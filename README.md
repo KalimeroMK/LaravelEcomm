@@ -1,15 +1,4 @@
-# Advance E-commerce website in  Laravel 7
-
-
-## Setup video : https://www.youtube.com/watch?v=URX5D1A5XQ4&t=19s
-
-## Demo video :
-https://youtu.be/c5a_wrvJSJo
-
-## Full tutorial :
-https://www.youtube.com/watch?v=FdAMucaks64&list=PLIFG3IUe1Zxo8Zvju3_kJJvoKSaIP_SC_&index=1&t=44s
-
-
+# E-commerce website in  Laravel 8
 
 ## Features :
 
@@ -19,7 +8,7 @@ https://www.youtube.com/watch?v=FdAMucaks64&list=PLIFG3IUe1Zxo8Zvju3_kJJvoKSaIP_
 - Shopping Cart, Wishlist, Product Reviews
 - Coupons & Discounts
 - Product attributes: cost price, promotion price, stock, size...
-- Blog: category, tag, content, web page 
+- Blog: category, tag, content, web page
 - Module/Extension: Shipping, payment, discount, ...
 - Upload manager: banner, images,..
 - SEO support: customer URL
@@ -31,8 +20,7 @@ https://www.youtube.com/watch?v=FdAMucaks64&list=PLIFG3IUe1Zxo8Zvju3_kJJvoKSaIP_
 - Product Share and follow from different social platform...
 - Payment integration(Paypal)
 - Order Tracking system
-- Multi-level comment system
-many more......
+- Multi-level comment system many more......
 
 ======= ADMIN =======
 
@@ -52,20 +40,17 @@ many more......
 - Line Chart & Pie chart ...
 - Generate order in pdf form...
 - Real time message & notification
-- Profile Settings
-Many more....
-
+- Profile Settings Many more....
 
 ======= USER DASHBOARD =======
-
 
 - Order management
 - Review Management
 - Comment Management
 - Profile Settings
 
-
 ## Screenshots :
+
 ![screencapture-e-shop-loc-admin-2020-08-15-15_47_37](https://user-images.githubusercontent.com/29488275/90719413-13b82200-e2d4-11ea-8ca0-f0e5551c4c9d.png)
 
 ![screencapture-e-shop-loc-admin-category-2020-08-14-19_45_55](https://user-images.githubusercontent.com/29488275/90719470-3813fe80-e2d4-11ea-8f63-e6001855a945.png)
@@ -97,11 +82,12 @@ Many more....
 7. Import db file(database/e-shop.sql) into your database (mysql,sql)
 8. npm install
 9. npm run watch
-10. run command[laravel file manager]:-  php artisan storage:link
+10. run command[laravel file manager]:- php artisan storage:link
 11. Edit .env file :- remove APP_URL
 10. php artisan serve or use virtual host
 11. Visit localhost:8000 in your browser
-12. Visit /admin if you want to access the admin panel. Admin Email/Password: admin@gmail.com/1111. User Email/Password: user@gmail.com/1111
+12. Visit /admin if you want to access the admin panel. Admin Email/Password: admin@gmail.com/1111. User Email/Password:
+    user@gmail.com/1111
 
 <p style="text-align:center">Thank You so much for your time !!!</p>
 
