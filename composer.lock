@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c551f0f09516a56a5837231e6e13dd1",
+    "content-hash": "2c715e8079f9a4215cf0762051e4edfa",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1133,6 +1133,52 @@
             "time": "2020-12-29T14:50:06+00:00"
         },
         {
+            "name": "eklundkristoffer/seedster",
+            "version": "4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eklundkristoffer/seedster.git",
+                "reference": "9c01f9d3527a1988eb9454270ec9e77787c2da7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eklundkristoffer/seedster/zipball/9c01f9d3527a1988eb9454270ec9e77787c2da7f",
+                "reference": "9c01f9d3527a1988eb9454270ec9e77787c2da7f",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*|6.*|^7.0|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Seedster\\SeedsterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Seedster\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kristoffer Eklund",
+                    "email": "kristoffereklund1@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/eklundkristoffer/seedster/issues",
+                "source": "https://github.com/eklundkristoffer/seedster/tree/4.0"
+            },
+            "time": "2020-09-14T16:33:44+00:00"
+        },
+        {
             "name": "fakerphp/faker",
             "version": "v1.15.0",
             "source": {
@@ -1886,6 +1932,73 @@
                 "source": "https://github.com/JayBizzle/Laravel-Crawler-Detect/tree/master"
             },
             "time": "2017-06-01T20:29:30+00:00"
+        },
+        {
+            "name": "jeremykenedy/laravel-blocker",
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykenedy/laravel-blocker.git",
+                "reference": "c636187f741a32fde7a4adecaf2c646f6d020377"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykenedy/laravel-blocker/zipball/c636187f741a32fde7a4adecaf2c646f6d020377",
+                "reference": "c636187f741a32fde7a4adecaf2c646f6d020377",
+                "shasum": ""
+            },
+            "require": {
+                "eklundkristoffer/seedster": "^4.0",
+                "laravelcollective/html": "^6.2",
+                "php": "^7.3|^8.0"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "jeremykenedy\\LaravelBlocker\\LaravelBlockerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "jeremykenedy\\LaravelBlocker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Kenedy",
+                    "email": "jeremykenedy@gmail.com"
+                }
+            ],
+            "keywords": [
+                "IP blocker",
+                "User blocker",
+                "blocker",
+                "email blocker",
+                "laravel Email blocker",
+                "laravel IP blocker",
+                "laravel blocker"
+            ],
+            "support": {
+                "issues": "https://github.com/jeremykenedy/laravel-blocker/issues",
+                "source": "https://github.com/jeremykenedy/laravel-blocker/tree/v3.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jeremykenedy",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/jeremykenedy",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2021-01-03T20:36:14+00:00"
         },
         {
             "name": "jeremykenedy/laravel-logger",
