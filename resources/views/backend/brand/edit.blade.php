@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title','E-SHOP || Brand Edit')
-@section('main-content')
+@section('content')
 
     <div class="card">
         <h5 class="card-header">Edit Brand</h5>

@@ -2,7 +2,7 @@
 
 @section('title','E-SHOP || Order Track Page')
 
-@section('main-content')
+@section('content')
     <!-- Breadcrumbs -->
     <div class="breadcrumbs">
         <div class="container">

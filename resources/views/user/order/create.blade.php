@@ -1,6 +1,6 @@
 @extends('user.layouts.master')
 
-@section('main-content')
+@section('content')
 
 <div class="card">
     <h5 class="card-header">Add Banner</h5>

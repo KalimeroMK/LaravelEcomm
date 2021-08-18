@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('main-content')
+@section('content')
 	<!-- Breadcrumbs -->
 	<div class="breadcrumbs">
 		<div class="container">

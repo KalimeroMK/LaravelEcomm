@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 @section('title','E-SHOP || HOME PAGE')
-@section('main-content')
+@section('content')
     <!-- Slider Area -->
     <section class="hero-slider">
         <!-- Single Slider -->

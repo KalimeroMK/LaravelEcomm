@@ -2,7 +2,7 @@
 
 @section('title','Admin Profile')
 
-@section('main-content')
+@section('content')
 
     <div class="container-fluid">
         <div class="content">

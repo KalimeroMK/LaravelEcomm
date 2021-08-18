@@ -86,7 +86,7 @@
     protected function mapUserRoutes()
     {
       Route::prefix('user')
-          ->middleware(['web', 'auth'])
+          ->middleware(['web', 'auth', 'activity', '2fa'])
           ->group(base_path('routes/user.php'));
     }
 
@@ -100,7 +100,7 @@
     protected function mapAdminRoutes()
     {
       Route::prefix('admin')
-          ->middleware(['web', 'auth'])
+          ->middleware(['web', 'auth', 'activity', '2fa'])
           ->group(base_path('routes/admin.php'));
     }
 
@@ -109,7 +109,7 @@
      */
     public function map2faRoutes()
     {
-      Route::middleware(['web', 'auth', '2fa'])
+      Route::middleware(['web', 'auth', '2fa', 'activity'])
           ->prefix('2fa')
           ->group(base_path('routes/2fa.php'));
     }

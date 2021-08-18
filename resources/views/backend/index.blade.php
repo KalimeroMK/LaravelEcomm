@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title','E-SHOP || DASHBOARD')
-@section('main-content')
+@section('content')
     <div class="container-fluid">
     @include('backend.layouts.notification')
     <!-- Page Heading -->

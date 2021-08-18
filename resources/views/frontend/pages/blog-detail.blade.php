@@ -2,7 +2,7 @@
 
 @section('title','E-TECH || Blog Detail page')
 
-@section('main-content')
+@section('content')
     <!-- Breadcrumbs -->
     <div class="breadcrumbs">
         <div class="container">

@@ -2,7 +2,7 @@
 
 @section('title','Order Detail')
 
-@section('main-content')
+@section('content')
     <div class="card">
         <h5 class="card-header">Order <a href="{{route('order.pdf',$order->id)}}"
                                          class=" btn btn-sm btn-primary shadow-sm float-right"><i

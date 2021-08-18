@@ -174,6 +174,7 @@
           PrettyRoutes\ServiceProvider::class,
           Spatie\Permission\PermissionServiceProvider::class,
           Spatie\Feed\FeedServiceProvider::class,
+          jeremykenedy\LaravelLogger\LaravelLoggerServiceProvider::class,
 
 
         /*

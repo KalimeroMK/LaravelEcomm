@@ -16,6 +16,7 @@
     "fideloper/proxy": "^4.2",
     "fruitcake/laravel-cors": "^1.0",
     "guzzlehttp/guzzle": "^7.3",
+    "jeremykenedy/laravel-logger": "^5.0",
     "kalnoy/nestedset": "^5.0",
     "laravel/framework": "^8.0",
     "laravel/helpers": "^1.1",
@@ -30,6 +31,7 @@
     "spatie/laravel-honeypot": "^3.0",
     "spatie/laravel-newsletter": "^4.8",
     "spatie/laravel-permission": "^4.0",
+    "spatie/laravel-sitemap": "^5.9",
     "srmklive/paypal": "^3.0",
     "unisharp/laravel-filemanager": "^2.1"
   },

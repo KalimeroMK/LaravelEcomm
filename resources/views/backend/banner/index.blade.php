@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title','E-SHOP || Banner Page')
-@section('main-content')
+@section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="row">

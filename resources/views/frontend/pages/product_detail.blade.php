@@ -15,7 +15,7 @@
     <meta property="og:description" content="{{$product_detail->description}}">
 @endsection
 @section('title','E-SHOP || PRODUCT DETAIL')
-@section('main-content')
+@section('content')
 
     <!-- Breadcrumbs -->
     <div class="breadcrumbs">

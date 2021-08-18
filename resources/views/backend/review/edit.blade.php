@@ -2,7 +2,7 @@
 
 @section('title','Review Edit')
 
-@section('main-content')
+@section('content')
     <div class="card">
         <h5 class="card-header">Review Edit</h5>
         <div class="card-body">

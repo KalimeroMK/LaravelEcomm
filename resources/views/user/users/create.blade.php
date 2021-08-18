@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('main-content')
+@section('content')
 
     <div class="card">
         <h5 class="card-header">Add User</h5>
