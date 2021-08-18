@@ -258,5 +258,23 @@
           'ASC')->get();
     }
 
+    /**
+     * @return BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+      return $this->belongsTo(Category::class, 'parent_id');
+    }
 
+    /**
+     * @return string
+     */
+    public function getParentsNames(): string
+    {
+      if ($this->parent) {
+        return $this->parent->getParentsNames();
+      } else {
+        return $this->title;
+      }
+    }
   }

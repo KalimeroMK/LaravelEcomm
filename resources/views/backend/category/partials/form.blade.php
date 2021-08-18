@@ -21,10 +21,10 @@
                         <div class="form-group">
                             <label for="name" class="control-label">{{trans('messages.sub_category')}}</label>
                             <select name="parent_id" id="parent_id" class="form-control">
-                                @if (!empty($category->title))
+                                @if (!empty($category->getParentsNames()))
                                     <option
-                                        value="{{ $category->id }}"
-                                        selected>{{ old('title', $category->title ?? null) }}</option>
+                                            value=""
+                                            selected>{{ $category->getParentsNames()}}</option>
                                 @else
                                     <option value="">Select category</option>
                                 @endif
