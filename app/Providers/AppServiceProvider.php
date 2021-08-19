@@ -1,7 +1,9 @@
 <?php
 
+
   namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
   use App\Http\ViewComposers\MenuViewComposer;
   use App\Http\ViewComposers\SettingsViewComposer;
   use App\Http\ViewComposers\ShemaOrgViewComposer;
@@ -41,6 +43,7 @@
      */
     public function boot()
     {
+      Model::preventLazyLoading(!app()->isProduction());
       Schema::defaultStringLength(191);
       Banner::observe(BannerObserver::class);
       Brand::observe(BrandObserver::class);

@@ -34,7 +34,7 @@
       $featured_products = Product::with('categories')->orderBy('price', 'DESC')->limit(2)->get();
       $posts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
       $banners = Banner::whereStatus('active')->limit(3)->orderBy('id', 'DESC')->get();
-      $product_lists = Product::whereCondition('hot')->whereStatus('active')->orderBy('id',
+      $product_lists = Product::with('categories')->whereCondition('hot')->whereStatus('active')->orderBy('id',
           'DESC')->limit(9)->get();
       // return $category;
       return view('frontend.index',
@@ -293,8 +293,8 @@
     public function blogDetail($slug)
     {
       $post = Post::getPostBySlug($slug);
-      $recant_post = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-      return view('frontend.pages.blog-detail', compact('post', 'recant_post'));
+      $recantPosts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+      return view('frontend.pages.blog-detail', compact('post', 'recantPosts'));
     }
 
     /**

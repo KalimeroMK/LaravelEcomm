@@ -162,7 +162,7 @@
                         <!-- Single Widget -->
                         <div class="single-widget recent-post">
                             <h3 class="title">Recent post</h3>
-                        @foreach($recent_posts as $post)
+                        @foreach($recantPosts as $post)
                             <!-- Single Post -->
                                 <div class="single-post">
                                     <div class="image">

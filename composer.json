@@ -20,7 +20,7 @@
     "jeremykenedy/laravel-logger": "^5.0",
     "joshrainwater/active-users": "^2.1",
     "kalnoy/nestedset": "^5.0",
-    "laravel/framework": "^8.0",
+    "laravel/framework": "^8.43",
     "laravel/helpers": "^1.1",
     "laravel/socialite": "^5.0",
     "laravel/tinker": "^2.0",
