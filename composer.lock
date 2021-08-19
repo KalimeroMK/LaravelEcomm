@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92c10029698a2c1363e3d6e3ffb39793",
+    "content-hash": "0b539d101e0bbe0e5b4040eb91c98234",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2122,6 +2122,65 @@
                 "source": "https://github.com/joshrainwater/active-users/tree/2.1"
             },
             "time": "2020-09-26T21:05:02+00:00"
+        },
+        {
+            "name": "kalimeromk/laravel-translation-manager",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KalimeroMK/lang-manager.git",
+                "reference": "b1234cc1a88904841f667c6b0bdc9add61da2ffc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KalimeroMK/lang-manager/zipball/b1234cc1a88904841f667c6b0bdc9add61da2ffc",
+                "reference": "b1234cc1a88904841f667c6b0bdc9add61da2ffc",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.5|^6|^7|^8",
+                "illuminate/translation": "^5.5|^6|^7|^8",
+                "php": ">=7",
+                "symfony/finder": "^3|^4|^5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.5-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Barryvdh\\TranslationManager\\ManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Barryvdh\\TranslationManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Manage Laravel Translations",
+            "keywords": [
+                "laravel",
+                "translations",
+                "translator"
+            ],
+            "support": {
+                "issues": "https://github.com/KalimeroMK/lang-manager/issues",
+                "source": "https://github.com/KalimeroMK/lang-manager/tree/master"
+            },
+            "time": "2020-10-22T20:15:26+00:00"
         },
         {
             "name": "kalnoy/nestedset",
@@ -5695,6 +5754,78 @@
                 "source": "https://github.com/spatie/robots-txt/tree/1.0.10"
             },
             "time": "2020-12-07T11:10:49+00:00"
+        },
+        {
+            "name": "spatie/schema-org",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/schema-org.git",
+                "reference": "066463b6f10eb9f7617f879302ed382aa6bdbf54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/schema-org/zipball/066463b6f10eb9f7617f879302ed382aa6bdbf54",
+                "reference": "066463b6f10eb9f7617f879302ed382aa6bdbf54",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "graham-campbell/analyzer": "^3.0.4",
+                "illuminate/collections": "^8.16.1",
+                "league/flysystem": "^1.1.3",
+                "phpunit/phpunit": "^9.4.3",
+                "symfony/console": "^3.4.47",
+                "twig/twig": "^1.44.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\SchemaOrg\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Tom Witkowski",
+                    "email": "dev.gummibeer@gmail.com",
+                    "homepage": "https://gummibeer.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A fluent builder Schema.org types and ld+json generator",
+            "homepage": "https://github.com/spatie/schema-org",
+            "keywords": [
+                "schema-org",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/schema-org/issues",
+                "source": "https://github.com/spatie/schema-org/tree/3.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-05-10T08:54:54+00:00"
         },
         {
             "name": "spatie/temporary-directory",
@@ -12106,7 +12237,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "kalimeromk/laravel-translation-manager": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

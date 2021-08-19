@@ -6,7 +6,6 @@
   use App\Http\Middleware\CheckForMaintenanceMode;
   use App\Http\Middleware\EncryptCookies;
   use App\Http\Middleware\LoginSecurityMiddleware;
-  use App\Http\Middleware\MyRobotsMiddleware;
   use App\Http\Middleware\RedirectIfAuthenticated;
   use App\Http\Middleware\RobotsMiddleware;
   use App\Http\Middleware\TrimStrings;

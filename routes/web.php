@@ -23,14 +23,13 @@
   | contains the "web" middleware group. Now create something great!
   |
   */
-  Route::get('feed', FeedController::class)->name("feeds.main");
 
+
+  Route::get('feed', FeedController::class)->name("feeds.main");
   Auth::routes();
 // Socialite
   Route::get('login/{provider}/', [LoginController::class, 'redirect'])->name('login.redirect');
   Route::get('login/{provider}/callback/', [LoginController::class, 'Callback'])->name('login.callback');
-
-
 // Frontend Routes
   Route::get('/', [FrontendController::class, 'index'])->name('home');
   Route::get('/about-us', [FrontendController::class, 'aboutUs'])->name('about-us');
@@ -46,7 +45,6 @@
       [CartController::class, 'singleAddToCart'])->name('single-add-to-cart');
   Route::get('cart-delete/{id}', [CartController::class, 'cartDelete'])->name('cart-delete');
   Route::post('cart-update', [CartController::class, 'cartUpdate'])->name('cart.update');
-
   Route::get('/cart', function () {
     return view('frontend.pages.cart');
   })->name('cart');
@@ -74,14 +72,11 @@
   Route::post('/blog/filter', [FrontendController::class, 'blogFilter'])->name('blog.filter');
   Route::get('blog-cat/{slug}', [FrontendController::class, 'blogByCategory'])->name('blog.category');
   Route::get('blog-tag/{slug}', [FrontendController::class, 'blogByTag'])->name('blog.tag');
-
 // NewsLetter
   Route::post('/subscribe', [FrontendController::class, 'subscribe'])->name('subscribe');
-
 // Product Review
   Route::post('product/{slug}/review', [ProductReviewController::class, 'store'])->name('product.review.store');
   Route::resource('/review', ProductReviewController::class);
-
 // Post Comment
   Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');
   Route::resource('/comment', PostCommentController::class);
@@ -91,12 +86,10 @@
   Route::get('payment', [PayPalController::class, 'payment'])->name('payment');
   Route::get('cancel', [PayPalController::class, 'cancel'])->name('payment.cancel');
   Route::get('payment/success', [PayPalController::class, 'success'])->name('payment.success');
-
 //Filemanager
   Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     Lfm::routes();
   });
-
   Route::get('/file-manager', function () {
     return view('backend.layouts.file');
   })->name('file-manager')->middleware(['web', 'auth']);

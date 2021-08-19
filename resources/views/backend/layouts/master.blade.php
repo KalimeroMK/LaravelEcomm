@@ -2,7 +2,6 @@
 <html lang="en">
 
 @include('backend.layouts.head')
-
 <body id="page-top">
 
 <!-- Page Wrapper -->

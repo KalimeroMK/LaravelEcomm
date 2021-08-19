@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 <head>
     @include('frontend.layouts.head')
+    {!! $shema !!}
 </head>
 <body class="js">
-
 <!-- Preloader -->
 <div class="preloader">
     <div class="preloader-inner">
@@ -15,7 +15,6 @@
     </div>
 </div>
 <!-- End Preloader -->
-
 @include('frontend.layouts.notification')
 <!-- Header -->
 @include('frontend.layouts.header')

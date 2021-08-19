@@ -4,6 +4,7 @@
 
   use App\Http\ViewComposers\MenuViewComposer;
   use App\Http\ViewComposers\SettingsViewComposer;
+  use App\Http\ViewComposers\ShemaOrgViewComposer;
   use App\Models\Banner;
   use App\Models\Brand;
   use App\Models\Category;
@@ -50,5 +51,6 @@
       Product::observe(ProductObserver::class);
       View::composer(['frontend.layouts.header', 'frontend.layouts.footer', 'frontend.pages.about-us'], SettingsViewComposer::class);
       View::composer(['frontend.pages.product-grids'], MenuViewComposer::class);
+      View::composer('frontend.layouts.master', ShemaOrgViewComposer::class);
     }
   }

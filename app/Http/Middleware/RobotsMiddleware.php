@@ -3,8 +3,10 @@
   namespace App\Http\Middleware;
 
   use Illuminate\Http\Request;
+  use Spatie\RobotsMiddleware\RobotsMiddleware as BaseRobotsMiddleware;
 
-  class RobotsMiddleware
+
+  class RobotsMiddleware extends BaseRobotsMiddleware
   {
     /**
      * @param  Request  $request
