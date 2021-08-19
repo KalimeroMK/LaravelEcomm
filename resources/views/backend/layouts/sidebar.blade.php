@@ -218,6 +218,7 @@
                 <h6 class="collapse-header">Configuration Options:</h6>
                 <a class="collapse-item" href="{{route('activity')}}">Activity log</a>
                 <a class="collapse-item" href="{{route('laravelblocker::blocker.index')}}">Blocked IP</a>
+                <a class="collapse-item" href="{{ url('translations/') }}">Translation</a>
             </div>
         </div>
     </li>
