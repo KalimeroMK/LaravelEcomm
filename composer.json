@@ -18,6 +18,7 @@
     "guzzlehttp/guzzle": "^7.3",
     "jeremykenedy/laravel-blocker": "^3.3",
     "jeremykenedy/laravel-logger": "^5.0",
+    "joshrainwater/active-users": "^2.1",
     "kalnoy/nestedset": "^5.0",
     "laravel/framework": "^8.0",
     "laravel/helpers": "^1.1",

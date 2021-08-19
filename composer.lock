@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c715e8079f9a4215cf0762051e4edfa",
+    "content-hash": "c1ca28efc96562e50b65038c546075ff",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2068,6 +2068,60 @@
                 }
             ],
             "time": "2021-07-24T07:15:35+00:00"
+        },
+        {
+            "name": "joshrainwater/active-users",
+            "version": "2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/joshrainwater/active-users.git",
+                "reference": "6b420d0ce6d3b0cbb5cd7c41ca54af64b026e9ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/joshrainwater/active-users/zipball/6b420d0ce6d3b0cbb5cd7c41ca54af64b026e9ec",
+                "reference": "6b420d0ce6d3b0cbb5cd7c41ca54af64b026e9ec",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.6|~5.7|~5.8|^6.0|^7.0|^8.0",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "^1.7",
+                "orchestra/testbench": "^4.0",
+                "phpunit/phpunit": "^8"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Rainwater\\Active\\ActiveServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rainwater\\Active\\": "src/Active"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Package for easily retrieving a list of active users and guests that are currently online.",
+            "homepage": "https://github.com/joshrainwater/active-users",
+            "keywords": [
+                "active uesrs",
+                "laravel",
+                "online activity",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/joshrainwater/active-users/issues",
+                "source": "https://github.com/joshrainwater/active-users/tree/2.1"
+            },
+            "time": "2020-09-26T21:05:02+00:00"
         },
         {
             "name": "kalnoy/nestedset",
