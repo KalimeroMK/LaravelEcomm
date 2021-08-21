@@ -11,6 +11,5 @@
     public function compose(View $view)
     {
       $view->with('settings', Setting::get());
-      $view->with('tree', Category::getList());
     }
   }

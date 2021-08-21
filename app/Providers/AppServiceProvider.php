@@ -3,7 +3,6 @@
 
   namespace App\Providers;
 
-use Illuminate\Database\Eloquent\Model;
   use App\Http\ViewComposers\MenuViewComposer;
   use App\Http\ViewComposers\SettingsViewComposer;
   use App\Http\ViewComposers\ShemaOrgViewComposer;
@@ -20,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
   use App\Observers\PostObserver;
   use App\Observers\ProductObserver;
   use App\Observers\TagObserver;
+  use Illuminate\Database\Eloquent\Model;
   use Illuminate\Support\Facades\View;
   use Illuminate\Support\ServiceProvider;
   use Schema;

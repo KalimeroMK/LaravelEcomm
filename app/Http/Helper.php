@@ -3,12 +3,9 @@
   namespace App\Http;
 
   use App\Models\Cart;
-  use App\Models\Category;
   use App\Models\Message;
   use App\Models\Order;
-  use App\Models\Product;
   use App\Models\Shipping;
-  use App\Models\Tag;
   use App\Models\Wishlist;
   use Illuminate\Database\Eloquent\Builder;
   use Illuminate\Support\Collection;
@@ -22,39 +19,6 @@
     public static function messageList(): Collection
     {
       return Message::whereNull('read_at')->orderBy('created_at', 'desc')->get();
-    }
-
-    /**
-     * @return Category[]|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|Collection
-     */
-    public static function productCategoryList()
-    {
-      if ($option = 'all') {
-        return Category::orderBy('id', 'DESC')->get();
-      }
-      return Category::has('products')->orderBy('id', 'DESC')->get();
-    }
-
-    /**
-     * @return Tag[]|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|Collection
-     */
-    public static function postTagList()
-    {
-      if ($option = 'all') {
-        return Tag::orderBy('id', 'desc')->get();
-      }
-      return Tag::has('posts')->orderBy('id', 'desc')->get();
-    }
-
-    /**
-     * @return Category[]|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|Collection|\Kalnoy\Nestedset\Collection
-     */
-    public static function postCategoryList()
-    {
-      if ($option = 'all') {
-        return Category::orderBy('id', 'DESC')->get();
-      }
-      return Category::has('posts')->orderBy('id', 'DESC')->get();
     }
     /**
      * @param  string  $user_id
@@ -71,14 +35,6 @@
       } else {
         return 0;
       }
-    }
-
-    /**
-     * @return mixed
-     */
-    public function product()
-    {
-      return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
     /**
@@ -176,21 +132,6 @@
       } else {
         return 0;
       }
-    }
-
-    /**
-     * @return string
-     */
-    // Admin home
-    public static function earningPerMonth(): string
-    {
-      $month_data = Order::whereStatus('delivered')->get();
-      // return $month_data;
-      $price = 0;
-      foreach ($month_data as $data) {
-        $price = $data->cart_info->sum('price');
-      }
-      return number_format((float)($price), 2, '.', '');
     }
 
     /**

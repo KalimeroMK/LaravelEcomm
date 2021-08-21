@@ -18,38 +18,38 @@
   use Illuminate\Database\Eloquent\Relations\HasOne;
 
   /**
-   * Class PostComment
-   *
-   * @property int $id
-   * @property int|null $user_id
-   * @property int|null $post_id
-   * @property string $comment
-   * @property string $status
-   * @property string|null $replied_comment
-   * @property int|null $parent_id
-   * @property Carbon|null $created_at
-   * @property Carbon|null $updated_at
-   * @property Post|null $post
-   * @property User|null $user
-   * @package App\Models
-   * @property-read Collection|PostComment[] $replies
-   * @property-read int|null $replies_count
-   * @method static Builder|PostComment newModelQuery()
-   * @method static Builder|PostComment newQuery()
-   * @method static Builder|PostComment query()
-   * @method static Builder|PostComment whereComment($value)
-   * @method static Builder|PostComment whereCreatedAt($value)
-   * @method static Builder|PostComment whereId($value)
-   * @method static Builder|PostComment whereParentId($value)
-   * @method static Builder|PostComment wherePostId($value)
-   * @method static Builder|PostComment whereRepliedComment($value)
-   * @method static Builder|PostComment whereStatus($value)
-   * @method static Builder|PostComment whereUpdatedAt($value)
-   * @method static Builder|PostComment whereUserId($value)
-   * @mixin Eloquent
-   * @method static \Database\Factories\PostCommentFactory factory(...$parameters)
-   * @property-read \App\Models\User|null $user_info
-   */
+ * Class PostComment
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property int|null $post_id
+ * @property string $comment
+ * @property string $status
+ * @property string|null $replied_comment
+ * @property int|null $parent_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Post|null $post
+ * @property User|null $user
+ * @package App\Models
+ * @property-read Collection|PostComment[] $replies
+ * @property-read int|null $replies_count
+ * @method static Builder|PostComment newModelQuery()
+ * @method static Builder|PostComment newQuery()
+ * @method static Builder|PostComment query()
+ * @method static Builder|PostComment whereComment($value)
+ * @method static Builder|PostComment whereCreatedAt($value)
+ * @method static Builder|PostComment whereId($value)
+ * @method static Builder|PostComment whereParentId($value)
+ * @method static Builder|PostComment wherePostId($value)
+ * @method static Builder|PostComment whereRepliedComment($value)
+ * @method static Builder|PostComment whereStatus($value)
+ * @method static Builder|PostComment whereUpdatedAt($value)
+ * @method static Builder|PostComment whereUserId($value)
+ * @mixin Eloquent
+ * @method static \Database\Factories\PostCommentFactory factory(...$parameters)
+ * @property-read \App\Models\User|null $user_info
+ */
   class PostComment extends Model
   {
     use HasFactory;

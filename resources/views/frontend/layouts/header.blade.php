@@ -7,10 +7,10 @@
                     <!-- Top Left -->
                     <div class="top-left">
                         <ul class="list-main">
-                            <li>
-                                <i class="ti-headphone-alt"></i>@foreach($settings as $data) {{$data->phone}} @endforeach
-                            </li>
-                            <li><i class="ti-email"></i> @foreach($settings as $data) {{$data->email}} @endforeach</li>
+                            @foreach($settings as $data)
+                                <li><i class="ti-headphone-alt"></i>{{$data->phone}}</li>
+                                <li><i class="ti-email"></i> {{$data->email}} </li>
+                            @endforeach
                         </ul>
                     </div>
                     <!--/ End Top Left -->
@@ -20,15 +20,15 @@
                     <div class="right-content">
                         <ul class="list-main">
                             <li><i class="ti-location-pin"></i> <a href="{{route('order.track')}}">Track Order</a></li>
-                            {{-- <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li> --}}
+                             <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
                             @auth
-                                {{--                                @if(Auth::user()->role=='admin')--}}
-                                {{--                                    <li><i class="ti-user"></i> <a href="{{route('admin')}}"--}}
-                                {{--                                                                   target="_blank">Dashboard</a></li>--}}
-                                {{--                                @else--}}
-                                {{--                                    <li><i class="ti-user"></i> <a href="{{route('user')}}"--}}
-                                {{--                                                                   target="_blank">Dashboard</a></li>--}}
-                                {{--                                @endif--}}
+                                                                @if(Auth::user()->role=='admin')
+                                                                    <li><i class="ti-user"></i> <a href="{{route('admin')}}"
+                                                                                                   target="_blank">Dashboard</a></li>
+                                                                @else
+                                                                    <li><i class="ti-user"></i> <a href="{{route('user')}}"
+                                                                                                   target="_blank">Dashboard</a></li>
+                                                                @endif
                                 <li><i class="ti-power-off"></i> <a href="{{route('logout')}}">Logout</a></li>
 
                             @else
@@ -94,7 +94,6 @@
                                         <a href="{{route('wishlist')}}">View Wishlist</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        {{-- {{\App\Http\Helper::getAllProductFromCart()}} --}}
                                         @foreach(\App\Http\Helper::getAllProductFromWishlist() as $data)
                                             @php
                                                 $photo=explode(',',$data->product['photo']);
@@ -123,9 +122,9 @@
                         @endauth
                         <!--/ End Shopping Item -->
                         </div>
-                        {{-- <div class="sinlge-bar">
+                         <div class="sinlge-bar">
                             <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                        </div> --}}
+                        </div>
                         <div class="sinlge-bar shopping">
                             <a href="{{route('cart')}}" class="single-icon"><i class="ti-bag"></i> <span
                                         class="total-count">{{\App\Http\Helper::cartCount()}}</span></a>

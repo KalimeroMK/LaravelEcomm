@@ -36,7 +36,6 @@
       $banners = Banner::whereStatus('active')->limit(3)->orderBy('id', 'DESC')->get();
       $product_lists = Product::with('categories')->whereCondition('hot')->whereStatus('active')->orderBy('id',
           'DESC')->limit(9)->get();
-      // return $category;
       return view('frontend.index',
           compact('featured_products', 'posts', 'banners', 'product_lists'));
     }

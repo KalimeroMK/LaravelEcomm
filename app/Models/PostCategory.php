@@ -15,29 +15,29 @@
   use Illuminate\Database\Eloquent\Relations\HasMany;
 
   /**
-   * Class PostCategory
-   *
-   * @property int $id
-   * @property string $title
-   * @property string $slug
-   * @property string $status
-   * @property Carbon|null $created_at
-   * @property Carbon|null $updated_at
-   * @property Collection|Post[] $posts
-   * @package App\Models
-   * @property-read int|null $posts_count
-   * @method static Builder|PostCategory newModelQuery()
-   * @method static Builder|PostCategory newQuery()
-   * @method static Builder|PostCategory query()
-   * @method static Builder|PostCategory whereCreatedAt($value)
-   * @method static Builder|PostCategory whereId($value)
-   * @method static Builder|PostCategory whereSlug($value)
-   * @method static Builder|PostCategory whereStatus($value)
-   * @method static Builder|PostCategory whereTitle($value)
-   * @method static Builder|PostCategory whereUpdatedAt($value)
-   * @mixin Eloquent
-   * @method static \Database\Factories\PostCategoryFactory factory(...$parameters)
-   */
+ * Class PostCategory
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Collection|Post[] $posts
+ * @package App\Models
+ * @property-read int|null $posts_count
+ * @method static Builder|PostCategory newModelQuery()
+ * @method static Builder|PostCategory newQuery()
+ * @method static Builder|PostCategory query()
+ * @method static Builder|PostCategory whereCreatedAt($value)
+ * @method static Builder|PostCategory whereId($value)
+ * @method static Builder|PostCategory whereSlug($value)
+ * @method static Builder|PostCategory whereStatus($value)
+ * @method static Builder|PostCategory whereTitle($value)
+ * @method static Builder|PostCategory whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @method static \Database\Factories\PostCategoryFactory factory(...$parameters)
+ */
   class PostCategory extends Model
   {
     use HasFactory;

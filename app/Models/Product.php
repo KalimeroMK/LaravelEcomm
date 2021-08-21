@@ -20,57 +20,57 @@
   use Spatie\Feed\FeedItem;
 
   /**
-   * Class Product
-   *
-   * @property int $id
-   * @property string $title
-   * @property string $slug
-   * @property string $summary
-   * @property string|null $description
-   * @property string $photo
-   * @property int $stock
-   * @property string|null $size
-   * @property string $condition
-   * @property string $status
-   * @property float $price
-   * @property float $discount
-   * @property bool $is_featured
-   * @property int|null $brand_id
-   * @property Carbon|null $created_at
-   * @property Carbon|null $updated_at
-   * @property Brand|null $brand
-   * @property Collection|Cart[] $carts
-   * @property Collection|ProductReview[] $product_reviews
-   * @property Collection|Wishlist[] $wishlists
-   * @package App\Models
-   * @property-read int|null $carts_count
-   * @property-read int|null $product_reviews_count
-   * @property-read int|null $wishlists_count
-   * @method static Builder|Product newModelQuery()
-   * @method static Builder|Product newQuery()
-   * @method static Builder|Product query()
-   * @method static Builder|Product whereBrandId($value)
-   * @method static Builder|Product whereCondition($value)
-   * @method static Builder|Product whereCreatedAt($value)
-   * @method static Builder|Product whereDescription($value)
-   * @method static Builder|Product whereDiscount($value)
-   * @method static Builder|Product whereId($value)
-   * @method static Builder|Product whereIsFeatured($value)
-   * @method static Builder|Product wherePhoto($value)
-   * @method static Builder|Product wherePrice($value)
-   * @method static Builder|Product whereSize($value)
-   * @method static Builder|Product whereSlug($value)
-   * @method static Builder|Product whereStatus($value)
-   * @method static Builder|Product whereStock($value)
-   * @method static Builder|Product whereSummary($value)
-   * @method static Builder|Product whereTitle($value)
-   * @method static Builder|Product whereUpdatedAt($value)
-   * @mixin Eloquent
-   * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
-   * @property-read int|null $categories_count
-   * @method static ProductFactory factory(...$parameters)
-   * @property-read string $image_url
-   */
+ * Class Product
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $summary
+ * @property string|null $description
+ * @property string $photo
+ * @property int $stock
+ * @property string|null $size
+ * @property string $condition
+ * @property string $status
+ * @property float $price
+ * @property float $discount
+ * @property bool $is_featured
+ * @property int|null $brand_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Brand|null $brand
+ * @property Collection|Cart[] $carts
+ * @property Collection|ProductReview[] $product_reviews
+ * @property Collection|Wishlist[] $wishlists
+ * @package App\Models
+ * @property-read int|null $carts_count
+ * @property-read int|null $product_reviews_count
+ * @property-read int|null $wishlists_count
+ * @method static Builder|Product newModelQuery()
+ * @method static Builder|Product newQuery()
+ * @method static Builder|Product query()
+ * @method static Builder|Product whereBrandId($value)
+ * @method static Builder|Product whereCondition($value)
+ * @method static Builder|Product whereCreatedAt($value)
+ * @method static Builder|Product whereDescription($value)
+ * @method static Builder|Product whereDiscount($value)
+ * @method static Builder|Product whereId($value)
+ * @method static Builder|Product whereIsFeatured($value)
+ * @method static Builder|Product wherePhoto($value)
+ * @method static Builder|Product wherePrice($value)
+ * @method static Builder|Product whereSize($value)
+ * @method static Builder|Product whereSlug($value)
+ * @method static Builder|Product whereStatus($value)
+ * @method static Builder|Product whereStock($value)
+ * @method static Builder|Product whereSummary($value)
+ * @method static Builder|Product whereTitle($value)
+ * @method static Builder|Product whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
+ * @property-read int|null $categories_count
+ * @method static ProductFactory factory(...$parameters)
+ * @property-read string $image_url
+ */
   class Product extends Model implements Feedable
   {
     use HasFactory;

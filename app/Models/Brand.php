@@ -16,29 +16,29 @@
   use Illuminate\Database\Eloquent\Relations\HasMany;
 
   /**
-   * Class Brand
-   *
-   * @property int $id
-   * @property string $title
-   * @property string $slug
-   * @property string $status
-   * @property Carbon|null $created_at
-   * @property Carbon|null $updated_at
-   * @property Collection|Product[] $products
-   * @package App\Models
-   * @property-read int|null $products_count
-   * @method static Builder|Brand newModelQuery()
-   * @method static Builder|Brand newQuery()
-   * @method static Builder|Brand query()
-   * @method static Builder|Brand whereCreatedAt($value)
-   * @method static Builder|Brand whereId($value)
-   * @method static Builder|Brand whereSlug($value)
-   * @method static Builder|Brand whereStatus($value)
-   * @method static Builder|Brand whereTitle($value)
-   * @method static Builder|Brand whereUpdatedAt($value)
-   * @mixin Eloquent
-   * @method static BrandFactory factory(...$parameters)
-   */
+ * Class Brand
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Collection|Product[] $products
+ * @package App\Models
+ * @property-read int|null $products_count
+ * @method static Builder|Brand newModelQuery()
+ * @method static Builder|Brand newQuery()
+ * @method static Builder|Brand query()
+ * @method static Builder|Brand whereCreatedAt($value)
+ * @method static Builder|Brand whereId($value)
+ * @method static Builder|Brand whereSlug($value)
+ * @method static Builder|Brand whereStatus($value)
+ * @method static Builder|Brand whereTitle($value)
+ * @method static Builder|Brand whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @method static BrandFactory factory(...$parameters)
+ */
   class Brand extends Model
   {
     use HasFactory;

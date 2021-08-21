@@ -15,29 +15,29 @@
   use Illuminate\Database\Eloquent\Relations\HasMany;
 
   /**
-   * Class Tag
-   *
-   * @property int $id
-   * @property string $title
-   * @property string $slug
-   * @property string $status
-   * @property Carbon|null $created_at
-   * @property Carbon|null $updated_at
-   * @property Collection|Post[] $posts
-   * @package App\Models
-   * @property-read int|null $posts_count
-   * @method static Builder|Tag newModelQuery()
-   * @method static Builder|Tag newQuery()
-   * @method static Builder|Tag query()
-   * @method static Builder|Tag whereCreatedAt($value)
-   * @method static Builder|Tag whereId($value)
-   * @method static Builder|Tag whereSlug($value)
-   * @method static Builder|Tag whereStatus($value)
-   * @method static Builder|Tag whereTitle($value)
-   * @method static Builder|Tag whereUpdatedAt($value)
-   * @mixin Eloquent
-   * @method static \Database\Factories\TagFactory factory(...$parameters)
-   */
+ * Class Tag
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Collection|Post[] $posts
+ * @package App\Models
+ * @property-read int|null $posts_count
+ * @method static Builder|Tag newModelQuery()
+ * @method static Builder|Tag newQuery()
+ * @method static Builder|Tag query()
+ * @method static Builder|Tag whereCreatedAt($value)
+ * @method static Builder|Tag whereId($value)
+ * @method static Builder|Tag whereSlug($value)
+ * @method static Builder|Tag whereStatus($value)
+ * @method static Builder|Tag whereTitle($value)
+ * @method static Builder|Tag whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @method static \Database\Factories\TagFactory factory(...$parameters)
+ */
   class Tag extends Model
   {
     use HasFactory;

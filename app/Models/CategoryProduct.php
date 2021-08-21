@@ -14,26 +14,26 @@
   use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
   /**
-   * Class CategoryProduct
-   *
-   * @property int $id
-   * @property int $product_id
-   * @property int $category_id
-   * @property Carbon|null $created_at
-   * @property Carbon|null $updated_at
-   * @property Category $category
-   * @property Product $product
-   * @package App\Models
-   * @method static Builder|CategoryProduct newModelQuery()
-   * @method static Builder|CategoryProduct newQuery()
-   * @method static Builder|CategoryProduct query()
-   * @method static Builder|CategoryProduct whereCategoryId($value)
-   * @method static Builder|CategoryProduct whereCreatedAt($value)
-   * @method static Builder|CategoryProduct whereId($value)
-   * @method static Builder|CategoryProduct whereProductId($value)
-   * @method static Builder|CategoryProduct whereUpdatedAt($value)
-   * @mixin Eloquent
-   */
+ * Class CategoryProduct
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property int $category_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Category $category
+ * @property Product $product
+ * @package App\Models
+ * @method static Builder|CategoryProduct newModelQuery()
+ * @method static Builder|CategoryProduct newQuery()
+ * @method static Builder|CategoryProduct query()
+ * @method static Builder|CategoryProduct whereCategoryId($value)
+ * @method static Builder|CategoryProduct whereCreatedAt($value)
+ * @method static Builder|CategoryProduct whereId($value)
+ * @method static Builder|CategoryProduct whereProductId($value)
+ * @method static Builder|CategoryProduct whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
   class CategoryProduct extends Model
   {
     use HasFactory;
