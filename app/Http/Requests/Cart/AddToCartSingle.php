@@ -18,8 +18,8 @@
     public function rules(): array
     {
       return [
-          'slug'  => 'required',
-          'quant' => 'required',
+          'slug'  => 'required|string',
+          'quant' => 'required|integer',
       ];
     }
 

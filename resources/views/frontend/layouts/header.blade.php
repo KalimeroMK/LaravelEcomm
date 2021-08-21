@@ -68,8 +68,9 @@
                     <!--/ End Search Form -->
                     <div class="mobile-nav"></div>
                 </div>
+                <div class="col-8"></div>
                 <div class="col-lg-2 col-md-3 col-12">
-                    <div class="right-bar">
+                    <div class="right-bar float-right">
                         <!-- Search Form -->
                         <div class="sinlge-bar shopping">
                             @php
@@ -122,9 +123,6 @@
                         @endauth
                         <!--/ End Shopping Item -->
                         </div>
-                         <div class="sinlge-bar">
-                            <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                        </div>
                         <div class="sinlge-bar shopping">
                             <a href="{{route('cart')}}" class="single-icon"><i class="ti-bag"></i> <span
                                         class="total-count">{{\App\Http\Helper::cartCount()}}</span></a>
@@ -136,7 +134,6 @@
                                         <a href="{{route('cart')}}">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        {{-- {{\App\Http\Helper::getAllProductFromCart()}} --}}
                                         @foreach(\App\Http\Helper::getAllProductFromCart() as $data)
                                             @php
                                                 $photo=explode(',',$data->product['photo']);
