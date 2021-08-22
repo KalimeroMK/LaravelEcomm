@@ -13,31 +13,31 @@
     use Illuminate\Database\Eloquent\Model;
 
     /**
- * Class Banner
- *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string|null $photo
- * @property string|null $description
- * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @package App\Models
- * @method static Builder|Banner newModelQuery()
- * @method static Builder|Banner newQuery()
- * @method static Builder|Banner query()
- * @method static Builder|Banner whereCreatedAt($value)
- * @method static Builder|Banner whereDescription($value)
- * @method static Builder|Banner whereId($value)
- * @method static Builder|Banner wherePhoto($value)
- * @method static Builder|Banner whereSlug($value)
- * @method static Builder|Banner whereStatus($value)
- * @method static Builder|Banner whereTitle($value)
- * @method static Builder|Banner whereUpdatedAt($value)
- * @mixin Eloquent
- * @method static \Database\Factories\BannerFactory factory(...$parameters)
- */
+     * Class Banner
+     *
+     * @property int $id
+     * @property string $title
+     * @property string $slug
+     * @property string|null $photo
+     * @property string|null $description
+     * @property string $status
+     * @property Carbon|null $created_at
+     * @property Carbon|null $updated_at
+     * @package App\Models
+     * @method static Builder|Banner newModelQuery()
+     * @method static Builder|Banner newQuery()
+     * @method static Builder|Banner query()
+     * @method static Builder|Banner whereCreatedAt($value)
+     * @method static Builder|Banner whereDescription($value)
+     * @method static Builder|Banner whereId($value)
+     * @method static Builder|Banner wherePhoto($value)
+     * @method static Builder|Banner whereSlug($value)
+     * @method static Builder|Banner whereStatus($value)
+     * @method static Builder|Banner whereTitle($value)
+     * @method static Builder|Banner whereUpdatedAt($value)
+     * @mixin Eloquent
+     * @method static \Database\Factories\BannerFactory factory(...$parameters)
+     */
     class Banner extends Model
     {
         use HasFactory;
