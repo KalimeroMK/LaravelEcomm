@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a0fabf722a731839e949418e6192054",
+    "content-hash": "1cc18063a675012ce9358425449fab0b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6250,6 +6250,67 @@
                 "source": "https://github.com/srmklive/laravel-paypal/tree/1.9.0"
             },
             "time": "2021-06-07T16:21:12+00:00"
+        },
+        {
+            "name": "stripe/stripe-php",
+            "version": "v7.94.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stripe/stripe-php.git",
+                "reference": "03cd6b5c1c4fc9087ddd1dd046457bff274294d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/03cd6b5c1c4fc9087ddd1dd046457bff274294d6",
+                "reference": "03cd6b5c1c4fc9087ddd1dd046457bff274294d6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "2.17.1",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^5.7",
+                "squizlabs/php_codesniffer": "^3.3",
+                "symfony/process": "~3.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stripe\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stripe and contributors",
+                    "homepage": "https://github.com/stripe/stripe-php/contributors"
+                }
+            ],
+            "description": "Stripe PHP Library",
+            "homepage": "https://stripe.com/",
+            "keywords": [
+                "api",
+                "payment processing",
+                "stripe"
+            ],
+            "support": {
+                "issues": "https://github.com/stripe/stripe-php/issues",
+                "source": "https://github.com/stripe/stripe-php/tree/v7.94.0"
+            },
+            "time": "2021-08-19T14:15:27+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

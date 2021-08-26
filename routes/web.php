@@ -7,6 +7,7 @@
     use App\Http\Controllers\PaypalController;
     use App\Http\Controllers\PostCommentController;
     use App\Http\Controllers\ProductReviewController;
+    use App\Http\Controllers\StripeController;
     use App\Http\Controllers\WishlistController;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Route;
@@ -93,3 +94,6 @@
     Route::get('/file-manager', function () {
         return view('backend.layouts.file');
     })->name('file-manager')->middleware(['web', 'auth']);
+//Stripe
+    Route::get('stripe', [StripeController::class, 'stripe']);
+    Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');

@@ -39,6 +39,7 @@
     "spatie/laravel-sitemap": "^5.9",
     "spatie/schema-org": "^3.4",
     "srmklive/paypal": "^1.0",
+    "stripe/stripe-php": "^7.94",
     "unisharp/laravel-filemanager": "^2.1"
   },
   "require-dev": {
