@@ -86,8 +86,18 @@
 11. Edit .env file :- remove APP_URL
 10. php artisan serve or use virtual host
 11. Visit localhost:8000 in your browser
-12. Visit /admin if you want to access the admin panel. Admin Email/Password: superadmin@mail.com/password. User Email/Password:
+12. Visit /admin if you want to access the admin panel. Admin Email/Password: superadmin@mail.com/password. User
+    Email/Password:
     client@mail.com/password
+
+### Requirements installation and configuration for docker
+
+* **Docker**
+* **In project root run**: docker-compose up -d.
+* **Install laravel packages**: composer install
+* **ENV**: rename DB_HOST=127.0.0.1 to DB_HOST=mysql
+* **Container ssh**: docker-compose exec app sh
+* **Run migrations**: php artisan:migrate:fresh --seed.
 
 <p style="text-align:center">Thank You so much for your time !!!</p>
 

@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+  #PHP Service
+  app:
+    image: kalimeromk/php:7.4
+    container_name: app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - app-network
+  #Nginx Service
+  webserver:
+    image: nginx:latest
+    container_name: webserver
+    hostname: test.local
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+  #MySQL Service
+  mysql:
+    image: mariadb:latest
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - app-network
+  #Docker Networks
+networks:
+  app-network:
+    driver: bridge
+  #Volumes
+volumes:
+  dbdata:
+    driver: local
