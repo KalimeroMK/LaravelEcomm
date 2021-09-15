@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+co@extends('backend.layouts.master')
 @section('title','E-SHOP || Banner Edit')
 @section('content')
 

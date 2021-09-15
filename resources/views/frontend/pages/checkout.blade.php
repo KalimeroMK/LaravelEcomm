@@ -27,7 +27,6 @@
             <form class="form" method="POST" action="{{route('cart.order')}}">
                 @csrf
                 <div class="row">
-
                     <div class="col-lg-8 col-12">
                         <div class="checkout-form">
                             <h2>Make Your Checkout Here</h2>
@@ -414,7 +413,9 @@
                                             <input name="payment_method" type="radio" value="cod"> <label> Cash On
                                                 Delivery</label><br>
                                             <input name="payment_method" type="radio" value="paypal"> <label>
-                                                PayPal</label>
+                                                PayPal</label><br>
+                                            <input name="payment_method" type="radio" value="stripe"> <label>
+                                                Stripe</label>
                                         </form-group>
 
                                     </div>

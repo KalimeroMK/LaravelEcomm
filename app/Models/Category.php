@@ -100,6 +100,7 @@
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $childrenCategories
  * @property-read int|null $children_categories_count
  * @property-read Category|null $parent_info
+ * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
  */
   class Category extends Model
   {

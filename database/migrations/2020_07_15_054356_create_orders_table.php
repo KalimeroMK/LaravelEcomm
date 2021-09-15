@@ -22,7 +22,7 @@
                 $table->float('coupon')->nullable();
                 $table->float('total_amount');
                 $table->integer('quantity');
-                $table->enum('payment_method', ['cod', 'paypal'])->default('cod');
+                $table->enum('payment_method', ['cod', 'paypal', 'stripe'])->default('cod');
                 $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid');
                 $table->enum('status', ['new', 'process', 'delivered', 'cancel'])->default('new');
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');

@@ -22,8 +22,7 @@
                             <p>{{ Session::get('success') }}</p>
                         </div>
                     @endif
-
-                    <form role="form" action="{{ route('make-payment') }}" method="post" class="stripe-payment"
+                    <form role="form" action="{{ route('stripe.post') }}" method="post" class="stripe-payment"
                           data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}"
                           id="stripe-payment">
                         @csrf
@@ -57,6 +56,8 @@
                                 <label class='control-label'>Expiration Year</label> <input
                                         class='form-control card-expiry-year' placeholder='YYYY' size='4' type='text'>
                             </div>
+                            <input type="hidden" name="id" value="{{ $id }}">
+
                         </div>
 
                         <div class='form-row row'>
@@ -82,9 +83,9 @@
 
 <script type="text/javascript">
     $(function () {
-        var $form = $(".stripe-payment");
+        const $form = $(".stripe-payment");
         $('form.stripe-payment').bind('submit', function (e) {
-            var $form = $(".stripe-payment"),
+            const $form = $(".stripe-payment"),
                 inputVal = ['input[type=email]', 'input[type=password]',
                     'input[type=text]', 'input[type=file]',
                     'textarea'
@@ -96,7 +97,7 @@
 
             $('.has-error').removeClass('has-error');
             $inputs.each(function (i, el) {
-                var $input = $(el);
+                const $input = $(el);
                 if ($input.val() === '') {
                     $input.parent().addClass('has-error');
                     $errorStatus.removeClass('hide');
@@ -124,7 +125,7 @@
                     .find('.alert')
                     .text(response.error.message);
             } else {
-                var token = response['id'];
+                const token = response['id'];
                 $form.find('input[type=text]').empty();
                 $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
                 $form.get(0).submit();

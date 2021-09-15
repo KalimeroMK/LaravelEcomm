@@ -54,8 +54,7 @@
     Route::get('/wishlist', function () {
         return view('frontend.pages.wishlist');
     })->name('wishlist');
-    Route::get('/wishlist/{slug}',
-        [WishlistController::class, 'wishlist'])->name('add-to-wishlist');
+    Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist');
     Route::get('wishlist-delete/{id}', [WishlistController::class, 'wishlistDelete'])->name('wishlist-delete');
     Route::post('cart/order', [OrderFrontController::class, 'store'])->name('cart.order');
     Route::get('order/pdf/{id}', [OrderFrontController::class, 'pdf'])->name('order.pdf');
@@ -87,6 +86,9 @@
     Route::get('payment', [PayPalController::class, 'payment'])->name('payment');
     Route::get('cancel', [PayPalController::class, 'cancel'])->name('payment.cancel');
     Route::get('payment/success', [PayPalController::class, 'success'])->name('payment.success');
+//Stripe
+    Route::get('stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
+    Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
 //Filemanager
     Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
         Lfm::routes();
@@ -94,6 +96,3 @@
     Route::get('/file-manager', function () {
         return view('backend.layouts.file');
     })->name('file-manager')->middleware(['web', 'auth']);
-//Stripe
-    Route::get('stripe', [StripeController::class, 'stripe']);
-    Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');

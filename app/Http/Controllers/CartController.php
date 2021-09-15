@@ -11,7 +11,6 @@
     use Illuminate\Contracts\View\View;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
-    use Illuminate\Support\Str;
 
     class CartController extends Controller
     {
@@ -39,7 +38,7 @@
                 return back();
             }
 
-            $already_cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->where('product_id', $product->id)->first();
+            $already_cart = Cart::whereUserId(auth()->user()->id)->where('order_id', null)->where('product_id', $product->id)->first();
             if ($already_cart) {
                 $already_cart->quantity = $already_cart->quantity + 1;
                 $already_cart->amount = $product->price + $already_cart->amount;
@@ -151,34 +150,14 @@
         }
 
         /**
-         * @param  Request  $request
          * @return Application|Factory|View|RedirectResponse
          */
-        public function checkout(Request $request)
+        public function checkout()
         {
             $cart = Cart::whereUserId(auth()->user()->id)->whereOrderId(null)->get();
             if (empty($cart)) {
                 request()->session()->flash('error', 'Cart is empty');
                 return redirect()->back();
-            }
-
-            $cart_index = Str::random(10);
-            $sub_total = 0;
-            foreach ($cart as $cart_item) {
-                $sub_total += $cart_item['amount'];
-                $data = [
-                    'cart_id'    => $cart_index,
-                    'user_id'    => $request->user()->id,
-                    'product_id' => $cart_item['id'],
-                    'quantity'   => $cart_item['quantity'],
-                    'amount'     => $cart_item['amount'],
-                    'status'     => 'new',
-                    'price'      => $cart_item['price'],
-                ];
-
-                $cart = new Cart();
-                $cart->fill($data);
-                $cart->save();
             }
 
             return view('frontend.pages.checkout');

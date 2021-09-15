@@ -75,7 +75,7 @@
       "Tests\\": "tests/"
     },
     "files": [
-      "app/Http/Helper.php"
+      "app/Helpers/Helper.php"
     ]
   },
   "minimum-stability": "dev",

@@ -36,22 +36,14 @@
             $data['return_url'] = route('payment.success');
             $data['cancel_url'] = route('payment.cancel');
 
-            $total = 0;
-            foreach ($data['items'] as $item) {
-                $total += $item['price'] * $item['qty'];
-            }
+            $data['total'] = session()->get('total');
 
-            $data['total'] = $total;
-            if (session('coupon')) {
-                $data['shipping_discount'] = session('coupon')['value'];
-            }
             Cart::where('user_id', auth()->user()->id)->where('order_id',
                 null)->update(['order_id' => session()->get('id')]);
 
             $provider = new ExpressCheckout;
 
-            $response = $provider->setExpressCheckout($data);
-
+            $response = $provider->setExpressCheckout($data, true);
             return redirect($response['paypal_link']);
         }
 
