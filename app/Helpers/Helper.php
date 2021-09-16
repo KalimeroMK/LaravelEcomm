@@ -3,9 +3,12 @@
     namespace App\Helpers;
 
     use App\Models\Cart;
+    use App\Models\Category;
     use App\Models\Message;
     use App\Models\Order;
+    use App\Models\PostCategory;
     use App\Models\Shipping;
+    use App\Models\Tag;
     use App\Models\Wishlist;
     use Illuminate\Database\Eloquent\Builder;
     use Illuminate\Support\Collection;
@@ -140,5 +143,29 @@
         public static function shipping(): Collection
         {
             return Shipping::orderBy('id', 'DESC')->get();
+        }
+
+        public static function productCategoryList($option = 'all')
+        {
+            if ($option = 'all') {
+                return Category::orderBy('id', 'DESC')->get();
+            }
+            return Category::has('products')->orderBy('id', 'DESC')->get();
+        }
+
+        public static function postTagList($option = 'all')
+        {
+            if ($option = 'all') {
+                return Tag::orderBy('id', 'desc')->get();
+            }
+            return Tag::has('posts')->orderBy('id', 'desc')->get();
+        }
+
+        public static function postCategoryList($option = "all")
+        {
+            if ($option = 'all') {
+                return Category::orderBy('id', 'DESC')->get();
+            }
+            return Category::has('posts')->orderBy('id', 'DESC')->get();
         }
     }

@@ -11,9 +11,7 @@
     use App\Models\Coupon;
     use App\Models\Message;
     use App\Models\Post;
-    use App\Models\PostCategory;
     use App\Models\Product;
-    use App\Models\Tag;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
     use Illuminate\Contracts\View\View;
@@ -31,15 +29,17 @@
          */
         public function index()
         {
-            $featured_products = Product::with('categories')->orderBy('price', 'DESC')->limit(2)->get();
+            $featured_products = Product::with('categories')->orderBy('price', 'DESC')->limit(4)->get();
             $posts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
             $banners = Banner::whereStatus('active')->limit(3)->orderBy('id', 'DESC')->get();
-            $product_lists = Product::with('categories')->whereCondition('hot')->whereStatus('active')->orderBy('id',
+            $product_lists = Product::with('categories')->where('condition', '!=', 'hot')->whereStatus('active')->orderBy('id',
+                'DESC')->limit(9)->get();
+            $product_hot = Product::with('categories')->whereCondition('hot')->whereStatus('active')->orderBy('id',
                 'DESC')->limit(9)->get();
             return view('frontend.index',
-                compact('featured_products', 'posts', 'banners', 'product_lists'));
+                compact('featured_products', 'posts', 'banners', 'product_lists', 'product_hot'));
         }
- 
+
         /**
          * @return Application|Factory|View
          */
@@ -248,41 +248,25 @@
             $category = Category::whereSlug($slug)->firstOrFail();
             $products = Product::whereHas('categories', static function ($q) use ($category) {
                 $q->where('title', '=', $category->title);
-            });
+            })->paginate(10);
             $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
-
+            $brands = Brand::orderBy('title', 'ASC')->where('status', 'active')->get();
             if (request()->is('e-shop.loc/product-grids')) {
-                return view('frontend.pages.product-grids', compact('products', 'recent_products'));
+                return view('frontend.pages.product-grids', compact('products', 'recent_products', 'brands'));
             } else {
-                return view('frontend.pages.product-lists', compact('products', 'recent_products'));
+                return view('frontend.pages.product-lists', compact('products', 'recent_products', 'brands'));
             }
         }
 
 
         /**
-         * @return array|Application|Factory|View
+         * @return Application|Factory|View
          */
         public function blog()
         {
-            $post = Post::query();
-
-            if (!empty($_GET['category'])) {
-                $slug = explode(',', $_GET['category']);
-                return PostCategory::select('id')->whereIn('slug', $slug)->pluck('id')->toArray();
-            }
-            if (!empty($_GET['tag'])) {
-                $slug = explode(',', $_GET['tag']);
-                $tag_ids = Tag::select('id')->whereIn('slug', $slug)->pluck('id')->toArray();
-                $posts->where('post_tag_id', $tag_ids);
-            }
-
-            if (!empty($_GET['show'])) {
-                $posts = $post->where('status', 'active')->orderBy('id', 'DESC')->paginate($_GET['show']);
-            } else {
-                $posts = $post->with('author_info')->where('status', 'active')->orderBy('id', 'DESC')->paginate(9);
-            }
-            $recent_posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-            return view('frontend.pages.blog', compact('posts', 'recent_posts'));
+            $posts = Post::with(['categories', 'author_info'])->whereStatus('active')->orderBy('id', 'DESC')->paginate(9);
+            $recantPosts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+            return view('frontend.pages.blog', compact('posts', 'recantPosts'));
         }
 
         /**
@@ -351,9 +335,12 @@
          */
         public function blogByCategory(Request $request)
         {
-            $posts = PostCategory::getBlogByCategory($request->slug);
-            $recent_posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-            return view('frontend.pages.blog', compact('posts', 'recent_posts'));
+            $category = Category::whereSlug($request->slug)->firstOrFail();
+            $posts = Post::with('author_info')->whereHas('categories', static function ($q) use ($category) {
+                $q->where('title', '=', $category->title);
+            })->paginate(10);
+            $recantPosts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+            return view('frontend.pages.blog', compact('posts', 'recantPosts'));
         }
 
         /**

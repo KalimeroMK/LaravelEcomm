@@ -198,7 +198,7 @@
                         <div class="single-widget side-tags">
                             <h3 class="title">Tags</h3>
                             <ul class="tag">
-                                @foreach(\App\Http\Helper::postTagList() as $tag)
+                                @foreach(\App\Helpers\Helper::postTagList() as $tag)
                                     <li><a href="">{{$tag->title}}</a></li>
                                 @endforeach
                             </ul>

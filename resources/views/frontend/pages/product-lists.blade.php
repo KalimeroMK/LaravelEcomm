@@ -32,37 +32,7 @@
                             <div class="single-widget category">
                                 <h3 class="title">Categories</h3>
                                 <ul class="categor-list">
-                                    @php
-                                        // $category = new Category();
-                                        $menu=App\Models\Category::getAllParentWithChild();
-                                    @endphp
-                                    @if($menu)
-                                        <li>
-                                        @foreach($menu as $cat_info)
-                                            @if($cat_info->child_cat->count()>0)
-                                                <li>
-                                                    <a href="{{route('product-cat',$cat_info->slug)}}">{{$cat_info->title}}</a>
-                                                    <ul>
-                                                        @foreach($cat_info->child_cat as $sub_menu)
-                                                            <li>
-                                                                <a href="{{route('product-sub-cat',[$cat_info->slug,$sub_menu->slug])}}">{{$sub_menu->title}}</a>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </li>
-                                            @else
-                                                <li>
-                                                    <a href="{{route('product-cat',$cat_info->slug)}}">{{$cat_info->title}}</a>
-                                                </li>
-                                                @endif
-                                                @endforeach
-                                                </li>
-                                            @endif
-                                            {{-- @foreach(\App\Http\Helper::productCategoryList('products') as $cat)
-                                                @if($cat->is_parent==1)
-                                                    <li><a href="{{route('product-cat',$cat->slug)}}">{{$cat->title}}</a></li>
-                                                @endif
-                                            @endforeach --}}
+
                                 </ul>
                             </div>
                             <!--/ End Single Widget -->
@@ -91,7 +61,6 @@
                                         </div>
                                         @php
                                             $max=DB::table('products')->max('price');
-                                            // dd($max);
                                         @endphp
                                         <div id="slider-range" data-min="0" data-max="{{$max}}"></div>
                                         <div class="product_filter">
@@ -130,12 +99,9 @@
                             {{-- {{dd($recent_products)}} --}}
                             @foreach($recent_products as $product)
                                 <!-- Single Post -->
-                                    @php
-                                        $photo=explode(',',$product->photo);
-                                    @endphp
                                     <div class="single-post first">
                                         <div class="image">
-                                            <img src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                                            <img src="{{ $product->imageUrl }}" alt="{{$product->imageUrl}}">
                                         </div>
                                         <div class="content">
                                             <h5>
@@ -157,10 +123,7 @@
                             <!-- Single Widget -->
                             <div class="single-widget category">
                                 <h3 class="title">Brands</h3>
-                                <ul class="categor-list">
-                                    @php
-                                        $brands=DB::table('brands')->orderBy('title','ASC')->where('status','active')->get();
-                                    @endphp
+                                <ul class="category-list">
                                     @foreach($brands as $brand)
                                         <li><a href="{{route('product-brand',$brand->slug)}}">{{$brand->title}}</a></li>
                                     @endforeach
@@ -231,7 +194,7 @@
                         </div>
                         <div class="row">
                         @if($products->count() > 0)
-                            @foreach($products->products as $product)
+                            @foreach($products as $product)
                                 {{-- {{$product}} --}}
                                 <!-- Start Single List -->
                                     <div class="col-12">
@@ -292,6 +255,11 @@
                                     </div>
                                     <!-- End Single List -->
                                 @endforeach
+                                <div class="row">
+                                    <div class="col-md-12 justify-content-center d-flex">
+                                        {{$products->appends($_GET)->links('vendor.pagination.bootstrap-4')}}
+                                    </div>
+                                </div>
                             @else
                                 <h4 class="text-warning" style="margin:100px auto;">There are no products.</h4>
                             @endif
@@ -303,7 +271,7 @@
         <!--/ End Product Style 1  -->
     </form>
     <!-- Modal -->
-    @foreach($products->products as $key=>$product)
+    @foreach($products as $key=>$product)
         <div class="modal fade" id="{{$product->id}}" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -450,37 +418,6 @@
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=1;
-            var pro_id=$(this).data('id');
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-					else{
-                        swal('error',response.msg,'error').then(function(){
-							// document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-	</script> --}}
     <script>
         $(document).ready(function () {
             /*----------------------------------------------------*/

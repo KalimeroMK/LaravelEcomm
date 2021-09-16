@@ -20,15 +20,15 @@
                     <div class="right-content">
                         <ul class="list-main">
                             <li><i class="ti-location-pin"></i> <a href="{{route('order.track')}}">Track Order</a></li>
-                             <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
+                            <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
                             @auth
-                                                                @if(Auth::user()->role=='admin')
-                                                                    <li><i class="ti-user"></i> <a href="{{route('admin')}}"
-                                                                                                   target="_blank">Dashboard</a></li>
-                                                                @else
-                                                                    <li><i class="ti-user"></i> <a href="{{route('user')}}"
-                                                                                                   target="_blank">Dashboard</a></li>
-                                                                @endif
+                                @if(Auth::user()->role=='admin')
+                                    <li><i class="ti-user"></i> <a href="{{route('admin')}}"
+                                                                   target="_blank">Dashboard</a></li>
+                                @else
+                                    <li><i class="ti-user"></i> <a href="{{route('user')}}"
+                                                                   target="_blank">Dashboard</a></li>
+                                @endif
                                 <li><i class="ti-power-off"></i> <a href="{{route('logout')}}">Logout</a></li>
 
                             @else
@@ -68,7 +68,17 @@
                     <!--/ End Search Form -->
                     <div class="mobile-nav"></div>
                 </div>
-                <div class="col-8"></div>
+                <div class="col-lg-8 col-md-7 col-12">
+                    <div class="search-bar-top">
+                        <div class="search-bar">
+                            <form method="POST" action="{{route('product.search')}}">
+                                @csrf
+                                <input name="search" placeholder="Search Products Here....." type="search">
+                                <button class="btnn" type="submit"><i class="ti-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-2 col-md-3 col-12">
                     <div class="right-bar float-right">
                         <!-- Search Form -->
@@ -86,16 +96,16 @@
                                 @endforeach
                             @endif
                             <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o"></i> <span
-                                        class="total-count">{{App\Http\Helper::wishlistCount()}}</span></a>
+                                        class="total-count">{{App\Helpers\Helper::wishlistCount()}}</span></a>
                             <!-- Shopping Item -->
                             @auth
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>{{count(\App\Http\Helper::getAllProductFromWishlist())}} Items</span>
+                                        <span>{{count(\App\Helpers\Helper::getAllProductFromWishlist())}} Items</span>
                                         <a href="{{route('wishlist')}}">View Wishlist</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        @foreach(\App\Http\Helper::getAllProductFromWishlist() as $data)
+                                        @foreach(\App\Helpers\Helper::getAllProductFromWishlist() as $data)
                                             @php
                                                 $photo=explode(',',$data->product['photo']);
                                             @endphp
@@ -115,7 +125,7 @@
                                         <div class="total">
                                             <span>Total</span>
                                             <span
-                                                    class="total-amount">${{number_format(\App\Http\Helper::totalWishlistPrice(),2)}}</span>
+                                                    class="total-amount">${{number_format(\App\Helpers\Helper::totalWishlistPrice(),2)}}</span>
                                         </div>
                                         <a href="{{route('cart')}}" class="btn animate">Cart</a>
                                     </div>
@@ -125,16 +135,16 @@
                         </div>
                         <div class="sinlge-bar shopping">
                             <a href="{{route('cart')}}" class="single-icon"><i class="ti-bag"></i> <span
-                                        class="total-count">{{\App\Http\Helper::cartCount()}}</span></a>
+                                        class="total-count">{{\App\Helpers\Helper::cartCount()}}</span></a>
                             <!-- Shopping Item -->
                             @auth
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>{{count(\App\Http\Helper::getAllProductFromCart())}} Items</span>
+                                        <span>{{count(\App\Helpers\Helper::getAllProductFromCart())}} Items</span>
                                         <a href="{{route('cart')}}">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        @foreach(\App\Http\Helper::getAllProductFromCart() as $data)
+                                        @foreach(\App\Helpers\Helper::getAllProductFromCart() as $data)
                                             @php
                                                 $photo=explode(',',$data->product['photo']);
                                             @endphp
@@ -154,7 +164,7 @@
                                         <div class="total">
                                             <span>Total</span>
                                             <span
-                                                    class="total-amount">${{number_format(\App\Http\Helper::totalCartPrice(),2)}}</span>
+                                                    class="total-amount">${{number_format(\App\Helpers\Helper::totalCartPrice(),2)}}</span>
                                         </div>
                                         <a href="{{route('checkout')}}" class="btn animate">Checkout</a>
                                     </div>
@@ -172,31 +182,75 @@
         <div class="container">
             <div class="cat-nav-head">
                 <div class="row">
-                    <div class="col-lg-12 col-12">
-                        <div class="menu-area">
-                            <!-- Main Menu -->
-                            <nav class="navbar navbar-expand-lg">
-                                <div class="navbar-collapse">
-                                    <div class="nav-inner">
-                                        <ul class="nav main-menu menu navbar-nav">
-                                            <li class="{{Request::path()=='home' ? 'active' : ''}}"><a
-                                                        href="{{route('home')}}">Home</a></li>
-                                            <li class="{{Request::path()=='about-us' ? 'active' : ''}}"><a
-                                                        href="{{route('about-us')}}">About Us</a></li>
-                                            <li class="@if(Request::path()=='product-grids'||Request::path()=='product-lists')  active  @endif">
-                                                <a href="{{route('product-grids')}}">Products</a><span
-                                                        class="new">New</span></li>
-                                            <li class="{{Request::path()=='blog' ? 'active' : ''}}"><a
-                                                        href="{{route('blog')}}">Blog</a></li>
-                                            <li class="{{Request::path()=='contact' ? 'active' : ''}}"><a
-                                                        href="{{route('contact')}}">Contact Us</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                            <!--/ End Main Menu -->
+                    @if (Request::path() == '/')
+                        <div class="col-lg-3">
+                            <div class="all-category">
+                                <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>CATEGORIES</h3>
+                                <ul class="main-category">
+                                    @foreach ($categories as $category)
+                                        <li><a href="{{ route('product-cat',$category->slug) }}">{{ $category->title }}
+                                                <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                            <ul class="sub-category">
+                                                @foreach ($category->childrenCategories as $childCategory)
+                                                    @include('frontend.layouts.child_category', ['child_category' => $childCategory])
+                                                @endforeach
+                                            </ul>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-lg-9 col-12">
+                            <div class="menu-area">
+                                <!-- Main Menu -->
+                                <nav class="navbar navbar-expand-lg">
+                                    <div class="navbar-collapse">
+                                        <div class="nav-inner">
+                                            <ul class="nav main-menu menu navbar-nav">
+                                                <li class="{{Request::path()=='home' ? 'active' : ''}}"><a
+                                                            href="{{route('home')}}">Home</a></li>
+                                                <li class="{{Request::path()=='about-us' ? 'active' : ''}}"><a
+                                                            href="{{route('about-us')}}">About Us</a></li>
+                                                <li class="@if(Request::path()=='product-grids'||Request::path()=='product-lists')  active  @endif">
+                                                    <a href="{{route('product-grids')}}">Products</a><span
+                                                            class="new">New</span></li>
+                                                <li class="{{Request::path()=='blog' ? 'active' : ''}}"><a
+                                                            href="{{route('blog')}}">Blog</a></li>
+                                                <li class="{{Request::path()=='contact' ? 'active' : ''}}"><a
+                                                            href="{{route('contact')}}">Contact Us</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+                                <!--/ End Main Menu -->
+                            </div>
+                        </div>
+                    @else
+                        <div class="col-12">
+                            <div class="menu-area">
+                                <!-- Main Menu -->
+                                <nav class="navbar navbar-expand-lg">
+                                    <div class="navbar-collapse">
+                                        <div class="nav-inner">
+                                            <ul class="nav main-menu menu navbar-nav">
+                                                <li class="{{Request::path()=='home' ? 'active' : ''}}"><a
+                                                            href="{{route('home')}}">Home</a></li>
+                                                <li class="{{Request::path()=='about-us' ? 'active' : ''}}"><a
+                                                            href="{{route('about-us')}}">About Us</a></li>
+                                                <li class="@if(Request::path()=='product-grids'||Request::path()=='product-lists')  active  @endif">
+                                                    <a href="{{route('product-grids')}}">Products</a><span
+                                                            class="new">New</span></li>
+                                                <li class="{{Request::path()=='blog' ? 'active' : ''}}"><a
+                                                            href="{{route('blog')}}">Blog</a></li>
+                                                <li class="{{Request::path()=='contact' ? 'active' : ''}}"><a
+                                                            href="{{route('contact')}}">Contact Us</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+                                <!--/ End Main Menu -->
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -3,12 +3,12 @@
        aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-envelope fa-fw"></i>
         <!-- Counter - Messages -->
-        @if(count(\App\Http\Helper::messageList())>5)
+        @if(count(\App\Helpers\Helper::messageList())>5)
             <span data-count="5" class="badge badge-danger badge-counter">5+</span>
         @else
 
-            <span data-count="{{count(\App\Http\Helper::messageList())}}"
-                  class="badge badge-danger badge-counter">{{count(\App\Http\Helper::messageList())}}</span>
+            <span data-count="{{count(\App\Helpers\Helper::messageList())}}"
+                  class="badge badge-danger badge-counter">{{count(\App\Helpers\Helper::messageList())}}</span>
 
         @endif
     </a>
@@ -19,7 +19,7 @@
             Message Center
         </h6>
         <div id="message-items">
-            @foreach(\App\Http\Helper::messageList() as $message)
+            @foreach(\App\Helpers\Helper::messageList() as $message)
                 <a class="dropdown-item d-flex align-items-center" href="{{route('messages.show',$message->id)}}">
                     <div class="dropdown-list-image mr-3">
                         @if($message->photo)

@@ -16,6 +16,7 @@
         public function run()
         {
             $categories = Category::factory()->count(10)->create();
+
             Product::factory()
                 ->count(500)
                 ->hasAttached($categories)

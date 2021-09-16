@@ -19,7 +19,6 @@
         </div>
     </div>
     <!-- End Breadcrumbs -->
-
     <!-- Start Blog Single -->
     <section class="blog-single shop-blog grid section">
         <div class="container">
@@ -76,15 +75,11 @@
                         <div class="single-widget category">
                             <h3 class="title">Blog Categories</h3>
                             <ul class="categor-list">
-                                @if(!empty($_GET['category']))
-                                    @php
-                                        $filter_cats=explode(',',$_GET['category'])
-                                    @endphp
-                                @endif
+
                                 <form action="{{route('blog.filter')}}" method="POST">
                                     @csrf
-                                    {{-- {{count(\App\Http\Helper::postCategoryList())}} --}}
-                                    @foreach(\App\Http\Helper::postCategoryList() as $cat)
+                                    {{count(\App\Helpers\Helper::postCategoryList())}}
+                                    @foreach(\App\Helpers\Helper::postCategoryList() as $cat)
                                         <li>
                                             <a href="{{route('blog.category',$cat->slug)}}">{{$cat->title}} </a>
                                         </li>
@@ -97,7 +92,7 @@
                         <!-- Single Widget -->
                         <div class="single-widget recent-post">
                             <h3 class="title">Recent post</h3>
-                        @foreach($recent_posts as $post)
+                        @foreach($recantPosts as $post)
                             <!-- Single Post -->
                                 <div class="single-post">
                                     <div class="image">
@@ -130,26 +125,6 @@
                         <!-- Single Widget -->
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
-                        <div class="single-widget side-tags">
-                            <h3 class="title">Tags</h3>
-                            <ul class="tag">
-                                @if(!empty($_GET['tag']))
-                                    @php
-                                        $filter_tags=explode(',',$_GET['tag'])
-                                    @endphp
-                                @endif
-                                <form action="{{route('blog.filter')}}" method="POST">
-                                    @csrf
-                                    @foreach(\App\Http\Helper::postTagList() as $tag)
-                                        <li>
-                                        <li>
-                                            <a href="{{route('blog.tag',$tag->title)}}">{{$tag->title}} </a>
-                                        </li>
-                                        </li>
-                                    @endforeach
-                                </form>
-                            </ul>
-                        </div>
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
                         <div class="single-widget newsletter">
