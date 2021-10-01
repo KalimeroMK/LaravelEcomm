@@ -107,21 +107,25 @@
             return $this->belongsToMany(Category::class);
         }
 
+        /**
+         * @return BelongsTo
+         */
         public function user(): BelongsTo
         {
             return $this->belongsTo(User::class, 'added_by');
         }
 
-        public function post_category(): BelongsTo
-        {
-            return $this->belongsTo(PostCategory::class, 'post_cat_id');
-        }
-
+        /**
+         * @return BelongsTo
+         */
         public function post_tag(): BelongsTo
         {
             return $this->belongsTo(Tag::class);
         }
 
+        /**
+         * @return HasMany
+         */
         public function post_comments(): HasMany
         {
             return $this->hasMany(PostComment::class);

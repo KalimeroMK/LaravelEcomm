@@ -102,21 +102,33 @@
             'color',
         ];
 
+        /**
+         * @return BelongsTo
+         */
         public function brand(): BelongsTo
         {
             return $this->belongsTo(Brand::class);
         }
 
+        /**
+         * @return HasMany
+         */
         public function carts(): HasMany
         {
             return $this->hasMany(Cart::class);
         }
 
+        /**
+         * @return HasMany
+         */
         public function product_reviews(): HasMany
         {
             return $this->hasMany(ProductReview::class);
         }
 
+        /**
+         * @return HasMany
+         */
         public function wishlists(): HasMany
         {
             return $this->hasMany(Wishlist::class);

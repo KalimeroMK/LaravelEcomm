@@ -25,14 +25,14 @@
          * Display a listing of the resource.
          *
          * @return Application|Factory|View
-         * /
-         * public function index()
-         * {
-         * $coupons = Coupon::orderBy('id', 'DESC')->paginate('10');
-         * return view('backend.coupon.index', compact('coupons'));
-         * }
-         *
-         * /**
+         */
+        public function index()
+        {
+            $coupons = Coupon::orderBy('id', 'DESC')->paginate('10');
+            return view('backend.coupon.index', compact('coupons'));
+        }
+
+        /**
          * Show the form for creating a new resource.
          *
          * @return Application|Factory|View

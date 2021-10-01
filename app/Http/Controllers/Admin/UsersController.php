@@ -27,10 +27,10 @@
          *
          * @return Application|Factory|View
          */
- 
+
         public function index(Request $request)
         {
-            $users = User::orderBy('id', 'DESC')->paginate(5);
+            $users = User::with('roles')->orderBy('id', 'DESC')->paginate(5);
             return view('backend.users.index', compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);
         }
 

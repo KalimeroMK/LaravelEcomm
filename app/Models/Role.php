@@ -15,28 +15,28 @@
     use Illuminate\Database\Eloquent\Relations\HasMany;
 
     /**
- * Class Role
- *
- * @property int $id
- * @property string $name
- * @property string $guard_name
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Collection|ModelHasRole[] $model_has_roles
- * @property Collection|Permission[] $permissions
- * @package App\Models
- * @property-read int|null $model_has_roles_count
- * @property-read int|null $permissions_count
- * @method static Builder|Role newModelQuery()
- * @method static Builder|Role newQuery()
- * @method static Builder|Role query()
- * @method static Builder|Role whereCreatedAt($value)
- * @method static Builder|Role whereGuardName($value)
- * @method static Builder|Role whereId($value)
- * @method static Builder|Role whereName($value)
- * @method static Builder|Role whereUpdatedAt($value)
- * @mixin Eloquent
- */
+     * Class Role
+     *
+     * @property int $id
+     * @property string $name
+     * @property string $guard_name
+     * @property Carbon|null $created_at
+     * @property Carbon|null $updated_at
+     * @property Collection|ModelHasRole[] $model_has_roles
+     * @property Collection|Permission[] $permissions
+     * @package App\Models
+     * @property-read int|null $model_has_roles_count
+     * @property-read int|null $permissions_count
+     * @method static Builder|Role newModelQuery()
+     * @method static Builder|Role newQuery()
+     * @method static Builder|Role query()
+     * @method static Builder|Role whereCreatedAt($value)
+     * @method static Builder|Role whereGuardName($value)
+     * @method static Builder|Role whereId($value)
+     * @method static Builder|Role whereName($value)
+     * @method static Builder|Role whereUpdatedAt($value)
+     * @mixin Eloquent
+     */
     class Role extends Model
     {
         protected $table = 'roles';
@@ -46,6 +46,9 @@
             'guard_name',
         ];
 
+        /**
+         * @return HasMany
+         */
         public function model_has_roles(): HasMany
         {
             return $this->hasMany(ModelHasRole::class);

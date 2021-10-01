@@ -2,8 +2,8 @@
 
     namespace App\Http\Controllers\Admin;
 
+    use App\Helpers\Helper;
     use App\Http\Controllers\Controller;
-    use App\Http\Helper;
     use App\Http\Requests\Order\Store;
     use App\Models\Cart;
     use App\Models\Order;

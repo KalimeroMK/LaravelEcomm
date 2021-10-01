@@ -39,7 +39,7 @@
 
         /**
          * @param  Request  $request
-         * @param $id
+         * @param  User  $user
          * @return RedirectResponse
          */
         public function profileUpdate(Request $request, User $user): RedirectResponse
@@ -125,7 +125,7 @@
          */
         public function productReviewUpdate(Request $request, int $id): RedirectResponse
         {
-            $review = ProductReview::find($id);
+            $review = ProductReview::findOrFail($id);
             if ($review) {
                 $data = $request->all();
                 $status = $review->fill($data)->update();
@@ -149,7 +149,7 @@
          */
         public function productReviewDelete(int $id): RedirectResponse
         {
-            $review = ProductReview::find($id);
+            $review = ProductReview::findOrFail($id);
             $status = $review->delete();
             if ($status) {
                 request()->session()->flash('success', 'Successfully deleted review');
@@ -174,7 +174,7 @@
          */
         public function userCommentDelete(int $id): RedirectResponse
         {
-            $comment = PostComment::find($id);
+            $comment = PostComment::findOrFail($id);
             if ($comment) {
                 $status = $comment->delete();
                 if ($status) {
@@ -195,7 +195,7 @@
          */
         public function userCommentEdit(int $id)
         {
-            $comments = PostComment::find($id);
+            $comments = PostComment::findOrFail($id);
             if ($comments) {
                 return view('user.comment.edit')->with('comment', $comments);
             } else {
@@ -213,7 +213,7 @@
          */
         public function userCommentUpdate(Request $request, int $id): RedirectResponse
         {
-            $comment = PostComment::find($id);
+            $comment = PostComment::findOrFail($id);
             if ($comment) {
                 $data = $request->all();
                 // return $data;

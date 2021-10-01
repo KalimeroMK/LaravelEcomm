@@ -15,6 +15,7 @@
     use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
     use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
     use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
+    use PragmaRX\Google2FAQRCode\Exceptions\MissingQrCodeServiceException;
     use PragmaRX\Google2FAQRCode\Google2FA;
 
     class LoginSecurityController extends Controller
@@ -22,6 +23,7 @@
         /**
          * Show 2FA Setting form
          * @return Application|Factory|View
+         * @throws MissingQrCodeServiceException
          */
         public function show2faForm()
         {

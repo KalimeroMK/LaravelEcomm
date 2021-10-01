@@ -239,11 +239,17 @@
             return $this->hasOne(Category::class, 'id', 'parent_id');
         }
 
+        /**
+         * @return HasMany
+         */
         public function child_cat(): HasMany
         {
             return $this->hasMany(Category::class, 'parent_id', 'id')->where('status', 'active');
         }
 
+        /**
+         * @return Builder[]|Collection
+         */
         public static function getAllParentWithChild()
         {
             return Category::with('child_cat')->where('parent_id', 1)->where('status', 'active')->orderBy('title',

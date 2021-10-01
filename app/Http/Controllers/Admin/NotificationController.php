@@ -40,7 +40,7 @@
          */
         public function delete($id): RedirectResponse
         {
-            $notification = Notification::find($id);
+            $notification = Notification::findOrFail($id);
             if ($notification) {
                 $status = $notification->delete();
                 if ($status) {

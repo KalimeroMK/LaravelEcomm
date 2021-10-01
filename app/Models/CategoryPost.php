@@ -53,11 +53,17 @@
             'category_id',
         ];
 
+        /**
+         * @return BelongsTo
+         */
         public function category(): BelongsTo
         {
             return $this->belongsTo(Category::class);
         }
 
+        /**
+         * @return BelongsTo
+         */
         public function post(): BelongsTo
         {
             return $this->belongsTo(Post::class);

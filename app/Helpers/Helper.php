@@ -6,9 +6,7 @@
     use App\Models\Category;
     use App\Models\Message;
     use App\Models\Order;
-    use App\Models\PostCategory;
     use App\Models\Shipping;
-    use App\Models\Tag;
     use App\Models\Wishlist;
     use Illuminate\Database\Eloquent\Builder;
     use Illuminate\Support\Collection;
@@ -90,22 +88,6 @@
 
         /**
          * @param  string  $user_id
-         * @return Builder[]|\Illuminate\Database\Eloquent\Collection|int
-         */
-        public static function getAllProductFromWishlist(string $user_id = '')
-        {
-            if (Auth::check()) {
-                if ($user_id == "") {
-                    $user_id = auth()->user()->id;
-                }
-                return Wishlist::with('product')->where('user_id', $user_id)->where('cart_id', null)->get();
-            } else {
-                return 0;
-            }
-        }
-
-        /**
-         * @param  string  $user_id
          * @return int|mixed
          */
         public static function totalWishlistPrice(string $user_id = '')
@@ -151,14 +133,6 @@
                 return Category::orderBy('id', 'DESC')->get();
             }
             return Category::has('products')->orderBy('id', 'DESC')->get();
-        }
-
-        public static function postTagList($option = 'all')
-        {
-            if ($option = 'all') {
-                return Tag::orderBy('id', 'desc')->get();
-            }
-            return Tag::has('posts')->orderBy('id', 'desc')->get();
         }
 
         public static function postCategoryList($option = "all")
