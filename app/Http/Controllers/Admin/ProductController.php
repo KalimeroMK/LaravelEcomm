@@ -7,6 +7,7 @@
     use App\Models\Brand;
     use App\Models\Category;
     use App\Models\Product;
+    use App\Traits\ImageUpload;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
     use Illuminate\Contracts\View\View;
@@ -22,6 +23,8 @@
             $this->middleware('permission:product-edit', ['only' => ['edit', 'update']]);
             $this->middleware('permission:product-delete', ['only' => ['destroy']]);
         }
+
+        use ImageUpload;
 
         /**
          * Display a listing of the resource.
@@ -57,18 +60,26 @@
             $data = $request->all();
             $data['is_featured'] = $request->input('is_featured', 0);
             $size = $request->input('size');
+            $color = $request->input('color');
             if ($size) {
                 $data['size'] = implode(',', $size);
             } else {
                 $data['size'] = '';
             }
+            if ($color) {
+                $color = preg_replace('/\s+/', '', $color);
+                $data['color'] = implode(',', $color);
+            } else {
+                $data['color'] = '';
+            }
+            $data['photo'] = $this->verifyAndStoreImage($request);
 
             $product = Product::create($data);
-            $product->categories()->attach($request->category);
+            $product->categories()->attach($request['category']);
 
             request()->session()->flash('success', 'Product Successfully added');
 
-            return redirect()->route('product.index');
+            return redirect()->route('products.index');
         }
 
         /**
@@ -79,13 +90,10 @@
          */
         public function edit(Product $product)
         {
-            $brand = Brand::get();
-            $category = Category::where('is_parent', 1)->get();
-            $items = Product::where('id', $id)->get();
-            // return $items;
-            return view('backend.product.edit')->with('product', $product)
-                ->with('brands', $brand)
-                ->with('categories', $category)->with('items', $items);
+            $brands = Brand::get();
+            $categories = Category::all();
+            $items = Product::whereId($product->id)->get();
+            return view('backend.product.edit', compact('brands', 'categories', 'items', 'product'));
         }
 
         /**
@@ -100,12 +108,20 @@
             $data = $request->all();
             $data['is_featured'] = $request->input('is_featured', 0);
             $size = $request->input('size');
+            $color = $request->input('color');
             if ($size) {
                 $data['size'] = implode(',', $size);
             } else {
                 $data['size'] = '';
             }
-            // return $data;
+            if ($color) {
+                $data['color'] = implode(',', $color);
+            } else {
+                $data['color'] = '';
+            }
+            if (!empty($data['photo'])) {
+                $data['photo'] = $this->verifyAndStoreImage($request);
+            }
             $status = $product->update($data);
             $product->categories()->sync($request->category, true);
 
@@ -133,5 +149,19 @@
                 request()->session()->flash('error', 'Error while deleting product');
             }
             return redirect()->route('product.index');
+        }
+
+
+        /**
+         * Make paths for storing images.
+         *
+         * @return object
+         */
+        public function makePaths(): object
+        {
+            $original = public_path().'/uploads/images/products/';
+            $thumbnail = public_path().'/uploads/images/products/thumbnails/';
+            $medium = public_path().'/uploads/images/products/medium/';
+            return (object)compact('original', 'thumbnail', 'medium');
         }
     }

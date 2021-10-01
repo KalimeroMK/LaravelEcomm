@@ -57,8 +57,8 @@
          */
         public function store(Store $request): RedirectResponse
         {
-            $title = $request->title;
-            $parent_id = $request->parent_id;
+            $title = $request['title'];
+            $parent_id = $request['parent_id'];
             if (!is_null($parent_id)) {
                 $category = Category::create(["title" => $title, "parent_id" => $parent_id]);
                 Session::flash('flash_message', 'Category successfully created!');

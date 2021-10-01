@@ -5,7 +5,7 @@
     <div class="card">
         <h5 class="card-header">Edit Post</h5>
         <div class="card-body">
-            <form method="post" action="{{route('post.update',$post->id)}}">
+            <form method="post" action="{{route('posts.update',$post->id)}}">
                 @csrf
                 @method('PATCH')
                 <div class="form-group">
@@ -42,15 +42,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="post_cat_id">Category <span class="text-danger">*</span></label>
-                    <select name="post_cat_id" class="form-control">
-                        <option value="">--Select any category--</option>
-                        @foreach($categories as $key=>$data)
-                            <option value='{{$data->id}}' {{(($data->id==$post->post_cat_id)? 'selected' : '')}}>{{$data->title}}</option>
+                    <label for="cat_id">Category <span class="text-danger">*</span></label>
+                    <select class="form-control js-example-basic-multiple" id="category" name="category[]"
+                            multiple="multiple">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">@for ($i = 0; $i < $category->depth; $i++)
+                                    - @endfor {{ $category->title }}</option>
                         @endforeach
                     </select>
                 </div>
-                {{-- {{$post->tags}} --}}
                 @php
                     $post_tags=explode(',',$post->tags);
                     // dd($tags);
@@ -114,37 +114,20 @@
     <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
+          rel="stylesheet"/>
 @endpush
 @push('scripts')
     <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
-    <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-
-    <script>
-        $('#lfm').filemanager('image');
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script type="text/javascript">
         $(document).ready(function () {
-            $('#summary').summernote({
-                placeholder: "Write short description.....",
-                tabsize: 2,
-                height: 150
-            });
+            $('.js-example-basic-multiple').select2();
         });
-
-        $(document).ready(function () {
-            $('#quote').summernote({
-                placeholder: "Write short Quote.....",
-                tabsize: 2,
-                height: 100
-            });
-        });
-        $(document).ready(function () {
-            $('#description').summernote({
-                placeholder: "Write detail description.....",
-                tabsize: 2,
-                height: 150
-            });
-        });
+    </script>
+    <!-- select2 -->
+    <script type="text/javascript">
+        $('#category').select2().val({!! json_encode($post->categories()->allRelatedIds()) !!}).trigger('change');
     </script>
 @endpush

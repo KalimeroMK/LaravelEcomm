@@ -1,11 +1,15 @@
 @extends('backend.layouts.master')
 
 @section('content')
-
+    @if($errors->any())
+        @foreach ($errors->all() as $error)
+            <div class="alert-primary">{{ $error }}</div>
+        @endforeach
+    @endif
     <div class="card">
         <h5 class="card-header">Add Product</h5>
         <div class="card-body">
-            <form method="post" action="{{route('products.store')}}">
+            <form method="post" action="{{route('products.store')}}" enctype="multipart/form-data">
                 {{csrf_field()}}
                 <div class="form-group">
                     <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
@@ -37,25 +41,14 @@
                     <label for="is_featured">Is Featured</label><br>
                     <input type="checkbox" name='is_featured' id='is_featured' value='1' checked> Yes
                 </div>
-                {{-- {{$categories}} --}}
-
                 <div class="form-group">
                     <label for="cat_id">Category <span class="text-danger">*</span></label>
-                    <select name="cat_id" id="cat_id" class="form-control">
-                        <option value="">--Select any category--</option>
-                        @foreach($categories as $key=>$cat_data)
-                            <option value='{{$cat_data->id}}'>{{$cat_data->title}}</option>
+                    <select class="form-control js-example-basic-multiple" id="category" name="category[]"
+                            multiple="multiple">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">@for ($i = 0; $i < $category->depth; $i++)
+                                    - @endfor {{ $category->title }}</option>
                         @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group d-none" id="child_cat_div">
-                    <label for="child_cat_id">Sub Category</label>
-                    <select name="child_cat_id" id="child_cat_id" class="form-control">
-                        <option value="">--Select any category--</option>
-                        {{-- @foreach($parent_cats as $key=>$parent_cat)
-                            <option value='{{$parent_cat->id}}'>{{$parent_cat->title}}</option>
-                        @endforeach --}}
                     </select>
                 </div>
 
@@ -86,11 +79,16 @@
                         <option value="XL">Extra Large (XL)</option>
                     </select>
                 </div>
-
+                <div class="form-group">
+                    <label for="color" class="col-form-label">Color</label>
+                    <input id="color" type="text" name="color[]" placeholder="Enter color"
+                           class="form-control">
+                    @error('color')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>
                 <div class="form-group">
                     <label for="brand_id">Brand</label>
-                    {{-- {{$brands}} --}}
-
                     <select name="brand_id" class="form-control">
                         <option value="">--Select Brand--</option>
                         @foreach($brands as $brand)
@@ -120,33 +118,29 @@
                 <div class="form-group">
                     <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
                     <div class="input-group">
-              <span class="input-group-btn">
-                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                  <i class="fa fa-picture-o"></i> Choose
-                  </a>
-              </span>
-                        <input id="thumbnail" class="form-control" type="text" name="photo" value="{{old('photo')}}">
-                    </div>
-                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+              <span class="btn btn-round btn-rose btn-file">
+                    <span class="fileinput-new">Add Photo</span>
+                    <input type="hidden" value="" name="photo"><input type="file"
+                                                                      name="photo">
                     @error('photo')
                     <span class="text-danger">{{$message}}</span>
-                    @enderror
-                </div>
+                        @enderror
+                    </div>
 
-                <div class="form-group">
-                    <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
-                    <select name="status" class="form-control">
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                    @error('status')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
-                </div>
-                <div class="form-group mb-3">
-                    <button type="reset" class="btn btn-warning">Reset</button>
-                    <button class="btn btn-success" type="submit">Submit</button>
-                </div>
+                    <div class="form-group">
+                        <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
+                        <select name="status" class="form-control">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        @error('status')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-3">
+                        <button type="reset" class="btn btn-warning">Reset</button>
+                        <button class="btn btn-success" type="submit">Submit</button>
+                    </div>
             </form>
         </div>
     </div>
@@ -157,71 +151,17 @@
     <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
+          rel="stylesheet"/>
 @endpush
 @push('scripts')
     <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
     <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-
-    <script>
-        const route_prefix = "/file-manager";
-        $('#lfm').filemanager('image', {prefix: route_prefix});
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script type="text/javascript">
         $(document).ready(function () {
-            $('#summary').summernote({
-                placeholder: "Write short description.....",
-                tabsize: 2,
-                height: 100
-            });
+            $('.js-example-basic-multiple').select2();
         });
-
-        $(document).ready(function () {
-            $('#description').summernote({
-                placeholder: "Write detail description.....",
-                tabsize: 2,
-                height: 150
-            });
-        });
-        // $('select').selectpicker();
-
-    </script>
-
-    <script>
-        $('#cat_id').change(function () {
-            var cat_id = $(this).val();
-            // alert(cat_id);
-            if (cat_id != null) {
-                // Ajax call
-                $.ajax({
-                    url: "/admin/category/" + cat_id + "/child",
-                    data: {
-                        _token: "{{csrf_token()}}",
-                        id: cat_id
-                    },
-                    type: "POST",
-                    success: function (response) {
-                        if (typeof (response) != 'object') {
-                            response = $.parseJSON(response)
-                        }
-                        // console.log(response);
-                        var html_option = "<option value=''>----Select sub category----</option>"
-                        if (response.status) {
-                            var data = response.data;
-                            // alert(data);
-                            if (response.data) {
-                                $('#child_cat_div').removeClass('d-none');
-                                $.each(data, function (id, title) {
-                                    html_option += "<option value='" + id + "'>" + title + "</option>"
-                                });
-                            } else {
-                            }
-                        } else {
-                            $('#child_cat_div').addClass('d-none');
-                        }
-                        $('#child_cat_id').html(html_option);
-                    }
-                });
-            } else {
-            }
-        })
     </script>
 @endpush

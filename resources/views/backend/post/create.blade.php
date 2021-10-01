@@ -5,7 +5,7 @@
     <div class="card">
         <h5 class="card-header">Add Post</h5>
         <div class="card-body">
-            <form method="post" action="{{route('post.store')}}">
+            <form method="post" action="{{route('posts.store')}}">
                 {{csrf_field()}}
                 <div class="form-group">
                     <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
@@ -41,11 +41,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="post_cat_id">Category <span class="text-danger">*</span></label>
-                    <select name="post_cat_id" class="form-control">
-                        <option value="">--Select any category--</option>
-                        @foreach($categories as $key=>$data)
-                            <option value='{{$data->id}}'>{{$data->title}}</option>
+                    <label for="cat_id">Category <span class="text-danger">*</span></label>
+                    <select class="form-control js-example-basic-multiple" id="category" name="category[]"
+                            multiple="multiple">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">@for ($i = 0; $i < $category->depth; $i++)
+                                    - @endfor {{ $category->title }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -71,19 +72,15 @@
                 <div class="form-group">
                     <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
                     <div class="input-group">
-              <span class="input-group-btn">
-                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                  <i class="fa fa-picture-o"></i> Choose
-                  </a>
-              </span>
-                        <input id="thumbnail" class="form-control" type="text" name="photo" value="{{old('photo')}}">
-                    </div>
-                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+              <span class="btn btn-round btn-rose btn-file">
+                    <span class="fileinput-new">Add Photo</span>
+                    <input type="hidden" value="" name="photo"><input type="file"
+                                                                      name="photo">
                     @error('photo')
                     <span class="text-danger">{{$message}}</span>
-                    @enderror
+                        @enderror
+                    </div>
                 </div>
-
                 <div class="form-group">
                     <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
                     <select name="status" class="form-control">
@@ -108,39 +105,16 @@
     <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
+          rel="stylesheet"/>
 @endpush
 @push('scripts')
-    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
     <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-
-    <script>
-        $('#lfm').filemanager('image');
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script type="text/javascript">
         $(document).ready(function () {
-            $('#summary').summernote({
-                placeholder: "Write short description.....",
-                tabsize: 2,
-                height: 100
-            });
+            $('.js-example-basic-multiple').select2();
         });
-
-        $(document).ready(function () {
-            $('#description').summernote({
-                placeholder: "Write detail description.....",
-                tabsize: 2,
-                height: 150
-            });
-        });
-
-        $(document).ready(function () {
-            $('#quote').summernote({
-                placeholder: "Write detail Quote.....",
-                tabsize: 2,
-                height: 100
-            });
-        });
-        // $('select').selectpicker();
-
     </script>
 @endpush

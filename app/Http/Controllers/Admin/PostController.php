@@ -5,10 +5,11 @@
     use App\Http\Controllers\Controller;
     use App\Http\Requests\Post\Store;
     use App\Http\Requests\Post\Update;
+    use App\Models\Category;
     use App\Models\Post;
-    use App\Models\PostCategory;
     use App\Models\Tag;
     use App\Models\User;
+    use App\Traits\ImageUpload;
     use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\View\Factory;
     use Illuminate\Contracts\View\View;
@@ -23,7 +24,9 @@
             $this->middleware('permission:post-edit', ['only' => ['edit', 'update']]);
             $this->middleware('permission:post-delete', ['only' => ['destroy']]);
         }
- 
+
+        use ImageUpload;
+
         /**
          * Display a listing of the resource.
          *
@@ -42,7 +45,7 @@
          */
         public function create()
         {
-            $categories = PostCategory::get();
+            $categories = Category::get();
             $tags = Tag::get();
             $users = User::get();
             return view('backend.post.create', compact('users', 'categories', 'tags'));
@@ -62,13 +65,13 @@
             } else {
                 $data['tags'] = '';
             }
+            $data['photo'] = $this->verifyAndStoreImage($request);
 
-            $status = Post::create($data);
-            if ($status) {
-                request()->session()->flash('success', 'Post Successfully added');
-            } else {
-                request()->session()->flash('error', 'Please try again!!');
-            }
+            $post = Post::create($data);
+            $post->categories()->attach($request['category']);
+
+            request()->session()->flash('success', 'Post Successfully added');
+
             return redirect()->route('post.index');
         }
 
@@ -81,7 +84,7 @@
          */
         public function edit(Post $post)
         {
-            $categories = PostCategory::get();
+            $categories = Category::get();
             $tags = Tag::get();
             $users = User::get();
             return view('backend.post.edit', compact('post', 'categories', 'tags', 'users'));
@@ -104,8 +107,12 @@
             } else {
                 $data['tags'] = '';
             }
-
+            if (!empty($data['photo'])) {
+                $data['photo'] = $this->verifyAndStoreImage($request);
+            }
             $status = $post->update($data);
+            $post->categories()->sync($request['category'], true);
+
             if ($status) {
                 request()->session()->flash('success', 'Post Successfully updated');
             } else {
@@ -130,5 +137,18 @@
                 request()->session()->flash('error', 'Error while deleting post ');
             }
             return redirect()->route('post.index');
+        }
+
+        /**
+         * Make paths for storing images.
+         *
+         * @return object
+         */
+        public function makePaths(): object
+        {
+            $original = public_path().'/uploads/images/post/';
+            $thumbnail = public_path().'/uploads/images/post/thumbnails/';
+            $medium = public_path().'/uploads/images/post/medium/';
+            return (object)compact('original', 'thumbnail', 'medium');
         }
     }

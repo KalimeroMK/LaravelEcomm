@@ -22,11 +22,12 @@
                 $table->text('photo');
                 $table->integer('stock')->default(1);
                 $table->string('size')->default('M')->nullable();
+                $table->string('color')->nullable();
                 $table->enum('condition', ['default', 'new', 'hot'])->default('default');
                 $table->enum('status', ['active', 'inactive'])->default('active');
                 $table->float('price');
                 $table->float('discount')->nullabale();
-                $table->boolean('is_featured')->deault(false);
+                $table->boolean('is_featured')->deault(false)->nullable();
                 $table->unsignedBigInteger('brand_id')->nullable();
                 $table->foreign('brand_id')->references('id')->on('brands')->onDelete('SET NULL');
                 $table->timestamps();

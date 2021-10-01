@@ -86,8 +86,6 @@
         </div>
     </section>
     <!--/ End Slider Area -->
-
-
     <!-- Start Most Popular -->
     <div class="product-area most-popular section">
         <div class="container">
@@ -259,9 +257,7 @@
                 </div>
             </section>
             <!-- End Shop Services Area -->
-
             @include('frontend.layouts.newsletter')
-
             <!-- Modal -->
             @if($product_lists)
                 @foreach($product_lists as $key=>$product)
@@ -336,14 +332,13 @@
                                                                 <select>
                                                                     @php
                                                                         $sizes=explode(',',$product->size);
-                                                                        // dd($sizes);
                                                                     @endphp
                                                                     @foreach($sizes as $size)
                                                                         <option>{{$size}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                            {{-- <div class="col-lg-6 col-12">
+                                                            <div class="col-lg-6 col-12">
                                                                 <h5 class="title">Color</h5>
                                                                 <select>
                                                                     <option selected="selected">orange</option>
@@ -351,7 +346,7 @@
                                                                     <option>black</option>
                                                                     <option>pink</option>
                                                                 </select>
-                                                            </div> --}}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 @endif

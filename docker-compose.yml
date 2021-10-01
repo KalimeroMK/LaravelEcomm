@@ -2,7 +2,7 @@ version: '3.7'
 services:
   #PHP Service
   app:
-    image: kalimeromk/php:7.4
+    build: ./docker
     container_name: app
     restart: unless-stopped
     working_dir: /var/www

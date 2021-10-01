@@ -12,7 +12,6 @@
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
-    use Illuminate\Support\Facades\Redirect;
     use PDF;
 
     class OrderFrontController extends Controller
@@ -37,7 +36,7 @@
             if (request('payment_method') == 'paypal') {
                 return redirect()->route('payment')->with($data[0], $data[1]);
             } elseif (request('payment_method') == 'stripe') {
-                return Redirect::to('stripe/'.$data[0]);
+                return redirect()->route('stripe')->with($data);
             } else {
                 session()->forget('cart');
                 session()->forget('coupon');
