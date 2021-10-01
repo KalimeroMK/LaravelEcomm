@@ -12,7 +12,6 @@
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Route;
     use Spatie\Feed\Http\FeedController;
-    use UniSharp\LaravelFilemanager\Lfm;
 
     /*
     |--------------------------------------------------------------------------
@@ -89,10 +88,4 @@
 //Stripe
     Route::get('stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
     Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
-//Filemanager
-    Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
-        Lfm::routes();
-    });
-    Route::get('/file-manager', function () {
-        return view('backend.layouts.file');
-    })->name('file-manager')->middleware(['web', 'auth']);
+

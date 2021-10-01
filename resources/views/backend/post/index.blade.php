@@ -22,6 +22,7 @@
                             <th>S.N.</th>
                             <th>Title</th>
                             <th>Category</th>
+                            <th>Description</th>
                             <th>Tag</th>
                             <th>Author</th>
                             <th>Photo</th>
@@ -34,6 +35,7 @@
                             <th>S.N.</th>
                             <th>Title</th>
                             <th>Category</th>
+                            <th>Description</th>
                             <th>Tag</th>
                             <th>Author</th>
                             <th>Photo</th>
@@ -47,12 +49,12 @@
                             <tr>
                                 <td>{{$post->id}}</td>
                                 <td>{{$post->title}}</td>
-                                <td>
                                 <td> @foreach($post->categories as $category)
                                         {{$category->title}}
                                     @endforeach
                                 </td>
                                 <td>{{$post->tags}}</td>
+                                <td>{{$post->description}}</td>
                                 <td>{{ $post->author_info->name}}</td>
                                 <td>
                                     @if($post->photo)
