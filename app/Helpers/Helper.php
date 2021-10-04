@@ -42,6 +42,22 @@
          * @param  string  $user_id
          * @return Builder[]|\Illuminate\Database\Eloquent\Collection|int
          */
+        public static function getAllProductFromWishlist(string $user_id = '')
+        {
+            if (Auth::check()) {
+                if ($user_id == "") {
+                    $user_id = auth()->user()->id;
+                }
+                return Wishlist::with('product')->where('user_id', $user_id)->where('cart_id', null)->get();
+            } else {
+                return 0;
+            }
+        }
+
+        /**
+         * @param  string  $user_id
+         * @return Builder[]|\Illuminate\Database\Eloquent\Collection|int
+         */
         public static function getAllProductFromCart(string $user_id = '')
         {
             if (Auth::check()) {

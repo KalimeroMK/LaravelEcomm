@@ -10,6 +10,7 @@
   "require": {
     "php": "^7.4|^8.0",
     "ext-json": "*",
+    "bacon/bacon-qr-code": "^2.0",
     "barryvdh/laravel-dompdf": "^0.8.6",
     "consoletvs/charts": "7.*",
     "fakerphp/faker": "^1.15",
