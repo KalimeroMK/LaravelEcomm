@@ -59,20 +59,17 @@
          */
         public function store(Store $request): RedirectResponse
         {
-            $tags = $request->input('tags');
-            if ($tags) {
-                $data['tags'] = implode(',', $tags);
-            } else {
-                $data['tags'] = '';
-            }
-            $data['photo'] = $this->verifyAndStoreImage($request);
-
-            $post = Post::create($data);
+            $post = Post::create(
+                $request->except('photo') + [
+                    'photo' => $this->verifyAndStoreImage($request),
+                ]
+            );
             $post->categories()->attach($request['category']);
+            $post->post_tag()->attach($request['tags']);
 
             request()->session()->flash('success', 'Post Successfully added');
 
-            return redirect()->route('post.index');
+            return redirect()->route('posts.index');
         }
 
 
@@ -99,18 +96,16 @@
          */
         public function update(Update $request, Post $post): RedirectResponse
         {
-            $data = $request->all();
-            $tags = $request->input('tags');
-            // return $tags;
-            if ($tags) {
-                $data['tags'] = implode(',', $tags);
+            if ($request->hasFile('photo')) {
+                $status = $post->update(
+                    $request->except('photo') + [
+                        'photo' => $this->verifyAndStoreImage($request),
+                    ]
+                );
             } else {
-                $data['tags'] = '';
+                $status = $post->update($request->all());
             }
-            if (!empty($data['photo'])) {
-                $data['photo'] = $this->verifyAndStoreImage($request);
-            }
-            $status = $post->update($data);
+            $post->post_tag()->sync($request['tags'], true);
             $post->categories()->sync($request['category'], true);
 
             if ($status) {

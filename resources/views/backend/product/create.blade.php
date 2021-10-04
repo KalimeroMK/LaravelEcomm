@@ -1,11 +1,6 @@
 @extends('backend.layouts.master')
 
 @section('content')
-    @if($errors->any())
-        @foreach ($errors->all() as $error)
-            <div class="alert-primary">{{ $error }}</div>
-        @endforeach
-    @endif
     <div class="card">
         <h5 class="card-header">Add Product</h5>
         <div class="card-body">

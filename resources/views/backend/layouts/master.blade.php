@@ -20,9 +20,14 @@
             <!-- Topbar -->
         @include('backend.layouts.header')
         <!-- End of Topbar -->
-
-            <!-- Begin Page Content -->
+            @if($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert-primary">{{ $error }}</div>
+            @endforeach
+        @endif
+        <!-- Begin Page Content -->
         @yield('content')
+
         <!-- /.container-fluid -->
 
         </div>

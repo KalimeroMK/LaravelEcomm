@@ -80,9 +80,7 @@
         protected $table = 'posts';
 
         protected $casts = [
-            'post_cat_id' => 'int',
-            'post_tag_id' => 'int',
-            'added_by'    => 'int',
+            'added_by' => 'int',
         ];
 
         protected $fillable = [
@@ -92,9 +90,6 @@
             'description',
             'quote',
             'photo',
-            'tags',
-            'post_cat_id',
-            'post_tag_id',
             'added_by',
             'status',
         ];
@@ -116,11 +111,11 @@
         }
 
         /**
-         * @return BelongsTo
+         * @return BelongsToMany
          */
-        public function post_tag(): BelongsTo
+        public function post_tag(): BelongsToMany
         {
-            return $this->belongsTo(Tag::class);
+            return $this->BelongsToMany(Tag::class);
         }
 
         /**
