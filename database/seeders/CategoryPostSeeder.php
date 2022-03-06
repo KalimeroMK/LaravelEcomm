@@ -2,9 +2,9 @@
 
     namespace Database\Seeders;
 
-    use App\Models\Category;
-    use App\Models\Post;
     use Illuminate\Database\Seeder;
+    use Modules\Category\Models\Category;
+    use Modules\Post\Models\Post;
 
     class CategoryPostSeeder extends Seeder
     {

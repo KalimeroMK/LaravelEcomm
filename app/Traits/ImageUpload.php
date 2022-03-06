@@ -11,20 +11,21 @@
     {
         /**
          * @param  Request  $request
+         *
          * @return string
          */
         public function verifyAndStoreImage(Request $request): string
         {
             if ($request->hasFile('photo')) {
-                $image = $request->file('photo');
+                $image     = $request->file('photo');
                 $imageName = Str::random(15).'.'.$image->getClientOriginalExtension();
-                $paths = $this->makePaths();
+                $paths     = $this->makePaths();
                 File::makeDirectory($paths->original, $mode = 0755, true, true);
                 File::makeDirectory($paths->thumbnail, $mode = 0755, true, true);
                 File::makeDirectory($paths->medium, $mode = 0755, true, true);
                 $image->move($paths->original, $imageName);
-                $find_image = $paths->original.$imageName;
-                $image_thumb = Image::make($find_image)->resize(
+                $find_image   = $paths->original.$imageName;
+                $image_thumb  = Image::make($find_image)->resize(
                     200,
                     null,
                     function ($constraint) {

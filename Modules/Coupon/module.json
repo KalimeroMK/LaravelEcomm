@@ -1,0 +1,13 @@
+{
+  "name": "Coupon",
+  "alias": "coupon",
+  "description": "",
+  "keywords": [],
+  "priority": 0,
+  "providers": [
+    "Modules\\Coupon\\Providers\\CouponServiceProvider"
+  ],
+  "aliases": {},
+  "files": [],
+  "requires": []
+}

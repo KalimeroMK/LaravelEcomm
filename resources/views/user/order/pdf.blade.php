@@ -156,7 +156,7 @@
               <tr>
                 <th scope="col" class="empty"></th>
                 <th scope="col" class="text-right">Discount:</th>
-                <th scope="col"><span>-{{$order->coupon->discount(\App\Http\Helper::orderPrice($order->id, $order->user->id))}}{{\App\Http\Helper::base_currency()}}</span></th>
+                <th scope="col"><span>-{{$order->coupon->discount(\App\Helpers\Helper::orderPrice($order->id, $order->user->id))}}{{\App\Helpers\Helper::base_currency()}}</span></th>
               </tr>
             @endif --}}
             <tr>

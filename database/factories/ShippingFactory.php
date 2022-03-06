@@ -2,9 +2,10 @@
 
     namespace Database\Factories;
 
-    use App\Models\Shipping;
     use Illuminate\Database\Eloquent\Factories\Factory;
     use Illuminate\Support\Carbon;
+    use JetBrains\PhpStorm\ArrayShape;
+    use Modules\Shipping\Models\Shipping;
 
     class ShippingFactory extends Factory
     {
@@ -15,7 +16,12 @@
          *
          * @return array
          */
-        public function definition(): array
+        #[ArrayShape([
+            'type'       => "string",
+            'price'      => "int",
+            'created_at' => "\Illuminate\Support\Carbon",
+            'updated_at' => "\Illuminate\Support\Carbon",
+        ])] public function definition(): array
         {
             return [
                 'type'       => $this->faker->word,

@@ -2,10 +2,12 @@
 
     namespace Database\Factories;
 
-    use App\Models\Cart;
-    use App\Models\Order;
     use Illuminate\Database\Eloquent\Factories\Factory;
     use Illuminate\Support\Carbon;
+    use JetBrains\PhpStorm\ArrayShape;
+    use Modules\Cart\Models\Cart;
+    use Modules\Order\Models\Order;
+    use Modules\Product\Models\Product;
 
     class CartFactory extends Factory
     {
@@ -16,7 +18,16 @@
          *
          * @return array
          */
-        public function definition(): array
+        #[ArrayShape([
+            'user_id'    => "int",
+            'price'      => "int",
+            'quantity'   => "int",
+            'amount'     => "int",
+            'created_at' => "\Illuminate\Support\Carbon",
+            'updated_at' => "\Illuminate\Support\Carbon",
+            'product_id' => "int",
+            'order_id'   => "\Closure",
+        ])] public function definition(): array
         {
             return [
                 'user_id'    => $this->faker->numberBetween(1, 3),
@@ -25,8 +36,9 @@
                 'amount'     => $this->faker->numberBetween(1, 7777),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-
-                'product_id' => $this->faker->numberBetween(1, 500),
+                'product_id' => function () {
+                    return Product::factory()->create()->id;
+                },
                 'order_id'   => function () {
                     return Order::factory()->create()->id;
                 },

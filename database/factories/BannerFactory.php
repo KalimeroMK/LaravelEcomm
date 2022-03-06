@@ -2,9 +2,10 @@
 
     namespace Database\Factories;
 
-    use App\Models\Banner;
     use Illuminate\Database\Eloquent\Factories\Factory;
     use Illuminate\Support\Carbon;
+    use JetBrains\PhpStorm\ArrayShape;
+    use Modules\Banner\Models\Banner;
 
     class BannerFactory extends Factory
     {
@@ -15,7 +16,13 @@
          *
          * @return array
          */
-        public function definition(): array
+        #[ArrayShape([
+            'title'       => "string",
+            'photo'       => "string",
+            'description' => "string",
+            'created_at'  => "\Illuminate\Support\Carbon",
+            'updated_at'  => "\Illuminate\Support\Carbon",
+        ])] public function definition(): array
         {
             return [
                 'title'       => $this->faker->unique()->word,

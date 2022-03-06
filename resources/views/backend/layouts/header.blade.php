@@ -59,7 +59,7 @@
 
         <!-- Nav Item - Messages -->
         <li class="nav-item dropdown no-arrow mx-1" id="messageT" data-url="{{route('messages.five')}}">
-            @include('backend.message.message')
+            @include('message::message')
         </li>
 
         <div class="topbar-divider d-none d-sm-block"></div>
@@ -81,7 +81,7 @@
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
-                <a class="dropdown-item" href="{{route('settings')}}">
+                <a class="dropdown-item" href="{{route('settings.index')}}">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings
                 </a>

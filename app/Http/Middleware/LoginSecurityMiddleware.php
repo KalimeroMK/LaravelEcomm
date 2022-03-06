@@ -2,9 +2,9 @@
 
   namespace App\Http\Middleware;
 
-  use App\Support\Google2FAAuthenticator;
   use Closure;
   use Illuminate\Http\Request;
+  use Modules\LoginSecurity\Support\Google2FAAuthenticator;
 
   class LoginSecurityMiddleware
   {

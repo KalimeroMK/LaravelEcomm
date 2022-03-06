@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('layouts.master')
 @section('title','E-SHOP || All Notifications')
 @section('content')
     <div class="card">

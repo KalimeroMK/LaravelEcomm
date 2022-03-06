@@ -1,27 +1,14 @@
 <?php
 
-
     namespace App\Providers;
 
-    use App\Http\ViewComposers\MenuViewComposer;
-    use App\Http\ViewComposers\SettingsViewComposer;
-    use App\Http\ViewComposers\ShemaOrgViewComposer;
-    use App\Models\Banner;
-    use App\Models\Brand;
-    use App\Models\Category;
-    use App\Models\Post;
-    use App\Models\PostCategory;
-    use App\Models\Product;
-    use App\Models\Tag;
-    use App\Observers\BannerObserver;
-    use App\Observers\BrandObserver;
-    use App\Observers\CategoryObserver;
-    use App\Observers\PostObserver;
-    use App\Observers\ProductObserver;
-    use App\Observers\TagObserver;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Support\Facades\View;
     use Illuminate\Support\ServiceProvider;
+    use Laravel\Passport\Passport;
+    use Modules\Front\Http\ViewComposers\MenuViewComposer;
+    use Modules\Front\Http\ViewComposers\SchemaOrgViewComposer;
+    use Modules\Front\Http\ViewComposers\SettingsViewComposer;
     use Schema;
 
     class AppServiceProvider extends ServiceProvider
@@ -36,6 +23,7 @@
             //
         }
 
+
         /**
          * Bootstrap any application services.
          *
@@ -43,16 +31,11 @@
          */
         public function boot()
         {
-            Model::preventLazyLoading(!app()->isProduction());
+            Model::preventLazyLoading(! app()->isProduction());
             Schema::defaultStringLength(191);
-            Banner::observe(BannerObserver::class);
-            Brand::observe(BrandObserver::class);
-            Category::observe(CategoryObserver::class);
-            Tag::observe(TagObserver::class);
-            Post::observe(PostObserver::class);
-            Product::observe(ProductObserver::class);
-            View::composer(['frontend.layouts.header', 'frontend.layouts.footer', 'frontend.pages.about-us'], SettingsViewComposer::class);
-            View::composer(['frontend.pages.product-grids', 'frontend.layouts.header'], MenuViewComposer::class);
-            View::composer('frontend.layouts.master', ShemaOrgViewComposer::class);
+            View::composer(['front::layouts.header', 'front::layouts.footer', 'front::pages.about-us'], SettingsViewComposer::class);
+            View::composer(['front::pages.product-grids', 'front::layouts.header'], MenuViewComposer::class);
+            View::composer('front::layouts.master', SchemaOrgViewComposer::class);
+            Passport::routes();
         }
     }

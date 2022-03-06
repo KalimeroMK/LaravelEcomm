@@ -2,9 +2,10 @@
 
     namespace Database\Factories;
 
-    use App\Models\Brand;
     use Illuminate\Database\Eloquent\Factories\Factory;
     use Illuminate\Support\Carbon;
+    use JetBrains\PhpStorm\ArrayShape;
+    use Modules\Brand\Models\Brand;
 
     class BrandFactory extends Factory
     {
@@ -15,7 +16,11 @@
          *
          * @return array
          */
-        public function definition(): array
+        #[ArrayShape([
+            'title'      => "string",
+            'created_at' => "\Illuminate\Support\Carbon",
+            'updated_at' => "\Illuminate\Support\Carbon",
+        ])] public function definition(): array
         {
             return [
                 'title'      => $this->faker->unique(true)->title,

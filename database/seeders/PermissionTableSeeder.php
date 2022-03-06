@@ -1,14 +1,12 @@
 <?php
 
-
     namespace Database\Seeders;
 
-    use App\Models\User;
     use Illuminate\Database\Seeder;
+    use Modules\User\Models\User;
     use Spatie\Permission\Models\Permission;
     use Spatie\Permission\Models\Role;
     use Spatie\Permission\PermissionRegistrar;
-
 
     class PermissionTableSeeder extends Seeder
 

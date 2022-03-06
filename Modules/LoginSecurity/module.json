@@ -1,0 +1,13 @@
+{
+  "name": "LoginSecurity",
+  "alias": "loginsecurity",
+  "description": "",
+  "keywords": [],
+  "priority": 0,
+  "providers": [
+    "Modules\\LoginSecurity\\Providers\\LoginSecurityServiceProvider"
+  ],
+  "aliases": {},
+  "files": [],
+  "requires": []
+}

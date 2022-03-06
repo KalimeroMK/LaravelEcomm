@@ -2,10 +2,10 @@
 
     namespace Database\Factories;
 
-    use App\Models\Order;
-    use App\Models\Shipping;
     use Illuminate\Database\Eloquent\Factories\Factory;
     use Illuminate\Support\Carbon;
+    use Modules\Order\Models\Order;
+    use Modules\Shipping\Models\Shipping;
 
     class OrderFactory extends Factory
     {

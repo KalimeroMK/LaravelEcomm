@@ -174,7 +174,7 @@
             Spatie\Feed\FeedServiceProvider::class,
             jeremykenedy\LaravelLogger\LaravelLoggerServiceProvider::class,
             Barryvdh\TranslationManager\ManagerServiceProvider::class,
-
+            Laravel\Passport\PassportServiceProvider::class,
 
             /*
              * Application Service Providers...

@@ -2,9 +2,10 @@
 
     namespace Database\Factories;
 
-    use App\Models\Notification;
     use Illuminate\Database\Eloquent\Factories\Factory;
     use Illuminate\Support\Carbon;
+    use JetBrains\PhpStorm\ArrayShape;
+    use Modules\Notification\Models\Notification;
 
     class NotificationFactory extends Factory
     {
@@ -15,7 +16,15 @@
          *
          * @return array
          */
-        public function definition(): array
+        #[ArrayShape([
+            'type'            => "string",
+            'notifiable_type' => "string",
+            'notifiable_id'   => "int",
+            'data'            => "string",
+            'read_at'         => "string",
+            'created_at'      => "\Illuminate\Support\Carbon",
+            'updated_at'      => "\Illuminate\Support\Carbon",
+        ])] public function definition(): array
         {
             return [
                 'type'            => $this->faker->word,

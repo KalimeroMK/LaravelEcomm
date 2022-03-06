@@ -2,14 +2,14 @@
 
     namespace App\Helpers;
 
-    use App\Models\Cart;
-    use App\Models\Order;
-    use App\Models\Shipping;
-    use App\Models\User;
     use App\Notifications\StatusNotification;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
     use Illuminate\Support\Str;
+    use Modules\Cart\Models\Cart;
+    use Modules\Order\Models\Order;
+    use Modules\Shipping\Models\Shipping;
+    use Modules\User\Models\User;
     use Notification;
 
     class Payment
@@ -19,9 +19,10 @@
          * Store a newly created resource in storage.
          *
          * @param  Request  $request
+         *
          * @return array|RedirectResponse
          */
-        public function calculate(Request $request)
+        public function calculate(Request $request): array|RedirectResponse
         {
             request()->validate(
                 [
@@ -36,17 +37,18 @@
                 ]);
             if (empty(Cart::whereUserId(auth()->user()->id)->where('order_id', null)->first())) {
                 request()->session()->flash('error', 'Cart is Empty !');
+
                 return back();
             }
 
-            $order = new Order();
-            $order_data = $request->all();
+            $order                      = new Order();
+            $order_data                 = $request->all();
             $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
-            $order_data['user_id'] = $request->user()->id;
-            $order_data['shipping_id'] = $request->shipping;
-            $shipping = Shipping::where('id', $order_data['shipping_id'])->pluck('price');
-            $order_data['sub_total'] = Helper::totalCartPrice();
-            $order_data['quantity'] = Helper::cartCount();
+            $order_data['user_id']      = $request->user()->id;
+            $order_data['shipping_id']  = $request->shipping;
+            $shipping                   = Shipping::where('id', $order_data['shipping_id'])->pluck('price');
+            $order_data['sub_total']    = Helper::totalCartPrice();
+            $order_data['quantity']     = Helper::cartCount();
             if (session('coupon')) {
                 $order_data['coupon'] = session('coupon')['value'];
             }
@@ -81,9 +83,10 @@
                 'actionURL' => route('user.order.show', $order->id),
                 'fas'       => 'fa-file-alt',
             ];
-            $id = $order->id;
-            $total = $order_data['total_amount'];
+            $id      = $order->id;
+            $total   = $order_data['total_amount'];
             Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
+
             return [$id, $total];
         }
     }
