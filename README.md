@@ -1,4 +1,4 @@
-# E-commerce website in  Laravel 8
+# E-commerce website in  Laravel 9
 
 ## Features :
 
