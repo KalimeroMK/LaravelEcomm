@@ -13,28 +13,26 @@
     use Illuminate\Http\JsonResponse;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
+    use Modules\Admin\Repository\AdminRepository;
     use Modules\Message\Models\Message;
     use Modules\User\Models\User;
 
     class AdminController extends Controller
     {
+        private AdminRepository $admin;
+
+        public function __construct(AdminRepository $admin)
+        {
+            $this->admin = $admin;
+        }
+
         /**
          * @return Application|Factory|View
          */
         public function index()
         {
-            $data    = User::select(DB::raw("COUNT(*) as count"), DB::raw("DAYNAME(created_at) as day_name"),
-                DB::raw("DAY(created_at) as day"))
-                           ->where('created_at', '>', Carbon::today()->subDay(6))
-                           ->groupBy('day_name', 'day')
-                           ->orderBy('day')
-                           ->get();
-            $array[] = ['Name', 'Number'];
-            foreach ($data as $key => $value) {
-                $array[++$key] = [$value->day_name, $value->count];
-            }
+            $array = $this->admin->index();
 
-            //  return $data;
             return view('admin::index')->with('users', json_encode($array));
         }
 
@@ -43,7 +41,7 @@
          */
         public function profile()
         {
-            $profile = Auth()->user();
+            $profile = $this->admin->profile();
 
             return view('admin::profile', compact('profile'));
         }
@@ -71,7 +69,7 @@
          */
         public function changePassword()
         {
-            return view('backend.layouts.changePassword');
+            return view('admin::layouts.changePassword');
         }
 
         /**
@@ -89,8 +87,11 @@
         // Pie chart
         public function userPieChart(Request $request)
         {
-            $data    = User::select(\DB::raw("COUNT(*) as count"), DB::raw("DAYNAME(created_at) as day_name"),
-                \DB::raw("DAY(created_at) as day"))
+            $data    = User::select(
+                \DB::raw("COUNT(*) as count"),
+                DB::raw("DAYNAME(created_at) as day_name"),
+                \DB::raw("DAY(created_at) as day")
+            )
                            ->where('created_at', '>', Carbon::today()->subDay(6))
                            ->groupBy('day_name', 'day')
                            ->orderBy('day')
@@ -112,5 +113,4 @@
 
             return response()->json($message);
         }
-
     }

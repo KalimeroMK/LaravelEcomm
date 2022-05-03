@@ -114,5 +114,4 @@
                 return redirect()->route('coupon.index');
             }
         }
-
     }

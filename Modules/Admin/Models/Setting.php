@@ -42,27 +42,27 @@
      * @method static Builder|Setting whereUpdatedAt($value)
      * @mixin Eloquent
      */
-    class Setting extends Model
+class Setting extends Model
+{
+    use HasFactory;
+
+    protected $table = 'settings';
+
+    protected $fillable = [
+        'description',
+        'short_des',
+        'logo',
+        'photo',
+        'address',
+        'phone',
+        'email',
+    ];
+
+    /**
+     * @return SettingFactory
+     */
+    public static function factory(): SettingFactory
     {
-        use HasFactory;
-
-        protected $table = 'settings';
-
-        protected $fillable = [
-            'description',
-            'short_des',
-            'logo',
-            'photo',
-            'address',
-            'phone',
-            'email',
-        ];
-
-        /**
-         * @return SettingFactory
-         */
-        public static function factory(): SettingFactory
-        {
-            return new SettingFactory();
-        }
+        return new SettingFactory();
     }
+}

@@ -101,193 +101,195 @@
      * @property-read Category|null $parent_info
      * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
      */
-    class Category extends Model
+class Category extends Model
+{
+    use HasFactory;
+    use NodeTrait;
+
+    protected $table = 'categories';
+
+    protected $casts = [
+        'status'    => 'int',
+        'parent_id' => 'int',
+        '_lft'      => 'int',
+        '_rgt'      => 'int',
+    ];
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'status',
+        'parent_id',
+        '_lft',
+        '_rgt',
+    ];
+
+    /**
+     * @return CategoryFactory
+     */
+    public static function factory(): CategoryFactory
     {
-        use HasFactory;
-        use NodeTrait;
+        return new CategoryFactory();
+    }
 
-        protected $table = 'categories';
+    /**
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
 
-        protected $casts = [
-            'status'    => 'int',
-            'parent_id' => 'int',
-            '_lft'      => 'int',
-            '_rgt'      => 'int',
-        ];
+    /**
+     * @return HasMany
+     */
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
 
-        protected $fillable = [
-            'title',
-            'slug',
-            'status',
-            'parent_id',
-            '_lft',
-            '_rgt',
-        ];
+    /**
+     * @return HasMany
+     */
+    public function childrenCategories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id')->with('categories');
+    }
 
-        /**
-         * @return CategoryFactory
-         */
-        public static function factory(): CategoryFactory
-        {
-            return new CategoryFactory();
-        }
+    /**
+     * @return BelongsToMany
+     */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class);
+    }
 
-        /**
-         * @return BelongsTo
-         */
-        public function category(): BelongsTo
-        {
-            return $this->belongsTo(Category::class, 'parent_id');
-        }
-
-        /**
-         * @return HasMany
-         */
-        public function categories(): HasMany
-        {
-            return $this->hasMany(Category::class, 'parent_id');
-        }
-
-        /**
-         * @return HasMany
-         */
-        public function childrenCategories(): HasMany
-        {
-            return $this->hasMany(Category::class, 'parent_id')->with('categories');
-        }
-
-        /**
-         * @return BelongsToMany
-         */
-        public function products(): BelongsToMany
-        {
-            return $this->belongsToMany(Product::class);
-        }
-
-        /**
-         * @return string
-         */
-        public static function getTree()
-        {
-            $categories = self::get()->toTree();
-            $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
-                foreach ($categories as $category) {
-                    $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
-                    $traverse($category->children, $prefix.'-');
-                }
-
-                return $allCats;
-            };
-
-            return $traverse($categories);
-        }
-
-        /**
-         * @return string
-         */
-        public static function getList(): string
-        {
-            $categories = self::get()->toTree();
-            $lists      = '<li class="list-unstyled">';
+    /**
+     * @return string
+     */
+    public static function getTree()
+    {
+        $categories = self::get()->toTree();
+        $traverse   = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
             foreach ($categories as $category) {
-                $lists .= self::renderNodeHP($category);
-            }
-            $lists .= "</li>";
-
-            return $lists;
-        }
-
-        /**
-         * @param $node
-         *
-         * @return string
-         */
-        public static function renderNodeHP($node): string
-        {
-            $list = '<li class="dropdown-item"><a class="nav-link" href="/categories/'.$node->slug.'">'.$node->title.'</a>';
-            if ($node->children()->count() > 0) {
-                $list .= '<ul class="dropdown border-0 shadow">';
-                foreach ($node->children as $child) {
-                    $list .= self::renderNodeHP($child);
-                }
-                $list .= "</ul>";
-            }
-            $list .= "</li>";
-
-            return $list;
-        }
-
-        /**
-         * @return int
-         */
-        public static function countActiveCategory(): int
-        {
-            $data = Category::where('status', 'active')->count();
-            if ($data) {
-                return $data;
+                $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
+                $traverse($category->children, $prefix.'-');
             }
 
-            return 0;
-        }
+            return $allCats;
+        };
 
-        /**
-         * @param $slug
-         *
-         * @return mixed|string
-         */
-        public function incrementSlug($slug): mixed
-        {
-            $original = $slug;
-            $count    = 2;
-            while (static::whereSlug($slug)->exists()) {
-                $slug = "{$original}-".$count++;
+        return $traverse($categories);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getList(): string
+    {
+        $categories = self::get()->toTree();
+        $lists      = '<li class="list-unstyled">';
+        foreach ($categories as $category) {
+            $lists .= self::renderNodeHP($category);
+        }
+        $lists .= "</li>";
+
+        return $lists;
+    }
+
+    /**
+     * @param $node
+     *
+     * @return string
+     */
+    public static function renderNodeHP($node): string
+    {
+        $list = '<li class="dropdown-item"><a class="nav-link" href="/categories/'.$node->slug.'">'.$node->title.'</a>';
+        if ($node->children()->count() > 0) {
+            $list .= '<ul class="dropdown border-0 shadow">';
+            foreach ($node->children as $child) {
+                $list .= self::renderNodeHP($child);
             }
+            $list .= "</ul>";
+        }
+        $list .= "</li>";
 
-            return $slug;
+        return $list;
+    }
+
+    /**
+     * @return int
+     */
+    public static function countActiveCategory(): int
+    {
+        $data = Category::where('status', 'active')->count();
+        if ($data) {
+            return $data;
         }
 
-        /**
-         * @return HasOne
-         */
-        public function parent_info(): HasOne
-        {
-            return $this->hasOne(Category::class, 'id', 'parent_id');
+        return 0;
+    }
+
+    /**
+     * @param $slug
+     *
+     * @return mixed|string
+     */
+    public function incrementSlug($slug): mixed
+    {
+        $original = $slug;
+        $count    = 2;
+        while (static::whereSlug($slug)->exists()) {
+            $slug = "{$original}-".$count++;
         }
 
-        /**
-         * @return HasMany
-         */
-        public function child_cat(): HasMany
-        {
-            return $this->hasMany(Category::class, 'parent_id', 'id')->where('status', 'active');
-        }
+        return $slug;
+    }
 
-        /**
-         * @return Builder[]|Collection
-         */
-        public static function getAllParentWithChild()
-        {
-            return Category::with('child_cat')->where('parent_id', 1)->where('status', 'active')->orderBy('title',
-                'ASC')->get();
-        }
+    /**
+     * @return HasOne
+     */
+    public function parent_info(): HasOne
+    {
+        return $this->hasOne(Category::class, 'id', 'parent_id');
+    }
 
-        /**
-         * @return BelongsTo
-         */
-        public function parent(): BelongsTo
-        {
-            return $this->belongsTo(Category::class, 'parent_id');
-        }
+    /**
+     * @return HasMany
+     */
+    public function child_cat(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id')->where('status', 'active');
+    }
 
-        /**
-         * @return string
-         */
-        public function getParentsNames()
-        {
-            if ($this->parent) {
-                return $this->parent->getParentsNames();
-            } else {
-                return $this->title;
-            }
+    /**
+     * @return Builder[]|Collection
+     */
+    public static function getAllParentWithChild()
+    {
+        return Category::with('child_cat')->where('parent_id', 1)->where('status', 'active')->orderBy(
+            'title',
+            'ASC'
+        )->get();
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getParentsNames()
+    {
+        if ($this->parent) {
+            return $this->parent->getParentsNames();
+        } else {
+            return $this->title;
         }
     }
+}

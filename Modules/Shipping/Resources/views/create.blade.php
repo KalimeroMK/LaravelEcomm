@@ -12,7 +12,7 @@
                     <input id="inputTitle" type="text" name="type" placeholder="Enter title" value="{{old('type')}}"
                            class="form-control">
                     @error('type')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
 
@@ -20,9 +20,7 @@
                     <label for="price" class="col-form-label">Price <span class="text-danger">*</span></label>
                     <input id="price" type="number" name="price" placeholder="Enter price" value="{{old('price')}}"
                            class="form-control">
-                    @error('price')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
 
                 <div class="form-group">
@@ -32,7 +30,7 @@
                         <option value="inactive">Inactive</option>
                     </select>
                     @error('status')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
                 <div class="form-group mb-3">

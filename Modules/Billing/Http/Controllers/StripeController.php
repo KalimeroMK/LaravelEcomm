@@ -9,6 +9,7 @@
     use Illuminate\Contracts\View\View;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Session;
     use JetBrains\PhpStorm\Pure;
     use Modules\Cart\Models\Cart;
@@ -32,7 +33,7 @@
 
         public function stripe($id)
         {
-            return view('frontend.pages.stripe', compact('id'));
+            return view('front::pages.stripe', compact('id'));
         }
 
         /**
@@ -56,7 +57,7 @@
                 "source"      => $request->stripeToken,
                 "description" => "Test payment from zbogoevski@gmail.com.",
             ]);
-            Cart::where('user_id', auth()->user()->id)->where('order_id', null)->update(['order_id' => $data[0]]);
+            Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $data[0]]);
             Session::flash('success', 'Payment successful!');
 
             return back();

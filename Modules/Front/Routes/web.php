@@ -28,4 +28,3 @@
     Route::post('/blog/filter', [FrontController::class, 'blogFilter'])->name('blog.filter');
     Route::get('blog-cat/{slug}', [FrontController::class, 'blogByCategory'])->name('blog.category');
     Route::get('blog-tag/{slug}', [FrontController::class, 'blogByTag'])->name('blog.tag');
-

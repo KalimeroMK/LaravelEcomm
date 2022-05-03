@@ -18,7 +18,7 @@
     use Illuminate\Notifications\DatabaseNotification;
     use Illuminate\Notifications\DatabaseNotificationCollection;
     use Illuminate\Notifications\Notifiable;
-    use Laravel\Passport\HasApiTokens;
+    use Laravel\Sanctum\HasApiTokens;
     use Modules\Billing\Models\Wishlist;
     use Modules\Cart\Models\Cart;
     use Modules\LoginSecurity\Models\LoginSecurity;
@@ -171,5 +171,4 @@
         {
             return $this->hasOne(LoginSecurity::class);
         }
-
     }

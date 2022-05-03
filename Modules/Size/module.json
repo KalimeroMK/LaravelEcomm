@@ -1,0 +1,13 @@
+{
+  "name": "Size",
+  "alias": "size",
+  "description": "",
+  "keywords": [],
+  "priority": 0,
+  "providers": [
+    "Modules\\Size\\Providers\\SizeServiceProvider"
+  ],
+  "aliases": {},
+  "files": [],
+  "requires": []
+}

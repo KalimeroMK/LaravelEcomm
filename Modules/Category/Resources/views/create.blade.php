@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('category::layouts.master')
 @section('content')
     <div class="container-fluid">
         <div class="card">

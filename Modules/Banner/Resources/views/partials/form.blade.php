@@ -13,18 +13,14 @@
                     <input id="inputTitle" type="text" name="title" placeholder="Enter title"
                            value="{{ $banner->title ?? null }}"
                            class="form-control">
-                    @error('title')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
 
                 <div class="form-group">
                     <label for="inputDesc" class="col-form-label">Description</label>
                     <textarea class="form-control" id="description"
                               name="description">{{$banner->description ?? null }}</textarea>
-                    @error('description')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
                 <div class="form-group">
                     <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
@@ -33,8 +29,8 @@
                     <span class="fileinput-new"></span>
                     <input type="hidden" value="" name="photo"><input type="file"
                                                                       name="photo">
-                    @error('photo')
-                    <span class="text-danger">{{$message}}</span>
+                        @error('photo')
+
                         @enderror
                     </div>
                     <div class="form-group">
@@ -44,7 +40,7 @@
                             <option value="inactive">Inactive</option>
                         </select>
                         @error('status')
-                        <span class="text-danger">{{$message}}</span>
+
                         @enderror
                     </div>
                     <div class="form-group mb-3">

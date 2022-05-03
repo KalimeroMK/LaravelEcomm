@@ -42,31 +42,31 @@
      * @method static Builder|Message whereUpdatedAt($value)
      * @mixin Eloquent
      */
-    class Message extends Model
+class Message extends Model
+{
+    use HasFactory;
+
+    protected $table = 'messages';
+
+    protected $dates = [
+        'read_at',
+    ];
+
+    protected $fillable = [
+        'name',
+        'subject',
+        'email',
+        'photo',
+        'phone',
+        'message',
+        'read_at',
+    ];
+
+    /**
+     * @return MessageFactory
+     */
+    public static function factory(): MessageFactory
     {
-        use HasFactory;
-
-        protected $table = 'messages';
-
-        protected $dates = [
-            'read_at',
-        ];
-
-        protected $fillable = [
-            'name',
-            'subject',
-            'email',
-            'photo',
-            'phone',
-            'message',
-            'read_at',
-        ];
-
-        /**
-         * @return MessageFactory
-         */
-        public static function factory(): MessageFactory
-        {
-            return new MessageFactory();
-        }
+        return new MessageFactory();
     }
+}

@@ -36,25 +36,24 @@
      * @method static Builder|Notification whereUpdatedAt($value)
      * @mixin Eloquent
      */
-    class Notification extends Model
-    {
+class Notification extends Model
+{
+    protected $table = 'notifications';
+    public $incrementing = false;
 
-        protected $table = 'notifications';
-        public $incrementing = false;
+    protected $casts = [
+        'notifiable_id' => 'int',
+    ];
 
-        protected $casts = [
-            'notifiable_id' => 'int',
-        ];
+    protected $dates = [
+        'read_at',
+    ];
 
-        protected $dates = [
-            'read_at',
-        ];
-
-        protected $fillable = [
-            'type',
-            'notifiable_type',
-            'notifiable_id',
-            'data',
-            'read_at',
-        ];
-    }
+    protected $fillable = [
+        'type',
+        'notifiable_type',
+        'notifiable_id',
+        'data',
+        'read_at',
+    ];
+}

@@ -1,11 +1,12 @@
-@extends('layouts.master')
+@extends('product::layouts.master')
 
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="row">
             <div class="col-md-12">
-                @include('backend.layouts.notification')
+                @include('notification::notification')
+
             </div>
         </div>
         <div class="card-header py-3">

@@ -13,7 +13,7 @@
                     <input id="inputTitle" type="text" name="code" placeholder="Enter Coupon Code"
                            value="{{old('code')}}" class="form-control">
                     @error('code')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
 
@@ -24,7 +24,7 @@
                         <option value="percent">Percent</option>
                     </select>
                     @error('type')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
 
@@ -33,7 +33,7 @@
                     <input id="inputTitle" type="number" name="value" placeholder="Enter Coupon value"
                            value="{{old('value')}}" class="form-control">
                     @error('value')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
 
@@ -44,7 +44,7 @@
                         <option value="inactive">Inactive</option>
                     </select>
                     @error('status')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
                 <div class="form-group mb-3">

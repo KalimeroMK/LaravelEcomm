@@ -45,51 +45,51 @@
      * @method static Builder|Wishlist whereUserId($value)
      * @mixin Eloquent
      */
-    class Wishlist extends Model
+class Wishlist extends Model
+{
+    use HasFactory;
+
+    protected $table = 'wishlists';
+
+    protected $casts = [
+        'product_id' => 'int',
+        'cart_id'    => 'int',
+        'user_id'    => 'int',
+        'price'      => 'float',
+        'quantity'   => 'int',
+        'amount'     => 'float',
+    ];
+
+    protected $fillable = [
+        'product_id',
+        'cart_id',
+        'user_id',
+        'price',
+        'quantity',
+        'amount',
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function cart(): BelongsTo
     {
-        use HasFactory;
-
-        protected $table = 'wishlists';
-
-        protected $casts = [
-            'product_id' => 'int',
-            'cart_id'    => 'int',
-            'user_id'    => 'int',
-            'price'      => 'float',
-            'quantity'   => 'int',
-            'amount'     => 'float',
-        ];
-
-        protected $fillable = [
-            'product_id',
-            'cart_id',
-            'user_id',
-            'price',
-            'quantity',
-            'amount',
-        ];
-
-        /**
-         * @return BelongsTo
-         */
-        public function cart(): BelongsTo
-        {
-            return $this->belongsTo(Cart::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function product(): BelongsTo
-        {
-            return $this->belongsTo(Product::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function user(): BelongsTo
-        {
-            return $this->belongsTo(User::class);
-        }
+        return $this->belongsTo(Cart::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}

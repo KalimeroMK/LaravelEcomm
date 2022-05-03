@@ -38,41 +38,41 @@
      * @method static Builder|Banner whereUpdatedAt($value)
      * @mixin Eloquent
      */
-    class Banner extends Model
+class Banner extends Model
+{
+    use HasFactory;
+
+    protected $table = 'banners';
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'photo',
+        'description',
+        'status',
+    ];
+
+    /**
+     * @return BannerFactory
+     */
+    public static function factory(): BannerFactory
     {
-        use HasFactory;
-
-        protected $table = 'banners';
-
-        protected $fillable = [
-            'title',
-            'slug',
-            'photo',
-            'description',
-            'status',
-        ];
-
-        /**
-         * @return BannerFactory
-         */
-        public static function factory(): BannerFactory
-        {
-            return new BannerFactory();
-        }
-
-        /**
-         * @param $slug
-         *
-         * @return mixed|string
-         */
-        public function incrementSlug($slug): mixed
-        {
-            $original = $slug;
-            $count    = 2;
-            while (static::whereSlug($slug)->exists()) {
-                $slug = "{$original}-".$count++;
-            }
-
-            return $slug;
-        }
+        return new BannerFactory();
     }
+
+    /**
+     * @param $slug
+     *
+     * @return mixed|string
+     */
+    public function incrementSlug($slug): mixed
+    {
+        $original = $slug;
+        $count    = 2;
+        while (static::whereSlug($slug)->exists()) {
+            $slug = "{$original}-".$count++;
+        }
+
+        return $slug;
+    }
+}

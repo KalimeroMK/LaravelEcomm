@@ -11,17 +11,13 @@
                     <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
                     <input id="inputTitle" type="text" name="title" placeholder="Enter title" value="{{old('title')}}"
                            class="form-control">
-                    @error('title')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
 
                 <div class="form-group">
                     <label for="inputDesc" class="col-form-label">Description</label>
                     <textarea class="form-control" id="description" name="description">{{old('description')}}</textarea>
-                    @error('description')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
 
                 <div class="form-group">
@@ -36,7 +32,7 @@
                     </div>
                     <img id="holder" style="margin-top:15px;max-height:100px;">
                     @error('photo')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
 
@@ -47,7 +43,7 @@
                         <option value="inactive">Inactive</option>
                     </select>
                     @error('status')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
                 <div class="form-group mb-3">

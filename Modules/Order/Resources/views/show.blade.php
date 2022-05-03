@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('order::layouts.master')
 
 @section('title','Order Detail')
 

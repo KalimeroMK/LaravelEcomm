@@ -18,7 +18,7 @@
          */
         public function index()
         {
-            return view('backend.notification.index');
+            return view('notification::index');
         }
 
         /**

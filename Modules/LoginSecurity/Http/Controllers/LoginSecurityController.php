@@ -111,8 +111,10 @@
         public function disable2fa(Request $request)
         {
             if ( ! (Hash::check($request->get('current-password'), Auth::user()->password))) {
-                return redirect()->back()->with("error",
-                    "Your password does not matches with your account password. Please try again.");
+                return redirect()->back()->with(
+                    "error",
+                    "Your password does not matches with your account password. Please try again."
+                );
             }
 
             $user                                  = Auth::user();

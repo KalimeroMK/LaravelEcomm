@@ -37,46 +37,46 @@
      * @mixin Eloquent
      * @method static CouponFactory factory(...$parameters)
      */
-    class Coupon extends Model
+class Coupon extends Model
+{
+    use HasFactory;
+
+    protected $table = 'coupons';
+
+    protected $casts = [
+        'value' => 'float',
+    ];
+
+    protected $fillable = [
+        'code',
+        'type',
+        'value',
+        'status',
+    ];
+
+    /**
+     * @param $code
+     *
+     * @return Model|Builder|Coupon|null
+     */
+    public static function findByCode($code): Model|Builder|Coupon|null
     {
-        use HasFactory;
+        return self::where('code', $code)->first();
+    }
 
-        protected $table = 'coupons';
-
-        protected $casts = [
-            'value' => 'float',
-        ];
-
-        protected $fillable = [
-            'code',
-            'type',
-            'value',
-            'status',
-        ];
-
-        /**
-         * @param $code
-         *
-         * @return Model|Builder|Coupon|null
-         */
-        public static function findByCode($code): Model|Builder|Coupon|null
-        {
-            return self::where('code', $code)->first();
-        }
-
-        /**
-         * @param $total
-         *
-         * @return float|int
-         */
-        public function discount($total): float|int
-        {
-            if ($this->type == "fixed") {
-                return $this->value;
-            } elseif ($this->type == "percent") {
-                return ($this->value / 100) * $total;
-            } else {
-                return 0;
-            }
+    /**
+     * @param $total
+     *
+     * @return float|int
+     */
+    public function discount($total): float|int
+    {
+        if ($this->type == "fixed") {
+            return $this->value;
+        } elseif ($this->type == "percent") {
+            return ($this->value / 100) * $total;
+        } else {
+            return 0;
         }
     }
+}

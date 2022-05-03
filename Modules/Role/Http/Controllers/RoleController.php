@@ -14,9 +14,7 @@
     use Spatie\Permission\Models\Role;
 
     class RoleController extends Controller
-
     {
-
         /**
          * Display a listing of the resource.
          *
@@ -51,7 +49,6 @@
          */
 
         public function create()
-
         {
             $permission = Permission::get();
 
@@ -91,8 +88,12 @@
         {
             $role = Role::find($id);
 
-            $rolePermissions = Permission::join("role_has_permissions", "role_has_permissions.permission_id", "=",
-                "permissions.id")
+            $rolePermissions = Permission::join(
+                "role_has_permissions",
+                "role_has_permissions.permission_id",
+                "=",
+                "permissions.id"
+            )
                                          ->where("role_has_permissions.role_id", $id)
                                          ->get();
 
@@ -156,5 +157,4 @@
 
             return redirect()->route('roles.index')->with('success', 'Role deleted successfully');
         }
-
     }

@@ -13,11 +13,15 @@
     use Modules\Category\Models\Category;
     use Modules\Product\Http\Requests\ProductReviewStore;
     use Modules\Product\Models\Product;
+    use Modules\Product\Repository\ProductRepository;
 
     class ProductController extends Controller
     {
-        public function __construct()
+        private ProductRepository $product;
+
+        public function __construct(ProductRepository $product)
         {
+            $this->product = $product;
             $this->middleware('permission:product-list');
             $this->middleware('permission:product-create', ['only' => ['create', 'store']]);
             $this->middleware('permission:product-edit', ['only' => ['edit', 'update']]);
@@ -61,27 +65,8 @@
          */
         public function store(ProductReviewStore $request): RedirectResponse
         {
-            $data                = $request->all();
-            $data['is_featured'] = $request->input('is_featured', 0);
-            $size                = $request->input('size');
-            $color               = $request->input('color');
-            if ($size) {
-                $data['size'] = implode(',', $size);
-            } else {
-                $data['size'] = '';
-            }
-            if ($color) {
-                $color         = preg_replace('/\s+/', '', $color);
-                $data['color'] = implode(',', $color);
-            } else {
-                $data['color'] = '';
-            }
-            $data['photo'] = $this->verifyAndStoreImage($request);
-
-            $product = Product::create($data);
-            $product->categories()->attach($request['category']);
-
-            request()->session()->flash('success', 'Product Successfully added');
+            $data = $request->all();
+            $this->product->storeProduct($data);
 
             return redirect()->route('products.index');
         }
@@ -112,31 +97,9 @@
          */
         public function update(Request $request, Product $product): RedirectResponse
         {
-            $data                = $request->all();
-            $data['is_featured'] = $request->input('is_featured', 0);
-            $size                = $request->input('size');
-            $color               = $request->input('color');
-            if ($size) {
-                $data['size'] = implode(',', $size);
-            } else {
-                $data['size'] = '';
-            }
-            if ($color) {
-                $data['color'] = implode(',', $color);
-            } else {
-                $data['color'] = '';
-            }
-            if ( ! empty($data['photo'])) {
-                $data['photo'] = $this->verifyAndStoreImage($request);
-            }
-            $status = $product->update($data);
-            $product->categories()->sync($request->category, true);
-
-            if ($status) {
-                request()->session()->flash('success', 'Product Successfully updated');
-            } else {
-                request()->session()->flash('error', 'Please try again!!');
-            }
+            $data  = $request->except('photo');
+            $image = $request['photo'];
+            $this->product->updateProduct($data, $image, $product->id);
 
             return redirect()->route('products.index');
         }
@@ -150,7 +113,7 @@
          */
         public function destroy(Product $product): RedirectResponse
         {
-            $status = $product->delete();
+            $status = $this->product->deleteProduct($product->id);
 
             if ($status) {
                 request()->session()->flash('success', 'Product successfully deleted');
@@ -159,19 +122,5 @@
             }
 
             return redirect()->route('products.index');
-        }
-
-        /**
-         * Make paths for storing images.
-         *
-         * @return object
-         */
-        public function makePaths(): object
-        {
-            $original  = public_path().'/uploads/images/products/';
-            $thumbnail = public_path().'/uploads/images/products/thumbnails/';
-            $medium    = public_path().'/uploads/images/products/medium/';
-
-            return (object)compact('original', 'thumbnail', 'medium');
         }
     }

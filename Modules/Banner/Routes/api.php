@@ -1,6 +1,7 @@
 <?php
 
-    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Route;
+    use Modules\Banner\Http\Controllers\Api\BannerController;
 
     /*
     |--------------------------------------------------------------------------
@@ -13,6 +14,10 @@
     |
     */
 
-    Route::middleware('auth:api')->get('/banner', function (Request $request) {
-        return $request->user();
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('banners', [BannerController::class, 'index'])->name('index');
+        Route::post('banners', [BannerController::class, 'store'])->name('store');
+        Route::get('banners/{id}', [BannerController::class, 'show'])->name('show');
+        Route::patch('banners/{id}', [BannerController::class, 'update'])->name('update');
+        Route::delete('banners/{id}', [BannerController::class, 'destroy'])->name('destroy');
     });

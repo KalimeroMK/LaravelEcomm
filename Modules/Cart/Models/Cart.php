@@ -54,68 +54,68 @@
      * @method static Builder|Cart whereUserId($value)
      * @mixin Eloquent
      */
-    class Cart extends Model
+class Cart extends Model
+{
+    use HasFactory;
+
+    protected $table = 'carts';
+
+    protected $casts = [
+        'product_id' => 'int',
+        'order_id'   => 'int',
+        'user_id'    => 'int',
+        'price'      => 'float',
+        'quantity'   => 'int',
+        'amount'     => 'float',
+    ];
+
+    protected $fillable = [
+        'product_id',
+        'order_id',
+        'user_id',
+        'price',
+        'status',
+        'quantity',
+        'amount',
+    ];
+
+    /**
+     * @return CartFactory
+     */
+    public static function factory(): CartFactory
     {
-        use HasFactory;
-
-        protected $table = 'carts';
-
-        protected $casts = [
-            'product_id' => 'int',
-            'order_id'   => 'int',
-            'user_id'    => 'int',
-            'price'      => 'float',
-            'quantity'   => 'int',
-            'amount'     => 'float',
-        ];
-
-        protected $fillable = [
-            'product_id',
-            'order_id',
-            'user_id',
-            'price',
-            'status',
-            'quantity',
-            'amount',
-        ];
-
-        /**
-         * @return CartFactory
-         */
-        public static function factory(): CartFactory
-        {
-            return new CartFactory();
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function order(): BelongsTo
-        {
-            return $this->belongsTo(Order::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function product(): BelongsTo
-        {
-            return $this->belongsTo(Product::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function user(): BelongsTo
-        {
-            return $this->belongsTo(User::class);
-        }
-
-        /**
-         * @return HasMany
-         */
-        public function wishlists(): HasMany
-        {
-            return $this->hasMany(Wishlist::class);
-        }
+        return new CartFactory();
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+}

@@ -16,9 +16,7 @@
     use Spatie\Permission\Models\Role;
 
     class UserController extends Controller
-
     {
-
         /**
          * Display a listing of the resource.
          *
@@ -29,7 +27,7 @@
         {
             $users = User::with('roles')->orderBy('id', 'DESC')->paginate(5);
 
-            return view('backend.users.index', compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);
+            return view('user::index', compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);
         }
 
         /**
@@ -39,12 +37,11 @@
          */
 
         public function create()
-
         {
             $user  = new User();
             $roles = Role::all();
 
-            return view('backend.users.create', compact('roles', 'user'));
+            return view('user::create', compact('roles', 'user'));
         }
 
         /**
@@ -84,7 +81,7 @@
         {
             $user = User::find($id);
 
-            return view('backend.users.show', compact('user'));
+            return view('user::edit', compact('user'));
         }
 
         /**
@@ -101,7 +98,7 @@
             $roles    = Role::all();
             $userRole = $user->roles->pluck('name', 'name')->all();
 
-            return view('backend.users.edit', compact('user', 'roles', 'userRole'));
+            return view('user::edit', compact('user', 'roles', 'userRole'));
         }
 
         /**
@@ -154,5 +151,4 @@
 
             return redirect()->route('users.index')->with('success', 'User deleted successfully');
         }
-
     }

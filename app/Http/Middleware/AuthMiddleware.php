@@ -11,6 +11,7 @@
         {
             if (auth()->guest()) {
                 request()->session()->flash('error', 'Pls login first');
+
                 return redirect()->back();
             }
 

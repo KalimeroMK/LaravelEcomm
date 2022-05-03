@@ -1,5 +1,5 @@
 <script>//https://github.com/rails/jquery-ujs/blob/master/src/rails.js
-    <?php if(config('translation-manager.template') == 'bootstrap4'):?>
+    <?php if (config('translation-manager.template') == 'bootstrap4') :?>
         $.fn.editableform.buttons = '<button type="submit" class="btn btn-sm btn-info editable-submit"><i class="fa fa-fw fa-check"></i></button>' +
         '<button type="button" class="btn btn-danger btn-sm editable-cancel"><i class="fa fa-fw fa-remove"></i></button>';
     $.fn.editableform.mode='inline';

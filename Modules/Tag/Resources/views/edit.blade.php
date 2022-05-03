@@ -1,20 +1,18 @@
-@extends('layouts.master')
+@extends('tag::layouts.master')
 
 @section('content')
 
     <div class="card">
         <h5 class="card-header">Edit Post Tag</h5>
         <div class="card-body">
-            <form method="post" action="{{route('post-tag.update',$postTag->id)}}" enctype="multipart/form-data">
+            <form method="post" action="{{route('tags.update',$tag->id}}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
                 <div class="form-group">
                     <label for="inputTitle" class="col-form-label">Title</label>
                     <input id="inputTitle" type="text" name="title" placeholder="Enter title"
                            value="{{$postTag->title}}" class="form-control">
-                    @error('title')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
 
                 <div class="form-group">
@@ -25,7 +23,7 @@
                         </option>
                     </select>
                     @error('status')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
                 <div class="form-group mb-3">

@@ -18,7 +18,7 @@
     "fruitcake/laravel-cors": "^3.0",
     "garygreen/pretty-routes": "^1.0",
     "guzzlehttp/guzzle": "^7.4",
-    "jeremykenedy/laravel-blocker": "dev-master",
+    "jeremykenedy/laravel-blocker": "^3.4",
     "jeremykenedy/laravel-logger": "^6.0",
     "joshrainwater/active-users": "dev-master",
     "kalimeromk/laravel-translation-manager": "0.5.x-dev",
@@ -26,8 +26,7 @@
     "laracasts/generators": "^2.0",
     "laravel/framework": "^9.2",
     "laravel/helpers": "^1.5",
-    "laravel/passport": "^10.3",
-    "laravel/sanctum": "^2.14.1",
+    "laravel/sanctum": "^2.15",
     "laravel/socialite": "^5.5",
     "laravel/telescope": "^4.7",
     "laravel/tinker": "^2.7",
@@ -61,16 +60,6 @@
     "preferred-install": "dist",
     "sort-packages": true
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/KalimeroMK/laravel-blocker"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/KalimeroMK/active-users"
-    }
-  ],
   "extra": {
     "laravel": {
       "dont-discover": []

@@ -31,32 +31,32 @@
      * @method static Builder|LoginSecurity whereUserId($value)
      * @mixin Eloquent
      */
-    class LoginSecurity extends Model
+class LoginSecurity extends Model
+{
+    use HasFactory;
+
+    protected $table = 'login_securities';
+
+    protected $casts = [
+        'user_id'          => 'int',
+        'google2fa_enable' => 'bool',
+    ];
+
+    protected $hidden = [
+        'google2fa_secret',
+    ];
+
+    protected $fillable = [
+        'user_id',
+        'google2fa_enable',
+        'google2fa_secret',
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        use HasFactory;
-
-        protected $table = 'login_securities';
-
-        protected $casts = [
-            'user_id'          => 'int',
-            'google2fa_enable' => 'bool',
-        ];
-
-        protected $hidden = [
-            'google2fa_secret',
-        ];
-
-        protected $fillable = [
-            'user_id',
-            'google2fa_enable',
-            'google2fa_secret',
-        ];
-
-        /**
-         * @return BelongsTo
-         */
-        public function user(): BelongsTo
-        {
-            return $this->belongsTo(User::class);
-        }
+        return $this->belongsTo(User::class);
     }
+}

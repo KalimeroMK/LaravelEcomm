@@ -11,7 +11,6 @@
 
     class WishlistController extends Controller
     {
-
         protected ?Product $product = null;
 
         public function __construct(Product $product)
@@ -39,8 +38,8 @@
 
                     return back();
                 } else {
-                    $wishlist             = new Wishlist;
-                    $wishlist->user_id    = auth()->user()->id;
+                    $wishlist             = new Wishlist();
+                    $wishlist->user_id    = Auth::id();
                     $wishlist->product_id = $product->id;
                     $wishlist->price      = ($product->price - ($product->price * $product->discount) / 100);
                     $wishlist->quantity   = 1;

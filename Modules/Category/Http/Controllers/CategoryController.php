@@ -12,11 +12,15 @@
     use Modules\Category\Http\Requests\Store;
     use Modules\Category\Http\Requests\Update;
     use Modules\Category\Models\Category;
+    use Modules\Category\Repository\CategoryRepository;
 
     class CategoryController extends Controller
     {
-        public function __construct()
+        private CategoryRepository $category;
+
+        public function __construct(CategoryRepository $category)
         {
+            $this->category = $category;
             $this->middleware('permission:categories-list');
             $this->middleware('permission:categories-create', ['only' => ['create', 'store']]);
             $this->middleware('permission:categories-edit', ['only' => ['edit', 'update']]);
@@ -30,8 +34,8 @@
          */
         public function index()
         {
-            $categories = Category::all();
-            if (is_null($categories)) {
+            $categories = $this->category->getAll();
+            if (empty($categories)) {
                 return redirect()->route('categories.create');
             }
 
@@ -62,13 +66,7 @@
         {
             $title     = $request['title'];
             $parent_id = $request['parent_id'];
-            if ( ! is_null($parent_id)) {
-                $category = Category::create(["title" => $title, "parent_id" => $parent_id]);
-                Session::flash('flash_message', 'Category successfully created!');
-
-                return redirect()->route('categories.edit', $category);
-            }
-            $category = Category::create(["title" => $title]);
+            $category  = $this->category->storeCategory($title, $parent_id);
             Session::flash('flash_message', 'Category successfully created!');
 
             return redirect()->route('categories.edit', $category);
@@ -98,13 +96,9 @@
          */
         public function update(Update $request, Category $category): RedirectResponse
         {
-            if ($request->has('parent_id')) {
-                $category->update($request->all());
-                Session::flash('flash_message', 'Category successfully created!');
-
-                return redirect()->back();
-            }
-            $category->update($request->all());
+            $title     = $request['title'];
+            $parent_id = $request['parent_id'];
+            $this->category->updateCategory($title, $parent_id, $category->id);
             Session::flash('flash_message', 'Category successfully created!');
 
             return redirect()->back();
@@ -120,7 +114,7 @@
          */
         public function destroy(Category $category): RedirectResponse
         {
-            $category->delete();
+            $this->category->deleteCategory($category->id);
             Session::flash('flash_message', 'Category successfully deleted!');
 
             return redirect()->route('categories.index');

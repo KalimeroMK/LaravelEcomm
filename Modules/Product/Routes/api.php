@@ -1,7 +1,5 @@
 <?php
 
-    use Illuminate\Http\Request;
-
     /*
     |--------------------------------------------------------------------------
     | API Routes
@@ -13,6 +11,8 @@
     |
     */
 
-    Route::middleware('auth:api')->get('/product', function (Request $request) {
-        return $request->user();
+    use Modules\Product\Http\Controllers\Api\ProductController;
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::resource('/product', ProductController::class);
     });

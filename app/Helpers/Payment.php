@@ -14,7 +14,6 @@
 
     class Payment
     {
-
         /**
          * Store a newly created resource in storage.
          *
@@ -34,7 +33,8 @@
                     'phone'      => 'numeric|required',
                     'post_code'  => 'string|nullable',
                     'email'      => 'string|required',
-                ]);
+                ]
+            );
             if (empty(Cart::whereUserId(auth()->user()->id)->where('order_id', null)->first())) {
                 request()->session()->flash('error', 'Cart is Empty !');
 

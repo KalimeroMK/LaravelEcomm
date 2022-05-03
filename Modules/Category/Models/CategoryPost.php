@@ -39,35 +39,35 @@
      * @property-read Post $post
      * @method static Builder|CategoryPost wherePostId($value)
      */
-    class CategoryPost extends Model
+class CategoryPost extends Model
+{
+    use HasFactory;
+
+    protected $table = 'category_post';
+
+    protected $casts = [
+        'post_id'     => 'int',
+        'category_id' => 'int',
+    ];
+
+    protected $fillable = [
+        'post_id',
+        'category_id',
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
     {
-        use HasFactory;
-
-        protected $table = 'category_post';
-
-        protected $casts = [
-            'post_id'     => 'int',
-            'category_id' => 'int',
-        ];
-
-        protected $fillable = [
-            'post_id',
-            'category_id',
-        ];
-
-        /**
-         * @return BelongsTo
-         */
-        public function category(): BelongsTo
-        {
-            return $this->belongsTo(Category::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function post(): BelongsTo
-        {
-            return $this->belongsTo(Post::class);
-        }
+        return $this->belongsTo(Category::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
+    }
+}

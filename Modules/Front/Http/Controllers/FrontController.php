@@ -32,13 +32,19 @@
             $featured_products = Product::with('categories')->orderBy('price', 'DESC')->limit(4)->get();
             $posts             = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
             $banners           = Banner::whereStatus('active')->limit(3)->orderBy('id', 'DESC')->get();
-            $product_lists     = Product::with('categories')->where('condition', '!=', 'hot')->whereStatus('active')->orderBy('id',
-                'DESC')->limit(9)->get();
-            $product_hot       = Product::with('categories')->whereCondition('hot')->whereStatus('active')->orderBy('id',
-                'DESC')->limit(9)->get();
+            $product_lists     = Product::with('categories')->where('condition', '!=', 'hot')->whereStatus('active')->orderBy(
+                'id',
+                'DESC'
+            )->limit(9)->get();
+            $product_hot       = Product::with('categories')->whereCondition('hot')->whereStatus('active')->orderBy(
+                'id',
+                'DESC'
+            )->limit(9)->get();
 
-            return view('front::index',
-                compact('featured_products', 'posts', 'banners', 'product_lists', 'product_hot'));
+            return view(
+                'front::index',
+                compact('featured_products', 'posts', 'banners', 'product_lists', 'product_hot')
+            );
         }
 
         /**

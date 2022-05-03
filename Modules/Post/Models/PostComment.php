@@ -51,80 +51,80 @@
      * @mixin Eloquent
      * @property-read User|null $user_info
      */
-    class PostComment extends Model
+class PostComment extends Model
+{
+    use HasFactory;
+
+    protected $table = 'post_comments';
+
+    protected $casts = [
+        'user_id'   => 'int',
+        'post_id'   => 'int',
+        'parent_id' => 'int',
+    ];
+
+    protected $fillable = [
+        'user_id',
+        'post_id',
+        'comment',
+        'status',
+        'replied_comment',
+        'parent_id',
+    ];
+
+    /**
+     * @return PostCommentFactory
+     */
+    public static function factory(): PostCommentFactory
     {
-        use HasFactory;
-
-        protected $table = 'post_comments';
-
-        protected $casts = [
-            'user_id'   => 'int',
-            'post_id'   => 'int',
-            'parent_id' => 'int',
-        ];
-
-        protected $fillable = [
-            'user_id',
-            'post_id',
-            'comment',
-            'status',
-            'replied_comment',
-            'parent_id',
-        ];
-
-        /**
-         * @return PostCommentFactory
-         */
-        public static function factory(): PostCommentFactory
-        {
-            return new PostCommentFactory();
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function post(): BelongsTo
-        {
-            return $this->belongsTo(Post::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function user(): BelongsTo
-        {
-            return $this->belongsTo(User::class);
-        }
-
-        /**
-         * @return HasOne
-         */
-        public function user_info(): HasOne
-        {
-            return $this->hasOne(User::class, 'id', 'user_id');
-        }
-
-        /**
-         * @return LengthAwarePaginator
-         */
-        public static function getAllComments(): LengthAwarePaginator
-        {
-            return PostComment::with(['user_info', 'post'])->paginate(10);
-        }
-
-        /**
-         * @return LengthAwarePaginator
-         */
-        public static function getAllUserComments(): LengthAwarePaginator
-        {
-            return PostComment::where('user_id', auth()->user()->id)->with('user_info')->paginate(10);
-        }
-
-        /**
-         * @return HasMany
-         */
-        public function replies(): HasMany
-        {
-            return $this->hasMany(PostComment::class, 'parent_id')->where('status', 'active');
-        }
+        return new PostCommentFactory();
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function user_info(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     */
+    public static function getAllComments(): LengthAwarePaginator
+    {
+        return PostComment::with(['user_info', 'post'])->paginate(10);
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     */
+    public static function getAllUserComments(): LengthAwarePaginator
+    {
+        return PostComment::where('user_id', auth()->user()->id)->with('user_info')->paginate(10);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany(PostComment::class, 'parent_id')->where('status', 'active');
+    }
+}

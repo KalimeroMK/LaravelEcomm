@@ -7,7 +7,8 @@
     <div class="card shadow mb-4">
         <div class="row">
             <div class="col-md-12">
-                @include('backend.layouts.notification')
+                @include('notification::notification')
+
             </div>
         </div>
         <div class="card-header py-3">
@@ -50,7 +51,7 @@
                             <input id="inputTitle" type="text" name="name" placeholder="Enter name"
                                    value="{{$profile->name}}" class="form-control">
                             @error('name')
-                            <span class="text-danger">{{$message}}</span>
+
                             @enderror
                         </div>
 
@@ -59,7 +60,7 @@
                             <input id="inputEmail" disabled type="email" name="email" placeholder="Enter email"
                                    value="{{$profile->email}}" class="form-control">
                             @error('email')
-                            <span class="text-danger">{{$message}}</span>
+
                             @enderror
                         </div>
 
@@ -75,7 +76,7 @@
                                        value="{{$profile->photo}}">
                             </div>
                             @error('photo')
-                            <span class="text-danger">{{$message}}</span>
+
                             @enderror
                         </div>
                         <button class="btn btn-success btn-sm"><a href="{{ route('show2faForm') }}"></a>Enable 2FA

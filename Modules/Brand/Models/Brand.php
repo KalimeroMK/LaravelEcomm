@@ -39,57 +39,57 @@
      * @method static Builder|Brand whereUpdatedAt($value)
      * @mixin Eloquent
      */
-    class Brand extends Model
+class Brand extends Model
+{
+    use HasFactory;
+
+    protected $table = 'brands';
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'status',
+    ];
+
+    /**
+     * @return BannerFactory
+     */
+    public static function factory(): BannerFactory
     {
-        use HasFactory;
-
-        protected $table = 'brands';
-
-        protected $fillable = [
-            'title',
-            'slug',
-            'status',
-        ];
-
-        /**
-         * @return BannerFactory
-         */
-        public static function factory(): BannerFactory
-        {
-            return new BannerFactory();
-        }
-
-        /**
-         * @return HasMany
-         */
-        public function products(): HasMany
-        {
-            return $this->hasMany(Product::class);
-        }
-
-        /**
-         * @param $slug
-         *
-         * @return Model|Builder|null
-         */
-        public static function getProductByBrand($slug): Model|Builder|null
-        {
-            return Brand::with('products')->whereSlug($slug)->first();
-        }
-
-        /**
-         * @param $slug
-         *
-         * @return mixed|string
-         */
-        public function incrementSlug($slug): mixed
-        {
-            $original = $slug;
-            $count    = 2;
-            while (static::whereSlug($slug)->exists()) {
-                $slug = "{$original}-".$count++;
-            }
-
-            return $slug;
-        }
+        return new BannerFactory();
     }
+
+    /**
+     * @return HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * @param $slug
+     *
+     * @return Model|Builder|null
+     */
+    public static function getProductByBrand($slug): Model|Builder|null
+    {
+        return Brand::with('products')->whereSlug($slug)->first();
+    }
+
+    /**
+     * @param $slug
+     *
+     * @return mixed|string
+     */
+    public function incrementSlug($slug): mixed
+    {
+        $original = $slug;
+        $count    = 2;
+        while (static::whereSlug($slug)->exists()) {
+            $slug = "{$original}-".$count++;
+        }
+
+        return $slug;
+    }
+}

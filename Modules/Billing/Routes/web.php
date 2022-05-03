@@ -36,4 +36,3 @@
 //Stripe
     Route::get('stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
     Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
-

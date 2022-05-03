@@ -35,35 +35,35 @@
      * @method static Builder|CategoryProduct whereUpdatedAt($value)
      * @mixin Eloquent
      */
-    class CategoryProduct extends Model
+class CategoryProduct extends Model
+{
+    use HasFactory;
+
+    protected $table = 'category_product';
+
+    protected $casts = [
+        'product_id'  => 'int',
+        'category_id' => 'int',
+    ];
+
+    protected $fillable = [
+        'product_id',
+        'category_id',
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
     {
-        use HasFactory;
-
-        protected $table = 'category_product';
-
-        protected $casts = [
-            'product_id'  => 'int',
-            'category_id' => 'int',
-        ];
-
-        protected $fillable = [
-            'product_id',
-            'category_id',
-        ];
-
-        /**
-         * @return BelongsTo
-         */
-        public function category(): BelongsTo
-        {
-            return $this->belongsTo(Category::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function product(): BelongsTo
-        {
-            return $this->belongsTo(Product::class);
-        }
+        return $this->belongsTo(Category::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+}

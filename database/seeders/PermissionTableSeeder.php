@@ -9,7 +9,6 @@
     use Spatie\Permission\PermissionRegistrar;
 
     class PermissionTableSeeder extends Seeder
-
     {
         /**
          * Run the database seeders.

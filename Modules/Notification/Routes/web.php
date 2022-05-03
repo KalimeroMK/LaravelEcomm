@@ -20,4 +20,3 @@
         Route::get('/notifications', [NotificationController::class, 'index'])->name('all.notification');
         Route::delete('/notification/{id}', [NotificationController::class, 'delete'])->name('notification.delete');
     });
-

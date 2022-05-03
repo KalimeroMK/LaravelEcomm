@@ -8,7 +8,7 @@
   use Laravel\Telescope\TelescopeApplicationServiceProvider;
 
   class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
-  {
+{
     /**
      * Register any application services.
      *
@@ -16,21 +16,21 @@
      */
     public function register()
     {
-      // Telescope::night();
+        // Telescope::night();
 
-      $this->hideSensitiveRequestDetails();
+        $this->hideSensitiveRequestDetails();
 
-      Telescope::filter(function (IncomingEntry $entry) {
-        if ($this->app->environment('local')) {
-          return true;
-        }
+        Telescope::filter(function (IncomingEntry $entry) {
+            if ($this->app->environment('local')) {
+                return true;
+            }
 
-        return $entry->isReportableException() ||
-            $entry->isFailedRequest() ||
-            $entry->isFailedJob() ||
-            $entry->isScheduledTask() ||
-            $entry->hasMonitoredTag();
-      });
+            return $entry->isReportableException() ||
+                   $entry->isFailedRequest() ||
+                   $entry->isFailedJob() ||
+                   $entry->isScheduledTask() ||
+                   $entry->hasMonitoredTag();
+        });
     }
 
     /**
@@ -40,17 +40,17 @@
      */
     protected function hideSensitiveRequestDetails()
     {
-      if ($this->app->environment('local')) {
-        return;
-      }
+        if ($this->app->environment('local')) {
+            return;
+        }
 
-      Telescope::hideRequestParameters(['_token']);
+        Telescope::hideRequestParameters(['_token']);
 
-      Telescope::hideRequestHeaders([
-          'cookie',
-          'x-csrf-token',
-          'x-xsrf-token',
-      ]);
+        Telescope::hideRequestHeaders([
+            'cookie',
+            'x-csrf-token',
+            'x-xsrf-token',
+        ]);
     }
 
     /**
@@ -62,10 +62,10 @@
      */
     protected function gate()
     {
-      Gate::define('viewTelescope', function ($user) {
-        return in_array($user->email, [
-          //
-        ]);
-      });
+        Gate::define('viewTelescope', function ($user) {
+            return in_array($user->email, [
+                //
+            ]);
+        });
     }
   }

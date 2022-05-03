@@ -27,6 +27,7 @@
          * Get the notification's delivery channels.
          *
          * @param  mixed  $notifiable
+         *
          * @return array
          */
         public function via($notifiable)
@@ -38,6 +39,7 @@
          * Get the mail representation of the notification.
          *
          * @param  mixed  $notifiable
+         *
          * @return MailMessage
          */
         // public function toMail($notifiable)
@@ -54,6 +56,7 @@
          * Get the array representation of the notification.
          *
          * @param  mixed  $notifiable
+         *
          * @return array
          */
         // public function toArray($notifiable)
@@ -73,11 +76,11 @@
             ];
         }
 
-
         /**
          * Get the broadcastable representation of the notification.
          *
          * @param  mixed  $notifiable
+         *
          * @return BroadcastMessage
          */
         public function toBroadcast($notifiable): BroadcastMessage
@@ -90,6 +93,4 @@
                 'time'      => date('F d, Y h:i A'),
             ]);
         }
-
-
     }

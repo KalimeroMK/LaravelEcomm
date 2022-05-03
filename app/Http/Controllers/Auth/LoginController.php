@@ -17,7 +17,6 @@
         | to conveniently provide its functionality to your applications.
         |
         */
-
         use AuthenticatesUsers;
 
         /**

@@ -1,4 +1,5 @@
-@include('backend.layouts.notification')
+@include('notification::notification')
+
 @if($category->exists)
     <form class="form-horizontal" method="POST" action="{{ route('categories.update',$category) }}"
           enctype="multipart/form-data">
@@ -44,7 +45,7 @@
                         <option value="inactive">Inactive</option>
                     </select>
                     @error('status')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
                 <div class="form-actions">

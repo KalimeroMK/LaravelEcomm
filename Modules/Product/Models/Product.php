@@ -155,8 +155,10 @@
          */
         public function getReview(): HasMany
         {
-            return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where('status',
-                'active')->orderBy('id', 'DESC');
+            return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where(
+                'status',
+                'active'
+            )->orderBy('id', 'DESC');
         }
 
         /**
@@ -234,5 +236,4 @@
                           ->limit(20)
                           ->get();
         }
-
     }

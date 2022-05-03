@@ -4,6 +4,5 @@
 
     class PostCategory
     {
-
         private $title;
     }

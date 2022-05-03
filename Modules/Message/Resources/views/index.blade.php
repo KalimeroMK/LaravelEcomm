@@ -3,7 +3,8 @@
     <div class="card">
         <div class="row">
             <div class="col-md-12">
-                @include('backend.layouts.notification')
+                @include('notification::notification')
+
             </div>
         </div>
         <h5 class="card-header">Messages</h5>

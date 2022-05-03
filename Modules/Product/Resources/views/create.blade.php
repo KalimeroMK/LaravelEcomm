@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('product::layouts.master')
 
 @section('content')
     <div class="card">

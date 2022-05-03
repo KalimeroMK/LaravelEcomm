@@ -7,7 +7,6 @@
 
     class LoginRequest extends FormRequest
     {
-
         public mixed $name;
         public mixed $email;
         public mixed $password;
@@ -17,7 +16,8 @@
                 'name'     => "string",
                 'email'    => "string",
                 'password' => "string",
-            ])
+            ]
+        )
         ]
         public function rules(): array
         {

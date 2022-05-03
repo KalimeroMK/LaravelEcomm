@@ -28,9 +28,9 @@
          */
         public function index()
         {
-            $postTags = Tag::orderBy('id', 'DESC')->paginate(10);
+            $tags = Tag::orderBy('id', 'DESC')->paginate(10);
 
-            return view('backend.postTag.index', compact('postTags'));
+            return view('tag::index', compact('tags'));
         }
 
         /**
@@ -40,7 +40,7 @@
          */
         public function create()
         {
-            return view('backend.postTag.create');
+            return view('tag::create');
         }
 
         /**
@@ -65,13 +65,13 @@
         /**
          * Show the form for editing the specified resource.
          *
-         * @param  Tag  $postTag
+         * @param  Tag  $tag
          *
          * @return Application|Factory|View
          */
-        public function edit(Tag $postTag)
+        public function edit(Tag $tag)
         {
-            return view('backend.postTag.edit', compact('postTag'));
+            return view('tag::edit', compact('tag'));
         }
 
         /**

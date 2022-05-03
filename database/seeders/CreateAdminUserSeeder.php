@@ -8,9 +8,7 @@
     use Spatie\Permission\Models\Role;
 
     class CreateAdminUserSeeder extends Seeder
-
     {
-
         /**
          * Run the database seeders.
          *
@@ -18,7 +16,6 @@
          */
 
         public function run()
-
         {
             $user        = User::create([
                 'name'     => 'Hardik Savani',
@@ -31,5 +28,4 @@
             $role->syncPermissions($permissions);
             $user->assignRole([$role->id]);
         }
-
     }

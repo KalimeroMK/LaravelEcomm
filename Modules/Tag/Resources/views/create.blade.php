@@ -11,9 +11,7 @@
                     <label for="inputTitle" class="col-form-label">Title</label>
                     <input id="inputTitle" type="text" name="title" placeholder="Enter title" value="{{old('title')}}"
                            class="form-control">
-                    @error('title')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
 
                 <div class="form-group">
@@ -23,7 +21,7 @@
                         <option value="inactive">Inactive</option>
                     </select>
                     @error('status')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
                 <div class="form-group mb-3">

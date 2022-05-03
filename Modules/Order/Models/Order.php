@@ -76,103 +76,102 @@
      * @method static Builder|Order whereUserId($value)
      * @mixin Eloquent
      */
-    class Order extends Model
+class Order extends Model
+{
+    use HasFactory;
+
+    protected $table = 'orders';
+
+    protected $casts = [
+        'user_id'      => 'int',
+        'sub_total'    => 'float',
+        'shipping_id'  => 'int',
+        'coupon'       => 'float',
+        'total_amount' => 'float',
+        'quantity'     => 'int',
+    ];
+
+    protected $fillable = [
+        'order_number',
+        'user_id',
+        'sub_total',
+        'shipping_id',
+        'coupon',
+        'total_amount',
+        'quantity',
+        'payment_method',
+        'payment_status',
+        'status',
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'country',
+        'post_code',
+        'address1',
+        'address2',
+    ];
+
+    /**
+     * @return OrderFactory
+     */
+    public static function factory(): OrderFactory
     {
-        use HasFactory;
-
-        protected $table = 'orders';
-
-        protected $casts = [
-            'user_id'      => 'int',
-            'sub_total'    => 'float',
-            'shipping_id'  => 'int',
-            'coupon'       => 'float',
-            'total_amount' => 'float',
-            'quantity'     => 'int',
-        ];
-
-        protected $fillable = [
-            'order_number',
-            'user_id',
-            'sub_total',
-            'shipping_id',
-            'coupon',
-            'total_amount',
-            'quantity',
-            'payment_method',
-            'payment_status',
-            'status',
-            'first_name',
-            'last_name',
-            'email',
-            'phone',
-            'country',
-            'post_code',
-            'address1',
-            'address2',
-        ];
-
-        /**
-         * @return OrderFactory
-         */
-        public static function factory(): OrderFactory
-        {
-            return new OrderFactory();
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function shipping(): BelongsTo
-        {
-            return $this->belongsTo(Shipping::class);
-        }
-
-        /**
-         * @return BelongsTo
-         */
-        public function user(): BelongsTo
-        {
-            return $this->belongsTo(User::class);
-        }
-
-        /**
-         * @return HasMany
-         */
-        public function carts(): HasMany
-        {
-            return $this->hasMany(Cart::class);
-        }
-
-        /**
-         * @return HasMany
-         */
-        public function cart_info(): HasMany
-        {
-            return $this->hasMany(Cart::class, 'order_id', 'id');
-        }
-
-        /**
-         * @param $id
-         *
-         * @return Builder|Builder[]|Collection|Model|null
-         */
-        public static function getAllOrder($id): Model|Collection|Builder|array|null
-        {
-            return Order::with('cart_info')->find($id);
-        }
-
-        /**
-         * @return int
-         */
-        public static function countActiveOrder(): int
-        {
-            $data = Order::count();
-            if ($data) {
-                return $data;
-            }
-
-            return 0;
-        }
-
+        return new OrderFactory();
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function shipping(): BelongsTo
+    {
+        return $this->belongsTo(Shipping::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function cart_info(): HasMany
+    {
+        return $this->hasMany(Cart::class, 'order_id', 'id');
+    }
+
+    /**
+     * @param $id
+     *
+     * @return Builder|Builder[]|Collection|Model|null
+     */
+    public static function getAllOrder($id): Model|Collection|Builder|array|null
+    {
+        return Order::with('cart_info')->find($id);
+    }
+
+    /**
+     * @return int
+     */
+    public static function countActiveOrder(): int
+    {
+        $data = Order::count();
+        if ($data) {
+            return $data;
+        }
+
+        return 0;
+    }
+}

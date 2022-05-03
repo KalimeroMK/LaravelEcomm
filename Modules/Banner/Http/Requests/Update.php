@@ -3,15 +3,21 @@
     namespace Modules\Banner\Http\Requests;
 
     use Illuminate\Foundation\Http\FormRequest;
+    use JetBrains\PhpStorm\ArrayShape;
 
     class Update extends FormRequest
     {
-        public function rules(): array
+        #[ArrayShape([
+            'title'       => "string",
+            'description' => "string",
+            'photo'       => "string",
+            'status'      => "string",
+        ])] public function rules(): array
         {
             return [
                 'title'       => 'string|required|max:50',
                 'description' => 'string|nullable',
-                'photo'       => 'string|required',
+                'photo'       => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
                 'status'      => 'required|in:active,inactive',
             ];
         }

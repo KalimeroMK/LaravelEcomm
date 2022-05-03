@@ -9,12 +9,15 @@
     use Illuminate\Http\RedirectResponse;
     use Modules\Brand\Http\Requests\Store;
     use Modules\Brand\Models\Brand;
+    use Modules\Brand\Repository\BrandRepository;
 
     class BrandController extends Controller
     {
+        private BrandRepository $brand;
 
-        public function __construct()
+        public function __construct(BrandRepository $brand)
         {
+            $this->brand = $brand;
             $this->middleware('permission:brand-list');
             $this->middleware('permission:brand-create', ['only' => ['create', 'store']]);
             $this->middleware('permission:brand-edit', ['only' => ['edit', 'update']]);
@@ -28,7 +31,7 @@
          */
         public function index()
         {
-            $brands = Brand::orderBy('id', 'DESC')->paginate();
+            $brands = $this->brand->getAll();
 
             return view('brand::index', compact('brands'));
         }
@@ -52,12 +55,8 @@
          */
         public function store(Store $request): RedirectResponse
         {
-            $brand = Brand::create($request->all());
-            if ($brand) {
-                request()->session()->flash('success', 'Brand successfully created');
-            } else {
-                request()->session()->flash('error', 'Error, Please try again');
-            }
+            $data  = $request->all();
+            $brand = $this->brand->storeBrand($data);
 
             return redirect()->route('brands.edit', $brand);
         }
@@ -84,12 +83,8 @@
          */
         public function update(Store $request, Brand $brand): RedirectResponse
         {
-            $status = $brand->update($request->all());
-            if ($status) {
-                request()->session()->flash('success', 'Brand successfully updated');
-            } else {
-                request()->session()->flash('error', 'Error, Please try again');
-            }
+            $data  = $request->all();
+            $brand = $this->brand->updateBrand($data, $brand->id);
 
             return redirect()->route('brands.edit', $brand);
         }

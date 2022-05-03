@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('brand::layouts.master')
 @section('title','E-SHOP || Brand Edit')
 @section('content')
 
@@ -12,9 +12,7 @@
                     <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
                     <input id="inputTitle" type="text" name="title" placeholder="Enter title" value="{{$brand->title}}"
                            class="form-control">
-                    @error('title')
-                    <span class="text-danger">{{$message}}</span>
-                    @enderror
+
                 </div>
                 <div class="form-group">
                     <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
@@ -23,7 +21,7 @@
                         <option value="inactive" {{(($brand->status=='inactive') ? 'selected' : '')}}>Inactive</option>
                     </select>
                     @error('status')
-                    <span class="text-danger">{{$message}}</span>
+
                     @enderror
                 </div>
                 <div class="form-group mb-3">

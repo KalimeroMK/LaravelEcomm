@@ -37,7 +37,7 @@
                                         <label>Your Email<span>*</span></label>
                                         <input type="email" name="email" placeholder="" required="required" value="{{old('email')}}">
                                         @error('email')
-                                            <span class="text-danger">{{$message}}</span>
+
                                         @enderror
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                                         <label>Your Password<span>*</span></label>
                                         <input type="password" name="password" placeholder="" required="required" value="{{old('password')}}">
                                         @error('password')
-                                            <span class="text-danger">{{$message}}</span>
+
                                         @enderror
                                     </div>
                                 </div>

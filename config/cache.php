@@ -1,22 +1,22 @@
 <?php
 
-use Illuminate\Support\Str;
+    use Illuminate\Support\Str;
 
-return [
+    return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Default Cache Store
-    |--------------------------------------------------------------------------
-    |
-    | This option controls the default cache connection that gets used while
-    | using this caching library. This connection is used when another is
-    | not explicitly specified when executing a given caching function.
-    |
-    | Supported: "apc", "array", "database", "file",
-    |            "memcached", "redis", "dynamodb"
-    |
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | Default Cache Store
+        |--------------------------------------------------------------------------
+        |
+        | This option controls the default cache connection that gets used while
+        | using this caching library. This connection is used when another is
+        | not explicitly specified when executing a given caching function.
+        |
+        | Supported: "apc", "array", "database", "file",
+        |            "memcached", "redis", "dynamodb"
+        |
+        */
 
     'default' => env('CACHE_DRIVER', 'file'),
 
@@ -101,4 +101,4 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 
-];
+    ];
