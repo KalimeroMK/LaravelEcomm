@@ -37,7 +37,7 @@
         public function register(AuthRequest $request)
         {
             $request['password'] = bcrypt($request['password']);
-            $user                = User::create($request->all());
+            $user                = User::create($request->validated());
             $success['token']    = $user->createToken('MyAuthApp')->plainTextToken;
             $success['name']     = $user->name;
 

@@ -1,4 +1,3 @@
-
 <!-- Start Shop Newsletter  -->
 <section class="shop-newsletter section">
     <div class="container">

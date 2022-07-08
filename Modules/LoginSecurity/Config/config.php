@@ -1,5 +1,5 @@
 <?php
 
-    return [
-        'name' => 'LoginSecurity',
-    ];
+return [
+    'name' => 'LoginSecurity',
+];

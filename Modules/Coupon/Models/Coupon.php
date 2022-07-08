@@ -1,59 +1,59 @@
 <?php
 
-    /**
-     * Created by Zoran Shefot Bogoevski.
-     */
+/**
+ * Created by Zoran Shefot Bogoevski.
+ */
 
-    namespace Modules\Coupon\Models;
+namespace Modules\Coupon\Models;
 
-    use Carbon\Carbon;
-    use Eloquent;
-    use Illuminate\Database\Eloquent\Builder;
-    use Illuminate\Database\Eloquent\Factories\HasFactory;
-    use Illuminate\Database\Eloquent\Model;
-    use Modules\Post\Models\CouponFactory;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Post\Models\CouponFactory;
 
-    /**
-     * Class Coupon
-     *
-     * @property int $id
-     * @property string $code
-     * @property string $type
-     * @property float $value
-     * @property string $status
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     * @package App\Models
-     * @method static Builder|Coupon newModelQuery()
-     * @method static Builder|Coupon newQuery()
-     * @method static Builder|Coupon query()
-     * @method static Builder|Coupon whereCode($value)
-     * @method static Builder|Coupon whereCreatedAt($value)
-     * @method static Builder|Coupon whereId($value)
-     * @method static Builder|Coupon whereStatus($value)
-     * @method static Builder|Coupon whereType($value)
-     * @method static Builder|Coupon whereUpdatedAt($value)
-     * @method static Builder|Coupon whereValue($value)
-     * @mixin Eloquent
-     * @method static CouponFactory factory(...$parameters)
-     */
+/**
+ * Class Coupon
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $type
+ * @property float $value
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @package App\Models
+ * @method static Builder|Coupon newModelQuery()
+ * @method static Builder|Coupon newQuery()
+ * @method static Builder|Coupon query()
+ * @method static Builder|Coupon whereCode($value)
+ * @method static Builder|Coupon whereCreatedAt($value)
+ * @method static Builder|Coupon whereId($value)
+ * @method static Builder|Coupon whereStatus($value)
+ * @method static Builder|Coupon whereType($value)
+ * @method static Builder|Coupon whereUpdatedAt($value)
+ * @method static Builder|Coupon whereValue($value)
+ * @mixin Eloquent
+ * @method static CouponFactory factory(...$parameters)
+ */
 class Coupon extends Model
 {
     use HasFactory;
-
+    
     protected $table = 'coupons';
-
+    
     protected $casts = [
         'value' => 'float',
     ];
-
+    
     protected $fillable = [
         'code',
         'type',
         'value',
         'status',
     ];
-
+    
     /**
      * @param $code
      *
@@ -63,7 +63,7 @@ class Coupon extends Model
     {
         return self::where('code', $code)->first();
     }
-
+    
     /**
      * @param $total
      *

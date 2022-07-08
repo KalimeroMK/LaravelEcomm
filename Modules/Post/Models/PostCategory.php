@@ -1,8 +1,8 @@
 <?php
 
-    namespace Modules\Post\Models;
+namespace Modules\Post\Models;
 
-    class PostCategory
-    {
-        private $title;
-    }
+class PostCategory
+{
+    private $title;
+}

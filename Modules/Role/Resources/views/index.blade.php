@@ -56,5 +56,4 @@
 
     {!! $roles->render() !!}
 
-
 @endsection

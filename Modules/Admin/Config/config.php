@@ -1,5 +1,5 @@
 <?php
 
-    return [
-        'name' => 'Admin',
-    ];
+return [
+    'name' => 'Admin',
+];

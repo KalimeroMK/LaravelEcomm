@@ -3,7 +3,7 @@
 /.env
 /.idea
 /vendor
-.idea
-.phpintel
+/.phpintel
 .env
 .DS_Store
+/.docker/

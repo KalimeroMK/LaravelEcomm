@@ -1,49 +1,49 @@
 <?php
 
-    /**
-     * Created by Zoran Shefot Bogoevski.
-     */
+/**
+ * Created by Zoran Shefot Bogoevski.
+ */
 
-    namespace Modules\Banner\Models;
+namespace Modules\Banner\Models;
 
-    use Carbon\Carbon;
-    use Database\Factories\BannerFactory;
-    use Eloquent;
-    use Illuminate\Database\Eloquent\Builder;
-    use Illuminate\Database\Eloquent\Factories\HasFactory;
-    use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use Database\Factories\BannerFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-    /**
-     * Class Banner
-     *
-     * @property int $id
-     * @property string $title
-     * @property string $slug
-     * @property string|null $photo
-     * @property string|null $description
-     * @property string $status
-     * @property Carbon|null $created_at
-     * @property Carbon|null $updated_at
-     * @package App\Models
-     * @method static Builder|Banner newModelQuery()
-     * @method static Builder|Banner newQuery()
-     * @method static Builder|Banner query()
-     * @method static Builder|Banner whereCreatedAt($value)
-     * @method static Builder|Banner whereDescription($value)
-     * @method static Builder|Banner whereId($value)
-     * @method static Builder|Banner wherePhoto($value)
-     * @method static Builder|Banner whereSlug($value)
-     * @method static Builder|Banner whereStatus($value)
-     * @method static Builder|Banner whereTitle($value)
-     * @method static Builder|Banner whereUpdatedAt($value)
-     * @mixin Eloquent
-     */
+/**
+ * Class Banner
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string|null $photo
+ * @property string|null $description
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @package App\Models
+ * @method static Builder|Banner newModelQuery()
+ * @method static Builder|Banner newQuery()
+ * @method static Builder|Banner query()
+ * @method static Builder|Banner whereCreatedAt($value)
+ * @method static Builder|Banner whereDescription($value)
+ * @method static Builder|Banner whereId($value)
+ * @method static Builder|Banner wherePhoto($value)
+ * @method static Builder|Banner whereSlug($value)
+ * @method static Builder|Banner whereStatus($value)
+ * @method static Builder|Banner whereTitle($value)
+ * @method static Builder|Banner whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Banner extends Model
 {
     use HasFactory;
-
+    
     protected $table = 'banners';
-
+    
     protected $fillable = [
         'title',
         'slug',
@@ -51,7 +51,7 @@ class Banner extends Model
         'description',
         'status',
     ];
-
+    
     /**
      * @return BannerFactory
      */
@@ -59,7 +59,7 @@ class Banner extends Model
     {
         return new BannerFactory();
     }
-
+    
     /**
      * @param $slug
      *
@@ -72,7 +72,7 @@ class Banner extends Model
         while (static::whereSlug($slug)->exists()) {
             $slug = "{$original}-".$count++;
         }
-
+        
         return $slug;
     }
 }

@@ -1,33 +1,33 @@
 <?php
 
-    namespace Modules\User\Observers;
+namespace Modules\User\Observers;
 
-    use Modules\User\Models\User;
+use Modules\User\Models\User;
 
-    class UserObserver
+class UserObserver
+{
+    public function creating(User $user): void
     {
-        public function creating(User $user): void
-        {
-            $user->assignRole('client');
-        }
-
-        public function updating(User $user): void
-        {
-            //
-        }
-
-        public function deleted(User $user)
-        {
-            //
-        }
-
-        public function restored(User $user)
-        {
-            //
-        }
-
-        public function forceDeleted(User $user)
-        {
-            //
-        }
+        $user->assignRole('client');
     }
+    
+    public function updating(User $user): void
+    {
+        //
+    }
+    
+    public function deleted(User $user)
+    {
+        //
+    }
+    
+    public function restored(User $user)
+    {
+        //
+    }
+    
+    public function forceDeleted(User $user)
+    {
+        //
+    }
+}

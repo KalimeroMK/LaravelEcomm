@@ -1,64 +1,50 @@
 <?php
 
-    namespace Modules\Notification\Http\Controllers;
+namespace Modules\Notification\Http\Controllers;
 
-    use App\Http\Controllers\Controller;
-    use Illuminate\Contracts\Foundation\Application;
-    use Illuminate\Contracts\View\Factory;
-    use Illuminate\Contracts\View\View;
-    use Illuminate\Http\RedirectResponse;
-    use Illuminate\Http\Request;
-    use Illuminate\Routing\Redirector;
-    use Modules\Notification\Models\Notification;
+use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Modules\Notification\Service\NotificationService;
 
-    class NotificationController extends Controller
+class NotificationController extends Controller
+{
+    private NotificationService $notification_service;
+    
+    public function __construct(NotificationService $notification_service)
     {
-        /**
-         * @return Application|Factory|View
-         */
-        public function index()
-        {
-            return view('notification::index');
-        }
-
-        /**
-         * @param  Request  $request
-         *
-         * @return Application|RedirectResponse|Redirector
-         */
-        public function show(Request $request)
-        {
-            $notification = Auth()->user()->notifications()->where('id', $request->id)->first();
-            if ($notification) {
-                $notification->markAsRead();
-
-                return redirect($notification->data['actionURL']);
-            }
-        }
-
-        /**
-         * @param $id
-         *
-         * @return RedirectResponse
-         */
-        public function delete($id): RedirectResponse
-        {
-            $notification = Notification::findOrFail($id);
-            if ($notification) {
-                $status = $notification->delete();
-                if ($status) {
-                    request()->session()->flash('success', 'Notification successfully deleted');
-
-                    return back();
-                } else {
-                    request()->session()->flash('error', 'Error please try again');
-
-                    return back();
-                }
-            } else {
-                request()->session()->flash('error', 'Notification not found');
-
-                return back();
-            }
-        }
+        $this->notification_service = $notification_service;
     }
+    
+    /**
+     * @return Application|Factory|View
+     */
+    public function index(): View|Factory|Application
+    {
+        return $this->notification_service->index();
+    }
+    
+    /**
+     * @param  Request  $request
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function show(Request $request): Redirector|RedirectResponse|Application
+    {
+        return $this->notification_service->show($request);
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return RedirectResponse
+     */
+    public function delete($id): RedirectResponse
+    {
+        return $this->notification_service->delete($id);
+    }
+}

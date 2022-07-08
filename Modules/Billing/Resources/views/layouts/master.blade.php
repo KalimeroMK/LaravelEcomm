@@ -9,7 +9,7 @@
 
     <!-- Sidebar -->
     @include('admin::layouts.sidebar')
-<!-- End of Sidebar -->
+    <!-- End of Sidebar -->
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -18,16 +18,16 @@
 
             <!-- Topbar -->
             @include('admin::layouts.header')
-        <!-- End of Topbar -->
+            <!-- End of Topbar -->
             @if($errors->any())
                 @foreach ($errors->all() as $error)
                     <div class="alert-primary">{{ $error }}</div>
-            @endforeach
-        @endif
-        <!-- Begin Page Content -->
-        @yield('content')
+                @endforeach
+            @endif
+            <!-- Begin Page Content -->
+            @yield('content')
 
-        <!-- /.container-fluid -->
+            <!-- /.container-fluid -->
 
         </div>
         <!-- End of Main Content -->

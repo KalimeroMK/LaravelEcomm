@@ -1,68 +1,31 @@
 <?php
 
-    namespace Modules\Billing\Http\Controllers;
+namespace Modules\Billing\Http\Controllers;
 
-    use App\Http\Controllers\Controller;
-    use Illuminate\Http\RedirectResponse;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
-    use Modules\Billing\Models\Wishlist;
-    use Modules\Product\Models\Product;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Modules\Billing\Service\WishlistService;
+use Modules\Product\Models\Product;
 
-    class WishlistController extends Controller
+class WishlistController extends Controller
+{
+    protected ?Product $product = null;
+    private WishlistService $wishlist_service;
+    
+    public function __construct(Product $product)
     {
-        protected ?Product $product = null;
-
-        public function __construct(Product $product)
-        {
-            $this->product = $product;
-        }
-
-        public function wishlist(Request $request): RedirectResponse
-        {
-            if (empty($request->slug)) {
-                request()->session()->flash('error', 'Invalid Products');
-
-                return back();
-            }
-            $product = Product::where('slug', $request->slug)->firstOrFail();
-            if (empty($product)) {
-                request()->session()->flash('error', 'Invalid Products');
-
-                return back();
-            }
-            if (Auth::check()) {
-                $already_wishlist = Wishlist::whereUserId(auth()->user()->id)->whereCartId(null)->whereProductId($product->id)->first();
-                if ($already_wishlist) {
-                    request()->session()->flash('error', 'You already placed in wishlist');
-
-                    return back();
-                } else {
-                    $wishlist             = new Wishlist();
-                    $wishlist->user_id    = Auth::id();
-                    $wishlist->product_id = $product->id;
-                    $wishlist->price      = ($product->price - ($product->price * $product->discount) / 100);
-                    $wishlist->quantity   = 1;
-                    $wishlist->amount     = $wishlist->price * $wishlist->quantity;
-                    if ($wishlist->product->stock < $wishlist->quantity || $wishlist->product->stock <= 0) {
-                        return back()->with('error', 'Stock not sufficient!.');
-                    }
-                    $wishlist->save();
-                }
-                request()->session()->flash('success', 'Product successfully added to wishlist');
-            } else {
-                request()->session()->flash('error', 'Pls login added to wishlist');
-            }
-
-            return back();
-        }
-
-        public function wishlistDelete(Request $request): RedirectResponse
-        {
-            $wishlist = Wishlist::findOrFail($request->id);
-            $wishlist->delete();
-            request()->session()->flash('success', 'Wishlist successfully removed');
-
-            return back();
-        }
+        $this->product          = $product;
+        $this->wishlist_service = new WishlistService();
     }
+    
+    public function wishlist(Request $request): RedirectResponse
+    {
+        return $this->wishlist_service->wishlist($request);
+    }
+    
+    public function wishlistDelete(Request $request): RedirectResponse
+    {
+        return $this->wishlist_service->wishlistDelete($request);
+    }
+}

@@ -21,8 +21,8 @@
     </div>
     <!-- End Breadcrumbs -->
     <form action="{{route('shop.filter')}}" method="POST">
-    @csrf
-    <!-- Product Style 1 -->
+        @csrf
+        <!-- Product Style 1 -->
         <section class="product-area shop-sidebar shop-list shop section">
             <div class="container">
                 <div class="row">
@@ -96,9 +96,9 @@
                             <!-- Single Widget -->
                             <div class="single-widget recent-post">
                                 <h3 class="title">Recent post</h3>
-                            {{-- {{dd($recent_products)}} --}}
-                            @foreach($recent_products as $product)
-                                <!-- Single Post -->
+                                {{-- {{dd($recent_products)}} --}}
+                                @foreach($recent_products as $product)
+                                    <!-- Single Post -->
                                     <div class="single-post first">
                                         <div class="image">
                                             <img src="{{ $product->imageUrl }}" alt="{{$product->imageUrl}}">
@@ -193,10 +193,10 @@
                             </div>
                         </div>
                         <div class="row">
-                        @if($products->count() > 0)
-                            @foreach($products as $product)
-                                {{-- {{$product}} --}}
-                                <!-- Start Single List -->
+                            @if($products->count() > 0)
+                                @foreach($products as $product)
+                                    {{-- {{$product}} --}}
+                                    <!-- Start Single List -->
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-lg-4 col-md-6 col-sm-6">

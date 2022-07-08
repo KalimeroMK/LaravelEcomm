@@ -1,5 +1,5 @@
 <?php
 
-    return [
-        'name' => 'Category',
-    ];
+return [
+    'name' => 'Category',
+];

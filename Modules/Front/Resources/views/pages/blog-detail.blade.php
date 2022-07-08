@@ -131,8 +131,8 @@
                                     <h3 class="comment-title">Comments ({{$post->allComments->count()}})</h3>
                                     <!-- Single Comment -->
 
-                                @include('frontend.pages.comment', ['comments' => $post->comments, 'post_id' => $post->id, 'depth' => 3])
-                                <!-- End Single Comment -->
+                                    @include('frontend.pages.comment', ['comments' => $post->comments, 'post_id' => $post->id, 'depth' => 3])
+                                    <!-- End Single Comment -->
                                 </div>
                             </div>
                         </div>
@@ -149,21 +149,21 @@
                         </div>
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
-                    {{--                        <div class="single-widget category">--}}
-                    {{--                            <h3 class="title">Blog Categories</h3>--}}
-                    {{--                            <ul class="categor-list">--}}
-                    {{--                                --}}{{-- {{count(\App\Helpers\Helper::postCategoryList())}} --}}
-                    {{--                                @foreach(\App\Helpers\Helper::postCategoryList() as $cat)--}}
-                    {{--                                    <li><a href="#">{{$cat->title}} </a></li>--}}
-                    {{--                                @endforeach--}}
-                    {{--                            </ul>--}}
-                    {{--                        </div>--}}
-                    <!--/ End Single Widget -->
+                        {{--                        <div class="single-widget category">--}}
+                        {{--                            <h3 class="title">Blog Categories</h3>--}}
+                        {{--                            <ul class="categor-list">--}}
+                        {{--                                --}}{{-- {{count(\App\Helpers\Helper::postCategoryList())}} --}}
+                        {{--                                @foreach(\App\Helpers\Helper::postCategoryList() as $cat)--}}
+                        {{--                                    <li><a href="#">{{$cat->title}} </a></li>--}}
+                        {{--                                @endforeach--}}
+                        {{--                            </ul>--}}
+                        {{--                        </div>--}}
+                        <!--/ End Single Widget -->
                         <!-- Single Widget -->
                         <div class="single-widget recent-post">
                             <h3 class="title">Recent post</h3>
-                        @foreach($recantPosts as $post)
-                            <!-- Single Post -->
+                            @foreach($recantPosts as $post)
+                                <!-- Single Post -->
                                 <div class="single-post">
                                     <div class="image">
                                         <img src="{{$post->photo}}" alt="{{$post->photo}}">

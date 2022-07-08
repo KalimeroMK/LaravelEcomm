@@ -32,7 +32,9 @@
                         <td>{{$order->first_name}} {{$order->last_name}}</td>
                         <td>{{$order->email}}</td>
                         <td>{{$order->quantity}}</td>
-                        <td>@foreach($order->shipping as $data) $ {{number_format($data,2)}} @endforeach</td>
+                        <td>@foreach($order->shipping as $data)
+                                $ {{number_format($data,2)}}
+                            @endforeach</td>
                         <td>${{number_format($order->total_amount,2)}}</td>
                         <td>
                             @if($order->status=='new')
@@ -91,7 +93,8 @@
 
                                             <td>Shipping Charge</td>
                                             <td>@foreach($order->shipping as $data)
-                                                    $ {{number_format($data,2)}} @endforeach</td>
+                                                    $ {{number_format($data,2)}}
+                                                @endforeach</td>
                                         </tr>
                                         <tr>
                                             <td>Coupon</td>
@@ -103,8 +106,11 @@
                                         </tr>
                                         <tr>
                                             <td>Payment Method</td>
-                                            <td> : @if($order->payment_method=='cod') Cash on Delivery @else
-                                                    Paypal @endif</td>
+                                            <td> : @if($order->payment_method=='cod')
+                                                    Cash on Delivery
+                                                @else
+                                                    Paypal
+                                                @endif</td>
                                         </tr>
                                         <tr>
                                             <td>Payment Status</td>

@@ -1,38 +1,23 @@
-version: '3.7'
+version: "3.7"
 services:
-  #PHP Service
   app:
-    build: ./docker
+    build:
+      context: .docker
+      dockerfile: Dockerfile
     container_name: app
     restart: unless-stopped
-    working_dir: /var/www
+    working_dir: /var/www/
     volumes:
       - ./:/var/www
+      - ./.docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./.docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
     networks:
-      - app-network
-  #Nginx Service
-  webserver:
-    image: nginx:latest
-    container_name: webserver
-    hostname: test.local
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-    networks:
-      - app-network
-  #MySQL Service
-  mysql:
+      - laravelapp
+  db:
     image: mariadb:latest
     container_name: mysql
     restart: unless-stopped
-    tty: true
-    ports:
-      - "3306:3306"
     environment:
       MYSQL_DATABASE: homestead
       MYSQL_USER: homestead
@@ -40,13 +25,33 @@ services:
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
+      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-      - app-network
-  #Docker Networks
+      - laravelapp
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx:/etc/nginx/conf.d
+    networks:
+      - laravelapp
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - ./.docker/redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - laravelapp
 networks:
-  app-network:
+  laravelapp:
     driver: bridge
-  #Volumes
-volumes:
-  dbdata:
-    driver: local

@@ -1,5 +1,5 @@
 <?php
 
-    return [
-        'name' => 'Post',
-    ];
+return [
+    'name' => 'Post',
+];

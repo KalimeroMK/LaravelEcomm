@@ -50,7 +50,9 @@
                                 <td>{{$order->first_name}} {{$order->last_name}}</td>
                                 <td>{{$order->email}}</td>
                                 <td>{{$order->quantity}}</td>
-                                <td>@foreach($order->shipping as $data) $ {{number_format($data,2)}} @endforeach</td>
+                                <td>@foreach($order->shipping as $data)
+                                        $ {{number_format($data,2)}}
+                                    @endforeach</td>
                                 <td>${{number_format($order->total_amount,2)}}</td>
                                 <td>
                                     @if($order->status=='new')

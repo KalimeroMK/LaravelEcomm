@@ -1,14 +1,14 @@
 <?php
 
-    namespace Modules\Front\Http\ViewComposers;
+namespace Modules\Front\Http\ViewComposers;
 
-    use Illuminate\View\View;
-    use Modules\Category\Models\Category;
+use Illuminate\View\View;
+use Modules\Category\Models\Category;
 
-    class MenuViewComposer
+class MenuViewComposer
+{
+    public function compose(View $view)
     {
-        public function compose(View $view)
-        {
-            $view->with('categories', Category::whereNull('parent_id')->with('childrenCategories')->get());
-        }
+        $view->with('categories', Category::whereNull('parent_id')->with('childrenCategories')->get());
     }
+}

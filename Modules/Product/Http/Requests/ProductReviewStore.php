@@ -1,25 +1,25 @@
 <?php
 
-    namespace Modules\Product\Http\Requests;
+namespace Modules\Product\Http\Requests;
 
-    use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-    class ProductReviewStore extends FormRequest
+class ProductReviewStore extends FormRequest
+{
+    /**
+     * @var mixed
+     */
+    public $slug;
+    
+    public function rules(): array
     {
-        /**
-         * @var mixed
-         */
-        public $slug;
-
-        public function rules(): array
-        {
-            return [
-                'rate' => 'required|numeric|min:1',
-            ];
-        }
-
-        public function authorize(): bool
-        {
-            return true;
-        }
+        return [
+            'rate' => 'required|numeric|min:1',
+        ];
     }
+    
+    public function authorize(): bool
+    {
+        return true;
+    }
+}

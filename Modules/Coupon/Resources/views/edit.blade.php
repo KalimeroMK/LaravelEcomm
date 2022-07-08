@@ -1,11 +1,11 @@
-@extends('layouts.master')
+@extends('coupon::layouts.master')
 
 @section('content')
 
     <div class="card">
         <h5 class="card-header">Edit Coupon</h5>
         <div class="card-body">
-            <form method="post" action="{{route('coupon.update',$coupon->id)}}">
+            <form method="post" action="{{route('coupons.update',$coupon->id)}}">
                 @csrf
                 @method('PATCH')
                 <div class="form-group">

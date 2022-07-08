@@ -130,8 +130,8 @@
                                         <a href="{{route('cart')}}" class="btn animate">Cart</a>
                                     </div>
                                 </div>
-                        @endauth
-                        <!--/ End Shopping Item -->
+                            @endauth
+                            <!--/ End Shopping Item -->
                         </div>
                         <div class="sinlge-bar shopping">
                             <a href="{{route('cart')}}" class="single-icon"><i class="ti-bag"></i> <span
@@ -169,8 +169,8 @@
                                         <a href="{{route('checkout')}}" class="btn animate">Checkout</a>
                                     </div>
                                 </div>
-                        @endauth
-                        <!--/ End Shopping Item -->
+                            @endauth
+                            <!--/ End Shopping Item -->
                         </div>
                     </div>
                 </div>

@@ -91,16 +91,16 @@
                                 </div>
                                 <!--/ End Description -->
                                 <!-- Color -->
-                            {{-- <div class="color">
-                                <h4>Available Options <span>Color</span></h4>
-                                <ul>
-                                    <li><a href="#" class="one"><i class="ti-check"></i></a></li>
-                                    <li><a href="#" class="two"><i class="ti-check"></i></a></li>
-                                    <li><a href="#" class="three"><i class="ti-check"></i></a></li>
-                                    <li><a href="#" class="four"><i class="ti-check"></i></a></li>
-                                </ul>
-                            </div> --}}
-                            <!--/ End Color -->
+                                {{-- <div class="color">
+                                    <h4>Available Options <span>Color</span></h4>
+                                    <ul>
+                                        <li><a href="#" class="one"><i class="ti-check"></i></a></li>
+                                        <li><a href="#" class="two"><i class="ti-check"></i></a></li>
+                                        <li><a href="#" class="three"><i class="ti-check"></i></a></li>
+                                        <li><a href="#" class="four"><i class="ti-check"></i></a></li>
+                                    </ul>
+                                </div> --}}
+                                <!--/ End Color -->
                                 <!-- Size -->
                                 @if($product_detail->size)
                                     <div class="size mt-4">
@@ -115,8 +115,8 @@
                                             @endforeach
                                         </ul>
                                     </div>
-                            @endif
-                            <!--/ End Size -->
+                                @endif
+                                <!--/ End Size -->
                                 <!-- Product Buy -->
                                 <div class="product-buy">
                                     <form action="{{route('single-add-to-cart')}}" method="POST">
@@ -156,9 +156,13 @@
                                         @endforeach
                                     </p>
 
-                                    <p class="availability">Stock : @if($product_detail->stock>0)<span
-                                                class="badge badge-success">{{$product_detail->stock}}</span>@else <span
-                                                class="badge badge-danger">{{$product_detail->stock}}</span>  @endif</p>
+                                    <p class="availability">Stock : @if($product_detail->stock>0)
+                                            <span
+                                                    class="badge badge-success">{{$product_detail->stock}}</span>
+                                        @else
+                                            <span
+                                                    class="badge badge-danger">{{$product_detail->stock}}</span>
+                                        @endif</p>
                                 </div>
                                 <!--/ End Product Buy -->
                             </div>
@@ -310,8 +314,8 @@
                                                             </h4>
                                                             <span>Based on {{$product_detail->getReview->count()}} Comments</span>
                                                         </div>
-                                                    @foreach($product_detail['getReview'] as $data)
-                                                        <!-- Single Rating -->
+                                                        @foreach($product_detail['getReview'] as $data)
+                                                            <!-- Single Rating -->
                                                             <div class="single-rating">
                                                                 <div class="rating-author">
                                                                     @if($data->user['photo'])
@@ -378,9 +382,9 @@
                 {{-- {{$product_detail->rel_prods}} --}}
                 <div class="col-12">
                     <div class="owl-carousel popular-slider">
-                    @foreach($related as $data)
-                        @if($data->id !==$product_detail->id)
-                            <!-- Start Single Product -->
+                        @foreach($related as $data)
+                            @if($data->id !==$product_detail->id)
+                                <!-- Start Single Product -->
                                 <div class="single-product">
                                     <div class="product-img">
                                         <a href="{{route('product-detail',$data->slug)}}">

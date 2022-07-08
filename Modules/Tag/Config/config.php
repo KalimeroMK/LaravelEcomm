@@ -1,5 +1,5 @@
 <?php
 
-    return [
-        'name' => 'Tag',
-    ];
+return [
+    'name' => 'Tag',
+];

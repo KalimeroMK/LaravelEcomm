@@ -56,8 +56,8 @@
                         @endforeach
                         <div class="col-12">
                             <!-- Pagination -->
-                        {{-- {{$posts->appends($_GET)->links()}} --}}
-                        <!--/ End Pagination -->
+                            {{-- {{$posts->appends($_GET)->links()}} --}}
+                            <!--/ End Pagination -->
                         </div>
                     </div>
                 </div>
@@ -92,8 +92,8 @@
                         <!-- Single Widget -->
                         <div class="single-widget recent-post">
                             <h3 class="title">Recent post</h3>
-                        @foreach($recantPosts as $post)
-                            <!-- Single Post -->
+                            @foreach($recantPosts as $post)
+                                <!-- Single Post -->
                                 <div class="single-post">
                                     <div class="image">
                                         <img src="{{$post->photo}}" alt="{{$post->photo}}">

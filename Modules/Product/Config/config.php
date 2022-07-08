@@ -1,5 +1,5 @@
 <?php
 
-    return [
-        'name' => 'Product',
-    ];
+return [
+    'name' => 'Product',
+];

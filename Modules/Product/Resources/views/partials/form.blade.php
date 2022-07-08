@@ -38,7 +38,8 @@
                             multiple="multiple">
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}">@for ($i = 0; $i < $category->depth; $i++)
-                                    - @endfor {{ $category->title }}</option>
+                                    -
+                                @endfor {{ $category->title }}</option>
                         @endforeach
                     </select>
                 </div>
