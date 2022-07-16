@@ -3,11 +3,6 @@
 namespace Modules\Message\Service;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Modules\Message\Models\Message;
 use Modules\Message\Repository\MessageRepository;
 
 class MessageService
@@ -20,50 +15,40 @@ class MessageService
     }
     
     /**
-     * Display the specified resource.
+     * @param $id
      *
-     * @param  Message  $message
-     *
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function show(Message $message): Factory|View|Application
+    public function show($id): mixed
     {
-        if (true) {
+        $message = $this->message_repository->findById($id);
+        if (
+            true
+        ) {
             $message->read_at = Carbon::now();
             $message->save();
-            
-            return view('backend::message.show', compact('message'));
         }
+        
+        return $message;
     }
     
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Message  $message
+     * @param $id
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function destroy(Message $message): RedirectResponse
+    public function destroy($id): void
     {
-        $status = $message->delete();
-        if ($status) {
-            request()->session()->flash('success', 'Successfully deleted message');
-        } else {
-            request()->session()->flash('error', 'Error occurred please try again');
-        }
-        
-        return back();
+        $this->message_repository->delete($id);
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
+     * @return array
      */
-    public function index(): View|Factory|Application
+    public function index(): array
     {
-        $messages = $this->message_repository->getAll();
-        
-        return view('backend::message.index', compact('messages'));
+        return $this->message_repository->findAll();
     }
 }

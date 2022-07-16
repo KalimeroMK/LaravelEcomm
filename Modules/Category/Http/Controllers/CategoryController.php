@@ -8,25 +8,23 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Session;
 use Modules\Category\Http\Requests\Store;
 use Modules\Category\Http\Requests\Update;
 use Modules\Category\Models\Category;
-use Modules\Category\Repository\CategoryRepository;
 use Modules\Category\Service\CategoryService;
 
 class CategoryController extends Controller
 {
-    private CategoryRepository $category;
     private CategoryService $category_service;
     
-    public function __construct(CategoryRepository $category)
+    public function __construct(CategoryService $category_service)
     {
-        $this->category = $category;
         $this->middleware('permission:categories-list');
         $this->middleware('permission:categories-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:categories-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:categories-delete', ['only' => ['destroy']]);
-        $this->category_service = new CategoryService($this);
+        $this->category_service = $category_service;
     }
     
     /**
@@ -36,7 +34,13 @@ class CategoryController extends Controller
      */
     public function index(): View|Factory|RedirectResponse|Application
     {
-        return $this->category_service->index();
+        $categories = $this->category_service->index();
+        
+        if (empty($categories)) {
+            return redirect()->route('categories.create');
+        }
+        
+        return view('category::index', compact('categories'));
     }
     
     /**
@@ -46,7 +50,7 @@ class CategoryController extends Controller
      */
     public function create(): View|Factory|Application
     {
-        return $this->category_service->create();
+        return view('category::create', ['categories' => Category::getTree(), 'category' => new Category()]);
     }
     
     /**
@@ -58,7 +62,9 @@ class CategoryController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        return $this->category_service->store($request);
+        $this->category_service->store($request->validated());
+        
+        return redirect()->route('categories.index');
     }
     
     /**
@@ -70,20 +76,22 @@ class CategoryController extends Controller
      */
     public function edit(Category $category): View|Factory|Application
     {
-        return $this->category_service->edit($category);
+        $categories = Category::getTree();
+        $category   = $this->category_service->edit($category->id);
+        
+        return view('category::edit', compact('category', 'categories'));
     }
     
     /**
      * Update the specified resource in storage.
      *
      * @param  Update  $request
-     * @param  Category  $category
      *
      * @return RedirectResponse
      */
-    public function update(Update $request, Category $category): RedirectResponse
+    public function update(Update $request): RedirectResponse
     {
-        return $this->category_service->update($request, $category);
+        return $this->category_service->update($request->all());
     }
     
     /**
@@ -96,14 +104,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        return $this->category_service->destroy($category);
+        $this->category_service->destroy($category->id);
+        Session::flash('flash_message', 'Category successfully deleted!');
+        
+        return redirect()->route('categories.index');
     }
     
-    /**
-     * @return CategoryRepository
-     */
-    public function get_category(): CategoryRepository
-    {
-        return $this->category;
-    }
 }

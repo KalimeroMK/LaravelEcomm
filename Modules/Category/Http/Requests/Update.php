@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class Update extends FormRequest
 {
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
@@ -18,8 +21,21 @@ class Update extends FormRequest
         ];
     }
     
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
+    }
+    
+    /**
+     * @return void
+     */
+    public function passedValidation(): void
+    {
+        $this->merge([
+            'id' => $this->route('categories'),
+        ]);
     }
 }

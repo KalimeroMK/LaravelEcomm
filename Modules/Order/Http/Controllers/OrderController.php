@@ -28,7 +28,7 @@ class OrderController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        return $this->order_service->index();
+        return view('order::index')->with($this->order_service->index());
     }
     
     /**
@@ -53,7 +53,9 @@ class OrderController extends Controller
      */
     public function update(Update $request, int $id): RedirectResponse
     {
-        return $this->order_service->update($request, $id);
+        $this->order_service->update($request, $id);
+        
+        return redirect()->route('orders.index');
     }
     
     /**
@@ -65,7 +67,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): View|Factory|Application
     {
-        return $this->order_service->show($order);
+        return view('order::show')->with($this->order_service->show($order->id));
     }
     
     /**
@@ -77,7 +79,7 @@ class OrderController extends Controller
      */
     public function edit(int $id): View|Factory|Application
     {
-        return $this->order_service->edit($id);
+        return view('order::edit')->with($this->order_service->edit($id));
     }
     
     /**
@@ -89,6 +91,8 @@ class OrderController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        return $this->order_service->destroy($id);
+        $this->order_service->destroy($id);
+        
+        return redirect()->back();
     }
 }

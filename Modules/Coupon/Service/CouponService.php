@@ -2,12 +2,9 @@
 
 namespace Modules\Coupon\Service;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Modules\Coupon\Http\Requests\Store;
-use Modules\Coupon\Http\Requests\Update;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use LaravelIdea\Helper\Modules\Coupon\Models\_IH_Coupon_C;
 use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Repository\CouponRepository;
 
@@ -21,94 +18,71 @@ class CouponService
     }
     
     /**
-     * Store a newly created resource in storage.
+     * @param $data
      *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
+     * @return Collection|_IH_Coupon_C|mixed|Coupon|Coupon[]
      */
-    public function store(Store $request): RedirectResponse
+    public function store($data): mixed
     {
-        $coupon = Coupon::create($request->validated());
-        if ($coupon) {
-            request()->session()->flash('success', 'Coupon Successfully added');
-        } else {
-            request()->session()->flash('error', 'Please try again!!');
+        try {
+            return $this->coupon_repository->create($data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        
-        return redirect()->route('coupons.edit', $coupon);
     }
     
     /**
-     * Show the form for editing the specified resource.
+     * @param $id
      *
-     * @param  Coupon  $coupon
-     *
-     * @return Application|Factory|View
+     * @return mixed|string
      */
-    public function edit(Coupon $coupon): View|Factory|Application
+    public function edit($id)
     {
-        return view('coupon::edit', compact('coupon'));
-    }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function create(): View|Factory|Application
-    {
-        return view('coupon::create');
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Update  $request
-     * @param  Coupon  $coupon
-     *
-     * @return RedirectResponse
-     */
-    public function update(Update $request, Coupon $coupon): RedirectResponse
-    {
-        $status = $coupon->update($request->validated());
-        if ($status) {
-            request()->session()->flash('success', 'Coupon Successfully updated');
-        } else {
-            request()->session()->flash('error', 'Please try again!!');
+        try {
+            return $this->coupon_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        
-        return redirect()->route('coupons::edit', $coupon);
     }
     
     /**
-     * Remove the specified resource from storage.
+     * @param $id
+     * @param $data
      *
-     * @param  Coupon  $coupon
-     *
-     * @return RedirectResponse
+     * @return mixed|string
      */
-    public function destroy(Coupon $coupon): RedirectResponse
+    public function update($id, $data)
     {
-        $status = $coupon->delete();
-        if ($status) {
-            request()->session()->flash('success', 'Coupon successfully deleted');
-        } else {
-            request()->session()->flash('error', 'Error, Please try again');
+        try {
+            return $this->coupon_repository->update($id, $data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        
-        return redirect()->route('coupon.index');
     }
     
     /**
-     * Display a listing of the resource.
+     * @param $id
      *
-     * @return Application|Factory|View
+     * @return string|void
      */
-    public function index(): Factory|View|Application
+    public function destroy($id)
     {
-        $coupons = $this->coupon_repository->getAll();
-        
-        return view('coupon::index', compact('coupons'));
+        try {
+            $this->coupon_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @return mixed|string
+     */
+    public function index()
+    {
+        try {
+            return $this->coupon_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

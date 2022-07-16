@@ -2,31 +2,19 @@
 
 namespace Modules\Banner\Repository;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
-use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
 use Modules\Banner\Models\Banner;
+use Modules\Core\Repositories\Repository;
 
-class BannerRepository
+class BannerRepository extends Repository
 {
+    public $model = Banner::class;
     
     /**
-     * @return Builder|Banner
+     * @return mixed
      */
-    public function getAll(): Builder|Banner
+    public function findAll(): mixed
     {
-        return Banner::orderBy('id', 'DESC');
-    }
-    
-    /**
-     * @param $id
-     *
-     * @return Model|Banner|Collection|_IH_Banner_C|array
-     */
-    public function getById($id): Model|Banner|Collection|_IH_Banner_C|array
-    {
-        return Banner::findOrFail($id);
+        return $this->model::paginate(10);
     }
     
 }

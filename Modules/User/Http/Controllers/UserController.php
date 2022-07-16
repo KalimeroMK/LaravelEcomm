@@ -3,20 +3,26 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use DB;
-use Hash;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
+use Modules\User\Http\Requests\StoreRequest;
+use Modules\User\Http\Requests\UpdateRequest;
 use Modules\User\Models\User;
-use Spatie\Permission\Models\Role;
+use Modules\User\Service\UserService;
 
 class UserController extends Controller
 {
+    
+    private UserService $user_service;
+    
+    public function __construct(UserService $user_service)
+    {
+        $this->user_service = $user_service;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -25,48 +31,30 @@ class UserController extends Controller
     
     public function index(Request $request)
     {
-        $users = User::with('roles')->orderBy('id', 'DESC')->paginate(5);
-        
-        return view('user::index', compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('user::index', ['users' => $this->user_service->index()])->with('i', ($request->input('page', 1) - 1) * 5);
     }
     
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  StoreRequest  $request
      *
      * @return RedirectResponse
-     * @throws ValidationException
      */
     
-    public function store(Request $request): RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $this->validate($request, [
-            'name'     => 'required',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles'    => 'required',
-        ]);
-        $input             = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $user              = User::create($input);
-        $user->assignRole($request->input('roles'));
+        $this->user_service->store($request);
         
         return redirect()->route('users.index')->with('success', 'User created successfully');
     }
     
     /**
-     * Show the form for creating a new resource.
-     *
      * @return Application|Factory|View
      */
-    
     public function create()
     {
-        $user  = new User();
-        $roles = Role::all();
-        
-        return view('user::create', compact('roles', 'user'));
+        return view('user::create')->with($this->user_service->$this->create());
     }
     
     /**
@@ -79,9 +67,7 @@ class UserController extends Controller
     
     public function show(int $id)
     {
-        $user = User::find($id);
-        
-        return view('user::edit', compact('user'));
+        return view('user::edit', ['user' => $this->user_service->show($id)]);
     }
     
     /**
@@ -94,45 +80,21 @@ class UserController extends Controller
     
     public function edit(int $id)
     {
-        $user     = User::find($id);
-        $roles    = Role::all();
-        $userRole = $user->roles->pluck('name', 'name')->all();
-        
-        return view('user::edit', compact('user', 'roles', 'userRole'));
+        return view('user::edit')->with($this->user_service->edit($id));
     }
     
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
+     * @param  UpdateRequest  $request
      * @param  int  $id
      *
      * @return RedirectResponse
-     * @throws ValidationException
      */
     
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(UpdateRequest $request, int $id): RedirectResponse
     {
-        $this->validate($request, [
-            'name'     => 'required',
-            'email'    => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles'    => 'required',
-        ]);
-        
-        $input = $request->all();
-        
-        if ( ! empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            $input = Arr::except($input, ['password']);
-        }
-        
-        $user = User::findOrFail($id);
-        
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
-        $user->assignRole($request->input('roles'));
+        $this->user_service->update($request, $id);
         
         return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
@@ -147,7 +109,7 @@ class UserController extends Controller
     
     public function destroy(User $user): RedirectResponse
     {
-        $user->delete();
+        $this->user_service->destroy($user->id);
         
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }

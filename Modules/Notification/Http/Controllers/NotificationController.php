@@ -25,7 +25,7 @@ class NotificationController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        return $this->notification_service->index();
+        return view('notification::index')->with($this->notification_service->index());
     }
     
     /**
@@ -35,7 +35,14 @@ class NotificationController extends Controller
      */
     public function show(Request $request): Redirector|RedirectResponse|Application
     {
-        return $this->notification_service->show($request);
+        $notification = Auth()->user()->notifications()->where('id', $request->id)->first();
+        if ($notification) {
+            $notification->markAsRead();
+            
+            return redirect($notification->data['actionURL']);
+        }
+        
+        return redirect()->back();
     }
     
     /**
@@ -45,6 +52,8 @@ class NotificationController extends Controller
      */
     public function delete($id): RedirectResponse
     {
-        return $this->notification_service->delete($id);
+        $this->notification_service->delete($id);
+        
+        return redirect()->back();
     }
 }

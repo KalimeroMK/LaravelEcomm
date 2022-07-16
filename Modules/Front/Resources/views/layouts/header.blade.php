@@ -192,7 +192,7 @@
                                                 <i class="fa fa-angle-right" aria-hidden="true"></i></a>
                                             <ul class="sub-category">
                                                 @foreach ($category->childrenCategories as $childCategory)
-                                                    @include('frontend.layouts.child_category', ['child_category' => $childCategory])
+                                                    @include('front::layouts.child_category', ['child_category' => $childCategory])
                                                 @endforeach
                                             </ul>
                                     @endforeach

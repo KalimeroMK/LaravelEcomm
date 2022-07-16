@@ -3,12 +3,12 @@
 namespace Modules\Role\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use DB;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -39,7 +39,7 @@ class RoleController extends Controller
     {
         $roles = Role::orderBy('id', 'DESC')->paginate(5);
         
-        return view('backend.roles.index', compact('roles'))->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('role::index', compact('roles'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
     
     /**
@@ -71,9 +71,7 @@ class RoleController extends Controller
     
     public function create()
     {
-        $permission = Permission::get();
-        
-        return view('backend.roles.create', compact('permission'));
+        return view('role::create', ['permission' => Permission::get()]);
     }
     
     /**
@@ -86,18 +84,16 @@ class RoleController extends Controller
     
     public function show(int $id)
     {
-        $role = Role::find($id);
+        $role = Role::findOrFail($id);
         
         $rolePermissions = Permission::join(
             "role_has_permissions",
             "role_has_permissions.permission_id",
             "=",
             "permissions.id"
-        )
-                                     ->where("role_has_permissions.role_id", $id)
-                                     ->get();
+        )->where("role_has_permissions.role_id", $id)->get();
         
-        return view('backend.roles.show', compact('role', 'rolePermissions'));
+        return view('role::show', compact('role', 'rolePermissions'));
     }
     
     /**
@@ -116,7 +112,7 @@ class RoleController extends Controller
                              ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
                              ->all();
         
-        return view('backend.roles.edit', compact('role', 'permission', 'rolePermissions'));
+        return view('role::edit', compact('role', 'permission', 'rolePermissions'));
     }
     
     /**

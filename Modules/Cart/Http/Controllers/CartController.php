@@ -9,22 +9,41 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\Cart\Http\Requests\AddToCartSingle;
-use Modules\Cart\Repository\CartRepository;
+use Modules\Cart\Service\CartService;
+use Modules\Product\Models\Product;
+use mysql_xdevapi\Exception;
 
 class CartController extends Controller
 {
     
-    private CartRepository $cart_repository;
+    private CartService $cart_service;
     
-    public function __construct()
+    public function __construct(CartService $cart_service)
     {
+        $this->cart_service = $cart_service;
         $this->middleware('login');
-        $this->cart_repository = new CartRepository();
     }
     
-    public function addToCart($request): RedirectResponse
+    /**
+     * @param $data
+     *
+     * @return RedirectResponse
+     */
+    public function addToCart($data): RedirectResponse
     {
-        return $this->cart_repository->addToCart($request);
+        try {
+            if (empty($data || Product::whereSlug($data)->first())) {
+                request()->session()->flash('error', 'Product successfully added to cart');
+                
+                return back();
+            }
+            $this->cart_service->addToCart(Product::whereSlug($data)->first());
+            session()->flash('message', 'Product successfully added to cart');
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+        
+        return redirect()->back();
     }
     
     /**
@@ -34,17 +53,41 @@ class CartController extends Controller
      */
     public function singleAddToCart(AddToCartSingle $request): RedirectResponse
     {
-        return $this->cart_repository->singleAddToCart($request);
+        try {
+            $this->cart_service->singleAddToCart($request->validated());
+            session()->flash('message', 'Product successfully added to cart');
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+        
+        return redirect()->back();
     }
     
+    /**
+     * @param  Request  $request
+     *
+     * @return RedirectResponse
+     */
     public function cartDelete(Request $request): RedirectResponse
     {
-        return $this->cart_repository->cartDelete($request);
+        try {
+            $this->cart_service->destroy($request->id);
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+        
+        return redirect()->back();
     }
     
     public function cartUpdate(Request $request): RedirectResponse
     {
-        return $this->cart_repository->cartUpdate($request);
+        try {
+            $this->cart_service->cartUpdate($request);
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+        
+        return redirect()->back();
     }
     
     /**
@@ -52,6 +95,12 @@ class CartController extends Controller
      */
     public function checkout(): View|Factory|RedirectResponse|Application
     {
-        return $this->cart_repository->checkout();
+        try {
+            $this->cart_service->checkout();
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+        
+        return view('front::pages.checkout');
     }
 }

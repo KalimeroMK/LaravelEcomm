@@ -10,9 +10,17 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Shipping\Http\Requests\Store;
 use Modules\Shipping\Http\Requests\Update;
 use Modules\Shipping\Models\Shipping;
+use Modules\Shipping\Service\ShippingService;
 
 class ShippingController extends Controller
 {
+    private ShippingService $shipping_service;
+    
+    public function __construct(ShippingService $shipping_service)
+    {
+        $this->shipping_service = $shipping_service;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -20,9 +28,7 @@ class ShippingController extends Controller
      */
     public function index()
     {
-        $shipping = Shipping::orderBy('id', 'DESC')->paginate(10);
-        
-        return view('shipping::index')->with('shippings', $shipping);
+        return view('shipping::index', ['shippings' => $this->shipping_service->index()]);
     }
     
     /**
@@ -34,13 +40,7 @@ class ShippingController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        // return $data;
-        $status = Shipping::create($request->validated());
-        if ($status) {
-            request()->session()->flash('success', 'Shipping successfully created');
-        } else {
-            request()->session()->flash('error', 'Error, Please try again');
-        }
+        $this->shipping_service->store($request->validated());
         
         return redirect()->route('shipping.index');
     }
@@ -64,7 +64,7 @@ class ShippingController extends Controller
      */
     public function edit(Shipping $shipping)
     {
-        return view('shipping::edit')->with('shipping', $shipping);
+        return view('shipping::edit')->with(['shipping' => $this->shipping_service->edit($shipping->id)]);
     }
     
     /**
@@ -77,12 +77,7 @@ class ShippingController extends Controller
      */
     public function update(Update $request, Shipping $shipping): RedirectResponse
     {
-        $status = $shipping->update($request->validated());
-        if ($status) {
-            request()->session()->flash('success', 'Shipping successfully updated');
-        } else {
-            request()->session()->flash('error', 'Error, Please try again');
-        }
+        $this->shipping_service->update($shipping->id, $request->validated());
         
         return redirect()->route('shipping.index');
     }
@@ -96,20 +91,8 @@ class ShippingController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $shipping = Shipping::find($id);
-        if ($shipping) {
-            $status = $shipping->delete();
-            if ($status) {
-                request()->session()->flash('success', 'Shipping successfully deleted');
-            } else {
-                request()->session()->flash('error', 'Error, Please try again');
-            }
-            
-            return redirect()->route('shipping.index');
-        } else {
-            request()->session()->flash('error', 'Shipping not found');
-            
-            return redirect()->back();
-        }
+        $this->shipping_service->destroy($id);
+        
+        return redirect()->back();
     }
 }

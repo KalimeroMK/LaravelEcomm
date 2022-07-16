@@ -3,13 +3,13 @@
 namespace Modules\LoginSecurity\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Hash;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Modules\LoginSecurity\Models\LoginSecurity;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;

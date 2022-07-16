@@ -6,19 +6,22 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Tag\Http\Requests\Store;
 use Modules\Tag\Models\Tag;
+use Modules\Tag\Service\TagService;
 
 class TagController extends Controller
 {
-    public function __construct()
+    private TagService $tag_service;
+    
+    public function __construct(TagService $tag_service)
     {
         $this->middleware('permission:tags-list');
         $this->middleware('permission:tags-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:tags-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:tags-delete', ['only' => ['destroy']]);
+        $this->tag_service = $tag_service;
     }
     
     /**
@@ -28,26 +31,19 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::orderBy('id', 'DESC')->paginate(10);
-        
-        return view('tag::index', compact('tags'));
+        return view('tag::index', ['tags' => $this->tag_service->index()]);
     }
     
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  Store  $request
      *
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
-        $status = Tag::create($request->validated());
-        if ($status) {
-            request()->session()->flash('success', 'Post Tag Successfully added');
-        } else {
-            request()->session()->flash('error', 'Please try again!!');
-        }
+        $this->tag_service->store($request->validated());
         
         return redirect()->route('post-tag.index');
     }
@@ -59,7 +55,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        return view('tag::create');
+        return view('tag::create', ['tags' => new Tag()]);
     }
     
     /**
@@ -71,25 +67,20 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        return view('tag::edit', compact('tag'));
+        return view('tag::edit', ['tag' => $this->tag_service->edit($tag->id)]);
     }
     
     /**
      * Update the specified resource in storage.
      *
      * @param  Store  $request
-     * @param  Tag  $postTag
+     * @param  Tag  $tag
      *
      * @return RedirectResponse
      */
-    public function update(Store $request, Tag $postTag): RedirectResponse
+    public function update(Store $request, Tag $tag): RedirectResponse
     {
-        $status = $postTag->update($request->validated());
-        if ($status) {
-            request()->session()->flash('success', 'Post Tag Successfully updated');
-        } else {
-            request()->session()->flash('error', 'Please try again!!');
-        }
+        $this->tag_service->update($request->validated(), $tag->id);
         
         return redirect()->route('post-tag.index');
     }
@@ -97,19 +88,13 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Tag  $postTag
+     * @param  Tag  $tag
      *
      * @return RedirectResponse
      */
-    public function destroy(Tag $postTag): RedirectResponse
+    public function destroy(Tag $tag): RedirectResponse
     {
-        $status = $postTag->delete();
-        
-        if ($status) {
-            request()->session()->flash('success', 'Post Tag successfully deleted');
-        } else {
-            request()->session()->flash('error', 'Error while deleting post tag');
-        }
+        $this->tag_service->destroy($tag->id);
         
         return redirect()->route('tags.index');
     }

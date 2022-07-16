@@ -27,7 +27,7 @@ class PostCommentController extends Controller
      */
     public function index()
     {
-        return $this->post_comment_service->index();
+        return view('backend.comment.index')->with($this->post_comment_service->index());
     }
     
     /**
@@ -39,7 +39,9 @@ class PostCommentController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        return $this->post_comment_service->store($request);
+        $this->post_comment_service->store($request);
+        
+        return redirect()->back();
     }
     
     /**
@@ -51,7 +53,7 @@ class PostCommentController extends Controller
      */
     public function edit(PostComment $postComment)
     {
-        return $this->post_comment_service->edit($postComment);
+        return view('backend.comment.edit')->with($this->post_comment_service->edit($postComment->id));
     }
     
     /**
@@ -60,11 +62,11 @@ class PostCommentController extends Controller
      * @param  Request  $request
      * @param  PostComment  $postComment
      *
-     * @return RedirectResponse
+     * @return Application|Factory|View
      */
-    public function update(Request $request, PostComment $postComment): RedirectResponse
+    public function update(Request $request, PostComment $postComment): Application|Factory|View
     {
-        return $this->post_comment_service->update($request, $postComment);
+        return view('backend.comment.index')->with($this->post_comment_service->update($request, $postComment->id));
     }
     
     /**
@@ -76,6 +78,6 @@ class PostCommentController extends Controller
      */
     public function destroy(PostComment $postComment): RedirectResponse
     {
-        return $this->post_comment_service->destroy($postComment);
+        return $this->post_comment_service->destroy($postComment->id);
     }
 }

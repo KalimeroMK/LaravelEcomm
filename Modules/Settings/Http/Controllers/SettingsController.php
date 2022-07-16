@@ -8,18 +8,23 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Admin\Http\Requests\Update;
-use Modules\Admin\Models\Setting;
+use Modules\Settings\Service\SettingsService;
 
 class SettingsController extends Controller
 {
+    private SettingsService $settings_service;
+    
+    public function __construct(SettingsService $settings_service)
+    {
+        $this->settings_service = $settings_service;
+    }
+    
     /**
      * @return Application|Factory|View
      */
     public function index()
     {
-        $data = Setting::first();
-        
-        return view('admin::setting', compact('data'));
+        return view('admin::setting', ['data' => $this->settings_service->index()]);
     }
     
     /**
@@ -29,13 +34,7 @@ class SettingsController extends Controller
      */
     public function Update(Update $request): RedirectResponse
     {
-        $settings = Setting::first();
-        $status   = $settings->update($request->validated());
-        if ($status) {
-            request()->session()->flash('success', 'Setting successfully updated');
-        } else {
-            request()->session()->flash('error', 'Please try again');
-        }
+        $this->settings_service->update($request);
         
         return redirect()->route('admin');
     }

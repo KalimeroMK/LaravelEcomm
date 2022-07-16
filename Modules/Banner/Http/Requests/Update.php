@@ -3,16 +3,10 @@
 namespace Modules\Banner\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use JetBrains\PhpStorm\ArrayShape;
 
 class Update extends FormRequest
 {
-    #[ArrayShape([
-        'title'       => "string",
-        'description' => "string",
-        'photo'       => "string",
-        'status'      => "string",
-    ])] public function rules(): array
+    public function rules(): array
     {
         return [
             'title'       => 'string|required|max:50',

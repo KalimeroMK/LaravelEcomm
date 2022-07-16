@@ -14,7 +14,10 @@ class MessageController extends Controller
 {
     private MessageService $message_service;
     
-    public function __construct() { $this->message_service = new MessageService(); }
+    public function __construct(MessageService $message_service)
+    {
+        $this->message_service = $message_service;
+    }
     
     /**
      * Display a listing of the resource.
@@ -23,7 +26,7 @@ class MessageController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        return $this->message_service->index();
+        return view('backend::message.index')->with($this->message_service->index());
     }
     
     /**
@@ -35,7 +38,7 @@ class MessageController extends Controller
      */
     public function show(Message $message): Factory|View|Application
     {
-        return $this->message_service->show($message);
+        return view('backend::message.show')->with($this->message_service->show($message->id));
     }
     
     /**
@@ -47,6 +50,8 @@ class MessageController extends Controller
      */
     public function destroy(Message $message): RedirectResponse
     {
-        return $this->message_service->destroy($message);
+        $this->message_service->destroy($message->id);
+        
+        return redirect()->back();
     }
 }

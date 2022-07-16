@@ -7,7 +7,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
@@ -26,81 +25,58 @@ class PostCommentService
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param $request
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function store(Request $request): RedirectResponse
+    public function store($request): void
     {
         $post_info       = Post::getPostBySlug($request->slug);
-        $data            = $request->all();
+        $data            = $request;
         $data['user_id'] = $request->user()->id;
         $data['status']  = 'active';
-        $status          = PostComment::create($data);
-        $details         = [
+        PostComment::create($data);
+        $details = [
             'title'     => "New Comment created",
             'actionURL' => route('blog.detail', $post_info->slug),
             'fas'       => 'fas fa-comment',
         ];
         Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
-        if ($status) {
-            request()->session()->flash('success', 'Thank you for your comment');
-        } else {
-            request()->session()->flash('error', 'Something went wrong! Please try again!!');
-        }
-        
-        return redirect()->back();
     }
     
     /**
-     * Show the form for editing the specified resource.
+     * @param $id
      *
-     * @param  PostComment  $postComment
-     *
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function edit(PostComment $postComment): View|Factory|Application
+    public function edit($id): mixed
     {
-        return view('backend.comment.edit', compact('postComment'));
+        return $this->post_comment_repository->findById($id);
     }
     
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  PostComment  $postComment
+     * @param $data
+     * @param $id
      *
      * @return RedirectResponse
      */
-    public function update(Request $request, PostComment $postComment): RedirectResponse
+    public function update($data, $id): RedirectResponse
     {
-        $status = $postComment->update($request->validated());
-        if ($status) {
-            request()->session()->flash('success', 'Comment successfully updated');
-        } else {
-            request()->session()->flash('error', 'Something went wrong! Please try again!!');
-        }
-        
-        return redirect()->route('comment.index');
+        return $this->post_comment_repository->update($id, $data);
     }
     
     /**
      * Remove the specified resource from storage.
      *
-     * @param  PostComment  $postComment
+     * @param $id
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function destroy(PostComment $postComment): RedirectResponse
+    public function destroy($id): void
     {
-        $status = $postComment->delete();
-        if ($status) {
-            request()->session()->flash('success', 'Post Comment successfully deleted');
-        } else {
-            request()->session()->flash('error', 'Error occurred please try again');
-        }
-        
-        return back();
+        $this->post_comment_repository->delete($id);
     }
     
     /**
@@ -110,8 +86,6 @@ class PostCommentService
      */
     public function index(): View|Factory|Application
     {
-        $comments = $this->post_comment_repository->getAllComments();
-        
-        return view('backend.comment.index', compact('comments'));
+        return $this->post_comment_repository->findAll();
     }
 }

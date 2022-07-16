@@ -3,7 +3,6 @@
 namespace Modules\Post\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Traits\ImageUpload;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -26,8 +25,6 @@ class PostController extends Controller
         $this->post_service = $post_service;
     }
     
-    use ImageUpload;
-    
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +32,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return $this->post_service->index();
+        return view('post::index')->with($this->post_service->index());
     }
     
     /**
@@ -47,7 +44,9 @@ class PostController extends Controller
      */
     public function store(PostCategoryStore $request): RedirectResponse
     {
-        return $this->post_service->store($request);
+        $this->post_service->store($request);
+        
+        return redirect()->route('posts.index');
     }
     
     /**
@@ -57,7 +56,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return $this->post_service->create();
+        return view('post::create')->with($this->post_service->create());
     }
     
     /**
@@ -69,7 +68,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return $this->post_service->edit($post);
+        return view('post::edit')->with($this->post_service->edit($post->id));
     }
     
     /**
@@ -82,7 +81,9 @@ class PostController extends Controller
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
-        return $this->post_service->update($request, $post);
+        $this->post_service->update($request, $post);
+        
+        return redirect()->route('post.index');
     }
     
     /**
@@ -94,16 +95,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post): RedirectResponse
     {
-        return $this->post_service->destroy($post);
+        $this->post_service->destroy($post->id);
+        
+        return redirect()->back();
     }
     
-    /**
-     * Make paths for storing images.
-     *
-     * @return object
-     */
-    public function makePaths(): object
-    {
-        return $this->post_service->makePaths();
-    }
 }

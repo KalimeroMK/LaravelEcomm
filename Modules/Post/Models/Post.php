@@ -6,9 +6,9 @@
 
 namespace Modules\Post\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Database\Factories\PostFactory;
-use Eloquent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -118,7 +118,7 @@ class Post extends Model
      *
      * @return Builder|Model
      */
-    public static function getPostBySlug($slug)
+    public static function getPostBySlug($slug): Model|Builder
     {
         return Post::whereSlug($slug)->with('comments')->firstOrFail();
     }

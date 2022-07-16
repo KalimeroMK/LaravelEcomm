@@ -3,12 +3,9 @@
 namespace Modules\Banner\Service;
 
 use App\Traits\ImageUpload;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Modules\Banner\Http\Requests\Store;
-use Modules\Banner\Http\Requests\Update;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
 
@@ -24,48 +21,35 @@ class BannerService
     }
     
     /**
-     * Store a newly created resource in storage.
+     * @param $data
      *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
+     * @return Collection|_IH_Banner_C|mixed|Banner|Banner[]|string
      */
-    public function store(Store $request): RedirectResponse
+    public function store($data): mixed
     {
-        $banner = Banner::create(
-            $request->except('photo') + [
-                'photo' => $this->verifyAndStoreImage($request),
-            ]
-        );
-        if ($banner) {
-            request()->session()->flash('success', 'Banner successfully added');
-        } else {
-            request()->session()->flash('error', 'Error occurred while adding banner');
+        try {
+            return $this->banner_repository->create(
+                collect($data)->except(['photo'])->toArray() + [
+                    'photo' => $this->verifyAndStoreImage($data['photo']),
+                ]
+            );
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        
-        return redirect()->route('banners.edit', $banner);
     }
     
     /**
-     * Show the form for editing the specified resource.
+     * @param $id
      *
-     * @param  Banner  $banner
-     *
-     * @return Application|Factory|View
+     * @return mixed|string
      */
-    public function edit(Banner $banner): View|Factory|Application
+    public function edit($id): mixed
     {
-        return view('banner::edit', compact('banner'));
-    }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function create(): View|Factory|Application
-    {
-        return view('banner::create', ['banner' => new Banner()]);
+        try {
+            return $this->banner_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
@@ -83,53 +67,45 @@ class BannerService
     }
     
     /**
-     * Update the specified resource in storage.
+     * @param $id
+     * @param $data
      *
-     * @param  Update  $request
-     * @param  Banner  $banner
-     *
-     * @return RedirectResponse
+     * @return mixed|string
      */
-    public function update(Update $request, Banner $banner): RedirectResponse
+    public function update($id, $data): mixed
     {
-        $banner = $banner->update($request->validated());
-        if ($banner) {
-            request()->session()->flash('success', 'Banner successfully updated');
-        } else {
-            request()->session()->flash('error', 'Error occurred while updating banner');
+        try {
+            return $this->banner_repository->update($id, $data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        
-        return redirect()->route('banners.edit', $banner);
     }
     
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Banner  $banner
+     * @param $banner
      *
-     * @return RedirectResponse
+     * @return string|void
      */
-    public function destroy(Banner $banner): RedirectResponse
+    public function destroy($banner)
     {
-        $status = $banner->delete();
-        if ($status) {
-            request()->session()->flash('success', 'Banner successfully deleted');
-        } else {
-            request()->session()->flash('error', 'Error occurred while deleting banner');
+        try {
+            $this->banner_repository->delete($banner->id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        
-        return redirect()->route('banners.index');
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
+     * @return mixed|string
      */
-    public function index(): Factory|View|Application
+    public function getAll(): mixed
     {
-        $banners = $this->banner_repository->getAll();
-        
-        return view('banner::index', compact('banners'));
+        try {
+            return $this->banner_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

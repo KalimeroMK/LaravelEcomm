@@ -17,5 +17,6 @@
   "Message": true,
   "Notification": true,
   "Billing": true,
-  "Front": true
+  "Front": true,
+  "Core": true
 }

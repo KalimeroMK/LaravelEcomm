@@ -3,13 +3,11 @@
 namespace Modules\Post\Service;
 
 use App\Traits\ImageUpload;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Modules\Category\Models\Category;
-use Modules\Post\Http\Requests\PostCategoryStore;
-use Modules\Post\Http\Requests\Update;
 use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
 use Modules\Tag\Models\Tag;
@@ -29,53 +27,53 @@ class PostService
     /**
      * Store a newly created resource in storage.
      *
-     * @param  PostCategoryStore  $request
+     * @param $request
      *
-     * @return RedirectResponse
+     * @return null|string
      */
-    public function store(PostCategoryStore $request): RedirectResponse
+    public function store($request): null|string
     {
-        $post = Post::create(
-            $request->except('photo') + [
-                'photo' => $this->verifyAndStoreImage($request),
-            ]
-        );
-        $post->categories()->attach($request['category']);
-        $post->post_tag()->attach($request['tags']);
-        
-        request()->session()->flash('success', 'Post Successfully added');
-        
-        return redirect()->route('posts.index');
+        try {
+            $post = Post::create(
+                $request->except('photo') + [
+                    'photo' => $this->verifyAndStoreImage($request),
+                ]
+            );
+            $post->categories()->attach($request['category']);
+            $post->post_tag()->attach($request['tags']);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
-     * Show the form for editing the specified resource.
+     * @param $id
      *
-     * @param  Post  $post
-     *
-     * @return Application|Factory|View
+     * @return array
      */
-    public function edit(Post $post): View|Factory|Application
+    public function edit($id): array
     {
-        $categories = Category::get();
-        $tags       = Tag::get();
-        $users      = User::get();
-        
-        return view('post::edit', compact('post', 'categories', 'tags', 'users'));
+        return [
+            'categories' => Category::get(),
+            'tags'       => Tag::get(),
+            'users'      => User::get(),
+            'post'       => $this->post_repository->findById($id),
+        ];
     }
     
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|View
+     * @return array
      */
-    public function create(): View|Factory|Application
+    public function create(): array
     {
-        $categories = Category::get();
-        $tags       = Tag::get();
-        $users      = User::get();
-        
-        return view('post::create', compact('users', 'categories', 'tags'));
+        return [
+            'categories' => Category::get(),
+            'tags'       => Tag::get(),
+            'users'      => User::get(),
+            'post'       => new Post(),
+        ];
     }
     
     /**
@@ -95,52 +93,36 @@ class PostService
     /**
      * Update the specified resource in storage.
      *
-     * @param  Update  $request
-     * @param  Post  $post
+     * @param $request
+     * @param $post
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function update(Update $request, Post $post): RedirectResponse
+    public function update($request, $post): void
     {
         if ($request->hasFile('photo')) {
-            $status = $post->update(
+            $post->update(
                 $request->except('photo') + [
                     'photo' => $this->verifyAndStoreImage($request),
                 ]
             );
         } else {
-            $status = $post->update($request->validated());
+            $post->update($request->validated());
         }
         $post->post_tag()->sync($request['tags'], true);
         $post->categories()->sync($request['category'], true);
-        
-        if ($status) {
-            request()->session()->flash('success', 'Post Successfully updated');
-        } else {
-            request()->session()->flash('error', 'Please try again!!');
-        }
-        
-        return redirect()->route('post.index');
     }
     
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Post  $post
+     * @param $id
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function destroy(Post $post): RedirectResponse
+    public function destroy($id): void
     {
-        $status = $post->delete();
-        
-        if ($status) {
-            request()->session()->flash('success', 'Post successfully deleted');
-        } else {
-            request()->session()->flash('error', 'Error while deleting post ');
-        }
-        
-        return redirect()->route('post.index');
+        $this->post_repository->delete($id);
     }
     
     /**
@@ -150,8 +132,6 @@ class PostService
      */
     public function index(): View|Factory|Application
     {
-        $posts = $this->post_repository->getAll();
-        
-        return view('post::index', compact('posts'));
+        return $this->post_repository->findAll();
     }
 }

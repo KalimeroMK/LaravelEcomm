@@ -2,22 +2,18 @@
 
 namespace Modules\Notification\Repository;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use LaravelIdea\Helper\Modules\Message\Models\_IH_Message_C;
-use Modules\Message\Models\Message;
+use Modules\Core\Repositories\Repository;
 use Modules\Notification\Models\Notification;
 
-class NotificationRepository
+class NotificationRepository extends Repository
 {
-    public function getAll(): LengthAwarePaginator|array|_IH_Message_C|\Illuminate\Pagination\LengthAwarePaginator
-    {
-        return Notification::orderBy('id', 'DESC')->paginate(10);
-    }
+    public $model = Notification::class;
     
-    public function getById($id): Model|Collection|array|_IH_Message_C|Message
+    /**
+     * @return mixed
+     */
+    public function findAll(): mixed
     {
-        return Notification::findOrFail($id);
+        return $this->model::paginate(10);
     }
 }

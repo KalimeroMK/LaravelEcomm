@@ -28,7 +28,7 @@
         </div>
         <!--/ End Single Slider -->
     </section>
-    @if(count($banners)>0)
+    @if(isset($banners))
         <section id="Gslider" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 @foreach($banners as $key=>$banner)

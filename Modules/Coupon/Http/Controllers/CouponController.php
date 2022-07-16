@@ -32,7 +32,7 @@ class CouponController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        return $this->coupon_service->index();
+        return view('coupon::index', ['coupons' => $this->coupon_service->index()]);
     }
     
     /**
@@ -44,7 +44,9 @@ class CouponController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        return $this->coupon_service->store($request);
+        $this->coupon_service->store($request->validated());
+        
+        return redirect()->route('coupons.index');
     }
     
     /**
@@ -54,7 +56,7 @@ class CouponController extends Controller
      */
     public function create(): View|Factory|Application
     {
-        return $this->coupon_service->create();
+        return view('coupon::create', ['coupons' => new Coupon()]);
     }
     
     /**
@@ -66,7 +68,7 @@ class CouponController extends Controller
      */
     public function edit(Coupon $coupon): View|Factory|Application
     {
-        return $this->coupon_service->edit($coupon);
+        return $this->coupon_service->edit($coupon->id);
     }
     
     /**
@@ -79,7 +81,7 @@ class CouponController extends Controller
      */
     public function update(Update $request, Coupon $coupon): RedirectResponse
     {
-        return $this->coupon_service->update($request, $coupon);
+        return $this->coupon_service->update($request->validated(), $coupon->id);
     }
     
     /**
@@ -91,6 +93,8 @@ class CouponController extends Controller
      */
     public function destroy(Coupon $coupon): RedirectResponse
     {
-        return $this->coupon_service->destroy($coupon);
+        $this->coupon_service->destroy($coupon->id);
+        
+        return redirect()->back();
     }
 }

@@ -3,6 +3,7 @@
 namespace Modules\Order\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Order\Rules\CartRule;
 
 class Store extends FormRequest
 {
@@ -22,6 +23,7 @@ class Store extends FormRequest
             'phone'      => 'numeric|required',
             'post_code'  => 'string|nullable',
             'email'      => 'string|required',
+            new CartRule(),
         ];
     }
     

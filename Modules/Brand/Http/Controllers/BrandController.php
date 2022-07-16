@@ -9,15 +9,15 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Brand\Http\Requests\Store;
 use Modules\Brand\Models\Brand;
-use Modules\Brand\Repository\BrandRepository;
+use Modules\Brand\Service\BrandService;
 
 class BrandController extends Controller
 {
-    private BrandRepository $brand;
+    private BrandService $brand_service;
     
-    public function __construct(BrandRepository $brand)
+    public function __construct(BrandService $brand_service)
     {
-        $this->brand = $brand;
+        $this->brand_service = $brand_service;
         $this->middleware('permission:brand-list');
         $this->middleware('permission:brand-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:brand-edit', ['only' => ['edit', 'update']]);
@@ -31,9 +31,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = $this->brand->getAll();
-        
-        return view('brand::index', compact('brands'));
+        return view('brand::index', ['brands' => $this->brand_service->getAll()]);
     }
     
     /**
@@ -43,7 +41,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('brand::create');
+        return view('brand::create', ['brand' => new Brand()]);
     }
     
     /**
@@ -55,10 +53,9 @@ class BrandController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $data  = $request->all();
-        $brand = $this->brand->storeBrand($data);
+        $this->brand_service->store($request->validated());
         
-        return redirect()->route('brands.edit', $brand);
+        return redirect()->route('brands.index');
     }
     
     /**
@@ -70,6 +67,8 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
+        $brand = $this->brand_service->edit($brand->id);
+        
         return view('brand::edit', compact('brand'));
     }
     
@@ -83,8 +82,7 @@ class BrandController extends Controller
      */
     public function update(Store $request, Brand $brand): RedirectResponse
     {
-        $data  = $request->all();
-        $brand = $this->brand->updateBrand($data, $brand->id);
+        $brand = $this->brand_service->update($brand->id, $request->validated());
         
         return redirect()->route('brands.edit', $brand);
     }
@@ -98,12 +96,7 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand): RedirectResponse
     {
-        $status = $brand->delete();
-        if ($status) {
-            request()->session()->flash('success', 'Brand successfully deleted');
-        } else {
-            request()->session()->flash('error', 'Error, Please try again');
-        }
+        $this->brand_service->destroy($brand->id);
         
         return redirect()->route('brands.index');
     }

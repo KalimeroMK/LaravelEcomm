@@ -11,13 +11,13 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
-use Modules\Banner\Service\BannerService;
+use Modules\Brand\Service\BrandService;
 
 class BannerController extends Controller
 {
-    private BannerService $banner_service;
+    private BrandService $banner_service;
     
-    public function __construct(BannerService $banner_service)
+    public function __construct(BrandService $banner_service)
     {
         $this->middleware('permission:banner-list');
         $this->middleware('permission:banner-create', ['only' => ['create', 'store']]);
@@ -35,9 +35,17 @@ class BannerController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        $banners = $this->banner_service->index();
-        
-        return view('banner::index', compact('banners'));
+        return view('banner::index', ['banners' => $this->banner_service->getAll()]);
+    }
+    
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Application|Factory|View
+     */
+    public function create(): View|Factory|Application
+    {
+        return view('banner::create', ['banner' => new Banner()]);
     }
     
     /**
@@ -49,19 +57,9 @@ class BannerController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->banner_service->store($request);
+        $this->banner_service->store($request->validated());
         
         return redirect()->route('banners.index');
-    }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function create(): View|Factory|Application
-    {
-        return $this->banner_service->create();
     }
     
     /**
@@ -73,7 +71,9 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner): View|Factory|Application
     {
-        return $this->banner_service->edit($banner);
+        $banner = $this->banner_service->edit($banner->id);
+        
+        return view('banner::edit', compact('banner'));
     }
     
     /**
@@ -86,7 +86,9 @@ class BannerController extends Controller
      */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
-        return $this->banner_service->update($request, $banner);
+        $banner = $this->banner_service->update($banner->id, $request->validated());
+        
+        return redirect()->route('banners.edit', $banner);
     }
     
     /**
@@ -98,7 +100,9 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner): RedirectResponse
     {
-        return $this->banner_service->destroy($banner);
+        $this->banner_service->destroy($banner);
+        
+        return redirect()->route('banners.index');
     }
     
     /**

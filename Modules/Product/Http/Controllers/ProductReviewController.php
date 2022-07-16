@@ -3,20 +3,24 @@
 namespace Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Notifications\StatusNotification;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\Product\Http\Requests\ProductReviewStore;
-use Modules\Product\Models\Product;
 use Modules\Product\Models\ProductReview;
-use Modules\User\Models\User;
-use Notification;
+use Modules\Product\Service\ProductReviewService;
 
 class ProductReviewController extends Controller
 {
+    private ProductReviewService $product_review_service;
+    
+    public function __construct(ProductReviewService $product_review_service)
+    {
+        $this->product_review_service = $product_review_service;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -24,9 +28,7 @@ class ProductReviewController extends Controller
      */
     public function index()
     {
-        $reviews = ProductReview::getAllReview();
-        
-        return view('product::review.index', compact('reviews'));
+        return view('product::review.index')->with($this->product_review_service->index());
     }
     
     /**
@@ -38,24 +40,7 @@ class ProductReviewController extends Controller
      */
     public function store(ProductReviewStore $request): RedirectResponse
     {
-        $product_info       = Product::getProductBySlug($request['slug']);
-        $data               = $request->all();
-        $data['product_id'] = $product_info->id;
-        $data['user_id']    = $request->user()->id;
-        $data['status']     = 'active';
-        // dd($data)q;
-        $status  = ProductReview::create($data);
-        $details = [
-            'title'     => 'New Product Rating!',
-            'actionURL' => route('product-detail', $product_info->slug),
-            'fas'       => 'fa-star',
-        ];
-        Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
-        if ($status) {
-            request()->session()->flash('success', 'Thank you for your feedback');
-        } else {
-            request()->session()->flash('error', 'Something went wrong! Please try again!!');
-        }
+        $this->product_review_service->store($request);
         
         return redirect()->back();
     }
@@ -69,8 +54,7 @@ class ProductReviewController extends Controller
      */
     public function edit(ProductReview $productReview)
     {
-        // return $review;
-        return view('product::review.edit', compact('productReview'));
+        return view('product::review.edit')->with($this->product_review_service->edit($productReview->id));
     }
     
     /**
@@ -83,17 +67,7 @@ class ProductReviewController extends Controller
      */
     public function update(Request $request, int $id): RedirectResponse
     {
-        $review = ProductReview::findOrFail($id);
-        if ($review) {
-            $status = $review->update($request->validated());
-            if ($status) {
-                request()->session()->flash('success', 'Review Successfully updated');
-            } else {
-                request()->session()->flash('error', 'Something went wrong! Please try again!!');
-            }
-        } else {
-            request()->session()->flash('error', 'Review not found!!');
-        }
+        $this->product_review_service->update($id, $request);
         
         return redirect()->route('product::review.index');
     }
@@ -107,13 +81,7 @@ class ProductReviewController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $review = ProductReview::find($id);
-        $status = $review->delete();
-        if ($status) {
-            request()->session()->flash('success', 'Successfully deleted review');
-        } else {
-            request()->session()->flash('error', 'Something went wrong! Try again');
-        }
+        $this->product_review_service->destroy($id);
         
         return redirect()->route('review.index');
     }

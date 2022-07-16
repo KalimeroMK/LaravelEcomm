@@ -2,26 +2,18 @@
 
 namespace Modules\Coupon\Repository;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
+use Modules\Core\Repositories\Repository;
 use Modules\Coupon\Models\Coupon;
 
-class CouponRepository
+class CouponRepository extends Repository
 {
-    public function getAll(): LengthAwarePaginator|_IH_Banner_C|\Illuminate\Pagination\LengthAwarePaginator|array
-    {
-        return Coupon::orderBy('id', 'DESC')->paginate(10);
-    }
+    public $model = Coupon::class;
     
     /**
-     * @param $id
-     *
-     * @return Model|Coupon|Collection|_IH_Banner_C|array
+     * @return mixed
      */
-    public function getById($id): Model|Coupon|Collection|_IH_Banner_C|array
+    public function findAll(): mixed
     {
-        return Coupon::findOrFail($id);
+        return $this->model::paginate(10);
     }
 }

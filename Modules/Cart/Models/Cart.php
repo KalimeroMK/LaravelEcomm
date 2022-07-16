@@ -6,9 +6,9 @@
 
 namespace Modules\Cart\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Database\Factories\CartFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

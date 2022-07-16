@@ -4,19 +4,15 @@ namespace Modules\Order\Service;
 
 use App\Helpers\Helper;
 use App\Notifications\StatusNotification;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
 use Modules\Order\Http\Requests\Store;
-use Modules\Order\Http\Requests\Update;
 use Modules\Order\Models\Order;
 use Modules\Order\Repository\OrderRepository;
 use Modules\Shipping\Models\Shipping;
 use Modules\User\Models\User;
-use Notification;
 
 class OrderService
 {
@@ -36,12 +32,6 @@ class OrderService
      */
     public function store(Store $request): RedirectResponse
     {
-        if (empty(Cart::where('user_id', auth()->user()->id)->where('order_id', null)->first())) {
-            request()->session()->flash('error', 'Cart is Empty !');
-            
-            return back();
-        }
-        
         $order                      = new Order();
         $order_data                 = $request->all();
         $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
@@ -66,7 +56,6 @@ class OrderService
                 $order_data['total_amount'] = Helper::totalCartPrice();
             }
         }
-        // return $order_data['total_amount'];
         $order_data['status'] = "new";
         if (request('payment_method') == 'paypal') {
             $order_data['payment_method'] = 'paypal';
@@ -90,9 +79,7 @@ class OrderService
             session()->forget('cart');
             session()->forget('coupon');
         }
-        Cart::where('user_id', auth()->user()->id)->where('order_id', null)->update(['order_id' => $order->id]);
-        
-        request()->session()->flash('success', 'Your product successfully placed in order');
+        Cart::whereUserId(Auth()->id())->whereOrderId(null)->update(['order_id' => $order->id]);
         
         return redirect()->route('home');
     }
@@ -102,57 +89,42 @@ class OrderService
      *
      * @param  int  $id
      *
-     * @return Application|Factory|View
-     */
-    public function edit(int $id): View|Factory|Application
+     * =     */
+    public function edit(int $id)
     {
-        $order = $this->order_repository->getById($id);
-        
-        return view('order::edit')->with('order', $order);
+        return $this->order_repository->findById($id);
     }
     
     /**
-     * Display the specified resource.
+     * @param $id
      *
-     * @param  Order  $order
-     *
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function show(Order $order): View|Factory|Application
+    public function show($id): mixed
     {
-        return view('order::show')->with('order', $order);
+        return $this->order_repository->findById($id);
     }
     
     /**
      * Update the specified resource in storage.
      *
-     * @param  Update  $request
+     * @param $request
      * @param  int  $id
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function update(Update $request, int $id): RedirectResponse
+    public function update($request, int $id): void
     {
-        $order = $this->order_repository->getById($id);
+        $order = $this->order_repository->findById($id);
         
-        $data = $request->all();
-        // return $request->status;
         if ($request->status == 'delivered') {
             foreach ($order->cart as $cart) {
-                $product = $cart->product;
-                // return $product;
+                $product        = $cart->product;
                 $product->stock -= $cart->quantity;
                 $product->save();
             }
         }
-        $status = $order->fill($data)->save();
-        if ($status) {
-            request()->session()->flash('success', 'Successfully updated order');
-        } else {
-            request()->session()->flash('error', 'Error while updating order');
-        }
-        
-        return redirect()->route('orders.index');
+        $order->fill($request)->save();
     }
     
     /**
@@ -160,30 +132,18 @@ class OrderService
      *
      * @param  int  $id
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(int $id): void
     {
-        $order  = $this->order_repository->getById($id);
-        $status = $order->delete();
-        if ($status) {
-            request()->session()->flash('success', 'Order Successfully deleted');
-        } else {
-            request()->session()->flash('error', 'Order can not deleted');
-        }
-        
-        return redirect()->route('orders.index');
+        $this->order_repository->delete($id);
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function index(): View|Factory|Application
+    public function index(): mixed
     {
-        $orders = $this->order_repository->getAll();
-        
-        return view('order::index', compact('orders'));
+        return $this->order_repository->findAll();
     }
 }
