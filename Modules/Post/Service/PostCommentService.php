@@ -3,9 +3,6 @@
 namespace Modules\Post\Service;
 
 use App\Notifications\StatusNotification;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Notification;
 use Modules\Post\Models\Post;
@@ -80,11 +77,9 @@ class PostCommentService
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function index(): View|Factory|Application
+    public function index(): mixed
     {
         return $this->post_comment_repository->findAll();
     }

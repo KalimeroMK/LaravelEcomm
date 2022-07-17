@@ -19,4 +19,4 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('/posts', PostController::class);
 });
 Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');
-Route::resource('/comment', PostCommentController::class);
+Route::resource('/post_comments', PostCommentController::class);

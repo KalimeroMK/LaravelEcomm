@@ -14,6 +14,6 @@ class PostRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::paginate(10);
+        return $this->model::with('categories', 'comments', 'post_comments', 'post_tag', 'author_info')->paginate(10);
     }
 }

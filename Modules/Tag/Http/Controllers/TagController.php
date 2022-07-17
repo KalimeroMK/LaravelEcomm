@@ -45,7 +45,7 @@ class TagController extends Controller
     {
         $this->tag_service->store($request->validated());
         
-        return redirect()->route('post-tag.index');
+        return redirect()->route('tags.index');
     }
     
     /**

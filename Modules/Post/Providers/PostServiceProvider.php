@@ -2,10 +2,10 @@
 
 namespace Modules\Post\Providers;
 
-use Config;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
-use Modules\Post\Observers\PostCategoryObserver;
+use Modules\Post\Models\Post;
+use Modules\Post\Observers\PostObserver;
 
 class PostServiceProvider extends ServiceProvider
 {
@@ -24,12 +24,13 @@ class PostServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        Post::observe(PostObserver::class);
     }
     
     /**
@@ -37,7 +38,7 @@ class PostServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerTranslations()
+    public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
         
@@ -53,7 +54,7 @@ class PostServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerConfig()
+    protected function registerConfig(): void
     {
         $this->publishes([
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
@@ -69,7 +70,7 @@ class PostServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerViews()
+    public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
         
@@ -99,7 +100,7 @@ class PostServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }

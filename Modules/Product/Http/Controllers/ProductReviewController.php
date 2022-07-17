@@ -28,7 +28,7 @@ class ProductReviewController extends Controller
      */
     public function index()
     {
-        return view('product::review.index')->with($this->product_review_service->index());
+        return view('product::review.index', ['reviews' => $this->product_review_service->index()]);
     }
     
     /**

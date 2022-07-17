@@ -1,12 +1,12 @@
-@extends('layouts.master')
+@extends('tag::layouts.master')
 
 @section('content')
 
     <div class="card">
         <h5 class="card-header">Add Post Category</h5>
         <div class="card-body">
-            <form method="post" action="{{route('posts.store')}}">
-                {{csrf_field()}}
+            <form method="post" action="{{route('tags.store')}}">
+                @csrf
                 <div class="form-group">
                     <label for="inputTitle" class="col-form-label">Title</label>
                     <input id="inputTitle" type="text" name="title" placeholder="Enter title" value="{{old('title')}}"

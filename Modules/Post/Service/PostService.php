@@ -4,9 +4,6 @@ namespace Modules\Post\Service;
 
 use App\Traits\ImageUpload;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Modules\Category\Models\Category;
 use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
@@ -36,13 +33,13 @@ class PostService
         try {
             $post = Post::create(
                 $request->except('photo') + [
-                    'photo' => $this->verifyAndStoreImage($request),
+                    'photo' => $this->verifyAndStoreImage($request['photo']),
                 ]
             );
             $post->categories()->attach($request['category']);
             $post->post_tag()->attach($request['tags']);
         } catch (Exception $exception) {
-            return $exception->getMessage();
+            return $exception;
         }
     }
     
@@ -103,7 +100,7 @@ class PostService
         if ($request->hasFile('photo')) {
             $post->update(
                 $request->except('photo') + [
-                    'photo' => $this->verifyAndStoreImage($request),
+                    'photo' => $this->verifyAndStoreImage($request['photo']),
                 ]
             );
         } else {
@@ -126,11 +123,9 @@ class PostService
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function index(): View|Factory|Application
+    public function index(): mixed
     {
         return $this->post_repository->findAll();
     }

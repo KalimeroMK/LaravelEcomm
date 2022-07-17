@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if(count($postTags)>0)
+                @if(isset($tags))
                     <table class="table table-bordered" id="post-category-dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
@@ -37,7 +37,7 @@
                         </tr>
                         </tfoot>
                         <tbody>
-                        @foreach($postTags as $data)
+                        @foreach($tags as $data)
                             <tr>
                                 <td>{{$data->id}}</td>
                                 <td>{{$data->title}}</td>
@@ -67,7 +67,7 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <span style="float:right">{{$postTags->links('vendor.pagination.bootstrap-4')}}</span>
+                    <span style="float:right">{{$tags->links('vendor.pagination.bootstrap-4')}}</span>
                 @else
                     <h6 class="text-center">No Post Tag found!!! Please create post tag</h6>
                 @endif

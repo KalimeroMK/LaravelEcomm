@@ -2,7 +2,7 @@
 
 namespace Modules\Brand\Providers;
 
-use Config;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Observers\BrandObserver;
@@ -38,7 +38,7 @@ class BrandServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerTranslations()
+    public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
         
@@ -54,7 +54,7 @@ class BrandServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerConfig()
+    protected function registerConfig(): void
     {
         $this->publishes([
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),

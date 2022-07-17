@@ -5,18 +5,20 @@ namespace Modules\Tag\Providers;
 use Config;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\ServiceProvider;
+use Modules\Tag\Models\Tag;
+use Modules\Tag\Observers\TagObserver;
 
 class TagServiceProvider extends ServiceProvider
 {
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Tag';
+    protected string $moduleName = 'Tag';
     
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'tag';
+    protected string $moduleNameLower = 'tag';
     
     /**
      * Boot the application events.
@@ -25,6 +27,7 @@ class TagServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Tag::observe(TagObserver::class);
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();

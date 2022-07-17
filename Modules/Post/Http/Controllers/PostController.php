@@ -7,7 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Modules\Post\Http\Requests\PostCategoryStore;
+use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
 use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
@@ -32,17 +32,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post::index')->with($this->post_service->index());
+        return view('post::index', ['posts' => $this->post_service->index()]);
     }
     
     /**
      * Store a newly created resource in storage.
      *
-     * @param  PostCategoryStore  $request
+     * @param  Store  $request
      *
      * @return RedirectResponse
      */
-    public function store(PostCategoryStore $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
         $this->post_service->store($request);
         
@@ -83,7 +83,7 @@ class PostController extends Controller
     {
         $this->post_service->update($request, $post);
         
-        return redirect()->route('post.index');
+        return redirect()->route('posts.index');
     }
     
     /**

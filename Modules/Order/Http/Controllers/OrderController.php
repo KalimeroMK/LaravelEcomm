@@ -28,7 +28,7 @@ class OrderController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        return view('order::index')->with($this->order_service->index());
+        return view('order::index', ['orders' => $this->order_service->index()]);
     }
     
     /**
@@ -67,7 +67,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): View|Factory|Application
     {
-        return view('order::show')->with($this->order_service->show($order->id));
+        return view('order::show', ['order' => $this->order_service->show($order->id)]);
     }
     
     /**
@@ -79,7 +79,7 @@ class OrderController extends Controller
      */
     public function edit(int $id): View|Factory|Application
     {
-        return view('order::edit')->with($this->order_service->edit($id));
+        return view('order::edit', ['order' => $this->order_service->edit($id)]);
     }
     
     /**

@@ -16,7 +16,8 @@ class Update extends FormRequest
             'photo'       => 'string|nullable',
             'tags'        => 'nullable',
             'added_by'    => 'nullable',
-            'post_cat_id' => 'required',
+            'category'    => 'sometimes|array',
+            'category.*'  => 'required|exists:categories,id',
             'status'      => 'required|in:active,inactive',
         ];
     }

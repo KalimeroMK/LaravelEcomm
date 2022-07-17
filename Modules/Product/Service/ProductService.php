@@ -132,6 +132,18 @@ class ProductService
         ];
     }
     
+    /**
+     * @return array
+     */
+    public function create(): array
+    {
+        return [
+            'brands'     => Brand::get(),
+            'categories' => Category::get(),
+            'product'    => new Product(),
+        ];
+    }
+    
     public function destroy($id): void
     {
         $this->product_repository->delete($id);

@@ -24,7 +24,7 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        return view('admin::setting', ['data' => $this->settings_service->index()]);
+        return view('settings::index', ['data' => $this->settings_service->index()]);
     }
     
     /**

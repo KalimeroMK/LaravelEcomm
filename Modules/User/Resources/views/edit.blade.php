@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('user::layouts.master')
 
 @section('title','Admin Profile')
 
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         {{ Form::model($user, ['route' => ['users.update', $user], 'method' => 'PUT','id'=>'form-username','class'=>'form-horizontal form-bordered', 'files'=>true]) }}
-                        @include('backend.users.partials.form')
+                        @include('user::partials.form')
                         {!! Form::close() !!}
                     </div>
                 </div>

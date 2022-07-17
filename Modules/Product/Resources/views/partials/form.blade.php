@@ -101,19 +101,22 @@
                 <div class="form-group">
                     <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
                     <div class="input-group">
-              <span class="btn btn-round btn-rose btn-file">
-                    <span class="fileinput-new">Add Photo</span>
-                    <input type="hidden" value="" name="photo"><input type="file">
-                    <div class="form-group">
-                        <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
-                        <select name="status" class="form-control">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
+                        <div class="image">
+                            <label><h4>Add image</h4></label>
+                            <input type="file" class="form-control" name="photo">
+                        </div>
+                        <div class="form-group">
+                            <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
+                            <select name="status" class="form-control">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <button type="reset" class="btn btn-warning">Reset</button>
+                            <button class="btn btn-success" type="submit">Submit</button>
+                        </div>
                     </div>
-                    <div class="form-group mb-3">
-                        <button type="reset" class="btn btn-warning">Reset</button>
-                        <button class="btn btn-success" type="submit">Submit</button>
-                    </div>
+                </div>
             </form>
     </form>

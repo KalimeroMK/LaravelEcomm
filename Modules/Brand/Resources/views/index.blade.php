@@ -6,7 +6,6 @@
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
-
             </div>
         </div>
         <div class="card-header py-3">

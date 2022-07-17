@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('post::layouts.master')
 @section('title','E-SHOP || Comment Page')
 @section('content')
     <!-- DataTales Example -->
@@ -54,11 +54,11 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('comment.edit',$comment->id)}}"
+                                    <a href="{{route('post_comments.edit',$comment->id)}}"
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('comment.destroy',[$comment->id])}}">
+                                    <form method="POST" action="{{route('post_comments.destroy',$comment->id)}}">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"

@@ -12,7 +12,7 @@ class PostObserver
      *
      * @param  Post  $post
      */
-    public function creating(Post $post)
+    public function creating(Post $post): void
     {
         $slug = Str::slug($post->title);
         if (Post::whereSlug($slug)->count() > 0) {

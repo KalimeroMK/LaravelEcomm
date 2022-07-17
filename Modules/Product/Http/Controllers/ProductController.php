@@ -7,8 +7,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Modules\Brand\Models\Brand;
-use Modules\Category\Models\Category;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Models\Product;
@@ -34,7 +32,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('product::index')->with($this->product_service->index());
+        return view('product::index', ['products' => $this->product_service->index()]);
     }
     
     /**
@@ -44,11 +42,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $brands     = Brand::get();
-        $categories = Category::get();
-        $product    = new Product();
-        
-        return view('product::create', compact('brands', 'categories', 'product'));
+        return view('product::create')->with($this->product_service->create());
     }
     
     /**

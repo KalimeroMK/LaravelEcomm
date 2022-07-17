@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('shipping::layouts.master')
 
 @section('content')
 

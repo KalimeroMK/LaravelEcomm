@@ -12,7 +12,7 @@ class BannerObserver
      *
      * @param  Banner  $banner
      */
-    public function creating(Banner $banner)
+    public function creating(Banner $banner): void
     {
         $slug = Str::slug($banner->title);
         if (Banner::whereSlug($slug)->count() > 0) {

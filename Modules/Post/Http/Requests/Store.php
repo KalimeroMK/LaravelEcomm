@@ -14,7 +14,8 @@ class Store extends FormRequest
             'summary'     => 'string|required',
             'description' => 'string|nullable',
             'photo'       => 'nullable|image',
-            'category'    => 'required|exists:categories,id',
+            'category'    => 'sometimes|array',
+            'category.*'  => 'required|exists:categories,id',
             'added_by'    => 'nullable',
             'status'      => 'required|in:active,inactive',
         ];
