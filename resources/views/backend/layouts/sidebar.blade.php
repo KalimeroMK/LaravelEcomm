@@ -20,7 +20,7 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
+    @hasanyrole('super-admin')
     <!-- Heading -->
     <div class="sidebar-heading">
         Banner
@@ -93,7 +93,6 @@
             </div>
         </div>
     </li>
-
     {{-- Shipping --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#shippingCollapse"
@@ -109,6 +108,7 @@
             </div>
         </div>
     </li>
+    @endhasanyrole
 
     <!--Orders -->
     <li class="nav-item">
@@ -128,6 +128,7 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
+    @hasrole('super-admin')
 
     <!-- Heading -->
     <div class="sidebar-heading">
@@ -165,7 +166,7 @@
             </div>
         </div>
     </li>
-
+    @endhasanyrole
     <!-- Comments -->
     <li class="nav-item">
         <a class="nav-link" href="{{route('post_comments.index')}}">
@@ -178,6 +179,8 @@
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
     <!-- Heading -->
+    @hasanyrole('super-admin')
+
     <div class="sidebar-heading">
         General Settings
     </div>
@@ -214,6 +217,7 @@
             </div>
         </div>
     </li>
+    @endhasanyrole
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

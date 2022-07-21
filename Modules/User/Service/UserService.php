@@ -2,9 +2,12 @@
 
 namespace Modules\User\Service;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use LaravelIdea\Helper\Modules\Order\Models\_IH_Order_C;
+use Modules\Order\Models\Order;
 use Modules\User\Models\User;
 use Modules\User\Repository\UserRepository;
 use Spatie\Permission\Models\Role;
@@ -103,4 +106,15 @@ class UserService
     {
         $this->user_repository->delete($id);
     }
+    
+    /**
+     * @param $id
+     *
+     * @return LengthAwarePaginator|_IH_Order_C|Order[]
+     */
+    public function orderUser($id)
+    {
+        return Order::with('shipping', 'user')->orderBy('id', 'DESC')->whereUserId($id)->paginate(10);
+    }
+    
 }

@@ -5,12 +5,13 @@ namespace Modules\Post\Service;
 use App\Traits\ImageUpload;
 use Exception;
 use Modules\Category\Models\Category;
+use Modules\Core\Service\CoreService;
 use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
 use Modules\Tag\Models\Tag;
 use Modules\User\Models\User;
 
-class PostService
+class PostService extends CoreService
 {
     use ImageUpload;
     
@@ -71,20 +72,6 @@ class PostService
             'users'      => User::get(),
             'post'       => new Post(),
         ];
-    }
-    
-    /**
-     * Make paths for storing images.
-     *
-     * @return object
-     */
-    public function makePaths(): object
-    {
-        $original  = public_path().'/uploads/images/post/';
-        $thumbnail = public_path().'/uploads/images/post/thumbnails/';
-        $medium    = public_path().'/uploads/images/post/medium/';
-        
-        return (object)compact('original', 'thumbnail', 'medium');
     }
     
     /**

@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelIdea\Helper\Modules\Product\Models\_IH_Product_C;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
+use Modules\Core\Service\CoreService;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 
-class ProductService
+class ProductService extends CoreService
 {
     private ProductRepository $product_repository;
     
@@ -100,20 +101,6 @@ class ProductService
         $product->categories()->sync($data['category'], true);
         
         return $product;
-    }
-    
-    /**
-     * Make paths for storing images.
-     *
-     * @return object
-     */
-    public function makePaths(): object
-    {
-        $original  = public_path().'/uploads/images/products/';
-        $thumbnail = public_path().'/uploads/images/products/thumbnails/';
-        $medium    = public_path().'/uploads/images/products/medium/';
-        
-        return (object)compact('original', 'thumbnail', 'medium');
     }
     
     /**

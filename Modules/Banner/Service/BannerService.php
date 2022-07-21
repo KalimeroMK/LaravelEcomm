@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
+use Modules\Core\Service\CoreService;
 
-class BannerService
+class BannerService extends CoreService
 {
     use ImageUpload;
     
@@ -50,20 +51,6 @@ class BannerService
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
-    }
-    
-    /**
-     * Make paths for storing images.
-     *
-     * @return object
-     */
-    public function makePaths(): object
-    {
-        $original  = public_path().'/uploads/images/banner/';
-        $thumbnail = public_path().'/uploads/images/banner/thumbnails/';
-        $medium    = public_path().'/uploads/images/banner/medium/';
-        
-        return (object)compact('original', 'thumbnail', 'medium');
     }
     
     /**

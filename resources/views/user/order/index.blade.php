@@ -1,5 +1,4 @@
 @extends('user.layouts.master')
-
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -13,7 +12,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if(count($orders)>0)
+                @if(isset($orders))
                     <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
@@ -52,7 +51,9 @@
                                 <td>{{$order->first_name}} {{$order->last_name}}</td>
                                 <td>{{$order->email}}</td>
                                 <td>{{$order->quantity}}</td>
-                                <td>@foreach($shipping_charge as $data) $ {{number_format($data,2)}} @endforeach</td>
+                                <td>@foreach($shipping_charge as $data)
+                                        $ {{number_format($data,2)}}
+                                    @endforeach</td>
                                 <td>${{number_format($order->total_amount,2)}}</td>
                                 <td>
                                     @if($order->status=='new')
@@ -74,9 +75,9 @@
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
-                                                data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%
-                                        " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                class="fas fa-trash-alt"></i></button>
+                                                data-id={{$order->id}}  data-toggle="tooltip" data-placement="bottom"
+                                                title="Delete"><i
+                                                    class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -136,8 +137,8 @@
                 }
             });
             $('.dltBtn').click(function (e) {
-                var form = $(this).closest('form');
-                var dataID = $(this).data('id');
+                const form = $(this).closest('form');
+                const dataID = $(this).data('id');
                 // alert(dataID);
                 e.preventDefault();
                 swal({

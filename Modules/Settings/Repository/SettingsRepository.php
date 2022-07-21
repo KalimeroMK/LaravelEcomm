@@ -2,8 +2,8 @@
 
 namespace Modules\Settings\Repository;
 
-use Modules\Admin\Models\Setting;
 use Modules\Core\Repositories\Repository;
+use Modules\Settings\Models\Setting;
 
 class SettingsRepository extends Repository
 {

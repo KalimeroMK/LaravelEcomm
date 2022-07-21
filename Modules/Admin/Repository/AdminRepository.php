@@ -3,7 +3,6 @@
 namespace Modules\Admin\Repository;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Modules\User\Models\User;
 
@@ -29,17 +28,5 @@ class AdminRepository
         }
         
         return $array;
-    }
-    
-    /**
-     * @return Authenticatable|null
-     */
-    public function profile(): ?Authenticatable
-    {
-        return Auth()->user();
-    }
-    
-    public function profileUpdate()
-    {
     }
 }

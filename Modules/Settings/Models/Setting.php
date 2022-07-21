@@ -4,11 +4,11 @@
  * Created by Zoran Shefot Bogoevski.
  */
 
-namespace Modules\Admin\Models;
+namespace Modules\Settings\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Database\Factories\SettingFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

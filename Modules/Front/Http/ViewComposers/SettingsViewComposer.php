@@ -3,7 +3,7 @@
 namespace Modules\Front\Http\ViewComposers;
 
 use Illuminate\View\View;
-use Modules\Admin\Models\Setting;
+use Modules\Settings\Models\Setting;
 
 class SettingsViewComposer
 {

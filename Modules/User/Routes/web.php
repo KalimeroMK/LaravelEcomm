@@ -16,4 +16,5 @@ use Modules\User\Http\Controllers\UserController;
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
+    Route::get('user-profile', [UserController::class, 'profile'])->name('user-profile');
 });

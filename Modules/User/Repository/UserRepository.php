@@ -16,4 +16,5 @@ class UserRepository extends Repository
     {
         return $this->model::with('roles')->orderBy('id', 'DESC')->paginate(5);
     }
+    
 }

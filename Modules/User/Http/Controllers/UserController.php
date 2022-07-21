@@ -113,4 +113,12 @@ class UserController extends Controller
         
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
+    
+    /**
+     * @return Application|Factory|View
+     */
+    public function profile()
+    {
+        return view('user::user.users.profile', ['profile' => Auth()->user()]);
+    }
 }

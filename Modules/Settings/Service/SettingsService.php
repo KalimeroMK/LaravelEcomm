@@ -2,7 +2,7 @@
 
 namespace Modules\Settings\Service;
 
-use Modules\Admin\Models\Setting;
+use Modules\Settings\Models\Setting;
 use Modules\Settings\Repository\SettingsRepository;
 
 class SettingsService

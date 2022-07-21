@@ -127,17 +127,17 @@
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             {{-- pie chart --}}
             <script type="text/javascript">
-                var analytics = <?php echo $users; ?>
+                const analytics = <?php echo $users; ?>
 
                 google.charts.load('current', {'packages': ['corechart']});
                 google.charts.setOnLoadCallback(drawChart);
 
                 function drawChart() {
-                    var data = google.visualization.arrayToDataTable(analytics);
-                    var options = {
+                    const data = google.visualization.arrayToDataTable(analytics);
+                    const options = {
                         title: 'Last 7 Days registered user'
                     };
-                    var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+                    const chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
                     chart.draw(data, options);
                 }
             </script>

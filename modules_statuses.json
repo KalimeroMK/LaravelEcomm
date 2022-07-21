@@ -18,5 +18,6 @@
   "Notification": true,
   "Billing": true,
   "Front": true,
-  "Core": true
+  "Core": true,
+  "Client": true
 }
