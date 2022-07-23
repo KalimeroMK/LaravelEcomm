@@ -195,6 +195,7 @@ return [
         jeremykenedy\LaravelLogger\LaravelLoggerServiceProvider::class,
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
+        Lab404\Impersonate\ImpersonateServiceProvider::class,
         
         /*
          * Application Service Providers...

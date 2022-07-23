@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Product\Http\Controllers\ProductController;
 use Modules\Product\Http\Controllers\ProductReviewController;
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
     Route::resource('/products', ProductController::class);
     // Product Review
     

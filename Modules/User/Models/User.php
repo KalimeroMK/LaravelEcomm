@@ -17,6 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Billing\Models\Wishlist;
@@ -94,6 +95,7 @@ class User extends Authenticatable
     use HasPermissions;
     use Notifiable;
     use HasApiTokens;
+    use Impersonate;
     
     protected $table = 'users';
     

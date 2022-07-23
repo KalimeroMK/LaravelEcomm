@@ -14,6 +14,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Banner\Http\Controllers\BannerController;
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
     Route::resource('banners', BannerController::class);
 });

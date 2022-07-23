@@ -81,6 +81,15 @@
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
+                @auth
+                    @if(session('impersonated_by'))
+                        <a class="dropdown-item" href="{{ route('users.leave-impersonate') }}">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Leave
+                            Impersonation
+                        </a>
+                    @endif
+                @endauth
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault();

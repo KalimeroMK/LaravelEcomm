@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if(count($products)>0)
+                @if(isset($products))
                     <table class="table table-bordered" id="product-dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
@@ -176,8 +176,8 @@
                 }
             });
             $('.dltBtn').click(function (e) {
-                var form = $(this).closest('form');
-                var dataID = $(this).data('id');
+                const form = $(this).closest('form');
+                const dataID = $(this).data('id');
                 // alert(dataID);
                 e.preventDefault();
                 swal({

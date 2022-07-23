@@ -13,6 +13,6 @@
 
 use Modules\Shipping\Http\Controllers\ShippingController;
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
     Route::resource('shipping', ShippingController::class);
 });

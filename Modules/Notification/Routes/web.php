@@ -14,7 +14,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Notification\Http\Controllers\NotificationController;
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
     Route::resource('/notifications', NotificationController::class);
     Route::get('/notification/{id}', [NotificationController::class, 'show'])->name('admin.notification');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('all.notification');

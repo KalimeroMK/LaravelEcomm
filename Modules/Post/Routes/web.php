@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Post\Http\Controllers\PostCommentController;
 use Modules\Post\Http\Controllers\PostController;
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
     Route::resource('/posts', PostController::class);
 });
 Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');

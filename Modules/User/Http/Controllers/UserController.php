@@ -125,4 +125,26 @@ class UserController extends Controller
     {
         return view('user::user.users.profile', ['profile' => Auth()->user()]);
     }
+    
+    /**
+     * @param  User  $user
+     *
+     * @return RedirectResponse
+     */
+    public function impersonate(User $user)
+    {
+        auth()->user()->impersonate($user);
+        
+        return redirect()->route('admin');
+    }
+    
+    /**
+     * @return RedirectResponse
+     */
+    public function leaveImpersonate()
+    {
+        auth()->user()->leaveImpersonation();
+        
+        return redirect()->route('admin');
+    }
 }
