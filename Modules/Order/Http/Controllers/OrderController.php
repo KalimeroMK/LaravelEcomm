@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Modules\Order\Http\Requests\Store;
 use Modules\Order\Http\Requests\Update;
 use Modules\Order\Models\Order;
@@ -19,6 +20,10 @@ class OrderController extends Controller
     public function __construct(OrderService $order_service)
     {
         $this->order_service = $order_service;
+        $this->middleware('permission:order-list');
+        $this->middleware('permission:order-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:order-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
     }
     
     /**
@@ -28,7 +33,11 @@ class OrderController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        return view('order::index', ['orders' => $this->order_service->index()]);
+        if (Auth::user()->hasRole('client')) {
+            return view('order::index', ['orders' => $this->order_service->findByAllUser()]);
+        } else {
+            return view('order::index', ['orders' => $this->order_service->index()]);
+        }
     }
     
     /**

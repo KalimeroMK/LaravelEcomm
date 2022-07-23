@@ -19,6 +19,10 @@ class ShippingController extends Controller
     public function __construct(ShippingService $shipping_service)
     {
         $this->shipping_service = $shipping_service;
+        $this->middleware('permission:shipping-list', ['only' => ['index']]);
+        $this->middleware('permission:shipping-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:shipping-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:shipping-delete', ['only' => ['destroy']]);
     }
     
     /**

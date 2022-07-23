@@ -6,13 +6,14 @@
 
 namespace Modules\Product\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
-use Eloquent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 use Modules\User\Models\User;
 
 /**
@@ -63,6 +64,14 @@ class ProductReview extends Model
     ];
     
     /**
+     * @return ProductReview
+     */
+    public static function factory(): ProductReview
+    {
+        return new ProductReview();
+    }
+    
+    /**
      * @return LengthAwarePaginator
      */
     public static function getAllReview(): LengthAwarePaginator
@@ -75,7 +84,7 @@ class ProductReview extends Model
      */
     public static function getAllUserReview(): LengthAwarePaginator
     {
-        return ProductReview::whereUserId(auth()->user()->id)->with('user')->paginate(10);
+        return ProductReview::whereUserId(Auth::id())->with('user', 'product')->paginate(10);
     }
     
     /**

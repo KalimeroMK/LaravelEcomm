@@ -6,7 +6,6 @@
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
-
             </div>
         </div>
         <div class="card-header py-3">
@@ -14,7 +13,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if(count($reviews)>0)
+                @if(isset($reviews))
                     <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
@@ -45,10 +44,8 @@
 
                             <tr>
                                 <td>{{$review->id}}</td>
-                                <td>{{$review->user_info['name']}}</td>
-                                <td>@foreach($review->product as $data)
-                                        {{ $data->title}}
-                                    @endforeach</td>
+                                <td>{{$review->user->name}}</td>
+                                <td>{{$review->product->title}}</td>
                                 <td>{{$review->review}}</td>
                                 <td>
                                     <ul style="list-style:none">
@@ -70,11 +67,11 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('review.edit',$review->id)}}"
+                                    <a href="{{route('product_review.edit',$review->id)}}"
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('review.destroy',[$review->id])}}">
+                                    <form method="POST" action="{{route('product_review.destroy',$review->id)}}">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
@@ -140,8 +137,8 @@
                 }
             });
             $('.dltBtn').click(function (e) {
-                var form = $(this).closest('form');
-                var dataID = $(this).data('id');
+                const form = $(this).closest('form');
+                const dataID = $(this).data('id');
                 // alert(dataID);
                 e.preventDefault();
                 swal({

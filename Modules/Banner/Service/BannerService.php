@@ -55,6 +55,20 @@ class BannerService extends CoreService
     
     /**
      * @param $id
+     *
+     * @return mixed|string
+     */
+    public function show($id): mixed
+    {
+        try {
+            return $this->banner_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
      * @param $data
      *
      * @return mixed|string

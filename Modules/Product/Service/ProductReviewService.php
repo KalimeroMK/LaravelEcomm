@@ -44,6 +44,8 @@ class ProductReviewService
      */
     public function edit($id): mixed
     {
+        dd($id);
+        
         return $this->product_review_repository->findById($id);
     }
     
@@ -76,5 +78,13 @@ class ProductReviewService
     public function destroy($id): void
     {
         $this->product_review_repository->delete($id);
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function findAllByUser(): mixed
+    {
+        return $this->product_review_repository->findAllByUser();
     }
 }

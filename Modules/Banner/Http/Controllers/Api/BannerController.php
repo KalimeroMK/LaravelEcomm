@@ -7,15 +7,15 @@ use Illuminate\Http\JsonResponse;
 use Modules\Banner\Http\Requests\Api\StoreRequest;
 use Modules\Banner\Http\Requests\Api\UpdateRequest;
 use Modules\Banner\Models\Banner;
-use Modules\Banner\Repository\BannerRepository;
+use Modules\Banner\Service\BannerService;
 
 class BannerController extends Controller
 {
-    private BannerRepository $banner;
+    private BannerService $banner_service;
     
-    public function __construct(BannerRepository $banner)
+    public function __construct(BannerService $banner_service)
     {
-        $this->banner = $banner;
+        $this->banner_service = $banner_service;
     }
     
     /**
@@ -23,7 +23,7 @@ class BannerController extends Controller
      */
     public function index(): JsonResponse
     {
-        return $this->sendResponse([$this->banner->getAll()], 200);
+        return $this->sendResponse([$this->banner_service->getAll()], 200);
     }
     
     /**
@@ -33,10 +33,7 @@ class BannerController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        $data  = $request->except('photo');
-        $image = $request['photo'];
-        
-        return $this->sendResponse([$this->banner->storeBanner($data, $image)], 200);
+        return $this->sendResponse([$this->banner_service->store($request)], 200);
     }
     
     /**
@@ -46,7 +43,7 @@ class BannerController extends Controller
      */
     public function show($id): JsonResponse
     {
-        return $this->sendResponse([$this->banner->getById($id)], 200);
+        return $this->sendResponse([$this->banner_service->show($id)], 200);
     }
     
     /**
@@ -58,10 +55,9 @@ class BannerController extends Controller
     public function update(UpdateRequest $request, $id): JsonResponse
     {
         $banner = Banner::findOrFail($id);
-        $data   = $request->except('photo');
-        $image  = $request['photo'];
+        $data   = $request;
         
-        return $this->sendResponse([$this->banner->updateBanner($data, $image, $banner->id)], 200);
+        return $this->sendResponse([$this->banner_service->update($data, $banner->id)], 200);
     }
     
     /**
@@ -71,6 +67,6 @@ class BannerController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        return $this->sendResponse([$this->banner->deleteBanner($id)], 200);
+        return $this->sendResponse([$this->banner_service->destroy($id)], 200);
     }
 }

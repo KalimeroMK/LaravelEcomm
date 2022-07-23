@@ -16,4 +16,9 @@ class ProductReviewRepository extends Repository
     {
         return $this->model::getAllReview();
     }
+    
+    public function findAllByUser()
+    {
+        return $this->model::getAllUserReview();
+    }
 }

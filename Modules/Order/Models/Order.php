@@ -6,9 +6,9 @@
 
 namespace Modules\Order\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Database\Factories\OrderFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

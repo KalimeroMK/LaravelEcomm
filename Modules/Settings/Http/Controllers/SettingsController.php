@@ -17,6 +17,10 @@ class SettingsController extends Controller
     public function __construct(SettingsService $settings_service)
     {
         $this->settings_service = $settings_service;
+        $this->middleware('permission:settings-list', ['only' => ['index']]);
+        $this->middleware('permission:settings-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:settings-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:settings-delete', ['only' => ['destroy']]);
     }
     
     /**

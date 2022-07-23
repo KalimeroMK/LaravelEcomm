@@ -146,4 +146,12 @@ class OrderService
     {
         return $this->order_repository->findAll();
     }
+    
+    /**
+     * @return mixed
+     */
+    public function findByAllUser(): mixed
+    {
+        return $this->order_repository->findAllByUser();
+    }
 }

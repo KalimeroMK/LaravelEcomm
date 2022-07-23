@@ -15,6 +15,8 @@ use Modules\Tag\Models\Tag;
 
 class DatabaseSeeder extends Seeder
 {
+    private $faker;
+    
     /**
      * Seed the application's database.
      *
@@ -35,6 +37,7 @@ class DatabaseSeeder extends Seeder
         Message::factory()->count(50)->create();
         Cart::factory()->count(200)->create();
         PostComment::factory()->count(200)->create();
+        $this->call(ProductReviewSeeder::class);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

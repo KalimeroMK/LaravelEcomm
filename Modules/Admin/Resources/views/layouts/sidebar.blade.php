@@ -1,5 +1,4 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('admin')}}">
         <div class="sidebar-brand-icon rotate-n-15">
@@ -7,7 +6,6 @@
         </div>
         <div class="sidebar-brand-text mx-3">Admin</div>
     </a>
-
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
@@ -17,7 +15,7 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-
+    @hasrole('super-admin')
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -43,9 +41,11 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
+    @endhasrole
     <div class="sidebar-heading">
         Shop
     </div>
+    @hasrole('super-admin')
 
     <!-- Categories -->
     <li class="nav-item">
@@ -93,7 +93,6 @@
             </div>
         </div>
     </li>
-
     {{-- Shipping --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#shippingCollapse"
@@ -109,6 +108,7 @@
             </div>
         </div>
     </li>
+    @endhasrole
 
     <!--Orders -->
     <li class="nav-item">
@@ -120,7 +120,7 @@
 
     <!-- Reviews -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('review.index')}}">
+        <a class="nav-link" href="{{route('product_review.index')}}">
             <i class="fas fa-comments"></i>
             <span>Reviews</span></a>
     </li>
@@ -133,6 +133,7 @@
     <div class="sidebar-heading">
         Posts
     </div>
+    @hasrole('super-admin')
 
     <!-- Posts -->
     <li class="nav-item">
@@ -165,7 +166,7 @@
             </div>
         </div>
     </li>
-
+    @endhasrole
     <!-- Comments -->
     <li class="nav-item">
         <a class="nav-link" href="{{route('post_comments.index')}}">
@@ -173,6 +174,7 @@
             <span>Comments</span>
         </a>
     </li>
+    @hasrole('super-admin')
 
 
     <!-- Divider -->
@@ -213,7 +215,9 @@
                 <a class="collapse-item" href="{{ url('translations/') }}">Translation</a>
             </div>
         </div>
+        @endhasrole
     </li>
+
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

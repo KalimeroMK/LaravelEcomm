@@ -17,7 +17,9 @@ use Modules\Product\Http\Controllers\ProductReviewController;
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('/products', ProductController::class);
+    // Product Review
+    
+    Route::post('product/{slug}/review', [ProductReviewController::class, 'store'])->name('product.review.store');
+    Route::resource('/product_review', ProductReviewController::class);
 });
-// Product Review
-Route::post('product/{slug}/review', [ProductReviewController::class, 'store'])->name('product.review.store');
-Route::resource('/review', ProductReviewController::class);
+

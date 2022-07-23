@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Product\Http\Requests\ProductReviewStore;
 use Modules\Product\Models\ProductReview;
 use Modules\Product\Service\ProductReviewService;
@@ -19,6 +20,10 @@ class ProductReviewController extends Controller
     public function __construct(ProductReviewService $product_review_service)
     {
         $this->product_review_service = $product_review_service;
+        $this->middleware('permission:review-list');
+        $this->middleware('permission:review-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:review-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:review-delete', ['only' => ['destroy']]);
     }
     
     /**
@@ -28,7 +33,11 @@ class ProductReviewController extends Controller
      */
     public function index()
     {
-        return view('product::review.index', ['reviews' => $this->product_review_service->index()]);
+        if (Auth::user()->hasRole('client')) {
+            return view('product::review.index', ['reviews' => $this->product_review_service->findAllByUser()]);
+        } else {
+            return view('product::review.index', ['reviews' => $this->product_review_service->index()]);
+        }
     }
     
     /**
@@ -54,6 +63,8 @@ class ProductReviewController extends Controller
      */
     public function edit(ProductReview $productReview)
     {
+        dd($productReview);
+        
         return view('product::review.edit')->with($this->product_review_service->edit($productReview->id));
     }
     

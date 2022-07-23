@@ -18,6 +18,10 @@ class PostCommentController extends Controller
     public function __construct(PostCommentService $post_comment_service)
     {
         $this->post_comment_service = $post_comment_service;
+        $this->middleware('permission:comments-list');
+        $this->middleware('permission:comments-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:comments-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:comments-delete', ['only' => ['destroy']]);
     }
     
     /**
