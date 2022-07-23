@@ -8,14 +8,13 @@ namespace Modules\Order\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
-use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Cart\Models\Cart;
+use Modules\Core\Models\Core;
 use Modules\Shipping\Models\Shipping;
 use Modules\User\Models\User;
 
@@ -76,10 +75,8 @@ use Modules\User\Models\User;
  * @method static Builder|Order whereUserId($value)
  * @mixin Eloquent
  */
-class Order extends Model
+class Order extends Core
 {
-    use HasFactory;
-    
     protected $table = 'orders';
     
     protected $casts = [
@@ -111,14 +108,6 @@ class Order extends Model
         'address1',
         'address2',
     ];
-    
-    /**
-     * @return OrderFactory
-     */
-    public static function factory(): OrderFactory
-    {
-        return new OrderFactory();
-    }
     
     /**
      * @param $id

@@ -7,13 +7,12 @@
 namespace Modules\Brand\Models;
 
 use Carbon\Carbon;
-use Database\Factories\BannerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
 /**
@@ -41,10 +40,8 @@ use Modules\Product\Models\Product;
  * @property string $photo
  * @method static Builder|Brand wherePhoto($value)
  */
-class Brand extends Model
+class Brand extends Core
 {
-    use HasFactory;
-    
     protected $table = 'brands';
     
     protected $fillable = [
@@ -52,14 +49,6 @@ class Brand extends Model
         'slug',
         'status',
     ];
-    
-    /**
-     * @return BannerFactory
-     */
-    public static function factory(): BannerFactory
-    {
-        return new BannerFactory();
-    }
     
     /**
      * @param $slug

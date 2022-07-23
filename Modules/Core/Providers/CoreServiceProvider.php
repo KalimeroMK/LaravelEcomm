@@ -2,8 +2,10 @@
 
 namespace Modules\Core\Providers;
 
-use Illuminate\Database\Eloquent\Factory;
+use Config;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,12 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        Factory::guessFactoryNamesUsing(function (string $model_name) {
+            $namespace  = 'Database\\Factories\\';
+            $model_name = Str::afterLast($model_name, '\\');
+            
+            return $namespace.$model_name.'Factory';
+        });
     }
     
     /**
@@ -103,7 +111,7 @@ class CoreServiceProvider extends ServiceProvider
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (\Config::get('view.paths') as $path) {
+        foreach (Config::get('view.paths') as $path) {
             if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }

@@ -8,14 +8,12 @@ namespace Modules\Cart\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
-use Database\Factories\CartFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Billing\Models\Wishlist;
+use Modules\Core\Models\Core;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;
 use Modules\User\Models\User;
@@ -54,9 +52,8 @@ use Modules\User\Models\User;
  * @method static Builder|Cart whereUserId($value)
  * @mixin Eloquent
  */
-class Cart extends Model
+class Cart extends Core
 {
-    use HasFactory;
     
     protected $table = 'carts';
     
@@ -78,14 +75,6 @@ class Cart extends Model
         'quantity',
         'amount',
     ];
-    
-    /**
-     * @return CartFactory
-     */
-    public static function factory(): CartFactory
-    {
-        return new CartFactory();
-    }
     
     /**
      * @return BelongsTo

@@ -7,13 +7,11 @@
 namespace Modules\Shipping\Models;
 
 use Carbon\Carbon;
-use Database\Factories\ShippingFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Core;
 use Modules\Order\Models\Order;
 
 /**
@@ -39,10 +37,8 @@ use Modules\Order\Models\Order;
  * @method static Builder|Shipping whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Shipping extends Model
+class Shipping extends Core
 {
-    use HasFactory;
-    
     protected $table = 'shipping';
     
     protected $casts = [
@@ -54,14 +50,6 @@ class Shipping extends Model
         'price',
         'status',
     ];
-    
-    /**
-     * @return ShippingFactory
-     */
-    public static function factory(): ShippingFactory
-    {
-        return new ShippingFactory();
-    }
     
     /**
      * @return HasMany

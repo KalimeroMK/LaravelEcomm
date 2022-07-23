@@ -9,7 +9,7 @@ namespace Modules\Notification\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\Core;
 
 /**
  * Class Notification
@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Notification whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Notification extends Model
+class Notification extends Core
 {
     public $incrementing = false;
     protected $table = 'notifications';

@@ -10,10 +10,9 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use Modules\Core\Models\Core;
 use Modules\User\Models\User;
 
 /**
@@ -43,10 +42,8 @@ use Modules\User\Models\User;
  * @method static Builder|ProductReview whereUserId($value)
  * @mixin Eloquent
  */
-class ProductReview extends Model
+class ProductReview extends Core
 {
-    use HasFactory;
-    
     protected $table = 'product_reviews';
     
     protected $casts = [
@@ -62,14 +59,6 @@ class ProductReview extends Model
         'review',
         'status',
     ];
-    
-    /**
-     * @return ProductReview
-     */
-    public static function factory(): ProductReview
-    {
-        return new ProductReview();
-    }
     
     /**
      * @return LengthAwarePaginator

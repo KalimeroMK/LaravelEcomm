@@ -7,13 +7,11 @@
 namespace Modules\Tag\Models;
 
 use Carbon\Carbon;
-use Database\Factories\TagFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Core\Models\Core;
 use Modules\Post\Models\Post;
 
 /**
@@ -39,9 +37,8 @@ use Modules\Post\Models\Post;
  * @method static Builder|Tag whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Tag extends Model
+class Tag extends Core
 {
-    use HasFactory;
     
     protected $table = 'tags';
     
@@ -50,14 +47,6 @@ class Tag extends Model
         'slug',
         'status',
     ];
-    
-    /**
-     * @return TagFactory
-     */
-    public static function factory(): TagFactory
-    {
-        return new TagFactory();
-    }
     
     /**
      * @return HasMany

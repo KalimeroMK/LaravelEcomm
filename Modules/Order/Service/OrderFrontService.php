@@ -3,12 +3,10 @@
 namespace Modules\Order\Service;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Models\Cart;
 use Modules\Order\Http\Controllers\OrderFrontController;
 use Modules\Order\Models\Order;
@@ -69,7 +67,7 @@ class OrderFrontService
             session()->forget('cart');
             session()->forget('coupon');
         }
-        Cart::where('user_id', auth()->user()->id)->where('order_id', null)->update(['order_id' => $data[0]]);
+        Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $data[0]]);
         
         request()->session()->flash('success', 'Your product successfully placed in order');
         
@@ -90,39 +88,4 @@ class OrderFrontService
         return $pdf->download($file_name);
     }
     
-    /**
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
-     */
-    public function productTrackOrder(Request $request): RedirectResponse
-    {
-        $order = Order::whereUserId(auth()->user()->id)->whereOrderNumber($request->order_number)->first();
-        if ($order) {
-            if ($order->status == "new") {
-                request()->session()->flash('success', 'Your order has been placed. please wait.');
-            } elseif ($order->status == "process") {
-                request()->session()->flash('success', 'Your order is under processing please wait.');
-            } elseif ($order->status == "delivered") {
-                request()->session()->flash('success', 'Your order is successfully delivered.');
-            } else {
-                request()->session()->flash('error', 'Your order canceled. please try again');
-            }
-            
-            return redirect()->route('home');
-        } else {
-            request()->session()->flash('error', 'Invalid order numer please try again');
-            
-            return back();
-        }
-    }
-    
-    /**
-     * @return Application|Factory|View
-     *
-     */
-    public function orderTrack(): View|Factory|Application
-    {
-        return view('frontend::pages.order-track');
-    }
 }

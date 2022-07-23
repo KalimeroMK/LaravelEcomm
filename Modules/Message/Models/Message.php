@@ -7,11 +7,9 @@
 namespace Modules\Message\Models;
 
 use Carbon\Carbon;
-use Database\Factories\MessageFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\Core;
 
 /**
  * Class Message
@@ -42,10 +40,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Message whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Message extends Model
+class Message extends Core
 {
-    use HasFactory;
-    
     protected $table = 'messages';
     
     protected $dates = [
@@ -62,11 +58,4 @@ class Message extends Model
         'read_at',
     ];
     
-    /**
-     * @return MessageFactory
-     */
-    public static function factory(): MessageFactory
-    {
-        return new MessageFactory();
-    }
 }

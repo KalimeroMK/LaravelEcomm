@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Coupon\Http\Controllers\CouponController;
-use Modules\Front\Service\FrontController;
+use Modules\Front\Http\Controllers\FrontController;
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('coupons', CouponController::class);

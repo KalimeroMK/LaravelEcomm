@@ -15,9 +15,5 @@ use Modules\Banner\Http\Controllers\Api\BannerController;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('banners', [BannerController::class, 'index'])->name('index');
-    Route::post('banners', [BannerController::class, 'store'])->name('store');
-    Route::get('banners/{id}', [BannerController::class, 'show'])->name('show');
-    Route::patch('banners/{id}', [BannerController::class, 'update'])->name('update');
-    Route::delete('banners/{id}', [BannerController::class, 'destroy'])->name('destroy');
+    Route::resource('banner', BannerController::class);
 });

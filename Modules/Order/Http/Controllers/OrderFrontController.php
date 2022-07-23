@@ -4,9 +4,6 @@ namespace Modules\Order\Http\Controllers;
 
 use App\Helpers\Payment;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,25 +30,6 @@ class OrderFrontController extends Controller
     public function store(Request $request): RedirectResponse
     {
         return $this->order_front_service->store($request);
-    }
-    
-    /**
-     * @return Application|Factory|View
-     *
-     */
-    public function orderTrack()
-    {
-        return $this->order_front_service->orderTrack();
-    }
-    
-    /**
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
-     */
-    public function productTrackOrder(Request $request): RedirectResponse
-    {
-        return $this->order_front_service->productTrackOrder($request);
     }
     /**
      * @param  Request  $request

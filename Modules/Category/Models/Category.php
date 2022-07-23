@@ -6,12 +6,9 @@
 
 namespace Modules\Category\Models;
 
-use Database\Factories\CategoryFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
+use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
 /**
@@ -102,9 +100,8 @@ use Modules\Product\Models\Product;
  * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
  * @method static \Kalnoy\Nestedset\Collection|static[] all($columns = ['*'])
  */
-class Category extends Model
+class Category extends Core
 {
-    use HasFactory;
     use NodeTrait;
     
     protected $table = 'categories';
@@ -124,14 +121,6 @@ class Category extends Model
         '_lft',
         '_rgt',
     ];
-    
-    /**
-     * @return CategoryFactory
-     */
-    public static function factory(): CategoryFactory
-    {
-        return new CategoryFactory();
-    }
     
     /**
      * @return string

@@ -4,7 +4,11 @@ namespace Modules\Front\Providers;
 
 use Config;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Modules\Front\Http\ViewComposers\MenuViewComposer;
+use Modules\Front\Http\ViewComposers\SchemaOrgViewComposer;
+use Modules\Front\Http\ViewComposers\SettingsViewComposer;
 
 class FrontServiceProvider extends ServiceProvider
 {
@@ -29,6 +33,10 @@ class FrontServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        
+        View::composer(['front::layouts.header', 'front::layouts.footer', 'front::pages.about-us'], SettingsViewComposer::class);
+        View::composer(['front::pages.product-grids', 'front::layouts.header', 'front::pages.product-lists'], MenuViewComposer::class);
+        View::composer('front::layouts.master', SchemaOrgViewComposer::class);
     }
     
     /**

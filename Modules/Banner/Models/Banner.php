@@ -7,11 +7,9 @@
 namespace Modules\Banner\Models;
 
 use Carbon\Carbon;
-use Database\Factories\BannerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\Core;
 
 /**
  * Class Banner
@@ -38,10 +36,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Banner whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Banner extends Model
+class Banner extends Core
 {
-    use HasFactory;
-    
     protected $table = 'banners';
     
     protected $fillable = [
@@ -51,14 +47,6 @@ class Banner extends Model
         'description',
         'status',
     ];
-    
-    /**
-     * @return BannerFactory
-     */
-    public static function factory(): BannerFactory
-    {
-        return new BannerFactory();
-    }
     
     /**
      * @param $slug

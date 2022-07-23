@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "34f14cbf2f65e79d64908119f61f72c7",
+  "content-hash": "e8eb48d1da9375798777bd2bd4e9a7c1",
   "packages": [
     {
       "name": "bacon/bacon-qr-code",
@@ -2680,16 +2680,16 @@
     },
     {
       "name": "laravel/framework",
-      "version": "v9.21.5",
+      "version": "v9.21.6",
       "source": {
         "type": "git",
         "url": "https://github.com/laravel/framework.git",
-        "reference": "a1944cd0d160a2cc423ef5a451d002711c5f014f"
+        "reference": "569d7a2e361895f90e66bb4e02db89c27691a0e7"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laravel/framework/zipball/a1944cd0d160a2cc423ef5a451d002711c5f014f",
-        "reference": "a1944cd0d160a2cc423ef5a451d002711c5f014f",
+        "url": "https://api.github.com/repos/laravel/framework/zipball/569d7a2e361895f90e66bb4e02db89c27691a0e7",
+        "reference": "569d7a2e361895f90e66bb4e02db89c27691a0e7",
         "shasum": ""
       },
       "require": {
@@ -2856,7 +2856,7 @@
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
       },
-      "time": "2022-07-21T19:38:16+00:00"
+      "time": "2022-07-22T14:16:44+00:00"
     },
     {
       "name": "laravel/helpers",
@@ -4460,16 +4460,16 @@
     },
     {
       "name": "nwidart/laravel-modules",
-      "version": "9.0.1",
+      "version": "v9.0.2",
       "source": {
         "type": "git",
         "url": "https://github.com/nWidart/laravel-modules.git",
-        "reference": "5483801843f653df5ffd074da373508f4d3925c9"
+        "reference": "5f2f6b61a314dd47a4d03b99074c18bfb218a9bc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/nWidart/laravel-modules/zipball/5483801843f653df5ffd074da373508f4d3925c9",
-        "reference": "5483801843f653df5ffd074da373508f4d3925c9",
+        "url": "https://api.github.com/repos/nWidart/laravel-modules/zipball/5f2f6b61a314dd47a4d03b99074c18bfb218a9bc",
+        "reference": "5f2f6b61a314dd47a4d03b99074c18bfb218a9bc",
         "shasum": ""
       },
       "require": {
@@ -4529,7 +4529,7 @@
       ],
       "support": {
         "issues": "https://github.com/nWidart/laravel-modules/issues",
-        "source": "https://github.com/nWidart/laravel-modules/tree/9.0.1"
+        "source": "https://github.com/nWidart/laravel-modules/tree/v9.0.2"
       },
       "funding": [
         {
@@ -4537,7 +4537,7 @@
           "type": "github"
         }
       ],
-      "time": "2022-02-28T13:17:36+00:00"
+      "time": "2022-07-22T07:53:22+00:00"
     },
     {
       "name": "paragonie/constant_time_encoding",
@@ -6795,6 +6795,89 @@
         }
       ],
       "time": "2022-06-29T23:11:42+00:00"
+    },
+    {
+      "name": "spatie/laravel-responsecache",
+      "version": "7.3.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/spatie/laravel-responsecache.git",
+        "reference": "da22367ef0449b5ad7585f73f70811b0912c0451"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/da22367ef0449b5ad7585f73f70811b0912c0451",
+        "reference": "da22367ef0449b5ad7585f73f70811b0912c0451",
+        "shasum": ""
+      },
+      "require": {
+        "illuminate/cache": "^8.71|^9.0",
+        "illuminate/console": "^8.71|^9.0",
+        "illuminate/container": "^8.71|^9.0",
+        "illuminate/http": "^8.71|^9.0",
+        "illuminate/support": "^8.71|^9.0",
+        "nesbot/carbon": "^2.35",
+        "php": "^8.0",
+        "spatie/laravel-package-tools": "^1.9"
+      },
+      "require-dev": {
+        "laravel/framework": "^9.0",
+        "mockery/mockery": "^1.4",
+        "orchestra/testbench": "^6.23|^7.0",
+        "phpunit/phpunit": "^9.4"
+      },
+      "type": "library",
+      "extra": {
+        "laravel": {
+          "providers": [
+            "Spatie\\ResponseCache\\ResponseCacheServiceProvider"
+          ],
+          "aliases": {
+            "ResponseCache": "Spatie\\ResponseCache\\Facades\\ResponseCache"
+          }
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Spatie\\ResponseCache\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Freek Van der Herten",
+          "email": "freek@spatie.be",
+          "homepage": "https://spatie.be",
+          "role": "Developer"
+        }
+      ],
+      "description": "Speed up a Laravel application by caching the entire response",
+      "homepage": "https://github.com/spatie/laravel-responsecache",
+      "keywords": [
+        "cache",
+        "laravel",
+        "laravel-responsecache",
+        "performance",
+        "response",
+        "spatie"
+      ],
+      "support": {
+        "source": "https://github.com/spatie/laravel-responsecache/tree/7.3.1"
+      },
+      "funding": [
+        {
+          "url": "https://spatie.be/open-source/support-us",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/spatie",
+          "type": "github"
+        }
+      ],
+      "time": "2022-05-30T08:32:11+00:00"
     },
     {
       "name": "spatie/laravel-robots-middleware",

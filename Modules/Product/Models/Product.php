@@ -7,12 +7,9 @@
 namespace Modules\Product\Models;
 
 use Carbon\Carbon;
-use Database\Factories\ProductFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +17,7 @@ use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
+use Modules\Core\Models\Core;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 
@@ -76,10 +74,8 @@ use Spatie\Feed\FeedItem;
  * @property string|null $color
  * @method static Builder|Product whereColor($value)
  */
-class Product extends Model implements Feedable
+class Product extends Core implements Feedable
 {
-    use HasFactory;
-    
     protected $table = 'products';
     
     protected $casts = [
@@ -108,19 +104,11 @@ class Product extends Model implements Feedable
     ];
     
     /**
-     * @return ProductFactory
-     */
-    public static function factory(): ProductFactory
-    {
-        return new ProductFactory();
-    }
-    
-    /**
      * @param $slug
      *
-     * @return Builder|Model|object|null
+     * @return object|null
      */
-    public static function getProductBySlug($slug)
+    public static function getProductBySlug($slug): object|null
     {
         return Product::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
     }

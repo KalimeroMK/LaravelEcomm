@@ -3,9 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Modules\Front\Service\FrontController;
+use Modules\Front\Http\Controllers\FrontController;
 use Spatie\Feed\Http\FeedController;
-use UniSharp\LaravelFilemanager\Lfm;
 
 /*
 |--------------------------------------------------------------------------

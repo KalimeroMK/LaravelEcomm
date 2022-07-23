@@ -8,10 +8,8 @@ namespace Modules\Settings\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
-use Database\Factories\SettingFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\Core;
 
 /**
  * Class Setting
@@ -42,10 +40,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Setting whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Setting extends Model
+class Setting extends Core
 {
-    use HasFactory;
-    
     protected $table = 'settings';
     
     protected $fillable = [
@@ -58,11 +54,4 @@ class Setting extends Model
         'email',
     ];
     
-    /**
-     * @return SettingFactory
-     */
-    public static function factory(): SettingFactory
-    {
-        return new SettingFactory();
-    }
 }

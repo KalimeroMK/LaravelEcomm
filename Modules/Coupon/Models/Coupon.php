@@ -9,8 +9,8 @@ namespace Modules\Coupon\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\Core;
 use Modules\Post\Models\CouponFactory;
 
 /**
@@ -35,11 +35,9 @@ use Modules\Post\Models\CouponFactory;
  * @method static Builder|Coupon whereUpdatedAt($value)
  * @method static Builder|Coupon whereValue($value)
  * @mixin Eloquent
- * @method static CouponFactory factory(...$parameters)
  */
-class Coupon extends Model
+class Coupon extends Core
 {
-    use HasFactory;
     
     protected $table = 'coupons';
     

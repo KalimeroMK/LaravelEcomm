@@ -2,7 +2,6 @@
 
 namespace Modules\Product\Service;
 
-use App\Traits\ImageUpload;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +9,7 @@ use LaravelIdea\Helper\Modules\Product\Models\_IH_Product_C;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Service\CoreService;
+use Modules\Core\Traits\ImageUpload;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 

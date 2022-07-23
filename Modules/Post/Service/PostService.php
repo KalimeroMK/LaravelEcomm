@@ -2,10 +2,10 @@
 
 namespace Modules\Post\Service;
 
-use App\Traits\ImageUpload;
 use Exception;
 use Modules\Category\Models\Category;
 use Modules\Core\Service\CoreService;
+use Modules\Core\Traits\ImageUpload;
 use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
 use Modules\Tag\Models\Tag;

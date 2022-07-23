@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 use Modules\Billing\Http\Controllers\PaypalController;
 use Modules\Billing\Http\Controllers\StripeController;
 use Modules\Billing\Http\Controllers\WishlistController;
-use Modules\Front\Service\FrontController;
+use Modules\Front\Http\Controllers\FrontController;
 use Modules\Order\Http\Controllers\OrderFrontController;
 
 Route::get('/wishlist', function () {
-    return view('frontend.pages.wishlist');
+    return view('front::pages.wishlist');
 })->name('wishlist');
 Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist');
 Route::get('wishlist-delete/{id}', [WishlistController::class, 'wishlistDelete'])->name('wishlist-delete');

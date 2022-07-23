@@ -7,16 +7,14 @@
 namespace Modules\Post\Models;
 
 use Carbon\Carbon;
-use Database\Factories\PostCommentFactory;
 use Eloquent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Core\Models\Core;
 use Modules\User\Models\User;
 
 /**
@@ -51,9 +49,8 @@ use Modules\User\Models\User;
  * @mixin Eloquent
  * @property-read User|null $user_info
  */
-class PostComment extends Model
+class PostComment extends Core
 {
-    use HasFactory;
     
     protected $table = 'post_comments';
     
@@ -71,14 +68,6 @@ class PostComment extends Model
         'replied_comment',
         'parent_id',
     ];
-    
-    /**
-     * @return PostCommentFactory
-     */
-    public static function factory(): PostCommentFactory
-    {
-        return new PostCommentFactory();
-    }
     
     /**
      * @return LengthAwarePaginator

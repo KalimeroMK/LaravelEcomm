@@ -7,7 +7,6 @@
 namespace Modules\User\Models;
 
 use Carbon\Carbon;
-use Database\Factories\UserFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,6 +18,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
 use Modules\LoginSecurity\Models\LoginSecurity;
@@ -83,7 +83,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection|Order[] $orders
  * @property-read Collection|PostComment[] $post_comments
  * @property-read Collection|ProductReview[] $product_reviews
- * @property-read Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @property-read Collection|PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
  * @property-read Collection|Wishlist[] $wishlists
  */
@@ -117,11 +117,6 @@ class User extends Authenticatable
         'status',
         'remember_token',
     ];
-    
-    public static function factory(): UserFactory
-    {
-        return new UserFactory();
-    }
     
     /**
      * @return HasMany

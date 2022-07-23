@@ -2,13 +2,13 @@
 
 namespace Modules\Brand\Service;
 
-use App\Traits\ImageUpload;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Service\CoreService;
+use Modules\Core\Traits\ImageUpload;
 
 class BrandService extends CoreService
 {

@@ -9,9 +9,8 @@ namespace Modules\Category\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
 /**
@@ -35,10 +34,8 @@ use Modules\Product\Models\Product;
  * @method static Builder|CategoryProduct whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class CategoryProduct extends Model
+class CategoryProduct extends Core
 {
-    use HasFactory;
-    
     protected $table = 'category_product';
     
     protected $casts = [

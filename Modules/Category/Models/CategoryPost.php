@@ -9,9 +9,8 @@ namespace Modules\Category\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Core\Models\Core;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 
@@ -39,9 +38,8 @@ use Modules\Product\Models\Product;
  * @property-read Post $post
  * @method static Builder|CategoryPost wherePostId($value)
  */
-class CategoryPost extends Model
+class CategoryPost extends Core
 {
-    use HasFactory;
     
     protected $table = 'category_post';
     

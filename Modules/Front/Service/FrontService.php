@@ -301,6 +301,8 @@ class FrontService
             return [
                 "recent_products" => $recent_products,
                 "products"        => $products,
+                "max"             => Product::max('price'),
+                "brands"          => Brand::with('products')->get(),
             ];
         } catch (Exception $exception) {
             return $exception->getMessage();
@@ -489,6 +491,8 @@ class FrontService
             return [
                 "recent_products" => $recent_products,
                 "products"        => $products,
+                "brands"          => Brand::with('products')->get(),
+            
             ];
         } catch (Exception $exception) {
             return $exception->getMessage();
