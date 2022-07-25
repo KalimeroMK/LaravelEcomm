@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "a1a920844d5bd64bd717f1c14999d5f2",
+  "content-hash": "6b48dfdc5b6b427cd6dff4c41aa01457",
   "packages": [
     {
       "name": "bacon/bacon-qr-code",
@@ -2497,6 +2497,59 @@
         "source": "https://github.com/joshrainwater/active-users/tree/master"
       },
       "time": "2022-04-08T21:11:13+00:00"
+    },
+    {
+      "name": "kalimeromk/filterable",
+      "version": "v1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/KalimeroMK/filterable.git",
+        "reference": "cfcf37f0fdcb9684cb1a23a6bb11396d52e69f28"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/KalimeroMK/filterable/zipball/cfcf37f0fdcb9684cb1a23a6bb11396d52e69f28",
+        "reference": "cfcf37f0fdcb9684cb1a23a6bb11396d52e69f28",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=7.4.0"
+      },
+      "require-dev": {
+        "orchestra/testbench": "^6.0"
+      },
+      "type": "package",
+      "extra": {
+        "laravel": {
+          "providers": [
+            "Kalimeromk\\Filterable\\FilterableServiceProvider"
+          ]
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Kalimeromk\\Filterable\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "kalimeromk",
+          "email": "zbogoevski@gmail.com"
+        }
+      ],
+      "description": "Address commonly face the problem of adding repetitive filtering code",
+      "keywords": [
+        "laravel"
+      ],
+      "support": {
+        "issues": "https://github.com/KalimeroMK/filterable/issues",
+        "source": "https://github.com/KalimeroMK/filterable/tree/v1"
+      },
+      "time": "2022-04-21T08:50:10+00:00"
     },
     {
       "name": "kalimeromk/laravel-translation-manager",

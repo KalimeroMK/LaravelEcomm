@@ -21,6 +21,7 @@
     "jeremykenedy/laravel-blocker": "^3.4",
     "jeremykenedy/laravel-logger": "^6.0",
     "joshrainwater/active-users": "dev-master",
+    "kalimeromk/filterable": "^1.0",
     "kalimeromk/laravel-translation-manager": "0.5.x-dev",
     "kalnoy/nestedset": "^6.0",
     "lab404/laravel-impersonate": "^1.7",

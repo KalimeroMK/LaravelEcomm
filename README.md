@@ -18,8 +18,7 @@
 - A Product search form
 - Laravel Socialite implement(Facebook, Google & twitter) & Customer login
 - Product Share and follow from different social platform...
-- Payment integration(Paypal)
-- Order Tracking system
+- Payment integration(Paypal, Stripe, Casys)
 - Multi-level comment system many more......
 
 ======= ADMIN =======
@@ -40,6 +39,10 @@
 - Line Chart & Pie chart ...
 - Generate order in pdf form...
 - Real time message & notification
+- Translation manager
+- Impersonate
+- Activity log
+- IP blocker
 - Profile Settings Many more....
 
 ======= USER DASHBOARD =======
