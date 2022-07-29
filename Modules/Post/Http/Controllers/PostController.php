@@ -7,10 +7,14 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Post\Export\Posts as PostExport;
+use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
 use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PostController extends Controller
 {
@@ -96,6 +100,24 @@ class PostController extends Controller
     public function destroy(Post $post): RedirectResponse
     {
         $this->post_service->destroy($post->id);
+        
+        return redirect()->back();
+    }
+    
+    /**
+     * @return BinaryFileResponse
+     */
+    public function export()
+    {
+        return Excel::download(new PostExport, 'Products.xlsx');
+    }
+    
+    /**
+     * @return RedirectResponse
+     */
+    public function import(ImportRequest $request)
+    {
+        Excel::import(new Post, $request->file('file'));
         
         return redirect()->back();
     }

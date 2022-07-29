@@ -17,6 +17,9 @@ use Modules\Post\Http\Controllers\PostController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
     Route::resource('/posts', PostController::class);
+    /*Excel import export*/
+    Route::get('export', [PostController::class, 'export'])->name('posts.export');
+    Route::post('import', [PostController::class, 'import'])->name('posts.import');
 });
 Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');
 Route::resource('/post_comments', PostCommentController::class);

@@ -18,6 +18,9 @@ use Modules\Product\Http\Controllers\ProductReviewController;
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
     Route::resource('/products', ProductController::class);
     // Product Review
+    /*Excel import export*/
+    Route::get('export', [ProductController::class, 'export'])->name('product.export');
+    Route::post('import', [ProductController::class, 'import'])->name('product.import');
     
     Route::post('product/{slug}/review', [ProductReviewController::class, 'store'])->name('product.review.store');
     Route::resource('/product_review', ProductReviewController::class);

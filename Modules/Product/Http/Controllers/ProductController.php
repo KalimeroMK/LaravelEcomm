@@ -7,10 +7,15 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Post\Http\Requests\ImportRequest;
+use Modules\Product\Export\Products;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
+use Modules\Product\Import\Products as ProductImport;
 use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProductController extends Controller
 {
@@ -100,5 +105,23 @@ class ProductController extends Controller
         $this->product_service->destroy($product->id);
         
         return redirect()->route('products.index');
+    }
+    
+    /**
+     * @return BinaryFileResponse
+     */
+    public function export()
+    {
+        return Excel::download(new Products, 'Products.xlsx');
+    }
+    
+    /**
+     * @return RedirectResponse
+     */
+    public function import(ImportRequest $request)
+    {
+        Excel::import(new ProductImport(), $request->file('file'));
+        
+        return redirect()->back();
     }
 }

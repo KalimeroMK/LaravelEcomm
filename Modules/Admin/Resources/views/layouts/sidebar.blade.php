@@ -135,7 +135,7 @@
     </div>
     @hasrole('super-admin')
 
-    <!-- Posts -->
+    <!-- Products -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#postCollapse" aria-expanded="true"
            aria-controls="postCollapse">

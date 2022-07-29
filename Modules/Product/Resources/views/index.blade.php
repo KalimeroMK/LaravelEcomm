@@ -12,7 +12,16 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">Product Lists</h6>
             <a href="{{route('products.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Product</a>
+               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Product</a><br><br>
+            <form action="{{ route('product.import') }}" method="POST" enctype="multipart/form-data"
+                  class="col-3 float-right">
+                @csrf
+                <input type="file" name="file" class="form-control">
+                <br>
+                <button class="btn btn-primary btn-sm">Import product data</button>
+                <a href="{{route('product.export')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+                   data-placement="bottom" title="Export posts"><i class="fas fa-plus"></i> Export posts</a>
+            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive">

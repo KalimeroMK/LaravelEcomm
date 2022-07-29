@@ -6,13 +6,22 @@
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
-
             </div>
         </div>
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">Post Lists</h6>
             <a href="{{route('posts.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Post</a>
+               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Create Post</a><br><br>
+
+            <form action="{{ route('posts.import') }}" method="POST" enctype="multipart/form-data"
+                  class="col-3 float-right">
+                @csrf
+                <input type="file" name="file" class="form-control">
+                <br>
+                <button class="btn btn-primary btn-sm">Import post data</button>
+                <a href="{{route('posts.export')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+                   data-placement="bottom" title="Export posts"><i class="fas fa-plus"></i> Export posts</a>
+            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive">
