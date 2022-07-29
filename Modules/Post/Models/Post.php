@@ -178,7 +178,7 @@ class Post extends Core
      *
      * @return mixed|string
      */
-    public function incrementSlug($slug)
+    public function incrementSlug($slug): mixed
     {
         $original = $slug;
         $count    = 2;

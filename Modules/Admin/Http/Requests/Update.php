@@ -11,7 +11,6 @@ class Update extends FormRequest
         return [
             'short_des'   => 'required|string',
             'description' => 'required|string',
-            'photo'       => 'required',
             'logo'        => 'required',
             'address'     => 'required|string',
             'email'       => 'required|email',

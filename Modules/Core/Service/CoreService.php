@@ -11,9 +11,9 @@ class CoreService
      */
     public function makePaths(): object
     {
-        $original  = public_path().'/uploads/images/banner/';
-        $thumbnail = public_path().'/uploads/images/banner/thumbnails/';
-        $medium    = public_path().'/uploads/images/banner/medium/';
+        $original  = public_path().'/uploads/images/';
+        $thumbnail = public_path().'/uploads/images/thumbnails/';
+        $medium    = public_path().'/uploads/images/medium/';
         
         return (object)compact('original', 'thumbnail', 'medium');
     }

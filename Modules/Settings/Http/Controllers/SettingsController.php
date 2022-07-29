@@ -28,7 +28,7 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        return view('settings::index', ['data' => $this->settings_service->index()]);
+        return view('settings::edit', ['settings' => $this->settings_service->index()]);
     }
     
     /**
@@ -40,6 +40,6 @@ class SettingsController extends Controller
     {
         $this->settings_service->update($request);
         
-        return redirect()->route('admin');
+        return redirect()->back();
     }
 }

@@ -18,7 +18,10 @@ class FrontController extends Controller
     
     private FrontService $front_service;
     
-    public function __construct() { $this->front_service = new FrontService(); }
+    public function __construct()
+    {
+        $this->front_service = new FrontService();
+    }
     
     /**
      * @return Application|Factory|View

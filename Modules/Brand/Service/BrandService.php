@@ -55,7 +55,7 @@ class BrandService extends CoreService
      *
      * @return mixed|string
      */
-    public function update($id, $data)
+    public function update($id, $data): mixed
     {
         try {
             return $this->brand_repository->update($id, $data);
