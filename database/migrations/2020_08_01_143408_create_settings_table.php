@@ -21,6 +21,10 @@ class CreateSettingsTable extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('email');
+            $table->string('fb_app_id')->nullable();
+            $table->string('description')->nullable();
+            $table->string('keywords')->nullable();
+            $table->string('google-site-verification')->nullable();
             $table->timestamps();
         });
     }
