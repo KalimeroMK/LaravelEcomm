@@ -13,7 +13,8 @@ class Update extends FormRequest
             'summary'      => 'string|required',
             'description'  => 'string|nullable',
             'photo'        => 'string|nullable',
-            'size'         => 'nullable',
+            'size'         => 'sometimes|array',
+            'size.*'       => 'required|exists:sizes,id',
             'color'        => 'nullable',
             'stock'        => "required|numeric",
             'category'     => 'sometimes|array',
@@ -22,7 +23,7 @@ class Update extends FormRequest
             'is_featured'  => 'sometimes|in:1',
             'brand_id'     => 'nullable|exists:brands,id',
             'status'       => 'required|in:active,inactive',
-            'condition'    => 'required|in:default,new,hot',
+            'condition_id' => 'required|exists:conditions,id',
             'price'        => 'required|numeric',
             'discount'     => 'nullable|numeric',
         ];

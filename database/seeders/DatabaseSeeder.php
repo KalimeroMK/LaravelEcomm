@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Modules\Admin\Database\Seeders\ConditionSeeder;
+use Modules\Admin\Database\Seeders\SizeSeeder;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
@@ -38,6 +40,8 @@ class DatabaseSeeder extends Seeder
         Cart::factory()->count(200)->create();
         PostComment::factory()->count(200)->create();
         $this->call(ProductReviewSeeder::class);
+        $this->call(SizeSeeder::class);
+        $this->call(ConditionSeeder::class);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

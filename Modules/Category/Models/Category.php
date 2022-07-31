@@ -191,7 +191,7 @@ class Category extends Core
     /**
      * @return Builder[]|Collection
      */
-    public static function getAllParentWithChild()
+    public static function getAllParentWithChild(): Collection|array
     {
         return Category::with('child_cat')->where('parent_id', 1)->where('status', 'active')->orderBy(
             'title',

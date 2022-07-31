@@ -66,9 +66,6 @@
                                                        placeholder="Add Your Price"/>
                                             </div>
                                         </div>
-                                        @php
-                                            $max=DB::table('products')->max('price');
-                                        @endphp
                                         <div id="slider-range" data-min="0" data-max="{{$max}}"></div>
                                         <div class="product_filter">
                                             <button type="submit" class="filter_button">Filter</button>

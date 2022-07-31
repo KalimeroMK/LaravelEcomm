@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+use Kalimeromk\Filterable\FilterableServiceProvider;
 
 return [
     
@@ -196,6 +197,7 @@ return [
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
+        FilterableServiceProvider::class,
         
         /*
          * Application Service Providers...

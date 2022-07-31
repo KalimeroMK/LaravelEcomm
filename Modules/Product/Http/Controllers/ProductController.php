@@ -86,9 +86,7 @@ class ProductController extends Controller
      */
     public function update(Update $request, Product $product): RedirectResponse
     {
-        $data  = $request->except('photo');
-        $image = $request['photo'];
-        $this->product_service->update($data, $image, $product->id);
+        $this->product_service->update($request->all(), $product->id);
         
         return redirect()->route('products.index');
     }

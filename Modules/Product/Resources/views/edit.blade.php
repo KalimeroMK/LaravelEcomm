@@ -32,4 +32,7 @@
     <script type="text/javascript">
         $('#category').select2().val({!! json_encode($product->categories()->allRelatedIds()) !!}).trigger('change');
     </script>
+    <script type="text/javascript">
+        $('#size').select2().val({!! json_encode($product->sizes()->allRelatedIds()) !!}).trigger('change');
+    </script>
 @endpush

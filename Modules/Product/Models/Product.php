@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Admin\Models\Condition;
+use Modules\Admin\Models\Size;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
@@ -93,13 +95,28 @@ class Product extends Core implements Feedable
         'description',
         'photo',
         'stock',
-        'size',
-        'condition',
+        'condition_id',
         'status',
         'price',
         'discount',
         'is_featured',
         'brand_id',
+        'color',
+    ];
+    
+    public const likeRows = [
+        'title',
+        'slug',
+        'summary',
+        'description',
+        'photo',
+        'stock',
+        'size',
+        'condition.name',
+        'status',
+        'price',
+        'discount',
+        'brand.title',
         'color',
     ];
     
@@ -189,7 +206,7 @@ class Product extends Core implements Feedable
      *
      * @return mixed|string
      */
-    public function incrementSlug($slug)
+    public function incrementSlug($slug): mixed
     {
         $original = $slug;
         $count    = 2;
@@ -201,7 +218,7 @@ class Product extends Core implements Feedable
     }
     
     /**
-     * @return string
+     * @return string|null
      */
     
     public function getImageUrlAttribute(): ?string
@@ -225,5 +242,18 @@ class Product extends Core implements Feedable
                        ->updated($this->updated_at)
                        ->link(route('product-detail', $this->slug))
                        ->author('admin');
+    }
+    
+    /**
+     * @return BelongsTo
+     */
+    public function condition(): BelongsTo
+    {
+        return $this->belongsTo(Condition::class);
+    }
+    
+    public function sizes(): belongsToMany
+    {
+        return $this->belongsToMany(Size::class);
     }
 }

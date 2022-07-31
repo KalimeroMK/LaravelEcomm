@@ -37,9 +37,8 @@
                     <select class="form-control js-example-basic-multiple" id="category" name="category[]"
                             multiple="multiple">
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">@for ($i = 0; $i < $category->depth; $i++)
-                                    -
-                                @endfor {{ $category->title }}</option>
+                            <option value="{{ $category->id }}">
+                                {{ $category->title }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -58,12 +57,11 @@
                 </div>
                 <div class="form-group">
                     <label for="size">Size</label>
-                    <select name="size[]" class="form-control selectpicker" multiple data-live-search="true">
-                        <option value="">--Select any size--</option>
-                        <option value="S">Small (S)</option>
-                        <option value="M">Medium (M)</option>
-                        <option value="L">Large (L)</option>
-                        <option value="XL">Extra Large (XL)</option>
+                    <select class="form-control js-example-basic-multiple" id="size" name="size[]"
+                            multiple="multiple">
+                        @foreach ($sizes as $size)
+                            <option value="{{ $size->id }}">{{ $size->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
@@ -84,14 +82,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="condition">Condition</label>
-                    <select name="condition" class="form-control">
-                        <option value="">--Select Condition--</option>
-                        <option value="default">Default</option>
-                        <option value="new">New</option>
-                        <option value="hot">Hot</option>
+                    <label for="condition_id">Condition</label>
+                    <select name="condition_id" class="form-control">
+                        <option value="">--Select condition--</option>
+                        @foreach($conditions as $condition)
+                            <option value="{{$condition->id}}"@if (!empty($product->condition->id))
+                                {{($condition->id==$product->condition->id)? 'selected':'' }}
+                                    @endif>{{$condition->status}}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
+
 
                 <div class="form-group">
                     <label for="stock">Quantity <span class="text-danger">*</span></label>
@@ -108,8 +110,8 @@
                         <div class="form-group">
                             <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
                             <select name="status" class="form-control">
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option @checked($product->status =='active') value="active">Active</option>
+                                <option @checked($product->status =='inactive') value="inactive">Inactive</option>
                             </select>
                         </div>
                         <div class="form-group mb-3">

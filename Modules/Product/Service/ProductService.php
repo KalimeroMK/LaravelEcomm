@@ -3,9 +3,8 @@
 namespace Modules\Product\Service;
 
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use LaravelIdea\Helper\Modules\Product\Models\_IH_Product_C;
+use Modules\Admin\Models\Condition;
+use Modules\Admin\Models\Size;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Service\CoreService;
@@ -30,77 +29,46 @@ class ProductService extends CoreService
     }
     
     /**
+     * @return array
+     */
+    public function create(): array
+    {
+        return [
+            'brands'     => Brand::get(),
+            'categories' => Category::get(),
+            'product'    => new Product(),
+            'sizes'      => Size::get(),
+            'conditions' => Condition::get(),
+        ];
+    }
+    
+    /**
      * @param $data
      *
      * @return string|null
      */
     public function store($data): null|string
     {
-        $size  = $data['size'];
         $color = $data['color'];
-        if ($size) {
-            $data['size'] = implode(',', $size);
-        } else {
-            $data['size'] = '';
-        }
         if ($color) {
             $color         = preg_replace('/\s+/', '', $color);
             $data['color'] = implode(',', $color);
         } else {
             $data['color'] = '';
         }
-        $image = $data['photo'];
+        if (isset($data['photo'])) {
+            $data['photo'] = $this->verifyAndStoreImage($data['photo']);
+        }
         
         try {
-            return $this->product_repository->create(
-                collect($data)->except(['photo'])->toArray() + [
-                    'photo' => $this->verifyAndStoreImage($image),
-                ]
-            )->categories()->attach($data['category']);
+            $product = $this->product_repository->create($data);
+            $product->categories()->attach($data['category']);
+            $product->sizes()->attach($data['size']);
+            
+            return $product;
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
-    }
-    
-    /**
-     * @param $data
-     * @param $image
-     * @param  int  $id
-     *
-     * @return Collection|Model|_IH_Product_C|Product|Product[]
-     */
-    public function update($data, $image, int $id): Model|Product|Collection|_IH_Product_C|array
-    {
-        $size  = $data['size'];
-        $color = $data['color'];
-        if ($size) {
-            $data['size'] = implode(',', $size);
-        } else {
-            $data['size'] = '';
-        }
-        if ($color) {
-            $color         = preg_replace('/\s+/', '', $color);
-            $data['color'] = implode(',', $color);
-        } else {
-            $data['color'] = '';
-        }
-        if (empty($image)) {
-            $image = Product::find($id)->photo;
-        } else {
-            $image = $this->verifyAndStoreImage($image);
-        }
-        
-        $product = Product::findOrFail($id);
-        
-        $product->update(
-            $data + [
-                'photo' => $image,
-            ]
-        );
-        
-        $product->categories()->sync($data['category'], true);
-        
-        return $product;
     }
     
     /**
@@ -113,24 +81,45 @@ class ProductService extends CoreService
         return [
             'brands'     => Brand::get(),
             'categories' => Category::all(),
-            'items'      => Product::whereId($id)->get(),
             'product'    => $this->product_repository->findById($id),
-        
+            'sizes'      => Size::get(),
+            'conditions' => Condition::get(),
         ];
     }
     
     /**
-     * @return array
+     * @param $data
+     * @param  int  $id
+     *
+     * @return array|null
      */
-    public function create(): array
+    public function update($data, int $id): ?array
     {
-        return [
-            'brands'     => Brand::get(),
-            'categories' => Category::get(),
-            'product'    => new Product(),
-        ];
+        $color = $data['color'];
+        if ($color) {
+            $color         = preg_replace('/\s+/', '', $color);
+            $data['color'] = implode(',', $color);
+        } else {
+            $data['color'] = '';
+        }
+        if (isset($data['image'])) {
+            $data['photo'] = $this->verifyAndStoreImage($data['photo']);
+        } else {
+            $data['photo'] = Product::find($id)->photo;
+        }
+        
+        try {
+            return $this->product_repository->update($id, $data);
+        } catch (Exception $exception) {
+            return [$exception->getMessage()];
+        }
     }
     
+    /**
+     * @param $id
+     *
+     * @return void
+     */
     public function destroy($id): void
     {
         $this->product_repository->delete($id);

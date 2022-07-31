@@ -5,19 +5,21 @@ namespace Modules\Front\Service;
 use App\Events\MessageSent;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use JetBrains\PhpStorm\NoReturn;
+use Modules\Admin\Models\Message;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Coupon\Models\Coupon;
-use Modules\Message\Models\Message;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 use Spatie\Newsletter\Newsletter;
 
 class FrontService
 {
+    
     /**
      * @param $slug
      *
@@ -52,11 +54,7 @@ class FrontService
     {
         try {
             $recent_posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-            $posts        = Post::orwhere('title', 'like', '%'.$request->search.'%')
-                                ->orwhere('quote', 'like', '%'.$request->search.'%')
-                                ->orwhere('summary', 'like', '%'.$request->search.'%')
-                                ->orwhere('description', 'like', '%'.$request->search.'%')
-                                ->orwhere('slug', 'like', '%'.$request->search.'%')
+            $posts        = Post::whereLike(Post::likeRows, Arr::get($request, 'search'))
                                 ->orderBy('id', 'DESC')
                                 ->paginate(8);
             
@@ -87,7 +85,7 @@ class FrontService
             $data['phone']   = $message->phone;
             $data['message'] = $message->message;
             $data['subject'] = $message->subject;
-            $data['photo']   = Auth()->user()->photo;
+            $data['photo']   = Auth()->user()->photo ?? '';
             // return $data;
             event(new MessageSent($data));
             exit();
@@ -132,12 +130,8 @@ class FrontService
                 $products = $products->whereStatus('active')->paginate(9);
             }
             
-            $max    = Product::max('price');
-            $brands = Brand::orderBy('title', 'ASC')->whereStatus('active')->get();
-            
             return [
-                "max"             => $max,
-                "brands"          => $brands,
+                "brands"          => Brand::orderBy('title', 'ASC')->whereStatus('active')->get(),
                 "recent_products" => $recent_products,
                 "products"        => $products,
             ];
@@ -270,7 +264,7 @@ class FrontService
             $posts       = Post::with('author_info')->whereHas('categories', static function ($q) use ($request) {
                 $q->whereSlug($request->slug);
             })->paginate(10);
-            $recantPosts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+            $recantPosts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
             
             return [
                 "posts"       => $posts,
@@ -289,19 +283,36 @@ class FrontService
     public function productSearch($request): array|string
     {
         try {
-            $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-            $products        = Product::orwhere('title', 'like', '%'.$request->search.'%')
-                                      ->orwhere('slug', 'like', '%'.$request->search.'%')
-                                      ->orwhere('description', 'like', '%'.$request->search.'%')
-                                      ->orwhere('summary', 'like', '%'.$request->search.'%')
-                                      ->orwhere('price', 'like', '%'.$request->search.'%')
+            $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
+            $products        = Product::whereLike(Product::likeRows, Arr::get($request, 'search'))
                                       ->orderBy('id', 'DESC')
                                       ->paginate('9');
             
             return [
                 "recent_products" => $recent_products,
                 "products"        => $products,
-                "max"             => Product::max('price'),
+                "brands"          => Brand::with('products')->get(),
+            ];
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     *
+     * @return array |string
+     */
+    public function productDeal(): array|string
+    {
+        try {
+            $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
+            $products        = Product::whereDDeal(true)
+                                      ->orderBy('id', 'DESC')
+                                      ->paginate('9');
+            
+            return [
+                "recent_products" => $recent_products,
+                "products"        => $products,
                 "brands"          => Brand::with('products')->get(),
             ];
         } catch (Exception $exception) {

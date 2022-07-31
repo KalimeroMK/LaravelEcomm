@@ -52,6 +52,11 @@ class Setting extends Core
         'address',
         'phone',
         'email',
+        'site-name',
+        'fb_app_id',
+        'keywords',
+        'google-site-verification',
+    
     ];
     
 }

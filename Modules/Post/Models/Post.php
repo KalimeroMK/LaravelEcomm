@@ -88,6 +88,17 @@ class Post extends Core
         'description',
         'quote',
         'photo',
+        'author_info.name',
+        'status',
+    ];
+    
+    public const likeRows = [
+        'title',
+        'slug',
+        'summary',
+        'description',
+        'quote',
+        'photo',
         'added_by',
         'status',
     ];

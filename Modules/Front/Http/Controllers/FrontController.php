@@ -94,6 +94,14 @@ class FrontController extends Controller
     }
     
     /**
+     * @return Application|Factory|View
+     */
+    public function productDeal()
+    {
+        return view('front::pages.product-grids')->with($this->front_service->productDeal());
+    }
+    
+    /**
      * @param  Request  $request
      *
      * @return Application|Factory|View

@@ -6,7 +6,6 @@
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
-
             </div>
         </div>
         <div class="card-header py-3">
@@ -75,8 +74,10 @@
                                 <td>{{(($product->is_featured==1)? 'Yes': 'No')}}</td>
                                 <td>Rs. {{$product->price}} /-</td>
                                 <td>  {{$product->discount}}% OFF</td>
-                                <td>{{$product->size}}</td>
-                                <td>{{$product->condition}}</td>
+                                <td> @foreach($product->sizes as $size)
+                                        {{$size->name}},
+                                    @endforeach</td>
+                                <td>{{$product->condition->status}}</td>
                                 <td>{{ $product->brand->title ?? ''}}</td>
                                 <td>
                                     @if($product->stock>0)

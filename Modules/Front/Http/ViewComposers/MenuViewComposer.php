@@ -7,7 +7,7 @@ use Modules\Category\Models\Category;
 
 class MenuViewComposer
 {
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with('categories', Category::whereNull('parent_id')->with('childrenCategories')->get());
     }
