@@ -1,25 +1,25 @@
 <?php
 
-    use Illuminate\Support\Str;
+use Illuminate\Support\Str;
 
-    return [
-
-        /*
-        |--------------------------------------------------------------------------
-        | Default Session Driver
-        |--------------------------------------------------------------------------
-        |
-        | This option controls the default session "driver" that will be used on
-        | requests. By default, we will use the lightweight native driver but
-        | you may specify any of the other wonderful drivers provided here.
-        |
-        | Supported: "file", "cookie", "database", "apc",
-        |            "memcached", "redis", "dynamodb", "array"
-        |
-        */
-
+return [
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Default Session Driver
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default session "driver" that will be used on
+    | requests. By default, we will use the lightweight native driver but
+    | you may specify any of the other wonderful drivers provided here.
+    |
+    | Supported: "file", "cookie", "database", "apc",
+    |            "memcached", "redis", "dynamodb", "array"
+    |
+    */
+    
     'driver' => env('SESSION_DRIVER', 'file'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Lifetime
@@ -30,11 +30,11 @@
     | to immediately expire on the browser closing, set that option.
     |
     */
-
+    
     'lifetime' => env('SESSION_LIFETIME', 120),
-
+    
     'expire_on_close' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Encryption
@@ -45,9 +45,9 @@
     | automatically by Laravel and you can use the Session like normal.
     |
     */
-
+    
     'encrypt' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session File Location
@@ -58,9 +58,9 @@
     | location may be specified. This is only needed for file sessions.
     |
     */
-
+    
     'files' => storage_path('framework/sessions'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Database Connection
@@ -71,9 +71,9 @@
     | correspond to a connection in your database configuration options.
     |
     */
-
-    'connection' => env('SESSION_CONNECTION', null),
-
+    
+    'connection' => env('SESSION_CONNECTION'),
+    
     /*
     |--------------------------------------------------------------------------
     | Session Database Table
@@ -84,9 +84,9 @@
     | provided for you; however, you are free to change this as needed.
     |
     */
-
+    
     'table' => 'sessions',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Cache Store
@@ -99,9 +99,9 @@
     | Affects: "apc", "dynamodb", "memcached", "redis"
     |
     */
-
-    'store' => env('SESSION_STORE', null),
-
+    
+    'store' => env('SESSION_STORE'),
+    
     /*
     |--------------------------------------------------------------------------
     | Session Sweeping Lottery
@@ -112,9 +112,9 @@
     | happen on a given request. By default, the odds are 2 out of 100.
     |
     */
-
+    
     'lottery' => [2, 100],
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Name
@@ -125,12 +125,12 @@
     | new session cookie is created by the framework for every driver.
     |
     */
-
+    
     'cookie' => env(
         'SESSION_COOKIE',
         Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Path
@@ -141,9 +141,9 @@
     | your application but you are free to change this when necessary.
     |
     */
-
+    
     'path' => '/',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Domain
@@ -154,9 +154,9 @@
     | available to in your application. A sensible default has been set.
     |
     */
-
-    'domain' => env('SESSION_DOMAIN', null),
-
+    
+    'domain' => env('SESSION_DOMAIN'),
+    
     /*
     |--------------------------------------------------------------------------
     | HTTPS Only Cookies
@@ -164,12 +164,12 @@
     |
     | By setting this option to true, session cookies will only be sent back
     | to the server if the browser has a HTTPS connection. This will keep
-    | the cookie from being sent to you if it can not be done securely.
+    | the cookie from being sent to you when it can't be done securely.
     |
     */
-
+    
     'secure' => env('SESSION_SECURE_COOKIE'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | HTTP Access Only
@@ -180,9 +180,9 @@
     | the HTTP protocol. You are free to modify this option if needed.
     |
     */
-
+    
     'http_only' => true,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Same-Site Cookies
@@ -195,7 +195,7 @@
     | Supported: "lax", "strict", "none", null
     |
     */
-
+    
     'same_site' => 'lax',
 
 ];
