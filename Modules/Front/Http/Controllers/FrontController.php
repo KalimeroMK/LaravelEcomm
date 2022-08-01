@@ -2,14 +2,16 @@
 
 namespace Modules\Front\Http\Controllers;
 
+use App\Helpers\Payment;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\NoReturn;
+use Modules\Cart\Models\Cart;
 use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Store;
 
@@ -211,10 +213,36 @@ class FrontController extends Controller
      *
      * @param  Store  $request
      *
-     * @return Response
+     * @return string|null
      */
-    #[NoReturn] public function messageStore(Store $request): Response
+    #[NoReturn] public function messageStore(Store $request): string|null
     {
         return $this->front_service->messageStore($request);
+    }
+    
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  Request  $request
+     *
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $data = Payment::calculate($request);
+        
+        if (request('payment_method') == 'paypal') {
+            return redirect()->route('payment')->with($data[0], $data[1]);
+        } elseif (request('payment_method') == 'stripe') {
+            return redirect()->route('stripe')->with($data);
+        } else {
+            session()->forget('cart');
+            session()->forget('coupon');
+        }
+        Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $data[0]]);
+        
+        request()->session()->flash('success', 'Your product successfully placed in order');
+        
+        return redirect()->route('home');
     }
 }

@@ -16,16 +16,12 @@ use Modules\Billing\Http\Controllers\PaypalController;
 use Modules\Billing\Http\Controllers\StripeController;
 use Modules\Billing\Http\Controllers\WishlistController;
 use Modules\Front\Http\Controllers\FrontController;
-use Modules\Order\Http\Controllers\OrderFrontController;
 
 Route::get('/wishlist', function () {
     return view('front::pages.wishlist');
 })->name('wishlist');
 Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist');
 Route::get('wishlist-delete/{id}', [WishlistController::class, 'wishlistDelete'])->name('wishlist-delete');
-Route::post('cart/order', [OrderFrontController::class, 'store'])->name('cart.order');
-Route::get('order/pdf/{id}', [OrderFrontController::class, 'pdf'])->name('order.pdf');
-Route::get('/income', [OrderFrontController::class, 'incomeChart'])->name('product.order.income');
 Route::get('/product-grids', [FrontController::class, 'productGrids'])->name('product-grids');
 Route::get('/product-lists', [FrontController::class, 'productLists'])->name('product-lists');
 Route::match(['get', 'post'], '/filter', [FrontController::class, 'productFilter'])->name('shop.filter');

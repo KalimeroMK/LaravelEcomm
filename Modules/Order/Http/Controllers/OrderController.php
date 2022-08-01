@@ -7,11 +7,14 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Modules\Order\Http\Requests\Store;
 use Modules\Order\Http\Requests\Update;
 use Modules\Order\Models\Order;
 use Modules\Order\Service\OrderService;
+use PDF;
 
 class OrderController extends Controller
 {
@@ -103,5 +106,19 @@ class OrderController extends Controller
         $this->order_service->destroy($id);
         
         return redirect()->back();
+    }
+    
+    /**
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function pdf(Request $request): Response
+    {
+        $order     = Order::getAllOrder($request->id);
+        $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
+        $pdf       = PDF::loadview('backend.order.pdf', compact('order'));
+        
+        return $pdf->download($file_name);
     }
 }
