@@ -10,9 +10,11 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Core\Models\Core;
 use Modules\Post\Models\Post;
+use Modules\Tag\Database\Factories\TagFactory;
 
 /**
  * Class Tag
@@ -39,6 +41,7 @@ use Modules\Post\Models\Post;
  */
 class Tag extends Core
 {
+    use HasFactory;
     
     protected $table = 'tags';
     
@@ -47,6 +50,14 @@ class Tag extends Core
         'slug',
         'status',
     ];
+    
+    /**
+     * @return TagFactory
+     */
+    public static function Factory(): TagFactory
+    {
+        return TagFactory::new();
+    }
     
     /**
      * @return HasMany

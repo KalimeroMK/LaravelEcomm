@@ -10,11 +10,13 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Models\Core;
+use Modules\Order\Database\Factories\OrderFactory;
 use Modules\Shipping\Models\Shipping;
 use Modules\User\Models\User;
 
@@ -77,6 +79,8 @@ use Modules\User\Models\User;
  */
 class Order extends Core
 {
+    use HasFactory;
+    
     protected $table = 'orders';
     
     protected $casts = [
@@ -108,6 +112,14 @@ class Order extends Core
         'address1',
         'address2',
     ];
+    
+    /**
+     * @return OrderFactory
+     */
+    public static function Factory(): OrderFactory
+    {
+        return OrderFactory::new();
+    }
     
     /**
      * @param $id

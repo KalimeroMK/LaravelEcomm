@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
+use Modules\Post\Database\Factories\PostFactory;
 use Modules\Tag\Models\Tag;
 use Modules\User\Models\User;
 
@@ -75,6 +77,8 @@ use Modules\User\Models\User;
  */
 class Post extends Core
 {
+    use HasFactory;
+    
     protected $table = 'posts';
     
     protected $casts = [
@@ -102,6 +106,14 @@ class Post extends Core
         'added_by',
         'status',
     ];
+    
+    /**
+     * @return PostFactory
+     */
+    public static function Factory(): PostFactory
+    {
+        return PostFactory::new();
+    }
     
     /**
      * @param $slug

@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Category\Database\Factories\CategoryProductFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
@@ -47,6 +48,14 @@ class CategoryProduct extends Core
         'product_id',
         'category_id',
     ];
+    
+    /**
+     * @return CategoryProductFactory
+     */
+    public static function Factory(): CategoryProductFactory
+    {
+        return CategoryProductFactory::new();
+    }
     
     /**
      * @return BelongsTo

@@ -9,15 +9,20 @@ use Modules\Admin\Database\Seeders\SizeSeeder;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
+use Modules\Category\Database\Seeders\CategoryPostSeeder;
+use Modules\Category\Database\Seeders\CategoryProductSeeder;
+use Modules\Coupon\Database\Seeders\CouponSeeder;
 use Modules\Message\Models\Message;
+use Modules\Newsletter\Models\Newsletter;
 use Modules\Order\Models\Order;
 use Modules\Post\Models\PostComment;
+use Modules\Product\Database\Seeders\ProductReviewSeeder;
 use Modules\Settings\Models\Setting;
 use Modules\Tag\Models\Tag;
+use Modules\User\Database\Seeders\PermissionTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
-    private $faker;
     
     /**
      * Seed the application's database.
@@ -42,6 +47,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductReviewSeeder::class);
         $this->call(SizeSeeder::class);
         $this->call(ConditionSeeder::class);
+        Newsletter::factory()->count(20)->create();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

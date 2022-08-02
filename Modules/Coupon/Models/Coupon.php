@@ -11,7 +11,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Models\Core;
-use Modules\Post\Models\CouponFactory;
 
 /**
  * Class Coupon

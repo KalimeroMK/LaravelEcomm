@@ -19,5 +19,6 @@
   "Billing": true,
   "Front": true,
   "Core": true,
-  "Client": true
+  "Client": true,
+  "Newsletter": true
 }

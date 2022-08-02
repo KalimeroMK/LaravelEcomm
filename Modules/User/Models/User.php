@@ -27,6 +27,7 @@ use Modules\Order\Models\Order;
 use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
 use Modules\Product\Models\ProductReview;
+use Modules\User\Database\factories\UserFactory;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasPermissions;
@@ -119,6 +120,14 @@ class User extends Authenticatable
         'status',
         'remember_token',
     ];
+    
+    /**
+     * @return UserFactory
+     */
+    protected static function Factory(): UserFactory
+    {
+        return UserFactory::new();
+    }
     
     /**
      * @return HasMany

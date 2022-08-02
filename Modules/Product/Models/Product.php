@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +21,7 @@ use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
+use Modules\Product\Database\Factories\ProductFactory;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 
@@ -78,6 +80,8 @@ use Spatie\Feed\FeedItem;
  */
 class Product extends Core implements Feedable
 {
+    use HasFactory;
+    
     protected $table = 'products';
     
     protected $casts = [
@@ -119,6 +123,14 @@ class Product extends Core implements Feedable
         'brand.title',
         'color',
     ];
+    
+    /**
+     * @return ProductFactory
+     */
+    public static function Factory(): ProductFactory
+    {
+        return ProductFactory::new();
+    }
     
     /**
      * @param $slug

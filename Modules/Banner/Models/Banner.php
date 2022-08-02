@@ -9,6 +9,7 @@ namespace Modules\Banner\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Modules\Banner\Database\Factories\BannerFactory;
 use Modules\Core\Models\Core;
 
 /**
@@ -47,6 +48,14 @@ class Banner extends Core
         'description',
         'status',
     ];
+    
+    /**
+     * @return BannerFactory
+     */
+    public static function Factory(): BannerFactory
+    {
+        return BannerFactory::new();
+    }
     
     /**
      * @param $slug

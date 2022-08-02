@@ -24,3 +24,6 @@ Route::get('login/{provider}/', [LoginController::class, 'redirect'])->name('log
 Route::get('login/{provider}/callback/', [LoginController::class, 'Callback'])->name('login.callback');
 // NewsLetter
 Route::post('/subscribe', [FrontController::class, 'subscribe'])->name('subscribe');
+Route::get('/validation/{token}', [FrontController::class, 'verifyNewsletter'])->name('validation');
+Route::get('/delete/{token}', [FrontController::class, 'deleteNewsletter'])->name('delete-newsletter');
+

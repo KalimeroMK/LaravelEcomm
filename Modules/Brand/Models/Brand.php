@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Brand\Database\Factories\BrandFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
@@ -49,6 +50,14 @@ class Brand extends Core
         'slug',
         'status',
     ];
+    
+    /**
+     * @return BrandFactory
+     */
+    public static function Factory(): BrandFactory
+    {
+        return BrandFactory::new();
+    }
     
     /**
      * @param $slug

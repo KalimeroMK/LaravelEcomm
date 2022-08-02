@@ -10,9 +10,11 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Core\Models\Core;
 use Modules\Order\Models\Order;
+use Modules\Shipping\Database\Factories\ShippingFactory;
 
 /**
  * Class Shipping
@@ -39,6 +41,8 @@ use Modules\Order\Models\Order;
  */
 class Shipping extends Core
 {
+    use HasFactory;
+    
     protected $table = 'shipping';
     
     protected $casts = [
@@ -50,6 +54,14 @@ class Shipping extends Core
         'price',
         'status',
     ];
+    
+    /**
+     * @return ShippingFactory
+     */
+    public static function Factory(): ShippingFactory
+    {
+        return ShippingFactory::new();
+    }
     
     /**
      * @return HasMany

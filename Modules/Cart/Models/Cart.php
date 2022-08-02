@@ -10,9 +10,11 @@ use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Billing\Models\Wishlist;
+use Modules\Cart\Database\Factories\CartFactory;
 use Modules\Core\Models\Core;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;
@@ -54,6 +56,7 @@ use Modules\User\Models\User;
  */
 class Cart extends Core
 {
+    use HasFactory;
     
     protected $table = 'carts';
     
@@ -75,6 +78,14 @@ class Cart extends Core
         'quantity',
         'amount',
     ];
+    
+    /**
+     * @return CartFactory
+     */
+    public static function Factory(): CartFactory
+    {
+        return CartFactory::new();
+    }
     
     /**
      * @return BelongsTo

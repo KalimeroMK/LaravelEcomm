@@ -3,21 +3,19 @@
 namespace Modules\Core\Providers;
 
 use Config;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 class CoreServiceProvider extends ServiceProvider
 {
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Core';
+    protected string $moduleName = 'Core';
     
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'core';
+    protected string $moduleNameLower = 'core';
     
     /**
      * Boot the application events.
@@ -30,12 +28,6 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-        Factory::guessFactoryNamesUsing(function (string $model_name) {
-            $namespace  = 'Database\\Factories\\';
-            $model_name = Str::afterLast($model_name, '\\');
-            
-            return $namespace.$model_name.'Factory';
-        });
     }
     
     /**

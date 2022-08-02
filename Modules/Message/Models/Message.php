@@ -9,7 +9,9 @@ namespace Modules\Message\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Core\Models\Core;
+use Modules\Message\Database\Factories\MessageFactory;
 
 /**
  * Class Message
@@ -42,6 +44,8 @@ use Modules\Core\Models\Core;
  */
 class Message extends Core
 {
+    use HasFactory;
+    
     protected $table = 'messages';
     
     protected $dates = [
@@ -58,4 +62,11 @@ class Message extends Core
         'read_at',
     ];
     
+    /**
+     * @return MessageFactory
+     */
+    public static function Factory(): MessageFactory
+    {
+        return MessageFactory::new();
+    }
 }

@@ -9,7 +9,9 @@ namespace Modules\Settings\Models;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Core\Models\Core;
+use Modules\Settings\Database\Factories\SettingFactory;
 
 /**
  * Class Setting
@@ -42,6 +44,8 @@ use Modules\Core\Models\Core;
  */
 class Setting extends Core
 {
+    use HasFactory;
+    
     protected $table = 'settings';
     
     protected $fillable = [
@@ -59,4 +63,11 @@ class Setting extends Core
     
     ];
     
+    /**
+     * @return SettingFactory
+     */
+    public static function Factory(): SettingFactory
+    {
+        return SettingFactory::new();
+    }
 }

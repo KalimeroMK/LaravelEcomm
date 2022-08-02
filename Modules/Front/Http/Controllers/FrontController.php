@@ -12,8 +12,10 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\NoReturn;
 use Modules\Cart\Models\Cart;
+use Modules\Front\Mail\NewsLetterMail;
 use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Store;
+use Modules\Newsletter\Models\Newsletter;
 
 class FrontController extends Controller
 {
@@ -203,9 +205,47 @@ class FrontController extends Controller
         return $this->front_service->couponStore($request);
     }
     
+    /**
+     * @param  Request  $request
+     *
+     * @return RedirectResponse
+     */
     public function subscribe(Request $request): RedirectResponse
     {
-        return $this->front_service->subscribe($request);
+        if (Newsletter::whereEmail($request->email) !== null) {
+            $this->front_service->newsletter($request->all());
+            
+            return redirect()->back()->with('message', "Your comment successfully send.");
+        }
+        
+        return redirect()->back()->with('message', "Your email is already in our mailing list.");
+    }
+    
+    /**
+     * @param $token
+     *
+     * @return string
+     */
+    public function verifyNewsletter($token): string
+    {
+        if (Newsletter::where('token', $token)->first() !== null) {
+            $this->front_service->validation(['id' => Newsletter::where('token', $token)->first()->id]);
+            
+            return redirect()->back()->with('message', "Your email is successfully validated.");
+        }
+        
+        return redirect()->back()->with('message', "token mismatch ");
+    }
+    
+    public function deleteNewsletter($token)
+    {
+        if (Newsletter::where('token', $token)->first() !== null) {
+            $this->front_service->deleteNewsletter(['id' => Newsletter::where('token', $token)->first()->id]);
+            
+            return redirect()->back()->with('message', "Your email is successfully deleted.");
+        }
+        
+        return redirect()->back()->with('message', "token mismatch ");
     }
     
     /**

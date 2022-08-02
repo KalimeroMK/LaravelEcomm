@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
+use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
@@ -121,6 +122,14 @@ class Category extends Core
         '_lft',
         '_rgt',
     ];
+    
+    /**
+     * @return CategoryFactory
+     */
+    public static function Factory(): CategoryFactory
+    {
+        return CategoryFactory::new();
+    }
     
     /**
      * @return string

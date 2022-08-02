@@ -6,6 +6,8 @@ use App\Events\MessageSent;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use JetBrains\PhpStorm\NoReturn;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
@@ -13,9 +15,9 @@ use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Coupon\Models\Coupon;
 use Modules\Message\Models\Message;
+use Modules\Newsletter\Models\Newsletter;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
-use Spatie\Newsletter\Newsletter;
 
 class FrontService
 {
@@ -155,35 +157,6 @@ class FrontService
                 "posts"        => $posts,
                 "recent_posts" => $recent_posts,
             ];
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
-    }
-    
-    /**
-     * @param $request
-     *
-     * @return RedirectResponse|string
-     */
-    public function subscribe($request): RedirectResponse|string
-    {
-        try {
-            if ( ! Newsletter::isSubscribed($request->email)) {
-                Newsletter::subscribePending($request->email);
-                if (Newsletter::lastActionSucceeded()) {
-                    request()->session()->flash('success', 'Subscribed! Please check your email');
-                    
-                    return redirect()->route('home');
-                } else {
-                    Newsletter::getLastError();
-                    
-                    return back()->with('error', 'Something went wrong! please try again');
-                }
-            } else {
-                request()->session()->flash('error', 'Already Subscribed');
-                
-                return back();
-            }
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -352,11 +325,11 @@ class FrontService
             $featured_products = Product::with('categories')->orderBy('price', 'DESC')->limit(4)->get();
             $posts             = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
             $banners           = Banner::whereStatus('active')->limit(3)->orderBy('id', 'DESC')->get();
-            $product_lists     = Product::with('categories')->where('condition', '!=', 'hot')->whereStatus('active')->orderBy(
+            $product_lists     = Product::with('categories', 'condition')->whereStatus('active')->orderBy(
                 'id',
                 'DESC'
             )->limit(9)->get();
-            $product_hot       = Product::with('categories')->whereCondition('hot')->whereStatus('active')->orderBy(
+            $product_hot       = Product::with('categories', 'condition')->whereStatus('active')->orderBy(
                 'id',
                 'DESC'
             )->limit(9)->get();
@@ -524,4 +497,47 @@ class FrontService
             return $exception->getMessage();
         }
     }
+    
+    /**
+     * @param $data
+     *
+     * @return void
+     */
+    public function newsletter($data): void
+    {
+        Newsletter::create([
+            'email' => $data['email'],
+            'token' => $token = Str::random(64),
+        ]);
+        
+        Mail::send('front::emails.news-letter', ['token' => $token], function ($message) use ($data) {
+            $message->to($data['email']);
+            $message->subject('Email Verification Mail');
+        });
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return void
+     */
+    public function validation($id): void
+    {
+        if ( ! is_null($id)) {
+            Newsletter::whereId($id)->update(['is_validated' => 1]);
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return void
+     */
+    public function deleteNewsletter($id): void
+    {
+        if ( ! is_null($id)) {
+            Newsletter::whereId($id)->delete();
+        }
+    }
+    
 }

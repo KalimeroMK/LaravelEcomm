@@ -11,6 +11,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\HasNewFactory;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 
@@ -40,6 +41,7 @@ use Modules\Product\Models\Product;
  */
 class CategoryPost extends Core
 {
+    use HasNewFactory;
     
     protected $table = 'category_post';
     

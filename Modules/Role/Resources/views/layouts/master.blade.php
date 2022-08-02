@@ -19,11 +19,7 @@
             <!-- Topbar -->
             @include('admin::layouts.header')
             <!-- End of Topbar -->
-            @if($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert-primary">{{ $error }}</div>
-                @endforeach
-            @endif
+
             <!-- Begin Page Content -->
             @yield('content')
 
