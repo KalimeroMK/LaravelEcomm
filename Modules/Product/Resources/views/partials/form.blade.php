@@ -122,3 +122,12 @@
                 </div>
             </form>
     </form>
+    @push('scripts')
+        <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
+        <script type="text/javascript">
+            CKEDITOR.replace('description', {
+                filebrowserUploadUrl: "{{route('ckeditor.image-upload', ['_token' => csrf_token() ])}}",
+                filebrowserUploadMethod: 'form'
+            });
+        </script>
+    @endpush

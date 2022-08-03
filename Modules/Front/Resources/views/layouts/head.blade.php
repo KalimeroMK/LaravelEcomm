@@ -8,10 +8,10 @@
 @include('feed::links')
 
 <!-- StyleSheet -->
-<link rel="manifest" href="/manifest.json">
-<!-- Bootstrap -->
-
 <link rel="stylesheet" href="{{asset('css/all_front.min.css')}}">
+<!-- Themify Icons -->
+<link rel="stylesheet" href="{{asset('frontend/css/themify-icons.css')}}">
+
 <script type='text/javascript'
         src='https://platform-api.sharethis.com/js/sharethis.js#property=5f2e5abf393162001291e431&product=inline-share-buttons'
         async='async'></script>

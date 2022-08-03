@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Post\Export\Posts as PostExport;
 use Modules\Post\Http\Requests\ImportRequest;
@@ -120,6 +121,16 @@ class PostController extends Controller
         Excel::import(new Post, $request->file('file'));
         
         return redirect()->back();
+    }
+    
+    /**
+     * @param  Request  $request
+     *
+     * @return void
+     */
+    public function upload(Request $request)
+    {
+        $this->post_service->upload($request);
     }
     
 }

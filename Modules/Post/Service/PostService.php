@@ -3,6 +3,7 @@
 namespace Modules\Post\Service;
 
 use Exception;
+use Illuminate\Http\Request;
 use Modules\Category\Models\Category;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
@@ -115,5 +116,30 @@ class PostService extends CoreService
     public function index(): mixed
     {
         return $this->post_repository->findAll();
+    }
+    
+    /**
+     * @param  Request  $request
+     *
+     * @return void
+     */
+    public function upload(Request $request): void
+    {
+        if ($request->hasFile('upload')) {
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName   = pathinfo($originName, PATHINFO_FILENAME);
+            $extension  = $request->file('upload')->getClientOriginalExtension();
+            $fileName   = $fileName.'_'.time().'.'.$extension;
+            
+            $request->file('upload')->move(public_path('images'), $fileName);
+            
+            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+            $url             = asset('images/'.$fileName);
+            $msg             = 'Image uploaded successfully';
+            $response        = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
+            
+            @header('Content-type: text/html; charset=utf-8');
+            echo $response;
+        }
     }
 }

@@ -1,3 +1,6 @@
+@php use Modules\Product\Models\Product; @endphp
+@php use Modules\Order\Models\Order; @endphp
+@php use Modules\Post\Models\Post; @endphp
 @extends('admin::layouts.master')
 @section('title','E-SHOP || DASHBOARD')
 @section('content')
@@ -35,7 +38,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Products</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{\Modules\Product\Models\Product::countActiveProduct()}}</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{Product::countActiveProduct()}}</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-cubes fa-2x text-gray-300"></i>
@@ -54,7 +57,7 @@
                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Order</div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\Modules\Order\Models\Order::countActiveOrder()}}</div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{Order::countActiveOrder()}}</div>
                                     </div>
 
                                 </div>
@@ -74,7 +77,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Post</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{\Modules\Post\Models\Post::countActivePost()}}</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{Post::countActivePost()}}</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-folder fa-2x text-gray-300"></i>

@@ -4828,8 +4828,8 @@
                 for (var i = 0, len = elements.length; i < len; i++) {
                     var _ret = _loop(i);
 
-                    if (_ret === "continue") continue;
-                }
+                    if (_ret === "continue")
+                        }
 
                 return createdDocument.body.innerHTML;
             }
@@ -6472,7 +6472,6 @@
             Object.defineProperty(exports, '__esModule', {value: true});
 
         })));
-//# sourceMappingURL=bootstrap.js.map
 
 
         /***/
@@ -8503,8 +8502,8 @@
                                                         (diff = nodeIndex = 0) || start.pop())) {
 
                                                         if ((ofType ?
-                                                            node.nodeName.toLowerCase() === name :
-                                                            node.nodeType === 1) &&
+                                                                node.nodeName.toLowerCase() === name :
+                                                                node.nodeType === 1) &&
                                                             ++diff) {
 
                                                             // Cache the index of each encountered element
@@ -9139,10 +9138,10 @@
                                     return setMatcher(
                                         i > 1 && elementMatcher(matchers),
                                         i > 1 && toSelector(
-                                        // If the preceding token was a descendant combinator, insert an implicit any-element `*`
-                                        tokens
-                                            .slice(0, i - 1)
-                                            .concat({value: tokens[i - 2].type === " " ? "*" : ""})
+                                            // If the preceding token was a descendant combinator, insert an implicit any-element `*`
+                                            tokens
+                                                .slice(0, i - 1)
+                                                .concat({value: tokens[i - 2].type === " " ? "*" : ""})
                                         ).replace(rtrim, "$1"),
                                         matcher,
                                         i < j && matcherFromTokens(tokens.slice(i, j)),
@@ -9515,7 +9514,8 @@
 
                 return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 
-            };
+            }
+
             var rsingleTag = (/^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i);
 
 
@@ -13278,19 +13278,19 @@
                 // In those cases, the computed value can be trusted to be border-box.
                 if ((!support.boxSizingReliable() && isBorderBox ||
 
-                    // Support: IE 10 - 11+, Edge 15 - 18+
-                    // IE/Edge misreport `getComputedStyle` of table rows with width/height
-                    // set in CSS while `offset*` properties report correct values.
-                    // Interestingly, in some cases IE 9 doesn't suffer from this issue.
-                    !support.reliableTrDimensions() && nodeName(elem, "tr") ||
+                        // Support: IE 10 - 11+, Edge 15 - 18+
+                        // IE/Edge misreport `getComputedStyle` of table rows with width/height
+                        // set in CSS while `offset*` properties report correct values.
+                        // Interestingly, in some cases IE 9 doesn't suffer from this issue.
+                        !support.reliableTrDimensions() && nodeName(elem, "tr") ||
 
-                    // Fall back to offsetWidth/offsetHeight when value is "auto"
-                    // This happens for inline elements with no explicit setting (gh-3571)
-                    val === "auto" ||
+                        // Fall back to offsetWidth/offsetHeight when value is "auto"
+                        // This happens for inline elements with no explicit setting (gh-3571)
+                        val === "auto" ||
 
-                    // Support: Android <=4.1 - 4.3 only
-                    // Also use offsetWidth/offsetHeight for misreported inline dimensions (gh-3602)
-                    !parseFloat(val) && jQuery.css(elem, "display", false, styles) === "inline") &&
+                        // Support: Android <=4.1 - 4.3 only
+                        // Also use offsetWidth/offsetHeight for misreported inline dimensions (gh-3602)
+                        !parseFloat(val) && jQuery.css(elem, "display", false, styles) === "inline") &&
 
                     // Make sure the element is visible & connected
                     elem.getClientRects().length) {
@@ -15202,7 +15202,7 @@
                     if (!onlyHandlers && !event.isDefaultPrevented()) {
 
                         if ((!special._default ||
-                            special._default.apply(eventPath.pop(), data) === false) &&
+                                special._default.apply(eventPath.pop(), data) === false) &&
                             acceptData(elem)) {
 
                             // Call a native DOM method on the target with the same name as the event.
@@ -17186,8 +17186,8 @@
             });
 
             jQuery.each(("blur focus focusin focusout resize scroll click dblclick " +
-                "mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-                "change select submit keydown keypress keyup contextmenu").split(" "),
+                    "mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
+                    "change select submit keydown keypress keyup contextmenu").split(" "),
                 function (_i, name) {
 
                     // Handle event binding
@@ -53225,7 +53225,7 @@
                                             return;
                                         }
                                         _this.emitJSON(event, Object(utf8["decode"])(bytes));
-                                        return;
+
                                     });
                                     return;
                                 }
@@ -54840,7 +54840,7 @@
                                 throw new UnsupportedTransport(type);
                             }
                             var enabled = (!config.enabledTransports ||
-                                arrayIndexOf(config.enabledTransports, name) !== -1) &&
+                                    arrayIndexOf(config.enabledTransports, name) !== -1) &&
                                 (!config.disabledTransports ||
                                     arrayIndexOf(config.disabledTransports, name) === -1);
                             var transport;

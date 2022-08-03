@@ -66,7 +66,6 @@ mix.babel([
         'public/frontend/css/magnific-popup.min.css',
         'public/frontend/css/font-awesome.css',
         'public/frontend/css/jquery.fancybox.min.css',
-        'public/frontend/css/themify-icons.css',
         'public/frontend/css/niceselect.css',
         'public/frontend/css/animate.css',
         'public/frontend/css/flex-slider.min.css',
