@@ -1,4 +1,4 @@
-@extends('shipping::layouts.master')
+@extends('admin::layouts.master')
 
 @section('content')
 
@@ -29,9 +29,7 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
-                    @error('status')
 
-                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <button type="reset" class="btn btn-warning">Reset</button>

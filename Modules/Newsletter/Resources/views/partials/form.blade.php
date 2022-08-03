@@ -22,9 +22,7 @@
                         <option @checked($newsletter->is_validated === true) value="1">Active</option>
                         <option @checked($newsletter->is_validated === false)  value="2">Inactive</option>
                     </select>
-                    @error('status')
 
-                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <button type="reset" class="btn btn-warning">Reset</button>

@@ -1,4 +1,4 @@
-@extends('coupon::layouts.master')
+@extends('admin::layouts.master')
 
 @section('content')
     <!-- DataTales Example -->
@@ -142,8 +142,8 @@
                 }
             });
             $('.dltBtn').click(function (e) {
-                var form = $(this).closest('form');
-                var dataID = $(this).data('id');
+                const form = $(this).closest('form');
+                const dataID = $(this).data('id');
                 // alert(dataID);
                 e.preventDefault();
                 swal({

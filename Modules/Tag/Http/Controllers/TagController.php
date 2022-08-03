@@ -55,7 +55,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        return view('tag::create', ['tags' => new Tag()]);
+        return view('tag::create', ['tag' => new Tag()]);
     }
     
     /**

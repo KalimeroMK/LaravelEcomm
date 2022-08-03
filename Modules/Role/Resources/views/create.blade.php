@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('admin::layouts.master')
 @section('content')
     <div class="container-fluid">
         <div class="content" style="margin-top: 7%">
@@ -9,7 +9,7 @@
                                 href="{{route('posts.index')}}">{{trans('messages.posts')}}</a></p>
                 </div>
                 <div class="card-body">
-                    @include('admin.roles.partials.form')
+                    @include('admin::roles.partials.form')
                 </div>
             </div>
         </div>

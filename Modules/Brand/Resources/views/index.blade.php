@@ -1,4 +1,4 @@
-@extends('brand::layouts.master')
+@extends('admin::layouts.master')
 @section('title','E-SHOP || Brand Page')
 @section('content')
     <!-- DataTales Example -->

@@ -1,4 +1,4 @@
-@extends('post::layouts.master')
+@extends('admin::layouts.master')
 @section('title','E-SHOP || Comment Page')
 @section('content')
     <!-- DataTales Example -->

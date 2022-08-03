@@ -7,7 +7,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Modules\Order\Http\Requests\Store;
@@ -41,6 +40,16 @@ class OrderController extends Controller
         } else {
             return view('order::index', ['orders' => $this->order_service->index()]);
         }
+    }
+    
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Application|Factory|View
+     */
+    public function create(): Application|Factory|View
+    {
+        return view('order::create', ['order' => new Order()]);
     }
     
     /**
@@ -109,15 +118,15 @@ class OrderController extends Controller
     }
     
     /**
-     * @param  Request  $request
+     * @param $id
      *
      * @return Response
      */
-    public function pdf(Request $request): Response
+    public function pdf($id): Response
     {
-        $order     = Order::getAllOrder($request->id);
+        $order     = Order::getAllOrder($id);
         $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
-        $pdf       = PDF::loadview('backend.order.pdf', compact('order'));
+        $pdf       = PDF::loadview('order::pdf', compact('order'));
         
         return $pdf->download($file_name);
     }

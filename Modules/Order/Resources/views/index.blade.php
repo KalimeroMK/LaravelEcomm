@@ -1,4 +1,4 @@
-@extends('order::layouts.master')
+@extends('admin::layouts.master')
 
 @section('content')
     <!-- DataTales Example -->

@@ -1,34 +1,13 @@
-@extends('tag::layouts.master')
+@extends('admin::layouts.master')
+
+@section('title','E-SHOP || Tag Create')
 
 @section('content')
 
     <div class="card">
-        <h5 class="card-header">Add Post Category</h5>
+        <h5 class="card-header">Add Tag</h5>
         <div class="card-body">
-            <form method="post" action="{{route('tags.store')}}">
-                @csrf
-                <div class="form-group">
-                    <label for="inputTitle" class="col-form-label">Title</label>
-                    <input id="inputTitle" type="text" name="title" placeholder="Enter title" value="{{old('title')}}"
-                           class="form-control">
-
-                </div>
-
-                <div class="form-group">
-                    <label for="status" class="col-form-label">Status</label>
-                    <select name="status" class="form-control">
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                    @error('status')
-
-                    @enderror
-                </div>
-                <div class="form-group mb-3">
-                    <button type="reset" class="btn btn-warning">Reset</button>
-                    <button class="btn btn-success" type="submit">Submit</button>
-                </div>
-            </form>
+            @include('tag::partials.form')
         </div>
     </div>
 

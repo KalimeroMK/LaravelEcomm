@@ -56,7 +56,7 @@ class CouponController extends Controller
      */
     public function create(): View|Factory|Application
     {
-        return view('coupon::create', ['coupons' => new Coupon()]);
+        return view('coupon::create', ['coupon' => new Coupon()]);
     }
     
     /**
@@ -68,7 +68,7 @@ class CouponController extends Controller
      */
     public function edit(Coupon $coupon): View|Factory|Application
     {
-        return $this->coupon_service->edit($coupon->id);
+        return view('coupon::edit', ['coupon' => $this->coupon_service->edit($coupon->id)]);
     }
     
     /**

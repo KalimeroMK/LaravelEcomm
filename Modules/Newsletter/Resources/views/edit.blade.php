@@ -1,4 +1,4 @@
-@extends('banner::layouts.master')
+@extends('admin::layouts.master')
 
 @section('title','E-SHOP || Banner Create')
 

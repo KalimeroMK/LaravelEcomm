@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('admin::layouts.master')
 
 @section('title','Admin Profile')
 
@@ -16,10 +16,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-
-                        {!! Form::open(['route' => 'users.store','method'=>'POST']) !!}
-                        @include('backend.users.partials.form')
-                        {!! Form::close() !!}
+                        @include('user::partials.form')
                     </div>
                 </div>
             </div>

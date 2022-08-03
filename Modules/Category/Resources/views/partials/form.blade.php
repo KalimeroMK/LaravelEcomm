@@ -44,9 +44,7 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
-                    @error('status')
 
-                    @enderror
                 </div>
                 <div class="form-actions">
                     <div class="row">

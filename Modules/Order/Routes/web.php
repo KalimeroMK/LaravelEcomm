@@ -16,4 +16,5 @@ use Modules\Order\Http\Controllers\OrderController;
 
 Route::prefix('admin')->middleware("auth")->group(function () {
     Route::resource('/orders', OrderController::class);
+    Route::get('order/pdf/{id}', [OrderController::class, 'pdf'])->name('order.pdf');
 });

@@ -36,7 +36,7 @@ class CouponService
      *
      * @return mixed|string
      */
-    public function edit($id)
+    public function edit($id): mixed
     {
         try {
             return $this->coupon_repository->findById($id);

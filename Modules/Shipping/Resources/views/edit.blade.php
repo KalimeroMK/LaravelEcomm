@@ -1,4 +1,4 @@
-@extends('shipping::layouts.master')
+@extends('admin::layouts.master')
 
 @section('content')
 
@@ -27,9 +27,7 @@
                         <option value="inactive" {{(($shipping->status=='inactive') ? 'selected' : '')}}>Inactive
                         </option>
                     </select>
-                    @error('status')
 
-                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <button class="btn btn-success" type="submit">Update</button>

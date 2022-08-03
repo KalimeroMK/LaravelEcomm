@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('admin::layouts.master')
 @section('content')
     <div class="card">
         <h5 class="card-header">Message</h5>
