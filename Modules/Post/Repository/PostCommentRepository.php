@@ -16,7 +16,7 @@ class PostCommentRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::with('user_info', 'user', 'post')->paginate(10);
+        return $this->model::with('user_info', 'user', 'post')->get();
     }
     
     /**

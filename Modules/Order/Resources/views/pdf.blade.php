@@ -124,7 +124,7 @@
         <div class="table-header">
             <h5>Order Details</h5>
         </div>
-        <table class="table table-bordered table-stripe">
+        <table class="table table-bordered table-stripe" id="data-table">
             <thead>
             <tr>
                 <th scope="col" class="col-6">Product</th>

@@ -35,19 +35,23 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="{{asset('backend/vendor/jquery/jquery.min.js')}}"></script>
-<script src="{{asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<!-- Core plugin JavaScript-->
-<script src="{{asset('backend/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+<script src="{{asset('js/all.min.js')}}"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="{{asset('backend/js/sb-admin-2.min.js')}}"></script>
 <!-- Page level plugins -->
-<script src="{{asset('backend/vendor/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
-<!-- Page level plugins -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-<script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
+@push('scripts')
+    <script>
+        $('#data-table').DataTable({
+            "ordering": true,
+            "paging": true,
+            "pageLength": 25,
+            "lengthMenu": [
+                [25, 50, 75, 100, -1],
+                [25, 50, 75, 100, 'All'],
+            ],
+
+        });
+    </script>
+@endpush
 <script>
     $(document).ready(function () {
         $.ajaxSetup({

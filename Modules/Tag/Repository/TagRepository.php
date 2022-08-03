@@ -14,7 +14,7 @@ class TagRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::orderBy('id', 'DESC')->paginate(10);
+        return $this->model::orderBy('id', 'DESC')->get();
     }
     
 }

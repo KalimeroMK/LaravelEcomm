@@ -6,7 +6,6 @@
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
-
             </div>
         </div>
         <div class="card-header py-3">
@@ -17,7 +16,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(count($banners)>0)
-                    <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th>S.N.</th>
@@ -78,7 +77,6 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <span style="float:right">{{$banners->links('vendor.pagination.bootstrap-4')}}</span>
                 @else
                     <h6 class="text-center">No banners found!!! Please create banner</h6>
                 @endif
@@ -87,35 +85,5 @@
     </div>
 @endsection
 
-@push('styles')
-    <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"/>
-    <style>
-        .zoom {
-            transition: transform .2s; /* Animation */
-        }
 
-        .zoom:hover {
-            transform: scale(3.2);
-        }
-    </style>
-@endpush
 
-@push('scripts')
-    <script>
-        $('#banner-dataTable').DataTable({
-            "columnDefs": [
-                {
-                    "orderable": false,
-                    "targets": [3, 4, 5]
-                }
-            ]
-        });
-
-        // Sweet alert
-
-        function deleteData(id) {
-
-        }
-    </script>
-@endpush

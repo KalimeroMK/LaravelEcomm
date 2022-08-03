@@ -15,7 +15,7 @@ class OrderRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::with('shipping', 'user', 'carts')->paginate(10);
+        return $this->model::with('shipping', 'user', 'carts')->get();
     }
     
     /**

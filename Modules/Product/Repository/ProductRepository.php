@@ -14,7 +14,7 @@ class ProductRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes')->paginate(10);
+        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes')->get();
     }
     
     /**

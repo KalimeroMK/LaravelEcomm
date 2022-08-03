@@ -9,4 +9,12 @@ class CartRepository extends Repository
 {
     public $model = Cart::class;
     
+    /**
+     * @return mixed
+     */
+    public function findAll(): mixed
+    {
+        return $this->model::get();
+    }
+    
 }

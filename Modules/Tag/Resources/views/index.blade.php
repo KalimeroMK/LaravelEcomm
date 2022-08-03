@@ -17,7 +17,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(isset($tags))
-                    <table class="table table-bordered" id="post-category-dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th>S.N.</th>
@@ -67,7 +67,6 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <span style="float:right">{{$tags->links('vendor.pagination.bootstrap-4')}}</span>
                 @else
                     <h6 class="text-center">No Post Tag found!!! Please create post tag</h6>
                 @endif
@@ -75,38 +74,3 @@
         </div>
     </div>
 @endsection
-
-@push('styles')
-    <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"/>
-    <style>
-        div.dataTables_wrapper div.dataTables_paginate {
-            display: none;
-        }
-    </style>
-@endpush
-
-@push('scripts')
-
-    <!-- Page level plugins -->
-
-
-    <!-- Page level custom scripts -->
-    <script>
-
-        $('#post-category-dataTable').DataTable({
-            "columnDefs": [
-                {
-                    "orderable": false,
-                    "targets": [3, 4]
-                }
-            ]
-        });
-
-        // Sweet alert
-
-        function deleteData(id) {
-
-        }
-    </script>
-@endpush

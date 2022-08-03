@@ -2,8 +2,8 @@
 
 namespace Modules\Message\Repository;
 
-use Modules\Admin\Models\Message;
 use Modules\Core\Repositories\Repository;
+use Modules\Message\Models\Message;
 
 class MessageRepository extends Repository
 {
@@ -14,6 +14,6 @@ class MessageRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::paginate(10);
+        return $this->model::get();
     }
 }

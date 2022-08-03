@@ -17,7 +17,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(isset($settings))
-                    <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th>S.N.</th>
@@ -74,31 +74,10 @@
                                                 class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
-                                {{-- Delete Modal --}}
-                                {{-- <div class="modal fade" id="delModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="#delModal{{$user->id}}Label" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="#delModal{{$user->id}}Label">Delete user</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
-                                        </div>
-                                        <div class="modal-body">
-                                          <form method="post" action="{{ route('banners.destroy',$user->id) }}">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger" style="margin:auto; text-align:center">Parmanent delete user</button>
-                                          </form>
-                                        </div>
-                                      </div>
-                                    </div>
-                                </div> --}}
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-                    <span style="float:right">{{$banners->links('vendor.pagination.bootstrap-4')}}</span>
                 @else
                     <h6 class="text-center">No banners found!!! Please create banner</h6>
                 @endif
@@ -106,46 +85,3 @@
         </div>
     </div>
 @endsection
-
-@push('styles')
-    <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"/>
-    <style>
-        div.dataTables_wrapper div.dataTables_paginate {
-            display: none;
-        }
-
-        .zoom {
-            transition: transform .2s; /* Animation */
-        }
-
-        .zoom:hover {
-            transform: scale(3.2);
-        }
-    </style>
-@endpush
-
-@push('scripts')
-
-    <!-- Page level plugins -->
-
-
-    <!-- Page level custom scripts -->
-    <script>
-
-        $('#banner-dataTable').DataTable({
-            "columnDefs": [
-                {
-                    "orderable": false,
-                    "targets": [3, 4, 5]
-                }
-            ]
-        });
-
-        // Sweet alert
-
-        function deleteData(id) {
-
-        }
-    </script>
-@endpush

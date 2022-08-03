@@ -14,6 +14,6 @@ class CouponRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::paginate(10);
+        return $this->model::get();
     }
 }

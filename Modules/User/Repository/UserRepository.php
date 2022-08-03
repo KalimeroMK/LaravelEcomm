@@ -14,7 +14,7 @@ class UserRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::with('roles')->orderBy('id', 'DESC')->paginate(5);
+        return $this->model::with('roles')->orderBy('id', 'DESC')->get();
     }
     
 }
