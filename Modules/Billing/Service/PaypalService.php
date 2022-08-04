@@ -48,10 +48,8 @@ class PaypalService
         
         $data['total'] = session()->get('total');
         
-        Cart::whereUserId(Auth()->user()->id)->where(
-            'order_id',
-            null
-        )->update(['order_id' => session()->get('id')]);
+        Cart::whereUserId(Auth()->id())->whereOrderId(null)
+            ->update(['order_id' => session()->get('id')]);
         // Init PayPal
         $provider = PayPal::setProvider();
         $provider->setApiCredentials(config('paypal'));

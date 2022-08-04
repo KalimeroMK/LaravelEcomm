@@ -1,3 +1,4 @@
+@php use Modules\Core\Helpers\Helper; @endphp
 @extends('front::layouts.master')
 
 @section('title','E-SHOP || Blog Page')
@@ -78,8 +79,8 @@
 
                                 <form action="{{route('blog.filter')}}" method="POST">
                                     @csrf
-                                    {{count(\App\Helpers\Helper::postCategoryList())}}
-                                    @foreach(\App\Helpers\Helper::postCategoryList() as $cat)
+                                    {{count(Helper::postCategoryList())}}
+                                    @foreach(Helper::postCategoryList() as $cat)
                                         <li>
                                             <a href="{{route('blog.category',$cat->slug)}}">{{$cat->title}} </a>
                                         </li>

@@ -2,9 +2,7 @@
 
 namespace Modules\Notification\Service;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use Exception;
 use Modules\Notification\Repository\NotificationRepository;
 
 class NotificationService
@@ -17,20 +15,42 @@ class NotificationService
     }
     
     /**
+     * Remove the specified resource from storage.
+     *
      * @param $id
      *
-     * @return void
+     * @return string|void
      */
-    public function delete($id): void
+    public function destroy($id)
     {
-        $this->notification_repository->delete($id);
+        try {
+            $this->notification_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
-     * @return Application|Factory|View
+     * @return mixed|string
      */
-    public function index(): View|Factory|Application
+    public function getAll(): mixed
     {
-        return $this->notification_repository->findAll();
+        try {
+            return $this->notification_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @return mixed|string
+     */
+    public function getById($id): mixed
+    {
+        try {
+            return $this->notification_repository->getById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

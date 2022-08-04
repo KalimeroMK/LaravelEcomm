@@ -2,8 +2,8 @@
 
 namespace Modules\Brand\Http\Requests\Api;
 
-use App\Helpers\ApiRequest;
 use JetBrains\PhpStorm\ArrayShape;
+use Modules\Core\Helpers\ApiRequest;
 
 class StoreRequest extends ApiRequest
 {

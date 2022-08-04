@@ -59,7 +59,7 @@
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
-                                                data-id={{$category['id']}} data-placement="bottom" title="Delete">
+                                                data-id="{{$category['id']}}" data-placement="bottom" title="Delete">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>

@@ -215,6 +215,11 @@
             <i class="fas fa-cog"></i>
             <span>Settings</span></a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('all.notification')}}">
+            <i class="fas fa-info"></i>
+            <span>Notification</span></a>
+    </li>
     {{-- Config --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#configCollapse"

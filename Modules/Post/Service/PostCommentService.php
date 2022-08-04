@@ -2,9 +2,9 @@
 
 namespace Modules\Post\Service;
 
-use App\Notifications\StatusNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Notification;
+use Modules\Core\Notifications\StatusNotification;
 use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
 use Modules\Post\Repository\PostCommentRepository;

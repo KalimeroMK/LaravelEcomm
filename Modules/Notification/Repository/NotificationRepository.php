@@ -16,4 +16,14 @@ class NotificationRepository extends Repository
     {
         return $this->model::get();
     }
+    
+    /**
+     * @param  string  $id
+     *
+     * @return mixed
+     */
+    public function getById(string $id): mixed
+    {
+        return $this->model::find($id);
+    }
 }

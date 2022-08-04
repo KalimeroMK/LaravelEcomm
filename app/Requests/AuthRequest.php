@@ -1,24 +1,24 @@
 <?php
 
-    namespace App\Requests;
+namespace App\Requests;
 
-    use App\Helpers\ApiRequest;
-    use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\ArrayShape;
+use Modules\Core\Helpers\ApiRequest;
 
-    class AuthRequest extends ApiRequest
+class AuthRequest extends ApiRequest
+{
+    #[ArrayShape([
+        'name'             => "string",
+        'email'            => "string",
+        'password'         => "string",
+        'confirm_password' => "string",
+    ])] public function rules(): array
     {
-        #[ArrayShape([
-            'name'             => "string",
-            'email'            => "string",
-            'password'         => "string",
-            'confirm_password' => "string",
-        ])] public function rules(): array
-        {
-            return [
-                'name'             => 'required',
-                'email'            => 'required|email|unique:users',
-                'password'         => 'required',
-                'confirm_password' => 'required|same:password',
-            ];
-        }
+        return [
+            'name'             => 'required',
+            'email'            => 'required|email|unique:users',
+            'password'         => 'required',
+            'confirm_password' => 'required|same:password',
+        ];
     }
+}

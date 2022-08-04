@@ -1,80 +1,78 @@
 @extends('admin::layouts.master')
-@section('title','E-SHOP || All Notifications')
+@section('title','E-SHOP || All notifications')
 @section('content')
-    <div class="card">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
             </div>
         </div>
-        <h5 class="card-header">Notifications</h5>
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary float-left">Newsletter List</h6>
+        </div>
         <div class="card-body">
-            @if(count(Auth::user()->Notifications)>0)
-                <table class="table  table-hover admin-table" id="notification-dataTable">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach ( Auth::user()->Notifications as $notification)
-
-                        <tr class="@if($notification->unread()) bg-light border-left-light @else border-left-success @endif">
-                            <td scope="row">{{$loop->index +1}}</td>
-                            <td>{{$notification->created_at->format('F d, Y h:i A')}}</td>
-                            <td>{{$notification->data['title']}}</td>
-                            <td>
-                                <a href="{{route('admin.notification', $notification->id) }}"
-                                   class="btn btn-primary btn-sm float-left mr-1"
-                                   style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view"
-                                   data-placement="bottom"><i class="fas fa-eye"></i></a>
-                                <form method="POST" action="{{ route('notification.delete', $notification->id) }}">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-danger btn-sm dltBtn"
-                                            data-id={{$notification->id}} style="height:30px;
-                                            width:30px;border-radius:50%
-                                    " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                            class="fas fa-trash-alt"></i></button>
-                                </form>
-                            </td>
+            <div class="table-responsive">
+                @if(isset($notifications))
+                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>S.N.</th>
+                            <th>Time</th>
+                            <th>Title</th>
+                            <th>Url</th>
+                            <th>Type</th>
+                            <th>Action</th>
                         </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>S.N.</th>
+                            <th>Time</th>
+                            <th>Title</th>
+                            <th>Url</th>
+                            <th>Type</th>
+                            <th>Action</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        @foreach ( $notifications as $notification)
 
-                    @endforeach
-                    </tbody>
-                </table>
-            @else
-                <h2>Notifications Empty!</h2>
-            @endif
+                            <tr>
+                                <td>{{$loop->index +1}}</td>
+                                <td>{{$notification->created_at->format('F d, Y h:i A')}}</td>
+                                @php
+                                    $items = json_decode($notification->data);
+                                @endphp
+                                @foreach($items as $key => $value)
+                                    <td>{{ $value  }}</td>
+                                @endforeach
+                                <td>
+                                    <a href="{{route('admin.notification', $notification->id) }}"
+                                       class="btn btn-primary btn-sm float-left mr-1"
+                                       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
+                                       title="view"
+                                       data-placement="bottom"><i class="fas fa-eye"></i></a>
+                                    <form method="POST" action="{{ route('notification.delete', $notification->id) }}">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-danger btn-sm dltBtn"
+                                                data-id="{{$notification->id}}" style="height:30px;
+                                                width:30px;border-radius:50%
+                                        " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
+                                                    class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <h6 class="text-center">No brands found!!! Please create brand</h6>
+                @endif
+            </div>
         </div>
     </div>
 @endsection
-@push('styles')
-    <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"/>
 
-@endpush
-@push('scripts')
 
-    <!-- Page level custom scripts -->
-    <script>
-
-        $('#notification-dataTable').DataTable({
-            "columnDefs": [
-                {
-                    "orderable": false,
-                    "targets": [3]
-                }
-            ]
-        });
-
-        // Sweet alert
-
-        function deleteData(id) {
-
-        }
-    </script>
-@endpush

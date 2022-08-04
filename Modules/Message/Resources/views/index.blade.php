@@ -37,9 +37,9 @@
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-danger btn-sm dltBtn"
-                                            data-id={{$message->id}} style="height:30px; width:30px;border-radius:50%
+                                            data-id="{{$message->id}}" style="height:30px; width:30px;border-radius:50%
                                     " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                            class="fas fa-trash-alt"></i></button>
+                                                class="fas fa-trash-alt"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -47,50 +47,9 @@
                     @endforeach
                     </tbody>
                 </table>
-                <nav class="blog-pagination justify-content-center d-flex">
-                    {{$messages->links('vendor.pagination.bootstrap-4')}}
-                </nav>
             @else
                 <h2>Messages Empty!</h2>
             @endif
         </div>
     </div>
 @endsection
-@push('styles')
-    <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"/>
-    <style>
-        div.dataTables_wrapper div.dataTables_paginate {
-            display: none;
-        }
-
-        .zoom {
-            transition: transform .2s; /* Animation */
-        }
-
-        .zoom:hover {
-            transform: scale(3.2);
-        }
-    </style>
-@endpush
-@push('scripts')
-
-    <!-- Page level custom scripts -->
-    <script>
-
-        $('#message-dataTable').DataTable({
-            "columnDefs": [
-                {
-                    "orderable": false,
-                    "targets": [4]
-                }
-            ]
-        });
-
-        // Sweet alert
-
-        function deleteData(id) {
-
-        }
-    </script>
-@endpush

@@ -1,3 +1,4 @@
+@php use Modules\Core\Helpers\Helper; @endphp
 @extends('front::layouts.master')
 @section('title','Wishlist Page')
 @section('content')
@@ -35,8 +36,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if(\App\Helpers\Helper::getAllProductFromWishlist())
-                            @foreach(\App\Helpers\Helper::getAllProductFromWishlist() as $key=>$wishlist)
+                        @if(Helper::getAllProductFromWishlist())
+                            @foreach(Helper::getAllProductFromWishlist() as $key=>$wishlist)
                                 <tr>
                                     @php
                                         $photo=explode(',',$wishlist->product['photo']);

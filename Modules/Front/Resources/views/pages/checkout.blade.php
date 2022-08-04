@@ -1,3 +1,4 @@
+@php use Modules\Core\Helpers\Helper; @endphp
 @extends('front::layouts.master')
 
 @section('title','Checkout page')
@@ -363,15 +364,15 @@
                                 <div class="content">
                                     <ul>
                                         <li class="order_subtotal"
-                                            data-price="{{\App\Helpers\Helper::totalCartPrice()}}">Cart
-                                            Subtotal<span>${{number_format(\App\Helpers\Helper::totalCartPrice(),2)}}</span>
+                                            data-price="{{Helper::totalCartPrice()}}">Cart
+                                            Subtotal<span>${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </li>
                                         <li class="shipping">
                                             Shipping Cost
-                                            @if(count(\App\Helpers\Helper::shipping())>0 && \App\Helpers\Helper::cartCount()>0)
+                                            @if(count(Helper::shipping())>0 && Helper::cartCount()>0)
                                                 <select name="shipping" class="nice-select">
                                                     <option value="">Select your address</option>
-                                                    @foreach(\App\Helpers\Helper::shipping() as $shipping)
+                                                    @foreach(Helper::shipping() as $shipping)
                                                         <option value="{{$shipping->id}}" class="shippingOption"
                                                                 data-price="{{$shipping->price}}">{{$shipping->type}}
                                                             : ${{$shipping->price}}</option>
@@ -387,7 +388,7 @@
                                                 Save<span>${{number_format(session('coupon')['value'],2)}}</span></li>
                                         @endif
                                         @php
-                                            $total_amount=\App\Helpers\Helper::totalCartPrice();
+                                            $total_amount=Helper::totalCartPrice();
                                             if(session('coupon')){
                                                 $total_amount=$total_amount-session('coupon')['value'];
                                             }

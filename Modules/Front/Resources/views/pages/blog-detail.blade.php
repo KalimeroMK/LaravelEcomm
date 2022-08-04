@@ -1,3 +1,4 @@
+@php use Modules\Core\Helpers\Helper; @endphp
 @extends('front::layouts.master')
 
 @section('title','E-TECH || Blog Detail page')
@@ -198,7 +199,7 @@
                         <div class="single-widget side-tags">
                             <h3 class="title">Tags</h3>
                             <ul class="tag">
-                                @foreach(\App\Helpers\Helper::postTagList() as $tag)
+                                @foreach(Helper::postTagList() as $tag)
                                     <li><a href="">{{$tag->title}}</a></li>
                                 @endforeach
                             </ul>

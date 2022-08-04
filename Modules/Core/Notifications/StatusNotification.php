@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace Modules\Core\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -30,7 +30,7 @@ class StatusNotification extends Notification
      *
      * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable)
     {
         return ['database', 'broadcast'];
     }
@@ -48,7 +48,7 @@ class StatusNotification extends Notification
     //                 ->subject('Status Notification')
     //                 ->from(env('MAIL_USERNAME','test@gmail.com'),'E-shop')
     //                 ->line($this->details['title'])
-    //                 ->action('View Orders', $this->details['actionURL'])
+    //                 ->action('View Order', $this->details['actionURL'])
     //                 ->line('Thank you!');
     // }
     
@@ -67,7 +67,7 @@ class StatusNotification extends Notification
     //         'fas'=>$this->details['fas']
     //     ];
     // }
-    public function toArray($notifiable): array
+    public function toArray(mixed $notifiable)
     {
         return [
             'title'     => $this->details['title'],
@@ -83,7 +83,7 @@ class StatusNotification extends Notification
      *
      * @return BroadcastMessage
      */
-    public function toBroadcast($notifiable): BroadcastMessage
+    public function toBroadcast(mixed $notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
             'title'     => $this->details['title'],
@@ -93,4 +93,5 @@ class StatusNotification extends Notification
             'time'      => date('F d, Y h:i A'),
         ]);
     }
+    
 }

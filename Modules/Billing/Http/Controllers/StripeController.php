@@ -2,7 +2,6 @@
 
 namespace Modules\Billing\Http\Controllers;
 
-use App\Helpers\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -11,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
 use Modules\Billing\Service\StripeService;
+use Modules\Core\Helpers\Payment;
 use Stripe\Exception\ApiErrorException;
 
 class StripeController extends Controller

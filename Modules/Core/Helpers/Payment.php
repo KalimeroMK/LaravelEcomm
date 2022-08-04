@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Helpers;
+namespace Modules\Core\Helpers;
 
-use App\Notifications\StatusNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
+use Modules\Core\Notifications\StatusNotification;
 use Modules\Order\Models\Order;
 use Modules\Shipping\Models\Shipping;
 use Modules\User\Models\User;

@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Notification\Http\Controllers\NotificationController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
-    Route::resource('/notifications', NotificationController::class);
     Route::get('/notification/{id}', [NotificationController::class, 'show'])->name('admin.notification');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('all.notification');
-    Route::delete('/notification/{id}', [NotificationController::class, 'delete'])->name('notification.delete');
+    Route::delete('/notification/{id}', [NotificationController::class, 'destroy'])->name('notification.delete');
 });

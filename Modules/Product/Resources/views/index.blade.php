@@ -114,10 +114,10 @@
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
-                                                data-id={{$product->id}} style="height:30px;
+                                                data-id="{{$product->id}}" style="height:30px;
                                                 width:30px;border-radius:50%
                                         " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                class="fas fa-trash-alt"></i></button>
+                                                    class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

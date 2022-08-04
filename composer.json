@@ -48,7 +48,8 @@
     "spatie/laravel-sitemap": "^6.2",
     "spatie/schema-org": "^3.9",
     "srmklive/paypal": "^3.0",
-    "stripe/stripe-php": "^7.114"
+    "stripe/stripe-php": "^7.114",
+    "ext-mysql_xdevapi": "*"
   },
   "require-dev": {
     "fakerphp/faker": "^1.9.1",
@@ -81,7 +82,7 @@
       "Tests\\": "tests/"
     },
     "files": [
-      "app/Helpers/Helper.php"
+      "Modules/Core/Helpers/Helper.php"
     ]
   },
   "minimum-stability": "dev",

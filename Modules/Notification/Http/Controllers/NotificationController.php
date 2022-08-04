@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Modules\Notification\Service\NotificationService;
 
-class NotificationController extends Controller
+class  NotificationController extends Controller
 {
     private NotificationService $notification_service;
     
@@ -25,7 +25,7 @@ class NotificationController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        return view('notification::index')->with($this->notification_service->index());
+        return view('notification::index', ['notifications' => $this->notification_service->getAll()]);
     }
     
     /**
@@ -35,14 +35,10 @@ class NotificationController extends Controller
      */
     public function show(Request $request): Redirector|RedirectResponse|Application
     {
-        $notification = Auth()->user()->notifications()->where('id', $request->id)->first();
-        if ($notification) {
-            $notification->markAsRead();
-            
-            return redirect($notification->data['actionURL']);
-        }
+        $notification = $this->notification_service->getById($request->id);
+        $data         = json_decode($notification->data);
         
-        return redirect()->back();
+        return redirect($data->actionURL);
     }
     
     /**
@@ -50,9 +46,9 @@ class NotificationController extends Controller
      *
      * @return RedirectResponse
      */
-    public function delete($id): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
-        $this->notification_service->delete($id);
+        $this->notification_service->destroy($id);
         
         return redirect()->back();
     }

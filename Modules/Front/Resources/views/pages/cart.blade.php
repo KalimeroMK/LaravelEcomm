@@ -1,3 +1,4 @@
+@php use Modules\Core\Helpers\Helper; @endphp
 @extends('front::layouts.master')
 @section('title','Cart Page')
 @section('content')
@@ -38,8 +39,8 @@
                         <tbody id="cart_item_list">
                         <form action="{{route('cart.update')}}" method="POST">
                             @csrf
-                            @if(\App\Helpers\Helper::getAllProductFromCart())
-                                @foreach(\App\Helpers\Helper::getAllProductFromCart() as $key=>$cart)
+                            @if(Helper::getAllProductFromCart())
+                                @foreach(Helper::getAllProductFromCart() as $key=>$cart)
                                     <tr>
                                         @php
                                             $photo=explode(',',$cart->product['photo']);
@@ -135,9 +136,9 @@
                                 <div class="right">
                                     <ul>
                                         <li class="order_subtotal"
-                                            data-price="{{\App\Helpers\Helper::totalCartPrice()}}">
+                                            data-price="{{Helper::totalCartPrice()}}">
                                             Cart
-                                            Subtotal<span>${{number_format(\App\Helpers\Helper::totalCartPrice(),2)}}</span>
+                                            Subtotal<span>${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </li>
                                         {{-- <div id="shipping" style="display:none;">
                                             <li class="shipping">
@@ -167,7 +168,7 @@
                                             </li>
                                         @endif
                                         @php
-                                            $total_amount=\App\Helpers\Helper::totalCartPrice();
+                                            $total_amount=Helper::totalCartPrice();
                                             if(session()->has('coupon')){
                                                 $total_amount=$total_amount-Session::get('coupon')['value'];
                                             }

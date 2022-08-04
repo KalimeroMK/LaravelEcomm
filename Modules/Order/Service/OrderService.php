@@ -2,12 +2,12 @@
 
 namespace Modules\Order\Service;
 
-use App\Helpers\Helper;
-use App\Notifications\StatusNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
+use Modules\Core\Helpers\Helper;
+use Modules\Core\Notifications\StatusNotification;
 use Modules\Order\Http\Requests\Store;
 use Modules\Order\Models\Order;
 use Modules\Order\Repository\OrderRepository;

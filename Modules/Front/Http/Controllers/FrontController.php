@@ -2,7 +2,6 @@
 
 namespace Modules\Front\Http\Controllers;
 
-use App\Helpers\Payment;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,6 +11,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\NoReturn;
 use Modules\Cart\Models\Cart;
+use Modules\Core\Helpers\Payment;
 use Modules\Front\Mail\NewsLetterMail;
 use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Store;

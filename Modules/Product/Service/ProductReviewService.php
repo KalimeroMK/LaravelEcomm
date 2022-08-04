@@ -2,8 +2,8 @@
 
 namespace Modules\Product\Service;
 
-use App\Notifications\StatusNotification;
 use Illuminate\Support\Facades\Notification;
+use Modules\Core\Notifications\StatusNotification;
 use Modules\Product\Models\Product;
 use Modules\Product\Models\ProductReview;
 use Modules\Product\Repository\ProductReviewRepository;

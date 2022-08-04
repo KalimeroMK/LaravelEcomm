@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace Modules\Core\Helpers;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

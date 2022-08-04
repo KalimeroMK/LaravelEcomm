@@ -1,3 +1,4 @@
+@php use Modules\Core\Helpers\Helper; @endphp
 <header class="header shop">
     <!-- Topbar -->
     <div class="topbar">
@@ -95,16 +96,16 @@
                                 @endforeach
                             @endif
                             <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o"></i> <span
-                                        class="total-count">{{App\Helpers\Helper::wishlistCount()}}</span></a>
+                                        class="total-count">{{Modules\Core\Helpers\Helper::wishlistCount()}}</span></a>
                             <!-- Shopping Item -->
                             @auth
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>{{count(\App\Helpers\Helper::getAllProductFromWishlist())}} Items</span>
+                                        <span>{{count(Helper::getAllProductFromWishlist())}} Items</span>
                                         <a href="{{route('wishlist')}}">View Wishlist</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        @foreach(\App\Helpers\Helper::getAllProductFromWishlist() as $data)
+                                        @foreach(Helper::getAllProductFromWishlist() as $data)
                                             @php
                                                 $photo=explode(',',$data->product['photo']);
                                             @endphp
@@ -124,7 +125,7 @@
                                         <div class="total">
                                             <span>Total</span>
                                             <span
-                                                    class="total-amount">${{number_format(\App\Helpers\Helper::totalWishlistPrice(),2)}}</span>
+                                                    class="total-amount">${{number_format(Helper::totalWishlistPrice(),2)}}</span>
                                         </div>
                                         <a href="{{route('cart')}}" class="btn animate">Cart</a>
                                     </div>
@@ -134,16 +135,16 @@
                         </div>
                         <div class="sinlge-bar shopping">
                             <a href="{{route('cart')}}" class="single-icon"><i class="ti-bag"></i> <span
-                                        class="total-count">{{\App\Helpers\Helper::cartCount()}}</span></a>
+                                        class="total-count">{{Helper::cartCount()}}</span></a>
                             <!-- Shopping Item -->
                             @auth
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>{{count(\App\Helpers\Helper::getAllProductFromCart())}} Items</span>
+                                        <span>{{count(Helper::getAllProductFromCart())}} Items</span>
                                         <a href="{{route('cart')}}">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        @foreach(\App\Helpers\Helper::getAllProductFromCart() as $data)
+                                        @foreach(Helper::getAllProductFromCart() as $data)
                                             @php
                                                 $photo=explode(',',$data->product['photo']);
                                             @endphp
@@ -163,7 +164,7 @@
                                         <div class="total">
                                             <span>Total</span>
                                             <span
-                                                    class="total-amount">${{number_format(\App\Helpers\Helper::totalCartPrice(),2)}}</span>
+                                                    class="total-amount">${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </div>
                                         <a href="{{route('checkout')}}" class="btn animate">Checkout</a>
                                     </div>
