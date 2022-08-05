@@ -45,10 +45,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
-        Route::prefix('api')
-             ->middleware('api')
+        Route::prefix('api/v1')
+             ->middleware('auth:sanctum')
              ->group(module_path('Banner', '/Routes/api.php'));
     }
     

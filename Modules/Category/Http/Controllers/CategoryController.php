@@ -9,8 +9,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
-use Modules\Category\Http\Requests\Store;
-use Modules\Category\Http\Requests\Update;
+use Modules\Category\Http\Requests\Api\Store;
+use Modules\Category\Http\Requests\Api\Update;
 use Modules\Category\Models\Category;
 use Modules\Category\Service\CategoryService;
 
@@ -34,7 +34,7 @@ class CategoryController extends Controller
      */
     public function index(): View|Factory|RedirectResponse|Application
     {
-        $categories = $this->category_service->index();
+        $categories = $this->category_service->getAll();
         
         if (empty($categories)) {
             return redirect()->route('categories.create');
@@ -86,12 +86,13 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Update  $request
+     * @param  Category  $category
      *
      * @return RedirectResponse
      */
-    public function update(Update $request): RedirectResponse
+    public function update(Update $request, Category $category): RedirectResponse
     {
-        return $this->category_service->update($request->all());
+        return $this->category_service->update($category->id, $request->all());
     }
     
     /**

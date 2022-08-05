@@ -48,8 +48,7 @@
     "spatie/laravel-sitemap": "^6.2",
     "spatie/schema-org": "^3.9",
     "srmklive/paypal": "^3.0",
-    "stripe/stripe-php": "^7.114",
-    "ext-mysql_xdevapi": "*"
+    "stripe/stripe-php": "^7.114"
   },
   "require-dev": {
     "fakerphp/faker": "^1.9.1",

@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Modules\Banner\Http\Controllers\Api\BannerController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +11,7 @@ use Modules\Banner\Http\Controllers\Api\BannerController;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('banner', BannerController::class);
-});
+use Illuminate\Support\Facades\Route;
+use Modules\Banner\Http\Controllers\Api\BannerController;
+
+Route::resource('banner', BannerController::class)->except('create', 'edit');

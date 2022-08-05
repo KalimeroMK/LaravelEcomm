@@ -3,9 +3,6 @@
 namespace Modules\Brand\Service;
 
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
-use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
-use Modules\Banner\Models\Banner;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
@@ -24,12 +21,16 @@ class BrandService extends CoreService
     /**
      * @param $data
      *
-     * @return Collection|_IH_Banner_C|mixed|Banner|Banner[]
+     * @return mixed
      */
     public function store($data): mixed
     {
         try {
-            return $this->brand_repository->create($data);
+            return $this->brand_repository->create(
+                collect($data)->except(['photo'])->toArray() + [
+                    'photo' => $this->verifyAndStoreImage($data['photo']),
+                ]
+            );
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -65,15 +66,15 @@ class BrandService extends CoreService
     }
     
     /**
-     * @param $banner
+     * @param $id
      *
      * @return string|void
      */
     
-    public function destroy($banner)
+    public function destroy($id)
     {
         try {
-            $this->brand_repository->delete($banner->id);
+            $this->brand_repository->delete($id);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -82,7 +83,7 @@ class BrandService extends CoreService
     /**
      * @return mixed|string
      */
-    public function getAll()
+    public function getAll(): mixed
     {
         try {
             return $this->brand_repository->findAll();

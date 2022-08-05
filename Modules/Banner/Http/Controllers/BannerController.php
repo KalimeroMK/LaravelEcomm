@@ -100,7 +100,7 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner): RedirectResponse
     {
-        $this->banner_service->destroy($banner);
+        $this->banner_service->destroy($banner->id);
         
         return redirect()->route('banners.index');
     }

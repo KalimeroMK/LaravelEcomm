@@ -34,7 +34,7 @@ class UserService
      *
      * @return void
      */
-    public function store($request): void
+    public function register($request): void
     {
         $input             = $request->all();
         $input['password'] = Hash::make($input['password']);
@@ -115,6 +115,16 @@ class UserService
     public function orderUser($id)
     {
         return Order::with('shipping', 'user')->orderBy('id', 'DESC')->whereUserId($id)->paginate(10);
+    }
+    
+    /**
+     * @param $data
+     *
+     * @return void
+     */
+    public function store($data): void
+    {
+        $this->user_repository->create($data);
     }
     
 }

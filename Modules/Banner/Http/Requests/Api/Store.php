@@ -3,9 +3,9 @@
 namespace Modules\Banner\Http\Requests\Api;
 
 use JetBrains\PhpStorm\ArrayShape;
-use Modules\Core\Helpers\ApiRequest;
+use Modules\Core\Http\Requests\Api\CoreRequest;
 
-class StoreRequest extends ApiRequest
+class Store extends CoreRequest
 {
     #[ArrayShape([
         'title'       => "string",

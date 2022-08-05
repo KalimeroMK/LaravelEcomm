@@ -3,19 +3,16 @@
 namespace Modules\Brand\Http\Requests\Api;
 
 use JetBrains\PhpStorm\ArrayShape;
-use Modules\Core\Helpers\ApiRequest;
+use Modules\Core\Http\Requests\Api\CoreRequest;
 
-class StoreRequest extends ApiRequest
+class Update extends CoreRequest
 {
     #[ArrayShape([
         'title' => "string",
-        'photo' => "string",
     ])] public function rules(): array
     {
         return [
             'title' => 'string|required|unique:brands',
-            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        
         ];
     }
     
