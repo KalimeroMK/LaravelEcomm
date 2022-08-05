@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Coupon\Http\Controllers\Api\CouponController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,5 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/coupon', function (Request $request) {
-    return $request->user();
-});
+Route::resource('coupon', CouponController::class)->except('create', 'edit');
+

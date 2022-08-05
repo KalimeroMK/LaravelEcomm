@@ -1,21 +1,21 @@
 <?php
 
-namespace Modules\Brand\Http\Controllers\Api;
+namespace Modules\Coupon\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\Brand\Service\BrandService;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
+use Modules\Coupon\Service\CouponService;
 
-class BrandController extends Controller
+class CouponController extends Controller
 {
-    private BrandService $brand_service;
+    private CouponService $coupon_service;
     
-    public function __construct(BrandService $brand_service)
+    public function __construct(CouponService $coupon_service)
     {
-        $this->brand_service = $brand_service;
+        $this->coupon_service = $coupon_service;
     }
     
     /**
@@ -23,7 +23,7 @@ class BrandController extends Controller
      */
     public function index(): JsonResponse
     {
-        return $this->sendResponse([$this->brand_service->getAll()], 200);
+        return $this->sendResponse([$this->coupon_service->getAll()], 200);
     }
     
     /**
@@ -33,7 +33,7 @@ class BrandController extends Controller
      */
     public function store(Store $request): JsonResponse
     {
-        return $this->sendResponse([$this->brand_service->store($request)], 200);
+        return $this->sendResponse([$this->coupon_service->store($request->all())], 200);
     }
     
     /**
@@ -43,7 +43,7 @@ class BrandController extends Controller
      */
     public function show($id): JsonResponse
     {
-        return $this->sendResponse([$this->brand_service->edit($id)], 200);
+        return $this->sendResponse([$this->coupon_service->edit($id)], 200);
     }
     
     /**
@@ -54,7 +54,9 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        return $this->sendResponse([$this->brand_service->update($request->all(), $id)], 200);
+        dd($id, $request->all());
+        
+        return $this->sendResponse([$this->coupon_service->update($id, $request->all())], 200);
     }
     
     /**
@@ -64,6 +66,6 @@ class BrandController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        return $this->sendResponse([$this->brand_service->destroy($id)], 200);
+        return $this->sendResponse([$this->coupon_service->destroy($id)], 200);
     }
 }

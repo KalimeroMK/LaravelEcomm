@@ -3,9 +3,6 @@
 namespace Modules\Coupon\Service;
 
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
-use LaravelIdea\Helper\Modules\Coupon\Models\_IH_Coupon_C;
-use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Repository\CouponRepository;
 
 class CouponService
@@ -20,7 +17,7 @@ class CouponService
     /**
      * @param $data
      *
-     * @return Collection|_IH_Coupon_C|mixed|Coupon|Coupon[]
+     * @return mixed
      */
     public function store($data): mixed
     {
@@ -51,7 +48,7 @@ class CouponService
      *
      * @return mixed|string
      */
-    public function update($id, $data)
+    public function update($id, $data): mixed
     {
         try {
             return $this->coupon_repository->update($id, $data);
@@ -77,7 +74,7 @@ class CouponService
     /**
      * @return mixed|string
      */
-    public function index()
+    public function getAll(): mixed
     {
         try {
             return $this->coupon_repository->findAll();
