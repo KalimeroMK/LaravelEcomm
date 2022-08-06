@@ -63,15 +63,15 @@ class NewsletterService extends CoreService
     }
     
     /**
-     * @param $banner
+     * @param $id
      *
      * @return string|void
      */
     
-    public function destroy($banner)
+    public function destroy($id)
     {
         try {
-            $this->newsletter_repository->delete($banner->id);
+            $this->newsletter_repository->delete($id);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

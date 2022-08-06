@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Newsletter\Http\Controllers\Api\NewsletterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/newsletter', function (Request $request) {
-    return $request->user();
-});
+Route::resource('newsletter', NewsletterController::class)->except('create', 'edit');

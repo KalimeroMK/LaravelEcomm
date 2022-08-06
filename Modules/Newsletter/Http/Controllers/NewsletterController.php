@@ -97,7 +97,7 @@ class NewsletterController extends Controller
      */
     public function destroy(Newsletter $newsletter): RedirectResponse
     {
-        $this->newsletter_service->destroy($newsletter);
+        $this->newsletter_service->destroy($newsletter->id);
         
         return redirect()->route('newsletters.index');
     }
