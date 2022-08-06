@@ -6,6 +6,7 @@ use App\Events\MessageSent;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\NoReturn;
@@ -13,6 +14,7 @@ use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
+use Modules\Core\Helpers\Payment;
 use Modules\Coupon\Models\Coupon;
 use Modules\Message\Models\Message;
 use Modules\Newsletter\Models\Newsletter;
@@ -176,7 +178,7 @@ class FrontService
                 
                 return back();
             }
-            $total_price = Cart::whereUserId(auth()->user()->id)->where('order_id', null)->sum('price');
+            $total_price = Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
             session()->put('coupon', [
                 'id'    => $coupon->id,
                 'code'  => $coupon->code,
@@ -501,42 +503,68 @@ class FrontService
     /**
      * @param $data
      *
-     * @return void
+     * @return string
      */
-    public function newsletter($data): void
+    public function newsletter($data): string
     {
-        Newsletter::create([
-            'email' => $data['email'],
-            'token' => $token = Str::random(64),
-        ]);
-        
-        Mail::send('front::emails.news-letter', ['token' => $token], function ($message) use ($data) {
-            $message->to($data['email']);
-            $message->subject('Email Verification Mail');
-        });
-    }
-    
-    /**
-     * @param $id
-     *
-     * @return void
-     */
-    public function validation($id): void
-    {
-        if ( ! is_null($id)) {
-            Newsletter::whereId($id)->update(['is_validated' => 1]);
+        try {
+            Newsletter::create([
+                'email' => $data['email'],
+                'token' => $token = Str::random(64),
+            ]);
+            
+            Mail::send('front::emails.news-letter', ['token' => $token], function ($message) use ($data) {
+                $message->to($data['email']);
+                $message->subject('Email Verification Mail');
+            });
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
     }
     
     /**
      * @param $id
      *
-     * @return void
+     * @return string
      */
-    public function deleteNewsletter($id): void
+    public function validation($id): string
     {
-        if ( ! is_null($id)) {
-            Newsletter::whereId($id)->delete();
+        try {
+            if ( ! is_null($id)) {
+                Newsletter::whereId($id)->update(['is_validated' => 1]);
+            }
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return string
+     */
+    public function deleteNewsletter($id): string
+    {
+        try {
+            if ( ! is_null($id)) {
+                Newsletter::whereId($id)->delete();
+            }
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $request
+     *
+     * @return null|string
+     */
+    public function orderStore($request): null|string
+    {
+        try {
+            return Payment::calculate($request);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
     }
     

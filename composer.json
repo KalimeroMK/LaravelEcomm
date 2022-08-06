@@ -28,7 +28,7 @@
     "laracasts/generators": "^2.0",
     "laravel/framework": "^9.2",
     "laravel/helpers": "^1.5",
-    "laravel/sanctum": "^2.15",
+    "laravel/sanctum": "^3.0",
     "laravel/socialite": "^5.5",
     "laravel/telescope": "^4.7",
     "laravel/tinker": "^2.7",

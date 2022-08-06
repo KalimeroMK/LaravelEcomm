@@ -2,13 +2,12 @@
 
 namespace Modules\Order\Service;
 
-use Illuminate\Http\RedirectResponse;
+use Exception;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Notifications\StatusNotification;
-use Modules\Order\Http\Requests\Store;
 use Modules\Order\Models\Order;
 use Modules\Order\Repository\OrderRepository;
 use Modules\Shipping\Models\Shipping;
@@ -24,127 +23,144 @@ class OrderService
     }
     
     /**
-     * Store a newly created resource in storage.
+     * @param $id
      *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
+     * @return mixed|string
      */
-    public function store(Store $request): RedirectResponse
+    public function edit($id): mixed
     {
-        $order                      = new Order();
-        $order_data                 = $request->all();
-        $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
-        $order_data['user_id']      = $request->user()->id;
-        $order_data['shipping_id']  = $request->shipping;
-        $shipping                   = Shipping::where('id', $order_data['shipping_id'])->pluck('price');
-        $order_data['sub_total']    = Helper::totalCartPrice();
-        $order_data['quantity']     = Helper::cartCount();
-        if (session('coupon')) {
-            $order_data['coupon'] = session('coupon')['value'];
+        try {
+            return $this->order_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        if ($request->shipping) {
-            if (session('coupon')) {
-                $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0] - session('coupon')['value'];
-            } else {
-                $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0];
-            }
-        } else {
-            if (session('coupon')) {
-                $order_data['total_amount'] = Helper::totalCartPrice() - session('coupon')['value'];
-            } else {
-                $order_data['total_amount'] = Helper::totalCartPrice();
-            }
-        }
-        $order_data['status'] = "new";
-        if (request('payment_method') == 'paypal') {
-            $order_data['payment_method'] = 'paypal';
-            $order_data['payment_status'] = 'paid';
-        } else {
-            $order_data['payment_method'] = 'cod';
-            $order_data['payment_status'] = 'Unpaid';
-        }
-        $order->fill($order_data);
-        $order->save();
-        
-        $details = [
-            'title'     => 'New order created',
-            'actionURL' => route('order.show', $order->id),
-            'fas'       => 'fa-file-alt',
-        ];
-        Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
-        if (request('payment_method') == 'paypal') {
-            return redirect()->route('payment')->with(['id' => $order->id]);
-        } else {
-            session()->forget('cart');
-            session()->forget('coupon');
-        }
-        Cart::whereUserId(Auth()->id())->whereOrderId(null)->update(['order_id' => $order->id]);
-        
-        return redirect()->route('home');
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * =     */
-    public function edit(int $id)
-    {
-        return $this->order_repository->findById($id);
     }
     
     /**
      * @param $id
      *
-     * @return mixed
+     * @return mixed|string
      */
     public function show($id): mixed
     {
-        return $this->order_repository->findById($id);
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param $request
-     * @param  int  $id
-     *
-     * @return void
-     */
-    public function update($request, int $id): void
-    {
-        $order = $this->order_repository->findById($id);
-        
-        if ($request->status == 'delivered') {
-            foreach ($order->cart as $cart) {
-                $product        = $cart->product;
-                $product->stock -= $cart->quantity;
-                $product->save();
-            }
+        try {
+            return $this->order_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        $order->fill($request)->save();
     }
     
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $id
      *
-     * @return void
+     * @return string|void
      */
-    public function destroy(int $id): void
+    public function destroy($id)
     {
-        $this->order_repository->delete($id);
+        try {
+            $this->order_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
+     * @return mixed|string
+     */
+    public function getAll(): mixed
+    {
+        try {
+            return $this->order_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param $data
+     *
+     * @return string
+     */
+    public function store($data): string
+    {
+        try {
+            $order                      = new Order();
+            $order_data                 = $data->all();
+            $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
+            $order_data['user_id']      = $data->user()->id;
+            $order_data['shipping_id']  = $data->shipping;
+            $shipping                   = Shipping::whereId($order_data['shipping_id'])->pluck('price');
+            $order_data['sub_total']    = Helper::totalCartPrice();
+            $order_data['quantity']     = Helper::cartCount();
+            if (session('coupon')) {
+                $order_data['coupon'] = session('coupon')['value'];
+            }
+            if ($data->shipping) {
+                if (session('coupon')) {
+                    $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0] - session('coupon')['value'];
+                } else {
+                    $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0];
+                }
+            } else {
+                if (session('coupon')) {
+                    $order_data['total_amount'] = Helper::totalCartPrice() - session('coupon')['value'];
+                } else {
+                    $order_data['total_amount'] = Helper::totalCartPrice();
+                }
+            }
+            $order_data['status'] = "new";
+            if (request('payment_method') == 'paypal') {
+                $order_data['payment_method'] = 'paypal';
+                $order_data['payment_status'] = 'paid';
+            } else {
+                $order_data['payment_method'] = 'cod';
+                $order_data['payment_status'] = 'Unpaid';
+            }
+            $order->fill($order_data);
+            $order->save();
+            
+            $details = [
+                'title'     => 'New order created',
+                'actionURL' => route('order.show', $order->id),
+                'fas'       => 'fa-file-alt',
+            ];
+            Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
+            
+            Cart::whereUserId(Auth()->id())->whereOrderId(null)->update(['order_id' => $order->id]);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param $data
+     * @param  int  $id
+     *
      * @return mixed
      */
-    public function index(): mixed
+    public function update($data, int $id): mixed
     {
-        return $this->order_repository->findAll();
+        try {
+            $order = $this->order_repository->findById($id);
+            
+            if ($data->status == 'delivered') {
+                foreach ($order->cart as $cart) {
+                    $product        = $cart->product;
+                    $product->stock -= $cart->quantity;
+                    $product->save();
+                }
+            }
+            
+            return $this->order_repository->update($id, $data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
@@ -152,6 +168,10 @@ class OrderService
      */
     public function findByAllUser(): mixed
     {
-        return $this->order_repository->findAllByUser();
+        try {
+            return $this->order_repository->findAllByUser();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

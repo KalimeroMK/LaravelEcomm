@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Category\Http\Controllers\Api\CategoryController;
+use Modules\Brand\Http\Controllers\Api\BrandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +13,4 @@ use Modules\Category\Http\Controllers\Api\CategoryController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::resource('brand', CategoryController::class)->except('create', 'edit');
+Route::resource('brand', BrandController::class)->except('create', 'edit');

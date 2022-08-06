@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Billing\Http\Controllers\PaypalController;
 use Modules\Billing\Http\Controllers\StripeController;
 use Modules\Billing\Http\Controllers\WishlistController;
-use Modules\Front\Http\Controllers\FrontController;
+use Modules\Front\Http\Controllers\Api\FrontController;
 
 Route::get('/wishlist', function () {
     return view('front::pages.wishlist');
