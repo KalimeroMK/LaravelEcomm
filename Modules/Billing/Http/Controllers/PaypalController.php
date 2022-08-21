@@ -19,7 +19,10 @@ class PaypalController extends Controller
 {
     private PaypalService $paypal_service;
     
-    public function __construct() { $this->paypal_service = new PaypalService(); }
+    public function __construct(PaypalService $paypal_service)
+    {
+        $this->paypal_service = $paypal_service;
+    }
     
     /**
      * @return Application|RedirectResponse|Redirector

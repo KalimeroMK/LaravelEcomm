@@ -12,7 +12,7 @@ use Modules\Newsletter\Repository\NewsletterRepository;
 class NewsletterService extends CoreService
 {
     
-    private NewsletterRepository $newsletter_repository;
+    public NewsletterRepository $newsletter_repository;
     
     public function __construct(NewsletterRepository $newsletter_repository)
     {
@@ -39,6 +39,20 @@ class NewsletterService extends CoreService
      * @return mixed
      */
     public function edit($id): mixed
+    {
+        try {
+            return $this->newsletter_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function show($id): mixed
     {
         try {
             return $this->newsletter_repository->findById($id);

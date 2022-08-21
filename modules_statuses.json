@@ -20,5 +20,6 @@
   "Front": true,
   "Core": true,
   "Client": true,
-  "Newsletter": true
+  "Newsletter": true,
+  "Size": true
 }

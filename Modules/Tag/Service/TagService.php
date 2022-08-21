@@ -2,23 +2,16 @@
 
 namespace Modules\Tag\Service;
 
+use Exception;
 use Modules\Tag\Repository\TagRepository;
 
 class TagService
 {
-    private TagRepository $tag_repository;
+    public TagRepository $tag_repository;
     
     public function __construct(TagRepository $tag_repository)
     {
         $this->tag_repository = $tag_repository;
-    }
-    
-    /**
-     * @return mixed
-     */
-    public function index(): mixed
-    {
-        return $this->tag_repository->findAll();
     }
     
     /**
@@ -28,37 +21,79 @@ class TagService
      */
     public function store($data): mixed
     {
-        return $this->tag_repository->create($data);
+        try {
+            return $this->tag_repository->create($data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return mixed|string
+     */
+    public function edit($id): mixed
+    {
+        try {
+            return $this->tag_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return mixed|string
+     */
+    public function show($id): mixed
+    {
+        try {
+            return $this->tag_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      * @param $data
      *
-     * @return mixed
+     * @return mixed|string
      */
     public function update($id, $data): mixed
     {
-        return $this->tag_repository->update($id, $data);
+        try {
+            return $this->tag_repository->update($id, $data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      *
-     * @return mixed
+     * @return string|void
      */
-    public function edit($id): mixed
+    public function destroy($id)
     {
-        return $this->tag_repository->findById($id);
+        try {
+            $this->tag_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
-     * @param $id
-     *
-     * @return void
+     * @return mixed|string
      */
-    public function destroy($id): void
+    public function getAll(): mixed
     {
-        $this->tag_repository->delete($id);
+        try {
+            return $this->tag_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

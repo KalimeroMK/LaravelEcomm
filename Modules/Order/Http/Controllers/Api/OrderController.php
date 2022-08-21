@@ -3,14 +3,20 @@
 namespace Modules\Order\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Banner\Http\Resource\BannerResource;
+use Modules\Core\Helpers\Helper;
+use Modules\Core\Traits\ApiResponses;
 use Modules\Order\Http\Requests\Api\Store;
 use Modules\Order\Http\Requests\Api\Update;
+use Modules\Order\Http\Resources\OrderResource;
 use Modules\Order\Service\OrderService;
 
 class OrderController extends Controller
 {
+    use ApiResponses;
     
     private OrderService $order_service;
     
@@ -20,51 +26,105 @@ class OrderController extends Controller
     }
     
     /**
-     * @return JsonResponse
+     * @return ResourceCollection
      */
-    public function index(): JsonResponse
+    public function index(): ResourceCollection
     {
-        return $this->sendResponse([$this->order_service->getAll()], 200);
+        return OrderResource::collection($this->order_service->getAll());
     }
     
     /**
-     * @param  Store  $request
      *
-     * @return JsonResponse
+     * @return mixed
+     * @throws Exception
      */
-    public function store(Store $request): JsonResponse
+    public function store(Store $request)
     {
-        return $this->sendResponse([$this->order_service->store($request->all())], 200);
-    }
-    
-    /**
-     * @param $id
-     *
-     * @return JsonResponse
-     */
-    public function show($id): JsonResponse
-    {
-        return $this->sendResponse([$this->order_service->edit($id)], 200);
-    }
-    
-    /**
-     * @param  Update  $request
-     * @param $id
-     *
-     * @return JsonResponse
-     */
-    public function update(Request $request, $id): JsonResponse
-    {
-        return $this->sendResponse([$this->order_service->update($request->all(), $id)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.storeSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->order_service->order_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BannerResource($this->order_service->store($request->validated())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      *
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
-    public function destroy($id): JsonResponse
+    public function show($id)
     {
-        return $this->sendResponse([$this->order_service->destroy($id)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.ok',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->order_service->order_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BannerResource($this->order_service->show($id)));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    public function update(Update $request, $id)
+    {
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.updateSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->order_service->order_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new OrderResource($this->order_service->update($id, $request->validated())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return JsonResponse|string
+     */
+    public function destroy($id)
+    {
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.deleteSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->order_service->order_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond($this->order_service->destroy($id));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

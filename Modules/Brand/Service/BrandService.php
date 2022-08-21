@@ -11,7 +11,7 @@ class BrandService extends CoreService
 {
     use ImageUpload;
     
-    private BrandRepository $brand_repository;
+    public BrandRepository $brand_repository;
     
     public function __construct(BrandRepository $brand_repository)
     {
@@ -52,6 +52,20 @@ class BrandService extends CoreService
     
     /**
      * @param $id
+     *
+     * @return mixed
+     */
+    public function show($id): mixed
+    {
+        try {
+            return $this->brand_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
      * @param $data
      *
      * @return mixed|string
@@ -59,7 +73,15 @@ class BrandService extends CoreService
     public function update($id, $data): mixed
     {
         try {
-            return $this->brand_repository->update($id, $data);
+            if ( ! empty($data['photo'])) {
+                return $this->brand_repository->update((int)$id,
+                    collect($data)->except(['photo'])->toArray() + [
+                        'photo' => $this->verifyAndStoreImage($data['photo']),
+                    ]
+                );
+            }
+            
+            return $this->brand_repository->update((int)$id, $data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

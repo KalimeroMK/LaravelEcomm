@@ -8,7 +8,7 @@ use Modules\Message\Repository\MessageRepository;
 
 class MessageService
 {
-    private MessageRepository $message_repository;
+    public MessageRepository $message_repository;
     
     public function __construct(MessageRepository $message_repository)
     {

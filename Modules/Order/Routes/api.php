@@ -14,4 +14,4 @@ use Modules\Order\Http\Controllers\Api\OrderController;
 |
 */
 
-Route::resource('order', OrderController::class)->except('create', 'edit');
+Route::apiResource('order', OrderController::class);

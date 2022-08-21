@@ -3,14 +3,21 @@
 namespace Modules\Coupon\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Banner\Http\Resource\BannerResource;
+use Modules\Core\Helpers\Helper;
+use Modules\Core\Traits\ApiResponses;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
+use Modules\Coupon\Http\Resource\CouponResource;
 use Modules\Coupon\Service\CouponService;
 
 class CouponController extends Controller
 {
+    use ApiResponses;
+    
     private CouponService $coupon_service;
     
     public function __construct(CouponService $coupon_service)
@@ -19,53 +26,106 @@ class CouponController extends Controller
     }
     
     /**
-     * @return JsonResponse
+     * @return ResourceCollection
      */
-    public function index(): JsonResponse
+    public function index(): ResourceCollection
     {
-        return $this->sendResponse([$this->coupon_service->getAll()], 200);
+        return BannerResource::collection($this->coupon_service->getAll());
     }
     
-    /**
-     * @param  Store  $request
-     *
-     * @return JsonResponse
-     */
-    public function store(Store $request): JsonResponse
+    public function store(Store $request)
     {
-        return $this->sendResponse([$this->coupon_service->store($request->all())], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.storeSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->coupon_service->coupon_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BannerResource($this->coupon_service->store($request->validated())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      *
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
-        return $this->sendResponse([$this->coupon_service->edit($id)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.ok',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->coupon_service->coupon_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new CouponResource($this->coupon_service->show($id)));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param  Update  $request
      * @param $id
      *
-     * @return JsonResponse
+     * @return string
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Update $request, $id)
     {
-        dd($id, $request->all());
-        
-        return $this->sendResponse([$this->coupon_service->update($id, $request->all())], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.updateSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->coupon_service->coupon_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BannerResource($this->coupon_service->update($id, $request->validated())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      *
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
-    public function destroy($id): JsonResponse
+    public function destroy($id)
     {
-        return $this->sendResponse([$this->coupon_service->destroy($id)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.deleteSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->coupon_service->coupon_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond($this->coupon_service->destroy($id));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

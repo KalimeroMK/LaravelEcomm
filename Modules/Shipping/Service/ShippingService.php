@@ -2,11 +2,12 @@
 
 namespace Modules\Shipping\Service;
 
+use Exception;
 use Modules\Shipping\Repository\ShippingRepository;
 
 class ShippingService
 {
-    private ShippingRepository $shipping_repository;
+    public ShippingRepository $shipping_repository;
     
     public function __construct(ShippingRepository $shipping_repository)
     {
@@ -16,7 +17,7 @@ class ShippingService
     /**
      * @return mixed
      */
-    public function index(): mixed
+    public function getAll(): mixed
     {
         return $this->shipping_repository->findAll();
     }
@@ -45,21 +46,43 @@ class ShippingService
     /**
      * @param $id
      *
-     * @return mixed
+     * @return mixed|string
      */
     public function edit($id): mixed
     {
-        return $this->shipping_repository->findById($id);
+        try {
+            return $this->shipping_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      *
-     * @return void
+     * @return Exception|void
      */
-    public function destroy($id): void
+    public function destroy($id)
     {
-        $this->shipping_repository->delete($id);
+        try {
+            $this->shipping_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception;
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return mixed|string
+     */
+    public function show($id): mixed
+    {
+        try {
+            return $this->shipping_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
 }

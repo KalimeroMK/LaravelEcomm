@@ -14,4 +14,5 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Banner\Http\Controllers\Api\BannerController;
 
-Route::resource('banner', BannerController::class)->except('create', 'edit');
+Route::apiResource('banner', BannerController::class)->except('update');
+Route::post('banner/{id}', [BannerController::class, 'update'])->name('banner.update');

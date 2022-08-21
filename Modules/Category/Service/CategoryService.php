@@ -3,14 +3,14 @@
 namespace Modules\Category\Service;
 
 use Exception;
-use Modules\Category\Repository\CategoryRepository;
+use Modules\Billing\Repository\WishlistRepository;
 
 class CategoryService
 {
     
-    private CategoryRepository $category_repository;
+    public WishlistRepository $category_repository;
     
-    public function __construct(CategoryRepository $category_repository)
+    public function __construct(WishlistRepository $category_repository)
     {
         $this->category_repository = $category_repository;
     }
@@ -36,6 +36,20 @@ class CategoryService
     {
         try {
             return $this->category_repository->create($data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return mixed|string
+     */
+    public function show($id): mixed
+    {
+        try {
+            return $this->category_repository->findById($id);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

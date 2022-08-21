@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Billing\Http\Controllers\Api\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/billing', function (Request $request) {
-    return $request->user();
-});
+Route::apiResource('wishlist', WishlistController::class);

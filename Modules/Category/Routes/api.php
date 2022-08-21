@@ -14,4 +14,4 @@ use Modules\Category\Http\Controllers\Api\CategoryController;
 |
 */
 
-Route::resource('category', CategoryController::class)->except('create', 'edit');
+Route::apiResource('category', CategoryController::class);

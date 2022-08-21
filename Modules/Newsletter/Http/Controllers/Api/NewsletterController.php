@@ -3,12 +3,21 @@
 namespace Modules\Newsletter\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Modules\Newsletter\Http\Requests\Api\Store;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Banner\Http\Resource\BannerResource;
+use Modules\Core\Helpers\Helper;
+use Modules\Core\Traits\ApiResponses;
+use Modules\Coupon\Http\Requests\Api\Store;
+use Modules\Coupon\Http\Requests\Api\Update;
+use Modules\Coupon\Http\Resource\CouponResource;
+use Modules\Newsletter\Http\Resources\NewsletterResource;
 use Modules\Newsletter\Service\NewsletterService;
 
 class NewsletterController extends Controller
 {
+    use ApiResponses;
     
     private NewsletterService $newsletter_service;
     
@@ -18,40 +27,106 @@ class NewsletterController extends Controller
     }
     
     /**
-     * @return JsonResponse
+     * @return ResourceCollection
      */
-    public function index(): JsonResponse
+    public function index(): ResourceCollection
     {
-        return $this->sendResponse([$this->newsletter_service->getAll()], 200);
+        return NewsletterResource::collection($this->newsletter_service->getAll());
     }
     
-    /**
-     * @param  Store  $request
-     *
-     * @return JsonResponse
-     */
-    public function store(Store $request): JsonResponse
+    public function store(Store $request)
     {
-        return $this->sendResponse([$this->newsletter_service->store($request->all())], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.storeSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->newsletter_service->newsletter_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BannerResource($this->newsletter_service->store($request->validated())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      *
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
-        return $this->sendResponse([$this->newsletter_service->edit($id)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.ok',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->newsletter_service->newsletter_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new CouponResource($this->newsletter_service->show($id)));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param  Update  $request
+     * @param $id
+     *
+     * @return string
+     */
+    public function update(Update $request, $id)
+    {
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.updateSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->newsletter_service->newsletter_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BannerResource($this->newsletter_service->update($id, $request->validated())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
      * @param $id
      *
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
-    public function destroy($id): JsonResponse
+    public function destroy($id)
     {
-        return $this->sendResponse([$this->newsletter_service->destroy($id)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.deleteSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->newsletter_service->newsletter_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond($this->newsletter_service->destroy($id));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

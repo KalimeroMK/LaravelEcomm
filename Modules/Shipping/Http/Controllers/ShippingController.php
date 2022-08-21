@@ -32,7 +32,7 @@ class ShippingController extends Controller
      */
     public function index()
     {
-        return view('shipping::index', ['shippings' => $this->shipping_service->index()]);
+        return view('shipping::index', ['shippings' => $this->shipping_service->getAll()]);
     }
     
     /**
@@ -46,7 +46,7 @@ class ShippingController extends Controller
     {
         $this->shipping_service->store($request->validated());
         
-        return redirect()->route('shipping.index');
+        return redirect()->route('shippings.index');
     }
     
     /**
@@ -83,7 +83,7 @@ class ShippingController extends Controller
     {
         $this->shipping_service->update($shipping->id, $request->validated());
         
-        return redirect()->route('shipping.index');
+        return redirect()->route('shippings.index');
     }
     
     /**

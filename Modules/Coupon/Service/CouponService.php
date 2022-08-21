@@ -7,7 +7,7 @@ use Modules\Coupon\Repository\CouponRepository;
 
 class CouponService
 {
-    private CouponRepository $coupon_repository;
+    public CouponRepository $coupon_repository;
     
     public function __construct(CouponRepository $coupon_repository)
     {
@@ -34,6 +34,20 @@ class CouponService
      * @return mixed|string
      */
     public function edit($id): mixed
+    {
+        try {
+            return $this->coupon_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return mixed|string
+     */
+    public function show($id): mixed
     {
         try {
             return $this->coupon_repository->findById($id);

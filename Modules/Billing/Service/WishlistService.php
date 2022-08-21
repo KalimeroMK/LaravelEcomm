@@ -2,60 +2,54 @@
 
 namespace Modules\Billing\Service;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Modules\Billing\Models\Wishlist;
-use Modules\Product\Models\Product;
+use Exception;
+use Modules\Billing\Repository\WishlistRepository;
 
 class WishlistService
 {
     
-    public function wishlist(Request $request): RedirectResponse
+    public WishlistRepository $wishlist_repository;
+    
+    public function __construct(WishlistRepository $wishlist_repository)
     {
-        if (empty($request->slug)) {
-            request()->session()->flash('error', 'Invalid Products');
-            
-            return back();
-        }
-        $product = Product::where('slug', $request->slug)->firstOrFail();
-        if (empty($product)) {
-            request()->session()->flash('error', 'Invalid Products');
-            
-            return back();
-        }
-        if (Auth::check()) {
-            $already_wishlist = Wishlist::whereUserId(auth()->user()->id)->whereCartId(null)->whereProductId($product->id)->first();
-            if ($already_wishlist) {
-                request()->session()->flash('error', 'You already placed in wishlist');
-                
-                return back();
-            } else {
-                $wishlist             = new Wishlist();
-                $wishlist->user_id    = Auth::id();
-                $wishlist->product_id = $product->id;
-                $wishlist->price      = ($product->price - ($product->price * $product->discount) / 100);
-                $wishlist->quantity   = 1;
-                $wishlist->amount     = $wishlist->price * $wishlist->quantity;
-                if ($wishlist->product->stock < $wishlist->quantity || $wishlist->product->stock <= 0) {
-                    return back()->with('error', 'Stock not sufficient!.');
-                }
-                $wishlist->save();
-            }
-            request()->session()->flash('success', 'Product successfully added to wishlist');
-        } else {
-            request()->session()->flash('error', 'Pls login added to wishlist');
-        }
-        
-        return back();
+        $this->wishlist_repository = $wishlist_repository;
     }
     
-    public function wishlistDelete(Request $request): RedirectResponse
+    /**
+     * @return mixed|string
+     */
+    public function getAll(): mixed
     {
-        $wishlist = Wishlist::findOrFail($request->id);
-        $wishlist->delete();
-        request()->session()->flash('success', 'Wishlist successfully removed');
-        
-        return back();
+        try {
+            return $this->wishlist_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
+    
+    public function store($data)
+    {
+        try {
+            return $this->wishlist_repository->create($data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param $id
+     *
+     * @return string|void
+     */
+    public function destroy($id)
+    {
+        try {
+            $this->wishlist_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
 }

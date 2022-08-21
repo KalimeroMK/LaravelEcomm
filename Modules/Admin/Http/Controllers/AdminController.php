@@ -7,8 +7,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Modules\Admin\Models\Message;
 use Modules\Admin\Service\AdminService;
+use Modules\Size\Models\Message;
 
 class AdminController extends Controller
 {

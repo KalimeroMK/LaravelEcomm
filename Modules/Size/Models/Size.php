@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Admin\Models;
+namespace Modules\Size\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Core\Models\Core;

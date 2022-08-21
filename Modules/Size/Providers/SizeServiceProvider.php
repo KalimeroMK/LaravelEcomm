@@ -3,7 +3,6 @@
 namespace Modules\Size\Providers;
 
 use Config;
-use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class SizeServiceProvider extends ServiceProvider

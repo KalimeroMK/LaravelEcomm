@@ -15,7 +15,7 @@ use Modules\User\Models\User;
 
 class OrderService
 {
-    private OrderRepository $order_repository;
+    public OrderRepository $order_repository;
     
     public function __construct(OrderRepository $order_repository)
     {

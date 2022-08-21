@@ -5,7 +5,7 @@
     <div class="card">
         <h5 class="card-header">Add Shipping</h5>
         <div class="card-body">
-            <form method="post" action="{{route('shipping.store')}}">
+            <form method="post" action="{{route('shippings.store')}}">
                 {{csrf_field()}}
                 <div class="form-group">
                     <label for="inputTitle" class="col-form-label">Type <span class="text-danger">*</span></label>

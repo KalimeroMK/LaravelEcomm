@@ -14,5 +14,5 @@ use Modules\Coupon\Http\Controllers\Api\CouponController;
 |
 */
 
-Route::resource('coupon', CouponController::class)->except('create', 'edit');
+Route::apiResource('coupon', CouponController::class);
 

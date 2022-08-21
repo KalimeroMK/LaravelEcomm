@@ -14,7 +14,7 @@ class ProductRepository extends Repository
      */
     public function findAll(): mixed
     {
-        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes')->get();
+        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->get();
     }
     
     /**
@@ -28,10 +28,18 @@ class ProductRepository extends Repository
         $item = $this->findById($id);
         $item->fill($data);
         $item->save();
-        $item->categories()->attach($data['category']);
-        $item->sizes()->attach($data['size']);
         
         return $item->fresh();
+    }
+    
+    /**
+     * @param  int  $id
+     *
+     * @return mixed
+     */
+    public function findById(int $id): mixed
+    {
+        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
     }
     
 }

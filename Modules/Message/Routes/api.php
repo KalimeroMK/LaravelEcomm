@@ -13,5 +13,5 @@
 
 use Modules\Message\Http\Controllers\Api\MessageController;
 
-Route::resource('message', MessageController::class)->only('index', 'destroy', 'show');
+Route::apiResource('message', MessageController::class)->only('index', 'destroy', 'show');
 

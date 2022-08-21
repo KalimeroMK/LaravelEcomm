@@ -11,6 +11,4 @@
 |
 */
 
-Route::prefix('size')->group(function () {
-    Route::get('/', 'SizeController@index');
-});
+

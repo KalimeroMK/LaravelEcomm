@@ -5,27 +5,37 @@ namespace Modules\Billing\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Modules\Billing\Http\Requests\Store;
 use Modules\Billing\Service\WishlistService;
-use Modules\Product\Models\Product;
 
 class WishlistController extends Controller
 {
-    protected ?Product $product = null;
     private WishlistService $wishlist_service;
     
-    public function __construct(Product $product)
+    public function __construct(WishlistService $wishlist_service)
     {
-        $this->product          = $product;
-        $this->wishlist_service = new WishlistService();
+        $this->wishlist_service = $wishlist_service;
     }
     
-    public function wishlist(Request $request): RedirectResponse
+    public function wishlist(Store $request): RedirectResponse
     {
-        return $this->wishlist_service->wishlist($request);
+        $this->wishlist_service->store($request->all());
+        
+        return back();
     }
     
+    /**
+     * @param  Request  $request
+     *
+     * @return RedirectResponse
+     */
     public function wishlistDelete(Request $request): RedirectResponse
     {
-        return $this->wishlist_service->wishlistDelete($request);
+        $this->wishlist_service->destroy($request->id);
+        
+        request()->session()->flash('success', 'Wishlist successfully removed');
+        
+        return back();
     }
+    
 }

@@ -13,6 +13,5 @@
 
 use Modules\Product\Http\Controllers\Api\ProductController;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('/product', ProductController::class);
-});
+Route::apiResource('product', ProductController::class)->except('update');
+Route::post('product/{id}', [ProductController::class, 'update'])->name('product.update');

@@ -13,4 +13,5 @@ use Modules\Brand\Http\Controllers\Api\BrandController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::resource('brand', BrandController::class)->except('create', 'edit');
+Route::apiResource('brand', BrandController::class)->except('update');
+Route::post('brand/{id}', [BrandController::class, 'update'])->name('brand.update');

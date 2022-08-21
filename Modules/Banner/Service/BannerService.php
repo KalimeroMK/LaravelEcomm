@@ -11,7 +11,7 @@ class BannerService extends CoreService
 {
     use ImageUpload;
     
-    private BannerRepository $banner_repository;
+    public BannerRepository $banner_repository;
     
     public function __construct(BannerRepository $banner_repository)
     {
@@ -73,7 +73,15 @@ class BannerService extends CoreService
     public function update($id, $data): mixed
     {
         try {
-            return $this->banner_repository->update($id, $data);
+            if ( ! empty($data['photo'])) {
+                return $this->banner_repository->update((int)$id,
+                    collect($data)->except(['photo'])->toArray() + [
+                        'photo' => $this->verifyAndStoreImage($data['photo']),
+                    ]
+                );
+            }
+            
+            return $this->banner_repository->update((int)$id, $data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

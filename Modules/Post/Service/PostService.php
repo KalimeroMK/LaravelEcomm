@@ -16,7 +16,7 @@ class PostService extends CoreService
 {
     use ImageUpload;
     
-    private PostRepository $post_repository;
+    public PostRepository $post_repository;
     
     public function __construct(PostRepository $post_repository)
     {
@@ -24,22 +24,20 @@ class PostService extends CoreService
     }
     
     /**
-     * Store a newly created resource in storage.
+     * @param $data
      *
-     * @param $request
-     *
-     * @return null|string
+     * @return Exception|void
      */
-    public function store($request): null|string
+    public function store($data)
     {
         try {
-            $post = Post::create(
-                $request->except('photo') + [
-                    'photo' => $this->verifyAndStoreImage($request['photo']),
+            $post = $this->post_repository->create(
+                collect($data)->except(['photo'])->toArray() + [
+                    'photo' => $this->verifyAndStoreImage($data['photo']),
                 ]
             );
-            $post->categories()->attach($request['category']);
-            $post->post_tag()->attach($request['tags']);
+            $post->categories()->attach($data['category']);
+            $post->post_tag()->attach($data['tags']);
         } catch (Exception $exception) {
             return $exception;
         }
@@ -76,44 +74,48 @@ class PostService extends CoreService
     }
     
     /**
-     * Update the specified resource in storage.
-     *
-     * @param $request
+     * @param $data
      * @param $post
      *
-     * @return void
+     * @return Exception|void
      */
-    public function update($request, $post): void
+    public function update($data, $post)
     {
-        if ($request->hasFile('photo')) {
-            $post->update(
-                $request->except('photo') + [
-                    'photo' => $this->verifyAndStoreImage($request['photo']),
-                ]
-            );
-        } else {
-            $post->update($request->validated());
+        try {
+            if ($data->hasFile('photo')) {
+                $post->update(
+                    $data->except('photo') + [
+                        'photo' => $this->verifyAndStoreImage($data['photo']),
+                    ]
+                );
+            } else {
+                $post->update($data);
+            }
+            $post->post_tag()->sync($data['tags'], true);
+            $post->categories()->sync($data['category'], true);
+        } catch (Exception $exception) {
+            return $exception;
         }
-        $post->post_tag()->sync($request['tags'], true);
-        $post->categories()->sync($request['category'], true);
     }
     
     /**
-     * Remove the specified resource from storage.
-     *
      * @param $id
      *
-     * @return void
+     * @return Exception|void
      */
-    public function destroy($id): void
+    public function destroy($id)
     {
-        $this->post_repository->delete($id);
+        try {
+            $this->post_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception;
+        }
     }
     
     /**
      * @return mixed
      */
-    public function index(): mixed
+    public function getAll(): mixed
     {
         return $this->post_repository->findAll();
     }
@@ -140,6 +142,20 @@ class PostService extends CoreService
             
             @header('Content-type: text/html; charset=utf-8');
             echo $response;
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return mixed|string
+     */
+    public function show($id): mixed
+    {
+        try {
+            return $this->post_repository->findById($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
     }
 }

@@ -14,4 +14,4 @@ use Modules\Newsletter\Http\Controllers\Api\NewsletterController;
 |
 */
 
-Route::resource('newsletter', NewsletterController::class)->except('create', 'edit');
+Route::apiResource('newsletter', NewsletterController::class);
