@@ -12,7 +12,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $moduleNamespace = 'Modules\Size\Http\Controllers';
+    protected string $moduleNamespace = 'Modules\Size\Http\Controllers';
     
     /**
      * Called before routes are registered.
@@ -21,7 +21,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
     }
@@ -31,7 +31,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function map()
+    public function map(): void
     {
         $this->mapApiRoutes();
         
@@ -45,11 +45,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
-        Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->moduleNamespace)
+        Route::prefix('api/v1')
+             ->middleware('auth:sanctum')
              ->group(module_path('Size', '/Routes/api.php'));
     }
     
@@ -60,10 +59,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
         Route::middleware('web')
-             ->namespace($this->moduleNamespace)
              ->group(module_path('Size', '/Routes/web.php'));
     }
 }

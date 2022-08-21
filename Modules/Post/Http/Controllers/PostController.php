@@ -37,7 +37,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post::index', ['posts' => $this->post_service->index()]);
+        return view('post::index', ['posts' => $this->post_service->getAll()]);
     }
     
     /**

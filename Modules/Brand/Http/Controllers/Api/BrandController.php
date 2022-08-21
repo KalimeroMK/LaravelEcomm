@@ -3,81 +3,133 @@
 namespace Modules\Brand\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Modules\Brand\Http\Requests\Api\StoreRequest;
-use Modules\Brand\Http\Requests\Api\UpdateRequest;
-use Modules\Brand\Models\Brand;
-use Modules\Brand\Repository\BrandRepository;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Brand\Http\Requests\Api\Update;
+use Modules\Brand\Http\Resource\BrandResource;
+use Modules\Brand\Service\BrandService;
+use Modules\Core\Helpers\Helper;
+use Modules\Core\Traits\ApiResponses;
+use Modules\Coupon\Http\Requests\Api\Store;
 
 class BrandController extends Controller
 {
-    private BrandRepository $brand;
+    use ApiResponses;
     
-    public function __construct(BrandRepository $brand)
+    private BrandService $brand_service;
+    
+    public function __construct(BrandService $brand_service)
     {
-        $this->brand = $brand;
+        $this->brand_service = $brand_service;
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
+     * @return ResourceCollection
      */
-    public function index(): JsonResponse
+    public function index(): ResourceCollection
     {
-        return $this->sendResponse([$this->brand->getAll()], 200);
+        return BrandResource::collection($this->brand_service->getAll());
     }
     
     /**
-     * Store a newly created resource in storage.
+     * @param  Store  $request
      *
-     * @param  StoreRequest  $request
-     *
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
-    public function store(StoreRequest $request): JsonResponse
+    public function store(Store $request)
     {
-        $data = $request->all();
-        
-        return $this->sendResponse([$this->brand->storeBrand($data)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.storeSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->brand_service->brand_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BrandResource($this->brand_service->store($request->validated())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  $id
-     *
-     * @return JsonResponse
-     */
-    public function show($id): JsonResponse
-    {
-        return $this->sendResponse([Brand::findOrFail($id)], 200);
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateRequest  $request
-     * @param  Brand  $brand
-     *
-     * @return JsonResponse
-     */
-    public function update(UpdateRequest $request, Brand $brand): JsonResponse
-    {
-        $data = $request->all();
-        
-        return $this->sendResponse([$this->brand->updateBrand($data, $brand->id)], 200);
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
      * @param $id
      *
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
-    public function destroy($id): JsonResponse
+    public function show($id)
     {
-        return $this->sendResponse([$this->brand->deleteBrand($id)], 200);
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.ok',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->brand_service->brand_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BrandResource($this->brand_service->show($id)));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param  Update  $request
+     * @param $id
+     *
+     * @return JsonResponse|string
+     */
+    public function update(Update $request, $id)
+    {
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.updateSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->brand_service->brand_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond(new BrandResource($this->brand_service->update($id, $request->all())));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return JsonResponse|string
+     */
+    public function destroy($id)
+    {
+        try {
+            return $this
+                ->setMessage(
+                    __(
+                        'apiResponse.deleteSuccess',
+                        [
+                            'resource' => Helper::getResourceName(
+                                $this->brand_service->brand_repository->model
+                            ),
+                        ]
+                    )
+                )
+                ->respond($this->brand_service->destroy($id));
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

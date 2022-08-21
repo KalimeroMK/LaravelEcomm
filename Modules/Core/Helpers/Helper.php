@@ -11,6 +11,8 @@ use Modules\Category\Models\Category;
 use Modules\Message\Models\Message;
 use Modules\Order\Models\Order;
 use Modules\Shipping\Models\Shipping;
+use ReflectionClass;
+use ReflectionException;
 
 class Helper
 {
@@ -157,8 +159,13 @@ class Helper
         return Shipping::orderBy('id', 'DESC')->get();
     }
     
-    public static function productCategoryList($option = 'all'
-    ): array|\Illuminate\Database\Eloquent\Collection|\Kalnoy\Nestedset\Collection|Collection {
+    /**
+     * @param  string  $option
+     *
+     * @return array
+     */
+    public static function productCategoryList(string $option = 'all'): array
+    {
         if ($option = 'all') {
             return Category::orderBy('id', 'DESC')->get();
         }
@@ -166,12 +173,34 @@ class Helper
         return Category::has('products')->orderBy('id', 'DESC')->get();
     }
     
-    public static function postCategoryList($option = "all"
-    ): array|\Illuminate\Database\Eloquent\Collection|\Kalnoy\Nestedset\Collection|Collection {
+    /**
+     * @param  string  $option
+     *
+     * @return array
+     */
+    public static function postCategoryList(string $option = "all"): array
+    {
         if ($option = 'all') {
             return Category::orderBy('id', 'DESC')->get();
         }
         
         return Category::has('posts')->orderBy('id', 'DESC')->get();
     }
+    
+    /**
+     * @param $class
+     *
+     * @return string
+     */
+    public static function getResourceName($class): string
+    {
+        try {
+            $reflectionClass = new ReflectionClass($class);
+            
+            return $reflectionClass->getShortName();
+        } catch (ReflectionException $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
 }

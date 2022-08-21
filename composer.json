@@ -28,7 +28,7 @@
     "laracasts/generators": "^2.0",
     "laravel/framework": "^9.2",
     "laravel/helpers": "^1.5",
-    "laravel/sanctum": "^2.15",
+    "laravel/sanctum": "^3.0",
     "laravel/socialite": "^5.5",
     "laravel/telescope": "^4.7",
     "laravel/tinker": "^2.7",
@@ -48,8 +48,7 @@
     "spatie/laravel-sitemap": "^6.2",
     "spatie/schema-org": "^3.9",
     "srmklive/paypal": "^3.0",
-    "stripe/stripe-php": "^7.114",
-    "ext-mysql_xdevapi": "*"
+    "stripe/stripe-php": "^7.114"
   },
   "require-dev": {
     "fakerphp/faker": "^1.9.1",

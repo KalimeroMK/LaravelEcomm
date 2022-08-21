@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +11,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/post', function (Request $request) {
-    return $request->user();
-});
+use Modules\Post\Http\Controllers\Api\PostController;
+
+Route::apiResource('post', PostController::class)->except('update');
+Route::post('post/{id}', [PostController::class, 'update'])->name('post.update');

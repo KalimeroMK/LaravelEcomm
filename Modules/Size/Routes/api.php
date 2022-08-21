@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Modules\Tag\Http\Controllers\Api\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,5 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/size', function (Request $request) {
-    return $request->user();
-});
+Route::apiResource('size', TagController::class);
+

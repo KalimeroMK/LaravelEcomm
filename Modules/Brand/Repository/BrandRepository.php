@@ -2,12 +2,12 @@
 
 namespace Modules\Brand\Repository;
 
-use Modules\Banner\Models\Banner;
+use Modules\Brand\Models\Brand;
 use Modules\Core\Repositories\Repository;
 
 class BrandRepository extends Repository
 {
-    public $model = Banner::class;
+    public $model = Brand::class;
     
     /**
      * @return mixed

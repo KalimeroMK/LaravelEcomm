@@ -11,10 +11,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\NoReturn;
 use Modules\Cart\Models\Cart;
-use Modules\Core\Helpers\Payment;
-use Modules\Front\Mail\NewsLetterMail;
 use Modules\Front\Service\FrontService;
-use Modules\Message\Http\Requests\Store;
+use Modules\Message\Http\Requests\Api\Store;
 use Modules\Newsletter\Models\Newsletter;
 
 class FrontController extends Controller
@@ -269,7 +267,7 @@ class FrontController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $data = Payment::calculate($request);
+        $data = $this->front_service->orderStore($request->all());
         
         if (request('payment_method') == 'paypal') {
             return redirect()->route('payment')->with($data[0], $data[1]);

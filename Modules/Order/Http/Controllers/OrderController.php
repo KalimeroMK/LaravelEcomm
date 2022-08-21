@@ -3,6 +3,7 @@
 namespace Modules\Order\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -11,11 +12,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Modules\Order\Http\Requests\Store;
-use Modules\Order\Http\Requests\Update;
+use Modules\Order\Http\Requests\Api\Api\Store;
+use Modules\Order\Http\Requests\Api\Api\Update;
 use Modules\Order\Models\Order;
 use Modules\Order\Service\OrderService;
-use PDF;
 
 class OrderController extends Controller
 {
@@ -40,7 +40,7 @@ class OrderController extends Controller
         if (Auth::user()->hasRole('client')) {
             return view('order::index', ['orders' => $this->order_service->findByAllUser()]);
         } else {
-            return view('order::index', ['orders' => $this->order_service->index()]);
+            return view('order::index', ['orders' => $this->order_service->getAll()]);
         }
     }
     
@@ -63,7 +63,11 @@ class OrderController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        return $this->order_service->store($request);
+        $this->order_service->store($request->all());
+        session()->forget('cart');
+        session()->forget('coupon');
+        
+        return redirect()->route('home');
     }
     
     /**

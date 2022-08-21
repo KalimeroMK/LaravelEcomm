@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Front\Http\Controllers\Api\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/front', function (Request $request) {
-    return $request->user();
-});
+Route::get('/', [FrontController::class, 'index'])->name('api.home');
+Route::get('product-detail/{slug}', [FrontController::class, 'productDetail'])->name('api.product-detail');
+Route::post('/product/search', [FrontController::class, 'productSearch'])->name('api.product.search');
+Route::get('/product-cat/{slug}', [FrontController::class, 'productCat'])->name('api.product-cat');
+Route::get('/product-brand/{slug}', [FrontController::class, 'productBrand'])->name('api.product-brand');
+Route::get('/blog', [FrontController::class, 'blog'])->name('api.blog');
+Route::get('/blog-detail/{slug}', [FrontController::class, 'blogDetail'])->name('api.blog.detail');
+Route::get('/blog/search', [FrontController::class, 'blogSearch'])->name('api.blog.search');
+Route::get('blog-cat/{slug}', [FrontController::class, 'blogByCategory'])->name('api.blog.category');
+Route::get('blog-tag/{slug}', [FrontController::class, 'blogByTag'])->name('api.blog.tag');
+Route::get('/product/deal', [FrontController::class, 'productDeal'])->name('api.product.deal');
+Route::post('cart/order', [FrontController::class, 'store'])->name('api.cart.order');
+

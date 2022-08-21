@@ -93,7 +93,15 @@
                         @endforeach
                     </select>
                 </div>
-
+                <div class="form-group">
+                    <label for="size">Tags</label>
+                    <select class="form-control js-example-basic-multiple" id="tags" name="tag[]"
+                            multiple="multiple">
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
                 <div class="form-group">
                     <label for="stock">Quantity <span class="text-danger">*</span></label>

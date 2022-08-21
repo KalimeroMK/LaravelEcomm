@@ -3,9 +3,6 @@
 namespace Modules\Banner\Service;
 
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
-use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
-use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
@@ -14,7 +11,7 @@ class BannerService extends CoreService
 {
     use ImageUpload;
     
-    private BannerRepository $banner_repository;
+    public BannerRepository $banner_repository;
     
     public function __construct(BannerRepository $banner_repository)
     {
@@ -24,7 +21,7 @@ class BannerService extends CoreService
     /**
      * @param $data
      *
-     * @return Collection|_IH_Banner_C|mixed|Banner|Banner[]|string
+     * @return mixed
      */
     public function store($data): mixed
     {
@@ -76,7 +73,15 @@ class BannerService extends CoreService
     public function update($id, $data): mixed
     {
         try {
-            return $this->banner_repository->update($id, $data);
+            if ( ! empty($data['photo'])) {
+                return $this->banner_repository->update((int)$id,
+                    collect($data)->except(['photo'])->toArray() + [
+                        'photo' => $this->verifyAndStoreImage($data['photo']),
+                    ]
+                );
+            }
+            
+            return $this->banner_repository->update((int)$id, $data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

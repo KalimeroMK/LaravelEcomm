@@ -20,7 +20,7 @@ class CategoryProductSeeder extends Seeder
         Brand::factory()->count(10)->create();
         
         Product::factory()
-               ->count(500)
+               ->count(10)
                ->hasAttached($categories)
                ->create();
     }

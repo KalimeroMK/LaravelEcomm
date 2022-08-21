@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
-use Modules\Tag\Http\Requests\Store;
+use Modules\Tag\Http\Requests\Api\Store;
 use Modules\Tag\Models\Tag;
 use Modules\Tag\Service\TagService;
 
@@ -31,7 +31,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        return view('tag::index', ['tags' => $this->tag_service->index()]);
+        return view('tag::index', ['tags' => $this->tag_service->getAll()]);
     }
     
     /**

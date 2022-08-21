@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Modules\Front\Http\Controllers\FrontController;
+use Modules\Front\Http\Controllers\Api\FrontController;
 use Spatie\Feed\Http\FeedController;
 
 /*

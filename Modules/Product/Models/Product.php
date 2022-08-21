@@ -15,13 +15,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Admin\Models\Condition;
-use Modules\Admin\Models\Size;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Product\Database\Factories\ProductFactory;
+use Modules\Size\Models\Size;
+use Modules\Tag\Models\Tag;
 use Spatie\Feed\Feedable;
 use Spatie\Feed\FeedItem;
 
@@ -115,8 +116,8 @@ class Product extends Core implements Feedable
         'description',
         'photo',
         'stock',
-        'size',
-        'condition.name',
+        'sizes.name',
+        'condition.status',
         'status',
         'price',
         'discount',
@@ -264,8 +265,19 @@ class Product extends Core implements Feedable
         return $this->belongsTo(Condition::class);
     }
     
+    /**
+     * @return BelongsToMany
+     */
     public function sizes(): belongsToMany
     {
         return $this->belongsToMany(Size::class);
+    }
+    
+    /**
+     * @return BelongsToMany
+     */
+    public function tags(): belongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }

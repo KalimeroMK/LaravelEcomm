@@ -37,7 +37,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('product::index', ['products' => $this->product_service->index()]);
+        return view('product::index', ['products' => $this->product_service->findAll()]);
     }
     
     /**
@@ -86,7 +86,7 @@ class ProductController extends Controller
      */
     public function update(Update $request, Product $product): RedirectResponse
     {
-        $this->product_service->update($request->all(), $product->id);
+        $this->product_service->update($product->id, $request->validated());
         
         return redirect()->route('products.index');
     }

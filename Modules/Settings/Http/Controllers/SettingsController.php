@@ -8,13 +8,13 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Admin\Http\Requests\Update;
-use Modules\Settings\Service\SettingsService;
+use Modules\Size\Service\SizesService;
 
 class SettingsController extends Controller
 {
-    private SettingsService $settings_service;
+    private SizesService $settings_service;
     
-    public function __construct(SettingsService $settings_service)
+    public function __construct(SizesService $settings_service)
     {
         $this->settings_service = $settings_service;
         $this->middleware('permission:settings-list', ['only' => ['index']]);

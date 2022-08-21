@@ -3,11 +3,12 @@
 namespace Modules\Message\Service;
 
 use Carbon\Carbon;
+use Exception;
 use Modules\Message\Repository\MessageRepository;
 
 class MessageService
 {
-    private MessageRepository $message_repository;
+    public MessageRepository $message_repository;
     
     public function __construct(MessageRepository $message_repository)
     {
@@ -21,34 +22,44 @@ class MessageService
      */
     public function show($id): mixed
     {
-        $message = $this->message_repository->findById($id);
-        if (
-            true
-        ) {
-            $message->read_at = Carbon::now();
-            $message->save();
+        try {
+            $message = $this->message_repository->findById($id);
+            if (
+                true
+            ) {
+                $message->read_at = Carbon::now();
+                $message->save();
+            }
+            
+            return $message;
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
-        
-        return $message;
     }
     
     /**
-     * Remove the specified resource from storage.
-     *
      * @param $id
      *
-     * @return void
+     * @return string|void
      */
-    public function destroy($id): void
+    public function destroy($id)
     {
-        $this->message_repository->delete($id);
+        try {
+            $this->message_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
     
     /**
-     * @return array
+     * @return mixed|string
      */
-    public function index(): array
+    public function getAll(): mixed
     {
-        return $this->message_repository->findAll();
+        try {
+            return $this->message_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
     }
 }

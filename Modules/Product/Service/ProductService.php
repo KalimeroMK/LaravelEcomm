@@ -4,17 +4,18 @@ namespace Modules\Product\Service;
 
 use Exception;
 use Modules\Admin\Models\Condition;
-use Modules\Admin\Models\Size;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
+use Modules\Size\Models\Size;
+use Modules\Tag\Models\Tag;
 
 class ProductService extends CoreService
 {
-    private ProductRepository $product_repository;
+    public ProductRepository $product_repository;
     
     public function __construct(ProductRepository $product_repository)
     {
@@ -23,7 +24,7 @@ class ProductService extends CoreService
     
     use ImageUpload;
     
-    public function index()
+    public function findAll()
     {
         return $this->product_repository->findAll();
     }
@@ -39,6 +40,7 @@ class ProductService extends CoreService
             'product'    => new Product(),
             'sizes'      => Size::get(),
             'conditions' => Condition::get(),
+            'tags'       => Tag::get(),
         ];
     }
     
@@ -50,11 +52,9 @@ class ProductService extends CoreService
     public function store($data): null|string
     {
         $color = $data['color'];
-        if ($color) {
+        if (is_array($color)) {
             $color         = preg_replace('/\s+/', '', $color);
             $data['color'] = implode(',', $color);
-        } else {
-            $data['color'] = '';
         }
         if (isset($data['photo'])) {
             $data['photo'] = $this->verifyAndStoreImage($data['photo']);
@@ -64,6 +64,7 @@ class ProductService extends CoreService
             $product = $this->product_repository->create($data);
             $product->categories()->attach($data['category']);
             $product->sizes()->attach($data['size']);
+            $product->tags()->attach($data['tag']);
             
             return $product;
         } catch (Exception $exception) {
@@ -84,6 +85,19 @@ class ProductService extends CoreService
             'product'    => $this->product_repository->findById($id),
             'sizes'      => Size::get(),
             'conditions' => Condition::get(),
+            'tags'       => Tag::get(),
+        ];
+    }
+    
+    /**
+     * @param $id
+     *
+     * @return array
+     */
+    public function show($id): array
+    {
+        return [
+            'product' => $this->product_repository->findById($id),
         ];
     }
     
@@ -93,14 +107,12 @@ class ProductService extends CoreService
      *
      * @return array|null
      */
-    public function update($data, int $id): ?array
+    public function update(int $id, $data): ?array
     {
         $color = $data['color'];
-        if ($color) {
+        if (is_array($color)) {
             $color         = preg_replace('/\s+/', '', $color);
             $data['color'] = implode(',', $color);
-        } else {
-            $data['color'] = '';
         }
         if (isset($data['image'])) {
             $data['photo'] = $this->verifyAndStoreImage($data['photo']);
@@ -109,7 +121,12 @@ class ProductService extends CoreService
         }
         
         try {
-            return $this->product_repository->update($id, $data);
+            $product = $this->product_repository->update($id, $data);
+            $product->categories()->sync($data['category'], true);
+            $product->sizes()->sync($data['size'], true);
+            $product->tags()->sync($data['size'], true);
+            
+            return $product;
         } catch (Exception $exception) {
             return [$exception->getMessage()];
         }
@@ -118,11 +135,15 @@ class ProductService extends CoreService
     /**
      * @param $id
      *
-     * @return void
+     * @return Exception|void
      */
-    public function destroy($id): void
+    public function destroy($id)
     {
-        $this->product_repository->delete($id);
+        try {
+            $this->product_repository->delete($id);
+        } catch (Exception $exception) {
+            return $exception;
+        }
     }
     
 }
