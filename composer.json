@@ -14,7 +14,6 @@
     "barryvdh/laravel-debugbar": "^3.6",
     "barryvdh/laravel-dompdf": "^1.0",
     "barryvdh/laravel-ide-helper": "^2.12",
-    "consoletvs/charts": "^7.3",
     "fruitcake/laravel-cors": "^3.0",
     "garygreen/pretty-routes": "^1.0",
     "guzzlehttp/guzzle": "^7.4",
