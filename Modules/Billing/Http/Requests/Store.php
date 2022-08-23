@@ -24,11 +24,11 @@ class Store extends FormRequest
     public function passedValidation()
     {
         $this->merge([
-            'product_id' => Product::whereSlug($this->get('slug'))->first()->id,
+            'product_id' => Product::whereSlug(request()->slug)->first()->id,
             'quantity'   => 1,
             'user_id'    => Auth::id(),
-            'discount'   => Product::whereSlug($this->get('slug'))->first()->discount,
-            'price'      => Product::whereSlug($this->get('slug'))->first()->price,
+            'discount'   => Product::whereSlug(request()->slug)->first()->discount,
+            'price'      => Product::whereSlug(request()->slug)->first()->price,
         
         ]);
     }

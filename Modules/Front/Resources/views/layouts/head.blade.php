@@ -9,6 +9,8 @@
 
 <!-- StyleSheet -->
 <link rel="stylesheet" href="{{asset('css/all_front.min.css')}}">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="{{asset('frontend/css/font-awesome.css')}}">
 <!-- Themify Icons -->
 <link rel="stylesheet" href="{{asset('frontend/css/themify-icons.css')}}">
 

@@ -14,7 +14,7 @@ class ProductStockRule implements Rule
     
     public function passes($attribute, $value): bool
     {
-        if (Product::whereSlug(request()->slug)->first()->stock < request()['quant'][1]) {
+        if (Product::whereSlug(request()->slug)->first()->stock < request()->quant) {
             return false;
         } else {
             return true;

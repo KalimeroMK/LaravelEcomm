@@ -118,4 +118,5 @@ class Cart extends Core
     {
         return $this->hasMany(Wishlist::class);
     }
+    
 }

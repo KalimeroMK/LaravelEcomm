@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Billing\Http\Controllers\Api\WishlistController;
+use Modules\Billing\Http\Controllers\Api\StripeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +14,6 @@ use Modules\Billing\Http\Controllers\Api\WishlistController;
 |
 */
 
-Route::apiResource('wishlist', WishlistController::class);
+Route::apiResource('wishlist', StripeController::class);
+Route::post('stripe', [StripeController::class, 'stripe']);
+

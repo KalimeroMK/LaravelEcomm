@@ -26,7 +26,7 @@ class PaypalService
      */
     public function payment(): Redirector|RedirectResponse|Application
     {
-        $cart = Cart::whereUserId(auth()->user()->id)->whereOrderId(null)->get()->toArray();
+        $cart = Cart::whereUserId(Auth()->id())->whereOrderId(null)->get()->toArray();
         
         $data = [];
         

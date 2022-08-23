@@ -15,13 +15,13 @@ class AddToCartSingle extends FormRequest
     /**
      * @var mixed
      */
-    public mixed $quant;
+    public mixed $quantity;
     
     public function rules(): array
     {
         return [
-            'slug'  => 'required|exists:products',
-            'quant' => [
+            'slug'     => 'required|exists:products',
+            'quantity' => [
                 'required',
                 new ProductStockRule(),
             ],

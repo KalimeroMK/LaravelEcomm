@@ -17,4 +17,12 @@ class CartRepository extends Repository
         return $this->model::get();
     }
     
+    /**
+     * @return mixed
+     */
+    public function show(): mixed
+    {
+        return $this->model::whereUserId(Auth()->id())->get();
+    }
+    
 }
