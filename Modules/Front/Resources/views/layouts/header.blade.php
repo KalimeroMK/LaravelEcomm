@@ -127,21 +127,21 @@
                                             <span
                                                     class="total-amount">${{number_format(Helper::totalWishlistPrice(),2)}}</span>
                                         </div>
-                                        <a href="{{route('cart')}}" class="btn animate">Cart</a>
+                                        <a href="{{route('cart-list')}}" class="btn animate">Cart</a>
                                     </div>
                                 </div>
                             @endauth
                             <!--/ End Shopping Item -->
                         </div>
                         <div class="sinlge-bar shopping">
-                            <a href="{{route('cart')}}" class="single-icon"><i class="ti-bag"></i> <span
+                            <a href="{{route('cart-list')}}" class="single-icon"><i class="ti-bag"></i> <span
                                         class="total-count">{{Helper::cartCount()}}</span></a>
                             <!-- Shopping Item -->
                             @auth
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
                                         <span>{{count(Helper::getAllProductFromCart())}} Items</span>
-                                        <a href="{{route('cart')}}">View Cart</a>
+                                        <a href="{{route('cart-list')}}">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
                                         @foreach(Helper::getAllProductFromCart() as $data)

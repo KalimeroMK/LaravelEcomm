@@ -3,10 +3,9 @@
 namespace Modules\Core\Helpers;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
-use Modules\Cart\Models\Cart;
+use Modules\Billing\Http\Requests\Api\Stripe;
 use Modules\Core\Notifications\StatusNotification;
 use Modules\Order\Models\Order;
 use Modules\Shipping\Models\Shipping;
@@ -17,30 +16,12 @@ class Payment
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  Stripe  $request
      *
      * @return array|RedirectResponse
      */
-    public function calculate(Request $request): array|RedirectResponse
+    public function calculate(Stripe $request): array|RedirectResponse
     {
-        request()->validate(
-            [
-                'first_name' => 'string|required',
-                'last_name'  => 'string|required',
-                'address1'   => 'string|required',
-                'address2'   => 'string|nullable',
-                'coupon'     => 'nullable|numeric',
-                'phone'      => 'numeric|required',
-                'post_code'  => 'string|nullable',
-                'email'      => 'string|required',
-            ]
-        );
-        if (empty(Cart::whereUserId(auth()->user()->id)->where('order_id', null)->first())) {
-            request()->session()->flash('error', 'Cart is Empty !');
-            
-            return back();
-        }
-        
         $order                      = new Order();
         $order_data                 = $request->all();
         $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Cart\Models\Cart;
+use Modules\Core\Traits\ClearsResponseCache;
 use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 
@@ -24,7 +25,7 @@ use Modules\User\Models\User;
  * @property int|null $cart_id
  * @property int|null $user_id
  * @property float $price
- * @property int $quantity
+ * @property int $quantityity
  * @property float $amount
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -49,6 +50,7 @@ use Modules\User\Models\User;
 class Wishlist extends Model
 {
     use HasFactory;
+    use ClearsResponseCache;
     
     protected $table = 'wishlists';
     

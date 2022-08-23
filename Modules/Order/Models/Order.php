@@ -30,7 +30,7 @@ use Modules\User\Models\User;
  * @property int|null $shipping_id
  * @property float|null $coupon
  * @property float $total_amount
- * @property int $quantity
+ * @property int $quantityity
  * @property string $payment_method
  * @property string $payment_status
  * @property string $status

@@ -363,16 +363,17 @@
                                                     <div class="button minus">
                                                         <button type="button" class="btn btn-primary btn-number"
                                                                 disabled="disabled" data-type="minus"
-                                                                data-field="quant[1]">
+                                                                data-field="quantity[1]">
                                                             <i class="ti-minus"></i>
                                                         </button>
                                                     </div>
                                                     <input type="hidden" name="slug" value="{{$product->slug}}">
-                                                    <input type="text" name="quant[1]" class="input-number" data-min="1"
+                                                    <input type="text" name="quantity[1]" class="input-number"
+                                                           data-min="1"
                                                            data-max="1000" value="1">
                                                     <div class="button plus">
                                                         <button type="button" class="btn btn-primary btn-number"
-                                                                data-type="plus" data-field="quant[1]">
+                                                                data-type="plus" data-field="quantity[1]">
                                                             <i class="ti-plus"></i>
                                                         </button>
                                                     </div>

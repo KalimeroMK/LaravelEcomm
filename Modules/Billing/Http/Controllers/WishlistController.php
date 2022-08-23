@@ -5,6 +5,7 @@ namespace Modules\Billing\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Http\Requests\Store;
 use Modules\Billing\Service\WishlistService;
 
@@ -19,7 +20,13 @@ class WishlistController extends Controller
     
     public function wishlist(Store $request): RedirectResponse
     {
-        $this->wishlist_service->store($request->all());
+        if (Auth::check()) {
+            $this->wishlist_service->store($request->all());
+            request()->session()->flash('success', 'Product successfully added to wishlist');
+            
+            return back();
+        }
+        request()->session()->flash('error', 'Pls login added to wishlist');
         
         return back();
     }
