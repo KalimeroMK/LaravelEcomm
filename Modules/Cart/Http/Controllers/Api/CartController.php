@@ -10,12 +10,9 @@ use Modules\Cart\Http\Requests\AddToCartSingle;
 use Modules\Cart\Http\Resources\CartResource;
 use Modules\Cart\Service\CartService;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 
 class CartController extends Controller
 {
-    use ApiResponses;
-    
     private CartService $cart_service;
     
     public function __construct(CartService $cart_service)

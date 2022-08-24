@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
@@ -15,8 +14,6 @@ use Modules\Post\Service\PostService;
 
 class PostController extends Controller
 {
-    use ApiResponses;
-    
     private PostService $post_service;
     
     public function __construct(PostService $post_service)

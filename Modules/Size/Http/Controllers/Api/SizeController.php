@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Update;
 use Modules\Size\Http\Resources\SizeResource;
@@ -15,7 +14,6 @@ use Modules\Size\Service\SizesService;
 
 class SizeController extends Controller
 {
-    use ApiResponses;
     
     private SizesService $sizes_service;
     

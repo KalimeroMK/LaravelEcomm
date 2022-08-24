@@ -10,12 +10,9 @@ use Modules\Billing\Http\Requests\Api\Store;
 use Modules\Billing\Http\Resources\WishlistResource;
 use Modules\Billing\Service\WishlistService;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 
 class WishlistController extends Controller
 {
-    use ApiResponses;
-    
     private WishlistService $wishlist_service;
     
     public function __construct(WishlistService $wishlist_service)

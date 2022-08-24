@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Store as Update;
 use Modules\Tag\Http\Resources\TagResource;
@@ -15,7 +14,6 @@ use Modules\Tag\Service\TagService;
 
 class TagController extends Controller
 {
-    use ApiResponses;
     
     private TagService $tag_service;
     

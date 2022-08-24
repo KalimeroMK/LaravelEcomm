@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Shipping\Http\Resources\ShippingResource;
 use Modules\Shipping\Service\ShippingService;
 use Modules\Size\Http\Requests\Api\Store;
@@ -15,7 +14,6 @@ use Modules\Size\Http\Requests\Api\Update;
 
 class ShippingController extends Controller
 {
-    use ApiResponses;
     
     private ShippingService $shipping_service;
     

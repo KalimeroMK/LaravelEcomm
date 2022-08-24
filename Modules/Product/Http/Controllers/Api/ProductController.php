@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
@@ -16,7 +15,6 @@ use Modules\Product\Service\ProductService;
 
 class ProductController extends Controller
 {
-    use ApiResponses;
     
     private ProductService $product_service;
     

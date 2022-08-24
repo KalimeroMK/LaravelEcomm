@@ -11,11 +11,9 @@ use Modules\Category\Http\Requests\Api\Update;
 use Modules\Category\Http\Resources\CategoryResource;
 use Modules\Category\Service\CategoryService;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 
 class CategoryController extends Controller
 {
-    use ApiResponses;
     
     private CategoryService $category_service;
     

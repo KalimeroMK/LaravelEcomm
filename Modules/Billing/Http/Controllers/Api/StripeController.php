@@ -8,15 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Helpers\Payment;
-use Modules\Core\Traits\ApiResponses;
 use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 class StripeController extends Controller
 {
-    use ApiResponses;
-    
     /**
      * success response method.
      *

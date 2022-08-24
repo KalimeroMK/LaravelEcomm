@@ -10,12 +10,10 @@ use Modules\Brand\Http\Requests\Api\Update;
 use Modules\Brand\Http\Resource\BrandResource;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Coupon\Http\Requests\Api\Store;
 
 class BrandController extends Controller
 {
-    use ApiResponses;
     
     private BrandService $brand_service;
     

@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
@@ -17,7 +16,6 @@ use Modules\Newsletter\Service\NewsletterService;
 
 class NewsletterController extends Controller
 {
-    use ApiResponses;
     
     private NewsletterService $newsletter_service;
     

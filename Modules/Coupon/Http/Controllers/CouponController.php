@@ -32,7 +32,7 @@ class CouponController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        return view('coupon::index', ['coupons' => $this->coupon_service->index()]);
+        return view('coupon::index', ['coupons' => $this->coupon_service->getAll()]);
     }
     
     /**

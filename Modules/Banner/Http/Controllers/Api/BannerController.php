@@ -11,11 +11,9 @@ use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Banner\Service\BannerService;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 
 class BannerController extends Controller
 {
-    use ApiResponses;
     
     private BannerService $banner_service;
     

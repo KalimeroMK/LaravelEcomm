@@ -7,13 +7,11 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Traits\ApiResponses;
 use Modules\Message\Http\Resources\MessageResource;
 use Modules\Message\Service\MessageService;
 
 class MessageController extends Controller
 {
-    use ApiResponses;
     
     private MessageService $message_service;
     
