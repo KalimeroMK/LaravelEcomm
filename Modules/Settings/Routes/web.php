@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 use Modules\Settings\Http\Controllers\SettingsController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
-    Route::resource('settings', SettingsController::class);
+    Route::resource('settings', SettingsController::class)->only('index', 'update');
 });

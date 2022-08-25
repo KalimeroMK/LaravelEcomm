@@ -7,8 +7,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Message\Models\Message;
 use Modules\Message\Service\MessageService;
-use Modules\Size\Models\Message;
 
 class MessageController extends CoreController
 {
@@ -26,7 +26,7 @@ class MessageController extends CoreController
      */
     public function index(): View|Factory|Application
     {
-        return view('backend::message.index')->with($this->message_service->index());
+        return view('backend::message.index')->with($this->message_service->getAll());
     }
     
     /**

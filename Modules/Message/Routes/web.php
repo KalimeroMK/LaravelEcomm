@@ -1,4 +1,4 @@
-<?php
+q<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 use Modules\Message\Http\Controllers\MessageController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
-    Route::resource('/messages', MessageController::class);
+    Route::resource('/messages', MessageController::class)->only('index', 'show', 'destroy');
 });

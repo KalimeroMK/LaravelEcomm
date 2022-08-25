@@ -16,11 +16,11 @@ use Modules\Post\Http\Controllers\PostCommentController;
 use Modules\Post\Http\Controllers\PostController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
-    Route::resource('/posts', PostController::class);
+    Route::resource('/posts', PostController::class)->except('show');
     /*Excel import export*/
     Route::get('posts/export', [PostController::class, 'export'])->name('posts.export');
     Route::post('posts/import', [PostController::class, 'import'])->name('posts.import');
     Route::post('ckeditor/upload', [PostController::class, 'upload'])->name('ckeditor.image-upload');
 });
 Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');
-Route::resource('/post_comments', PostCommentController::class);
+Route::resource('/post_comments', PostCommentController::class)->except('create', 'show');

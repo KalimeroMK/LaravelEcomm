@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 use Modules\Brand\Http\Controllers\BrandController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
-    Route::resource('brands', BrandController::class);
+    Route::resource('brands', BrandController::class)->except('show');
 });

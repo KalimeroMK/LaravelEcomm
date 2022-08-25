@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 use Modules\Tag\Http\Controllers\TagController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
-    Route::resource('/tags', TagController::class);
+    Route::resource('/tags', TagController::class)->except('show');
 });

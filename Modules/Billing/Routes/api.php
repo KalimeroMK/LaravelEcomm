@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Billing\Http\Controllers\Api\StripeController;
+use Modules\Billing\Http\Controllers\Api\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,6 @@ use Modules\Billing\Http\Controllers\Api\StripeController;
 |
 */
 
-Route::apiResource('wishlist', StripeController::class);
+Route::apiResource('wishlist', WishlistController::class)->only('index', 'store', 'destroy');
 Route::post('stripe', [StripeController::class, 'stripe']);
 

@@ -8,13 +8,13 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Admin\Http\Requests\Update;
-use Modules\Size\Service\SizesService;
+use Modules\Settings\Service\SettingsService;
 
 class SettingsController extends Controller
 {
-    private SizesService $settings_service;
+    private SettingsService $settings_service;
     
-    public function __construct(SizesService $settings_service)
+    public function __construct(SettingsService $settings_service)
     {
         $this->settings_service = $settings_service;
         $this->middleware('permission:settings-list', ['only' => ['index']]);
@@ -28,7 +28,7 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        return view('settings::edit', ['settings' => $this->settings_service->index()]);
+        return view('settings::edit', ['settings' => $this->settings_service->getData()]);
     }
     
     /**
@@ -38,7 +38,7 @@ class SettingsController extends Controller
      */
     public function Update(Update $request): RedirectResponse
     {
-        $this->settings_service->update($request);
+        $this->settings_service->update($request->all());
         
         return redirect()->back();
     }

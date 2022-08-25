@@ -16,13 +16,13 @@ use Modules\Product\Http\Controllers\ProductController;
 use Modules\Product\Http\Controllers\ProductReviewController;
 
 Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
-    Route::resource('/products', ProductController::class);
+    Route::resource('/products', ProductController::class)->except('show');
     // Product Review
     /*Excel import export*/
     Route::get('products/export', [ProductController::class, 'export'])->name('product.export');
     Route::post('products/import', [ProductController::class, 'import'])->name('product.import');
     
     Route::post('product/{slug}/review', [ProductReviewController::class, 'store'])->name('product.review.store');
-    Route::resource('/product_review', ProductReviewController::class);
+    Route::resource('/product_review', ProductReviewController::class)->except('show', 'create');
 });
 

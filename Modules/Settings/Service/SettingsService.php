@@ -19,7 +19,7 @@ class SettingsService extends CoreService
         $this->settings_repository = $settings_repository;
     }
     
-    public function index()
+    public function getData()
     {
         return $this->settings_repository->findFirst();
     }
