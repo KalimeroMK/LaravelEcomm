@@ -2,7 +2,6 @@
 
 namespace Modules\Brand\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,8 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Brand\Http\Requests\Store;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
+use Modules\Core\Http\Controllers\CoreController;
 
-class BrandController extends Controller
+class BrandController extends CoreController
 {
     private BrandService $brand_service;
     

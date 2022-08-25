@@ -2,17 +2,11 @@
 
 namespace App\Requests;
 
-use JetBrains\PhpStorm\ArrayShape;
-use Modules\Core\Helpers\ApiRequest;
+use Modules\Core\Http\Requests\Api\CoreRequest;
 
-class AuthRequest extends ApiRequest
+class AuthRequest extends CoreRequest
 {
-    #[ArrayShape([
-        'name'             => "string",
-        'email'            => "string",
-        'password'         => "string",
-        'confirm_password' => "string",
-    ])] public function rules(): array
+    public function rules(): array
     {
         return [
             'name'             => 'required',

@@ -2,7 +2,6 @@
 
 namespace Modules\Cart\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -10,8 +9,9 @@ use Modules\Cart\Http\Requests\AddToCartSingle;
 use Modules\Cart\Http\Resources\CartResource;
 use Modules\Cart\Service\CartService;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 
-class CartController extends Controller
+class CartController extends CoreController
 {
     private CartService $cart_service;
     

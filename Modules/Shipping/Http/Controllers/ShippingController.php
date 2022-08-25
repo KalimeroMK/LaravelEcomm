@@ -2,17 +2,17 @@
 
 namespace Modules\Shipping\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Shipping\Http\Requests\Store;
 use Modules\Shipping\Http\Requests\Update;
 use Modules\Shipping\Models\Shipping;
 use Modules\Shipping\Service\ShippingService;
 
-class ShippingController extends Controller
+class ShippingController extends CoreController
 {
     private ShippingService $shipping_service;
     

@@ -2,14 +2,14 @@
 
 namespace Modules\Billing\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Http\Requests\Store;
 use Modules\Billing\Service\WishlistService;
+use Modules\Core\Http\Controllers\CoreController;
 
-class WishlistController extends Controller
+class WishlistController extends CoreController
 {
     private WishlistService $wishlist_service;
     

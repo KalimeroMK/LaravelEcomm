@@ -2,7 +2,6 @@
 
 namespace Modules\Cart\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -11,9 +10,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\Cart\Http\Requests\AddToCartSingle;
 use Modules\Cart\Service\CartService;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Product\Models\Product;
 
-class CartController extends Controller
+class CartController extends CoreController
 {
     
     private CartService $cart_service;

@@ -2,7 +2,6 @@
 
 namespace Modules\Banner\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -11,8 +10,9 @@ use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Banner\Service\BannerService;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 
-class BannerController extends Controller
+class BannerController extends CoreController
 {
     
     private BannerService $banner_service;

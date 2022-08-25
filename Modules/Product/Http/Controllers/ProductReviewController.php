@@ -2,18 +2,18 @@
 
 namespace Modules\Product\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Product\Http\Requests\ProductReviewStore;
 use Modules\Product\Models\ProductReview;
 use Modules\Product\Service\ProductReviewService;
 
-class ProductReviewController extends Controller
+class ProductReviewController extends CoreController
 {
     private ProductReviewService $product_review_service;
     

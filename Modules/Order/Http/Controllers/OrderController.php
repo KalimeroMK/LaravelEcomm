@@ -2,7 +2,6 @@
 
 namespace Modules\Order\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
@@ -12,12 +11,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Modules\Order\Http\Requests\Api\Api\Store;
-use Modules\Order\Http\Requests\Api\Api\Update;
+use Modules\Core\Http\Controllers\CoreController;
+use Modules\Order\Http\Requests\Api\Store;
+use Modules\Order\Http\Requests\Api\Update;
 use Modules\Order\Models\Order;
 use Modules\Order\Service\OrderService;
 
-class OrderController extends Controller
+class OrderController extends CoreController
 {
     private OrderService $order_service;
     

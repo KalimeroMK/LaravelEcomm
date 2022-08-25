@@ -2,18 +2,18 @@
 
 namespace Modules\Coupon\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
 use Modules\Coupon\Service\CouponService;
 
-class CouponController extends Controller
+class CouponController extends CoreController
 {
     private CouponService $coupon_service;
     

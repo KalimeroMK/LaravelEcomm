@@ -2,7 +2,6 @@
 
 namespace Modules\Billing\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -11,11 +10,12 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use JetBrains\PhpStorm\NoReturn;
 use Modules\Billing\Service\PaypalService;
+use Modules\Core\Http\Controllers\CoreController;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Throwable;
 
-class PaypalController extends Controller
+class PaypalController extends CoreController
 {
     private PaypalService $paypal_service;
     

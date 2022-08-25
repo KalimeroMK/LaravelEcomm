@@ -2,17 +2,17 @@
 
 namespace Modules\Coupon\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Coupon\Http\Requests\Store;
 use Modules\Coupon\Http\Requests\Update;
 use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Service\CouponService;
 
-class CouponController extends Controller
+class CouponController extends CoreController
 {
     private CouponService $coupon_service;
     

@@ -6,12 +6,12 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Controller;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Tag\Http\Requests\Api\Store;
 use Modules\Tag\Models\Tag;
 use Modules\Tag\Service\TagService;
 
-class TagController extends Controller
+class TagController extends CoreController
 {
     private TagService $tag_service;
     

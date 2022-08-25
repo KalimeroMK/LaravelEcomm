@@ -2,17 +2,17 @@
 
 namespace Modules\Size\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Update;
 use Modules\Size\Http\Resources\SizeResource;
 use Modules\Size\Service\SizesService;
 
-class SizeController extends Controller
+class SizeController extends CoreController
 {
     
     private SizesService $sizes_service;

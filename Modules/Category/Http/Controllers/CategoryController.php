@@ -2,7 +2,6 @@
 
 namespace Modules\Category\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -13,8 +12,9 @@ use Modules\Category\Http\Requests\Api\Store;
 use Modules\Category\Http\Requests\Api\Update;
 use Modules\Category\Models\Category;
 use Modules\Category\Service\CategoryService;
+use Modules\Core\Http\Controllers\CoreController;
 
-class CategoryController extends Controller
+class CategoryController extends CoreController
 {
     private CategoryService $category_service;
     

@@ -2,7 +2,6 @@
 
 namespace Modules\Banner\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,9 +10,10 @@ use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Service\BrandService;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Core\Traits\ImageUpload;
 
-class BannerController extends Controller
+class BannerController extends CoreController
 {
     private BrandService $banner_service;
     

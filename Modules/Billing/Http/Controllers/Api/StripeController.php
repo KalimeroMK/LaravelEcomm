@@ -2,25 +2,23 @@
 
 namespace Modules\Billing\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Helpers\Payment;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
-class StripeController extends Controller
+class StripeController extends CoreController
 {
     /**
      * success response method.
      *
-     * @return RedirectResponse
+     * @return void
      * @throws ApiErrorException
      */
-    public function stripe(Request $request)
+    public function stripe(\Modules\Billing\Http\Requests\Api\Stripe $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
         

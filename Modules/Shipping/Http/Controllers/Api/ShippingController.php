@@ -2,17 +2,17 @@
 
 namespace Modules\Shipping\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Shipping\Http\Resources\ShippingResource;
 use Modules\Shipping\Service\ShippingService;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Update;
 
-class ShippingController extends Controller
+class ShippingController extends CoreController
 {
     
     private ShippingService $shipping_service;

@@ -6,13 +6,13 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Controller;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Newsletter\Http\Requests\Store;
 use Modules\Newsletter\Http\Requests\Store as Update;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Service\NewsletterService;
 
-class NewsletterController extends Controller
+class NewsletterController extends CoreController
 {
     private NewsletterService $newsletter_service;
     

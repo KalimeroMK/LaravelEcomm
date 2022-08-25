@@ -2,15 +2,15 @@
 
 namespace Modules\Message\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Message\Http\Resources\MessageResource;
 use Modules\Message\Service\MessageService;
 
-class MessageController extends Controller
+class MessageController extends CoreController
 {
     
     private MessageService $message_service;

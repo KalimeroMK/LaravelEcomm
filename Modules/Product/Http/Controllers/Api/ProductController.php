@@ -2,18 +2,18 @@
 
 namespace Modules\Product\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
 use Modules\Product\Http\Resources\ProductResource;
 use Modules\Product\Service\ProductService;
 
-class ProductController extends Controller
+class ProductController extends CoreController
 {
     
     private ProductService $product_service;

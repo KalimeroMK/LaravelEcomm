@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Requests\AuthRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\User\Models\User;
 
-class AuthController extends Controller
+class AuthController extends CoreController
 {
     /**
      * @param  Request  $request

@@ -2,15 +2,15 @@
 
 namespace Modules\Message\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Message\Service\MessageService;
 use Modules\Size\Models\Message;
 
-class MessageController extends Controller
+class MessageController extends CoreController
 {
     private MessageService $message_service;
     

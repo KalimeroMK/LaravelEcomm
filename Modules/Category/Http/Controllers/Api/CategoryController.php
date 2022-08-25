@@ -2,7 +2,6 @@
 
 namespace Modules\Category\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -11,8 +10,9 @@ use Modules\Category\Http\Requests\Api\Update;
 use Modules\Category\Http\Resources\CategoryResource;
 use Modules\Category\Service\CategoryService;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 
-class CategoryController extends Controller
+class CategoryController extends CoreController
 {
     
     private CategoryService $category_service;

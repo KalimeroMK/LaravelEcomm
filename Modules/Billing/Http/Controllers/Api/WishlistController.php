@@ -2,7 +2,6 @@
 
 namespace Modules\Billing\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -10,8 +9,9 @@ use Modules\Billing\Http\Requests\Api\Store;
 use Modules\Billing\Http\Resources\WishlistResource;
 use Modules\Billing\Service\WishlistService;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 
-class WishlistController extends Controller
+class WishlistController extends CoreController
 {
     private WishlistService $wishlist_service;
     

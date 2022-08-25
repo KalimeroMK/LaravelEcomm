@@ -2,17 +2,17 @@
 
 namespace Modules\Tag\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Store as Update;
 use Modules\Tag\Http\Resources\TagResource;
 use Modules\Tag\Service\TagService;
 
-class TagController extends Controller
+class TagController extends CoreController
 {
     
     private TagService $tag_service;
