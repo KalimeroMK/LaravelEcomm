@@ -11,7 +11,6 @@ use Modules\Attribute\Http\Requests\Api\SearchRequest;
 use Modules\Attribute\Resource\AttributeResource;
 use Modules\Attribute\Service\AttributeService;
 use Modules\Brand\Http\Requests\Api\Update;
-use Modules\Brand\Http\Resource\BrandResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Traits\ApiResponses;
 use Modules\Coupon\Http\Requests\Api\Store;
@@ -86,7 +85,7 @@ class AttributeController extends Controller
                         ]
                     )
                 )
-                ->respond(new BrandResource($this->attribute_service->show($id)));
+                ->respond(new AttributeResource($this->attribute_service->show($id)));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -112,7 +111,7 @@ class AttributeController extends Controller
                         ]
                     )
                 )
-                ->respond(new BrandResource($this->attribute_service->update($id, $request->all())));
+                ->respond(new AttributeResource($this->attribute_service->update($id, $request->all())));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
