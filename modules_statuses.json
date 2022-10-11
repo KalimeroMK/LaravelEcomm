@@ -21,5 +21,6 @@
   "Core": true,
   "Client": true,
   "Newsletter": true,
-  "Size": true
+  "Size": true,
+  "Attribute": true
 }

@@ -3,11 +3,7 @@
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="row">
-            <div class="col-md-12">
-                @include('notification::notification')
-            </div>
-        </div>
+
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">Banners List</h6>
             <a href="{{route('banners.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
@@ -16,7 +12,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(count($banners)>0)
-                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
                             <th>S.N.</th>

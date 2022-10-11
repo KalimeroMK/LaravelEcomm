@@ -90,7 +90,7 @@ class OrderService
         try {
             $order                      = new Order();
             $order_data                 = $data->all();
-            $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
+            $order_data['order_number'] = 'ORD-' . strtoupper(Str::random(10));
             $order_data['user_id']      = $data->user()->id;
             $order_data['shipping_id']  = $data->shipping;
             $shipping                   = Shipping::whereId($order_data['shipping_id'])->pluck('price');
@@ -170,6 +170,20 @@ class OrderService
     {
         try {
             return $this->order_repository->findAllByUser();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param  array  $data
+     *
+     * @return mixed|string
+     */
+    public function search(array $data): mixed
+    {
+        try {
+            return $this->order_repository->search($data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

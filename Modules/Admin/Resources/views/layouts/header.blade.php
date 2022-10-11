@@ -106,3 +106,4 @@
     </ul>
 
 </nav>
+@include('notification::notification')

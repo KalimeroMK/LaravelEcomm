@@ -17,7 +17,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(isset($users))
-                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
                             <th>S.N.</th>

@@ -4,7 +4,8 @@ namespace Modules\Banner\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Attribute\Http\Requests\Api\SearchRequest;
+use Modules\Banner\Exception\SearchException;
 use Modules\Banner\Http\Requests\Api\Store;
 use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
@@ -23,11 +24,15 @@ class BannerController extends CoreController
     }
     
     /**
-     * @return ResourceCollection
+     * @throws SearchException
      */
-    public function index(): ResourceCollection
+    public function index(SearchRequest $request)
     {
-        return BannerResource::collection($this->banner_service->getAll());
+        try {
+            return BannerResource::collection($this->banner_service->search($request->validated()));
+        } catch (Exception $exception) {
+            throw new SearchException($exception);
+        }
     }
     
     /**

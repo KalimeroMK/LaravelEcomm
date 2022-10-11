@@ -3,18 +3,14 @@
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="row">
-            <div class="col-md-12">
-                @include('notification::notification')
-            </div>
-        </div>
+
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">Comment Lists</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 @if(count($comments)>0)
-                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
                             <th>S.N.</th>
@@ -62,10 +58,9 @@
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
-                                                data-id={{$comment->id}} style="height:30px;
-                                                width:30px;border-radius:50%
+                                                data-id="{{$comment->id}}" style="height:30px; width:30px;border-radius:50%
                                         " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                class="fas fa-trash-alt"></i></button>
+                                                    class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

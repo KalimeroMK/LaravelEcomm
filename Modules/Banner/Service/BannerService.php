@@ -74,7 +74,8 @@ class BannerService extends CoreService
     {
         try {
             if ( ! empty($data['photo'])) {
-                return $this->banner_repository->update((int)$id,
+                return $this->banner_repository->update(
+                    (int)$id,
                     collect($data)->except(['photo'])->toArray() + [
                         'photo' => $this->verifyAndStoreImage($data['photo']),
                     ]
@@ -110,6 +111,20 @@ class BannerService extends CoreService
     {
         try {
             return $this->banner_repository->findAll();
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param  array  $data
+     *
+     * @return mixed|string
+     */
+    public function search(array $data): mixed
+    {
+        try {
+            return $this->banner_repository->search($data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

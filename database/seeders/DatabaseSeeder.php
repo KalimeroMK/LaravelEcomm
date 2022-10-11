@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Modules\Admin\Database\Seeders\ConditionSeeder;
 use Modules\Admin\Database\Seeders\SizeSeeder;
+use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\AttributeValue;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
@@ -48,6 +50,8 @@ class DatabaseSeeder extends Seeder
         $this->call(SizeSeeder::class);
         $this->call(ConditionSeeder::class);
         Newsletter::factory()->count(20)->create();
+        Attribute::factory()->count(20)->create();
+        AttributeValue::factory()->count(200)->create();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

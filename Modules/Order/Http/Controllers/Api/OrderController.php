@@ -4,10 +4,11 @@ namespace Modules\Order\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Order\Exceptions\SearchException;
+use Modules\Order\Http\Requests\Api\SearchRequest;
 use Modules\Order\Http\Requests\Api\Store;
 use Modules\Order\Http\Requests\Api\Update;
 use Modules\Order\Http\Resources\OrderResource;
@@ -24,11 +25,15 @@ class OrderController extends CoreController
     }
     
     /**
-     * @return ResourceCollection
+     * @throws SearchException
      */
-    public function index(): ResourceCollection
+    public function index(SearchRequest $request)
     {
-        return OrderResource::collection($this->order_service->getAll());
+        try {
+            return OrderResource::collection($this->order_service->search($request->validated()));
+        } catch (Exception $exception) {
+            throw new SearchException($exception);
+        }
     }
     
     /**

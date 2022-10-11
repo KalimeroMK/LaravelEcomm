@@ -5,8 +5,9 @@ namespace Modules\Post\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
+use Modules\Post\Exceptions\SearchException;
+use Modules\Post\Http\Requests\Api\SearchRequest;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
@@ -22,11 +23,15 @@ class PostController extends Controller
     }
     
     /**
-     * @return ResourceCollection
+     * @throws SearchException
      */
-    public function index(): ResourceCollection
+    public function index(SearchRequest $request)
     {
-        return PostResource::collection($this->post_service->getAll());
+        try {
+            return PostResource::collection($this->post_service->search($request->validated()));
+        } catch (Exception $exception) {
+            throw new SearchException($exception);
+        }
     }
     
     /**

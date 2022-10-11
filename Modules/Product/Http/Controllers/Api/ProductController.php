@@ -4,12 +4,13 @@ namespace Modules\Product\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
+use Modules\Product\Exceptions\SearchException;
+use Modules\Product\Http\Requests\Api\SearchRequest;
 use Modules\Product\Http\Resources\ProductResource;
 use Modules\Product\Service\ProductService;
 
@@ -24,11 +25,15 @@ class ProductController extends CoreController
     }
     
     /**
-     * @return ResourceCollection
+     * @throws SearchException
      */
-    public function index(): ResourceCollection
+    public function index(SearchRequest $request)
     {
-        return ProductResource::collection($this->product_service->findAll());
+        try {
+            return ProductResource::collection($this->product_service->search($request->validated()));
+        } catch (Exception $exception) {
+            throw new SearchException($exception);
+        }
     }
     
     /**

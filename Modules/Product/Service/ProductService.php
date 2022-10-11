@@ -146,4 +146,18 @@ class ProductService extends CoreService
         }
     }
     
+    /**
+     * @param  array  $data
+     *
+     * @return mixed|string
+     */
+    public function search(array $data): mixed
+    {
+        try {
+            return $this->product_repository->search($data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
 }
