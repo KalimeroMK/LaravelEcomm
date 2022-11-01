@@ -3,9 +3,9 @@
 namespace Modules\Product\Service;
 
 use Exception;
-use Modules\Admin\Models\Condition;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
+use Modules\Core\Helpers\Condition;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
 use Modules\Product\Models\Product;

@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Cart\Http\Requests\AddToCartSingle;
+use Modules\Cart\Http\Requests\Api\Store;
 use Modules\Cart\Http\Resources\CartResource;
 use Modules\Cart\Service\CartService;
 use Modules\Core\Helpers\Helper;
@@ -29,11 +30,11 @@ class CartController extends CoreController
     }
     
     /**
-     * @param  AddToCartSingle  $request
+     * @param  Store  $request
      *
      * @return JsonResponse|string
      */
-    public function store(AddToCartSingle $request)
+    public function store(Store $request)
     {
         try {
             return $this
@@ -77,11 +78,11 @@ class CartController extends CoreController
     }
     
     /**
-     * @param  AddToCartSingle  $request
+     * @param  Store  $request
      *
      * @return JsonResponse|string
      */
-    public function update(AddToCartSingle $request)
+    public function update(Store $request)
     {
         try {
             return $this

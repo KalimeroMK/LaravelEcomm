@@ -193,7 +193,6 @@ return [
         PrettyRoutes\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Spatie\Feed\FeedServiceProvider::class,
-        jeremykenedy\LaravelLogger\LaravelLoggerServiceProvider::class,
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,

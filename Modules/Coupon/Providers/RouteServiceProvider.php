@@ -31,11 +31,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function map()
+    public function map(): void
     {
         $this->mapApiRoutes();
-        
-        $this->mapWebRoutes();
     }
     
     /**
@@ -50,18 +48,5 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api/v1')
              ->middleware('auth:sanctum')
              ->group(module_path('Coupon', '/Routes/api.php'));
-    }
-    
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapWebRoutes(): void
-    {
-        Route::middleware('web')
-             ->group(module_path('Coupon', '/Routes/web.php'));
     }
 }

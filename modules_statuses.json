@@ -13,7 +13,6 @@
   "Settings": true,
   "Shipping": true,
   "Tag": true,
-  "Admin": true,
   "Message": true,
   "Notification": true,
   "Billing": true,

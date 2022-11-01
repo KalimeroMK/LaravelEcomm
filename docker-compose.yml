@@ -26,7 +26,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./.docker/dbdata:/var/lib/mysql
       - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
@@ -41,15 +41,6 @@ services:
     volumes:
       - ./:/var/www
       - ./.docker/nginx:/etc/nginx/conf.d
-    networks:
-      - laravelapp
-  redis:
-    image: redis:alpine
-    container_name: redis
-    volumes:
-      - ./.docker/redis:/data
-    ports:
-      - "6379:6379"
     networks:
       - laravelapp
 networks:

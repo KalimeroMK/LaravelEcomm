@@ -16,12 +16,4 @@ class Update extends CoreRequest
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }
-    
-    /**
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

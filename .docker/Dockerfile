@@ -19,12 +19,13 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install exif \
     && docker-php-ext-install pcntl \
     && docker-php-ext-install bcmath \
-    && docker-php-ext-install gd \
     && docker-php-ext-install zip \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
-    && docker-php-source delete
-
+    && docker-php-source delete \
+#GD
+RUN docker-php-ext-configure gd --with-jpeg && \
+    docker-php-ext-install gd
 #Xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug

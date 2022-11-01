@@ -3,18 +3,15 @@
 namespace Modules\Cart\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Arr;
 use Modules\Product\Models\Product;
 
 class ProductStockRule implements Rule
 {
     
-    public function __construct()
-    {
-    }
-    
     public function passes($attribute, $value): bool
     {
-        if (Product::whereSlug(request()->slug)->first()->stock < request()->quant) {
+        if (Product::whereSlug(Arr::get(request()->all(), 'slug'))->first()->stock < request()->quantity) {
             return false;
         } else {
             return true;

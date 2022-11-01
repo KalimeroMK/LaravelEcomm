@@ -14,11 +14,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Modules\Admin\Models\Condition;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
+use Modules\Core\Helpers\Condition;
 use Modules\Core\Models\Core;
 use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
@@ -224,7 +224,7 @@ class Product extends Core implements Feedable
         $original = $slug;
         $count    = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count ++;
         }
         
         return $slug;

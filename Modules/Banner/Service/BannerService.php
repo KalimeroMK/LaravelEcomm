@@ -74,7 +74,8 @@ class BannerService extends CoreService
     {
         try {
             if ( ! empty($data['photo'])) {
-                return $this->banner_repository->update((int)$id,
+                return $this->banner_repository->update(
+                    (int)$id,
                     collect($data)->except(['photo'])->toArray() + [
                         'photo' => $this->verifyAndStoreImage($data['photo']),
                     ]
@@ -90,14 +91,14 @@ class BannerService extends CoreService
     /**
      * Remove the specified resource from storage.
      *
-     * @param $banner
+     * @param $id
      *
      * @return string|void
      */
-    public function destroy($banner)
+    public function destroy($id)
     {
         try {
-            $this->banner_repository->delete($banner->id);
+            $this->banner_repository->delete($id);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

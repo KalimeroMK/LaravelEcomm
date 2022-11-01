@@ -7,7 +7,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Modules\Admin\Http\Requests\Update;
+use Modules\Core\Http\Requests\Update;
+use Modules\Settings\Models\Setting;
 use Modules\Size\Service\SizesService;
 
 class SettingsController extends Controller
@@ -33,12 +34,13 @@ class SettingsController extends Controller
     
     /**
      * @param  Update  $request
+     * @param  Setting  $setting
      *
      * @return RedirectResponse
      */
-    public function Update(Update $request): RedirectResponse
+    public function Update(Setting $setting, Update $request): RedirectResponse
     {
-        $this->settings_service->update($request);
+        $this->settings_service->update($setting->id, $request->validated());
         
         return redirect()->back();
     }

@@ -18,7 +18,6 @@
     "garygreen/pretty-routes": "^1.0",
     "guzzlehttp/guzzle": "^7.4",
     "jeremykenedy/laravel-blocker": "^3.4",
-    "jeremykenedy/laravel-logger": "^6.0",
     "joshrainwater/active-users": "dev-master",
     "kalimeromk/filterable": "^1.0",
     "kalimeromk/laravel-translation-manager": "0.5.x-dev",

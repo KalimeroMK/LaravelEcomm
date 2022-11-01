@@ -5,12 +5,12 @@ namespace Modules\Brand\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Brand\Http\Requests\Api\Store;
 use Modules\Brand\Http\Requests\Api\Update;
 use Modules\Brand\Http\Resource\BrandResource;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
-use Modules\Coupon\Http\Requests\Api\Store;
 
 class BrandController extends CoreController
 {
