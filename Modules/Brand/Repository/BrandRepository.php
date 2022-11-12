@@ -4,20 +4,11 @@ namespace Modules\Brand\Repository;
 
 use Illuminate\Support\Arr;
 use Modules\Brand\Models\Brand;
-use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 
-class BrandRepository extends Repository implements SearchInterface
+class BrandRepository extends Repository
 {
     public $model = Brand::class;
-    
-    /**
-     * @return mixed
-     */
-    public function findAll(): mixed
-    {
-        return $this->model::get();
-    }
     
     /**
      * @param  array  $data
@@ -37,11 +28,11 @@ class BrandRepository extends Repository implements SearchInterface
             $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
         }
         if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
-            return $query->get();
+            return $query->with('products')->get();
         }
         
         $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');
         
-        return $query->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
+        return $query->with('products')->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
     }
 }

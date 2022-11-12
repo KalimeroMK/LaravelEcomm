@@ -20,15 +20,10 @@ class Store extends CoreRequest
             'address1'   => 'string|required',
             'address2'   => 'string|nullable',
             'coupon'     => 'nullable|numeric',
-            'phone'      => 'numeric|required',
+            'phone'      => 'string|required',
             'post_code'  => 'string|nullable',
             'email'      => 'string|required',
             new CartRule(),
         ];
-    }
-    
-    public function authorize(): bool
-    {
-        return true;
     }
 }

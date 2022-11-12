@@ -4,14 +4,15 @@ namespace Modules\Product\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Post\Http\Requests\Api\Search;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
-use Modules\Post\Http\Resources\PostResource;
 use Modules\Product\Exceptions\SearchException;
-use Modules\Product\Http\Requests\Api\SearchRequest;
 use Modules\Product\Http\Resources\ProductResource;
+use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
 
 class ProductController extends CoreController
@@ -22,26 +23,27 @@ class ProductController extends CoreController
     public function __construct(ProductService $product_service)
     {
         $this->product_service = $product_service;
+        $this->authorizeResource(Product::class);
     }
     
     /**
+     * @param  Search  $request
+     *
+     * @return ResourceCollection
      * @throws SearchException
      */
-    public function index(SearchRequest $request)
+    public function index(Search $request): ResourceCollection
     {
-        try {
-            return ProductResource::collection($this->product_service->search($request->validated()));
-        } catch (Exception $exception) {
-            throw new SearchException($exception);
-        }
+        return ProductResource::collection($this->product_service->getAll($request->validated()));
     }
     
     /**
      *
-     * @return mixed
-     * @throws Exception
+     * @param  Store  $request
+     *
+     * @return JsonResponse|string
      */
-    public function store(Store $request)
+    public function store(Store $request): JsonResponse|string
     {
         try {
             return $this
@@ -55,7 +57,7 @@ class ProductController extends CoreController
                         ]
                     )
                 )
-                ->respond(new PostResource($this->product_service->store($request->validated())));
+                ->respond(new ProductResource($this->product_service->store($request->validated())));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -66,7 +68,7 @@ class ProductController extends CoreController
      *
      * @return JsonResponse|string
      */
-    public function show($id)
+    public function show($id): JsonResponse|string
     {
         try {
             return $this
@@ -86,7 +88,15 @@ class ProductController extends CoreController
         }
     }
     
-    public function update(Update $request, $id)
+    /**
+     * JsonResponse
+     *
+     * @param  Update  $request
+     * @param $id
+     *
+     * @return JsonResponse|string
+     */
+    public function update(Update $request, $id): JsonResponse|string
     {
         try {
             return $this
@@ -111,7 +121,7 @@ class ProductController extends CoreController
      *
      * @return JsonResponse|string
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse|string
     {
         try {
             return $this

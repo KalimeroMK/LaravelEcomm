@@ -12,14 +12,6 @@ class PostRepository extends Repository implements SearchInterface
     public $model = Post::class;
     
     /**
-     * @return mixed
-     */
-    public function findAll(): mixed
-    {
-        return $this->model::with('categories', 'comments', 'post_comments', 'post_tag', 'author_info')->get();
-    }
-    
-    /**
      * @param  array  $data
      *
      * @return mixed
@@ -43,10 +35,12 @@ class PostRepository extends Repository implements SearchInterface
             $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
         }
         if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
-            return $query->get();
+            return $query->with('categories', 'comments', 'post_comments', 'post_tag', 'author_info')->get();
         }
         $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');
         
-        return $query->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
+        return $query->with('categories', 'comments', 'post_comments', 'post_tag', 'author_info')->paginate(
+            Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()
+        );
     }
 }

@@ -3,7 +3,6 @@
 namespace Modules\Message\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use JetBrains\PhpStorm\ArrayShape;
 use Modules\Message\Models\Message;
 
 class MessageFactory extends Factory
@@ -15,15 +14,7 @@ class MessageFactory extends Factory
      *
      * @return array
      */
-    #[ArrayShape([
-        'name'    => "string",
-        'subject' => "string",
-        'email'   => "string",
-        'photo'   => "string",
-        'phone'   => "string",
-        'message' => "string",
-        'read_at' => "string",
-    ])] public function definition(): array
+    public function definition(): array
     {
         return [
             'name'    => $this->faker->name,

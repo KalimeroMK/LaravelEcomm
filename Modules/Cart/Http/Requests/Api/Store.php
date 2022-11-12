@@ -10,17 +10,12 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'slug'  => 'string|required|exists:products,slug',
-            'quant' => [
+            'slug'     => 'string|required|exists:products,slug',
+            'quantity' => [
                 'required',
                 new ProductStockRule(),
             ],
         
         ];
-    }
-    
-    public function authorize(): bool
-    {
-        return true;
     }
 }

@@ -4,7 +4,6 @@ namespace Modules\Post\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
-use JetBrains\PhpStorm\ArrayShape;
 use Modules\Post\Models\Post;
 
 class PostFactory extends Factory
@@ -16,18 +15,7 @@ class PostFactory extends Factory
      *
      * @return array
      */
-    #[ArrayShape([
-        'title'       => "string",
-        'summary'     => "string",
-        'description' => "string",
-        'quote'       => "string",
-        'photo'       => "string",
-        'slug'        => "string",
-        'tags'        => "string",
-        'added_by'    => "int",
-        'created_at'  => "\Illuminate\Support\Carbon",
-        'updated_at'  => "\Illuminate\Support\Carbon",
-    ])] public function definition(): array
+    public function definition(): array
     {
         return [
             'title'       => $this->faker->word,

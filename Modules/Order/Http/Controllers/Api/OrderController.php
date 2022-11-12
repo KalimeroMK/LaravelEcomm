@@ -4,14 +4,16 @@ namespace Modules\Order\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Order\Exceptions\SearchException;
-use Modules\Order\Http\Requests\Api\SearchRequest;
+use Modules\Order\Http\Requests\Api\Search;
 use Modules\Order\Http\Requests\Api\Store;
 use Modules\Order\Http\Requests\Api\Update;
 use Modules\Order\Http\Resources\OrderResource;
+use Modules\Order\Models\Order;
 use Modules\Order\Service\OrderService;
 
 class OrderController extends CoreController
@@ -22,18 +24,18 @@ class OrderController extends CoreController
     public function __construct(OrderService $order_service)
     {
         $this->order_service = $order_service;
+        $this->authorizeResource(Order::class);
     }
     
     /**
+     * @param  Search  $request
+     *
+     * @return ResourceCollection
      * @throws SearchException
      */
-    public function index(SearchRequest $request)
+    public function index(Search $request): ResourceCollection
     {
-        try {
-            return OrderResource::collection($this->order_service->search($request->validated()));
-        } catch (Exception $exception) {
-            throw new SearchException($exception);
-        }
+        return OrderResource::collection($this->order_service->getAll($request->validated()));
     }
     
     /**
@@ -86,6 +88,12 @@ class OrderController extends CoreController
         }
     }
     
+    /**
+     * @param  Update  $request
+     * @param  $id
+     *
+     * @return JsonResponse|string
+     */
     public function update(Update $request, $id)
     {
         try {
@@ -107,11 +115,11 @@ class OrderController extends CoreController
     }
     
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return JsonResponse|string
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         try {
             return $this

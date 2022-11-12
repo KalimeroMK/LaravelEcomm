@@ -38,9 +38,8 @@ class OrderResource extends JsonResource
             'updated_at'      => $this->updated_at,
             'cart_info_count' => $this->cart_info_count,
             'carts_count'     => $this->carts_count,
-            
-            'user_id'     => $this->user_id,
-            'shipping_id' => $this->shipping_id,
+            'user_id'         => $this->user_id,
+            'shipping_id'     => $this->shipping_id,
         ];
     }
 }

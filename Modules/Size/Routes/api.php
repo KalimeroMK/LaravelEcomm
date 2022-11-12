@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Tag\Http\Controllers\Api\TagController;
+use Modules\Size\Http\Controllers\Api\SizeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,5 +13,5 @@ use Modules\Tag\Http\Controllers\Api\TagController;
 |
 */
 
-Route::apiResource('size', TagController::class);
+Route::apiResource('size', SizeController::class);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Core\Exceptions;
+namespace Modules\Core\Exceptions;
 
 class GeneralStoreException extends GeneralException
 {

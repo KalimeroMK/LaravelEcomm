@@ -9,6 +9,7 @@ use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
 use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
+use Modules\Product\Exceptions\SearchException;
 use Modules\Tag\Models\Tag;
 use Modules\User\Models\User;
 
@@ -113,11 +114,18 @@ class PostService extends CoreService
     }
     
     /**
+     * @param $data
+     *
      * @return mixed
+     * @throws SearchException
      */
-    public function getAll(): mixed
+    public function getAll($data): mixed
     {
-        return $this->post_repository->findAll();
+        try {
+            return $this->post_repository->search($data);
+        } catch (Exception $exception) {
+            throw new SearchException($exception);
+        }
     }
     
     /**
@@ -154,20 +162,6 @@ class PostService extends CoreService
     {
         try {
             return $this->post_repository->findById($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
-    }
-    
-    /**
-     * @param  array  $data
-     *
-     * @return mixed|string
-     */
-    public function search(array $data): mixed
-    {
-        try {
-            return $this->post_repository->search($data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

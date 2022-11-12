@@ -17,9 +17,4 @@ class Update extends CoreRequest
             'status' => 'required|in:new,process,delivered,cancel',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

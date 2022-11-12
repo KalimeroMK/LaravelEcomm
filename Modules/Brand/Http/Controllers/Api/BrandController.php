@@ -4,14 +4,16 @@ namespace Modules\Brand\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Brand\Exceptions\SearchException;
-use Modules\Brand\Http\Requests\Api\SearchRequest;
+use Modules\Brand\Http\Requests\Api\Search;
+use Modules\Brand\Http\Requests\Api\Store;
 use Modules\Brand\Http\Requests\Api\Update;
 use Modules\Brand\Http\Resource\BrandResource;
+use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
-use Modules\Coupon\Http\Requests\Api\Store;
 
 class BrandController extends CoreController
 {
@@ -21,18 +23,18 @@ class BrandController extends CoreController
     public function __construct(BrandService $brand_service)
     {
         $this->brand_service = $brand_service;
+        $this->authorizeResource(Brand::class);
     }
     
     /**
+     * @param  Search  $request
+     *
+     * @return ResourceCollection
      * @throws SearchException
      */
-    public function index(SearchRequest $request)
+    public function index(Search $request): ResourceCollection
     {
-        try {
-            return BrandResource::collection($this->brand_service->search($request->validated()));
-        } catch (Exception $exception) {
-            throw new SearchException($exception);
-        }
+        return BrandResource::collection($this->brand_service->getAll($request->validated()));
     }
     
     /**

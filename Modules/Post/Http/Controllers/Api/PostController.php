@@ -2,44 +2,46 @@
 
 namespace Modules\Post\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
-use Modules\Post\Exceptions\SearchException;
-use Modules\Post\Http\Requests\Api\SearchRequest;
+use Modules\Core\Http\Controllers\CoreController;
+use Modules\Post\Http\Requests\Api\Search;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
+use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
 
-class PostController extends Controller
+class PostController extends CoreController
 {
+    
     private PostService $post_service;
     
     public function __construct(PostService $post_service)
     {
         $this->post_service = $post_service;
+        $this->authorizeResource(Post::class);
     }
     
     /**
-     * @throws SearchException
+     * @param  Search  $request
+     *
+     * @return ResourceCollection
      */
-    public function index(SearchRequest $request)
+    public function index(Search $request): ResourceCollection
     {
-        try {
-            return PostResource::collection($this->post_service->search($request->validated()));
-        } catch (Exception $exception) {
-            throw new SearchException($exception);
-        }
+        return PostResource::collection($this->post_service->getAll($request->validated()));
     }
     
     /**
      *
+     * @param  Store  $request
+     *
      * @return mixed
-     * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): mixed
     {
         try {
             return $this
@@ -64,7 +66,7 @@ class PostController extends Controller
      *
      * @return JsonResponse|string
      */
-    public function show($id)
+    public function show($id): JsonResponse|string
     {
         try {
             return $this
@@ -84,7 +86,13 @@ class PostController extends Controller
         }
     }
     
-    public function update(Update $request, $id)
+    /**
+     * @param  Update  $request
+     * @param $id
+     *
+     * @return JsonResponse|string
+     */
+    public function update(Update $request, $id): JsonResponse|string
     {
         try {
             return $this
@@ -109,7 +117,7 @@ class PostController extends Controller
      *
      * @return JsonResponse|string
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse|string
     {
         try {
             return $this

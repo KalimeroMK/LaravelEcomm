@@ -12,9 +12,4 @@ class Update extends CoreRequest
             'name' => 'string|required|unique:sizes',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

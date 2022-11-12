@@ -4,11 +4,13 @@ namespace Modules\Banner\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Modules\Attribute\Http\Requests\Api\SearchRequest;
-use Modules\Banner\Exception\SearchException;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Banner\Exceptions\SearchException;
+use Modules\Banner\Http\Requests\Api\Search;
 use Modules\Banner\Http\Requests\Api\Store;
 use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
+use Modules\Banner\Models\Banner;
 use Modules\Banner\Service\BannerService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -21,18 +23,18 @@ class BannerController extends CoreController
     public function __construct(BannerService $banner_service)
     {
         $this->banner_service = $banner_service;
+        $this->authorizeResource(Banner::class);
     }
     
     /**
+     * @param  Search  $request
+     *
+     * @return ResourceCollection
      * @throws SearchException
      */
-    public function index(SearchRequest $request)
+    public function index(Search $request): ResourceCollection
     {
-        try {
-            return BannerResource::collection($this->banner_service->search($request->validated()));
-        } catch (Exception $exception) {
-            throw new SearchException($exception);
-        }
+        return BannerResource::collection($this->banner_service->getAll($request->validated()));
     }
     
     /**

@@ -46,7 +46,7 @@
 
         {{-- Home page --}}
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="{{route('home')}}" target="_blank" data-toggle="tooltip"
+            <a class="nav-link dropdown-toggle" href="{{route('admin')}}" target="_blank" data-toggle="tooltip"
                data-placement="bottom" title="home" role="button">
                 <i class="fas fa-home fa-fw"></i>
             </a>
@@ -106,4 +106,4 @@
     </ul>
 
 </nav>
-@include('notification::notification')
+{{--@include('notification::notification')--}}

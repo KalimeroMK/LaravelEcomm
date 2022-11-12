@@ -10,6 +10,7 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Store as Update;
 use Modules\Tag\Http\Resources\TagResource;
+use Modules\Tag\Models\Tag;
 use Modules\Tag\Service\TagService;
 
 class TagController extends CoreController
@@ -20,6 +21,7 @@ class TagController extends CoreController
     public function __construct(TagService $tag_service)
     {
         $this->tag_service = $tag_service;
+        $this->authorizeResource(Tag::class);
     }
     
     /**

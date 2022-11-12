@@ -22,9 +22,4 @@ class Store extends CoreRequest
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

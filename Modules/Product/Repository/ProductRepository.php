@@ -3,29 +3,20 @@
 namespace Modules\Product\Repository;
 
 use Illuminate\Support\Arr;
-use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 use Modules\Product\Models\Product;
 
-class ProductRepository extends Repository implements SearchInterface
+class ProductRepository extends Repository
 {
     public $model = Product::class;
     
     /**
-     * @return mixed
-     */
-    public function findAll(): mixed
-    {
-        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->get();
-    }
-    
-    /**
-     * @param  int  $id
+     * @param  $id
      * @param  array  $data
      *
      * @return mixed
      */
-    public function update(int $id, array $data): mixed
+    public function update($id, array $data): mixed
     {
         $item = $this->findById($id);
         $item->fill($data);
@@ -35,11 +26,11 @@ class ProductRepository extends Repository implements SearchInterface
     }
     
     /**
-     * @param  int  $id
+     * @param $id
      *
      * @return mixed
      */
-    public function findById(int $id): mixed
+    public function findById($id): mixed
     {
         return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
     }
@@ -52,6 +43,7 @@ class ProductRepository extends Repository implements SearchInterface
     public function search(array $data): mixed
     {
         $query = $this->model::query();
+        
         if (Arr::has($data, 'title')) {
             $query->where('title', 'like', '%' . Arr::get($data, 'title') . '%');
         }
@@ -80,11 +72,13 @@ class ProductRepository extends Repository implements SearchInterface
             $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
         }
         if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
-            return $query->get();
+            return $query->with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->get();
         }
         $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');
         
-        return $query->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
+        return $query->with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->paginate(
+            Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()
+        );
     }
     
 }

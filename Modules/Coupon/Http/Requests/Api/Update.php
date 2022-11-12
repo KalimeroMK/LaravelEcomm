@@ -15,9 +15,4 @@ class Update extends CoreRequest
             'status' => 'nullable|in:active,inactive',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

@@ -3,6 +3,7 @@
 namespace Modules\Banner\Service;
 
 use Exception;
+use Modules\Banner\Exceptions\SearchException;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
@@ -91,14 +92,14 @@ class BannerService extends CoreService
     /**
      * Remove the specified resource from storage.
      *
-     * @param $banner
+     * @param $id
      *
      * @return string|void
      */
-    public function destroy($banner)
+    public function destroy($id)
     {
         try {
-            $this->banner_repository->delete($banner->id);
+            $this->banner_repository->delete($id);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -106,27 +107,14 @@ class BannerService extends CoreService
     
     /**
      * @return mixed|string
+     * @throws SearchException
      */
-    public function getAll(): mixed
-    {
-        try {
-            return $this->banner_repository->findAll();
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
-    }
-    
-    /**
-     * @param  array  $data
-     *
-     * @return mixed|string
-     */
-    public function search(array $data): mixed
+    public function getAll($data): mixed
     {
         try {
             return $this->banner_repository->search($data);
         } catch (Exception $exception) {
-            return $exception->getMessage();
+            throw new SearchException($exception);
         }
     }
 }

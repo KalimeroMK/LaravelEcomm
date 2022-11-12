@@ -13,12 +13,6 @@ class Store extends CoreRequest
             'type'   => 'required|in:fixed,percent',
             'value'  => 'required|numeric',
             'status' => 'required|in:active,inactive',
-        
         ];
-    }
-    
-    public function authorize(): bool
-    {
-        return true;
     }
 }

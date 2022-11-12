@@ -15,14 +15,6 @@ class OrderRepository extends Repository implements SearchInterface
     /**
      * @return mixed
      */
-    public function findAll(): mixed
-    {
-        return $this->model::with('shipping', 'user', 'carts')->get();
-    }
-    
-    /**
-     * @return mixed
-     */
     public function findAllByUser(): mixed
     {
         return $this->model::with('shipping', 'user', 'carts')->where('user_id', Auth::id())->paginate(10);
@@ -61,10 +53,12 @@ class OrderRepository extends Repository implements SearchInterface
             $query->where('email', 'like', '%' . Arr::get($data, 'email') . '%');
         }
         if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
-            return $query->get();
+            return $query->with('shipping', 'user', 'carts')->get();
         }
         $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');
         
-        return $query->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
+        return $query->with('shipping', 'user', 'carts')->paginate(
+            Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()
+        );
     }
 }

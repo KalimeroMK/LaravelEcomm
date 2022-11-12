@@ -10,6 +10,7 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Update;
 use Modules\Size\Http\Resources\SizeResource;
+use Modules\Size\Models\Size;
 use Modules\Size\Service\SizesService;
 
 class SizeController extends CoreController
@@ -20,6 +21,7 @@ class SizeController extends CoreController
     public function __construct(SizesService $sizes_service)
     {
         $this->sizes_service = $sizes_service;
+        $this->authorizeResource(Size::class);
     }
     
     /**

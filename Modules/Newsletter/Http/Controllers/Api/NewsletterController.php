@@ -8,9 +8,9 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
-use Modules\Coupon\Http\Requests\Api\Store;
-use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
+use Modules\Newsletter\Http\Requests\Api\Store;
+use Modules\Newsletter\Http\Requests\Api\Store as Update;
 use Modules\Newsletter\Http\Resources\NewsletterResource;
 use Modules\Newsletter\Service\NewsletterService;
 

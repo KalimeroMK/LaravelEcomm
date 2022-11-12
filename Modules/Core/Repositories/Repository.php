@@ -56,12 +56,12 @@ class Repository implements RepositoryInterface
     }
     
     /**
-     * @param  int  $id
+     * @param  $id
      * @param  array  $data
      *
      * @return mixed
      */
-    public function update(int $id, array $data): mixed
+    public function update($id, array $data): mixed
     {
         $item = $this->findById($id);
         $item->fill($data);
@@ -71,31 +71,31 @@ class Repository implements RepositoryInterface
     }
     
     /**
-     * @param  int  $id
+     * @param  $id
      *
      * @return mixed
      */
-    public function findById(int $id): mixed
+    public function findById($id): mixed
     {
         return $this->model::find($id);
     }
     
     /**
-     * @param  int  $id
+     * @param  §  $id
      *
      * @return void
      */
-    public function delete(int $id): void
+    public function delete($id): void
     {
         $this->model::destroy($id);
     }
     
     /**
-     * @param  int  $id
+     * @param  $id
      *
      * @return mixed
      */
-    public function restore(int $id): mixed
+    public function restore($id): mixed
     {
         $object = $this->findByIdWithTrashed($id);
         if ($object && method_exists($this->model, 'isSoftDelete')) {
@@ -106,11 +106,11 @@ class Repository implements RepositoryInterface
     }
     
     /**
-     * @param  int  $id
+     * @param  $id
      *
      * @return mixed
      */
-    public function findByIdWithTrashed(int $id): mixed
+    public function findByIdWithTrashed($id): mixed
     {
         if (method_exists($this->model, 'isSoftDelete')) {
             return $this->model::withTrashed()->find($id);

@@ -43,15 +43,6 @@ services:
       - ./.docker/nginx:/etc/nginx/conf.d
     networks:
       - laravelapp
-  redis:
-    image: redis:alpine
-    container_name: redis
-    volumes:
-      - ./.docker/redis:/data
-    ports:
-      - "6379:6379"
-    networks:
-      - laravelapp
 networks:
   laravelapp:
     driver: bridge

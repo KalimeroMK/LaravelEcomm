@@ -13,15 +13,10 @@ class Store extends CoreRequest
             'quote'       => 'string|nullable',
             'summary'     => 'string|required',
             'description' => 'string|nullable',
-            'photo'       => 'nullable|image',
+            'photo'       => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'category'    => 'sometimes|array',
             'category.*'  => 'required|exists:categories,id',
             'status'      => 'required|in:active,inactive',
         ];
-    }
-    
-    public function authorize(): bool
-    {
-        return true;
     }
 }

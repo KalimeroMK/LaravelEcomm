@@ -13,12 +13,7 @@ class Store extends CoreRequest
             'email'   => 'email|required',
             'message' => 'required|min:20|max:200',
             'subject' => 'string|required',
-            'phone'   => 'numeric|required',
+            'phone'   => 'string|required',
         ];
-    }
-    
-    public function authorize(): bool
-    {
-        return true;
     }
 }

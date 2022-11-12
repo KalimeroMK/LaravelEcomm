@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Category\Http\Requests\Api\Store;
 use Modules\Category\Http\Requests\Api\Update;
 use Modules\Category\Http\Resources\CategoryResource;
+use Modules\Category\Models\Category;
 use Modules\Category\Service\CategoryService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -20,6 +21,7 @@ class CategoryController extends CoreController
     public function __construct(CategoryService $category_service)
     {
         $this->category_service = $category_service;
+        $this->authorizeResource(Category::class);
     }
     
     /**

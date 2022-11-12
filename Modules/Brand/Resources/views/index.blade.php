@@ -3,7 +3,11 @@
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-
+        <div class="row">
+            <div class="col-md-12">
+                @include('notification::notification')
+            </div>
+        </div>
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">Brand List</h6>
             <a href="{{route('brands.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
@@ -12,7 +16,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(count($brands)>0)
-                    <table class="table table-bordered" id="data-table">
+                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th>S.N.</th>
@@ -49,7 +53,7 @@
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('brands.destroy',$brand->id)}}">
+                                    <form method="POST" action="{{route('brands.destroy',[$brand->id])}}">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"

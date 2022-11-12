@@ -14,17 +14,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Modules\Admin\Models\Condition;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
+use Modules\Core\Helpers\Condition;
 use Modules\Core\Models\Core;
 use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;
-use Spatie\Feed\Feedable;
-use Spatie\Feed\FeedItem;
 
 /**
  * Class Product
@@ -79,7 +77,7 @@ use Spatie\Feed\FeedItem;
  * @property string|null $color
  * @method static Builder|Product whereColor($value)
  */
-class Product extends Core implements Feedable
+class Product extends Core
 {
     use HasFactory;
     
@@ -224,7 +222,7 @@ class Product extends Core implements Feedable
         $original = $slug;
         $count    = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count ++;
         }
         
         return $slug;
@@ -241,20 +239,6 @@ class Product extends Core implements Feedable
         }
         
         return asset('https://via.placeholder.com/640x480.png/003311?text=et');
-    }
-    
-    /**
-     * @return FeedItem
-     */
-    public function toFeedItem(): FeedItem
-    {
-        return FeedItem::create()
-                       ->id($this->id)
-                       ->title($this->title)
-                       ->summary($this->summary)
-                       ->updated($this->updated_at)
-                       ->link(route('product-detail', $this->slug))
-                       ->author('admin');
     }
     
     /**

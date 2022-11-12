@@ -62,4 +62,33 @@ class MessageService
             return $exception->getMessage();
         }
     }
+    
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function store($data): mixed
+    {
+        try {
+            return $this->message_repository->create($data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+    
+    /**
+     * @param $id
+     * @param $data
+     *
+     * @return mixed|string
+     */
+    public function update($id, $data): mixed
+    {
+        try {
+            return $this->message_repository->update($id, $data);
+        } catch (Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
 }

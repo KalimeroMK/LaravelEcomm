@@ -6,9 +6,11 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Banner\Http\Requests\Api\Search;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
+use Modules\Brand\Exceptions\SearchException;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Core\Traits\ImageUpload;
@@ -32,10 +34,11 @@ class BannerController extends CoreController
      * Display a listing of the resource.
      *
      * @return Application|Factory|View
+     * @throws SearchException
      */
-    public function index(): Factory|View|Application
+    public function index(Search $request): Factory|View|Application
     {
-        return view('banner::index', ['banners' => $this->banner_service->getAll()]);
+        return view('banner::index', ['banners' => $this->banner_service->getAll($request->validated())]);
     }
     
     /**

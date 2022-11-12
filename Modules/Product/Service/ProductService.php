@@ -3,11 +3,12 @@
 namespace Modules\Product\Service;
 
 use Exception;
-use Modules\Admin\Models\Condition;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
+use Modules\Core\Helpers\Condition;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
+use Modules\Product\Exceptions\SearchException;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 use Modules\Size\Models\Size;
@@ -24,9 +25,19 @@ class ProductService extends CoreService
     
     use ImageUpload;
     
-    public function findAll()
+    /**
+     * @param $data
+     *
+     * @return mixed
+     * @throws SearchException
+     */
+    public function getAll($data): mixed
     {
-        return $this->product_repository->findAll();
+        try {
+            return $this->product_repository->search($data);
+        } catch (Exception $exception) {
+            throw new SearchException($exception);
+        }
     }
     
     /**
@@ -143,20 +154,6 @@ class ProductService extends CoreService
             $this->product_repository->delete($id);
         } catch (Exception $exception) {
             return $exception;
-        }
-    }
-    
-    /**
-     * @param  array  $data
-     *
-     * @return mixed|string
-     */
-    public function search(array $data): mixed
-    {
-        try {
-            return $this->product_repository->search($data);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
         }
     }
     

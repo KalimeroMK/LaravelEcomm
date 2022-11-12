@@ -5,12 +5,12 @@ namespace Modules\Coupon\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
+use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Service\CouponService;
 
 class CouponController extends CoreController
@@ -20,6 +20,7 @@ class CouponController extends CoreController
     public function __construct(CouponService $coupon_service)
     {
         $this->coupon_service = $coupon_service;
+        $this->authorizeResource(Coupon::class);
     }
     
     /**
@@ -27,7 +28,7 @@ class CouponController extends CoreController
      */
     public function index(): ResourceCollection
     {
-        return BannerResource::collection($this->coupon_service->getAll());
+        return CouponResource::collection($this->coupon_service->getAll());
     }
     
     public function store(Store $request)
@@ -44,7 +45,7 @@ class CouponController extends CoreController
                         ]
                     )
                 )
-                ->respond(new BannerResource($this->coupon_service->store($request->validated())));
+                ->respond(new CouponResource($this->coupon_service->store($request->validated())));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -95,7 +96,7 @@ class CouponController extends CoreController
                         ]
                     )
                 )
-                ->respond(new BannerResource($this->coupon_service->update($id, $request->validated())));
+                ->respond(new CouponResource($this->coupon_service->update($id, $request->validated())));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

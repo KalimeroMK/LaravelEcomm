@@ -3,11 +3,13 @@
 namespace Modules\Order\Service;
 
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Notifications\StatusNotification;
+use Modules\Order\Exceptions\SearchException;
 use Modules\Order\Models\Order;
 use Modules\Order\Repository\OrderRepository;
 use Modules\Shipping\Models\Shipping;
@@ -68,13 +70,14 @@ class OrderService
     
     /**
      * @return mixed|string
+     * @throws SearchException
      */
-    public function getAll(): mixed
+    public function getAll($data): mixed
     {
         try {
-            return $this->order_repository->findAll();
+            return $this->order_repository->search($data);
         } catch (Exception $exception) {
-            return $exception->getMessage();
+            throw new SearchException($exception);
         }
     }
     
@@ -89,9 +92,9 @@ class OrderService
     {
         try {
             $order                      = new Order();
-            $order_data                 = $data->all();
+            $order_data                 = $data;
             $order_data['order_number'] = 'ORD-' . strtoupper(Str::random(10));
-            $order_data['user_id']      = $data->user()->id;
+            $order_data['user_id']      = Auth::id();
             $order_data['shipping_id']  = $data->shipping;
             $shipping                   = Shipping::whereId($order_data['shipping_id'])->pluck('price');
             $order_data['sub_total']    = Helper::totalCartPrice();
@@ -122,14 +125,12 @@ class OrderService
             }
             $order->fill($order_data);
             $order->save();
-            
             $details = [
                 'title'     => 'New order created',
                 'actionURL' => route('order.show', $order->id),
                 'fas'       => 'fa-file-alt',
             ];
             Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
-            
             Cart::whereUserId(Auth()->id())->whereOrderId(null)->update(['order_id' => $order->id]);
         } catch (Exception $exception) {
             return $exception->getMessage();
@@ -140,11 +141,11 @@ class OrderService
      * Update the specified resource in storage.
      *
      * @param $data
-     * @param  int  $id
+     * @param $id
      *
      * @return mixed
      */
-    public function update($data, int $id): mixed
+    public function update($data, $id): mixed
     {
         try {
             $order = $this->order_repository->findById($id);
@@ -170,20 +171,6 @@ class OrderService
     {
         try {
             return $this->order_repository->findAllByUser();
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
-    }
-    
-    /**
-     * @param  array  $data
-     *
-     * @return mixed|string
-     */
-    public function search(array $data): mixed
-    {
-        try {
-            return $this->order_repository->search($data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

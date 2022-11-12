@@ -3,6 +3,7 @@
 namespace Modules\Brand\Service;
 
 use Exception;
+use Modules\Brand\Exceptions\SearchException;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
@@ -105,27 +106,14 @@ class BrandService extends CoreService
     
     /**
      * @return mixed|string
+     * @throws SearchException
      */
-    public function getAll(): mixed
-    {
-        try {
-            return $this->brand_repository->findAll();
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
-    }
-    
-    /**
-     * @param  array  $data
-     *
-     * @return mixed|string
-     */
-    public function search(array $data): mixed
+    public function getAll($data): mixed
     {
         try {
             return $this->brand_repository->search($data);
         } catch (Exception $exception) {
-            return $exception->getMessage();
+            throw new SearchException($exception);
         }
     }
 }

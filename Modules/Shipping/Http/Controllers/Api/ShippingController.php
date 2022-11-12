@@ -7,10 +7,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Shipping\Http\Requests\Api\Store;
+use Modules\Shipping\Http\Requests\Api\Update;
 use Modules\Shipping\Http\Resources\ShippingResource;
+use Modules\Shipping\Models\Shipping;
 use Modules\Shipping\Service\ShippingService;
-use Modules\Size\Http\Requests\Api\Store;
-use Modules\Size\Http\Requests\Api\Update;
 
 class ShippingController extends CoreController
 {
@@ -20,6 +21,7 @@ class ShippingController extends CoreController
     public function __construct(ShippingService $shipping_service)
     {
         $this->shipping_service = $shipping_service;
+        $this->authorizeResource(Shipping::class);
     }
     
     /**

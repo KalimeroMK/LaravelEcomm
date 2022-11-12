@@ -3,14 +3,14 @@
 namespace Modules\Category\Service;
 
 use Exception;
-use Modules\Billing\Repository\WishlistRepository;
+use Modules\Category\Repository\CategoryRepository;
 
 class CategoryService
 {
     
-    public WishlistRepository $category_repository;
+    public CategoryRepository $category_repository;
     
-    public function __construct(WishlistRepository $category_repository)
+    public function __construct(CategoryRepository $category_repository)
     {
         $this->category_repository = $category_repository;
     }

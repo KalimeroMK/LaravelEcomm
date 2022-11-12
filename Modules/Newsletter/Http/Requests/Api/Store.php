@@ -12,9 +12,4 @@ class Store extends CoreRequest
             'email' => 'required|email|unique:newsletters',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

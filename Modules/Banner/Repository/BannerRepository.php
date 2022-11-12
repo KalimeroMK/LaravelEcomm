@@ -12,14 +12,6 @@ class BannerRepository extends Repository implements SearchInterface
     public $model = Banner::class;
     
     /**
-     * @return mixed
-     */
-    public function findAll(): mixed
-    {
-        return $this->model::get();
-    }
-    
-    /**
      * @param  array  $data
      *
      * @return mixed
@@ -47,4 +39,5 @@ class BannerRepository extends Repository implements SearchInterface
         
         return $query->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
     }
+    
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Modules\Core\Exceptions;
+namespace Modules\Core\Exceptions;
 
 class FormRequestTableNotFoundException extends GeneralException
 {
     public $code = 404;
     
     /**
-     * @return string|null
+     * @return string
      */
     public function message(): string
     {

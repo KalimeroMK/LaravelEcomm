@@ -12,17 +12,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
-use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
-use Modules\LoginSecurity\Models\LoginSecurity;
 use Modules\Order\Models\Order;
 use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
@@ -78,7 +75,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $roles_count
  * @method static Builder|User permission($permissions)
  * @method static Builder|User role($roles, $guard = null)
- * @property-read LoginSecurity|null $loginSecurity
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read Collection|Cart[] $carts
@@ -96,7 +92,6 @@ class User extends Authenticatable
     use HasPermissions;
     use Notifiable;
     use HasApiTokens;
-    use Impersonate;
     
     protected $table = 'users';
     
@@ -177,11 +172,4 @@ class User extends Authenticatable
         return $this->hasMany(Wishlist::class);
     }
     
-    /**
-     * @return HasOne
-     */
-    public function loginSecurity(): HasOne
-    {
-        return $this->hasOne(LoginSecurity::class);
-    }
 }
