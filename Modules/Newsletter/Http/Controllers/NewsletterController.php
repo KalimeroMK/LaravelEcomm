@@ -18,10 +18,7 @@ class NewsletterController extends CoreController
     
     public function __construct(NewsletterService $newsletter_service)
     {
-        $this->middleware('permission:newsletter-list');
-        $this->middleware('permission:newsletter-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:newsletter-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:newsletter-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Newsletter::class);
         $this->newsletter_service = $newsletter_service;
     }
     

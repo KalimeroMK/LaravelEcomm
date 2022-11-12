@@ -18,10 +18,7 @@ class CouponController extends CoreController
     
     public function __construct(CouponService $coupon_service)
     {
-        $this->middleware('permission:coupon-list');
-        $this->middleware('permission:coupon-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:coupon-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:coupon-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Coupon::class);
         $this->coupon_service = $coupon_service;
     }
     

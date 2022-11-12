@@ -17,6 +17,7 @@ class MessageController extends CoreController
     public function __construct(MessageService $message_service)
     {
         $this->message_service = $message_service;
+        $this->authorizeResource(Message::class);
     }
     
     /**

@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\Cart\Http\Requests\AddToCartSingle;
+use Modules\Cart\Models\Cart;
 use Modules\Cart\Service\CartService;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Product\Models\Product;
@@ -21,7 +22,7 @@ class CartController extends CoreController
     public function __construct(CartService $cart_service)
     {
         $this->cart_service = $cart_service;
-        $this->middleware('login');
+        $this->authorizeResource(Cart::class);
     }
     
     /**

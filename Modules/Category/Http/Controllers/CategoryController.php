@@ -20,10 +20,7 @@ class CategoryController extends CoreController
     
     public function __construct(CategoryService $category_service)
     {
-        $this->middleware('permission:categories-list');
-        $this->middleware('permission:categories-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:categories-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:categories-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Category::class);
         $this->category_service = $category_service;
     }
     

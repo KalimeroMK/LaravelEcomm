@@ -34,12 +34,4 @@ class CartPolicy
     {
         return $user->can('cart-delete') && $user->id == $cart->user_id;
     }
-    
-    public function restore(User $user, Cart $cart): bool
-    {
-    }
-    
-    public function forceDelete(User $user, Cart $cart): bool
-    {
-    }
 }

@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Modules\Newsletter\Models\Newsletter;
+use Modules\Newsletter\Policies\NewsletterPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,8 +15,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
 //         'App\Model' => 'App\Policies\ModelPolicy',
+        Newsletter::class => NewsletterPolicy::class,
     ];
-
+    
     /**
      * Register any authentication / authorization services.
      *

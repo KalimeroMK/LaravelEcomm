@@ -6,6 +6,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Brand\Exceptions\SearchException;
+use Modules\Brand\Http\Requests\Api\Search;
 use Modules\Brand\Http\Requests\Store;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
@@ -18,20 +20,18 @@ class BrandController extends CoreController
     public function __construct(BrandService $brand_service)
     {
         $this->brand_service = $brand_service;
-        $this->middleware('permission:brand-list');
-        $this->middleware('permission:brand-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:brand-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:brand-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Brand::class);
     }
     
     /**
      * Display a listing of the resource.
      *
      * @return Application|Factory|View
+     * @throws SearchException
      */
-    public function index()
+    public function index(Search $request)
     {
-        return view('brand::index', ['brands' => $this->brand_service->getAll()]);
+        return view('brand::index', ['brands' => $this->brand_service->getAll($request->validated())]);
     }
     
     /**

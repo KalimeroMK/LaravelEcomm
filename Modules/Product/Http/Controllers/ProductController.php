@@ -9,7 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Post\Http\Requests\ImportRequest;
+use Modules\Product\Exceptions\SearchException;
 use Modules\Product\Export\Products;
+use Modules\Product\Http\Requests\Api\Search;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Import\Products as ProductImport;
@@ -34,10 +36,11 @@ class ProductController extends CoreController
      * Display a listing of the resource.
      *
      * @return Application|Factory|View
+     * @throws SearchException
      */
-    public function index()
+    public function index(Search $request)
     {
-        return view('product::index', ['products' => $this->product_service->findAll()]);
+        return view('product::index', ['products' => $this->product_service->getAll($request->validated())]);
     }
     
     /**

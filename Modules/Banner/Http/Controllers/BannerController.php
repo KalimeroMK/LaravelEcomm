@@ -11,6 +11,7 @@ use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Exceptions\SearchException;
+use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Core\Traits\ImageUpload;
@@ -21,10 +22,7 @@ class BannerController extends CoreController
     
     public function __construct(BrandService $banner_service)
     {
-        $this->middleware('permission:banner-list');
-        $this->middleware('permission:banner-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:banner-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:banner-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Brand::class);
         $this->banner_service = $banner_service;
     }
     
@@ -32,6 +30,8 @@ class BannerController extends CoreController
     
     /**
      * Display a listing of the resource.
+     *
+     * @param  Search  $request
      *
      * @return Application|Factory|View
      * @throws SearchException
