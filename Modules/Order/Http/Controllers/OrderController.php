@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Order\Exceptions\SearchException;
+use Modules\Order\Http\Requests\Api\Search;
 use Modules\Order\Http\Requests\Api\Store;
 use Modules\Order\Http\Requests\Api\Update;
 use Modules\Order\Models\Order;
@@ -24,23 +26,23 @@ class OrderController extends CoreController
     public function __construct(OrderService $order_service)
     {
         $this->order_service = $order_service;
-        $this->middleware('permission:order-list');
-        $this->middleware('permission:order-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:order-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Order::class);
     }
     
     /**
      * Display a listing of the resource.
      *
+     * @param  Search  $request
+     *
      * @return Application|Factory|View
+     * @throws SearchException
      */
-    public function index(): View|Factory|Application
+    public function index(Search $request): View|Factory|Application
     {
-        if (Auth::user()->hasRole('client')) {
-            return view('order::index', ['orders' => $this->order_service->findByAllUser()]);
+        if (Auth::user()->hasRole('super-admin')) {
+            return view('order::index', ['orders' => $this->order_service->getAll($request->validated())]);
         } else {
-            return view('order::index', ['orders' => $this->order_service->getAll()]);
+            return view('order::index', ['orders' => $this->order_service->findByAllUser()]);
         }
     }
     
@@ -131,7 +133,7 @@ class OrderController extends CoreController
     public function pdf($id): Response
     {
         $order     = Order::getAllOrder($id);
-        $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
+        $file_name = $order->order_number . '-' . $order->first_name . '.pdf';
         $pdf       = PDF::loadview('order::pdf', compact('order'));
         
         return $pdf->download($file_name);
@@ -158,7 +160,7 @@ class OrderController extends CoreController
             }
         }
         $data = [];
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 12; $i ++) {
             $monthName        = date('F', mktime(0, 0, 0, $i, 1));
             $data[$monthName] = ( ! empty($result[$i])) ? number_format((float)($result[$i]), 2, '.', '') : 0.0;
         }

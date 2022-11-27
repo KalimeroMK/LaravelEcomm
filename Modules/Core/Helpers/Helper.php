@@ -177,11 +177,10 @@ class Helper
     }
     
     /**
-     * @param  string  $option
      *
      * @return array
      */
-    public static function postCategoryList(string $option = "all"): array
+    public static function postCategoryList(string $option = "all")
     {
         if ($option = 'all') {
             return Category::orderBy('id', 'DESC')->get();

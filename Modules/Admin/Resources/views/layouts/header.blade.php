@@ -81,6 +81,10 @@
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
+                <a class="dropdown-item" href="{{route('home')}}">
+                    <i class="fas fa-shopify fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Web shop
+                </a>
                 @auth
                     @if(session('impersonated_by'))
                         <a class="dropdown-item" href="{{ route('users.leave-impersonate') }}">

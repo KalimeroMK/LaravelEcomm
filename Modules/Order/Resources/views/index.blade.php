@@ -6,7 +6,6 @@
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
-
             </div>
         </div>
         <div class="card-header py-3">
@@ -23,7 +22,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Quantity</th>
-                            <th>Charge</th>
+                            <th>Shipping</th>
                             <th>Total Amount</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -36,7 +35,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Quantity</th>
-                            <th>Charge</th>
+                            <th>Shipping</th>
                             <th>Total Amount</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -47,12 +46,10 @@
                             <tr>
                                 <td>{{$order->id}}</td>
                                 <td>{{$order->order_number}}</td>
-                                <td>{{$order->first_name}} {{$order->last_name}}</td>
-                                <td>{{$order->email}}</td>
+                                <td>{{$order->user->name}}</td>
+                                <td>{{$order->user->email}}</td>
                                 <td>{{$order->quantity}}</td>
-                                <td>@foreach($order->shipping as $data)
-                                        $ {{number_format($data,2)}}
-                                    @endforeach</td>
+                                <td>{{ $order->shipping->type ??''}}</td>
                                 <td>${{number_format($order->total_amount,2)}}</td>
                                 <td>
                                     @if($order->status=='new')

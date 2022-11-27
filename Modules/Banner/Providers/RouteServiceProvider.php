@@ -59,9 +59,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
-        Route::middleware('web')
+        Route::middleware(['web', 'doNotCacheResponse'])
              ->group(module_path('Banner', '/Routes/web.php'));
     }
 }
