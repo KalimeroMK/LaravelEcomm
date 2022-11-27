@@ -52,7 +52,7 @@ class OrderRepository extends Repository implements SearchInterface
         if (Arr::has($data, 'email')) {
             $query->where('email', 'like', '%' . Arr::get($data, 'email') . '%');
         }
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
+        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
             return $query->with('shipping', 'user', 'carts')->get();
         }
         $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');

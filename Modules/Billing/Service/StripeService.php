@@ -7,21 +7,22 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Modules\Billing\Http\Controllers\StripeController;
-use Modules\Cart\Models\Cart;
+use Modules\Billing\Http\Traits\Order;
+use Modules\Core\Helpers\Payment;
 use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 class StripeService
 {
-    private StripeController $stripe_controller;
+    use Order;
     
-    public function __construct(StripeController $stripe_controller)
+    private Payment $payment;
+    
+    public function __construct(Payment $payment)
     {
-        $this->stripe_controller = $stripe_controller;
+        $this->payment = $payment;
     }
     
     /**
@@ -34,20 +35,17 @@ class StripeService
      */
     public function stripePost(Request $request): RedirectResponse
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-        
-        $data = $this->stripe_controller->payment->calculate($request);
-        
+        Stripe::setApiKey(config('stripe.sandbox.client_secret'));
         Charge::create([
-            "amount"      => $data[1] * 100,
+            "amount"      => $this->payment->calculate($request) * 100,
             "currency"    => "usd",
             "source"      => $request->stripeToken,
-            "description" => "Test payment from zbogoevski@gmail.com.",
+            "description" => "KalimeroMK E-comm",
         ]);
-        Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $data[0]]);
+        $this->orderSave($this->payment->calculate($request));
         Session::flash('success', 'Payment successful!');
         
-        return back();
+        return redirect()->route('order.index');
     }
     
     /**

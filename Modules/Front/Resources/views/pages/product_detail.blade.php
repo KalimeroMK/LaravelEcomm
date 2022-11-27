@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="online shop, purchase, cart, ecommerce site, best online shopping">
-    <meta name="description" content="{{$product_detail->summary}}">
-    <meta property="og:url" content="{{route('product-detail',$product_detail->slug)}}">
+    <meta name="description" content="{{$product_detail->summary ??''}}">
+    <meta property="og:url" content="{{route('product-detail',$product_detail->slug ??'')}}">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="{{$product_detail->title}}">
-    <meta property="og:image" content="{{$product_detail->imageUrl}}">
-    <meta property="og:description" content="{{$product_detail->description}}">
+    <meta property="og:title" content="{{$product_detail->title ?? ''}}">
+    <meta property="og:image" content="{{$product_detail->imageUrl ?? ''}}">
+    <meta property="og:description" content="{{$product_detail->description ?? ''}}">
 @endsection
 @section('title','E-SHOP || PRODUCT DETAIL')
 @section('content')
@@ -603,38 +603,4 @@
 @endpush
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=$('#quantity').val();
-            var pro_id=$(this).data('id');
-            // alert(quantity);
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-					else{
-                        swal('error',response.msg,'error').then(function(){
-							document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-    </script> --}}
-
 @endpush

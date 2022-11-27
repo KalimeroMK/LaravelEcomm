@@ -7,21 +7,17 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use JetBrains\PhpStorm\Pure;
 use Modules\Billing\Service\StripeService;
-use Modules\Core\Helpers\Payment;
 use Modules\Core\Http\Controllers\CoreController;
 use Stripe\Exception\ApiErrorException;
 
 class StripeController extends CoreController
 {
-    public Payment $payment;
     private StripeService $stripe_service;
     
-    #[Pure] public function __construct()
+    public function __construct(StripeService $stripe_service)
     {
-        $this->payment        = new Payment();
-        $this->stripe_service = new StripeService($this);
+        $this->stripe_service = $stripe_service;
     }
     
     /**

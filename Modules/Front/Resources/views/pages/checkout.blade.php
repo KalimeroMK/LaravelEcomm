@@ -576,13 +576,13 @@
     </script>
     <script>
         function showMe(box) {
-            var checkbox = document.getElementById('shipping').style.display;
+            const checkbox = document.getElementById('shipping').style.display;
             // alert(checkbox);
-            var vis = 'none';
-            if (checkbox == "none") {
+            let vis = 'none';
+            if (checkbox === "none") {
                 vis = 'block';
             }
-            if (checkbox == "block") {
+            if (checkbox === "block") {
                 vis = "none";
             }
             document.getElementById(box).style.display = vis;

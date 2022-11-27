@@ -2,7 +2,7 @@
 
 /**
  * PayPal Setting & API Credentials
- * Created by Raza Mehdi <srmk@outlook.com>.
+ * Created by Zoran Shefot Bogoevski.
  */
 
 return [

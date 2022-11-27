@@ -13,9 +13,4 @@ class Store extends CoreRequest
             'status' => 'required|in:active,inactive',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

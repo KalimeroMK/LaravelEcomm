@@ -60,16 +60,16 @@
                                                 <div class="button minus">
                                                     <button type="button" class="btn btn-primary btn-number"
                                                             disabled="disabled" data-type="minus"
-                                                            data-field="quant[{{$key}}]">
+                                                            data-field="quantity[{{$key}}]">
                                                         <i class="ti-minus"></i>
                                                     </button>
                                                 </div>
-                                                <input type="text" name="quant[{{$key}}]" class="input-number"
+                                                <input type="text" name="quantity[{{$key}}]" class="input-number"
                                                        data-min="1" data-max="100" value="{{$cart->quantity}}">
                                                 <input type="hidden" name="qty_id[]" value="{{$cart->id}}">
                                                 <div class="button plus">
                                                     <button type="button" class="btn btn-primary btn-number"
-                                                            data-type="plus" data-field="quant[{{$key}}]">
+                                                            data-type="plus" data-field="quantity[{{$key}}]">
                                                         <i class="ti-plus"></i>
                                                     </button>
                                                 </div>

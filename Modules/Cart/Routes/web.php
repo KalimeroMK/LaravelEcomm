@@ -14,9 +14,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Cart\Http\Controllers\CartController;
 
-//Route::prefix('cart')->group(function () {
-//    Route::get('/', [CartController::class, 'index']);
-//});
 // Cart section
 Route::get('/add-to-cart/{slug}', [CartController::class, 'addToCart'])->name('add-to-cart');
 Route::post('/add-to-cart', [CartController::class, 'singleAddToCart'])->name('single-add-to-cart');

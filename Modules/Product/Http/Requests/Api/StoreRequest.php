@@ -29,9 +29,4 @@ class StoreRequest extends CoreRequest
             'discount'     => 'nullable|numeric',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

@@ -5,7 +5,6 @@ namespace Modules\Order\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Order\Exceptions\SearchException;
@@ -57,7 +56,7 @@ class OrderController extends CoreController
                         ]
                     )
                 )
-                ->respond(new BannerResource($this->order_service->store($request->validated())));
+                ->respond(new OrderResource($this->order_service->store($request->validated())));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -82,7 +81,7 @@ class OrderController extends CoreController
                         ]
                     )
                 )
-                ->respond(new BannerResource($this->order_service->show($id)));
+                ->respond(new OrderResource($this->order_service->show($id)));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

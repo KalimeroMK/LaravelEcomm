@@ -107,7 +107,9 @@ class FrontService
             $products = Product::query();
             
             if ( ! empty($_GET['category'])) {
-                $cat_ids = Category::select('id')->whereIn('slug', explode(',', $_GET['category']))->pluck('id')->toArray();
+                $cat_ids = Category::select('id')->whereIn('slug', explode(',', $_GET['category']))->pluck(
+                    'id'
+                )->toArray();
                 $products->whereIn('cat_id', $cat_ids);
             }
             if ( ! empty($_GET['brand'])) {
@@ -204,9 +206,9 @@ class FrontService
             if ( ! empty($request['category'])) {
                 foreach ($request['category'] as $category) {
                     if (empty($catURL)) {
-                        $catURL .= '&category='.$category;
+                        $catURL .= '&category=' . $category;
                     } else {
-                        $catURL .= ','.$category;
+                        $catURL .= ',' . $category;
                     }
                 }
             }
@@ -215,14 +217,14 @@ class FrontService
             if ( ! empty($request['tag'])) {
                 foreach ($request['tag'] as $tag) {
                     if (empty($tagURL)) {
-                        $tagURL .= '&tag='.$tag;
+                        $tagURL .= '&tag=' . $tag;
                     } else {
-                        $tagURL .= ','.$tag;
+                        $tagURL .= ',' . $tag;
                     }
                 }
             }
             
-            return redirect()->route('blog', $catURL.$tagURL);
+            return redirect()->route('blog', $catURL . $tagURL);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -259,7 +261,7 @@ class FrontService
     {
         try {
             $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
-            $products        = Product::whereLike(Product::likeRows, Arr::get($request, 'search'))
+            $products        = Product::whereLike(Arr::get($request, 'search'), Product::likeRows)
                                       ->orderBy('id', 'DESC')
                                       ->paginate('9');
             
@@ -395,21 +397,21 @@ class FrontService
         try {
             $showURL = "";
             if ( ! empty($request['show'])) {
-                $showURL .= '&show='.$request['show'];
+                $showURL .= '&show=' . $request['show'];
             }
             
             $sortByURL = '';
             if ( ! empty($request['sortBy'])) {
-                $sortByURL .= '&sortBy='.$request['sortBy'];
+                $sortByURL .= '&sortBy=' . $request['sortBy'];
             }
             
             $catURL = "";
             if ( ! empty($request['category'])) {
                 foreach ($request['category'] as $category) {
                     if (empty($catURL)) {
-                        $catURL .= '&category='.$category;
+                        $catURL .= '&category=' . $category;
                     } else {
-                        $catURL .= ','.$category;
+                        $catURL .= ',' . $category;
                     }
                 }
             }
@@ -418,21 +420,21 @@ class FrontService
             if ( ! empty($request['brand'])) {
                 foreach ($request['brand'] as $brand) {
                     if (empty($brandURL)) {
-                        $brandURL .= '&brand='.$brand;
+                        $brandURL .= '&brand=' . $brand;
                     } else {
-                        $brandURL .= ','.$brand;
+                        $brandURL .= ',' . $brand;
                     }
                 }
             }
             
             $priceRangeURL = "";
             if ( ! empty($request['price_range'])) {
-                $priceRangeURL .= '&price='.$request['price_range'];
+                $priceRangeURL .= '&price=' . $request['price_range'];
             }
             if (request()->is('e-shop.loc/product-grids')) {
-                return redirect()->route('product-grids', $catURL.$brandURL.$priceRangeURL.$showURL.$sortByURL);
+                return redirect()->route('product-grids', $catURL . $brandURL . $priceRangeURL . $showURL . $sortByURL);
             } else {
-                return redirect()->route('product-lists', $catURL.$brandURL.$priceRangeURL.$showURL.$sortByURL);
+                return redirect()->route('product-lists', $catURL . $brandURL . $priceRangeURL . $showURL . $sortByURL);
             }
         } catch (Exception $exception) {
             return $exception->getMessage();
@@ -448,7 +450,9 @@ class FrontService
             $products = Product::query();
             
             if ( ! empty($_GET['category'])) {
-                $cat_ids = Category::select('id')->whereIn('slug', explode(',', $_GET['category']))->pluck('id')->toArray();
+                $cat_ids = Category::select('id')->whereIn('slug', explode(',', $_GET['category']))->pluck(
+                    'id'
+                )->toArray();
                 $products->whereIn('cat_id', $cat_ids)->paginate;
             }
             if ( ! empty($_GET['brand'])) {
@@ -492,7 +496,10 @@ class FrontService
     {
         try {
             return [
-                "posts"       => Post::with(['categories', 'author_info'])->whereStatus('active')->orderBy('id', 'DESC')->paginate(9),
+                "posts"       => Post::with(['categories', 'author_info'])->whereStatus('active')->orderBy(
+                    'id',
+                    'DESC'
+                )->paginate(9),
                 "recantPosts" => Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get(),
             ];
         } catch (Exception $exception) {
@@ -555,14 +562,14 @@ class FrontService
     }
     
     /**
-     * @param $request
+     * @param $data
      *
-     * @return null|string
+     * @return array|string
      */
-    public function orderStore($request): null|string
+    public function orderStore($data): array|string
     {
         try {
-            return Payment::calculate($request);
+            return Payment::calculate($data);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }

@@ -26,10 +26,7 @@ class ProductController extends CoreController
     public function __construct(ProductService $product_service)
     {
         $this->product_service = $product_service;
-        $this->middleware('permission:product-list');
-        $this->middleware('permission:product-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:product-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Product::class);
     }
     
     /**

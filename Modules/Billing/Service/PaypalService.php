@@ -2,97 +2,50 @@
 
 namespace Modules\Billing\Service;
 
-use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use JetBrains\PhpStorm\NoReturn;
-use Modules\Cart\Models\Cart;
-use Modules\Product\Models\Product;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
-use Srmklive\PayPal\Facades\PayPal;
-use Throwable;
+use Illuminate\Http\Request;
+use Modules\Billing\Http\Controllers\PaypalController;
+use Modules\Billing\Http\Traits\Order;
+use Modules\Core\Helpers\Helper;
 
 class PaypalService
 {
+    use Order;
     
-    /**
-     * @return Application|RedirectResponse|Redirector
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws Exception|Throwable
-     */
-    public function payment(): Redirector|RedirectResponse|Application
+    private PaypalController $paypal_controller;
+    
+    public function __construct(PaypalController $paypal_controller)
     {
-        $cart = Cart::whereUserId(Auth()->id())->whereOrderId(null)->get()->toArray();
-        
-        $data = [];
-        
-        $data['items'] = array_map(function ($item) use ($cart) {
-            $name = Product::whereId($item['product_id'])->pluck('title');
-            
-            return [
-                'name'  => $name,
-                'price' => $item['price'],
-                'desc'  => 'Thank you for using paypal',
-                'qty'   => $item['quantity'],
-            ];
-        }, $cart);
-        
-        $data['invoice_id']          = 'ORD-'.strtoupper(uniqid());
-        $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
-        $data['return_url']          = route('payment.success');
-        $data['cancel_url']          = route('payment.cancel');
-        
-        $data['total'] = session()->get('total');
-        
-        Cart::whereUserId(Auth()->id())->whereOrderId(null)->update(['order_id' => session()->get('id')]);
-        // Init PayPal
-        $provider = PayPal::setProvider();
-        $provider->setApiCredentials(config('paypal'));
-        $token = $provider->getAccessToken();
-        $provider->setAccessToken($token);
-        $response = $provider->createOrder($data, true);
-        
-        return redirect($response['paypal_link']);
+        $this->paypal_controller = $paypal_controller;
     }
     
     /**
-     * Responds with a welcome message with instructions
+     * Charge a payment and store the transaction.
      *
-     * @return Response
-     */
-    #[NoReturn] public function cancel(): Response
-    {
-        dd('Your payment is canceled. You can create cancel page here.');
-    }
-    
-    /**
-     * Responds with a welcome message with instructions
+     * @param  Request  $request
      *
-     * @return RedirectResponse
-     * @throws Throwable
+     * @return string|null
      */
-    public function success(): RedirectResponse
+    public function success(Request $request): ?string
     {
-        // Init PayPal
-        $provider = PayPal::setProvider();
-        $provider->setApiCredentials(config('paypal'));
-        $token = $provider->getAccessToken();
-        $provider->setAccessToken($token);
-        
-        if (in_array(strtoupper($response['ACK']), ['SUCCESS', 'SUCCESSWITHWARNING'])) {
-            request()->session()->flash('success', 'You successfully pay from Paypal! Thank You');
-            session()->forget('cart');
-            session()->forget('coupon');
+        // Once the transaction has been approved, we need to complete it.
+        if ($request->input('paymentId') && $request->input('PayerID')) {
+            $transaction = $this->paypal_controller->get_gateway()->completePurchase([
+                'payer_id'             => $request->input('PayerID'),
+                'transactionReference' => $request->input('paymentId'),
+            ]);
+            $response    = $transaction->send();
             
-            return redirect()->route('home');
+            if ($response->isSuccessful()) {
+                // The customer has successfully paid.
+                $order_data = $response->getData();
+                $this->orderSave(Helper::totalCartPrice());
+                
+                return "Payment is successful. Your transaction id is: " . $order_data['id'];
+            } else {
+                return $response->getMessage();
+            }
+        } else {
+            return 'Transaction is declined';
         }
-        
-        request()->session()->flash('error', 'Something went wrong please try again!!!');
-        
-        return redirect()->back();
     }
 }

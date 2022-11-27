@@ -27,7 +27,7 @@ class BrandRepository extends Repository
         if (Arr::has($data, 'status')) {
             $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
         }
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
+        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
             return $query->with('products')->get();
         }
         

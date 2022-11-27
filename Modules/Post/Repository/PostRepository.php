@@ -34,7 +34,7 @@ class PostRepository extends Repository implements SearchInterface
         if (Arr::has($data, 'status')) {
             $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
         }
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
+        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
             return $query->with('categories', 'comments', 'post_comments', 'post_tag', 'author_info')->get();
         }
         $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');

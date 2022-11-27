@@ -45,7 +45,7 @@ class AttributeRepository extends Repository implements SearchInterface
         if (Arr::has($data, 'configurable')) {
             $query->where('configurable', '==', Arr::get($data, 'configurable'));
         }
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
+        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
             return $query->get();
         }
         

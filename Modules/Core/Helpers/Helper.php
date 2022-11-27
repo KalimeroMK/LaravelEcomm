@@ -5,12 +5,15 @@ namespace Modules\Core\Helpers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use LaravelIdea\Helper\Modules\Core\Models\_IH_Core_C;
+use LaravelIdea\Helper\Modules\Tag\Models\_IH_Tag_C;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Message\Models\Message;
 use Modules\Order\Models\Order;
 use Modules\Shipping\Models\Shipping;
+use Modules\Tag\Models\Tag;
 use ReflectionClass;
 use ReflectionException;
 
@@ -47,8 +50,8 @@ class Helper
      *
      * @return Builder[]|\Illuminate\Database\Eloquent\Collection|int
      */
-    public static function getAllProductFromWishlist(string $user_id = ''): \Illuminate\Database\Eloquent\Collection|int|array
-    {
+    public static function getAllProductFromWishlist(string $user_id = ''
+    ): \Illuminate\Database\Eloquent\Collection|int|array {
         if (Auth::check()) {
             if ($user_id == "") {
                 $user_id = auth()->user()->id;
@@ -65,8 +68,8 @@ class Helper
      *
      * @return Builder[]|\Illuminate\Database\Eloquent\Collection|int
      */
-    public static function getAllProductFromCart(string $user_id = ''): \Illuminate\Database\Eloquent\Collection|int|array
-    {
+    public static function getAllProductFromCart(string $user_id = ''
+    ): \Illuminate\Database\Eloquent\Collection|int|array {
         if (Auth::check()) {
             if ($user_id == "") {
                 $user_id = auth()->user()->id;
@@ -201,6 +204,18 @@ class Helper
         } catch (ReflectionException $exception) {
             return $exception->getMessage();
         }
+    }
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|_IH_Tag_C|array|_IH_Core_C
+     */
+    public static function postTagList(): \Illuminate\Database\Eloquent\Collection|_IH_Tag_C|array|_IH_Core_C
+    {
+        if ($option = 'all') {
+            return Tag::orderBy('id', 'desc')->get();
+        }
+        
+        return Tag::has('posts')->orderBy('id', 'desc')->get();
     }
     
 }

@@ -7,7 +7,7 @@ use Modules\Product\Models\Product;
 
 class MaxViewComposer
 {
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with('max', Product::max('price'));
     }

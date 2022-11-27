@@ -6,7 +6,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use JetBrains\PhpStorm\NoReturn;
@@ -231,28 +230,4 @@ class FrontController extends Controller
         return $this->front_service->messageStore($request);
     }
     
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $data = $this->front_service->orderStore($request->all());
-        
-        if (request('payment_method') == 'paypal') {
-            return redirect()->route('payment')->with($data[0], $data[1]);
-        } elseif (request('payment_method') == 'stripe') {
-            return redirect()->route('stripe')->with($data);
-        } else {
-            session()->forget('cart');
-            session()->forget('coupon');
-        }
-        
-        request()->session()->flash('success', 'Your product successfully placed in order');
-        
-        return redirect()->route('home');
-    }
 }

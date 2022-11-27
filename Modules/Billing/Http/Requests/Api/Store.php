@@ -16,11 +16,6 @@ class Store extends CoreRequest
         ];
     }
     
-    public function authorize(): bool
-    {
-        return true;
-    }
-    
     public function passedValidation()
     {
         $this->merge([

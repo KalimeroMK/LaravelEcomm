@@ -71,7 +71,7 @@ class ProductRepository extends Repository
         if (Arr::has($data, 'status')) {
             $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
         }
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
+        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
             return $query->with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->get();
         }
         $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');

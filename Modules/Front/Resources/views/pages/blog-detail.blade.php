@@ -132,7 +132,8 @@
                                     <h3 class="comment-title">Comments ({{$post->allComments->count()}})</h3>
                                     <!-- Single Comment -->
 
-                                    @include('frontend.pages.comment', ['comments' => $post->comments, 'post_id' => $post->id, 'depth' => 3])
+                                    @include('front::pages.comment', ['comments' => $post->comments, 'post_id' =>
+                                    $post->id, 'depth' => 3])
                                     <!-- End Single Comment -->
                                 </div>
                             </div>

@@ -8,9 +8,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\NoReturn;
-use Modules\Cart\Models\Cart;
 use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Api\Store;
 use Modules\Newsletter\Models\Newsletter;
@@ -267,19 +267,14 @@ class FrontController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $data = $this->front_service->orderStore($request->all());
-        
-        if (request('payment_method') == 'paypal') {
-            return redirect()->route('payment')->with($data[0], $data[1]);
-        } elseif (request('payment_method') == 'stripe') {
-            return redirect()->route('stripe')->with($data);
+        if (Arr::has($request, 'payment_method') == 'paypal' && $request['payment_method'] == 'paypal') {
+            return redirect()->route('payment');
+        } elseif (Arr::has($request, 'payment_method') == 'stripe' && $request['payment_method'] == 'stripe') {
+            return redirect()->route('stripe', Auth::id());
         } else {
             session()->forget('cart');
             session()->forget('coupon');
         }
-        Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $data[0]]);
-        
-        request()->session()->flash('success', 'Your product successfully placed in order');
         
         return redirect()->route('home');
     }

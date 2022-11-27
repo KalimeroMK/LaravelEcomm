@@ -25,9 +25,4 @@ class Stripe extends CoreRequest
             new CartExistRule(),
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

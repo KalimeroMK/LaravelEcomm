@@ -27,7 +27,7 @@ class MessageController extends CoreController
      */
     public function index(): View|Factory|Application
     {
-        return view('backend::message.index')->with($this->message_service->getAll());
+        return view('message::index', ['messages' => $this->message_service->getAll()]);
     }
     
     /**
@@ -39,7 +39,7 @@ class MessageController extends CoreController
      */
     public function show(Message $message): Factory|View|Application
     {
-        return view('backend::message.show')->with($this->message_service->show($message->id));
+        return view('message::show', ['message' => $this->message_service->show($message->id)]);
     }
     
     /**

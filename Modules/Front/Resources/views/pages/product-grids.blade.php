@@ -36,7 +36,8 @@
                                         <li>{{ $category->title }}</li>
                                         <ul>
                                             @foreach ($category->childrenCategories as $childCategory)
-                                                @include('frontend.layouts.child_category', ['child_category' => $childCategory])
+                                                @include('front::layouts.child_category', ['child_category' =>
+                                                $childCategory])
                                             @endforeach
                                         </ul>
                                     @endforeach

@@ -22,9 +22,4 @@ class Update extends CoreRequest
             'configurable' => 'sometimes|in:0,1',
         ];
     }
-    
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

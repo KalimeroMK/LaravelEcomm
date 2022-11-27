@@ -3,7 +3,6 @@
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Modules\Front\Http\Controllers\Api\FrontController;
 use Spatie\Feed\Http\FeedController;
 
 /*
@@ -22,8 +21,4 @@ Auth::routes();
 // Socialite
 Route::get('login/{provider}/', [LoginController::class, 'redirect'])->name('login.redirect');
 Route::get('login/{provider}/callback/', [LoginController::class, 'Callback'])->name('login.callback');
-// NewsLetter
-Route::post('/subscribe', [FrontController::class, 'subscribe'])->name('subscribe');
-Route::get('/validation/{token}', [FrontController::class, 'verifyNewsletter'])->name('validation');
-Route::get('/delete/{token}', [FrontController::class, 'deleteNewsletter'])->name('delete-newsletter');
 

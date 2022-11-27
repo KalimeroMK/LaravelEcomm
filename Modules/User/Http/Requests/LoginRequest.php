@@ -3,7 +3,6 @@
 namespace Modules\User\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use JetBrains\PhpStorm\ArrayShape;
 
 class LoginRequest extends FormRequest
 {
@@ -11,14 +10,6 @@ class LoginRequest extends FormRequest
     public mixed $email;
     public mixed $password;
     
-    #[ArrayShape(
-        [
-            'name'     => "string",
-            'email'    => "string",
-            'password' => "string",
-        ]
-    )
-    ]
     public function rules(): array
     {
         return [

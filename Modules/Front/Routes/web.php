@@ -33,4 +33,8 @@ Route::post('cart/order', [FrontController::class, 'store'])->name('cart.order')
 Route::get('/product-lists', [FrontController::class, 'productLists'])->name('product-lists');
 Route::match(['get', 'post'], '/filter', [FrontController::class, 'productFilter'])->name('shop.filter');
 Route::get('/product-grids', [FrontController::class, 'productGrids'])->name('product-grids');
+// NewsLetter
+Route::post('/subscribe', [\Modules\Front\Http\Controllers\Api\FrontController::class, 'subscribe'])->name('subscribe');
+Route::get('/validation/{token}', [FrontController::class, 'verifyNewsletter'])->name('validation');
+Route::get('/delete/{token}', [FrontController::class, 'deleteNewsletter'])->name('delete-newsletter');
 

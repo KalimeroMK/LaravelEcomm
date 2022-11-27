@@ -4,7 +4,7 @@ services:
     build:
       context: .docker
       dockerfile: Dockerfile
-    container_name: app
+    container_name: e_comm_app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
@@ -16,7 +16,7 @@ services:
       - laravelapp
   db:
     image: mariadb:latest
-    container_name: mysql
+    container_name: e_comm_mysql
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: homestead
@@ -34,7 +34,7 @@ services:
       - laravelapp
   nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: e_comm_nginx
     restart: unless-stopped
     ports:
       - "80:80"
