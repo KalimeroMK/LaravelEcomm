@@ -13,20 +13,20 @@ class AdminRepository
      */
     public function index(): array
     {
-        $data    = User::select(
-            DB::raw("COUNT(*) as count"),
-            DB::raw("DAYNAME(created_at) as day_name"),
-            DB::raw("DAY(created_at) as day")
-        )
-                       ->where('created_at', '>', Carbon::today()->subDay(6))
-                       ->groupBy('day_name', 'day')
-                       ->orderBy('day')
-                       ->get();
-        $array[] = ['Name', 'Number'];
-        foreach ($data as $key => $value) {
-            $array[++$key] = [$value->day_name, $value->count];
+        $data = User::query()
+            ->selectRaw('COUNT(*) as count, DAYNAME(created_at) as day_name, DAY(created_at) as day')
+            ->where('created_at', '>', Carbon::today()->subDays(6))
+            ->groupBy('day_name', 'day')
+            ->orderBy('day')
+            ->get();
+
+        $array = [['Day', 'Count']];
+
+        foreach ($data as $row) {
+            $array[] = [$row->day_name, $row->count];
         }
-        
+
         return $array;
     }
+
 }

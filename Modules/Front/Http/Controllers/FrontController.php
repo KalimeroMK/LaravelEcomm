@@ -17,14 +17,14 @@ use Modules\Newsletter\Models\Newsletter;
 
 class FrontController extends Controller
 {
-    
+
     private FrontService $front_service;
-    
+
     public function __construct()
     {
         $this->front_service = new FrontService();
     }
-    
+
     /**
      * @return Application|Factory|View
      */
@@ -32,7 +32,7 @@ class FrontController extends Controller
     {
         return view('front::index')->with($this->front_service->index());
     }
-    
+
     /**
      * @return Application|Factory|View
      */
@@ -40,7 +40,7 @@ class FrontController extends Controller
     {
         return view('front::pages.about-us');
     }
-    
+
     /**
      * @return Application|Factory|View
      */
@@ -48,7 +48,7 @@ class FrontController extends Controller
     {
         return view('front::pages.contact');
     }
-    
+
     /**
      * @param $slug
      *
@@ -58,7 +58,7 @@ class FrontController extends Controller
     {
         return view('front::pages.product_detail')->with($this->front_service->productDetail($slug));
     }
-    
+
     /**
      * @return Application|Factory|View
      */
@@ -66,7 +66,7 @@ class FrontController extends Controller
     {
         return view('front::pages.product-grids')->with($this->front_service->productGrids());
     }
-    
+
     /**
      * @return Application|Factory|View
      */
@@ -74,7 +74,7 @@ class FrontController extends Controller
     {
         return view('front::pages.product-lists')->with($this->front_service->productLists());
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -84,7 +84,7 @@ class FrontController extends Controller
     {
         return $this->front_service->productFilter($request);
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -94,7 +94,7 @@ class FrontController extends Controller
     {
         return view('front::pages.product-grids')->with($this->front_service->productSearch($request));
     }
-    
+
     /**
      * @return Application|Factory|View
      */
@@ -102,7 +102,7 @@ class FrontController extends Controller
     {
         return view('front::pages.product-grids')->with($this->front_service->productDeal());
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -116,7 +116,7 @@ class FrontController extends Controller
             return view('front::pages.product-lists')->with($this->front_service->productBrand($request));
         }
     }
-    
+
     /**
      * @param $slug
      *
@@ -130,7 +130,7 @@ class FrontController extends Controller
             return view('front::pages.product-lists')->with($this->front_service->productCat($slug));
         }
     }
-    
+
     /**
      * @return Application|Factory|View
      */
@@ -138,7 +138,7 @@ class FrontController extends Controller
     {
         return view('front::pages.blog')->with($this->front_service->blog());
     }
-    
+
     /**
      * @param $slug
      *
@@ -148,7 +148,7 @@ class FrontController extends Controller
     {
         return view('front::pages.blog-detail')->with($this->front_service->blogDetail($slug));
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -158,7 +158,7 @@ class FrontController extends Controller
     {
         return view('front::pages.blog')->with($this->front_service->blogSearch($request));
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -168,7 +168,7 @@ class FrontController extends Controller
     {
         return $this->front_service->blogFilter($request);
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -178,7 +178,7 @@ class FrontController extends Controller
     {
         return view('front::pages.blog')->with($this->front_service->blogByCategory($request));
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -188,11 +188,11 @@ class FrontController extends Controller
     {
         return view('front::pages.blog')->with($this->front_service->blogByTag($request));
     }
-    
+
     /**
      * @return Application|Factory|View
      */
-    
+
     /**
      * @param  Request  $request
      *
@@ -202,7 +202,7 @@ class FrontController extends Controller
     {
         return $this->front_service->couponStore($request);
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -212,13 +212,13 @@ class FrontController extends Controller
     {
         if (Newsletter::whereEmail($request->email) !== null) {
             $this->front_service->newsletter($request->all());
-            
+
             return redirect()->back()->with('message', "Your comment successfully send.");
         }
-        
+
         return redirect()->back()->with('message', "Your email is already in our mailing list.");
     }
-    
+
     /**
      * @param $token
      *
@@ -227,25 +227,25 @@ class FrontController extends Controller
     public function verifyNewsletter($token): string
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->validation(['id' => Newsletter::where('token', $token)->first()->id]);
-            
+            $this->front_service->validation((int)['id' => Newsletter::where('token', $token)->first()->id]);
+
             return redirect()->back()->with('message', "Your email is successfully validated.");
         }
-        
+
         return redirect()->back()->with('message', "token mismatch ");
     }
-    
+
     public function deleteNewsletter($token)
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->deleteNewsletter(['id' => Newsletter::where('token', $token)->first()->id]);
-            
+            $this->front_service->deleteNewsletter((int)['id' => Newsletter::where('token', $token)->first()->id]);
+
             return redirect()->back()->with('message', "Your email is successfully deleted.");
         }
-        
+
         return redirect()->back()->with('message', "token mismatch ");
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -257,7 +257,7 @@ class FrontController extends Controller
     {
         return $this->front_service->messageStore($request);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -267,15 +267,22 @@ class FrontController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if (Arr::has($request, 'payment_method') == 'paypal' && $request['payment_method'] == 'paypal') {
+        // Check if the payment method is PayPal and redirect to the payment route
+        if (Arr::get($request, 'payment_method') == 'paypal') {
             return redirect()->route('payment');
-        } elseif (Arr::has($request, 'payment_method') == 'stripe' && $request['payment_method'] == 'stripe') {
-            return redirect()->route('stripe', Auth::id());
-        } else {
-            session()->forget('cart');
-            session()->forget('coupon');
         }
-        
+
+        // Check if the payment method is Stripe and redirect to the Stripe route with the user ID
+        if (Arr::get($request, 'payment_method') == 'stripe') {
+            return redirect()->route('stripe', Auth::id());
+        }
+
+        // Clear the cart and coupon from the session
+        session()->forget('cart');
+        session()->forget('coupon');
+
+        // Redirect to the home page
         return redirect()->route('home');
     }
+
 }

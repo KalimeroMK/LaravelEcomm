@@ -9,7 +9,7 @@ use Modules\Product\Models\Product;
 class ProductRepository extends Repository
 {
     public $model = Product::class;
-    
+
     /**
      * @param  $id
      * @param  array  $data
@@ -21,10 +21,10 @@ class ProductRepository extends Repository
         $item = $this->findById($id);
         $item->fill($data);
         $item->save();
-        
+
         return $item->fresh();
     }
-    
+
     /**
      * @param $id
      *
@@ -34,51 +34,35 @@ class ProductRepository extends Repository
     {
         return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
     }
-    
-    /**
-     * @param  array  $data
-     *
-     * @return mixed
-     */
+
+    const DEFAULT_ORDER_BY = 'id';
+    const DEFAULT_SORT = 'desc';
+
+    protected function withRelations()
+    {
+        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags'];
+    }
+
     public function search(array $data): mixed
     {
         $query = $this->model::query();
-        
-        if (Arr::has($data, 'title')) {
-            $query->where('title', 'like', '%' . Arr::get($data, 'title') . '%');
+
+        $searchableFields = ['title', 'summary', 'description', 'color', 'stock', 'brand_id', 'price', 'discount', 'status'];
+        foreach ($searchableFields as $field) {
+            if (Arr::has($data, $field)) {
+                $query->where($field, 'like', '%' . Arr::get($data, $field) . '%');
+            }
         }
-        if (Arr::has($data, 'summary')) {
-            $query->where('summary', 'like', '%' . Arr::get($data, 'summary') . '%');
-        }
-        if (Arr::has($data, 'description')) {
-            $query->where('description', 'like', '%' . Arr::get($data, 'description') . '%');
-        }
-        if (Arr::has($data, 'color')) {
-            $query->where('color', 'like', '%' . Arr::get($data, 'color') . '%');
-        }
-        if (Arr::has($data, 'stock')) {
-            $query->where('stock', 'like', '%' . Arr::get($data, 'stock') . '%');
-        }
-        if (Arr::has($data, 'brand_id')) {
-            $query->where('brand_id', 'like', '%' . Arr::get($data, 'brand_id') . '%');
-        }
-        if (Arr::has($data, 'price')) {
-            $query->where('price', 'like', '%' . Arr::get($data, 'price') . '%');
-        }
-        if (Arr::has($data, 'discount')) {
-            $query->where('discount', 'like', '%' . Arr::get($data, 'discount') . '%');
-        }
-        if (Arr::has($data, 'status')) {
-            $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
-        }
+
         if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
-            return $query->with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->get();
+            return $query->with($this->withRelations())->get();
         }
-        $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');
-        
-        return $query->with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->paginate(
+
+        $query->orderBy(Arr::get($data, 'order_by') ?? self::DEFAULT_ORDER_BY, Arr::get($data, 'sort') ?? self::DEFAULT_SORT);
+
+        return $query->with($this->withRelations())->paginate(
             Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()
         );
     }
-    
+
 }

@@ -10,7 +10,7 @@ use Modules\Core\Repositories\Repository;
 class BannerRepository extends Repository implements SearchInterface
 {
     public $model = Banner::class;
-    
+
     /**
      * @param  array  $data
      *
@@ -19,25 +19,22 @@ class BannerRepository extends Repository implements SearchInterface
     public function search(array $data): mixed
     {
         $query = $this->model::query();
-        if (Arr::has($data, 'title')) {
-            $query->where('title', 'like', '%' . Arr::get($data, 'title') . '%');
+
+        foreach (['title', 'slug', 'description', 'status'] as $field) {
+            if (isset($data[$field])) {
+                $query->where($field, 'like', '%' . $data[$field] . '%');
+            }
         }
-        if (Arr::has($data, 'slug')) {
-            $query->where('slug', 'like', '%' . Arr::get($data, 'slug') . '%');
-        }
-        if (Arr::has($data, 'description')) {
-            $query->where('description', 'like', '%' . Arr::get($data, 'description') . '%');
-        }
-        if (Arr::has($data, 'status')) {
-            $query->where('status', 'like', '%' . Arr::get($data, 'status') . '%');
-        }
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true) {
+
+        if (isset($data['all_included']) && $data['all_included']) {
             return $query->get();
         }
-        
-        $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');
-        
-        return $query->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
+
+        $orderBy = $data['order_by'] ?? 'id';
+        $sort = $data['sort'] ?? 'desc';
+        $perPage = $data['per_page'] ?? $this->model->getPerPage();
+
+        return $query->orderBy($orderBy, $sort)->paginate($perPage);
     }
-    
+
 }
