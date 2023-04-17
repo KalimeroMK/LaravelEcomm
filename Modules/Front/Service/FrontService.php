@@ -4,6 +4,7 @@ namespace Modules\Front\Service;
 
 use App\Events\MessageSent;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -424,23 +425,27 @@ class FrontService
     /**
      * Get data for a product brand page.
      *
-     * @param $request
-     *
+     * @param $data
      * @return array|string
      */
-    public function productBrand($request): array|string
+    public function productBrand($data): array|string
     {
-            // Get products for brand
-            $products = Brand::getProductByBrand($request->slug);
+        // Get products for brand
+        $products = Product::whereHas('brand', function (Builder $query) use ($data) {
+            $query->where('slug' ,$data['slug']);
+        })->paginate(9);
+        $brands = Brand::where('status', 'active')
+            ->orderBy('title')
+            ->get();
+        // Get recent products
+        $recentProducts = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
-            // Get recent products
-            $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-
-            // Return data
-            return [
-                "products"        => $products,
-                "recent_products" => $recent_products,
-            ];
+        // Return data
+        return [
+            "products" => $products,
+            "brands" => $brands,
+            'recentProducts' => $recentProducts,
+        ];
     }
 
 

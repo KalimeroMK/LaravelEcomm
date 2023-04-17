@@ -84,7 +84,7 @@
                             <div class="single-widget recent-post">
                                 <h3 class="title">Recent post</h3>
                                 {{-- {{dd($recent_products)}} --}}
-                                @foreach($recent_products as $product)
+                                @foreach($recentProducts as $product)
                                     <div class="single-post first">
                                         <div class="image">
                                             <img src="{{$product->imageUrl}}" alt="{{$product->imageUrl}}">
