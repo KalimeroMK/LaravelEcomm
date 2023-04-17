@@ -99,7 +99,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="owl-carousel popular-slider">
-                        @foreach($product_lists as $product)
+                        @foreach($hot_products as $product)
                             <!-- Start Single Product -->
                             <div class="single-product">
                                 <div class="product-img">
@@ -259,8 +259,8 @@
             <!-- End Shop Services Area -->
             @include('front::layouts.newsletter')
             <!-- Modal -->
-            @if($product_lists)
-                @foreach($product_lists as $key=>$product)
+            @if($hot_products)
+                @foreach($hot_products as $key=>$product)
                     <div class="modal fade" id="{{$product->id}}" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
