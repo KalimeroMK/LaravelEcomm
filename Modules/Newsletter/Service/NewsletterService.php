@@ -2,7 +2,6 @@
 
 namespace Modules\Newsletter\Service;
 
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
 use Modules\Banner\Models\Banner;
@@ -11,14 +10,14 @@ use Modules\Newsletter\Repository\NewsletterRepository;
 
 class NewsletterService extends CoreService
 {
-    
+
     public NewsletterRepository $newsletter_repository;
-    
+
     public function __construct(NewsletterRepository $newsletter_repository)
     {
         $this->newsletter_repository = $newsletter_repository;
     }
-    
+
     /**
      * @param $data
      *
@@ -26,13 +25,9 @@ class NewsletterService extends CoreService
      */
     public function store($data): mixed
     {
-        try {
             return $this->newsletter_repository->create($data);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @param $id
      *
@@ -40,13 +35,9 @@ class NewsletterService extends CoreService
      */
     public function edit($id): mixed
     {
-        try {
             return $this->newsletter_repository->findById($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @param $id
      *
@@ -54,13 +45,9 @@ class NewsletterService extends CoreService
      */
     public function show($id): mixed
     {
-        try {
             return $this->newsletter_repository->findById($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @param $id
      * @param $data
@@ -69,37 +56,25 @@ class NewsletterService extends CoreService
      */
     public function update($id, $data): mixed
     {
-        try {
             return $this->newsletter_repository->update($id, $data);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @param $id
      *
      * @return string|void
      */
-    
+
     public function destroy($id)
     {
-        try {
             $this->newsletter_repository->delete($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @return mixed|string
      */
     public function getAll(): mixed
     {
-        try {
             return $this->newsletter_repository->findAll();
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
 }

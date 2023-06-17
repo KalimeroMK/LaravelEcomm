@@ -10,12 +10,12 @@ class Repository implements RepositoryInterface
      * Model::class
      */
     public $model;
-    
+
     /**
      * @var array
      */
     public array $filters = [];
-    
+
     /**
      * @return mixed
      */
@@ -23,7 +23,7 @@ class Repository implements RepositoryInterface
     {
         return $this->model::all();
     }
-    
+
     /**
      * @param  string  $column
      * @param $value
@@ -34,7 +34,7 @@ class Repository implements RepositoryInterface
     {
         return $this->model::where($column, $value);
     }
-    
+
     /**
      * @param  array  $data
      *
@@ -44,7 +44,7 @@ class Repository implements RepositoryInterface
     {
         return $this->model::create($data)->fresh();
     }
-    
+
     /**
      * @param  array  $data
      *
@@ -54,7 +54,7 @@ class Repository implements RepositoryInterface
     {
         return $this->model::insert($data);
     }
-    
+
     /**
      * @param  $id
      * @param  array  $data
@@ -66,10 +66,10 @@ class Repository implements RepositoryInterface
         $item = $this->findById($id);
         $item->fill($data);
         $item->save();
-        
+
         return $item->fresh();
     }
-    
+
     /**
      * @param  $id
      *
@@ -79,9 +79,9 @@ class Repository implements RepositoryInterface
     {
         return $this->model::find($id);
     }
-    
+
     /**
-     * @param  §  $id
+     * @param  $id
      *
      * @return void
      */
@@ -89,7 +89,7 @@ class Repository implements RepositoryInterface
     {
         $this->model::destroy($id);
     }
-    
+
     /**
      * @param  $id
      *
@@ -97,14 +97,20 @@ class Repository implements RepositoryInterface
      */
     public function restore($id): mixed
     {
-        $object = $this->findByIdWithTrashed($id);
-        if ($object && method_exists($this->model, 'isSoftDelete')) {
-            $object->restore($id);
-            
-            return $object;
+        if (!method_exists($this->model, 'isSoftDelete')) {
+            return null;
         }
+
+        $object = $this->model->withTrashed()->find($id);
+        if (!$object) {
+            return null;
+        }
+
+        $object->restore();
+
+        return $object;
     }
-    
+
     /**
      * @param  $id
      *
@@ -112,8 +118,10 @@ class Repository implements RepositoryInterface
      */
     public function findByIdWithTrashed($id): mixed
     {
-        if (method_exists($this->model, 'isSoftDelete')) {
-            return $this->model::withTrashed()->find($id);
+        if (!method_exists($this->model, 'isSoftDelete')) {
+            return null;
         }
+
+        return $this->model->withTrashed()->find($id);
     }
 }

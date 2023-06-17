@@ -8,12 +8,12 @@ use Modules\Shipping\Repository\ShippingRepository;
 class ShippingService
 {
     public ShippingRepository $shipping_repository;
-    
+
     public function __construct(ShippingRepository $shipping_repository)
     {
         $this->shipping_repository = $shipping_repository;
     }
-    
+
     /**
      * @return mixed
      */
@@ -21,7 +21,7 @@ class ShippingService
     {
         return $this->shipping_repository->findAll();
     }
-    
+
     /**
      * @param $data
      *
@@ -31,7 +31,7 @@ class ShippingService
     {
         return $this->shipping_repository->create($data);
     }
-    
+
     /**
      * @param $id
      * @param $data
@@ -42,7 +42,7 @@ class ShippingService
     {
         return $this->shipping_repository->update($id, $data);
     }
-    
+
     /**
      * @param $id
      *
@@ -50,13 +50,9 @@ class ShippingService
      */
     public function edit($id): mixed
     {
-        try {
             return $this->shipping_repository->findById($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @param $id
      *
@@ -64,13 +60,9 @@ class ShippingService
      */
     public function destroy($id)
     {
-        try {
             $this->shipping_repository->delete($id);
-        } catch (Exception $exception) {
-            return $exception;
-        }
     }
-    
+
     /**
      * @param $id
      *
@@ -78,11 +70,7 @@ class ShippingService
      */
     public function show($id): mixed
     {
-        try {
             return $this->shipping_repository->findById($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
 }

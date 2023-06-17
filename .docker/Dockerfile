@@ -28,12 +28,6 @@ RUN apt-get update && apt-get install -y \
 #Xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
-# Node.js
-RUN curl -sL https://deb.nodesource.com/setup_15.x -o nodesource_setup.sh
-RUN bash nodesource_setup.sh
-RUN apt-get install nodejs -y
-RUN command -v node
-RUN command -v npm
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

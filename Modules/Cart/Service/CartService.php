@@ -2,7 +2,6 @@
 
 namespace Modules\Cart\Service;
 
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
@@ -16,24 +15,20 @@ use Modules\Product\Models\Product;
 class CartService
 {
     public CartRepository $cart_repository;
-    
+
     public function __construct(CartRepository $cart_repository)
     {
         $this->cart_repository = $cart_repository;
     }
-    
+
     /**
      * @return mixed|string
      */
     public function getAll(): mixed
     {
-        try {
             return $this->cart_repository->findAll();
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @param $data
      *
@@ -42,9 +37,9 @@ class CartService
     public function apiAddToCart($data): Cart|Core
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
-        
+
         $cart = Cart::Create(
-            
+
             [
                 'user_id'    => Auth::id(),
                 'product_id' => $product->id,
@@ -54,10 +49,10 @@ class CartService
             ]
         );
         Wishlist::whereUserId(Auth::id())->whereCartId(null)->update(['cart_id' => $cart->id]);
-        
+
         return $cart;
     }
-    
+
     /**
      * @param $data
      *
@@ -66,11 +61,11 @@ class CartService
     public function apiAUpdateCart($data): bool|int
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
-        
+
         return Cart::whereUserId(Auth::id())
                    ->whereProductId($product->id)
                    ->update(
-            
+
                        [
                            'price'    => ($product->price - ($product->price * $product->discount) / 100),
                            'quantity' => $data['quantity'],
@@ -78,7 +73,7 @@ class CartService
                        ]
                    );
     }
-    
+
     /**
      * @param $data
      *
@@ -112,7 +107,7 @@ class CartService
             $cart->save();
         }
     }
-    
+
     /**
      * @param $data
      *
@@ -121,12 +116,12 @@ class CartService
     public function singleAddToCart($data)
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
-        
+
         $already_cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->where(
             'product_id',
             $product->id
         )->first();
-        
+
         if ($already_cart) {
             $already_cart->quantity = $already_cart->quantity + $data['quantity'][1];
             $already_cart->amount   = ($product->price * $data['quantity'][1]) + $already_cart->amount;
@@ -144,7 +139,7 @@ class CartService
             $cart->save();
         }
     }
-    
+
     /**
      * @return Builder[]|Collection
      */
@@ -152,22 +147,18 @@ class CartService
     {
         return Cart::whereUserId(Auth::id())->whereOrderId(null)->get();
     }
-    
+
     /**
      * @param $id
      *
      * @return string|void
      */
-    
+
     public function destroy($id)
     {
-        try {
             $this->cart_repository->delete($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     public function cartUpdate($data): RedirectResponse
     {
         if ($data->quantity) {
@@ -179,11 +170,11 @@ class CartService
                 if ($quantities > 0 && $cart) {
                     if ($cart->product->stock < $quantities) {
                         request()->session()->flash('error', 'Out of stock');
-                        
+
                         return back();
                     }
                     $cart->quantity = ($cart->product->stock > $quantities) ? $quantities : $cart->product->stock;
-                    
+
                     if ($cart->product->stock <= 0) {
                         continue;
                     }
@@ -196,22 +187,18 @@ class CartService
                     $error[] = 'Cart Invalid!';
                 }
             }
-            
+
             return back()->with($error)->with('success', $success);
         } else {
             return back()->with('Cart Invalid!');
         }
     }
-    
+
     /**
      * @return mixed|string
      */
     public function show(): mixed
     {
-        try {
             return $this->cart_repository->show();
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
 }

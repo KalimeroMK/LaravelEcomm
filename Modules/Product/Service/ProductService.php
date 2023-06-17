@@ -17,14 +17,14 @@ use Modules\Tag\Models\Tag;
 class ProductService extends CoreService
 {
     public ProductRepository $product_repository;
-    
+
     public function __construct(ProductRepository $product_repository)
     {
         $this->product_repository = $product_repository;
     }
-    
+
     use ImageUpload;
-    
+
     /**
      * @param $data
      *
@@ -39,7 +39,7 @@ class ProductService extends CoreService
             throw new SearchException($exception);
         }
     }
-    
+
     /**
      * @return array
      */
@@ -54,7 +54,7 @@ class ProductService extends CoreService
             'tags'       => Tag::get(),
         ];
     }
-    
+
     /**
      * @param $data
      *
@@ -70,19 +70,15 @@ class ProductService extends CoreService
         if (isset($data['photo'])) {
             $data['photo'] = $this->verifyAndStoreImage($data['photo']);
         }
-        
-        try {
+
             $product = $this->product_repository->create($data);
             $product->categories()->attach($data['category']);
             $product->sizes()->attach($data['size']);
             $product->tags()->attach($data['tag']);
-            
+
             return $product;
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
     }
-    
+
     /**
      * @param $id
      *
@@ -99,7 +95,7 @@ class ProductService extends CoreService
             'tags'       => Tag::get(),
         ];
     }
-    
+
     /**
      * @param $id
      *
@@ -111,7 +107,7 @@ class ProductService extends CoreService
             'product' => $this->product_repository->findById($id),
         ];
     }
-    
+
     /**
      * @param $data
      * @param  int  $id
@@ -130,31 +126,23 @@ class ProductService extends CoreService
         } else {
             $data['photo'] = Product::find($id)->photo;
         }
-        
-        try {
+
             $product = $this->product_repository->update($id, $data);
             $product->categories()->sync($data['category'], true);
             $product->sizes()->sync($data['size'], true);
             $product->tags()->sync($data['size'], true);
-            
+
             return $product;
-        } catch (Exception $exception) {
-            return [$exception->getMessage()];
-        }
     }
-    
+
     /**
      * @param $id
      *
-     * @return Exception|void
+     * @return void
      */
     public function destroy($id)
     {
-        try {
             $this->product_repository->delete($id);
-        } catch (Exception $exception) {
-            return $exception;
-        }
     }
-    
+
 }

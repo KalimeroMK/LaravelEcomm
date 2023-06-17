@@ -31,43 +31,30 @@ class FrontService
      */
     public function index(): array
     {
-        // Get featured products
         $featured_products = Product::with('categories')
-            ->orderBy('price', 'DESC')
+            ->orderBy('price', 'desc')
             ->limit(4)
             ->get();
 
-        // Get latest posts
         $posts = Post::where('status', 'active')
-            ->orderBy('id', 'DESC')
+            ->orderBy('id', 'desc')
             ->limit(3)
             ->get();
 
-        // Get active banners
         $banners = Banner::where('status', 'active')
+            ->orderBy('id', 'desc')
             ->limit(3)
-            ->orderBy('id', 'DESC')
             ->get();
 
-        // Get latest and hot products
-        $latest_hot_products = Product::with('categories', 'condition')
+        $latest_products = Product::with('categories', 'condition')
             ->where('status', 'active')
-            ->orderBy('id', 'DESC')
-            ->limit(9)
+            ->orderBy('id', 'desc')
+            ->limit(4)
             ->get();
 
-        // Split latest and hot products
-        $latest_products = $latest_hot_products->take(4);
-        $hot_products = $latest_hot_products->skip(4);
+        $hot_products = $latest_products->splice(4);
 
-        // Return all data
-        return [
-            "featured_products" => $featured_products,
-            "posts" => $posts,
-            "banners" => $banners,
-            "latest_products" => $latest_products,
-            "hot_products" => $hot_products,
-        ];
+        return compact('featured_products', 'posts', 'banners', 'latest_products', 'hot_products');
     }
 
     /**
@@ -83,15 +70,11 @@ class FrontService
             return 'Category not found';
         }
 
-        $categoryTitle = $category->title;
-
-        $products = Product::whereHas('categories', function ($query) use ($categoryTitle) {
-            $query->where('title', $categoryTitle);
-        })
+        $products = $category->products()
             ->paginate(10);
 
         $recentProducts = Product::where('status', 'active')
-            ->orderByDesc('id')
+            ->orderBy('id', 'desc')
             ->take(3)
             ->get();
 
@@ -99,16 +82,12 @@ class FrontService
             ->orderBy('title')
             ->get();
 
-        return [
-            'brands'          => $brands,
-            'recent_products' => $recentProducts,
-            'products'        => $products,
-        ];
+        return compact('brands', 'recentProducts', 'products');
     }
 
 
     /**
-     * @param $request
+     * @param  Request  $request
      *
      * @return array|string
      */
@@ -191,26 +170,26 @@ class FrontService
         $sortColumn = $queryParams['sortBy'] ?? 'created_at';
         $sortOrder = ($sortColumn === 'title') ? 'asc' : 'desc';
         if ($sortColumn === 'price') {
-            $sortColumn = 'price';
             $sortOrder = 'asc';
         }
 
         // Query products with filters and pagination
         $products = $this->model::query()
-            ->when($categoryIds, fn($query, $categoryIds) => $query->whereIn('cat_id', $categoryIds))
-            ->when($brandIds, fn($query, $brandIds) => $query->whereIn('brand_id', $brandIds))
+            ->when($categoryIds, fn($query) => $query->whereIn('cat_id', $categoryIds))
+            ->when($brandIds, fn($query) => $query->whereIn('brand_id', $brandIds))
             ->when($minPrice || $maxPrice, fn($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
             ->orderBy($sortColumn, $sortOrder)
             ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
             ->paginate($perPage);
 
         // Retrieve brands and recent products for display
-        $brands = Brand::whereStatus('active')->orderBy('title', 'ASC')->get();
-        $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->take(3)->get();
+        $brands = Brand::where('status', 'active')->orderBy('title')->get();
+        $recent_products = Product::where('status', 'active')->orderByDesc('id')->take(3)->get();
 
         // Return view data
         return compact('brands', 'recent_products', 'products');
     }
+
 
 
 
@@ -279,34 +258,19 @@ class FrontService
     public function blogFilter($request): RedirectResponse|string
     {
         try {
-            $catURL = "";
-            if (!empty($request['category'])) {
-                foreach ($request['category'] as $category) {
-                    if (empty($catURL)) {
-                        $catURL .= '&category=' . $category;
-                    } else {
-                        $catURL .= ',' . $category;
-                    }
-                }
-            }
+            $category = $request['category'] ?? [];
+            $tag = $request['tag'] ?? [];
 
-            $tagURL = "";
-            if (!empty($request['tag'])) {
-                foreach ($request['tag'] as $tag) {
-                    if (empty($tagURL)) {
-                        $tagURL .= '&tag=' . $tag;
-                    } else {
-                        $tagURL .= ',' . $tag;
-                    }
-                }
-            }
+            $catURL = !empty($category) ? '&category='.implode(',', $category) : '';
+            $tagURL = !empty($tag) ? '&tag='.implode(',', $tag) : '';
 
             // Redirect to blog page with filtered categories and tags.
-            return redirect()->route('blog', $catURL . $tagURL);
+            return redirect()->route('blog', $catURL.$tagURL);
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
     }
+
 
     /**
      * Get blog posts by category slug.
@@ -337,18 +301,17 @@ class FrontService
      * @param $data
      * @return array|string
      */
-    public function productSearch($data)
+    public function productSearch($data): array|string
     {
+        // Get recent products.
+        $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
-            // Get recent products.
-            $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
+        // Search products by name, description, and brand name.
+        $products = Product::whereLike(Product::likeRows, Arr::get($data, 'search'))
+            ->orderBy('id', 'DESC')
+            ->paginate('9');
 
-            // Search products by name, description, and brand name.
-            $products = Product::whereLike(Product::likeRows, Arr::get($data, 'search'))
-                ->orderBy('id', 'DESC')
-                ->paginate('9');
-
-            return [
+        return [
                 "recent_products" => $recent_products,
                 "products"        => $products,
                 "brands"          => Brand::with('products')->get(),
@@ -457,27 +420,13 @@ class FrontService
      */
     public function productFilter($data): RedirectResponse|string
     {
-        $query = [];
-
-        if (filled($data['show'])) {
-            $query['show'] = $data['show'];
-        }
-
-        if (filled($data['sortBy'])) {
-            $query['sortBy'] = $data['sortBy'];
-        }
-
-        if (filled($data['category'])) {
-            $query['category'] = implode(',', $data['category']);
-        }
-
-        if (filled($data['brand'])) {
-            $query['brand'] = implode(',', $data['brand']);
-        }
-
-        if (filled($data['price_range'])) {
-            $query['price'] = $data['price_range'];
-        }
+        $query = array_filter([
+            'show' => $data['show'] ?? null,
+            'sortBy' => $data['sortBy'] ?? null,
+            'category' => $data['category'] ? implode(',', $data['category']) : null,
+            'brand' => $data['brand'] ? implode(',', $data['brand']) : null,
+            'price' => $data['price_range'] ?? null,
+        ]);
 
         $routeName = request()->is('e-shop.loc/product-grids') ? 'product-grids' : 'product-lists';
         $routeParameters = http_build_query($query);
@@ -494,7 +443,9 @@ class FrontService
     public function productLists(): array
     {
         // Retrieve all products
-        $query = $this->model::query()->with(['categories', 'brand', 'condition', 'tags', 'sizes']);
+        $query = $this->model::query()
+            ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
+            ->where('status', 'active');
 
         // If category is specified, filter by category
         if (!empty($_GET['category'])) {
@@ -536,7 +487,7 @@ class FrontService
 
         // If show is specified, paginate by show amount, else paginate by default amount of 6
         $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
-        $products = $query->whereStatus('active')->paginate($perPage);
+        $products = $query->paginate($perPage);
 
         // Return recent products, filtered products, and brands with their associated products
         return [

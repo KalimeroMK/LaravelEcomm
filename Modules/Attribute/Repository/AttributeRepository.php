@@ -10,7 +10,7 @@ use Modules\Core\Repositories\Repository;
 class AttributeRepository extends Repository implements SearchInterface
 {
     public $model = Attribute::class;
-    
+
     /**
      * @return mixed
      */
@@ -18,7 +18,7 @@ class AttributeRepository extends Repository implements SearchInterface
     {
         return $this->model::get();
     }
-    
+
     /**
      * @param  array  $data
      *
@@ -27,30 +27,34 @@ class AttributeRepository extends Repository implements SearchInterface
     public function search(array $data): mixed
     {
         $query = $this->model::query();
-        if (Arr::has($data, 'name')) {
-            $query->where('name', 'like', '%' . Arr::get($data, 'name') . '%');
+
+        $filterableKeys = ['name', 'code', 'type', 'display'];
+
+        foreach ($filterableKeys as $key) {
+            if (Arr::has($data, $key)) {
+                $query->where($key, 'like', '%' . Arr::get($data, $key) . '%');
+            }
         }
-        if (Arr::has($data, 'code')) {
-            $query->where('code', 'like', '%' . Arr::get($data, 'code') . '%');
+
+        $boolKeys = ['filterable', 'configurable'];
+
+        foreach ($boolKeys as $key) {
+            if (Arr::has($data, $key)) {
+                $query->where($key, Arr::get($data, $key));
+            }
         }
-        if (Arr::has($data, 'type')) {
-            $query->where('type', 'like', '%' . Arr::get($data, 'type') . '%');
-        }
-        if (Arr::has($data, 'display')) {
-            $query->where('display', 'like', '%' . Arr::get($data, 'display') . '%');
-        }
-        if (Arr::has($data, 'filterable')) {
-            $query->where('filterable', '==', Arr::get($data, 'filterable'));
-        }
-        if (Arr::has($data, 'configurable')) {
-            $query->where('configurable', '==', Arr::get($data, 'configurable'));
-        }
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
+
+        if ((bool)Arr::get($data, 'all_included') || empty($data)) {
             return $query->get();
         }
-        
-        $query->orderBy(Arr::get($data, 'order_by') ?? 'id', Arr::get($data, 'sort') ?? 'desc');
-        
-        return $query->paginate(Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage());
+
+        $orderBy = Arr::get($data, 'order_by', 'id');
+        $sort = Arr::get($data, 'sort', 'desc');
+
+        $query->orderBy($orderBy, $sort);
+
+        $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
+
+        return $query->paginate($perPage);
     }
 }

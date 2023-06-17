@@ -16,14 +16,14 @@ use Modules\User\Models\User;
 class PostService extends CoreService
 {
     use ImageUpload;
-    
+
     public PostRepository $post_repository;
-    
+
     public function __construct(PostRepository $post_repository)
     {
         $this->post_repository = $post_repository;
     }
-    
+
     /**
      * @param $data
      *
@@ -31,7 +31,6 @@ class PostService extends CoreService
      */
     public function store($data)
     {
-        try {
             $post = $this->post_repository->create(
                 collect($data)->except(['photo'])->toArray() + [
                     'photo' => $this->verifyAndStoreImage($data['photo']),
@@ -39,11 +38,8 @@ class PostService extends CoreService
             );
             $post->categories()->attach($data['category']);
             $post->post_tag()->attach($data['tags']);
-        } catch (Exception $exception) {
-            return $exception;
-        }
     }
-    
+
     /**
      * @param $id
      *
@@ -58,7 +54,7 @@ class PostService extends CoreService
             'post'       => $this->post_repository->findById($id),
         ];
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -73,7 +69,7 @@ class PostService extends CoreService
             'post'       => new Post(),
         ];
     }
-    
+
     /**
      * @param $data
      * @param $post
@@ -82,7 +78,6 @@ class PostService extends CoreService
      */
     public function update($data, $post)
     {
-        try {
             if ($data->hasFile('photo')) {
                 $post->update(
                     $data->except('photo') + [
@@ -94,11 +89,8 @@ class PostService extends CoreService
             }
             $post->post_tag()->sync($data['tags'], true);
             $post->categories()->sync($data['category'], true);
-        } catch (Exception $exception) {
-            return $exception;
-        }
     }
-    
+
     /**
      * @param $id
      *
@@ -106,13 +98,9 @@ class PostService extends CoreService
      */
     public function destroy($id)
     {
-        try {
             $this->post_repository->delete($id);
-        } catch (Exception $exception) {
-            return $exception;
-        }
     }
-    
+
     /**
      * @param $data
      *
@@ -121,13 +109,9 @@ class PostService extends CoreService
      */
     public function getAll($data): mixed
     {
-        try {
             return $this->post_repository->search($data);
-        } catch (Exception $exception) {
-            throw new SearchException($exception);
-        }
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -140,19 +124,19 @@ class PostService extends CoreService
             $fileName   = pathinfo($originName, PATHINFO_FILENAME);
             $extension  = $request->file('upload')->getClientOriginalExtension();
             $fileName   = $fileName . '_' . time() . '.' . $extension;
-            
+
             $request->file('upload')->move(public_path('images'), $fileName);
-            
+
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
             $url             = asset('images/' . $fileName);
             $msg             = 'Image uploaded successfully';
             $response        = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
-            
+
             @header('Content-type: text/html; charset=utf-8');
             echo $response;
         }
     }
-    
+
     /**
      * @param $id
      *

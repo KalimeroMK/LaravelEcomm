@@ -12,12 +12,12 @@ use Modules\User\Models\User;
 class ProductReviewService
 {
     private ProductReviewRepository $product_review_repository;
-    
+
     public function __construct(ProductReviewRepository $product_review_repository)
     {
         $this->product_review_repository = $product_review_repository;
     }
-    
+
     /**
      * @return mixed
      */
@@ -25,7 +25,7 @@ class ProductReviewService
     {
         return $this->product_review_repository->findAll();
     }
-    
+
     /**
      * @param $id
      * @param $data
@@ -36,7 +36,7 @@ class ProductReviewService
     {
         return $this->product_review_repository->update($id, $data);
     }
-    
+
     /**
      * @param $id
      *
@@ -44,11 +44,10 @@ class ProductReviewService
      */
     public function edit($id): mixed
     {
-        dd($id);
-        
+
         return $this->product_review_repository->findById($id);
     }
-    
+
     /**
      * @param $request
      *
@@ -69,7 +68,7 @@ class ProductReviewService
         ];
         Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
     }
-    
+
     /**
      * @param $id
      *
@@ -79,7 +78,7 @@ class ProductReviewService
     {
         $this->product_review_repository->delete($id);
     }
-    
+
     /**
      * @return mixed
      */
