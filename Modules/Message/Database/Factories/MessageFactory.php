@@ -2,6 +2,7 @@
 
 namespace Modules\Message\Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Message\Models\Message;
 
@@ -23,7 +24,7 @@ class MessageFactory extends Factory
             'photo'   => $this->faker->word,
             'phone'   => $this->faker->phoneNumber,
             'message' => $this->faker->word,
-            'read_at' => $this->faker->time,
+            'read_at' => Carbon::now()
         ];
     }
 }

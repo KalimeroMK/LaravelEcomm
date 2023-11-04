@@ -21,7 +21,7 @@ Route::get('/wishlist', function () {
 })->name('wishlist');
 Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist');
 Route::get('wishlist-delete/{id}', [WishlistController::class, 'wishlistDelete'])->name('wishlist-delete');
-// Payment
+//// Payment
 Route::get('payment', [PaypalController::class, 'charge'])->name('payment');
 Route::get('cancel', [PaypalController::class, 'cancel'])->name('payment.cancel');
 Route::get('payment/success', [PaypalController::class, 'success'])->name('payment.success');

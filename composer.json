@@ -49,6 +49,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
+        "nunomaduro/larastan": "^2.6",
         "phpunit/phpunit": "^10.1",
         "spatie/laravel-ignition": "^2.0"
     },
@@ -69,6 +70,7 @@
       "Modules/Core/Helpers/Helper.php"
     ],
     "scripts": {
+        "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
