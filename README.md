@@ -34,6 +34,8 @@
 - Review Management
 - Blog, Category & Tag manager
 - User Management
+- Role
+- Permission
 - Coupon Management
 - System config: email setting, info shop, maintain status,...
 - Line Chart & Pie chart ...
