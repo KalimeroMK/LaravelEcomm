@@ -13,17 +13,15 @@ use Modules\Post\Service\PostCommentService;
 
 class PostCommentController extends Controller
 {
-    private PostCommentService $post_comment_service;
-    
-    public function __construct(PostCommentService $post_comment_service)
+    private PostCommentService $postCommentService;
+
+    public function __construct(PostCommentService $postCommentService)
     {
-        $this->post_comment_service = $post_comment_service;
-        $this->middleware('permission:comments-list');
-        $this->middleware('permission:comments-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:comments-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:comments-delete', ['only' => ['destroy']]);
+        $this->postCommentService = $postCommentService;
+        $this->authorizeResource(PostComment::class, 'comment');
     }
-    
+
+
     /**
      * Display a listing of the resource.
      *
@@ -31,9 +29,9 @@ class PostCommentController extends Controller
      */
     public function index()
     {
-        return view('post::comment.index', ['comments' => $this->post_comment_service->index()]);
+        return view('post::comment.index', ['comments' => $this->postCommentService->index()]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -43,47 +41,47 @@ class PostCommentController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->post_comment_service->store($request);
-        
+        $this->postCommentService->store($request);
+
         return redirect()->back();
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  PostComment  $postComment
+     * @param  PostComment  $comment
      *
      * @return Application|Factory|View
      */
-    public function edit(PostComment $postComment)
+    public function edit(PostComment $comment)
     {
-        return view('post::comment.edit', ['comment' => $this->post_comment_service->edit($postComment->id)]);
+        return view('post::comment.edit', ['comment' => $this->postCommentService->edit($comment->id)]);
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  PostComment  $postComment
+     * @param  PostComment  $comment
      *
      * @return Application|Factory|View
      */
-    public function update(Request $request, PostComment $postComment): Application|Factory|View
+    public function update(Request $request, PostComment $comment): Application|Factory|View
     {
-        return view('post::comment.index')->with($this->post_comment_service->update($request, $postComment->id));
+        return view('post::comment.index')->with($this->postCommentService->update($request, $comment->id));
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  PostComment  $postComment
+     * @param  PostComment  $comment
      *
      * @return RedirectResponse
      */
-    public function destroy(PostComment $postComment): RedirectResponse
+    public function destroy(PostComment $comment): RedirectResponse
     {
-        $this->post_comment_service->destroy($postComment->id);
-        
+        $this->postCommentService->destroy($comment->id);
+
         return redirect()->back();
     }
 }

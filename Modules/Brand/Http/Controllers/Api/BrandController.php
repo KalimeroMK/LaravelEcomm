@@ -2,10 +2,8 @@
 
 namespace Modules\Brand\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Brand\Exceptions\SearchException;
 use Modules\Brand\Http\Requests\Api\Search;
 use Modules\Brand\Http\Requests\Api\Store;
 use Modules\Brand\Http\Requests\Api\Update;
@@ -17,124 +15,81 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 
 class BrandController extends CoreController
 {
-    
+
     private BrandService $brand_service;
-    
+
     public function __construct(BrandService $brand_service)
     {
         $this->brand_service = $brand_service;
-        $this->authorizeResource(Brand::class);
+        $this->authorizeResource(Brand::class, 'brand');
     }
-    
-    /**
-     * @param  Search  $request
-     *
-     * @return ResourceCollection
-     * @throws SearchException
-     */
+
     public function index(Search $request): ResourceCollection
     {
         return BrandResource::collection($this->brand_service->getAll($request->validated()));
     }
-    
-    /**
-     * @param  Store  $request
-     *
-     * @return JsonResponse|string
-     */
-    public function store(Store $request)
+
+    public function store(Store $request): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.storeSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->brand_service->brand_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->brand_service->brand_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new BrandResource($this->brand_service->store($request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new BrandResource($this->brand_service->store($request->validated())));
     }
-    
-    /**
-     * @param $id
-     *
-     * @return JsonResponse|string
-     */
-    public function show($id)
+
+    public function show(Brand $brand): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.ok',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->brand_service->brand_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.ok',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->brand_service->brand_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new BrandResource($this->brand_service->show($id)));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new BrandResource($this->brand_service->show($brand->id)));
     }
-    
-    /**
-     * @param  Update  $request
-     * @param $id
-     *
-     * @return JsonResponse|string
-     */
-    public function update(Update $request, $id)
+
+    public function update(Update $request, Brand $brand): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.updateSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->brand_service->brand_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.updateSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->brand_service->brand_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new BrandResource($this->brand_service->update($id, $request->all())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new BrandResource($this->brand_service->update($brand->id, $request->validated())));
     }
-    
-    /**
-     * @param $id
-     *
-     * @return JsonResponse|string
-     */
-    public function destroy($id)
+
+    public function destroy(Brand $brand): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->brand_service->brand_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->brand_service->brand_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->brand_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond($this->brand_service->destroy($brand->id));
     }
 }

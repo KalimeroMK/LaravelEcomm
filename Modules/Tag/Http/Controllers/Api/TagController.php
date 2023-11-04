@@ -15,15 +15,15 @@ use Modules\Tag\Service\TagService;
 
 class TagController extends CoreController
 {
-    
+
     private TagService $tag_service;
-    
+
     public function __construct(TagService $tag_service)
     {
         $this->tag_service = $tag_service;
-        $this->authorizeResource(Tag::class);
+        $this->authorizeResource(Tag::class, 'tag');
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -31,7 +31,7 @@ class TagController extends CoreController
     {
         return TagResource::collection($this->tag_service->getAll());
     }
-    
+
     /**
      *
      * @return mixed
@@ -39,24 +39,20 @@ class TagController extends CoreController
      */
     public function store(Store $request)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.storeSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->tag_service->tag_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->tag_service->tag_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new TagResource($this->tag_service->store($request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new TagResource($this->tag_service->store($request->validated())));
     }
-    
+
     /**
      * @param $id
      *
@@ -64,66 +60,54 @@ class TagController extends CoreController
      */
     public function show($id)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.ok',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->tag_service->tag_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.ok',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->tag_service->tag_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new TagResource($this->tag_service->show($id)));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new TagResource($this->tag_service->show($id)));
     }
-    
+
     public function update(Update $request, $id)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.updateSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->tag_service->tag_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.updateSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->tag_service->tag_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new TagResource($this->tag_service->update($id, $request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new TagResource($this->tag_service->update($id, $request->validated())));
     }
-    
+
     /**
      * @param $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->tag_service->tag_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->tag_service->tag_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->tag_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond($this->tag_service->destroy($id));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Modules\Shipping\Service;
 
-use Exception;
 use Modules\Shipping\Repository\ShippingRepository;
 
 class ShippingService
@@ -50,17 +49,17 @@ class ShippingService
      */
     public function edit($id): mixed
     {
-            return $this->shipping_repository->findById($id);
+        return $this->shipping_repository->findById($id);
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return Exception|void
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(int $id): void
     {
-            $this->shipping_repository->delete($id);
+        $this->shipping_repository->delete($id);
     }
 
     /**
@@ -70,7 +69,7 @@ class ShippingService
      */
     public function show($id): mixed
     {
-            return $this->shipping_repository->findById($id);
+        return $this->shipping_repository->findById($id);
     }
 
 }

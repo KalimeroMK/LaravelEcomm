@@ -3,8 +3,14 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Modules\Newsletter\Models\Newsletter;
-use Modules\Newsletter\Policies\NewsletterPolicy;
+use Modules\Post\Models\Policies\PostCommentPolicy;
+use Modules\Post\Models\PostComment;
+use Modules\Role\Models\Polices\RolePolicy;
+use Modules\Role\Models\Role;
+use Modules\Settings\Models\Polices\SettingsPolicy;
+use Modules\Settings\Models\Setting;
+use Modules\User\Models\Policies\UserPolicy;
+use Modules\User\Models\User;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,9 +20,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Newsletter::class => NewsletterPolicy::class,
+        PostComment::class => PostCommentPolicy::class,
+        User::class => UserPolicy::class,
+        Setting::class => SettingsPolicy::class,
+        Role::class => RolePolicy::class,
     ];
-    
+
     /**
      * Register any authentication / authorization services.
      *
@@ -25,5 +34,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
+//        Gate::before(function ($user, $ability) {
+//            return $user->hasRole('super-admin') ? true : null;
+//        });
     }
 }

@@ -4,94 +4,56 @@ namespace Modules\Attribute\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Controller;
 use Modules\Attribute\Http\Requests\Store;
 use Modules\Attribute\Http\Requests\Update;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Service\AttributeService;
+use Modules\Core\Http\Controllers\CoreController;
 
-class AttributeController extends Controller
+class AttributeController extends CoreController
 {
-    
-    public AttributeService $attribute_service;
-    
+
+    protected AttributeService $attribute_service;
+
     public function __construct(AttributeService $attribute_service)
     {
         $this->attribute_service = $attribute_service;
+        $this->authorizeResource(Attribute::class, 'attribute');
     }
-    
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
+
+    public function index(): Renderable
     {
         return view('attribute::index', ['attributes' => $this->attribute_service->getAll()]);
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+
+    public function create(): Renderable
     {
         return view('attribute::create', ['attribute' => new Attribute()]);
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
-     */
-    public function store(Store $request)
+
+    public function store(Store $request): RedirectResponse
     {
         $this->attribute_service->store($request->validated());
-        
+
         return redirect()->route('attributes.index');
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Attribute  $attribute
-     *
-     * @return Renderable
-     */
-    public function edit(Attribute $attribute)
+
+    public function edit(Attribute $attribute): Renderable
     {
-        $attribute = $this->attribute_service->edit($attribute->id);
-        
-        return view('attribute::edit', compact('attribute'));
+        return view('attribute::edit', ['attribute' => $this->attribute_service->show($attribute->id)]);
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Update  $request
-     * @param  Attribute  $attribute
-     *
-     * @return RedirectResponse
-     */
-    public function update(Attribute $attribute, Update $request)
+
+    public function update(Update $request, Attribute $attribute): RedirectResponse
     {
         $this->attribute_service->update($attribute->id, $request->validated());
-        
+
         return redirect()->route('attributes.index');
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Attribute  $attribute
-     *
-     * @return RedirectResponse
-     */
-    public function destroy(Attribute $attribute)
+
+    public function destroy(Attribute $attribute): RedirectResponse
     {
         $this->attribute_service->destroy($attribute->id);
-        
+
         return redirect()->route('attributes.index');
     }
 }

@@ -16,16 +16,12 @@ use Modules\Product\Service\ProductReviewService;
 class ProductReviewController extends CoreController
 {
     private ProductReviewService $product_review_service;
-    
+
     public function __construct(ProductReviewService $product_review_service)
     {
         $this->product_review_service = $product_review_service;
-        $this->middleware('permission:review-list');
-        $this->middleware('permission:review-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:review-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:review-delete', ['only' => ['destroy']]);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -39,7 +35,7 @@ class ProductReviewController extends CoreController
             return view('product::review.index', ['reviews' => $this->product_review_service->index()]);
         }
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -50,50 +46,50 @@ class ProductReviewController extends CoreController
     public function store(ProductReviewStore $request): RedirectResponse
     {
         $this->product_review_service->store($request);
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  ProductReview  $productReview
-     *
+     * @param  ProductReview  $review
      * @return Application|Factory|View
      */
-    public function edit(ProductReview $productReview)
+    public function edit(ProductReview $review)
     {
-        dd($productReview);
-        
-        return view('product::review.edit')->with($this->product_review_service->edit($productReview->id));
+        $this->authorize('update', $review);
+
+        return view('product::review.edit')->with('review', $this->product_review_service->edit($review->id));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  int  $id
-     *
+     * @param  ProductReview  $review
      * @return RedirectResponse
      */
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, ProductReview $review): RedirectResponse
     {
-        $this->product_review_service->update($id, $request);
-        
+        $this->authorize('update', $review);
+
+        $this->product_review_service->update($review->id, $request);
+
         return redirect()->route('product::review.index');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     *
+     * @param  ProductReview  $review
      * @return RedirectResponse
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(ProductReview $review): RedirectResponse
     {
-        $this->product_review_service->destroy($id);
-        
+        $this->authorize('delete', $review);
+        $this->product_review_service->destroy($review->id);
+
         return redirect()->route('review.index');
     }
 }

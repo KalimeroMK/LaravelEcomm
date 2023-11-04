@@ -4,7 +4,6 @@ namespace Modules\Settings\Service;
 
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
-use Modules\Settings\Models\Setting;
 use Modules\Settings\Repository\SettingsRepository;
 
 class SettingsService extends CoreService
@@ -23,14 +22,13 @@ class SettingsService extends CoreService
         return $this->settings_repository->findFirst();
     }
 
-    public function update($data): string
+    public function update($id, $data)
     {
-        $id = Setting::first()->id;
-            return $this->settings_repository->update($id,
-                collect($data)->except(['logo'])->toArray() + [
-                    'logo' => $this->verifyAndStoreImage($data['logo']),
-                ]
-            );
+        return $this->settings_repository->update($id,
+            collect($data)->except(['logo'])->toArray() + [
+                'logo' => $this->verifyAndStoreImage($data['logo']),
+            ]
+        );
     }
 
 }

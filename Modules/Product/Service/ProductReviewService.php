@@ -44,7 +44,6 @@ class ProductReviewService
      */
     public function edit($id): mixed
     {
-
         return $this->product_review_repository->findById($id);
     }
 
@@ -55,16 +54,16 @@ class ProductReviewService
      */
     public function store($request): void
     {
-        $product_info       = Product::getProductBySlug($request['slug']);
-        $data               = $request->all();
+        $product_info = Product::getProductBySlug($request['slug']);
+        $data = $request->all();
         $data['product_id'] = $product_info->id;
-        $data['user_id']    = $request->user()->id;
-        $data['status']     = 'active';
+        $data['user_id'] = $request->user()->id;
+        $data['status'] = 'active';
         ProductReview::create($data);
         $details = [
-            'title'     => 'New Product Rating!',
+            'title' => 'New Product Rating!',
             'actionURL' => route('product-detail', $product_info->slug),
-            'fas'       => 'fa-star',
+            'fas' => 'fa-star',
         ];
         Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
     }

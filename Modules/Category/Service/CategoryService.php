@@ -2,100 +2,44 @@
 
 namespace Modules\Category\Service;
 
-use Exception;
 use Modules\Category\Repository\CategoryRepository;
 
 class CategoryService
 {
-    
     public CategoryRepository $category_repository;
-    
+
     public function __construct(CategoryRepository $category_repository)
     {
         $this->category_repository = $category_repository;
     }
-    
-    /**
-     * @return mixed|string
-     */
-    public function getAll(): mixed
+
+    public function getAll()
     {
-        try {
-            return $this->category_repository->findAll();
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+        return $this->category_repository->findAll();
     }
-    
-    /**
-     * @param $data
-     *
-     * @return mixed
-     */
-    public function store($data): mixed
+
+    public function store(array $data)
     {
-        try {
-            return $this->category_repository->create($data);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+        return $this->category_repository->create($data);
     }
-    
-    /**
-     * @param $id
-     *
-     * @return mixed|string
-     */
-    public function show($id): mixed
+
+    public function show(int $id)
     {
-        try {
-            return $this->category_repository->findById($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+        return $this->category_repository->findById($id);
     }
-    
-    /**
-     * @param $id
-     *
-     * @return mixed|string
-     */
-    public function edit($id): mixed
+
+    public function edit(int $id)
     {
-        try {
-            return $this->category_repository->findById($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+        return $this->category_repository->findById($id);
     }
-    
-    /**
-     * @param $id
-     * @param $data
-     *
-     * @return mixed
-     */
-    public function update($id, $data): mixed
+
+    public function update(int $id, array $data)
     {
-        try {
-            return $this->category_repository->update($id, $data);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+        return $this->category_repository->update($id, $data);
     }
-    
-    /**
-     * @param $id
-     *
-     * @return string|void
-     */
-    public function destroy($id)
+
+    public function destroy(int $id): void
     {
-        try {
-            $this->category_repository->delete($id);
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+        $this->category_repository->delete($id);
     }
-    
 }

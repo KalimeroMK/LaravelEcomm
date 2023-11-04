@@ -2,7 +2,6 @@
 
 namespace Modules\Post\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
@@ -16,15 +15,15 @@ use Modules\Post\Service\PostService;
 
 class PostController extends CoreController
 {
-    
+
     private PostService $post_service;
-    
+
     public function __construct(PostService $post_service)
     {
         $this->post_service = $post_service;
-        $this->authorizeResource(Post::class);
+        $this->authorizeResource(Post::class, 'post');
     }
-    
+
     /**
      * @param  Search  $request
      *
@@ -32,35 +31,30 @@ class PostController extends CoreController
      */
     public function index(Search $request): ResourceCollection
     {
-        return PostResource::collection($this->post_service->getAll($request->validated()));
+        return PostResource::collection($this->post_service->search($request->validated()));
     }
-    
+
     /**
      *
      * @param  Store  $request
-     *
-     * @return mixed
+     * @return JsonResponse
      */
-    public function store(Store $request): mixed
+    public function store(Store $request): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.storeSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->post_service->post_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->post_service->post_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new PostResource($this->post_service->store($request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new PostResource($this->post_service->store($request->validated())));
     }
-    
+
     /**
      * @param $id
      *
@@ -68,72 +62,59 @@ class PostController extends CoreController
      */
     public function show($id): JsonResponse|string
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.ok',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->post_service->post_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.ok',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->post_service->post_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new PostResource($this->post_service->show($id)));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new PostResource($this->post_service->show($id)));
     }
-    
+
     /**
      * @param  Update  $request
-     * @param $id
-     *
+     * @param  Post  $post
      * @return JsonResponse|string
      */
-    public function update(Update $request, $id): JsonResponse|string
+    public function update(Update $request, Post $post): JsonResponse|string
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.updateSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->post_service->post_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.updateSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->post_service->post_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new PostResource($this->post_service->update($id, $request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new PostResource($this->post_service->update($post->id, $request->validated())));
     }
-    
+
     /**
-     * @param $id
-     *
+     * @param  Post  $post
      * @return JsonResponse|string
      */
-    public function destroy($id): JsonResponse|string
+    public function destroy(Post $post): JsonResponse|string
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->post_service->post_repository->model
-                            ),
-                        ]
-                    )
+        $this->post_service->destroy($post->id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->post_service->post_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->post_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(null);
     }
 }

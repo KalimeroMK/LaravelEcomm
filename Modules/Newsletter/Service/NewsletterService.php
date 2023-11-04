@@ -2,15 +2,10 @@
 
 namespace Modules\Newsletter\Service;
 
-use Illuminate\Database\Eloquent\Collection;
-use LaravelIdea\Helper\Modules\Banner\Models\_IH_Banner_C;
-use Modules\Banner\Models\Banner;
-use Modules\Core\Service\CoreService;
 use Modules\Newsletter\Repository\NewsletterRepository;
 
-class NewsletterService extends CoreService
+class NewsletterService
 {
-
     public NewsletterRepository $newsletter_repository;
 
     public function __construct(NewsletterRepository $newsletter_repository)
@@ -18,63 +13,33 @@ class NewsletterService extends CoreService
         $this->newsletter_repository = $newsletter_repository;
     }
 
-    /**
-     * @param $data
-     *
-     * @return Collection|_IH_Banner_C|mixed|Banner|Banner[]
-     */
-    public function store($data): mixed
+    public function store($data)
     {
-            return $this->newsletter_repository->create($data);
+        return $this->newsletter_repository->create($data);
     }
 
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function edit($id): mixed
+    public function edit($id)
     {
-            return $this->newsletter_repository->findById($id);
+        return $this->newsletter_repository->findById($id);
     }
 
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function show($id): mixed
+    public function show($id)
     {
-            return $this->newsletter_repository->findById($id);
+        return $this->newsletter_repository->findById($id);
     }
 
-    /**
-     * @param $id
-     * @param $data
-     *
-     * @return mixed|string
-     */
-    public function update($id, $data): mixed
+    public function update($id, $data)
     {
-            return $this->newsletter_repository->update($id, $data);
+        return $this->newsletter_repository->update($id, $data);
     }
 
-    /**
-     * @param $id
-     *
-     * @return string|void
-     */
-
-    public function destroy($id)
+    public function destroy($id): void
     {
-            $this->newsletter_repository->delete($id);
+        $this->newsletter_repository->delete($id);
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function getAll(): mixed
+    public function getAll()
     {
-            return $this->newsletter_repository->findAll();
+        return $this->newsletter_repository->findAll();
     }
 }

@@ -20,16 +20,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class PostController extends Controller
 {
     private PostService $post_service;
-    
+
     public function __construct(PostService $post_service)
     {
-        $this->middleware('permission:post-list');
-        $this->middleware('permission:post-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:post-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:post-delete', ['only' => ['destroy']]);
         $this->post_service = $post_service;
+        $this->authorizeResource(Post::class, 'post');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -39,7 +36,7 @@ class PostController extends Controller
     {
         return view('post::index', ['posts' => $this->post_service->getAll()]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -49,11 +46,11 @@ class PostController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->post_service->store($request);
-        
+        $this->post_service->store($request->validated());
+
         return redirect()->route('posts.index');
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -63,7 +60,7 @@ class PostController extends Controller
     {
         return view('post::create')->with($this->post_service->create());
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -75,7 +72,7 @@ class PostController extends Controller
     {
         return view('post::edit')->with($this->post_service->edit($post->id));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -86,11 +83,11 @@ class PostController extends Controller
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
-        $this->post_service->update($request, $post);
-        
+        $this->post_service->update($request->validated(), $post);
+
         return redirect()->route('posts.index');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -100,11 +97,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post): RedirectResponse
     {
+        $this->authorize('delete', $post);
+
         $this->post_service->destroy($post->id);
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * @return BinaryFileResponse
      */
@@ -112,17 +111,17 @@ class PostController extends Controller
     {
         return Excel::download(new PostExport, 'Products.xlsx');
     }
-    
+
     /**
      * @return RedirectResponse
      */
     public function import(ImportRequest $request)
     {
         Excel::import(new Post, $request->file('file'));
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -132,5 +131,5 @@ class PostController extends Controller
     {
         $this->post_service->upload($request);
     }
-    
+
 }

@@ -15,88 +15,43 @@ use Modules\Shipping\Service\ShippingService;
 class ShippingController extends CoreController
 {
     private ShippingService $shipping_service;
-    
+
     public function __construct(ShippingService $shipping_service)
     {
         $this->shipping_service = $shipping_service;
-        $this->middleware('permission:shipping-list', ['only' => ['index']]);
-        $this->middleware('permission:shipping-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:shipping-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:shipping-delete', ['only' => ['destroy']]);
+        $this->authorizeResource(Shipping::class, 'shipping');
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function index()
+
+    public function index(): Application|Factory|View
     {
         return view('shipping::index', ['shippings' => $this->shipping_service->getAll()]);
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
-     */
+
     public function store(Store $request): RedirectResponse
     {
         $this->shipping_service->store($request->validated());
-        
         return redirect()->route('shippings.index');
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function create()
+
+    public function create(): Application|Factory|View
     {
         return view('shipping::create');
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Shipping  $shipping
-     *
-     * @return Application|Factory|View
-     */
-    public function edit(Shipping $shipping)
+
+    public function edit(Shipping $shipping): Application|Factory|View
     {
         return view('shipping::edit')->with(['shipping' => $this->shipping_service->edit($shipping->id)]);
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Update  $request
-     * @param  Shipping  $shipping
-     *
-     * @return RedirectResponse
-     */
+
     public function update(Update $request, Shipping $shipping): RedirectResponse
     {
         $this->shipping_service->update($shipping->id, $request->validated());
-        
         return redirect()->route('shippings.index');
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return RedirectResponse
-     */
-    public function destroy(int $id): RedirectResponse
+
+    public function destroy(Shipping $shipping): RedirectResponse
     {
-        $this->shipping_service->destroy($id);
-        
+        $this->shipping_service->destroy($shipping->id);
         return redirect()->back();
     }
 }

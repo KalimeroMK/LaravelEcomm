@@ -2,101 +2,54 @@
 
 namespace Modules\Newsletter\Http\Controllers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Newsletter\Http\Requests\Store;
-use Modules\Newsletter\Http\Requests\Store as Update;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Service\NewsletterService;
 
 class NewsletterController extends CoreController
 {
     private NewsletterService $newsletter_service;
-    
+
     public function __construct(NewsletterService $newsletter_service)
     {
-        $this->authorizeResource(Newsletter::class);
         $this->newsletter_service = $newsletter_service;
+        $this->authorizeResource(Newsletter::class, 'newsletter');
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function index(): Factory|View|Application
+
+    public function index(): View
     {
-        return view('newsletter::index', ['newsletters' => $this->newsletter_service->getAll()]);
+        $newsletters = $this->newsletter_service->getAll();
+        return view('newsletter::index', compact('newsletters'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function create(): View|Factory|Application
+
+    public function create(): View
     {
         return view('newsletter::create', ['newsletter' => new Newsletter()]);
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
-     */
+
     public function store(Store $request): RedirectResponse
     {
         $this->newsletter_service->store($request->validated());
-        
-        return redirect()->route('newsletters.index');
+        return redirect()->route('newsletters.index')->with('status', 'Newsletter created successfully!');
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Newsletter  $newsletter
-     *
-     * @return Application|Factory|View
-     */
-    public function edit(Newsletter $newsletter): View|Factory|Application
+
+    public function edit(Newsletter $newsletter): View
     {
-        $newsletter = $this->newsletter_service->edit($newsletter->id);
-        
         return view('newsletter::edit', compact('newsletter'));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Update  $request
-     * @param  Newsletter  $newsletter
-     *
-     * @return RedirectResponse
-     */
-    public function update(Update $request, Newsletter $newsletter): RedirectResponse
+
+    public function update(Store $request, Newsletter $newsletter): RedirectResponse
     {
         $this->newsletter_service->update($newsletter->id, $request->validated());
-        
-        return redirect()->route('newsletters.index');
+        return redirect()->route('newsletters.index')->with('status', 'Newsletter updated successfully!');
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Newsletter  $newsletter
-     *
-     * @return RedirectResponse
-     */
+
     public function destroy(Newsletter $newsletter): RedirectResponse
     {
         $this->newsletter_service->destroy($newsletter->id);
-        
-        return redirect()->route('newsletters.index');
+        return redirect()->route('newsletters.index')->with('status', 'Newsletter deleted successfully!');
     }
-    
 }

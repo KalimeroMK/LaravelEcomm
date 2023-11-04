@@ -5,11 +5,11 @@
             <div class="card">
                 <div class="card-header card-header-primary">
                     <h4 class="card-title "> {{trans('messages.role')}}</h4>
-                    <p class="card-category"><a href="{{ route('dashboard')}}">{{trans('messages.home')}}</a> -> <a
-                                href="{{route('posts.index')}}">{{trans('messages.role')}}</a></p>
+                    <p class="card-category"><a href="{{ route('home')}}">{{trans('messages.home')}}</a> -> <a
+                                href="{{route('role.index')}}">{{trans('messages.role')}}</a></p>
                 </div>
                 <div class="card-body">
-                    @include('admin::roles.partials.form')
+                    @include('role::partials.form')
                 </div>
             </div>
         </div>

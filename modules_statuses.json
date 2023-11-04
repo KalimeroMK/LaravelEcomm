@@ -22,5 +22,6 @@
     "Newsletter": true,
     "Size": true,
     "Attribute": true,
-    "Billing": true
+    "Billing": true,
+    "Permission": true
 }

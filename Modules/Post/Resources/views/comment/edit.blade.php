@@ -6,7 +6,7 @@
     <div class="card">
         <h5 class="card-header">Comment Edit</h5>
         <div class="card-body">
-            <form action="{{route('post_comments.update',$comment->id)}}" method="POST">
+            <form action="{{route('comments.update',$comment->id)}}" method="POST">
                 @csrf
                 @method('PATCH')
                 <div class="form-group">

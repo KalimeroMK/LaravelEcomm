@@ -6,24 +6,24 @@
     <div class="card">
         <h5 class="card-header">Review Edit</h5>
         <div class="card-body">
-            <form action="{{route('review.update',$productReview->id)}}" method="POST">
+            <form action="{{route('reviews.update',$review->id)}}" method="POST">
                 @csrf
                 @method('PATCH')
                 <div class="form-group">
                     <label for="name">Review By:</label>
-                    <input type="text" disabled class="form-control" value="{{$productReview->user_info->name}}">
+                    <input type="text" disabled class="form-control" value="{{$review->user->name}}">
                 </div>
                 <div class="form-group">
                     <label for="review">Review</label>
                     <textarea name="review" id="" cols="20" rows="10"
-                              class="form-control">{{$productReview->review}}</textarea>
+                              class="form-control">{{$review->review}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="status">Status :</label>
                     <select name="status" id="" class="form-control">
                         <option value="">--Select Status--</option>
-                        <option value="active" {{(($productReview->status=='active')? 'selected' : '')}}>Active</option>
-                        <option value="inactive" {{(($productReview->status=='inactive')? 'selected' : '')}}>Inactive
+                        <option value="active" {{(($review->status=='active')? 'selected' : '')}}>Active</option>
+                        <option value="inactive" {{(($review->status=='inactive')? 'selected' : '')}}>Inactive
                         </option>
                     </select>
                 </div>

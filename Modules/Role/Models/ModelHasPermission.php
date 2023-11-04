@@ -10,6 +10,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Permission\Models\Permission;
 
 /**
  * Class ModelHasPermission
@@ -34,9 +35,9 @@ class ModelHasPermission extends Model
     protected $table = 'model_has_permissions';
     protected $casts = [
         'permission_id' => 'int',
-        'model_id'      => 'int',
+        'model_id' => 'int',
     ];
-    
+
     public function permission(): BelongsTo
     {
         return $this->belongsTo(Permission::class);

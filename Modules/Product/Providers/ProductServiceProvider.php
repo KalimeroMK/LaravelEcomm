@@ -3,9 +3,12 @@
 namespace Modules\Product\Providers;
 
 use Config;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\Product\Models\Observers\ProductObserver;
+use Modules\Product\Models\Policies\ProductReviewPolicy;
 use Modules\Product\Models\Product;
-use Modules\Product\Observers\ProductObserver;
+use Modules\Product\Models\ProductReview;
 
 class ProductServiceProvider extends ServiceProvider
 {
@@ -13,12 +16,12 @@ class ProductServiceProvider extends ServiceProvider
      * @var string $moduleName
      */
     protected string $moduleName = 'Product';
-    
+
     /**
      * @var string $moduleNameLower
      */
     protected string $moduleNameLower = 'product';
-    
+
     /**
      * Boot the application events.
      *
@@ -31,8 +34,9 @@ class ProductServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        $this->registerPolicies();
     }
-    
+
     /**
      * Register translations.
      *
@@ -41,14 +45,14 @@ class ProductServiceProvider extends ServiceProvider
     public function registerTranslations()
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Register config.
      *
@@ -64,7 +68,7 @@ class ProductServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -73,16 +77,16 @@ class ProductServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -91,10 +95,10 @@ class ProductServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Register the service provider.
      *
@@ -104,7 +108,7 @@ class ProductServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
     }
-    
+
     /**
      * Get the services provided by the provider.
      *
@@ -114,4 +118,10 @@ class ProductServiceProvider extends ServiceProvider
     {
         return [];
     }
+
+    protected function registerPolicies(): void
+    {
+        Gate::policy(ProductReview::class, ProductReviewPolicy::class);
+    }
+
 }

@@ -7,7 +7,6 @@ use Modules\Core\Service\CoreService;
 
 class AttributeService extends CoreService
 {
-
     public AttributeRepository $attribute_repository;
 
     public function __construct(AttributeRepository $attribute_repository)
@@ -15,75 +14,33 @@ class AttributeService extends CoreService
         $this->attribute_repository = $attribute_repository;
     }
 
-    /**
-     * @param $data
-     *
-     * @return mixed
-     */
-    public function store($data): mixed
+    public function getAll()
     {
-      return $this->attribute_repository->create($data);
+        return $this->attribute_repository->findAll();
     }
 
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function edit($id): mixed
+    public function store(array $data)
+    {
+        return $this->attribute_repository->create($data);
+    }
+
+    public function show(int $id)
     {
         return $this->attribute_repository->findById($id);
     }
 
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function show($id): mixed
+    public function update(int $id, array $data)
     {
-        return $this->attribute_repository->findById($id);
+        return $this->attribute_repository->update($id, $data);
     }
 
-    /**
-     * @param $id
-     * @param $data
-     *
-     * @return mixed|string
-     */
-    public function update($id, $data): mixed
-    {
-
-            return $this->attribute_repository->update((int)$id, $data);
-    }
-
-    /**
-     * @param $id
-     *
-     * @return string|void
-     */
-
-    public function destroy($id)
+    public function destroy(int $id): void
     {
         $this->attribute_repository->delete($id);
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function getAll(): mixed
+    public function search(array $data)
     {
-
-            return $this->attribute_repository->findAll();
-    }
-
-    /**
-     * @param  array  $data
-     *
-     * @return mixed|string
-     */
-    public function search(array $data): mixed
-    {
-            return $this->attribute_repository->search($data);
+        return $this->attribute_repository->search($data);
     }
 }

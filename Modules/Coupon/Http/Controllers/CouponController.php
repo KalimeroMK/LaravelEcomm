@@ -15,13 +15,13 @@ use Modules\Coupon\Service\CouponService;
 class CouponController extends CoreController
 {
     private CouponService $coupon_service;
-    
+
     public function __construct(CouponService $coupon_service)
     {
-        $this->authorizeResource(Coupon::class);
+        $this->authorizeResource(Coupon::class, 'coupon');
         $this->coupon_service = $coupon_service;
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +31,7 @@ class CouponController extends CoreController
     {
         return view('coupon::index', ['coupons' => $this->coupon_service->getAll()]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -42,10 +42,10 @@ class CouponController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $this->coupon_service->store($request->validated());
-        
+
         return redirect()->route('coupons.index');
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -55,7 +55,7 @@ class CouponController extends CoreController
     {
         return view('coupon::create', ['coupon' => new Coupon()]);
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -67,7 +67,7 @@ class CouponController extends CoreController
     {
         return view('coupon::edit', ['coupon' => $this->coupon_service->edit($coupon->id)]);
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -80,7 +80,7 @@ class CouponController extends CoreController
     {
         return $this->coupon_service->update($request->validated(), $coupon->id);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -91,7 +91,7 @@ class CouponController extends CoreController
     public function destroy(Coupon $coupon): RedirectResponse
     {
         $this->coupon_service->destroy($coupon->id);
-        
+
         return redirect()->back();
     }
 }

@@ -5,7 +5,7 @@ namespace Modules\Category\Providers;
 use Config;
 use Illuminate\Support\ServiceProvider;
 use Modules\Category\Models\Category;
-use Modules\Category\Observers\CategoryObserver;
+use Modules\Category\Models\Observers\CategoryObserver;
 
 class CategoryServiceProvider extends ServiceProvider
 {
@@ -13,12 +13,12 @@ class CategoryServiceProvider extends ServiceProvider
      * @var string $moduleName
      */
     protected string $moduleName = 'Category';
-    
+
     /**
      * @var string $moduleNameLower
      */
     protected string $moduleNameLower = 'category';
-    
+
     /**
      * Boot the application events.
      *
@@ -32,7 +32,7 @@ class CategoryServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
     }
-    
+
     /**
      * Register translations.
      *
@@ -41,14 +41,14 @@ class CategoryServiceProvider extends ServiceProvider
     public function registerTranslations()
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Register config.
      *
@@ -64,7 +64,7 @@ class CategoryServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -73,16 +73,16 @@ class CategoryServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -91,10 +91,10 @@ class CategoryServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Register the service provider.
      *
@@ -104,7 +104,7 @@ class CategoryServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
     }
-    
+
     /**
      * Get the services provided by the provider.
      *

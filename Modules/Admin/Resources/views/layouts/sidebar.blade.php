@@ -151,7 +151,7 @@
 
     <!-- Reviews -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('product_review.index')}}">
+        <a class="nav-link" href="{{route('reviews.index')}}">
             <i class="fas fa-comments"></i>
             <span>Reviews</span></a>
     </li>
@@ -197,15 +197,19 @@
             </div>
         </div>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('coupons.index')}}">
+            <i class="fas fa-table"></i>
+            <span>Coupon</span></a>
+    </li>
     @endhasrole
     <!-- Comments -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('post_comments.index')}}">
+        <a class="nav-link" href="{{route('comments.index')}}">
             <i class="fas fa-comments fa-chart-area"></i>
             <span>Comments</span>
         </a>
     </li>
-    @hasrole('super-admin')
 
 
     <!-- Divider -->
@@ -214,17 +218,26 @@
     <div class="sidebar-heading">
         General Settings
     </div>
-    <li class="nav-item">
-        <a class="nav-link" href="{{route('coupons.index')}}">
-            <i class="fas fa-table"></i>
-            <span>Coupon</span></a>
-    </li>
+
     <!-- Users -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('users.index')}}">
-            <i class="fas fa-users"></i>
-            <span>Users</span></a>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userCollapse"
+           aria-expanded="true" aria-controls="shippingCollapse">
+            <i class="fas fa-wrench"></i>
+            <span>User</span>
+        </a>
+        <div id="userCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">User configuration:</h6>
+                <a class="collapse-item" href="{{route('users.index')}}">User</a>
+                @hasrole('super-admin')
+                <a class="collapse-item" href="{{route('role.index')}}">Role</a>
+                <a class="collapse-item" href="{{route('permissions.index')}}">Permission</a>
+                @endhasrole
+            </div>
+        </div>
     </li>
+    @hasrole('super-admin')
     <!-- General settings -->
     <li class="nav-item">
         <a class="nav-link" href="{{route('settings.index')}}">
@@ -251,8 +264,8 @@
                 <a class="collapse-item" href="{{ url('translations/') }}">Translation</a>
             </div>
         </div>
-        @endhasrole
     </li>
+    @endhasrole
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

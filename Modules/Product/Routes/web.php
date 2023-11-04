@@ -21,8 +21,8 @@ Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(functi
     /*Excel import export*/
     Route::get('products/export', [ProductController::class, 'export'])->name('product.export');
     Route::post('products/import', [ProductController::class, 'import'])->name('product.import');
-    
-    Route::post('product/{slug}/review', [ProductReviewController::class, 'store'])->name('product.review.store');
-    Route::resource('/product_review', ProductReviewController::class)->except('show', 'create');
+
+    Route::post('reviews/{slug}', [ProductReviewController::class, 'store'])->name('product.review.store');
+    Route::resource('reviews', ProductReviewController::class)->except('show', 'create');
 });
 

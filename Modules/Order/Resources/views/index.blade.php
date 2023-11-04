@@ -13,7 +13,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                @if(count($orders)>0)
+                @if(!$orders->isEmpty())
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>

@@ -15,15 +15,15 @@ use Modules\Shipping\Service\ShippingService;
 
 class ShippingController extends CoreController
 {
-    
+
     private ShippingService $shipping_service;
-    
+
     public function __construct(ShippingService $shipping_service)
     {
         $this->shipping_service = $shipping_service;
-        $this->authorizeResource(Shipping::class);
+        $this->authorizeResource(Shipping::class, 'shipping');
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -31,99 +31,82 @@ class ShippingController extends CoreController
     {
         return ShippingResource::collection($this->shipping_service->getAll());
     }
-    
+
     /**
      *
-     * @return mixed
+     * @return JsonResponse
      * @throws Exception
      */
     public function store(Store $request)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.storeSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->shipping_service->shipping_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->shipping_service->shipping_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new ShippingResource($this->shipping_service->store($request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new ShippingResource($this->shipping_service->store($request->validated())));
     }
-    
+
     /**
-     * @param $id
-     *
-     * @return JsonResponse|string
+     * @param  Shipping  $shipping
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(Shipping $shipping)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.ok',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->shipping_service->shipping_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.ok',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->shipping_service->shipping_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new ShippingResource($this->shipping_service->show($id)));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new ShippingResource($this->shipping_service->show($shipping->id)));
     }
-    
-    public function update(Update $request, $id)
+
+    public function update(Update $request, Shipping $shipping)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.updateSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->shipping_service->shipping_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.updateSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->shipping_service->shipping_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new ShippingResource($this->shipping_service->update($id, $request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new ShippingResource($this->shipping_service->update($shipping->id, $request->validated())));
     }
-    
+
     /**
-     * @param $id
-     *
-     * @return JsonResponse|string
+     * @param  Shipping  $shipping
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Shipping $shipping)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->shipping_service->shipping_repository->model
-                            ),
-                        ]
-                    )
+        $this->shipping_service->destroy($shipping->id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->shipping_service->shipping_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->shipping_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(null);
     }
 }

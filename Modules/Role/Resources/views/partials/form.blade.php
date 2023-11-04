@@ -1,5 +1,5 @@
 @if ($role->exists)
-    <form class="form-horizontal" method="POST" action="{{ route('roles.update', $role) }}"
+    <form class="form-horizontal" method="POST" action="{{ route('role.update', $role) }}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
@@ -20,7 +20,7 @@
                         <div class="form-group">
                             <strong>Permission:</strong>
                             <br/>
-                            @foreach ($permission as $permission)
+                            @foreach ($permissions as $permission)
                                 <label>
                                     <label for="{{ $permission->id }}">
                                         <input id="{{ $permission->id }}" name="permission[]" type="checkbox"

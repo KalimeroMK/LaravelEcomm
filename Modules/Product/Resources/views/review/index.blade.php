@@ -63,11 +63,11 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('product_review.edit',$review->id)}}"
+                                    <a href="{{route('reviews.edit',$review->id)}}"
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('product_review.destroy',$review->id)}}">
+                                    <form method="POST" action="{{route('reviews.destroy',$review->id)}}">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"

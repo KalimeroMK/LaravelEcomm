@@ -3,9 +3,12 @@
 namespace Modules\Post\Providers;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\Post\Models\Observers\PostObserver;
+use Modules\Post\Models\Policies\PostCommentPolicy;
 use Modules\Post\Models\Post;
-use Modules\Post\Observers\PostObserver;
+use Modules\Post\Models\PostComment;
 
 class PostServiceProvider extends ServiceProvider
 {
@@ -13,12 +16,12 @@ class PostServiceProvider extends ServiceProvider
      * @var string $moduleName
      */
     protected string $moduleName = 'Post';
-    
+
     /**
      * @var string $moduleNameLower
      */
     protected string $moduleNameLower = 'post';
-    
+
     /**
      * Boot the application events.
      *
@@ -31,8 +34,9 @@ class PostServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         Post::observe(PostObserver::class);
+        $this->registerPolicies();
     }
-    
+
     /**
      * Register translations.
      *
@@ -41,14 +45,14 @@ class PostServiceProvider extends ServiceProvider
     public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Register config.
      *
@@ -64,7 +68,7 @@ class PostServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -73,16 +77,16 @@ class PostServiceProvider extends ServiceProvider
     public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -91,10 +95,10 @@ class PostServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Register the service provider.
      *
@@ -104,7 +108,7 @@ class PostServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
     }
-    
+
     /**
      * Get the services provided by the provider.
      *
@@ -113,5 +117,10 @@ class PostServiceProvider extends ServiceProvider
     public function provides(): array
     {
         return [];
+    }
+
+    protected function registerPolicies(): void
+    {
+        Gate::policy(PostComment::class, PostCommentPolicy::class);
     }
 }

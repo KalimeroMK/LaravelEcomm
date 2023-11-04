@@ -14,16 +14,13 @@ use Modules\Tag\Service\TagService;
 class TagController extends CoreController
 {
     private TagService $tag_service;
-    
+
     public function __construct(TagService $tag_service)
     {
-        $this->middleware('permission:tags-list');
-        $this->middleware('permission:tags-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:tags-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:tags-delete', ['only' => ['destroy']]);
         $this->tag_service = $tag_service;
+        $this->authorizeResource(Tag::class, 'tag');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +30,7 @@ class TagController extends CoreController
     {
         return view('tag::index', ['tags' => $this->tag_service->getAll()]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -44,10 +41,10 @@ class TagController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $this->tag_service->store($request->validated());
-        
+
         return redirect()->route('tags.index');
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -57,7 +54,7 @@ class TagController extends CoreController
     {
         return view('tag::create', ['tag' => new Tag()]);
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -69,7 +66,7 @@ class TagController extends CoreController
     {
         return view('tag::edit', ['tag' => $this->tag_service->edit($tag->id)]);
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -81,10 +78,10 @@ class TagController extends CoreController
     public function update(Store $request, Tag $tag): RedirectResponse
     {
         $this->tag_service->update($request->validated(), $tag->id);
-        
+
         return redirect()->route('post-tag.index');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -95,7 +92,7 @@ class TagController extends CoreController
     public function destroy(Tag $tag): RedirectResponse
     {
         $this->tag_service->destroy($tag->id);
-        
+
         return redirect()->route('tags.index');
     }
 }

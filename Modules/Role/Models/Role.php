@@ -10,9 +10,8 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Permission\Models\Permission;
 
 /**
  * Class Role
@@ -37,23 +36,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Role whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Role extends Model
+class Role extends \Spatie\Permission\Models\Role
 {
     protected $table = 'roles';
-    
+
     protected $fillable = [
         'name',
         'guard_name',
     ];
-    
-    /**
-     * @return HasMany
-     */
-    public function model_has_roles(): HasMany
-    {
-        return $this->hasMany(ModelHasRole::class);
-    }
-    
+
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class, 'role_has_permissions');

@@ -21,6 +21,6 @@ Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(functi
     Route::get('posts/export', [PostController::class, 'export'])->name('posts.export');
     Route::post('posts/import', [PostController::class, 'import'])->name('posts.import');
     Route::post('ckeditor/upload', [PostController::class, 'upload'])->name('ckeditor.image-upload');
+    Route::resource('comments', PostCommentController::class)->except('create');
 });
-Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');
-Route::resource('/post_comments', PostCommentController::class)->except('create', 'show');
+Route::post('comments/{slug}', [PostCommentController::class, 'store'])->name('post-comment.store');

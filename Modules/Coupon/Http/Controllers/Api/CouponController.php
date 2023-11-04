@@ -2,7 +2,6 @@
 
 namespace Modules\Coupon\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
@@ -16,13 +15,13 @@ use Modules\Coupon\Service\CouponService;
 class CouponController extends CoreController
 {
     private CouponService $coupon_service;
-    
+
     public function __construct(CouponService $coupon_service)
     {
         $this->coupon_service = $coupon_service;
-        $this->authorizeResource(Coupon::class);
+        $this->authorizeResource(Coupon::class, 'coupon');
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -30,52 +29,43 @@ class CouponController extends CoreController
     {
         return CouponResource::collection($this->coupon_service->getAll());
     }
-    
+
     public function store(Store $request)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.storeSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->coupon_service->coupon_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->coupon_service->coupon_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new CouponResource($this->coupon_service->store($request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new CouponResource($this->coupon_service->store($request->validated())));
     }
-    
+
     /**
-     * @param $id
-     *
-     * @return JsonResponse|string
+     * @param  Coupon  $coupon
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(Coupon $coupon)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.ok',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->coupon_service->coupon_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.ok',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->coupon_service->coupon_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new CouponResource($this->coupon_service->show($id)));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new CouponResource($this->coupon_service->show($coupon->id)));
     }
-    
+
     /**
      * @param  Update  $request
      * @param $id
@@ -84,46 +74,37 @@ class CouponController extends CoreController
      */
     public function update(Update $request, $id)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.updateSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->coupon_service->coupon_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.updateSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->coupon_service->coupon_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new CouponResource($this->coupon_service->update($id, $request->validated())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new CouponResource($this->coupon_service->update($id, $request->validated())));
     }
-    
+
     /**
-     * @param $id
-     *
-     * @return JsonResponse|string
+     * @param  Coupon  $coupon
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Coupon $coupon)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->coupon_service->coupon_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->coupon_service->coupon_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->coupon_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond($this->coupon_service->destroy($coupon->id));
     }
 }

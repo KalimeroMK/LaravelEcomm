@@ -2,13 +2,11 @@
 
 namespace Modules\Product\Service;
 
-use Exception;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Helpers\Condition;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
-use Modules\Product\Exceptions\SearchException;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 use Modules\Size\Models\Size;
@@ -25,124 +23,86 @@ class ProductService extends CoreService
 
     use ImageUpload;
 
-    /**
-     * @param $data
-     *
-     * @return mixed
-     * @throws SearchException
-     */
     public function getAll($data): mixed
     {
-        try {
-            return $this->product_repository->search($data);
-        } catch (Exception $exception) {
-            throw new SearchException($exception);
-        }
+        return $this->product_repository->search($data);
     }
 
-    /**
-     * @return array
-     */
     public function create(): array
     {
         return [
-            'brands'     => Brand::get(),
+            'brands' => Brand::get(),
             'categories' => Category::get(),
-            'product'    => new Product(),
-            'sizes'      => Size::get(),
+            'product' => new Product(),
+            'sizes' => Size::get(),
             'conditions' => Condition::get(),
-            'tags'       => Tag::get(),
+            'tags' => Tag::get(),
         ];
     }
 
-    /**
-     * @param $data
-     *
-     * @return string|null
-     */
-    public function store($data): null|string
+    public function store(array $data): Product
     {
-        $color = $data['color'];
-        if (is_array($color)) {
-            $color         = preg_replace('/\s+/', '', $color);
-            $data['color'] = implode(',', $color);
-        }
+        $this->handleColor($data);
+
         if (isset($data['photo'])) {
             $data['photo'] = $this->verifyAndStoreImage($data['photo']);
         }
 
-            $product = $this->product_repository->create($data);
-            $product->categories()->attach($data['category']);
-            $product->sizes()->attach($data['size']);
-            $product->tags()->attach($data['tag']);
+        $product = $this->product_repository->create($data);
+        $product->categories()->attach($data['category']);
+        $product->sizes()->attach($data['size']);
+        $product->tags()->attach($data['tag']);
 
-            return $product;
+        return $product;
     }
 
-    /**
-     * @param $id
-     *
-     * @return array
-     */
-    public function edit($id): array
+    public function edit(int $id): array
     {
         return [
-            'brands'     => Brand::get(),
+            'brands' => Brand::get(),
             'categories' => Category::all(),
-            'product'    => $this->product_repository->findById($id),
-            'sizes'      => Size::get(),
-            'conditions' => Condition::get(),
-            'tags'       => Tag::get(),
-        ];
-    }
-
-    /**
-     * @param $id
-     *
-     * @return array
-     */
-    public function show($id): array
-    {
-        return [
             'product' => $this->product_repository->findById($id),
+            'sizes' => Size::get(),
+            'conditions' => Condition::get(),
+            'tags' => Tag::get(),
         ];
     }
 
-    /**
-     * @param $data
-     * @param  int  $id
-     *
-     * @return array|null
-     */
-    public function update(int $id, $data): ?array
+    public function update(int $id, array $data): Product
     {
-        $color = $data['color'];
-        if (is_array($color)) {
-            $color         = preg_replace('/\s+/', '', $color);
-            $data['color'] = implode(',', $color);
-        }
-        if (isset($data['image'])) {
+        $this->handleColor($data);
+
+        if (isset($data['photo'])) {
             $data['photo'] = $this->verifyAndStoreImage($data['photo']);
         } else {
             $data['photo'] = Product::find($id)->photo;
         }
 
-            $product = $this->product_repository->update($id, $data);
-            $product->categories()->sync($data['category'], true);
-            $product->sizes()->sync($data['size'], true);
-            $product->tags()->sync($data['size'], true);
+        $product = $this->product_repository->update($id, $data);
+        $product->categories()->sync($data['category']);
+        $product->sizes()->sync($data['size']);
+        $product->tags()->sync($data['tag']);
 
-            return $product;
+        return $product;
     }
 
-    /**
-     * @param $id
-     *
-     * @return void
-     */
-    public function destroy($id)
+
+    public function destroy(int $id): void
     {
-            $this->product_repository->delete($id);
+        $this->product_repository->delete($id);
     }
 
+    private function handleColor(array &$data): void
+    {
+        $color = $data['color'];
+        if (is_array($color)) {
+            $color = preg_replace('/\s+/', '', $color);
+            $data['color'] = implode(',', $color);
+        }
+    }
+
+    public function show(int $id)
+    {
+        return $this->product_repository->findById($id);
+    }
 }

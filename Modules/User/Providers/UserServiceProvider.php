@@ -4,8 +4,8 @@ namespace Modules\User\Providers;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\User\Models\Observers\UserObserver;
 use Modules\User\Models\User;
-use Modules\User\Observers\UserObserver;
 
 class UserServiceProvider extends ServiceProvider
 {
@@ -13,12 +13,12 @@ class UserServiceProvider extends ServiceProvider
      * @var string $moduleName
      */
     protected $moduleName = 'User';
-    
+
     /**
      * @var string $moduleNameLower
      */
     protected $moduleNameLower = 'user';
-    
+
     /**
      * Boot the application events.
      *
@@ -32,7 +32,7 @@ class UserServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
     }
-    
+
     /**
      * Register translations.
      *
@@ -41,14 +41,14 @@ class UserServiceProvider extends ServiceProvider
     public function registerTranslations()
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Register config.
      *
@@ -64,7 +64,7 @@ class UserServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -73,16 +73,16 @@ class UserServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -91,10 +91,10 @@ class UserServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Register the service provider.
      *
@@ -104,7 +104,7 @@ class UserServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
     }
-    
+
     /**
      * Get the services provided by the provider.
      *
