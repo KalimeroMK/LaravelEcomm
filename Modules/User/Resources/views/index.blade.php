@@ -27,7 +27,9 @@
                             <th>Join Date</th>
                             <th>Role</th>
                             <th>Status</th>
+                            @role('super-admin')
                             <th>Impersonate</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -40,7 +42,9 @@
                             <th>Join Date</th>
                             <th>Role</th>
                             <th>Status</th>
+                            @role('super-admin')
                             <th>Impersonate</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                         </tfoot>
@@ -101,7 +105,8 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach                        </tbody>
+                        @endforeach
+                        </tbody>
                     </table>
                 @else
                     <h6 class="text-center">No Products found!!! Please create Product</h6>

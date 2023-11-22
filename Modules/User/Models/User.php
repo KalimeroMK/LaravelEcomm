@@ -171,5 +171,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Wishlist::class);
     }
-    
+    /**
+     * Determine if the user is a super-admin.
+     *
+     * @return bool
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('super-admin');
+    }
 }

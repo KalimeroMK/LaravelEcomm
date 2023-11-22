@@ -6,7 +6,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use LaravelIdea\Helper\Modules\Order\Models\_IH_Order_C;
 use Modules\Order\Models\Order;
 use Modules\User\Models\User;
 use Modules\User\Repository\UserRepository;
@@ -26,9 +25,16 @@ class UserService
      */
     public function index(): mixed
     {
-        return $this->user_repository->findAll();
+        $currentUser = auth()->user();
+
+        if ($currentUser->isSuperAdmin()) {
+         return $this->user_repository->findAll();
+        } else {
+            return collect([$this->user_repository->findById($currentUser->id)]);
+        }
     }
-    
+
+
     /**
      * @param $request
      *
@@ -37,7 +43,6 @@ class UserService
     public function register($request): void
     {
         $input             = $request->all();
-        $input['password'] = Hash::make($input['password']);
         $user              = User::create($input);
         $user->assignRole($request->input('roles'));
     }

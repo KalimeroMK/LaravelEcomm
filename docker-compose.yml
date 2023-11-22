@@ -37,7 +37,7 @@ services:
     container_name: e_comm_nginx
     restart: unless-stopped
     ports:
-      - "93:80"
+      - "80:80"
     volumes:
       - ./:/var/www
       - ./.docker/nginx:/etc/nginx/conf.d
