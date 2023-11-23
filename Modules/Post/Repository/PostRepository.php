@@ -10,6 +10,7 @@ use Modules\Post\Models\Post;
 class PostRepository extends Repository implements SearchInterface
 {
     public $model = Post::class;
+    private const LATEST_POSTS_LIMIT = 3;
 
     /**
      * @param  array  $data
@@ -30,13 +31,17 @@ class PostRepository extends Repository implements SearchInterface
 
         foreach ($searchable as $key) {
             if (Arr::has($data, $key)) {
-                $query->where($key, 'like', '%' . Arr::get($data, $key) . '%');
+                $query->where($key, 'like', '%'.Arr::get($data, $key).'%');
             }
         }
 
         if (Arr::get($data, 'all_included', false)) {
             return $query->with([
-                'categories', 'comments', 'post_comments', 'post_tag', 'author_info'
+                'categories',
+                'comments',
+                'post_comments',
+                'post_tag',
+                'author_info'
             ])->get();
         }
 
@@ -45,8 +50,21 @@ class PostRepository extends Repository implements SearchInterface
         $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
 
         return $query->with([
-            'categories', 'comments', 'post_comments', 'post_tag', 'author_info'
+            'categories',
+            'comments',
+            'post_comments',
+            'post_tag',
+            'author_info'
         ])->orderBy($orderBy, $sort)->paginate($perPage);
+    }
+
+
+    public function getActivePosts()
+    {
+        return $this->model::where('status', 'active')
+            ->orderBy('id', 'desc')
+            ->limit(self::LATEST_POSTS_LIMIT)
+            ->get();
     }
 
 }

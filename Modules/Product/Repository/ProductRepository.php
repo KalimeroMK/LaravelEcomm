@@ -3,12 +3,15 @@
 namespace Modules\Product\Repository;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Modules\Core\Repositories\Repository;
 use Modules\Product\Models\Product;
 
 class ProductRepository extends Repository
 {
     public $model = Product::class;
+
+    private const LATEST_PRODUCTS_LIMIT = 4;
 
     /**
      * @param  $id
@@ -47,10 +50,20 @@ class ProductRepository extends Repository
     {
         $query = $this->model::query();
 
-        $searchableFields = ['title', 'summary', 'description', 'color', 'stock', 'brand_id', 'price', 'discount', 'status'];
+        $searchableFields = [
+            'title',
+            'summary',
+            'description',
+            'color',
+            'stock',
+            'brand_id',
+            'price',
+            'discount',
+            'status'
+        ];
         foreach ($searchableFields as $field) {
             if (Arr::has($data, $field)) {
-                $query->where($field, 'like', '%' . Arr::get($data, $field) . '%');
+                $query->where($field, 'like', '%'.Arr::get($data, $field).'%');
             }
         }
 
@@ -58,11 +71,42 @@ class ProductRepository extends Repository
             return $query->with($this->withRelations())->get();
         }
 
-        $query->orderBy(Arr::get($data, 'order_by') ?? self::DEFAULT_ORDER_BY, Arr::get($data, 'sort') ?? self::DEFAULT_SORT);
+        $query->orderBy(Arr::get($data, 'order_by') ?? self::DEFAULT_ORDER_BY,
+            Arr::get($data, 'sort') ?? self::DEFAULT_SORT);
 
         return $query->with($this->withRelations())->paginate(
             Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()
         );
+    }
+
+    public function getLatestProducts(): Collection
+    {
+        return $this->model::with('categories', 'condition')
+            ->where('status', 'active')
+            ->orderBy('id', 'desc')
+            ->limit(self::LATEST_PRODUCTS_LIMIT)
+            ->get();
+    }
+
+    public function getActiveProducts(int $limit)
+    {
+        return $this->model::where('status', 'active')
+            ->orderBy('id', 'desc')
+            ->take($limit)
+            ->get();
+    }
+
+    /**
+     * Get the featured products.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getFeaturedProducts(): Collection
+    {
+        return $this->model::with('categories')
+            ->orderBy('price', 'desc')
+            ->limit(4)
+            ->get();
     }
 
 }

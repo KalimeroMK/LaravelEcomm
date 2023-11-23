@@ -2,7 +2,6 @@
 
 namespace Modules\Brand\Repository;
 
-use Illuminate\Support\Arr;
 use Modules\Brand\Models\Brand;
 use Modules\Core\Repositories\Repository;
 
@@ -25,7 +24,7 @@ class BrandRepository extends Repository
 
         foreach (['title', 'slug', 'status'] as $field) {
             if (isset($data[$field])) {
-                $query->where($field, 'like', '%' . $data[$field] . '%');
+                $query->where($field, 'like', '%'.$data[$field].'%');
             }
         }
 
@@ -33,5 +32,10 @@ class BrandRepository extends Repository
         $sort = $data['sort'] ?? 'desc';
 
         return $query->orderBy($orderBy, $sort)->paginate($this->model->getPerPage());
+    }
+
+    public function getActiveBrands()
+    {
+        return $this->model::where('status', 'active')->orderBy('title')->get();
     }
 }

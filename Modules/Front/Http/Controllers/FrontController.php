@@ -20,9 +20,9 @@ class FrontController extends Controller
 
     private FrontService $front_service;
 
-    public function __construct()
+    public function __construct(FrontService $frontService)
     {
-        $this->front_service = new FrontService();
+        $this->front_service = $frontService;
     }
 
     /**
