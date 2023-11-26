@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Service;
 
+use Exception;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Brand\Models\Brand;
@@ -43,6 +44,9 @@ class ProductService extends CoreService
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function store(array $data): Product
     {
         $this->handleColor($data);
@@ -74,6 +78,9 @@ class ProductService extends CoreService
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function update(int $id, array $data): Product
     {
         $this->handleColor($data);
@@ -115,12 +122,14 @@ class ProductService extends CoreService
         return $this->product_repository->findById($id);
     }
 
+    /**
+     * @throws Exception
+     */
     private function syncAttributes(Product $product, array $attributeData): void
     {
         foreach ($attributeData as $attributeId => $value) {
             $attribute = Attribute::findOrFail($attributeId);
-            $valueColumn = $attribute->getValueColumnName(
-            ); // Make sure this method exists and returns the correct column name
+            $valueColumn = $attribute->getValueColumnName();
 
             $attributeValue = AttributeValue::firstOrCreate([
                 'attribute_id' => $attributeId,

@@ -10,7 +10,6 @@ use Modules\Banner\Http\Requests\Api\Search;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
-use Modules\Brand\Exceptions\SearchException;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Http\Controllers\CoreController;
@@ -19,28 +18,27 @@ use Modules\Core\Traits\ImageUpload;
 class BannerController extends CoreController
 {
     private BrandService $banner_service;
-    
+
     public function __construct(BrandService $banner_service)
     {
         $this->authorizeResource(Brand::class);
         $this->banner_service = $banner_service;
     }
-    
+
     use ImageUpload;
-    
+
     /**
      * Display a listing of the resource.
      *
      * @param  Search  $request
      *
      * @return Application|Factory|View
-     * @throws SearchException
      */
     public function index(Search $request): Factory|View|Application
     {
         return view('banner::index', ['banners' => $this->banner_service->getAll($request->validated())]);
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -50,7 +48,7 @@ class BannerController extends CoreController
     {
         return view('banner::create', ['banner' => new Banner()]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -61,10 +59,10 @@ class BannerController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $this->banner_service->store($request->validated());
-        
+
         return redirect()->route('banners.index');
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -75,10 +73,10 @@ class BannerController extends CoreController
     public function edit(Banner $banner): View|Factory|Application
     {
         $banner = $this->banner_service->edit($banner->id);
-        
+
         return view('banner::edit', compact('banner'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -90,10 +88,10 @@ class BannerController extends CoreController
     public function update(Update $request, Banner $banner): RedirectResponse
     {
         $banner = $this->banner_service->update($banner->id, $request->validated());
-        
+
         return redirect()->route('banners.edit', $banner);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -104,17 +102,7 @@ class BannerController extends CoreController
     public function destroy(Banner $banner): RedirectResponse
     {
         $this->banner_service->destroy($banner->id);
-        
+
         return redirect()->route('banners.index');
-    }
-    
-    /**
-     * Make paths for storing images.
-     *
-     * @return object
-     */
-    public function makePaths(): object
-    {
-        return $this->banner_service->makePaths();
     }
 }

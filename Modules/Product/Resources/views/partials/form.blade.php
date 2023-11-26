@@ -74,6 +74,15 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="size">Tags</label>
+                    <select class="form-control js-example-basic-multiple" id="tags" name="tag[]"
+                            multiple="multiple">
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="condition_id">Condition</label>
                     <select name="condition_id" class="form-control">
                         <option value="">--Select condition--</option>
@@ -89,16 +98,78 @@
 
                 <div class="form-group row">
                     @foreach ($attributes as $attribute)
+                        @php
+                            $attributeValue = $product->attributeValues->where('attribute_id', $attribute->id)->first();
+                        @endphp
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="attribute_{{ $attribute->id }}">{{ $attribute->name }}</label>
-                                <input type="text" class="form-control" name="attributes[{{ $attribute->id }}]"
-                                       id="attribute_{{ $attribute->id }}"
-                                       value="{{ $product->attributeValues->where('attribute_id', $attribute->id)->first()->value ?? '' }}">
+
+                                @switch($attribute->type)
+                                    @case('url')
+                                    @case('text')
+                                    @case('string')
+                                        <input type="text" class="form-control" name="attributes[{{ $attribute->id }}]"
+                                               id="attribute_{{ $attribute->id }}"
+                                               value="{{ $attributeValue->value ?? '' }}">
+                                        @break
+
+                                    @case('hex')
+                                        <input type="color" class="form-control" name="attributes[{{ $attribute->id }}]"
+                                               id="attribute_{{ $attribute->id }}"
+                                               value="{{ $attributeValue->value ?? '' }}">
+                                        @break
+
+                                    @case('date')
+                                        <input type="date" class="form-control" name="attributes[{{ $attribute->id }}]"
+                                               id="attribute_{{ $attribute->id }}"
+                                               value="{{ $attributeValue->value ?? '' }}">
+                                        @break
+
+                                    @case('time')
+                                        <input type="time" class="form-control" name="attributes[{{ $attribute->id }}]"
+                                               id="attribute_{{ $attribute->id }}"
+                                               value="{{ $attributeValue->value ?? '' }}">
+                                        @break
+
+                                    @case('float')
+                                    @case('decimal')
+                                        <input type="number" step="0.01" class="form-control"
+                                               name="attributes[{{ $attribute->id }}]"
+                                               id="attribute_{{ $attribute->id }}"
+                                               value="{{ $attributeValue->value ?? '' }}">
+                                        @break
+
+                                    @case('integer')
+                                        <input type="number" class="form-control"
+                                               name="attributes[{{ $attribute->id }}]"
+                                               id="attribute_{{ $attribute->id }}"
+                                               value="{{ $attributeValue->value ?? '' }}">
+                                        @break
+
+                                    @case('boolean')
+                                        <select class="form-control" name="attributes[{{ $attribute->id }}]"
+                                                id="attribute_{{ $attribute->id }}">
+                                            <option value="1" {{ $attributeValue?->value == '1' ? 'selected' : '' }}>
+                                                True
+                                            </option>
+                                            <option value="0" {{ $attributeValue?->value == '0' ? 'selected' : '' }}>
+                                                False
+                                            </option>
+                                        </select>
+                                        @break
+
+                                    @default
+                                        <input type="text" class="form-control" name="attributes[{{ $attribute->id }}]"
+                                               id="attribute_{{ $attribute->id }}"
+                                               value="{{ $attributeValue->value ?? '' }}">
+                                @endswitch
                             </div>
                         </div>
                     @endforeach
                 </div>
+
                 <!-- Continue with the rest of the form elements -->
 
                 <button type="reset" class="btn btn-warning">Reset</button>

@@ -1,5 +1,4 @@
-FROM php:8.1-fpm
-
+FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -8,24 +7,28 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    libzip-dev \
     zip \
-    nano \
     unzip \
     libicu-dev \
-    python3 \
-    && docker-php-ext-install pdo_mysql \
+    libzip-dev \
+    nano \
+    libjpeg62-turbo-dev
+
+# Configure & install gd extension with jpeg support
+RUN docker-php-ext-configure gd --with-jpeg
+RUN docker-php-ext-install gd
+
+RUN docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install exif \
     && docker-php-ext-install pcntl \
     && docker-php-ext-install bcmath \
-    && docker-php-ext-install gd \
     && docker-php-ext-install zip \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-source delete
 
-#Xdebug
+# Install xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 
@@ -35,9 +38,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Get latest Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
-# Create system user to run Composer and Artisan Commands
+# Create system user
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
 # Set working directory
 WORKDIR /var/www
-
