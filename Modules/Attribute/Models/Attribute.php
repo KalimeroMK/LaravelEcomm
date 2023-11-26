@@ -35,7 +35,7 @@ class Attribute extends Core
     const DISPLAY_SELECT = 'select';
     const DISPLAY_CHECKBOX = 'checkbox';
     const DISPLAY_MULTI_SELECT = 'multiselect';
-    
+
     const TYPES = [
         self::TYPE_URL,
         self::TYPE_HEX,
@@ -47,7 +47,7 @@ class Attribute extends Core
         self::TYPE_BOOLEAN,
         self::TYPE_DECIMAL,
     ];
-    
+
     const DISPLAYS = [
         self::DISPLAY_INPUT,
         self::DISPLAY_RADIO,
@@ -69,5 +69,25 @@ class Attribute extends Core
     public function values(): HasMany
     {
         return $this->hasMany(AttributeValue::class);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getValueColumnName(): string
+    {
+        return match ($this->type) {
+            self::TYPE_URL => 'url_value',
+            self::TYPE_HEX => 'hex_value',
+            self::TYPE_TEXT => 'text_value',
+            self::TYPE_DATE => 'date_value',
+            self::TYPE_TIME => 'time_value',
+            self::TYPE_FLOAT => 'float_value',
+            self::TYPE_STRING => 'string_value',
+            self::TYPE_INTEGER => 'integer_value',
+            self::TYPE_BOOLEAN => 'boolean_value',
+            self::TYPE_DECIMAL => 'decimal_value',
+            default => throw new \Exception("Invalid attribute type"),
+        };
     }
 }

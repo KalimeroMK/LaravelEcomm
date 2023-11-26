@@ -4,16 +4,17 @@ namespace Modules\Product\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Exporter;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Product\Http\Requests\Api\Search;
-use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Import\Products;
 use Modules\Product\Import\Products as ProductImport;
 use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
+use PhpOffice\PhpSpreadsheet\Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProductController extends CoreController
@@ -38,9 +39,9 @@ class ProductController extends CoreController
         return view('product::create')->with($this->product_service->create());
     }
 
-    public function store(Store $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $this->product_service->store($request->validated());
+        $this->product_service->store($request->all());
         return redirect()->route('products.index');
     }
 
@@ -61,6 +62,10 @@ class ProductController extends CoreController
         return redirect()->route('products.index');
     }
 
+    /**
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public function export(): BinaryFileResponse
     {
         return $this->excel->download(new Products, 'Products.xlsx');

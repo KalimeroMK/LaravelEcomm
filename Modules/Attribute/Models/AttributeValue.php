@@ -3,8 +3,10 @@
 namespace Modules\Attribute\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Attribute\Database\Factories\AttributeValueFactory;
 use Modules\Core\Models\Core;
+use Modules\Product\Models\Product;
 
 class AttributeValue extends Core
 {
@@ -37,9 +39,20 @@ class AttributeValue extends Core
     {
         return $this->belongsTo(Attribute::class);
     }
-    
+
     public function getValueAttribute()
     {
-        return $this->{$this->attribute->type . '_value'};
+        $type = $this->attribute->type;
+        return match ($type) {
+            Attribute::TYPE_URL => $this->url_value,
+            Attribute::TYPE_HEX => $this->hex_value,
+            Attribute::TYPE_TEXT => $this->text_value,
+            default => null,
+        };
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_attribute_value');
     }
 }

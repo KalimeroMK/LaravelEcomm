@@ -41,9 +41,9 @@ class ProductRepository extends Repository
     const DEFAULT_ORDER_BY = 'id';
     const DEFAULT_SORT = 'desc';
 
-    protected function withRelations()
+    protected function withRelations(): array
     {
-        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags'];
+        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags', 'attributeValues.attribute'];
     }
 
     public function search(array $data): mixed
@@ -71,8 +71,10 @@ class ProductRepository extends Repository
             return $query->with($this->withRelations())->get();
         }
 
-        $query->orderBy(Arr::get($data, 'order_by') ?? self::DEFAULT_ORDER_BY,
-            Arr::get($data, 'sort') ?? self::DEFAULT_SORT);
+        $query->orderBy(
+            Arr::get($data, 'order_by') ?? self::DEFAULT_ORDER_BY,
+            Arr::get($data, 'sort') ?? self::DEFAULT_SORT
+        );
 
         return $query->with($this->withRelations())->paginate(
             Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()

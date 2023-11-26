@@ -3,7 +3,6 @@
 namespace Modules\Attribute\Providers;
 
 use Config;
-use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class AttributeServiceProvider extends ServiceProvider

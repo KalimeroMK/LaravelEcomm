@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Service;
 
+use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\AttributeValue;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Helpers\Condition;
@@ -37,6 +39,7 @@ class ProductService extends CoreService
             'sizes' => Size::get(),
             'conditions' => Condition::get(),
             'tags' => Tag::get(),
+            'attributes' => Attribute::all()
         ];
     }
 
@@ -47,10 +50,12 @@ class ProductService extends CoreService
         if (isset($data['photo'])) {
             $data['photo'] = $this->verifyAndStoreImage($data['photo']);
         }
-
         $product = $this->product_repository->create($data);
+        $this->syncAttributes($product, $data['attributes']); // Assuming 'attributes' is the input name
         $product->categories()->attach($data['category']);
-        $product->sizes()->attach($data['size']);
+        if (isset($data['size'])) {
+            $product->sizes()->attach($data['size']);
+        }
         $product->tags()->attach($data['tag']);
 
         return $product;
@@ -65,6 +70,7 @@ class ProductService extends CoreService
             'sizes' => Size::get(),
             'conditions' => Condition::get(),
             'tags' => Tag::get(),
+            'attributes' => Attribute::all()
         ];
     }
 
@@ -79,8 +85,11 @@ class ProductService extends CoreService
         }
 
         $product = $this->product_repository->update($id, $data);
+        $this->syncAttributes($product, $data['attributes']);
         $product->categories()->sync($data['category']);
-        $product->sizes()->sync($data['size']);
+        if (isset($data['size'])) {
+            $product->sizes()->sync($data['size']);
+        }
         $product->tags()->sync($data['tag']);
 
         return $product;
@@ -105,4 +114,21 @@ class ProductService extends CoreService
     {
         return $this->product_repository->findById($id);
     }
+
+    private function syncAttributes(Product $product, array $attributeData): void
+    {
+        foreach ($attributeData as $attributeId => $value) {
+            $attribute = Attribute::findOrFail($attributeId);
+            $valueColumn = $attribute->getValueColumnName(
+            ); // Make sure this method exists and returns the correct column name
+
+            $attributeValue = AttributeValue::firstOrCreate([
+                'attribute_id' => $attributeId,
+                $valueColumn => $value,
+            ]);
+
+            $product->attributeValues()->syncWithoutDetaching([$attributeValue->id]);
+        }
+    }
+
 }
