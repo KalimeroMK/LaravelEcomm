@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Kalimeromk\Filterable\app\Traits\Filterable;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
@@ -81,17 +82,18 @@ use Modules\Tag\Models\Tag;
 class Product extends Core
 {
     use HasFactory;
-    
+    use Filterable;
+
     protected $table = 'products';
-    
+
     protected $casts = [
-        'stock'       => 'int',
-        'price'       => 'float',
-        'discount'    => 'float',
+        'stock' => 'int',
+        'price' => 'float',
+        'discount' => 'float',
         'is_featured' => 'bool',
-        'brand_id'    => 'int',
+        'brand_id' => 'int',
     ];
-    
+
     protected $fillable = [
         'title',
         'slug',
@@ -107,7 +109,7 @@ class Product extends Core
         'brand_id',
         'color',
     ];
-    
+
     public const likeRows = [
         'title',
         'slug',
@@ -123,7 +125,7 @@ class Product extends Core
         'brand.title',
         'color',
     ];
-    
+
     /**
      * @return ProductFactory
      */
@@ -131,7 +133,7 @@ class Product extends Core
     {
         return ProductFactory::new();
     }
-    
+
     /**
      * @param $slug
      *
@@ -141,7 +143,7 @@ class Product extends Core
     {
         return Product::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
     }
-    
+
     /**
      * @return int
      */
@@ -151,20 +153,20 @@ class Product extends Core
         if ($data) {
             return $data;
         }
-        
+
         return 0;
     }
-    
+
     /**
      * @return \Illuminate\Support\Collection
      */
     public static function getFeedItems(): \Illuminate\Support\Collection
     {
         return Product::orderBy('created_at', 'desc')
-                      ->limit(20)
-                      ->get();
+            ->limit(20)
+            ->get();
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -172,7 +174,7 @@ class Product extends Core
     {
         return $this->belongsTo(Brand::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -180,7 +182,7 @@ class Product extends Core
     {
         return $this->hasMany(Cart::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -188,7 +190,7 @@ class Product extends Core
     {
         return $this->hasMany(ProductReview::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -196,12 +198,12 @@ class Product extends Core
     {
         return $this->hasMany(Wishlist::class);
     }
-    
+
     public function categories(): belongsToMany
     {
         return $this->belongsToMany(Category::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -212,7 +214,7 @@ class Product extends Core
             'active'
         )->orderBy('id', 'DESC');
     }
-    
+
     /**
      * @param $slug
      *
@@ -221,27 +223,34 @@ class Product extends Core
     public function incrementSlug($slug): mixed
     {
         $original = $slug;
-        $count    = 2;
+        $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count ++;
+            $slug = "{$original}-".$count++;
         }
-        
+
         return $slug;
     }
-    
+
     /**
-     * @return string|null
+     * @return string
      */
-    
-    public function getImageUrlAttribute(): ?string
+    public function getImageUrlAttribute(): string
     {
-        if ( ! empty($this->photo)) {
-            return asset($this->photo);
+        if (empty($this->photo)) {
+            // Local image stored in storage
+            return 'https://via.placeholder.com/640x480.png/003311?text=et';
         }
-        
-        return asset('https://via.placeholder.com/640x480.png/003311?text=et');
+        return asset('storage/uploads/images/'.$this->photo);
     }
-    
+
+    public function getImageThumbUrlAttribute(): ?string
+    {
+        if (empty($this->photo)) {
+            return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        }
+        return asset('storage/uploads/images/thumbnails/'.$this->photo);
+    }
+
     /**
      * @return BelongsTo
      */
@@ -249,7 +258,7 @@ class Product extends Core
     {
         return $this->belongsTo(Condition::class);
     }
-    
+
     /**
      * @return BelongsToMany
      */
@@ -257,7 +266,7 @@ class Product extends Core
     {
         return $this->belongsToMany(Size::class);
     }
-    
+
     /**
      * @return BelongsToMany
      */

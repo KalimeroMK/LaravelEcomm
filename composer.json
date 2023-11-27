@@ -14,7 +14,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "jeremykenedy/laravel-blocker": "*",
         "jeremykenedy/laravel-logger": "*",
-        "kalimeromk/filterable": "*",
+        "kalimeromk/filterable": "^1.5",
         "kalimeromk/laravel-translation-manager": "^1.3",
         "kalnoy/nestedset": "^6.0",
         "lab404/laravel-impersonate": "*",

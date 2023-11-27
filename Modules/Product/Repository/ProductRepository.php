@@ -90,14 +90,6 @@ class ProductRepository extends Repository
             ->get();
     }
 
-    public function getActiveProducts(int $limit)
-    {
-        return $this->model::where('status', 'active')
-            ->orderBy('id', 'desc')
-            ->take($limit)
-            ->get();
-    }
-
     /**
      * Get the featured products.
      *

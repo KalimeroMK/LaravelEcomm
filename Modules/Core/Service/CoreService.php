@@ -11,7 +11,7 @@ class CoreService
      */
     public function makePaths(): object
     {
-        $base_path = storage_path().'/uploads/images/';
+        $base_path = storage_path('app/public/uploads/images/');
         $original = $base_path;
         $thumbnail = $base_path.'thumbnails/';
         $medium = $base_path.'medium/';

@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\NoReturn;
+use Modules\Front\Http\Requests\ProductSearchRequest;
 use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Api\Store;
 use Modules\Newsletter\Models\Newsletter;
@@ -86,13 +87,13 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param  ProductSearchRequest  $request
      *
      * @return Application|Factory|View
      */
-    public function productSearch(Request $request)
+    public function productSearch(ProductSearchRequest $request)
     {
-        return view('front::pages.product-grids')->with($this->front_service->productSearch($request));
+        return view('front::pages.product-grids')->with($this->front_service->productSearch($request->validated()));
     }
 
     /**

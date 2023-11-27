@@ -16,15 +16,15 @@ use Modules\Product\Models\Product;
 
 class CartController extends CoreController
 {
-    
+
     private CartService $cart_service;
-    
+
     public function __construct(CartService $cart_service)
     {
         $this->cart_service = $cart_service;
         $this->authorizeResource(Cart::class);
     }
-    
+
     /**
      * @param $slug
      *
@@ -33,21 +33,17 @@ class CartController extends CoreController
      */
     public function addToCart($slug): RedirectResponse
     {
-        try {
-            if (empty($slug || Product::whereSlug($slug)->first())) {
-                request()->session()->flash('error', 'Product successfully added to cart');
-                
-                return back();
-            }
-            $this->cart_service->addToCart(Product::whereSlug($slug)->first());
-            session()->flash('message', 'Product successfully added to cart');
-        } catch (Exception $e) {
-            throw new Exception($e);
+        if (empty($slug || Product::whereSlug($slug)->first())) {
+            request()->session()->flash('error', 'Product not added to cart');
+
+            return back();
         }
-        
+        $this->cart_service->addToCart(Product::whereSlug($slug)->first());
+        session()->flash('success', 'Product successfully added to cart');
+
         return redirect()->back();
     }
-    
+
     /**
      * @param  AddToCartSingle  $request
      *
@@ -56,16 +52,12 @@ class CartController extends CoreController
      */
     public function singleAddToCart(AddToCartSingle $request): RedirectResponse
     {
-        try {
-            $this->cart_service->singleAddToCart($request->validated());
-            session()->flash('message', 'Product successfully added to cart');
-        } catch (Exception $e) {
-            throw new Exception($e);
-        }
-        
+        $this->cart_service->singleAddToCart($request->validated());
+        session()->flash('success', 'Product successfully added to cart');
+
         return redirect()->back();
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -74,15 +66,11 @@ class CartController extends CoreController
      */
     public function cartDelete(Request $request): RedirectResponse
     {
-        try {
-            $this->cart_service->destroy($request->id);
-        } catch (Exception $e) {
-            throw new Exception($e);
-        }
-        
+        $this->cart_service->destroy($request->id);
+
         return redirect()->back();
     }
-    
+
     /**
      * @param  Request  $request
      *
@@ -91,32 +79,25 @@ class CartController extends CoreController
      */
     public function cartUpdate(Request $request): RedirectResponse
     {
-        try {
-            $this->cart_service->cartUpdate($request);
-        } catch (Exception $e) {
-            throw new Exception($e);
-        }
-        
+        $this->cart_service->cartUpdate($request);
+
         return redirect()->back();
     }
-    
+
     /**
      * @return Application|Factory|View|RedirectResponse
      * @throws Exception
      */
     public function checkout(): View|Factory|RedirectResponse|Application
     {
-        try {
-            $this->cart_service->checkout();
-            if (empty($this->cart_service->checkout())) {
-                request()->session()->flash('error', 'Cart is empty');
-                
-                return redirect()->back();
-            }
-        } catch (Exception $e) {
-            throw new Exception($e);
+        $this->cart_service->checkout();
+        if (empty($this->cart_service->checkout())) {
+            request()->session()->flash('error', 'Cart is empty');
+
+            return redirect()->back();
         }
-        
+
+
         return view('front::pages.checkout');
     }
 }

@@ -9,11 +9,9 @@ namespace Modules\Billing\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Cart\Models\Cart;
-use Modules\Core\Traits\ClearsResponseCache;
 use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 
@@ -49,20 +47,18 @@ use Modules\User\Models\User;
  */
 class Wishlist extends Model
 {
-    use HasFactory;
-    use ClearsResponseCache;
-    
+
     protected $table = 'wishlists';
-    
+
     protected $casts = [
         'product_id' => 'int',
-        'cart_id'    => 'int',
-        'user_id'    => 'int',
-        'price'      => 'float',
-        'quantity'   => 'int',
-        'amount'     => 'float',
+        'cart_id' => 'int',
+        'user_id' => 'int',
+        'price' => 'float',
+        'quantity' => 'int',
+        'amount' => 'float',
     ];
-    
+
     protected $fillable = [
         'product_id',
         'cart_id',
@@ -71,7 +67,7 @@ class Wishlist extends Model
         'quantity',
         'amount',
     ];
-    
+
     /**
      * @return BelongsTo
      */
@@ -79,7 +75,7 @@ class Wishlist extends Model
     {
         return $this->belongsTo(Cart::class);
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -87,7 +83,7 @@ class Wishlist extends Model
     {
         return $this->belongsTo(Product::class);
     }
-    
+
     /**
      * @return BelongsTo
      */

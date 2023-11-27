@@ -11,3 +11,11 @@
         {{session('error')}}
     </div>
 @endif
+@if ($errors->any())
+    @foreach ($errors->all() as $error)
+        <div class="alert alert-danger alert-dismissable fade show text-center">
+            <button class="close" data-dismiss="alert" aria-label="Close">×</button>
+            {{ $error }}
+        </div>
+    @endforeach
+@endif

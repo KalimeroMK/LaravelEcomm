@@ -46,15 +46,10 @@
                                 <!-- Images slider -->
                                 <div class="flexslider-thumbnails">
                                     <ul class="slides">
-                                        @php
-                                            $photo=explode(',',$product_detail->photo);
-                                        // dd($photo);
-                                        @endphp
-                                        @foreach($photo as $data)
-                                            <li data-thumb="{{$data}}" rel="adjustX:10, adjustY:">
-                                                <img src="{{$data}}" alt="{{$data}}">
-                                            </li>
-                                        @endforeach
+                                        <li data-thumb="" rel="adjustX:10, adjustY:">
+                                            <img src="{{$product_detail->imageUrl}}"
+                                                 alt="{{$product_detail->title}}">
+                                        </li>
                                     </ul>
                                 </div>
                                 <!-- End Images slider -->
@@ -91,15 +86,22 @@
                                 </div>
                                 <!--/ End Description -->
                                 <!-- Color -->
-                                {{-- <div class="color">
+                                <div class="color">
                                     <h4>Available Options <span>Color</span></h4>
                                     <ul>
-                                        <li><a href="#" class="one"><i class="ti-check"></i></a></li>
-                                        <li><a href="#" class="two"><i class="ti-check"></i></a></li>
-                                        <li><a href="#" class="three"><i class="ti-check"></i></a></li>
-                                        <li><a href="#" class="four"><i class="ti-check"></i></a></li>
+                                        @php
+                                            $colors = explode(',', $product_detail->color);
+                                        @endphp
+
+                                        @foreach($colors as $color)
+                                            <li>
+                                                <a href="#" class="{{ strtolower(trim($color)) }}">
+                                                    <i class="ti-check"></i>
+                                                </a>
+                                            </li>
+                                        @endforeach
                                     </ul>
-                                </div> --}}
+                                </div>
                                 <!--/ End Color -->
                                 <!-- Size -->
                                 @if($product_detail->size)
@@ -108,7 +110,6 @@
                                         <ul>
                                             @php
                                                 $sizes=explode(',',$product_detail->size);
-                                                // dd($sizes);
                                             @endphp
                                             @foreach($sizes as $size)
                                                 <li><a href="#" class="one">{{$size}}</a></li>
