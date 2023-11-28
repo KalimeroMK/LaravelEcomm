@@ -101,10 +101,7 @@
                     <div class="card-body">
                         <div class="chart-area">
                             <!-- Include Chart.js -->
-
                             <canvas id="ordersChart"></canvas>
-
-
                         </div>
                     </div>
                 </div>
@@ -118,20 +115,22 @@
                         <h6 class="m-0 font-weight-bold text-primary">Users</h6>
                     </div>
                     <!-- Card Body -->
-                    <div class="card-body" style="overflow:hidden">
-                        <div id="pie_chart" style="width:350px; height:320px;">
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <!-- Include Chart.js -->
+                            <canvas id="userChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Content Row -->
         </div>
+        <!-- Content Row -->
     </div>
 @endsection
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('ordersChart').getContext('2d');
+        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
 
         const data = {
             labels: @json($paidOrdersByMonth->pluck('month')),
@@ -144,7 +143,7 @@
         }]
     };
 
-    const myChart = new Chart(ctx, {
+    const myChart = new Chart(ordersCtx, {
         type: 'bar',
         data: data,
         options: {
@@ -158,4 +157,31 @@
         }
     });
     </script>
+    <script>
+        const userCtx = document.getElementById('userChart').getContext('2d');
+        const userChart = new Chart(userCtx, {
+            type: 'line',
+            data: {
+                labels: @json(array_keys($data)),
+            datasets: [{
+                label: 'User Registrations',
+                data: @json(array_values($data)),
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    </script>
+
 @endpush

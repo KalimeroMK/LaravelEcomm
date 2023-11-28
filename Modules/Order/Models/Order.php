@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Models\Core;
 use Modules\Order\Database\Factories\OrderFactory;
@@ -177,24 +176,5 @@ class Order extends Core
         return $this->hasMany(Cart::class, 'order_id', 'id');
     }
 
-    /**
-     * Get the count of paid orders for each of the last 12 months.
-     *
-     * @return Collection
-     */
-    public static function getPaidOrdersCountByMonth(): Collection
-    {
-        return self::select(
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('YEAR(created_at) as year'),
-            DB::raw('COUNT(*) as count')
-        )
-            ->where('payment_status', 'paid')
-            ->where('created_at', '>=', now()->subYear())
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'desc')
-            ->orderBy('month', 'desc')
-            ->get();
-    }
-    
+
 }

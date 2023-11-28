@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Modules\Admin\Service\AdminService;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Message\Models\Message;
-use Modules\Order\Models\Order;
 
 class AdminController extends CoreController
 {
@@ -26,10 +25,10 @@ class AdminController extends CoreController
      */
     public function index(): View|Factory|Application
     {
-        $users = $this->admin_service->index();
-        $paidOrdersByMonth = Order::getPaidOrdersCountByMonth();
+        $data = $this->admin_service->index();
+        $paidOrdersByMonth = $this->admin_service->OrdersByMonth();
 
-        return view('admin::index', compact('paidOrdersByMonth', 'users'));
+        return view('admin::index', compact('paidOrdersByMonth', 'data'));
     }
 
     /**

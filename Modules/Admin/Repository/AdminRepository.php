@@ -3,30 +3,44 @@
 namespace Modules\Admin\Repository;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Modules\Order\Models\Order;
 use Modules\User\Models\User;
 
 class AdminRepository
 {
-    /**
-     * @return array
-     */
-    public function index(): array
+
+    public function usersLastSevenDays(): array
     {
-        $data = User::query()
-            ->selectRaw('COUNT(*) as count, DAYNAME(created_at) as day_name, DAY(created_at) as day')
-            ->where('created_at', '>', Carbon::today()->subDays(6))
-            ->groupBy('day_name', 'day')
-            ->orderBy('day')
-            ->get();
+        $usersCount = [];
 
-        $array = [['Day', 'Count']];
-
-        foreach ($data as $row) {
-            $array[] = [$row->day_name, $row->count];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i)->format('Y-m-d');
+            $count = User::whereDate('created_at', $date)->count();
+            $usersCount[$date] = $count;
         }
+        return $usersCount;
+    }
 
-        return $array;
+    /**
+     * Get the count of paid orders for each of the last 12 months.
+     *
+     * @return Collection
+     */
+    public function getPaidOrdersCountByMonth(): Collection
+    {
+        return Order::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('YEAR(created_at) as year'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->where('payment_status', 'paid')
+            ->where('created_at', '>=', now()->subYear())
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
     }
 
 }
