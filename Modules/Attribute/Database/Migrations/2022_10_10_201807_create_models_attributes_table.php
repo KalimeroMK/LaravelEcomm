@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name')->nullable()->index();
             $table->string('code')->unique()->index();
             $table->string('type')->default(\Modules\Attribute\Models\Attribute::TYPE_STRING);
             $table->string('display')->default(\Modules\Attribute\Models\Attribute::DISPLAY_SELECT);
@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *

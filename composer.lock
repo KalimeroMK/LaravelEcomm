@@ -2574,16 +2574,16 @@
         },
         {
             "name": "kalimeromk/filterable",
-            "version": "1.5",
+            "version": "v1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KalimeroMK/filterable.git",
-                "reference": "6cb4d07780c287dad16ea4c206b2bcbd340502e3"
+                "reference": "ee1d9526a0bc7f94936d2851cfca21a813071092"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KalimeroMK/filterable/zipball/6cb4d07780c287dad16ea4c206b2bcbd340502e3",
-                "reference": "6cb4d07780c287dad16ea4c206b2bcbd340502e3",
+                "url": "https://api.github.com/repos/KalimeroMK/filterable/zipball/ee1d9526a0bc7f94936d2851cfca21a813071092",
+                "reference": "ee1d9526a0bc7f94936d2851cfca21a813071092",
                 "shasum": ""
             },
             "require": {
@@ -2621,9 +2621,9 @@
             ],
             "support": {
                 "issues": "https://github.com/KalimeroMK/filterable/issues",
-                "source": "https://github.com/KalimeroMK/filterable/tree/1.5"
+                "source": "https://github.com/KalimeroMK/filterable/tree/v1.6"
             },
-            "time": "2023-06-17T06:43:09+00:00"
+            "time": "2023-11-27T19:09:24+00:00"
         },
         {
             "name": "kalimeromk/laravel-translation-manager",
@@ -12115,16 +12115,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.44",
+            "version": "1.10.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b"
+                "reference": "2f024fbb47432e2e62ad8a8032387aa2dd631c73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf84367c53a23f759513985c54ffe0d0c249825b",
-                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2f024fbb47432e2e62ad8a8032387aa2dd631c73",
+                "reference": "2f024fbb47432e2e62ad8a8032387aa2dd631c73",
                 "shasum": ""
             },
             "require": {
@@ -12173,7 +12173,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-21T16:30:46+00:00"
+            "time": "2023-11-27T14:15:06+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

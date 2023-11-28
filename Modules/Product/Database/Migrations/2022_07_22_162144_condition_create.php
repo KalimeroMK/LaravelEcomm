@@ -9,11 +9,11 @@ return new class extends Migration {
     {
         Schema::create('conditions', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
+            $table->string('status')->index();
             $table->timestamps();
         });
     }
-    
+
     public function down()
     {
         Schema::table('conditions', function (Blueprint $table) {

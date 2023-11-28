@@ -16,7 +16,6 @@
 
     <!-- Custom styles for this template-->
     <link href="{{asset('css/all.min.css')}}" rel="stylesheet">
-    <link href="{{asset('')}}" rel="stylesheet">
 
     @stack('styles')
 

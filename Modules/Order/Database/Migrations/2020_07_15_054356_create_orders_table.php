@@ -4,13 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
+return new class extends Migration {
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
@@ -31,7 +26,7 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *
@@ -41,4 +36,4 @@ class CreateOrdersTable extends Migration
     {
         Schema::dropIfExists('orders');
     }
-}
+};

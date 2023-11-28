@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Models\Core;
 use Modules\Order\Database\Factories\OrderFactory;
@@ -80,18 +81,18 @@ use Modules\User\Models\User;
 class Order extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'orders';
-    
+
     protected $casts = [
-        'user_id'      => 'int',
-        'sub_total'    => 'float',
-        'shipping_id'  => 'int',
-        'coupon'       => 'float',
+        'user_id' => 'int',
+        'sub_total' => 'float',
+        'shipping_id' => 'int',
+        'coupon' => 'float',
         'total_amount' => 'float',
-        'quantity'     => 'int',
+        'quantity' => 'int',
     ];
-    
+
     protected $fillable = [
         'order_number',
         'user_id',
@@ -112,7 +113,7 @@ class Order extends Core
         'address1',
         'address2',
     ];
-    
+
     /**
      * @return OrderFactory
      */
@@ -120,7 +121,7 @@ class Order extends Core
     {
         return OrderFactory::new();
     }
-    
+
     /**
      * @param $id
      *
@@ -130,7 +131,7 @@ class Order extends Core
     {
         return Order::with('cart_info')->find($id);
     }
-    
+
     /**
      * @return int
      */
@@ -140,10 +141,10 @@ class Order extends Core
         if ($data) {
             return $data;
         }
-        
+
         return 0;
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -151,7 +152,7 @@ class Order extends Core
     {
         return $this->belongsTo(Shipping::class);
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -159,7 +160,7 @@ class Order extends Core
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -167,7 +168,7 @@ class Order extends Core
     {
         return $this->hasMany(Cart::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -175,4 +176,25 @@ class Order extends Core
     {
         return $this->hasMany(Cart::class, 'order_id', 'id');
     }
+
+    /**
+     * Get the count of paid orders for each of the last 12 months.
+     *
+     * @return Collection
+     */
+    public static function getPaidOrdersCountByMonth(): Collection
+    {
+        return self::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('YEAR(created_at) as year'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->where('payment_status', 'paid')
+            ->where('created_at', '>=', now()->subYear())
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
+    }
+    
 }

@@ -26,7 +26,7 @@ class CartService
      */
     public function getAll(): mixed
     {
-            return $this->cart_repository->findAll();
+        return $this->cart_repository->findAll();
     }
 
     /**
@@ -41,11 +41,11 @@ class CartService
         $cart = Cart::Create(
 
             [
-                'user_id'    => Auth::id(),
+                'user_id' => Auth::id(),
                 'product_id' => $product->id,
-                'price'      => ($product->price - ($product->price * $product->discount) / 100),
-                'quantity'   => $data['quantity'],
-                'amount'     => ($product->price - ($product->price * $product->discount) / 100) * $data['quantity'],
+                'price' => ($product->price - ($product->price * $product->discount) / 100),
+                'quantity' => $data['quantity'],
+                'amount' => ($product->price - ($product->price * $product->discount) / 100) * $data['quantity'],
             ]
         );
         Wishlist::whereUserId(Auth::id())->whereCartId(null)->update(['cart_id' => $cart->id]);
@@ -63,15 +63,15 @@ class CartService
         $product = Product::whereSlug($data['slug'])->firstOrFail();
 
         return Cart::whereUserId(Auth::id())
-                   ->whereProductId($product->id)
-                   ->update(
+            ->whereProductId($product->id)
+            ->update(
 
-                       [
-                           'price'    => ($product->price - ($product->price * $product->discount) / 100),
-                           'quantity' => $data['quantity'],
-                           'amount'   => ($product->price - ($product->price * $product->discount) / 100) * $data['quantity'],
-                       ]
-                   );
+                [
+                    'price' => ($product->price - ($product->price * $product->discount) / 100),
+                    'quantity' => $data['quantity'],
+                    'amount' => ($product->price - ($product->price * $product->discount) / 100) * $data['quantity'],
+                ]
+            );
     }
 
     /**
@@ -89,18 +89,18 @@ class CartService
         )->first();
         if ($already_cart) {
             $already_cart->quantity = $already_cart->quantity + 1;
-            $already_cart->amount   = $data->price + $already_cart->amount;
+            $already_cart->amount = $data->price + $already_cart->amount;
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!.');
             }
             $already_cart->save();
         } else {
-            $cart             = new Cart();
-            $cart->user_id    = Auth::id();
+            $cart = new Cart();
+            $cart->user_id = Auth::id();
             $cart->product_id = $data->id;
-            $cart->price      = ($data->price - ($data->price * $data->discount) / 100);
-            $cart->quantity   = 1;
-            $cart->amount     = $cart->price * $cart->quantity;
+            $cart->price = ($data->price - ($data->price * $data->discount) / 100);
+            $cart->quantity = 1;
+            $cart->amount = $cart->price * $cart->quantity;
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!.');
             }
@@ -117,25 +117,25 @@ class CartService
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
 
-        $already_cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->where(
+        $already_cart = Cart::where('user_id', Auth::id())->where('order_id', null)->where(
             'product_id',
             $product->id
         )->first();
 
         if ($already_cart) {
             $already_cart->quantity = $already_cart->quantity + $data['quantity'][1];
-            $already_cart->amount   = ($product->price * $data['quantity'][1]) + $already_cart->amount;
+            $already_cart->amount = ($product->price * $data['quantity'][1]) + $already_cart->amount;
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!.');
             }
             $already_cart->save();
         } else {
-            $cart             = new Cart();
-            $cart->user_id    = Auth::id();
+            $cart = new Cart();
+            $cart->user_id = Auth::id();
             $cart->product_id = $product->id;
-            $cart->price      = ($product->price - ($product->price * $product->discount) / 100);
-            $cart->quantity   = $data['quantity'][1];
-            $cart->amount     = ($product->price * $data['quantity'][1]);
+            $cart->price = ($product->price - ($product->price * $product->discount) / 100);
+            $cart->quantity = $data['quantity'][1];
+            $cart->amount = ($product->price * $data['quantity'][1]);
             $cart->save();
         }
     }
@@ -156,16 +156,16 @@ class CartService
 
     public function destroy($id)
     {
-            $this->cart_repository->delete($id);
+        $this->cart_repository->delete($id);
     }
 
     public function cartUpdate($data): RedirectResponse
     {
         if ($data->quantity) {
-            $error   = [];
+            $error = [];
             $success = '';
             foreach ($data->quantity as $k => $quantities) {
-                $id   = $data->qty_id[$k];
+                $id = $data->qty_id[$k];
                 $cart = Cart::findOrFail($id);
                 if ($quantities > 0 && $cart) {
                     if ($cart->product->stock < $quantities) {
@@ -178,7 +178,7 @@ class CartService
                     if ($cart->product->stock <= 0) {
                         continue;
                     }
-                    $after_price  = ($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
+                    $after_price = ($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
                     $cart->amount = $after_price * $quantities;
                     $cart->save();
                     session()->put('cart', $cart);
@@ -199,6 +199,6 @@ class CartService
      */
     public function show(): mixed
     {
-            return $this->cart_repository->show();
+        return $this->cart_repository->show();
     }
 }

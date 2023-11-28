@@ -38,20 +38,18 @@
 <script src="{{asset('js/all.min.js')}}"></script>
 
 <!-- Page level plugins -->
-@push('scripts')
-    <script>
-        $('#data-table').DataTable({
-            "ordering": true,
-            "paging": true,
-            "pageLength": 25,
-            "lengthMenu": [
-                [25, 50, 75, 100, -1],
-                [25, 50, 75, 100, 'All'],
-            ],
+<script>
+    $('#data-table').DataTable({
+        "ordering": true,
+        "paging": true,
+        "pageLength": 25,
+        "lengthMenu": [
+            [25, 50, 75, 100, -1],
+            [25, 50, 75, 100, 'All'],
+        ],
 
-        });
-    </script>
-@endpush
+    });
+</script>
 <script>
     $(document).ready(function () {
         $.ajaxSetup({
@@ -81,10 +79,10 @@
         })
     })
 </script>
-@stack('scripts')
 
 <script>
     setTimeout(function () {
         $('.alert').slideUp();
     }, 4000);
 </script>
+@stack('scripts')
