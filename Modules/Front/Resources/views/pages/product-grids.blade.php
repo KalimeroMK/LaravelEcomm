@@ -32,15 +32,19 @@
                             <div class="single-widget category">
                                 <h3 class="title">Categories</h3>
                                 <ul class="categor-list">
-                                    @foreach ($categories as $category)
-                                        <li>{{ $category->title }}</li>
-                                        <ul>
-                                            @foreach ($category->childrenCategories as $childCategory)
-                                                @include('front::layouts.child_category', ['child_category' =>
-                                                $childCategory])
-                                            @endforeach
-                                        </ul>
-                                    @endforeach
+                                    <ul class="categor-list">
+                                        @foreach ($categories as $category)
+                                            <li>
+                                                <a href="{{ route('product-cat', $category->slug) }}">{{ $category->title }}</a>
+                                                <ul>
+                                                    @foreach ($category->childrenCategories as $childCategory)
+                                                        @include('front::layouts.child_category', ['child_category' => $childCategory])
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
                                 </ul>
                             </div>
                             <!--/ End Single Widget -->

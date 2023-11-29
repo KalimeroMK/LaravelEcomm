@@ -3,7 +3,7 @@
     @if ($child_category->categories)
         <ul class="main-category">
             @foreach ($child_category->categories as $childCategory)
-                @include('frontend.layouts.child_category', ['child_category' => $childCategory])
+                @include('front::layouts.child_category', ['child_category' => $childCategory])
             @endforeach
         </ul>
 @endif
