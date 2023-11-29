@@ -31,7 +31,7 @@ class FrontController extends Controller
      */
     public function index()
     {
-        return view('front::index')->with($this->front_service->index());
+        return view('front::index', $this->front_service->index());
     }
 
     /**
@@ -57,7 +57,7 @@ class FrontController extends Controller
      */
     public function productDetail($slug)
     {
-        return view('front::pages.product_detail')->with($this->front_service->productDetail($slug));
+        return view('front::pages.product_detail', $this->front_service->productDetail($slug));
     }
 
     /**
@@ -65,7 +65,7 @@ class FrontController extends Controller
      */
     public function productGrids()
     {
-        return view('front::pages.product-grids')->with($this->front_service->productGrids());
+        return view('front::pages.product-grids', $this->front_service->productGrids());
     }
 
     /**
@@ -73,7 +73,7 @@ class FrontController extends Controller
      */
     public function productLists()
     {
-        return view('front::pages.product-lists')->with($this->front_service->productLists());
+        return view('front::pages.product-lists', $this->front_service->productLists());
     }
 
     /**
@@ -93,7 +93,7 @@ class FrontController extends Controller
      */
     public function productSearch(ProductSearchRequest $request)
     {
-        return view('front::pages.product-grids')->with($this->front_service->productSearch($request->validated()));
+        return view('front::pages.product-grids', $this->front_service->productSearch($request->validated()));
     }
 
     /**
@@ -101,7 +101,7 @@ class FrontController extends Controller
      */
     public function productDeal()
     {
-        return view('front::pages.product-grids')->with($this->front_service->productDeal());
+        return view('front::pages.product-grids', $this->front_service->productDeal());
     }
 
     /**
@@ -112,9 +112,9 @@ class FrontController extends Controller
     public function productBrand(Request $request)
     {
         if (request()->is('e-shop.loc/product-grids')) {
-            return view('front::pages.product-grids')->with($this->front_service->productBrand($request));
+            return view('front::pages.product-grids', $this->front_service->productBrand($request));
         } else {
-            return view('front::pages.product-lists')->with($this->front_service->productBrand($request));
+            return view('front::pages.product-lists', $this->front_service->productBrand($request));
         }
     }
 
@@ -126,9 +126,9 @@ class FrontController extends Controller
     public function productCat($slug)
     {
         if (request()->is('e-shop.loc/product-grids')) {
-            return view('front::pages.product-grids')->with($this->front_service->productCat($slug));
+            return view('front::pages.product-grids', $this->front_service->productCat($slug));
         } else {
-            return view('front::pages.product-lists')->with($this->front_service->productCat($slug));
+            return view('front::pages.product-lists', $this->front_service->productCat($slug));
         }
     }
 
@@ -137,7 +137,7 @@ class FrontController extends Controller
      */
     public function blog()
     {
-        return view('front::pages.blog')->with($this->front_service->blog());
+        return view('front::pages.blog', $this->front_service->blog());
     }
 
     /**
@@ -147,7 +147,7 @@ class FrontController extends Controller
      */
     public function blogDetail($slug)
     {
-        return view('front::pages.blog-detail')->with($this->front_service->blogDetail($slug));
+        return view('front::pages.blog-detail', $this->front_service->blogDetail($slug));
     }
 
     /**
@@ -157,7 +157,7 @@ class FrontController extends Controller
      */
     public function blogSearch(Request $request)
     {
-        return view('front::pages.blog')->with($this->front_service->blogSearch($request));
+        return view('front::pages.blog', $this->front_service->blogSearch($request));
     }
 
     /**
@@ -167,7 +167,9 @@ class FrontController extends Controller
      */
     public function blogFilter(Request $request): RedirectResponse
     {
-        return $this->front_service->blogFilter($request);
+        $filterData = $this->front_service->blogFilter($request);
+
+        return redirect()->route('blog', http_build_query($filterData));
     }
 
     /**
@@ -177,7 +179,7 @@ class FrontController extends Controller
      */
     public function blogByCategory(Request $request)
     {
-        return view('front::pages.blog')->with($this->front_service->blogByCategory($request));
+        return view('front::pages.blog', $this->front_service->blogByCategory($request));
     }
 
     /**
@@ -187,7 +189,7 @@ class FrontController extends Controller
      */
     public function blogByTag(Request $request)
     {
-        return view('front::pages.blog')->with($this->front_service->blogByTag($request));
+        return view('front::pages.blog', $this->front_service->blogByTag($request));
     }
 
     /**

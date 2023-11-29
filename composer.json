@@ -34,6 +34,7 @@
     "omnipay/paypal": "*",
     "pragmarx/google2fa": "*",
     "pragmarx/google2fa-laravel": "*",
+    "predis/predis": "^2.2",
     "psr/simple-cache": "*",
     "pusher/pusher-php-server": "*",
     "spatie/laravel-cookie-consent": "*",

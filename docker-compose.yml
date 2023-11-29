@@ -43,6 +43,14 @@ services:
       - ./.docker/nginx:/etc/nginx/conf.d
     networks:
       - laravelapp
+  redis:
+    image: redis:latest
+    container_name: e_comm_redis
+    restart: unless-stopped
+    networks:
+      - laravelapp
+    ports:
+      - "6379:6379"
 networks:
   laravelapp:
     driver: bridge
