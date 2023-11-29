@@ -232,23 +232,23 @@ class Product extends Core
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getImageUrlAttribute(): string
+    public function getImageUrlAttribute(): ?string
     {
-        if (empty($this->photo)) {
-            // Local image stored in storage
-            return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        if (!empty($this->photo) && file_exists('storage/uploads/images/'.$this->photo)) {
+            return asset('storage/uploads/images//'.$this->photo);
         }
-        return asset('storage/uploads/images/'.$this->photo);
+        return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
+
 
     public function getImageThumbUrlAttribute(): ?string
     {
-        if (empty($this->photo)) {
-            return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        if (!empty($this->photo) && file_exists('storage/uploads/images/'.$this->photo)) {
+            return asset('storage/uploads/images/thumbnails/'.$this->photo);
         }
-        return asset('storage/uploads/images/thumbnails/'.$this->photo);
+        return 'https://via.placeholder.com/262x198.png/003311?text=et';
     }
 
     /**

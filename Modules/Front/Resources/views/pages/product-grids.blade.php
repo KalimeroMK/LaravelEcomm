@@ -87,7 +87,7 @@
                                 @foreach($products as $product)
                                     <div class="single-post first">
                                         <div class="image">
-                                            <img src="{{$product->imageUrl}}" alt="{{$product->imageUrl}}">
+                                            <img src="{{$product->ImageThumbUrl}}" alt="{{$product->title}}">
                                         </div>
                                         <div class="content">
                                             <h5>
@@ -262,15 +262,11 @@
                                     <!-- Product Slider -->
                                     <div class="product-gallery">
                                         <div class="quickview-slider-active">
-                                            @php
-                                                $photo=explode(',',$product->photo);
-                                            // dd($photo);
-                                            @endphp
-                                            @foreach($photo as $data)
-                                                <div class="single-slider">
-                                                    <img src="{{$data}}" alt="{{$data}}">
-                                                </div>
-                                            @endforeach
+
+                                            <div class="single-slider">
+                                                <img class="default-img" src="{{$product->imageUrl}}"
+                                                     alt="{{$product->imageUrl}}">
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- End Product slider -->
@@ -323,7 +319,6 @@
                                                 <ul>
                                                     @php
                                                         $sizes=explode(',',$product->size);
-                                                        // dd($sizes);
                                                     @endphp
                                                     @foreach($sizes as $size)
                                                         <li><a href="#" class="one">{{$size}}</a></li>
@@ -421,37 +416,6 @@
 @endpush
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=1;
-            var pro_id=$(this).data('id');
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-                    else{
-                        swal('error',response.msg,'error').then(function(){
-							// document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-    </script> --}}
     <script>
         $(document).ready(function () {
             /*----------------------------------------------------*/

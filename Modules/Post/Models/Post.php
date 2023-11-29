@@ -78,13 +78,13 @@ use Modules\User\Models\User;
 class Post extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'posts';
-    
+
     protected $casts = [
         'added_by' => 'int',
     ];
-    
+
     protected $fillable = [
         'title',
         'slug',
@@ -95,7 +95,7 @@ class Post extends Core
         'author_info.name',
         'status',
     ];
-    
+
     public const likeRows = [
         'title',
         'slug',
@@ -106,7 +106,7 @@ class Post extends Core
         'added_by',
         'status',
     ];
-    
+
     /**
      * @return PostFactory
      */
@@ -114,7 +114,7 @@ class Post extends Core
     {
         return PostFactory::new();
     }
-    
+
     /**
      * @param $slug
      *
@@ -124,7 +124,7 @@ class Post extends Core
     {
         return Post::where('tags', $slug)->paginate(8);
     }
-    
+
     /**
      * @param $slug
      *
@@ -134,7 +134,7 @@ class Post extends Core
     {
         return Post::whereSlug($slug)->with('comments')->firstOrFail();
     }
-    
+
     /**
      * @return int
      */
@@ -144,10 +144,10 @@ class Post extends Core
         if ($data) {
             return $data;
         }
-        
+
         return 0;
     }
-    
+
     /**
      * @return BelongsToMany
      */
@@ -155,7 +155,7 @@ class Post extends Core
     {
         return $this->belongsToMany(Category::class);
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -163,7 +163,7 @@ class Post extends Core
     {
         return $this->belongsTo(User::class, 'added_by');
     }
-    
+
     /**
      * @return BelongsToMany
      */
@@ -171,7 +171,7 @@ class Post extends Core
     {
         return $this->BelongsToMany(Tag::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -179,7 +179,7 @@ class Post extends Core
     {
         return $this->hasMany(PostComment::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -187,7 +187,7 @@ class Post extends Core
     {
         return $this->hasMany(PostComment::class)->where('status', 'active');
     }
-    
+
     /**
      * @return HasMany
      */
@@ -195,7 +195,7 @@ class Post extends Core
     {
         return $this->hasMany(PostComment::class)->whereNull('parent_id')->orderBy('id', 'DESC');
     }
-    
+
     /**
      * @param $slug
      *
@@ -204,14 +204,14 @@ class Post extends Core
     public function incrementSlug($slug): mixed
     {
         $original = $slug;
-        $count    = 2;
+        $count = 2;
         while (static::whereSlug($slug)->exists()) {
             $slug = "{$original}-".$count++;
         }
-        
+
         return $slug;
     }
-    
+
     /**
      * @return HasOne
      */
@@ -219,17 +219,16 @@ class Post extends Core
     {
         return $this->hasOne(User::class, 'id', 'added_by');
     }
-    
+
     /**
      * @return string|null
      */
-    
+
     public function getImageUrlAttribute(): ?string
     {
-        if ( ! empty($this->photo)) {
-            return asset($this->photo);
+        if (!empty($this->photo) && file_exists('storage/uploads/images/'.$this->photo)) {
+            return asset('storage/uploads/images//'.$this->photo);
         }
-        
-        return asset('https://via.placeholder.com/640x480.png/003311?text=et');
+        return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 }
