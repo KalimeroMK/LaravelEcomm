@@ -12,8 +12,7 @@
                             referred to as factors) to verify your identity. Two factor authentication protects against
                             phishing, social engineering and password brute force attacks and secures your logins from
                             attackers exploiting weak or stolen credentials.</p>
-
-                        @if($data['user']->loginSecurity == null)
+                        @if($user->loginSecurity == null)
                             {{-- Generate 2FA Secret --}}
                             <form method="POST" action="{{ route('generate2faSecret') }}">
                                 {{ csrf_field() }}
@@ -23,11 +22,11 @@
                                     </button>
                                 </div>
                             </form>
-                        @elseif($data['user']->loginSecurity->google2fa_enable == 0)
+                        @elseif($user->loginSecurity->google2fa_enable == 0)
                             {{-- Enable 2FA --}}
                             <p>1. Scan this QR code with your Google Authenticator App. Alternatively, you can use the
-                                code: <code>{{ $data['secret'] }}</code></p>
-                            <img src="{{$data['google2fa_url'] }}" alt="QR Code">
+                                code: <code>{{ $secret_key }}</code></p>
+                            <img src="{{ $google2fa_url }}" alt="QR Code">
 
                             <p>2. Enter the pin from Google Authenticator app:</p>
                             <form method="POST" action="{{ route('enable2fa') }}">
@@ -46,7 +45,7 @@
                                     Enable 2FA
                                 </button>
                             </form>
-                        @elseif($data['user']->loginSecurity->google2fa_enable == 1)
+                        @elseif($user->loginSecurity->google2fa_enable == 1)
                             {{-- 2FA is enabled --}}
                             <div class="alert alert-success">
                                 2FA is currently <strong>enabled</strong> on your account.

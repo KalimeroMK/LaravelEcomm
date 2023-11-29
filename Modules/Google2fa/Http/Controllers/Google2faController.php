@@ -7,13 +7,11 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 use Modules\Google2fa\Models\Google2fa;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
@@ -27,19 +25,16 @@ class Google2faController extends Controller
 
     /**
      * Show 2FA Setting form
-     * @return Application|Factory|View
      * @throws MissingQrCodeServiceException
      */
     public function show2faForm()
     {
         $user = Auth::user();
-        $google2fa_url = "";
-        $secret_key = "";
 
         if ($user->loginSecurity()->exists()) {
             $google2fa = (new PragmaRXGoogle2FA());
             $google2fa_url = $google2fa->getQRCodeUrl(
-                'KalimeroCMS',
+                'Kalimero-Ecomm',
                 $user->email,
                 $user->loginSecurity->google2fa_secret
             );
@@ -52,14 +47,9 @@ class Google2faController extends Controller
             $qrImage = $writer->writeString($google2fa_url);
             $google2fa_url = 'data:image/svg+xml;base64,'.base64_encode($qrImage);
             $secret_key = $user->loginSecurity->google2fa_secret;
+            return view('google2fa::2fa_settings', compact($user, $secret_key, $google2fa_url));
         }
-        $data = [
-            'user' => $user,
-            'secret' => $secret_key,
-            'google2fa_url' => $google2fa_url
-        ];
-
-        return view('google2fa::2fa_settings')->with('data', $data);
+        return redirect()->route('user-profile')->with('error', "Pls enable 2FA");
     }
 
     /**

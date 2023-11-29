@@ -5,7 +5,6 @@
   "Cart": true,
   "Category": true,
   "Coupon": true,
-  "LoginSecurity": true,
   "Role": true,
   "Order": true,
   "Post": true,

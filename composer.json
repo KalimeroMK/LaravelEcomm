@@ -33,6 +33,8 @@
     "nwidart/laravel-modules": "*",
     "omnipay/paypal": "*",
     "pragmarx/google2fa": "*",
+    "pragmarx/google2fa-laravel": "^2.1",
+    "pragmarx/google2fa-qrcode": "^3.0",
     "predis/predis": "^2.2",
     "psr/simple-cache": "*",
     "pusher/pusher-php-server": "*",
@@ -44,9 +46,7 @@
     "spatie/laravel-robots-middleware": "*",
     "spatie/laravel-sitemap": "*",
     "spatie/schema-org": "*",
-    "stripe/stripe-php": "*",
-    "pragmarx/google2fa-laravel": "^2.1",
-    "pragmarx/google2fa-qrcode": "^3.0"
+    "stripe/stripe-php": "*"
   },
   "require-dev": {
     "fakerphp/faker": "^1.9.1",
