@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Post\Http\Controllers\PostCommentController;
 use Modules\Post\Http\Controllers\PostController;
 
-Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
+Route::prefix('admin')->middleware(['auth',])->group(function () {
     Route::resource('/posts', PostController::class)->except('show');
     /*Excel import export*/
     Route::get('posts/export', [PostController::class, 'export'])->name('posts.export');

@@ -29,11 +29,9 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Spatie\CookieConsent\CookieConsentMiddleware;
-use Spatie\Permission\Middlewares\PermissionMiddleware;
-use Spatie\Permission\Middlewares\RoleMiddleware;
-use Spatie\Permission\Middlewares\RoleOrPermissionMiddleware;
-use Spatie\ResponseCache\Middlewares\CacheResponse;
-use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -69,9 +67,7 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
-            SubstituteBindings::class,
-            CacheResponse::class,
-
+            SubstituteBindings::class
         ],
 
         'api' => [
@@ -89,22 +85,21 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'               => Authenticate::class,
-        'auth.basic'         => AuthenticateWithBasicAuth::class,
-        'bindings'           => SubstituteBindings::class,
-        'cache.headers'      => SetCacheHeaders::class,
-        'can'                => Authorize::class,
-        'guest'              => RedirectIfAuthenticated::class,
-        'password.confirm'   => RequirePassword::class,
-        'signed'             => ValidateSignature::class,
-        'throttle'           => ThrottleRequests::class,
-        'verified'           => EnsureEmailIsVerified::class,
-        'role'               => RoleMiddleware::class,
-        'permission'         => PermissionMiddleware::class,
+        'auth' => Authenticate::class,
+        'auth.basic' => AuthenticateWithBasicAuth::class,
+        'bindings' => SubstituteBindings::class,
+        'cache.headers' => SetCacheHeaders::class,
+        'can' => Authorize::class,
+        'guest' => RedirectIfAuthenticated::class,
+        'password.confirm' => RequirePassword::class,
+        'signed' => ValidateSignature::class,
+        'throttle' => ThrottleRequests::class,
+        'verified' => EnsureEmailIsVerified::class,
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
         'role_or_permission' => RoleOrPermissionMiddleware::class,
-        '2fa'                => LoginSecurityMiddleware::class,
-        'login'              => AuthMiddleware::class,
-        'doNotCacheResponse' => DoNotCacheResponse::class,
+        '2fa' => LoginSecurityMiddleware::class,
+        'login' => AuthMiddleware::class,
 
     ];
 }

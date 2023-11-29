@@ -2,7 +2,10 @@
 
 namespace Modules\Post\Repository;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 use Modules\Post\Models\Post;
@@ -17,45 +20,49 @@ class PostRepository extends Repository implements SearchInterface
      *
      * @return mixed
      */
-    public function search(array $data): mixed
+    public function search(array $data): LengthAwarePaginator
+    {
+        $query = $this->buildQuery($data);
+
+        if (Arr::get($data, 'all_included', false)) {
+            return $this->eagerLoadRelations($query)->get();
+        }
+
+        return $this->applySortingAndPaginate($query, $data);
+    }
+
+    private function buildQuery(array $data): Builder
     {
         $query = $this->model::query();
 
-        $searchable = [
-            'title',
-            'quote',
-            'summary',
-            'description',
-            'status'
-        ];
-
-        foreach ($searchable as $key) {
-            if (Arr::has($data, $key)) {
-                $query->where($key, 'like', '%'.Arr::get($data, $key).'%');
+        foreach ($this->searchableFields() as $key) {
+            if (!empty($data[$key])) {
+                $query->where($key, 'like', '%'.$data[$key].'%');
             }
         }
 
-        if (Arr::get($data, 'all_included', false)) {
-            return $query->with([
-                'categories',
-                'comments',
-                'post_comments',
-                'post_tag',
-                'author_info'
-            ])->get();
-        }
+        return $query;
+    }
 
-        $orderBy = Arr::get($data, 'order_by', 'id');
-        $sort = Arr::get($data, 'sort', 'desc');
+    private function searchableFields(): array
+    {
+        return ['title', 'quote', 'summary', 'description', 'status'];
+    }
+
+    private function eagerLoadRelations(Builder $query): Builder
+    {
+        return $query->with(['categories', 'comments', 'post_comments', 'post_tag', 'author_info']);
+    }
+
+    private function applySortingAndPaginate(
+        Builder $query,
+        array $data
+    ): LengthAwarePaginator {
+        $orderBy = Arr::get($data, 'order_by', $this->model::DEFAULT_ORDER_BY);
+        $sort = Arr::get($data, 'sort', $this->model::DEFAULT_SORT);
         $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
 
-        return $query->with([
-            'categories',
-            'comments',
-            'post_comments',
-            'post_tag',
-            'author_info'
-        ])->orderBy($orderBy, $sort)->paginate($perPage);
+        return $this->eagerLoadRelations($query)->orderBy($orderBy, $sort)->paginate($perPage);
     }
 
 
@@ -65,6 +72,14 @@ class PostRepository extends Repository implements SearchInterface
             ->orderBy('id', 'desc')
             ->limit(self::LATEST_POSTS_LIMIT)
             ->get();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function findAll(): Collection
+    {
+        return $this->eagerLoadRelations($this->model::query())->get();
     }
 
 }

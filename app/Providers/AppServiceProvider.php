@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Schema;
 
@@ -16,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
-    
+
     /**
      * Bootstrap any application services.
      *
@@ -24,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Model::preventLazyLoading(!$this->app->isProduction());
+
         Schema::defaultStringLength(191);
     }
 }

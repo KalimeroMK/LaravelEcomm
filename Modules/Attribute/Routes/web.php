@@ -13,6 +13,6 @@
 
 use Modules\Attribute\Http\Controllers\AttributeController;
 
-Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
+Route::prefix('admin')->middleware(['auth',])->group(function () {
     Route::resource('/attributes', AttributeController::class)->except('shows');
 });

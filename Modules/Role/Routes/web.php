@@ -14,6 +14,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Role\Http\Controllers\RoleController;
 
-Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
+Route::prefix('admin')->middleware(['auth',])->group(function () {
     Route::resource('role', RoleController::class);
 });

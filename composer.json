@@ -42,7 +42,6 @@
     "spatie/laravel-feed": "*",
     "spatie/laravel-honeypot": "*",
     "spatie/laravel-permission": "*",
-    "spatie/laravel-responsecache": "*",
     "spatie/laravel-robots-middleware": "*",
     "spatie/laravel-sitemap": "*",
     "spatie/schema-org": "*",

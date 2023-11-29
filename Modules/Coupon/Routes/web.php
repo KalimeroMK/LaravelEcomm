@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Coupon\Http\Controllers\CouponController;
 use Modules\Front\Http\Controllers\Api\FrontController;
 
-Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
+Route::prefix('admin')->middleware(['auth',])->group(function () {
     Route::resource('coupons', CouponController::class)->except('show');
 });
 Route::post('/coupon-store', [FrontController::class, 'couponStore'])->name('coupon-store');

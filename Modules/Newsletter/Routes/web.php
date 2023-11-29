@@ -13,6 +13,6 @@
 
 use Modules\Newsletter\Http\Controllers\NewsletterController;
 
-Route::prefix('admin')->middleware(['auth', 'doNotCacheResponse'])->group(function () {
+Route::prefix('admin')->middleware(['auth',])->group(function () {
     Route::resource('newsletters', NewsletterController::class)->except('show');
 });

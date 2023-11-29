@@ -42,7 +42,7 @@ class OrderRepository extends Repository implements SearchInterface
 
         foreach ($searchableFields as $field) {
             if (Arr::has($data, $field)) {
-                $query->where($field, 'like', '%' . Arr::get($data, $field) . '%');
+                $query->where($field, 'like', '%'.Arr::get($data, $field).'%');
             }
         }
 
@@ -60,6 +60,14 @@ class OrderRepository extends Repository implements SearchInterface
         }
 
         return $query;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function findAll(): mixed
+    {
+        return $this->model::with('user', 'carts', 'shipping')->get();
     }
 
 }

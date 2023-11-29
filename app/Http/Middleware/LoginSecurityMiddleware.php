@@ -1,12 +1,12 @@
 <?php
 
-  namespace App\Http\Middleware;
+namespace App\Http\Middleware;
 
-  use Closure;
-  use Illuminate\Http\Request;
-  use Modules\LoginSecurity\Support\Google2FAAuthenticator;
+use Closure;
+use Illuminate\Http\Request;
+use Modules\Google2fa\Support\Google2FAAuthenticator;
 
-  class LoginSecurityMiddleware
+class LoginSecurityMiddleware
 {
     /**
      * Handle an incoming request.
@@ -25,4 +25,4 @@
 
         return $authenticator->makeRequestOneTimePasswordResponse();
     }
-  }
+}
