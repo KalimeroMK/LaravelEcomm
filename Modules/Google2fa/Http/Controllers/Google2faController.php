@@ -64,7 +64,7 @@ class Google2faController extends Controller
 
     /**
      * Generate 2FA secret key
-     * @return Application|RedirectResponse|Redirector
+     * @return RedirectResponse
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
@@ -81,14 +81,13 @@ class Google2faController extends Controller
         $login_security->google2fa_enable = 0;
         $login_security->google2fa_secret = $google2fa->generateSecretKey();
         $login_security->save();
-
-        return redirect('/2fa')->with('success', "Secret key is generated.");
+        return redirect()->route('2fa')->with('success', "Secret key is generated.");
     }
 
     /**
      * Enable 2FA
      * @param  Request  $request
-     * @return Application|RedirectResponse|Redirector
+     * @return RedirectResponse
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
@@ -100,19 +99,18 @@ class Google2faController extends Controller
 
         $secret = $request->input('secret');
         $valid = $google2fa->verifyKey($user->loginSecurity->google2fa_secret, $secret);
-
         if ($valid) {
             $user->loginSecurity->google2fa_enable = 1;
             $user->loginSecurity->save();
-            return redirect('2fa')->with('success', "2FA is enabled successfully.");
+            return redirect()->route('2fa')->with('success', "2FA is enabled successfully.");
         } else {
-            return redirect('2fa')->with('error', "Invalid verification Code, Please try again.");
+            return redirect()->route('2fa')->with('error', "Invalid verification Code, Please try again.");
         }
     }
 
     /**
      * Disable 2FA
-     * @return Application|RedirectResponse|Redirector
+     * @return RedirectResponse
      */
     public function disable2fa()
     {

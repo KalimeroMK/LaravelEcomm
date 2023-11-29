@@ -45,8 +45,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware('web')
-            ->namespace($this->moduleNamespace)
+        Route::middleware(['web', 'auth'])
+            ->prefix('admin')
             ->group(module_path('Google2fa', '/Routes/web.php'));
     }
 }
