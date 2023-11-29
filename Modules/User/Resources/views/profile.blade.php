@@ -79,8 +79,16 @@
 
                             @enderror
                         </div>
-                        <button class="btn btn-success btn-sm"><a href="{{ route('show2faForm') }}"></a>Enable 2FA
-                        </button>
+                        <div class="col-md-12 mt-3">
+                            @if(auth()->user()->loginSecurity && auth()->user()->loginSecurity->google2fa_enable)
+                                <a class="btn btn-warning"
+                                   href="{{ route('disable2fa') }}">@lang('translation.users.2fa_disable')
+                                </a>
+                            @else
+                                <a class="btn btn-secondary"
+                                   href="{{ route('2fa') }}">@lang('translation.users.2fa_enable')</a>
+                            @endif
+                        </div>
                         <button type="submit" class="btn btn-success btn-sm float-right">Update</button>
                     </form>
 

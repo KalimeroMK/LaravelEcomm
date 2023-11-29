@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -20,6 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
+use Modules\Google2fa\Models\Google2fa;
 use Modules\Order\Models\Order;
 use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
@@ -92,18 +94,18 @@ class User extends Authenticatable
     use HasPermissions;
     use Notifiable;
     use HasApiTokens;
-    
+
     protected $table = 'users';
-    
+
     protected $dates = [
         'email_verified_at',
     ];
-    
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
-    
+
     protected $fillable = [
         'name',
         'email',
@@ -115,7 +117,7 @@ class User extends Authenticatable
         'status',
         'remember_token',
     ];
-    
+
     /**
      * @return UserFactory
      */
@@ -123,7 +125,7 @@ class User extends Authenticatable
     {
         return UserFactory::new();
     }
-    
+
     /**
      * @return HasMany
      */
@@ -131,7 +133,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Cart::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -139,7 +141,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -147,7 +149,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(PostComment::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -155,7 +157,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class, 'added_by');
     }
-    
+
     /**
      * @return HasMany
      */
@@ -163,7 +165,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProductReview::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -171,6 +173,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Wishlist::class);
     }
+
     /**
      * Determine if the user is a super-admin.
      *
@@ -179,5 +182,10 @@ class User extends Authenticatable
     public function isSuperAdmin(): bool
     {
         return $this->hasRole('super-admin');
+    }
+
+    public function loginSecurity(): HasOne
+    {
+        return $this->hasOne(Google2fa::class);
     }
 }

@@ -119,7 +119,7 @@ class UserController extends Controller
      */
     public function profile()
     {
-        return view('user::user.users.profile', ['profile' => Auth()->user()]);
+        return view('user::profile', ['profile' => Auth()->user()]);
     }
 
     /**
@@ -143,4 +143,16 @@ class UserController extends Controller
 
         return redirect()->route('admin');
     }
+
+    public function profileUpdate(Request $request, User $user)
+    {
+        $status = $user->fill($request->all())->save();
+        if ($status) {
+            request()->session()->flash('success', 'Successfully updated your profile');
+        } else {
+            request()->session()->flash('error', 'Please try again!');
+        }
+        return redirect()->back();
+    }
+
 }

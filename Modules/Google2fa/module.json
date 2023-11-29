@@ -1,0 +1,11 @@
+{
+  "name": "Google2fa",
+  "alias": "google2fa",
+  "description": "",
+  "keywords": [],
+  "priority": 0,
+  "providers": [
+    "Modules\\Google2fa\\Providers\\Google2faServiceProvider"
+  ],
+  "files": []
+}
