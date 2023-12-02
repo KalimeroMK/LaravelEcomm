@@ -1,6 +1,6 @@
 @extends('front::layouts.master')
 
-@section('meta')
+@section('SOE')
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name='copyright' content=''>

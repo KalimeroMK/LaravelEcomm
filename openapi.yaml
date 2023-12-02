@@ -1,0 +1,1547 @@
+"openapi": "3.0.0"
+"info":
+  "title": "Ecomm"
+  "version": "1.0.0"
+"servers":
+  - "url": "http://{{base_url}}"
+"components":
+  "securitySchemes":
+    "bearerAuth":
+      "type": "http"
+      "scheme": "bearer"
+"tags":
+  - "name": "Auth"
+  - "name": "Banner"
+  - "name": "Brand"
+  - "name": "Category"
+  - "name": "Coupon"
+  - "name": "Cart"
+  - "name": "Front"
+  - "name": "Message"
+  - "name": "Newsletter"
+  - "name": "Order"
+  - "name": "Post"
+  - "name": "Product"
+  - "name": "Shipping"
+  - "name": "Size"
+  - "name": "Tag"
+  - "name": "Billing"
+  - "name": "Wishlist"
+  - "name": "Attribute"
+"paths":
+  "/login":
+    "post":
+      "tags":
+        - "Auth"
+      "summary": "Login"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "email":
+                  "type": "string"
+                  "example": "superadmin@mail.com"
+                "password":
+                  "type": "string"
+                  "example": "password"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/register":
+    "post":
+      "tags":
+        - "Auth"
+      "summary": "Register"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "example": "Zoran"
+                "email":
+                  "type": "string"
+                  "example": "zbogoevski@gmail.com1esj"
+                "password":
+                  "type": "string"
+                  "example": "password"
+                "confirm_password":
+                  "type": "string"
+                  "example": "password"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/banner":
+    "get":
+      "tags":
+        - "Banner"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "per_page"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "100"
+        - "name": "all_included"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "0"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Banner"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1"
+                "description":
+                  "type": "string"
+                  "example": "description text"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/banner/3":
+    "get":
+      "tags":
+        - "Banner"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Banner"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1"
+                "description":
+                  "type": "string"
+                  "example": "description text"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Size"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/brand":
+    "get":
+      "tags":
+        - "Brand"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "status"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+        - "name": "per_page"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "100"
+        - "name": "all_included"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "0"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Brand"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/brand/1":
+    "post":
+      "tags":
+        - "Brand"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/brand/3":
+    "get":
+      "tags":
+        - "Brand"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Brand"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/category":
+    "get":
+      "tags":
+        - "Category"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Category"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1k"
+                "parent_id":
+                  "type": "string"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/category/3":
+    "get":
+      "tags":
+        - "Category"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "patch":
+      "tags":
+        - "Category"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test12"
+                "parent_id":
+                  "type": "integer"
+                  "example": "1"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Category"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/coupon":
+    "get":
+      "tags":
+        - "Cart"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Coupon"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "code":
+                  "type": "string"
+                  "example": "test1k"
+                "type":
+                  "type": "string"
+                  "example": "percent"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "value":
+                  "type": "integer"
+                  "example": "100"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/coupon/3":
+    "get":
+      "tags":
+        - "Coupon"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "patch":
+      "tags":
+        - "Coupon"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "properties":
+                "code":
+                  "type": "string"
+                  "example": "sescription"
+                "type":
+                  "type": "integer"
+                  "example": "1"
+                "value":
+                  "type": "integer"
+                  "example": "101"
+                "status":
+                  "type": "string"
+                  "example": "active"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Cart"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/cart":
+    "post":
+      "tags":
+        - "Cart"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "slug":
+                  "type": "string"
+                  "example": "dolores"
+                "quantity":
+                  "type": "integer"
+                  "example": "3"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "get":
+      "tags":
+        - "Cart"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/cart/":
+    "post":
+      "tags":
+        - "Cart"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "properties":
+                "code":
+                  "type": "string"
+                  "example": "sescription"
+                "type":
+                  "type": "integer"
+                  "example": "1"
+                "value":
+                  "type": "integer"
+                  "example": "101"
+                "status":
+                  "type": "string"
+                  "example": "active"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "slug"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "dolores"
+        - "name": "quantity"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "4"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "Index"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/product/deal":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "product/deal"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/blog":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "blog"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/blog-detail/laboriosam":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "blog-detail/{slug}"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/product-detail/expedita":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "product-detail/{slug}"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/product-cat/sit":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "product-cat/{slug}"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/product-brand/prof":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "product-brand/{slug}"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/product/search":
+    "post":
+      "tags":
+        - "Front"
+      "summary": "product/search"
+      "requestBody":
+        "content": { }
+      "parameters":
+        - "name": "search"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "expedita"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/blog/search":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "blog/search"
+      "parameters":
+        - "name": "search"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "expedita"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/front/blog-cat/voluptatem":
+    "get":
+      "tags":
+        - "Front"
+      "summary": "blog/blog-cat/{slug}"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/message":
+    "get":
+      "tags":
+        - "Message"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/message/3":
+    "get":
+      "tags":
+        - "Message"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Message"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/newsletter":
+    "get":
+      "tags":
+        - "Newsletter"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Newsletter"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1"
+                "description":
+                  "type": "string"
+                  "example": "description text"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "email"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "test@email.com"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/newsletter/3":
+    "get":
+      "tags":
+        - "Newsletter"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Newsletter"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/order":
+    "get":
+      "tags":
+        - "Order"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "first_name"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "test1k"
+        - "name": "last_name"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "percent"
+        - "name": "address1"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+        - "name": "address2"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "100"
+        - "name": "coupon"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "dsasd"
+        - "name": "email"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "test@MAIL.COM"
+        - "name": "phone"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "3123213"
+        - "name": "post_code"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "321"
+        - "name": "per_page"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "100"
+        - "name": "all_included"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "0"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Order"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "first_name":
+                  "type": "string"
+                  "example": "test1k"
+                "last_name":
+                  "type": "string"
+                  "example": "percent"
+                "address1":
+                  "type": "string"
+                  "example": "active"
+                "address2":
+                  "type": "integer"
+                  "example": "100"
+                "coupon":
+                  "type": "string"
+                  "example": "dsasd"
+                "email":
+                  "type": "string"
+                  "example": "test@MAIL.COM"
+                "phone":
+                  "type": "integer"
+                  "example": "3123213"
+                "post_code":
+                  "type": "integer"
+                  "example": "321"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/order/3":
+    "get":
+      "tags":
+        - "Order"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "patch":
+      "tags":
+        - "Order"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "properties":
+                "first_name":
+                  "type": "string"
+                  "example": "test1k"
+                "last_name":
+                  "type": "string"
+                  "example": "percent"
+                "address1":
+                  "type": "string"
+                  "example": "active"
+                "address2":
+                  "type": "integer"
+                  "example": "100"
+                "coupon":
+                  "type": "string"
+                  "example": "dsasd"
+                "email":
+                  "type": "string"
+                  "example": "test@MAIL.COM"
+                "phone":
+                  "type": "integer"
+                  "example": "3123213"
+                "post_code":
+                  "type": "integer"
+                  "example": "321"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Order"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/post":
+    "get":
+      "tags":
+        - "Post"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "title"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "test1"
+        - "name": "description"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "description text"
+        - "name": "summary"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+        - "name": "quote"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "dsadsadasdsadsadsa"
+        - "name": "status"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+        - "name": "per_page"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "100"
+        - "name": "all_included"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "0"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Post"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1"
+                "description":
+                  "type": "string"
+                  "example": "description text"
+                "summary":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                "category[]":
+                  "type": "integer"
+                  "example": "3"
+                "quote":
+                  "type": "string"
+                  "example": "dsadsadasdsadsadsa"
+                "status":
+                  "type": "string"
+                  "example": "active"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/post/3":
+    "get":
+      "tags":
+        - "Post"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "patch":
+      "tags":
+        - "Post"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "sescriptione"
+                "description":
+                  "type": "string"
+                  "example": "dasdasdad"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                "summary":
+                  "type": "string"
+                  "example": "dsada"
+                "category[]":
+                  "type": "integer"
+                  "example": "2"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/posts/3":
+    "delete":
+      "tags":
+        - "Product"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/product":
+    "get":
+      "tags":
+        - "Product"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "status"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+        - "name": "per_page"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "100"
+        - "name": "all_included"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "0"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Product"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test11"
+                "summary":
+                  "type": "string"
+                  "example": "active"
+                "description":
+                  "type": "string"
+                  "example": "description text"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                "category[]":
+                  "type": "integer"
+                  "example": "3"
+                "quote":
+                  "type": "string"
+                  "example": "dsadsadasdsadsadsa"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "tag[]":
+                  "type": "integer"
+                  "example": "4"
+                "size[]":
+                  "type": "integer"
+                  "example": "4"
+                "price":
+                  "type": "integer"
+                  "example": "2213"
+                "color":
+                  "type": "string"
+                  "example": "red,blue"
+                "stock":
+                  "type": "integer"
+                  "example": "200"
+                "condition_id":
+                  "type": "integer"
+                  "example": "1"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/product/3":
+    "get":
+      "tags":
+        - "Product"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Product"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test11"
+                "summary":
+                  "type": "string"
+                  "example": "active"
+                "description":
+                  "type": "string"
+                  "example": "description text"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                "category[]":
+                  "type": "integer"
+                  "example": "3"
+                "quote":
+                  "type": "string"
+                  "example": "dsadsadasdsadsadsa"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "tag[]":
+                  "type": "integer"
+                  "example": "4"
+                "size[]":
+                  "type": "integer"
+                  "example": "4"
+                "price":
+                  "type": "integer"
+                  "example": "2213"
+                "color":
+                  "type": "string"
+                  "example": "red,blue"
+                "stock":
+                  "type": "integer"
+                  "example": "200"
+                "condition_id":
+                  "type": "integer"
+                  "example": "1"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/shipping":
+    "get":
+      "tags":
+        - "Shipping"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Shipping"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                  "example": "test1"
+                "description":
+                  "type": "string"
+                  "example": "description text"
+                "status":
+                  "type": "string"
+                  "example": "active"
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/shipping/3":
+    "get":
+      "tags":
+        - "Shipping"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "patch":
+      "tags":
+        - "Size"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "properties":
+                "type":
+                  "type": "string"
+                  "example": "test11111"
+                "price":
+                  "type": "integer"
+                  "example": "123"
+                "status":
+                  "type": "string"
+                  "example": "active"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "type"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "test1"
+        - "name": "price"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "123"
+        - "name": "status"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/size":
+    "get":
+      "tags":
+        - "Size"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Tag"
+      "summary": "Store"
+      "requestBody":
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "example": "test1"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "title"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "test"
+        - "name": "status"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/size/3":
+    "get":
+      "tags":
+        - "Size"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/tag":
+    "get":
+      "tags":
+        - "Tag"
+      "summary": "Index"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/tag/3":
+    "get":
+      "tags":
+        - "Tag"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "patch":
+      "tags":
+        - "Tag"
+      "summary": "Update"
+      "requestBody":
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "properties":
+                "type":
+                  "type": "string"
+                  "example": "test11111"
+                "price":
+                  "type": "integer"
+                  "example": "123"
+                "status":
+                  "type": "string"
+                  "example": "active"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "title"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "test1"
+        - "name": "status"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "active"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "delete":
+      "tags":
+        - "Tag"
+      "summary": "Destory"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/stripe":
+    "get":
+      "tags":
+        - "Billing"
+      "summary": "Stripe"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/payment":
+    "get":
+      "tags":
+        - "Billing"
+      "summary": "Paypal"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/wishlist":
+    "get":
+      "tags":
+        - "Wishlist"
+      "summary": "Get wishlist per user"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Wishlist"
+      "summary": "Destroy"
+      "requestBody":
+        "content": { }
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "slug"
+          "in": "query"
+          "schema":
+            "type": "string"
+          "example": "hic"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/attribute":
+    "get":
+      "tags":
+        - "Attribute"
+      "summary": "index"
+      "security":
+        - "bearerAuth": [ ]
+      "parameters":
+        - "name": "filterable"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "1"
+        - "name": "configurable"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "1"
+        - "name": "per_page"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "100"
+        - "name": "all_included"
+          "in": "query"
+          "schema":
+            "type": "integer"
+          "example": "0"
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+    "post":
+      "tags":
+        - "Attribute"
+      "summary": "Store"
+      "requestBody":
+        "content": { }
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }
+  "/attribute/1":
+    "get":
+      "tags":
+        - "Attribute"
+      "summary": "Show"
+      "security":
+        - "bearerAuth": [ ]
+      "responses":
+        "200":
+          "description": "Successful response"
+          "content":
+            "application/json": { }

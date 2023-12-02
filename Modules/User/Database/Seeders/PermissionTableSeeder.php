@@ -3,6 +3,7 @@
 namespace Modules\User\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Modules\User\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -82,6 +83,10 @@ class PermissionTableSeeder extends Seeder
         $this->createUserWithRole('Example Super-Admin User', 'superadmin@mail.com', 'super-admin');
     }
 
+    /**
+     * @param  string[]  $operations  Array of operation names
+     * @param  string[]  $resources  Array of resource names
+     */
     private function createRoleWithPermissions(string $roleName, array $resources, array $operations): void
     {
         $role = Role::create(['name' => $roleName]);
@@ -97,6 +102,7 @@ class PermissionTableSeeder extends Seeder
         $user = User::factory()->create([
             'name' => $name,
             'email' => $email,
+            'password' => Hash::make('password') // Replace with a secure default password or mechanism
         ]);
         $user->assignRole($roleName);
     }

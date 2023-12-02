@@ -129,7 +129,13 @@ class UserController extends Controller
      */
     public function impersonate(User $user)
     {
-        auth()->user()->impersonate($user);
+        $authUser = auth()->user();
+
+        if ($authUser === null) {
+            return redirect()->back()->withErrors('No authenticated user found.');
+        }
+
+        $authUser->impersonate($user);
 
         return redirect()->route('admin');
     }
@@ -139,11 +145,22 @@ class UserController extends Controller
      */
     public function leaveImpersonate()
     {
-        auth()->user()->leaveImpersonation();
+        $authUser = auth()->user();
+
+        if ($authUser === null) {
+            return redirect()->back()->withErrors('No authenticated user found.');
+        }
+
+        $authUser->leaveImpersonation();
 
         return redirect()->route('admin');
     }
 
+    /**
+     * @param  Request  $request
+     * @param  User  $user
+     * @return RedirectResponse
+     */
     public function profileUpdate(Request $request, User $user)
     {
         $status = $user->fill($request->all())->save();

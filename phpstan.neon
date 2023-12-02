@@ -1,0 +1,9 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+parameters:
+    paths:
+       - Modules/User
+    level: 9
+    ignoreErrors:
+       - '#Method \S+::rules\(\) return type has no value type specified in iterable type array#'
+    excludePaths:

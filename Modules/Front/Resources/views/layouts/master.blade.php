@@ -6,25 +6,27 @@
     @yield('SOE')
     @if (Request::path() == '/')
         <title></title>
+        <meta charset="utf-8">
+        <title>E-commerce Website - Buy and Sell Products Online</title>
         <meta name="robots" content="index, follow">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="profile" href="http://gmpg.org/xfn/11">
-        <link type="text/plain" rel="author" href="http://tge.mk/humans.txt"/>
-        <meta property="og:title" content="МПЦ - ОА Европска епархија"/>
-        <meta property="article:author" content="https://www.facebook.com/Sefot"/>
-        <meta property="og:site_name" content="МПЦ - ОА Европска епархија"/>
-        <meta property="fb:app_id" content="1192823797520220"/>
-        <meta name="google-site-verification" content="tk0mLfz9VdFAzjzllTBY5jIFtMhVFoJM2HxUkLMidEM"/>
-        <meta property="og:type" content="article"/>
-        <meta property="og:image" content="http://tge.mk/assets/img/logo/logo.jpg"/>
+        <link type="text/plain" rel="author" href="http://yourwebsite.com/humans.txt"/>
+        <meta property="og:title" content="E-commerce Website - Buy and Sell Products Online"/>
+        <meta property="article:author" content="https://www.facebook.com/YourEcommercePage"/>
+        <meta property="og:site_name" content="E-commerce Website"/>
+        <meta property="fb:app_id" content="YourFacebookAppID"/>
+        <meta name="google-site-verification" content="YourGoogleVerificationCode"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" content="http://yourwebsite.com/assets/img/logo/logo.jpg"/>
         <meta property="article:tag"
-              content="pravoslavna, crkva, православие, pravoslavie, црква, Бог, религија, bog, religija, manastir, gospodi, isus hristos, bogorodica"/>
+              content="e-commerce, online shopping, products, buy and sell, shopping website, online marketplace"/>
         <meta property="og:description"
-              content="Официјален веб портал на  Македонска правлславна црква Европска епархија">
+              content="Shop for a wide range of products on our e-commerce website. Explore our selection of high-quality items and enjoy secure online shopping."/>
         <meta name="description"
-              content="Официјален веб портал на  Македонска правлславна црква Европска епархија"/>
+              content="Shop for a wide range of products on our e-commerce website. Explore our selection of high-quality items and enjoy secure online shopping."/>
         <meta name="keywords"
-              content="pravoslavna, crkva, православие, pravoslavie, црква, Бог, религија, bog, religija, manastir, gospodi, isus hristos, bogorodica, виена, австрија, епархија, македонска, охридска, архиепископија"/>
+              content="e-commerce, online shopping, products, buy and sell, shopping website, online marketplace, deals, discounts"/>
         <meta name="author" content="Zoran Shefot Bogoevski">
     @endif
     <!-- Mobile Meta -->
@@ -47,9 +49,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-
-    <!-- Mobile Meta -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/img/favicon.ico">
