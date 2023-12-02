@@ -12,12 +12,15 @@ class UserObserver
         if ($user->email != 'superadmin@mail.com') {
             $user->assignRole('client');
         }
-        $user->password = Hash::make($user->password);
+
+        if (!is_null($user->password)) {
+            $user->password = Hash::make($user->password);
+        }
     }
 
     public function updating(User $user): void
     {
-        if ($user->isDirty('password')) {
+        if ($user->isDirty('password') && !is_null($user->password)) {
             $user->password = Hash::make($user->password);
         }
     }

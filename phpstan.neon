@@ -1,9 +1,23 @@
 includes:
     - ./vendor/nunomaduro/larastan/extension.neon
+
 parameters:
+    # Specify the paths to be analyzed
     paths:
        - Modules/User
+
+    # Set the analysis level
     level: 9
-    ignoreErrors:
-       - '#Method \S+::rules\(\) return type has no value type specified in iterable type array#'
+
+    # Parameters to configure PHPStan's behavior
+    checkGenericClassInNonGenericObjectType: false
+
+    # Exclude certain paths from analysis
     excludePaths:
+        # Specify paths or patterns to exclude
+        # - pattern or specific path
+
+    # Ignore specific errors
+    ignoreErrors:
+        - '#Method \S+::rules\(\) return type has no value type specified in iterable type array#'
+        # Add other patterns or error messages to ignore

@@ -99,8 +99,11 @@ class User extends Authenticatable
     use Impersonate;
 
     protected $table = 'users';
-
-    protected $dates = [
+    
+    /**
+     * @var string[]
+     */
+    protected array $dates = [
         'email_verified_at',
     ];
 
@@ -187,6 +190,9 @@ class User extends Authenticatable
         return $this->hasRole('super-admin');
     }
 
+    /**
+     * @return HasOne
+     */
     public function loginSecurity(): HasOne
     {
         return $this->hasOne(Google2fa::class);
