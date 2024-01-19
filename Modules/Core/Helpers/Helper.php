@@ -15,10 +15,10 @@ use ReflectionException;
 
 class Helper
 {
-    private static function getUserId(string $user_id = ''): string|int
+    private static function getUserId(int|string $user_id = ''): string|int
     {
         if (Auth::check()) {
-            return $user_id ? $user_id : Auth::id();
+            return $user_id ?: Auth::id();
         }
 
         return 0;

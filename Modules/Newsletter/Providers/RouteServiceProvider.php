@@ -13,7 +13,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected string $moduleNamespace = 'Modules\Newsletter\Http\Controllers';
-    
+
     /**
      * Called before routes are registered.
      *
@@ -25,7 +25,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
     }
-    
+
     /**
      * Define the routes for the application.
      *
@@ -34,10 +34,10 @@ class RouteServiceProvider extends ServiceProvider
     public function map(): void
     {
         $this->mapApiRoutes();
-        
+
         $this->mapWebRoutes();
     }
-    
+
     /**
      * Define the "web" routes for the application.
      *
@@ -47,11 +47,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware('web')
-             ->namespace($this->moduleNamespace)
-             ->group(module_path('Newsletter', '/Routes/web.php'));
+        Route::middleware(['web', 'activity'])
+            ->namespace($this->moduleNamespace)
+            ->group(module_path('Newsletter', '/Routes/web.php'));
     }
-    
+
     /**
      * Define the "api" routes for the application.
      *
@@ -62,8 +62,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::prefix('api/v1')
-             ->middleware('auth:sanctum')
-             ->namespace($this->moduleNamespace)
-             ->group(module_path('Newsletter', '/Routes/api.php'));
+            ->middleware('auth:sanctum')
+            ->namespace($this->moduleNamespace)
+            ->group(module_path('Newsletter', '/Routes/api.php'));
     }
 }

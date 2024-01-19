@@ -61,7 +61,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware(['web',])
+        Route::middleware(['web', 'activity'])
             ->group(module_path('Billing', '/Routes/web.php'));
     }
 }

@@ -13,7 +13,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected string $moduleNamespace = 'Modules\Admin\Http\Controllers';
-    
+
     /**
      * Called before routes are registered.
      *
@@ -25,7 +25,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
     }
-    
+
     /**
      * Define the routes for the application.
      *
@@ -34,10 +34,10 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-        
+
         $this->mapWebRoutes();
     }
-    
+
     /**
      * Define the "api" routes for the application.
      *
@@ -48,10 +48,10 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
-             ->group(module_path('Admin', '/Routes/api.php'));
+            ->middleware('api')
+            ->group(module_path('Admin', '/Routes/api.php'));
     }
-    
+
     /**
      * Define the "web" routes for the application.
      *
@@ -61,7 +61,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware('web')
-             ->group(module_path('Admin', '/Routes/web.php'));
+        Route::middleware(['web', 'activity'])
+            ->group(module_path('Admin', '/Routes/web.php'));
     }
 }

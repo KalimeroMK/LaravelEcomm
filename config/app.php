@@ -186,17 +186,14 @@ return [
         /*
          * Package Service Providers...
          */
-        Intervention\Image\ImageServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Spatie\Feed\FeedServiceProvider::class,
-        jeremykenedy\LaravelLogger\LaravelLoggerServiceProvider::class,
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
-        FilterableServiceProvider::class,
         FilterableServiceProvider::class,
 
         /*
