@@ -16,7 +16,7 @@
     "darkaonline/l5-swagger": "^8.5",
     "garygreen/pretty-routes": "*",
     "guzzlehttp/guzzle": "^7.2",
-    "intervention/image": "*",
+    "intervention/image": "^2.7",
     "jeremykenedy/laravel-blocker": "*",
     "jeremykenedy/laravel-logger": "^8.1",
     "kalimeromk/filterable": "^1.5",

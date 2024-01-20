@@ -32,14 +32,15 @@
                                value="{{ $product->price ?? '' }}" class="form-control">
                         <label for="price" class="col-form-label">Special price<span
                                     class="text-danger">*</span></label>
-                        <input id="price" type="number" name="special_price" placeholder="Enter price"
+                        <input id="price" type="number" name="special_price" placeholder="Enter special price"
                                value="{{ $product->special_price ?? '' }}" class="form-control">
-                        <label for="price" class="col-form-label">Special price start <span class="text-danger">*</span></label>
-                        <input id="price" type="date" name="special_price_start" placeholder="Enter price"
-                               value="{{ $product->special_price_start ?? '' }}" class="form-control">
-                        <label for="price" class="col-form-label">Special price start <span
+                        <label for="price" class="col-form-label">Special price start date<span
                                     class="text-danger">*</span></label>
-                        <input id="price" type="date" name="special_price_start" placeholder="Enter price"
+                        <input id="price" type="date" name="special_price_start"
+                               value="{{ $product->special_price_start ?? '' }}" class="form-control">
+                        <label for="price" class="col-form-label">Special price start date<span
+                                    class="text-danger">*</span></label>
+                        <input id="price" type="date" name="special_price_start"
                                value="{{ $product->special_price_start ?? '' }}" class="form-control">
                     </div>
                 </div>

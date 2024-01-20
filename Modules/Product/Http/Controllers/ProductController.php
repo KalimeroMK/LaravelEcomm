@@ -4,11 +4,11 @@ namespace Modules\Product\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Exporter;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Product\Http\Requests\Api\Search;
+use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Import\Products;
 use Modules\Product\Import\Products as ProductImport;
@@ -39,7 +39,10 @@ class ProductController extends CoreController
         return view('product::create')->with($this->product_service->create());
     }
 
-    public function store(Request $request): RedirectResponse
+    /**
+     * @throws \Exception
+     */
+    public function store(Store $request): RedirectResponse
     {
         $this->product_service->store($request->all());
         return redirect()->route('products.index');
