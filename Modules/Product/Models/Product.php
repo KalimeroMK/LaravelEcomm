@@ -11,6 +11,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,8 +41,11 @@ use Modules\Tag\Models\Tag;
  * @property string $condition
  * @property string $status
  * @property float $price
+ * @property float $special_price
  * @property float $discount
  * @property bool $is_featured
+ * @property Carbon|null $special_price_start
+ * @property Carbon|null $special_price_end
  * @property int|null $brand_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -92,6 +96,9 @@ class Product extends Core
         'discount' => 'float',
         'is_featured' => 'bool',
         'brand_id' => 'int',
+        'special_price_start' => 'date',
+        'special_price_end' => 'date',
+        'special_price' => 'float'
     ];
 
     protected $fillable = [
@@ -108,6 +115,9 @@ class Product extends Core
         'is_featured',
         'brand_id',
         'color',
+        'special_price',
+        'special_price_start',
+        'special_price_end'
     ];
 
     public const likeRows = [
@@ -242,7 +252,9 @@ class Product extends Core
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
-
+    /**
+     * @return string|null
+     */
     public function getImageThumbUrlAttribute(): ?string
     {
         if (!empty($this->photo) && file_exists('storage/uploads/images/'.$this->photo)) {
@@ -275,8 +287,25 @@ class Product extends Core
         return $this->belongsToMany(Tag::class);
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function attributeValues(): BelongsToMany
     {
         return $this->belongsToMany(AttributeValue::class, 'product_attribute_value');
+    }
+
+    /**
+     * @return HigherOrderBuilderProxy|mixed|null
+     */
+    public function getCurrentPrice(): mixed
+    {
+        $today = now();
+
+        if ($this->special_price && $today->between($this->special_price_start, $this->special_price_end)) {
+            return $this->special_price;
+        }
+
+        return null;
     }
 }
