@@ -2,6 +2,7 @@
 
 namespace Modules\Core\Traits;
 
+use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -24,7 +25,6 @@ trait ImageUpload
         $find_image = $paths->original.$imageName;
         $this->resizeImage($find_image, 200, $paths->thumbnail.$imageName);
         $this->resizeImage($find_image, 600, $paths->medium.$imageName);
-
         return $imageName;
     }
 
@@ -45,16 +45,23 @@ trait ImageUpload
         $image->move($directory, $imageName);
     }
 
+    /**
+     * @throws Exception
+     */
     public function resizeImage($find_image, $size, $destination): void
     {
-        $resized_image = Image::make($find_image)->resize(
-            $size,
-            null,
-            function ($constraint) {
+        error_log("Starting resizeImage function");
+        try {
+            error_log("Creating image from: ".$find_image);
+            $resized_image = Image::make($find_image)->resize($size, null, function ($constraint) {
                 $constraint->aspectRatio();
-            }
-        );
-
-        $resized_image->save($destination);
+                error_log("Resizing image");
+            });
+            error_log("Saving image to: ".$destination);
+            $resized_image->save($destination);
+        } catch (Exception $e) {
+            error_log('Intervention Image Error: '.$e->getMessage());
+            throw $e;
+        }
     }
 }

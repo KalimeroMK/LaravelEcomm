@@ -42,6 +42,20 @@
                                     class="text-danger">*</span></label>
                         <input id="price" type="date" name="special_price_start"
                                value="{{ $product->special_price_start ?? '' }}" class="form-control">
+                        <label for="price" class="col-form-label">Stock count<span
+                                    class="text-danger">*</span></label>
+                        <input id="price" type="number" name="stock" placeholder="Enter stock value"
+                               value="{{ $product->stock ?? '' }}" class="form-control">
+                        <label for="cat_id">Status <span class="text-danger">*</span></label>
+                        <select name="status" class="form-control" required>
+                            <option value="">--Select status--</option>
+                            <option value="active" {{ (isset($product->status) && $product->status == 'active') ? 'selected' : '' }}>
+                                Active
+                            </option>
+                            <option value="inactive" {{ (isset($product->status) && $product->status == 'inactive') ? 'selected' : '' }}>
+                                Inactive
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">

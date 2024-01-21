@@ -55,7 +55,7 @@ class ProductController extends CoreController
 
     public function update(Update $request, Product $product): RedirectResponse
     {
-        $this->product_service->update($product->id, $request->validated());
+        $this->product_service->update($product->id, $request->all());
         return redirect()->route('products.index');
     }
 

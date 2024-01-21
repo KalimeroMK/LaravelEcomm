@@ -24,9 +24,9 @@ class AttributeValue extends Core
         'decimal_value',
         'attribute_id',
     ];
-    
+
     protected $appends = ['value'];
-    
+
     /**
      * @return AttributeValueFactory
      */
@@ -34,7 +34,7 @@ class AttributeValue extends Core
     {
         return AttributeValueFactory::new();
     }
-    
+
     public function attribute(): BelongsTo
     {
         return $this->belongsTo(Attribute::class);
@@ -42,6 +42,10 @@ class AttributeValue extends Core
 
     public function getValueAttribute()
     {
+        if (!$this->relationLoaded('attribute')) {
+            $this->load('attribute');
+        }
+
         $type = $this->attribute->type;
         return match ($type) {
             Attribute::TYPE_URL => $this->url_value,

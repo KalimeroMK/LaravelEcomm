@@ -9,26 +9,26 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'title'        => 'string|required',
-            'summary'      => 'string|required',
-            'description'  => 'string|nullable',
-            'photo'        => 'string|nullable',
-            'size'         => 'sometimes|array',
-            'size.*'       => 'required|exists:sizes,id',
-            'color'        => 'nullable',
-            'stock'        => "required|numeric",
-            'category'     => 'sometimes|array',
-            'category.*'   => 'required|exists:categories,id',
+            'title' => 'string|required',
+            'summary' => 'string|required',
+            'description' => 'string|nullable',
+            'photo' => 'required|image',
+            'size' => 'sometimes|array',
+            'size.*' => 'required|exists:sizes,id',
+            'color' => 'nullable',
+            'stock' => "required|numeric",
+            'category' => 'sometimes|array',
+            'category.*' => 'required|exists:categories,id',
             'child_cat_id' => 'nullable|exists:categories,id',
-            'is_featured'  => 'sometimes|in:1',
-            'brand_id'     => 'nullable|exists:brands,id',
-            'status'       => 'required|in:active,inactive',
+            'is_featured' => 'sometimes|in:1',
+            'brand_id' => 'nullable|exists:brands,id',
+            'status' => 'required|in:active,inactive',
             'condition_id' => 'required|exists:conditions,id',
-            'price'        => 'required|numeric',
-            'discount'     => 'nullable|numeric',
+            'price' => 'required|numeric',
+            'discount' => 'nullable|numeric',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

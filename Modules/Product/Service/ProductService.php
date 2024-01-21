@@ -54,16 +54,25 @@ class ProductService extends CoreService
         if (isset($data['photo'])) {
             $data['photo'] = $this->verifyAndStoreImage($data['photo']);
         }
+
         $product = $this->product_repository->create($data);
-        $this->syncAttributes($product, $data['attributes']); // Assuming 'attributes' is the input name
+
+        // Check if 'attributes' key exists in the data array
+        if (isset($data['attributes'])) {
+            $this->syncAttributes($product, $data['attributes']);
+        }
+
         $product->categories()->attach($data['category']);
+
         if (isset($data['size'])) {
             $product->sizes()->attach($data['size']);
         }
+
         $product->tags()->attach($data['tag']);
 
         return $product;
     }
+
 
     public function edit(int $id): array
     {
@@ -92,8 +101,11 @@ class ProductService extends CoreService
         }
 
         $product = $this->product_repository->update($id, $data);
-        $this->syncAttributes($product, $data['attributes']);
+        if (isset($data['attributes'])) {
+            $this->syncAttributes($product, $data['attributes']);
+        }
         $product->categories()->sync($data['category']);
+
         if (isset($data['size'])) {
             $product->sizes()->sync($data['size']);
         }

@@ -12,12 +12,16 @@
     <!-- End of Sidebar -->
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-
         <!-- Main Content -->
         <div id="content">
-
             <!-- Topbar -->
             @include('admin::layouts.header')
+            @if($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            @endif
+
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
