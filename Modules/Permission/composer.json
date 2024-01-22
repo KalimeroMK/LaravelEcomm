@@ -1,31 +1,30 @@
 {
-    "name": "nwidart/permission",
-    "description": "",
-    "authors": [
-        {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [],
-            "aliases": {
-
-            }
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Modules\\Permission\\": "",
-            "Modules\\Permission\\App\\": "app/",
-            "Modules\\Permission\\Database\\Factories\\": "database/factories/",
-            "Modules\\Permission\\Database\\Seeders\\": "database/seeders/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Modules\\Permission\\Tests\\": "tests/"
-        }
+  "name": "nwidart/permission",
+  "description": "",
+  "authors": [
+    {
+      "name": "Zoran Shefot Bogoevski",
+      "email": "zbogoevski@gmail.com"
     }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [],
+      "aliases": {
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\Permission\\": "",
+      "Modules\\Permission\\App\\": "app/",
+      "Modules\\Permission\\Database\\Factories\\": "database/factories/",
+      "Modules\\Permission\\Database\\Seeders\\": "database/seeders/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Modules\\Permission\\Tests\\": "tests/"
+    }
+  }
 }
