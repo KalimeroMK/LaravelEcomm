@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Banner\Observers;
+namespace Modules\Banner\Models\Observers;
 
 use Illuminate\Support\Str;
 use Modules\Banner\Models\Banner;
@@ -20,7 +20,7 @@ class BannerObserver
         }
         $banner->slug = $banner->incrementSlug($slug);
     }
-    
+
     /**
      * Handle the banner "updated" event.
      *
@@ -29,7 +29,7 @@ class BannerObserver
     public function updating(Banner $banner)
     {
     }
-    
+
     /**
      * Handle the banner "deleted" event.
      *
@@ -39,7 +39,7 @@ class BannerObserver
     {
         //
     }
-    
+
     /**
      * Handle the banner "restored" event.
      *
@@ -49,7 +49,7 @@ class BannerObserver
     {
         //
     }
-    
+
     /**
      * Handle the banner "force deleted" event.
      *

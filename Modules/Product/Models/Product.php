@@ -19,6 +19,7 @@ use Kalimeromk\Filterable\app\Traits\Filterable;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
+use Modules\Bundle\Models\Bundle;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Helpers\Condition;
@@ -287,13 +288,6 @@ class Product extends Core
         return $this->belongsToMany(Tag::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
-    public function attributeValues(): BelongsToMany
-    {
-        return $this->belongsToMany(AttributeValue::class, 'product_attribute_value');
-    }
 
     /**
      * @return HigherOrderBuilderProxy|mixed|null
@@ -307,5 +301,18 @@ class Product extends Core
         }
 
         return null;
+    }
+
+    public function attributeValues(): BelongsToMany
+    {
+        return $this->belongsToMany(AttributeValue::class, 'product_attribute_value')
+            ->withPivot('id')
+            ->withTimestamps();
+    }
+
+    public function bundles(): BelongsToMany
+    {
+        return $this->belongsToMany(Bundle::class)
+            ->withTimestamps();
     }
 }

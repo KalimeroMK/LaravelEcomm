@@ -1,0 +1,11 @@
+{
+    "name": "Bundle",
+    "alias": "bundle",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Bundle\\Providers\\BundleServiceProvider"
+    ],
+    "files": []
+}

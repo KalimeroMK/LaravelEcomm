@@ -8,6 +8,12 @@ use Modules\Product\Models\Product;
 
 class Bundle extends Core
 {
+    protected $table = 'bundles';
+
+    protected $casts = [
+        'price' => 'float'
+    ];
+
     protected $fillable = [
         'name',
         'description',
@@ -16,6 +22,7 @@ class Bundle extends Core
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)
+            ->withTimestamps();
     }
 }

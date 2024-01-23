@@ -93,6 +93,21 @@
             </div>
         </div>
     </li>
+    {{-- Bandle --}}
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#bundleCollapse"
+           aria-expanded="true" aria-controls="bundleCollapse">
+            <i class="fas fa-cubes"></i>
+            <span>Bundles</span>
+        </a>
+        <div id="bundleCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Bundle Options:</h6>
+                <a class="collapse-item" href="{{route('bundles.index')}}">Bundles</a>
+                <a class="collapse-item" href="{{route('bundles.create')}}">Add Bundle</a>
+            </div>
+        </div>
+    </li>
 
     {{-- Brands --}}
     <li class="nav-item">

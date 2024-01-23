@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Modules\Bundle\Models\Bundle;
+use Modules\Bundle\Models\Policy\BundlePolicy;
 use Modules\Post\Models\Policies\PostCommentPolicy;
 use Modules\Post\Models\PostComment;
 use Modules\Role\Models\Polices\RolePolicy;
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Setting::class => SettingsPolicy::class,
         Role::class => RolePolicy::class,
+        Bundle::class => BundlePolicy::class,
     ];
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('product_bundle', function (Blueprint $table) {
+        Schema::create('bundle_product', function (Blueprint $table) {
             $table->foreignId('bundle_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->primary(['bundle_id', 'product_id']);
@@ -17,6 +17,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('product_bundle');
+        Schema::dropIfExists('bundle_product');
     }
 };
