@@ -13,7 +13,7 @@ use Modules\User\Models\User;
 
 class OrderService
 {
-    protected OrderRepository $order_repository;
+    public OrderRepository $order_repository;
 
     public function __construct(OrderRepository $order_repository)
     {

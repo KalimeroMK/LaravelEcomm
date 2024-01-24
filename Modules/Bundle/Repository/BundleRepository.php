@@ -18,7 +18,7 @@ class BundleRepository extends Repository implements SearchInterface
     public function findAll(): mixed
 
     {
-        return $this->model::with('products')->get();
+        return $this->model::with(['products', 'media'])->get();
     }
 
     /**

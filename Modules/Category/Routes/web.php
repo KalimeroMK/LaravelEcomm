@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 use Modules\Category\Http\Controllers\CategoryController;
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
-    Route::resource('/categories', CategoryController::class)->except('shows');
+    Route::resource('categories', CategoryController::class)->except('shows');
 });

@@ -21,7 +21,7 @@ class BannerController extends CoreController
 
     public function __construct(BrandService $banner_service)
     {
-        $this->authorizeResource(Brand::class);
+        $this->authorizeResource(Brand::class, 'banner');
         $this->banner_service = $banner_service;
     }
 

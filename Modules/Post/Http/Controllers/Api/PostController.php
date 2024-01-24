@@ -12,6 +12,7 @@ use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
 use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
+use ReflectionException;
 
 class PostController extends CoreController
 {
@@ -38,6 +39,7 @@ class PostController extends CoreController
      *
      * @param  Store  $request
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
     {
@@ -59,6 +61,7 @@ class PostController extends CoreController
      * @param $id
      *
      * @return JsonResponse|string
+     * @throws ReflectionException
      */
     public function show($id): JsonResponse|string
     {
@@ -80,6 +83,7 @@ class PostController extends CoreController
      * @param  Update  $request
      * @param  Post  $post
      * @return JsonResponse|string
+     * @throws ReflectionException
      */
     public function update(Update $request, Post $post): JsonResponse|string
     {
@@ -100,6 +104,7 @@ class PostController extends CoreController
     /**
      * @param  Post  $post
      * @return JsonResponse|string
+     * @throws ReflectionException
      */
     public function destroy(Post $post): JsonResponse|string
     {

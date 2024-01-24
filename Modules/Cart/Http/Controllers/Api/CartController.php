@@ -2,7 +2,6 @@
 
 namespace Modules\Cart\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Cart\Http\Requests\Api\Store;
@@ -11,17 +10,18 @@ use Modules\Cart\Models\Cart;
 use Modules\Cart\Service\CartService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use ReflectionException;
 
 class CartController extends CoreController
 {
     private CartService $cart_service;
-    
+
     public function __construct(CartService $cart_service)
     {
         $this->cart_service = $cart_service;
-        $this->authorizeResource(Cart::class);
+        $this->authorizeResource(Cart::class, 'cart');
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -29,102 +29,90 @@ class CartController extends CoreController
     {
         return CartResource::collection($this->cart_service->getAll());
     }
-    
+
     /**
      * @param  Store  $request
      *
      * @return JsonResponse|string
+     * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse|string
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.storeSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->cart_service->cart_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->cart_service->cart_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new CartResource($this->cart_service->apiAddToCart($request->all())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new CartResource($this->cart_service->apiAddToCart($request->all())));
     }
-    
+
     /**
-     * @return JsonResponse|string
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function show()
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.ok',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->cart_service->cart_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.ok',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->cart_service->cart_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new CartResource($this->cart_service->show()));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new CartResource($this->cart_service->show()));
     }
-    
+
     /**
      * @param  Store  $request
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function update(Store $request)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.updateSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->cart_service->cart_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.updateSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->cart_service->cart_repository->model
+                        ),
+                    ]
                 )
-                ->respond(new CartResource($this->cart_service->apiAUpdateCart($request->all())));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(new CartResource($this->cart_service->apiAUpdateCart($request->all())));
     }
-    
+
     /**
      * @param $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function destroy($id)
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->cart_service->cart_repository->model
-                            ),
-                        ]
-                    )
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->cart_service->cart_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->cart_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond($this->cart_service->destroy($id));
     }
 }

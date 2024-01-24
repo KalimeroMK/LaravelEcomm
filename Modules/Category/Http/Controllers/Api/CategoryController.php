@@ -19,7 +19,7 @@ class CategoryController extends CoreController
     public function __construct(CategoryService $category_service)
     {
         $this->category_service = $category_service;
-        $this->authorizeResource(Category::class);
+        $this->authorizeResource(Category::class, 'category');
     }
 
     public function index(): ResourceCollection

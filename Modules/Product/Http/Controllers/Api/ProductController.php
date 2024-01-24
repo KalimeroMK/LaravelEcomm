@@ -12,6 +12,7 @@ use Modules\Post\Http\Requests\Api\Update;
 use Modules\Product\Http\Resources\ProductResource;
 use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
+use ReflectionException;
 
 class ProductController extends CoreController
 {
@@ -29,6 +30,9 @@ class ProductController extends CoreController
         return ProductResource::collection($this->product_service->getAll($request->validated()));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function store(Store $request): JsonResponse
     {
         return $this
@@ -45,6 +49,9 @@ class ProductController extends CoreController
             ->respond(new ProductResource($this->product_service->store($request->validated())));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function show(Product $product): JsonResponse
     {
         return $this
@@ -61,6 +68,9 @@ class ProductController extends CoreController
             ->respond(new ProductResource($this->product_service->show($product->id)));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function update(Update $request, Product $product): JsonResponse
     {
         return $this
@@ -77,6 +87,9 @@ class ProductController extends CoreController
             ->respond(new ProductResource($this->product_service->update($product->id, $request->validated())));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function destroy(Product $product): JsonResponse
     {
         $this->product_service->destroy($product->id);

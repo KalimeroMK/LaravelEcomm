@@ -18,7 +18,7 @@ class CouponController extends CoreController
 
     public function __construct(CouponService $coupon_service)
     {
-        $this->authorizeResource(Coupon::class, 'coupon');
+        $this->authorizeResource(Coupon::class, 'coupons');
         $this->coupon_service = $coupon_service;
     }
 

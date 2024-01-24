@@ -13,6 +13,7 @@ use Modules\Order\Http\Requests\Api\Update;
 use Modules\Order\Http\Resources\OrderResource;
 use Modules\Order\Models\Order;
 use Modules\Order\Service\OrderService;
+use ReflectionException;
 
 class OrderController extends CoreController
 {
@@ -59,6 +60,7 @@ class OrderController extends CoreController
     /**
      * @param  Order  $order
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function show(Order $order)
     {
@@ -80,6 +82,7 @@ class OrderController extends CoreController
      * @param  Update  $request
      * @param  Order  $order
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function update(Update $request, Order $order)
     {
@@ -100,6 +103,7 @@ class OrderController extends CoreController
     /**
      * @param  Order  $order
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function destroy(Order $order)
     {

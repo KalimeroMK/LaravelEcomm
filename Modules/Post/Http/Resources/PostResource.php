@@ -24,7 +24,17 @@ class PostResource extends JsonResource
             'summary' => $this->summary,
             'description' => $this->description,
             'quote' => $this->quote,
-            'photo' => $this->photo,
+            'images' => $this->whenLoaded('media', function () {
+                return $this->getMedia('post')->map(function ($media) {
+                    return [
+                        'id' => $media->id,
+                        'url' => $media->getUrl(),
+                        'name' => $media->name,
+                        'size' => $media->size,
+                        'mime_type' => $media->mime_type,
+                    ];
+                });
+            }),
             'tags' => $this->tags,
             'post_cat_id' => $this->post_cat_id,
             'status' => $this->status,

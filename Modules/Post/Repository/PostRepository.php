@@ -51,7 +51,7 @@ class PostRepository extends Repository implements SearchInterface
 
     private function eagerLoadRelations(Builder $query): Builder
     {
-        return $query->with(['categories', 'comments', 'post_comments', 'tags', 'author_info']);
+        return $query->with(['categories', 'comments', 'post_comments', 'tags', 'author_info', 'media']);
     }
 
     private function applySortingAndPaginate(Builder $query, array $data): LengthAwarePaginator

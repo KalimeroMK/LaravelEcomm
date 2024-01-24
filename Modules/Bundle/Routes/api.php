@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Bundle\Http\Controllers\Api\BundleController;
 
 /*
     |--------------------------------------------------------------------------
@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
     |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('bundle', fn (Request $request) => $request->user())->name('bundle');
-});
+Route::resource('bundle', BundleController::class);
+Route::delete('/bundle/{modelId}/media/{mediaId}',
+    [BundleController::class, 'deleteMedia'])->name('bundle.delete-media');

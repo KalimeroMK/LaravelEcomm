@@ -2,8 +2,8 @@
 
 namespace Modules\Bundle\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -51,9 +51,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->moduleNamespace)
+        Route::prefix('api/v1')
+            ->middleware('auth:sanctum')
             ->group(module_path('Bundle', '/Routes/api.php'));
     }
 }

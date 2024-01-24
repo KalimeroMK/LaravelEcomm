@@ -11,6 +11,7 @@ use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
 use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Service\CouponService;
+use ReflectionException;
 
 class CouponController extends CoreController
 {
@@ -30,6 +31,11 @@ class CouponController extends CoreController
         return CouponResource::collection($this->coupon_service->getAll());
     }
 
+    /**
+     * @param  Store  $request
+     * @return JsonResponse
+     * @throws ReflectionException
+     */
     public function store(Store $request)
     {
         return $this
@@ -49,7 +55,8 @@ class CouponController extends CoreController
     /**
      * @param  Coupon  $coupon
      * @return JsonResponse
-     */
+     * @throws ReflectionException
+     * q*/
     public function show(Coupon $coupon)
     {
         return $this
@@ -71,6 +78,7 @@ class CouponController extends CoreController
      * @param $id
      *
      * @return string
+     * @throws ReflectionException
      */
     public function update(Update $request, $id)
     {
@@ -91,6 +99,7 @@ class CouponController extends CoreController
     /**
      * @param  Coupon  $coupon
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function destroy(Coupon $coupon)
     {

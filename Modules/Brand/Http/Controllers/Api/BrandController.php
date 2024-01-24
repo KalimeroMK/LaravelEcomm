@@ -12,6 +12,7 @@ use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use ReflectionException;
 
 class BrandController extends CoreController
 {
@@ -21,7 +22,7 @@ class BrandController extends CoreController
     public function __construct(BrandService $brand_service)
     {
         $this->brand_service = $brand_service;
-        $this->authorizeResource(Brand::class, 'brand');
+        $this->authorizeResource(Brand::class, 'brands');
     }
 
     public function index(Search $request): ResourceCollection
@@ -45,6 +46,9 @@ class BrandController extends CoreController
             ->respond(new BrandResource($this->brand_service->store($request->validated())));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function show(Brand $brand): JsonResponse
     {
         return $this
@@ -61,6 +65,9 @@ class BrandController extends CoreController
             ->respond(new BrandResource($this->brand_service->show($brand->id)));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function update(Update $request, Brand $brand): JsonResponse
     {
         return $this
@@ -77,19 +84,22 @@ class BrandController extends CoreController
             ->respond(new BrandResource($this->brand_service->update($brand->id, $request->validated())));
     }
 
-    public function destroy(Brand $brand): JsonResponse
+    /**
+     * @param $id
+     * @return JsonResponse
+     * @throws ReflectionException
+     */
+    public function destroy($id)
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->brand_service->brand_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond($this->brand_service->destroy($brand->id));
+        $this->brand_service->destroy($id);
+
+        $resourceName = Helper::getResourceName(
+            $this->brand_service->brand_repository->model
+        );
+
+        $message = __('apiResponse.deleteSuccess', ['resource' => $resourceName]);
+
+        // Assuming you have a method to set response message and status
+        return $this->setMessage($message)->respond(null);
     }
 }

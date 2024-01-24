@@ -1,39 +1,37 @@
 <?php
 
-namespace Modules\Banner\Http\Controllers\Api;
+namespace Modules\Bundle\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Banner\Http\Requests\Api\Search;
-use Modules\Banner\Http\Requests\Api\Store;
-use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Banner\Models\Banner;
-use Modules\Banner\Service\BannerService;
+use Modules\Bundle\Http\Requests\Store;
+use Modules\Bundle\Http\Requests\Update;
+use Modules\Bundle\Http\Resource\BundleResource;
+use Modules\Bundle\Service\BundleService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use ReflectionException;
 
-class BannerController extends CoreController
+class BundleController extends CoreController
 {
 
-    private BannerService $banner_service;
+    private BundleService $bundleService;
 
-    public function __construct(BannerService $banner_service)
+    public function __construct(BundleService $bundleService)
     {
-        $this->banner_service = $banner_service;
-        $this->authorizeResource(Banner::class, 'banners');
+        $this->bundleService = $bundleService;
+        $this->authorizeResource(Banner::class);
     }
 
     /**
-     * @param  Search  $request
-     *
      * @return ResourceCollection
      */
-    public function index(Search $request): ResourceCollection
+    public function index(): ResourceCollection
     {
-        return BannerResource::collection($this->banner_service->getAll($request->validated()));
+        return BundleResource::collection($this->bundleService->getAll());
     }
 
     /**
@@ -50,12 +48,12 @@ class BannerController extends CoreController
                     'apiResponse.storeSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->banner_service->banner_repository->model
+                            $this->bundleService->bundleRepository->model
                         ),
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_service->store($request->validated())));
+            ->respond(new BannerResource($this->bundleService->store($request->validated())));
     }
 
     /**
@@ -72,12 +70,12 @@ class BannerController extends CoreController
                     'apiResponse.ok',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->banner_service->banner_repository->model
+                            $this->bundleService->bundleRepository->model
                         ),
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_service->show($id)));
+            ->respond(new BannerResource($this->bundleService->show($id)));
     }
 
     /**
@@ -95,31 +93,31 @@ class BannerController extends CoreController
                     'apiResponse.updateSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->banner_service->banner_repository->model
+                            $this->bundleService->bundleRepository->model
                         ),
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_service->update($id, $request->validated())));
+            ->respond(new BannerResource($this->bundleService->update($id, $request->validated())));
     }
 
     /**
      * @param $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy($id)
     {
-        $this->banner_service->destroy($id);
+        $this->bundleService->destroy($id);
 
         $resourceName = Helper::getResourceName(
-            $this->banner_service->banner_repository->model
+            $this->bundleService->bundleRepository->model
         );
 
         $message = __('apiResponse.deleteSuccess', ['resource' => $resourceName]);
 
-        // Assuming you have a method to set response message and status
         return $this->setMessage($message)->respond(null);
     }
+
 }
