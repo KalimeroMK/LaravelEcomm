@@ -185,11 +185,11 @@
                 <button class="btn btn-success" type="submit">Submit</button>
             </form>
             <div class="row">
-                @foreach($product->getMedia('post') as $media)
+                @foreach($product->getMedia('product') as $media)
                     <div class="col-md-3">
                         <div class="image">
                             <img src="{{ $media->getUrl() }}" alt="Image" class="img-fluid">
-                            <form action="{{ route('products.delete-media', ['modelId' => $product->id, 'mediaId' =>
+                            <form action="{{ route('product.delete-media', ['modelId' => $product->id, 'mediaId' =>
                             $media->id]) }}"
                                   method="POST">
                                 @csrf

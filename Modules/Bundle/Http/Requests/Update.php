@@ -12,6 +12,8 @@ class Update extends FormRequest
             'name' => ['required'],
             'description' => ['nullable'],
             'price' => ['required', 'numeric'],
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 

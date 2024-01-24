@@ -44,8 +44,13 @@ class ProductController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->product_service->store($request->all());
-        return redirect()->route('products.index');
+        $product = $this->product_service->store($request->all());
+        if (request()->hasFile('images')) {
+            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('product');
+            });
+        }
+        return redirect()->route('product.index');
     }
 
     public function edit(Product $product): Renderable
@@ -53,16 +58,24 @@ class ProductController extends CoreController
         return view('product::edit')->with($this->product_service->edit($product->id));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function update(Update $request, Product $product): RedirectResponse
     {
         $this->product_service->update($product->id, $request->all());
-        return redirect()->route('products.index');
+        if (request()->hasFile('images')) {
+            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('product');
+            });
+        }
+        return redirect()->route('product.index');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
         $this->product_service->destroy($product->id);
-        return redirect()->route('products.index');
+        return redirect()->route('product.index');
     }
 
     /**
@@ -78,6 +91,14 @@ class ProductController extends CoreController
     {
         $this->excel->import(new ProductImport(), $request->file('file'));
         return redirect()->back();
+    }
+
+    public function deleteMedia($modelId, $mediaId)
+    {
+        $model = Product::findOrFail($modelId);
+        $model->media()->where('id', $mediaId)->first()->delete();
+
+        return back()->with('success', 'Media deleted successfully.');
     }
 
 }

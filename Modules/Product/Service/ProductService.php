@@ -51,10 +51,6 @@ class ProductService extends CoreService
     {
         $this->handleColor($data);
 
-        if (isset($data['photo'])) {
-            $data['photo'] = $this->verifyAndStoreImage($data['photo']);
-        }
-
         $product = $this->product_repository->create($data);
 
         // Check if 'attributes' key exists in the data array
@@ -109,7 +105,9 @@ class ProductService extends CoreService
         if (isset($data['size'])) {
             $product->sizes()->sync($data['size']);
         }
-        $product->tags()->sync($data['tag']);
+        if (isset($data['tag'])) {
+            $product->tags()->sync($data['tag']);
+        }
 
         return $product;
     }

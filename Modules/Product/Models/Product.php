@@ -250,9 +250,12 @@ class Product extends Core implements HasMedia
      */
     public function getImageUrlAttribute(): ?string
     {
-        if (!empty($this->photo) && file_exists('storage/uploads/images/'.$this->photo)) {
-            return asset('storage/uploads/images//'.$this->photo);
+        $mediaItem = $this->getFirstMedia('product');
+
+        if ($mediaItem) {
+            return $mediaItem->first()->getUrl();
         }
+
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
@@ -261,10 +264,13 @@ class Product extends Core implements HasMedia
      */
     public function getImageThumbUrlAttribute(): ?string
     {
-        if (!empty($this->photo) && file_exists('storage/uploads/images/'.$this->photo)) {
-            return asset('storage/uploads/images/thumbnails/'.$this->photo);
+        $mediaItem = $this->getFirstMedia('product');
+
+        if ($mediaItem) {
+            return $mediaItem->first()->getUrl();
         }
-        return 'https://via.placeholder.com/262x198.png/003311?text=et';
+
+        return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     /**

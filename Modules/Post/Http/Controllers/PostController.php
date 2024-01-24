@@ -146,4 +146,12 @@ class PostController extends Controller
         $this->post_service->upload($request);
     }
 
+    public function deleteMedia($modelId, $mediaId)
+    {
+        $model = Post::findOrFail($modelId);
+        $model->media()->where('id', $mediaId)->first()->delete();
+
+        return back()->with('success', 'Media deleted successfully.');
+    }
+
 }
