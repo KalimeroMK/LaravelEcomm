@@ -30,13 +30,16 @@ class BundleService
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return mixed
      */
-    public function edit($id): mixed
+    public function edit(int $id): array
     {
-        return $this->bundleRepository->findById($id);
+        return [
+            'products' => Product::all(),
+            'bundle' => $this->bundleRepository->findById($id),
+        ];
     }
 
     /**

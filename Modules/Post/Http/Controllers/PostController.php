@@ -15,6 +15,8 @@ use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
 use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PostController extends Controller
@@ -43,11 +45,17 @@ class PostController extends Controller
      * @param  Store  $request
      *
      * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->post_service->store($request->validated());
-
+        $post = $this->post_service->store($request->validated());
+        if (request()->hasFile('images')) {
+            $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('post');
+            });
+        }
         return redirect()->route('posts.index');
     }
 
@@ -80,11 +88,17 @@ class PostController extends Controller
      * @param  Post  $post
      *
      * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
         $this->post_service->update($request->validated(), $post);
-
+        if (request()->hasFile('images')) {
+            $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('post');
+            });
+        }
         return redirect()->route('posts.index');
     }
 

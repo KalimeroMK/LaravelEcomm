@@ -71,24 +71,12 @@
                         @endforeach
                     </select>
                 </div>
+
                 <div class="form-group">
-                    <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
-                    <div class="input-group">
-              <span class="input-group-btn">
-                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                  <i class="fa fa-picture-o"></i> Choose
-                  </a>
-              </span>
-                        <input id="thumbnail" class="form-control" type="text" name="photo"
-                               value="{{$post->photo}}">
-                    </div>
-                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
-
-                    @error('photo')
-
-                    @enderror
+                    <label for="inputImage" class="col-form-label">Image <span
+                                class="text-danger">*</span></label>
+                    <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
                 </div>
-
                 <div class="form-group">
                     <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
                     <select name="status" class="form-control">
@@ -102,13 +90,31 @@
                     <button class="btn btn-success" type="submit">Update</button>
                 </div>
             </form>
-    </form>
-    @push('scripts')
-        <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
-        <script type="text/javascript">
-            CKEDITOR.replace('description', {
-                filebrowserUploadUrl: "{{route('ckeditor.image-upload', ['_token' => csrf_token() ])}}",
-                filebrowserUploadMethod: 'form'
-            });
-        </script>
+            {{-- Images Display and Deletion --}}
+            <div class="row">
+                @foreach($post->getMedia('post') as $media)
+                    <div class="col-md-3">
+                        <div class="image">
+                            <img src="{{ $media->getUrl() }}" alt="Image" class="img-fluid">
+                            <form action="{{ route('posts.delete-media', ['modelId' => $post->id, 'mediaId' =>
+                            $media->id]) }}"
+                                  method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            @push('scripts')
+                <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
+                <script type="text/javascript">
+                    CKEDITOR.replace('description', {
+                        filebrowserUploadUrl: "{{route('ckeditor.image-upload', ['_token' => csrf_token() ])}}",
+                        filebrowserUploadMethod: 'form'
+                    });
+                </script>
     @endpush

@@ -26,8 +26,9 @@
                         <tr>
                             <th>S.N.</th>
                             <th>Name</th>
-                            <th>Code</th>
-                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Product</th>
                             <th>Action</th>
                         </tr>
                         </tfoot>
@@ -38,8 +39,9 @@
                                 <td>{{$bundle->name}}</td>
                                 <td>{{$bundle->description}}</td>
                                 <td>{{$bundle->price}}</td>
-                                <td>{{$bundle->price}}</td>
-
+                                <td>@foreach($bundle->products as $product)
+                                        {{ $product->title }},
+                                    @endforeach</td>
                                 <td>
                                     <a href="{{route('bundles.edit',$bundle->id)}}"
                                        class="btn btn-primary btn-sm float-left mr-1"

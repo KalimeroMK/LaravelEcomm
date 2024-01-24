@@ -6,7 +6,7 @@
     <div class="card">
         <h5 class="card-header">Edit attribute</h5>
         <div class="card-body">
-            @include('attribute::partials.form')
+            @include('bundle::partials.form')
         </div>
     </div>
 
@@ -29,6 +29,6 @@
     </script>
     <!-- select2 -->
     <script type="text/javascript">
-        $('#size').select2().val({!! json_encode($product->name()) !!}).trigger('change');
+        $('#products').select2().val({!! json_encode($bundle->products()->allRelatedIds()) !!}).trigger('change');
     </script>
 @endpush

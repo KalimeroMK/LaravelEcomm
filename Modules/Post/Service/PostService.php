@@ -25,17 +25,11 @@ class PostService extends CoreService
 
     public function store($data): Post
     {
-        $postAttributes = Collection::make($data)
-            ->put('photo', $this->verifyAndStoreImage($data['photo']))
-            ->except(['category', 'tags'])
-            ->toArray();
-
-        $post = $this->post_repository->create($postAttributes);
-
+        $post = $this->post_repository->create($data);
         $post->categories()->attach($data['category']);
         $post->post_tag()->attach($data['tags']);
 
-        return $post; // Return the created post instance.
+        return $post;
     }
 
 

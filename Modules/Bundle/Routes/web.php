@@ -14,3 +14,5 @@
 use Modules\Bundle\Http\Controllers\BundleController;
 
 Route::resource('bundles', BundleController::class);
+Route::delete('/bundles/{modelId}/media/{mediaId}',
+    [BundleController::class, 'deleteMedia'])->name('bundle.delete-media');

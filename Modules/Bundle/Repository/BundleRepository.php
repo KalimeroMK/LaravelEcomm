@@ -20,4 +20,14 @@ class BundleRepository extends Repository implements SearchInterface
     {
         return $this->model::with('products')->get();
     }
+
+    /**
+     * @param  $id
+     *
+     * @return mixed
+     */
+    public function findById($id): mixed
+    {
+        return $this->model::with('media')->find($id);
+    }
 }

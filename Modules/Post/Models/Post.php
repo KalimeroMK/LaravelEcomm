@@ -22,6 +22,10 @@ use Modules\Core\Models\Core;
 use Modules\Post\Database\Factories\PostFactory;
 use Modules\Tag\Models\Tag;
 use Modules\User\Models\User;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Post
@@ -75,9 +79,10 @@ use Modules\User\Models\User;
  * @property-read string $image_url
  * @property-read int|null $post_tag_count
  */
-class Post extends Core
+class Post extends Core implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $table = 'posts';
 
@@ -230,5 +235,13 @@ class Post extends Core
             return asset('storage/uploads/images//'.$this->photo);
         }
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('preview')
+            ->fit(Fit::Contain, 300, 300)
+            ->nonQueued();
     }
 }
