@@ -3,7 +3,6 @@
 namespace Modules\Post\Service;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Modules\Category\Models\Category;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
@@ -27,7 +26,7 @@ class PostService extends CoreService
     {
         $post = $this->post_repository->create($data);
         $post->categories()->attach($data['category']);
-        $post->post_tag()->attach($data['tags']);
+        $post->tags()->attach($data['tags']);
 
         return $post;
     }
@@ -53,19 +52,13 @@ class PostService extends CoreService
         ];
     }
 
-    public function update($data, Post $post): Post
+    public function update($data, $post): Post
     {
-        $attributes = Collection::make($data);
-
-        if ($attributes->has('photo')) {
-            $attributes->put('photo', $this->verifyAndStoreImage($data['photo']));
-        }
-
-        $post->update($attributes->except(['category', 'tags'])->toArray());
-        $post->post_tag()->sync($data['tags']);
+        $post->update($data);
+        $post->tags()->sync($data['tag']);
         $post->categories()->sync($data['category']);
 
-        return $post; // Return the updated post instance.
+        return $post;
     }
 
 

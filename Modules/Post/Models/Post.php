@@ -172,7 +172,7 @@ class Post extends Core implements HasMedia
     /**
      * @return BelongsToMany
      */
-    public function post_tag(): BelongsToMany
+    public function tags(): BelongsToMany
     {
         return $this->BelongsToMany(Tag::class);
     }

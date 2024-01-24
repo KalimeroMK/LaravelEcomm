@@ -29,5 +29,8 @@
     <script type="text/javascript">
         $('#category').select2().val({!! json_encode($post->categories()->allRelatedIds()) !!}).trigger('change');
     </script>
+    <script type="text/javascript">
+        $('#tags').select2().val({!! json_encode($post->tags()->allRelatedIds()) !!}).trigger('change');
+    </script>
 @endpush
 

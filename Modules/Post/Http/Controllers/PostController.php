@@ -93,7 +93,7 @@ class PostController extends Controller
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
-        $this->post_service->update($request->validated(), $post);
+        $this->post_service->update($request->all(), $post);
         if (request()->hasFile('images')) {
             $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
                 $fileAdder->preservingOriginal()->toMediaCollection('post');

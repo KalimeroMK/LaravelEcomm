@@ -51,13 +51,11 @@ class PostRepository extends Repository implements SearchInterface
 
     private function eagerLoadRelations(Builder $query): Builder
     {
-        return $query->with(['categories', 'comments', 'post_comments', 'post_tag', 'author_info']);
+        return $query->with(['categories', 'comments', 'post_comments', 'tags', 'author_info']);
     }
 
-    private function applySortingAndPaginate(
-        Builder $query,
-        array $data
-    ): LengthAwarePaginator {
+    private function applySortingAndPaginate(Builder $query, array $data): LengthAwarePaginator
+    {
         $orderBy = Arr::get($data, 'order_by', $this->model::DEFAULT_ORDER_BY);
         $sort = Arr::get($data, 'sort', $this->model::DEFAULT_SORT);
         $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
