@@ -24,14 +24,14 @@
     <section class="blog-single shop-blog grid section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-12">
+                <div class="col-9">
                     <div class="row">
                         @foreach($posts as $post)
                             {{-- {{$post}} --}}
                             <div class="col-lg-6 col-md-6 col-12">
                                 <!-- Start Single Blog  -->
                                 <div class="shop-single-blog">
-                                    <img src="{{$post->photo}}" alt="{{$post->photo}}">
+                                    <img src="{{$post->getImageUrlAttribute()}}" alt="{{$post->photo}}">
                                     <div class="content">
 
                                         <p class="date"><i class="fa fa-calendar"
@@ -57,12 +57,12 @@
                         @endforeach
                         <div class="col-12">
                             <!-- Pagination -->
-                            {{-- {{$posts->appends($_GET)->links()}} --}}
+                            {{$posts->appends($_GET)->links('vendor.pagination.bootstrap-4')}}
                             <!--/ End Pagination -->
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-12">
+                <div class="col-3">
                     <div class="main-sidebar">
                         <!-- Single Widget -->
                         <div class="single-widget search">

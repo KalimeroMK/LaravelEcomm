@@ -4,14 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up(): void
+
+return new class extends Migration {
+    public function up()
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
@@ -19,7 +14,6 @@ class CreateProductsTable extends Migration
             $table->string('slug')->unique();
             $table->text('summary')->index();
             $table->longText('description')->nullable()->index();
-            $table->text('photo');
             $table->integer('stock')->default(1);
             $table->string('color')->nullable();
             $table->unsignedBigInteger('condition_id');
@@ -43,4 +37,4 @@ class CreateProductsTable extends Migration
     {
         Schema::dropIfExists('products');
     }
-}
+};

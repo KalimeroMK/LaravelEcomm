@@ -39,4 +39,15 @@ class Bundle extends Core implements HasMedia
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
     }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        $mediaItem = $this->getFirstMedia('bundle');
+
+        if ($mediaItem) {
+            return $mediaItem->first()->getUrl();
+        }
+
+        return 'https://via.placeholder.com/640x480.png/003311?text=et';
+    }
 }

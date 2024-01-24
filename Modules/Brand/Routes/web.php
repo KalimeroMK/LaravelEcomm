@@ -14,6 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Brand\Http\Controllers\BrandController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('brands', BrandController::class)->except('show');
-});
+Route::resource('brand', BrandController::class)->except('show');

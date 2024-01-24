@@ -13,6 +13,4 @@
 
 use Modules\Newsletter\Http\Controllers\NewsletterController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('newsletters', NewsletterController::class)->except('show');
-});
+Route::resource('newsletter', NewsletterController::class)->except('show');

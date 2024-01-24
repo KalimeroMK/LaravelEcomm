@@ -1,10 +1,10 @@
 @if ($coupon->exists)
-    <form method="post" action="{{route('coupons.update',$coupon->id)}}"
+    <form method="post" action="{{route('coupon.update',$coupon->id)}}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
         @else
-            <form class="form-horizontal" method="POST" action="{{ route('coupons.store') }}"
+            <form class="form-horizontal" method="POST" action="{{ route('coupon.store') }}"
                   enctype="multipart/form-data">
                 @csrf
                 @endif

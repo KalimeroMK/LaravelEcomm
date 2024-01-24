@@ -13,13 +13,13 @@ use Modules\Message\Service\MessageService;
 class MessageController extends CoreController
 {
     private MessageService $message_service;
-    
+
     public function __construct(MessageService $message_service)
     {
         $this->message_service = $message_service;
-        $this->authorizeResource(Message::class);
+        $this->authorizeResource(Message::class, 'message');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +29,7 @@ class MessageController extends CoreController
     {
         return view('message::index', ['messages' => $this->message_service->getAll()]);
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -41,7 +41,7 @@ class MessageController extends CoreController
     {
         return view('message::show', ['message' => $this->message_service->show($message->id)]);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -52,7 +52,7 @@ class MessageController extends CoreController
     public function destroy(Message $message): RedirectResponse
     {
         $this->message_service->destroy($message->id);
-        
+
         return redirect()->back();
     }
 }

@@ -12,6 +12,7 @@ use Modules\Brand\Http\Requests\Api\Update;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Traits\ApiResponses;
 use Modules\Coupon\Http\Requests\Api\Store;
+use ReflectionException;
 
 class AttributeController extends Controller
 {
@@ -29,6 +30,9 @@ class AttributeController extends Controller
         return AttributeResource::collection($this->attribute_service->search($request->validated()));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function store(Store $request): JsonResponse
     {
         return $this
@@ -45,6 +49,9 @@ class AttributeController extends Controller
             ->respond(new AttributeResource($this->attribute_service->store($request->validated())));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function show($id): JsonResponse
     {
         return $this
@@ -61,6 +68,9 @@ class AttributeController extends Controller
             ->respond(new AttributeResource($this->attribute_service->show($id)));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function update(Update $request, $id): JsonResponse
     {
         return $this
@@ -77,6 +87,9 @@ class AttributeController extends Controller
             ->respond(new AttributeResource($this->attribute_service->update($id, $request->all())));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function destroy($id): JsonResponse
     {
         $this->attribute_service->destroy($id);

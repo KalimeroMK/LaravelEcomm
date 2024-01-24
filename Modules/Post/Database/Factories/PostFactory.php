@@ -9,7 +9,7 @@ use Modules\Post\Models\Post;
 class PostFactory extends Factory
 {
     protected $model = Post::class;
-    
+
     /**
      * Define the model's default state.
      *
@@ -18,16 +18,15 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'       => $this->faker->word,
-            'slug'        => $this->faker->slug,
-            'summary'     => $this->faker->text,
+            'title' => $this->faker->word,
+            'slug' => $this->faker->slug,
+            'summary' => $this->faker->text,
             'description' => $this->faker->text,
-            'quote'       => $this->faker->word,
-            'photo'       => $this->faker->imageUrl(640, 480),
-            'tags'        => $this->faker->word,
-            'added_by'    => $this->faker->numberBetween(1, 3),
-            'created_at'  => Carbon::now(),
-            'updated_at'  => Carbon::now(),
+            'quote' => $this->faker->word,
+            'tags' => $this->faker->word,
+            'added_by' => $this->faker->numberBetween(1, 3),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 }

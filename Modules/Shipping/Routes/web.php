@@ -13,6 +13,4 @@
 
 use Modules\Shipping\Http\Controllers\ShippingController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('shippings', ShippingController::class);
-});
+Route::resource('shipping', ShippingController::class);

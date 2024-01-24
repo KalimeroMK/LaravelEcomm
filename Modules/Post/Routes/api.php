@@ -13,5 +13,12 @@
 
 use Modules\Post\Http\Controllers\Api\PostController;
 
-Route::apiResource('post', PostController::class)->except('update');
-Route::post('post/{id}', [PostController::class, 'update'])->name('post.update');
+Route::apiResource('post', PostController::class)
+    ->names([
+        'index' => 'api.post.index',
+        'store' => 'api.post.store',
+        'show' => 'api.post.show',
+        'destroy' => 'api.post.destroy',
+        'create' => 'api.post.create',
+    ]);
+Route::post('post/{id}', [PostController::class, 'update'])->name('api.post.update');

@@ -14,5 +14,12 @@ use Modules\Coupon\Http\Controllers\Api\CouponController;
 |
 */
 
-Route::apiResource('coupon', CouponController::class);
-
+Route::apiResource('coupon', CouponController::class)
+    ->names([
+        'index' => 'api.coupon.index',
+        'store' => 'api.coupon.store',
+        'show' => 'api.coupon.show',
+        'destroy' => 'api.coupon.destroy',
+        'update' => 'api.coupon.update', // if you're using forms for APIs, which is unusual
+        'create' => 'api.coupon.create', // if you're using forms for APIs
+    ]);

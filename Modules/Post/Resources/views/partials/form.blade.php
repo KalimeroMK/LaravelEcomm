@@ -1,10 +1,10 @@
 @if ($post->exists)
-    <form class="form-horizontal" method="POST" action="{{ route('posts.update',$post->id) }}"
+    <form class="form-horizontal" method="POST" action="{{ route('post.update',$post->id) }}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
         @else
-            <form class="form-horizontal" method="POST" action="{{ route('posts.store') }}"
+            <form class="form-horizontal" method="POST" action="{{ route('post.store') }}"
                   enctype="multipart/form-data">
                 @csrf
                 @endif

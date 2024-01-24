@@ -1,10 +1,10 @@
 @if ($product->exists)
-    <form class="form-horizontal" method="POST" action="{{ route('products.update', $product->id) }}"
+    <form class="form-horizontal" method="POST" action="{{ route('product.update', $product->id) }}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
         @else
-            <form class="form-horizontal" method="POST" action="{{ route('products.store') }}"
+            <form class="form-horizontal" method="POST" action="{{ route('product.store') }}"
                   enctype="multipart/form-data">
                 @csrf
                 @endif
@@ -22,10 +22,10 @@
                                   name="description">{{ $product->description ??''}}</textarea>
                     </div>
                     <div class="form-group col-3">
-                        <div class="image">
-                            <label for="inputTitle" class="col-form-label">Image <span
+                        <div class="form-group">
+                            <label for="inputImage" class="col-form-label">Image <span
                                         class="text-danger">*</span></label>
-                            <input type="file" class="form-control" name="photo">
+                            <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
                         </div>
                         <label for="price" class="col-form-label">Price <span class="text-danger">*</span></label>
                         <input id="price" type="number" name="price" placeholder="Enter price"
@@ -181,13 +181,27 @@
                         </div>
                     @endforeach
                 </div>
-
-
                 <button type="reset" class="btn btn-warning">Reset</button>
                 <button class="btn btn-success" type="submit">Submit</button>
-
             </form>
-
+            <div class="row">
+                @foreach($product->getMedia('post') as $media)
+                    <div class="col-md-3">
+                        <div class="image">
+                            <img src="{{ $media->getUrl() }}" alt="Image" class="img-fluid">
+                            <form action="{{ route('products.delete-media', ['modelId' => $product->id, 'mediaId' =>
+                            $media->id]) }}"
+                                  method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
             @push('scripts')
                 <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
                 <script type="text/javascript">

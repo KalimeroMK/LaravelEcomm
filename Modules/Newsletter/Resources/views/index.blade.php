@@ -6,7 +6,7 @@
 
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">Newsletter List</h6>
-            <a href="{{route('newsletters.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+            <a href="{{route('newsletter.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
                data-placement="bottom" title="Add newsletter"><i class="fas fa-plus"></i> Add newsletter</a>
         </div>
         <div class="card-body">
@@ -43,11 +43,11 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('newsletters.edit',$newsletter->id)}}"
+                                    <a href="{{route('newsletter.edit',$newsletter->id)}}"
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('newsletters.destroy',$newsletter->id)}}">
+                                    <form method="POST" action="{{route('newsletter.destroy',$newsletter->id)}}">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"

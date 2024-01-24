@@ -1,11 +1,11 @@
 @if ($tag->exists)
 
-    <form class="form-horizontal" method="POST" action="{{route('tags.update',$tag->id)}}"
+    <form class="form-horizontal" method="POST" action="{{route('tag.update',$tag->id)}}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
         @else
-            <form class="form-horizontal" method="POST" action="{{ route('tags.store') }}"
+            <form class="form-horizontal" method="POST" action="{{ route('tag.store') }}"
                   enctype="multipart/form-data">
                 @csrf
                 @endif

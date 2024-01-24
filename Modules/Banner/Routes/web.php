@@ -14,6 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Banner\Http\Controllers\BannerController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('banners', BannerController::class)->except('show');
-});
+Route::resource('banner', BannerController::class)->except('show');

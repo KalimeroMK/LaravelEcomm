@@ -27,6 +27,8 @@ use Modules\Core\Models\Core;
 use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Class Product
@@ -84,10 +86,11 @@ use Modules\Tag\Models\Tag;
  * @property string|null $color
  * @method static Builder|Product whereColor($value)
  */
-class Product extends Core
+class Product extends Core implements HasMedia
 {
     use HasFactory;
     use Filterable;
+    use InteractsWithMedia;
 
     protected $table = 'products';
 

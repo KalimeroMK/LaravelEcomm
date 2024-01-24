@@ -13,6 +13,13 @@ use Modules\Tag\Http\Controllers\Api\TagController;
 |
 */
 
-Route::apiResource('tag', TagController::class);
-
+Route::apiResource('product', TagController::class)
+    ->names([
+        'index' => 'api.tag.index',
+        'store' => 'api.tag.store',
+        'show' => 'api.tag.show',
+        'destroy' => 'api.tag.destroy',
+        'update' => 'api.tag.update',
+        'create' => 'api.tag.create',
+    ]);
 

@@ -14,6 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Role\Http\Controllers\RoleController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('role', RoleController::class);
-});
+Route::resource('role', RoleController::class);

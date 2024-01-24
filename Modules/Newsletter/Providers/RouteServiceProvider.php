@@ -47,8 +47,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware(['web', 'activity'])
-            ->namespace($this->moduleNamespace)
+        Route::middleware(['web', 'activity', 'auth'])
+            ->prefix('admin')
             ->group(module_path('Newsletter', '/Routes/web.php'));
     }
 
@@ -63,7 +63,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api/v1')
             ->middleware('auth:sanctum')
-            ->namespace($this->moduleNamespace)
             ->group(module_path('Newsletter', '/Routes/api.php'));
     }
 }

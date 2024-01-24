@@ -1,10 +1,10 @@
 @if ($bundle->exists)
-    <form class="form-horizontal" method="POST" action="{{ route('bundles.update', $bundle->id) }}"
+    <form class="form-horizontal" method="POST" action="{{ route('bundle.update', $bundle->id) }}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
         @else
-            <form class="form-horizontal" method="POST" action="{{ route('bundles.store') }}"
+            <form class="form-horizontal" method="POST" action="{{ route('bundle.store') }}"
                   enctype="multipart/form-data">
                 @csrf
                 @endif

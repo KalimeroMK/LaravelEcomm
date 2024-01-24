@@ -1,12 +1,12 @@
 @include('notification::notification')
 
 @if($category->exists)
-    <form class="form-horizontal" method="POST" action="{{ route('categories.update',$category) }}"
+    <form class="form-horizontal" method="POST" action="{{ route('category.update',$category) }}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
         @else
-            <form class="form-horizontal" method="POST" action="{{ route('categories.store') }}"
+            <form class="form-horizontal" method="POST" action="{{ route('category.store') }}"
                   enctype="multipart/form-data">
                 @csrf
                 @endif

@@ -26,7 +26,7 @@ class ProductController extends CoreController
     {
         $this->product_service = $product_service;
         $this->excel = $excel;
-        $this->authorizeResource(Product::class, 'products');
+        $this->authorizeResource(Product::class, 'product');
     }
 
     public function index(Search $request): Renderable

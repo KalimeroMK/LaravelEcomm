@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->text('summary');
             $table->longText('description')->nullable();
             $table->text('quote')->nullable();
-            $table->string('photo')->nullable();
             $table->string('tags')->nullable();
             $table->unsignedBigInteger('added_by')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');

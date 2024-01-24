@@ -14,4 +14,12 @@ use Modules\Order\Http\Controllers\Api\OrderController;
 |
 */
 
-Route::apiResource('order', OrderController::class);
+Route::apiResource('order', OrderController::class)
+    ->names([
+        'index' => 'api.order.index',
+        'store' => 'api.order.store',
+        'show' => 'api.order.show',
+        'destroy' => 'api.order.destroy',
+        'update' => 'api.order.update',
+        'create' => 'api.order.create',
+    ]);

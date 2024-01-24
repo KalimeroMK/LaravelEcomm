@@ -1,10 +1,10 @@
 @if ($newsletter->exists)
-    <form class="form-horizontal" method="POST" action="{{ route('newsletters.update', $newsletter->id) }}"
+    <form class="form-horizontal" method="POST" action="{{ route('newsletter.update', $newsletter->id) }}"
           enctype="multipart/form-data">
         @method('put')
         @csrf
         @else
-            <form class="form-horizontal" method="POST" action="{{ route('newsletters.store') }}"
+            <form class="form-horizontal" method="POST" action="{{ route('newsletter.store') }}"
                   enctype="multipart/form-data">
                 @csrf
                 @endif

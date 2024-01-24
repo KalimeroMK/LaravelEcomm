@@ -14,5 +14,5 @@ use Modules\Permission\Http\Controllers\PermissionController;
 |
 */
 
-Route::resource('permissions', PermissionController::class);
+Route::resource('permission', PermissionController::class);
 

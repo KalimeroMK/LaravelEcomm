@@ -14,6 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Message\Http\Controllers\MessageController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('/messages', MessageController::class)->only('index', 'show', 'destroy');
-});
+Route::resource('message', MessageController::class)->only('index', 'show', 'destroy');

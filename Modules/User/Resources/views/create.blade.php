@@ -12,7 +12,7 @@
                     <p class="card-category"><a href="{{ route('admin')}}">{{trans('messages.dashboard')}}</a>
                         ->
                         <a
-                                href="{{route('users.index')}}">{{trans('messages.users')}}</a></p>
+                                href="{{route('user.index')}}">{{trans('messages.users')}}</a></p>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

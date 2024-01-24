@@ -13,6 +13,4 @@
 
 use Modules\Attribute\Http\Controllers\AttributeController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('/attributes', AttributeController::class)->except('shows');
-});
+Route::resource('/attribute', AttributeController::class)->except('shows');

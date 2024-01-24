@@ -25,8 +25,14 @@ class PostService extends CoreService
     public function store($data): Post
     {
         $post = $this->post_repository->create($data);
-        $post->categories()->attach($data['category']);
-        $post->tags()->attach($data['tags']);
+
+        if (isset($data['category'])) {
+            $post->categories()->attach($data['category']);
+        }
+
+        if (isset($data['tags'])) {
+            $post->tags()->attach($data['tags']);
+        }
 
         return $post;
     }
@@ -55,8 +61,13 @@ class PostService extends CoreService
     public function update($data, $post): Post
     {
         $post->update($data);
-        $post->tags()->sync($data['tag']);
-        $post->categories()->sync($data['category']);
+        if (isset($data['category'])) {
+            $post->categories()->sync($data['category']);
+        }
+
+        if (isset($data['tags'])) {
+            $post->tags()->sync($data['tags']);
+        }
 
         return $post;
     }

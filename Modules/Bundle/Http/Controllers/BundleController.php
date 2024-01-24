@@ -18,7 +18,7 @@ class BundleController extends Controller
     public function __construct(BundleService $bundleService)
     {
         $this->bundleService = $bundleService;
-//        $this->authorizeResource(Bundle::class, 'bundles');
+        $this->authorizeResource(Bundle::class, 'bundle');
     }
 
     public function index(): View
