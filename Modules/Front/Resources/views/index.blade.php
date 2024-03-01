@@ -194,7 +194,7 @@
                                 <div class="col-lg-4 col-md-6 col-12">
                                     <!-- Start Single Blog  -->
                                     <div class="shop-single-blog">
-                                        <img src="{{$post->photo}}" alt="{{$post->photo}}">
+                                        <img src="{{$post->getImageUrlAttribute()}}" alt="{{$post->title}}">
                                         <div class="content">
                                             <p class="date">{{$post->created_at->format('d M , Y. D')}}</p>
                                             <a href="{{route('blog.detail',$post->slug)}}"
