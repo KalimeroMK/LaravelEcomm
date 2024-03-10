@@ -61,7 +61,7 @@
                         @else
                             <tr>
                                 <td class="text-center">
-                                    There are no any wishlist available. <a href="{{route('product-grids')}}"
+                                    There are no any wishlist available. <a href="{{route('front.product-grids')}}"
                                                                             style="color:blue;">Continue shopping</a>
 
                                 </td>

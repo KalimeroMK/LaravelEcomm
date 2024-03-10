@@ -81,7 +81,7 @@
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
-                <a class="dropdown-item" href="{{route('home')}}">
+                <a class="dropdown-item" href="{{route('front.index')}}">
                     <i class="fas fa-shopify fa-sm fa-fw mr-2 text-gray-400"></i>
                     Web shop
                 </a>

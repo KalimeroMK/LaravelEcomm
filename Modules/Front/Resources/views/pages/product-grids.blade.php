@@ -21,7 +21,7 @@
     <!-- End Breadcrumbs -->
 
     <!-- Product Style -->
-    <form action="{{route('shop.filter')}}" method="POST">
+    <form action="{{route('front.product-filter')}}" method="POST">
         @csrf
         <section class="product-area shop-sidebar shop section">
             <div class="container">
@@ -35,7 +35,8 @@
                                     <ul class="categor-list">
                                         @foreach ($categories as $category)
                                             <li>
-                                                <a href="{{ route('product-cat', $category->slug) }}">{{ $category->title }}</a>
+                                                <a href="{{ route('front.product-cat', $category->slug) }}">{{ $category->title
+                                                }}</a>
                                                 <ul>
                                                     @foreach ($category->childrenCategories as $childCategory)
                                                         @include('front::layouts.child_category', ['child_category' => $childCategory])
@@ -95,7 +96,7 @@
                                         </div>
                                         <div class="content">
                                             <h5>
-                                                <a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a>
+                                                <a href="{{route('front.product-detail',$product->slug)}}">{{$product->title}}</a>
                                             </h5>
                                             @php
                                                 $org=($product->price-($product->price*$product->discount)/100);
@@ -115,7 +116,9 @@
                                 <h3 class="title">Brands</h3>
                                 <ul class="categor-list">
                                     @foreach($brands as $brand)
-                                        <li><a href="{{route('product-brand',$brand->slug)}}">{{$brand->title}}</a></li>
+                                        <li>
+                                            <a href="{{route('front.product-brand',$brand->slug)}}">{{$brand->title}}</a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -176,7 +179,8 @@
                                     <ul class="view-mode">
                                         <li class="active"><a href="javascript:void(0)"><i
                                                         class="fa fa-th-large"></i></a></li>
-                                        <li><a href="{{route('product-lists')}}"><i class="fa fa-th-list"></i></a></li>
+                                        <li><a href="{{route('front.product-lists')}}"><i class="fa fa-th-list"></i></a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <!--/ End Shop Top -->
@@ -189,7 +193,7 @@
                                     <div class="col-lg-4 col-md-6 col-12">
                                         <div class="single-product">
                                             <div class="product-img">
-                                                <a href="{{route('product-detail',$product->slug)}}">
+                                                <a href="{{route('front.product-detail',$product->slug)}}">
                                                     <img class="default-img" src="{{$product->imageUrl}}"
                                                          alt="{{$product->imageUrl}}">
                                                     <img class="hover-img" src="{{$product->imageUrl}}"
@@ -216,7 +220,7 @@
                                             </div>
                                             <div class="product-content">
                                                 <h3>
-                                                    <a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a>
+                                                    <a href="{{route('front.product-detail',$product->slug)}}">{{$product->title}}</a>
                                                 </h3>
                                                 @php
                                                     $after_discount=($product->price-($product->price*$product->discount)/100);

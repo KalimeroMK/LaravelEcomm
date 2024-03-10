@@ -8,10 +8,9 @@ use Modules\Admin\Database\Seeders\ConditionSeeder;
 use Modules\Admin\Database\Seeders\SizeSeeder;
 use Modules\Attribute\Database\Seeders\AttributeDatabaseSeeder;
 use Modules\Attribute\Database\Seeders\AttributeValueSeeder;
-use Modules\Attribute\Models\Attribute;
-use Modules\Attribute\Models\AttributeValue;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
+use Modules\Bundle\Models\BundleProduct;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Database\Seeders\CategoryPostSeeder;
 use Modules\Category\Database\Seeders\CategoryProductSeeder;
@@ -27,7 +26,7 @@ use Modules\User\Database\Seeders\PermissionTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
-    
+
     /**
      * Seed the application's database.
      *
@@ -54,7 +53,7 @@ class DatabaseSeeder extends Seeder
         Newsletter::factory()->count(20)->create();
         $this->call(AttributeDatabaseSeeder::class);
         $this->call(AttributeValueSeeder::class);
-
+        BundleProduct::factory()->count(50)->create();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

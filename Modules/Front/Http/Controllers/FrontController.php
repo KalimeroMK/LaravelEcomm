@@ -71,6 +71,14 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
+    public function bundles()
+    {
+        return view('front::pages.product-grids', $this->front_service->productGrids());
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
     public function productLists()
     {
         return view('front::pages.product-lists', $this->front_service->productLists());
@@ -285,7 +293,7 @@ class FrontController extends Controller
         session()->forget('coupon');
 
         // Redirect to the home page
-        return redirect()->route('home');
+        return redirect()->route('front.index');
     }
 
 }

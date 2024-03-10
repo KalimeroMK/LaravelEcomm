@@ -10,9 +10,7 @@
   "require": {
     "php": "^8.2",
     "bacon/bacon-qr-code": "*",
-    "barryvdh/laravel-debugbar": "*",
     "barryvdh/laravel-dompdf": "*",
-    "barryvdh/laravel-ide-helper": "*",
     "darkaonline/l5-swagger": "^8.5",
     "garygreen/pretty-routes": "*",
     "guzzlehttp/guzzle": "^7.2",
@@ -40,7 +38,6 @@
     "predis/predis": "^2.2",
     "psr/simple-cache": "*",
     "pusher/pusher-php-server": "*",
-    "reliese/laravel": "^1.2",
     "spatie/laravel-cookie-consent": "*",
     "spatie/laravel-feed": "*",
     "spatie/laravel-honeypot": "*",
@@ -52,6 +49,9 @@
     "stripe/stripe-php": "*"
   },
   "require-dev": {
+    "barryvdh/laravel-ide-helper": "*",
+    "barryvdh/laravel-debugbar": "*",
+    "reliese/laravel": "^1.2",
     "fakerphp/faker": "^1.9.1",
     "laravel/pint": "^1.0",
     "laravel/sail": "^1.18",

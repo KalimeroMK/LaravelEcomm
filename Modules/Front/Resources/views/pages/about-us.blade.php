@@ -12,7 +12,7 @@
                     <div class="bread-inner">
                         <ul class="bread-list">
                             <li><a href="/">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="{{ route('about-us') }}">About Us</a></li>
+                            <li class="active"><a href="{{ route('front.about-us') }}">About Us</a></li>
                         </ul>
                     </div>
                 </div>
@@ -32,8 +32,8 @@
                                 {{$data->description}}
                             @endforeach</p>
                         <div class="button">
-                            <a href="{{route('blog')}}" class="btn">Our Blog</a>
-                            <a href="{{route('contact')}}" class="btn primary">Contact Us</a>
+                            <a href="{{route('front.blog')}}" class="btn">Our Blog</a>
+                            <a href="{{route('front.contact')}}" class="btn primary">Contact Us</a>
                         </div>
                     </div>
                 </div>

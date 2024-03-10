@@ -11,7 +11,7 @@
                 <div class="col-12">
                     <div class="bread-inner">
                         <ul class="bread-list">
-                            <li><a href="{{route('home')}}">Home<i class="ti-arrow-right"></i></a></li>
+                            <li><a href="{{route('front.index')}}">Home<i class="ti-arrow-right"></i></a></li>
                             <li class="active"><a href="javascript:void(0);">Shop List</a></li>
                         </ul>
                     </div>
@@ -20,7 +20,7 @@
         </div>
     </div>
     <!-- End Breadcrumbs -->
-    <form action="{{route('shop.filter')}}" method="POST">
+    <form action="{{route('front.product-filter')}}" method="POST">
         @csrf
         <!-- Product Style 1 -->
         <section class="product-area shop-sidebar shop-list shop section">
@@ -109,7 +109,7 @@
                                         </div>
                                         <div class="content">
                                             <h5>
-                                                <a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a>
+                                                <a href="{{route('front.product-detail',$product->slug)}}">{{$product->title}}</a>
                                             </h5>
                                             @php
                                                 $org=($product->price-($product->price*$product->discount)/100);
@@ -129,7 +129,9 @@
                                 <h3 class="title">Brands</h3>
                                 <ul class="category-list">
                                     @foreach($brands as $brand)
-                                        <li><a href="{{route('product-brand',$brand->slug)}}">{{$brand->title}}</a></li>
+                                        <li>
+                                            <a href="{{route('front.product-brand',$brand->slug)}}">{{$brand->title}}</a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -188,7 +190,7 @@
                                         </div>
                                     </div>
                                     <ul class="view-mode">
-                                        <li><a href="{{route('product-grids')}}"><i class="fa fa-th-large"></i></a></li>
+                                        <li><a href="{{route('grid')}}"><i class="fa fa-th-large"></i></a></li>
                                         <li class="active"><a href="javascript:void(0)"><i
                                                         class="fa fa-th-list"></i></a></li>
                                     </ul>
@@ -206,7 +208,7 @@
                                             <div class="col-lg-4 col-md-6 col-sm-6">
                                                 <div class="single-product">
                                                     <div class="product-img">
-                                                        <a href="{{route('product-detail',$product->slug)}}">
+                                                        <a href="{{route('front.product-detail',$product->slug)}}">
                                                             @php
                                                                 $photo=explode(',',$product->photo);
                                                             @endphp
@@ -246,12 +248,13 @@
                                                             <del>${{number_format($product->price,2)}}</del>
                                                         </div>
                                                         <h3 class="title"><a
-                                                                    href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a>
+                                                                    href="{{route('front.product-detail',$product->slug)
+                                                                    }}">{{$product->title}}</a>
                                                         </h3>
                                                         {{-- <p>{!! html_entity_decode($product->summary) !!}</p> --}}
                                                     </div>
                                                     <p class="des pt-2">{!! html_entity_decode($product->summary) !!}</p>
-                                                    <a href="{{route('product-detail',$product->slug)}}"
+                                                    <a href="{{route('front.product-detail',$product->slug)}}"
                                                        class="btn cart">Read more
                                                     </a>
                                                 </div>

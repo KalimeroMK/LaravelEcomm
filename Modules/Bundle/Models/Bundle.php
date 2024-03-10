@@ -3,6 +3,7 @@
 namespace Modules\Bundle\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Modules\Bundle\Database\Factories\BundleFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 use Spatie\Image\Enums\Fit;
@@ -26,6 +27,14 @@ class Bundle extends Core implements HasMedia
         'description',
         'price'
     ];
+
+    /**
+     * @return BundleFactory
+     */
+    public static function Factory(): BundleFactory
+    {
+        return BundleFactory::new();
+    }
 
     public function products(): BelongsToMany
     {

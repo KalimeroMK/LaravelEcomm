@@ -43,7 +43,7 @@
                         <div class="carousel-caption d-none d-md-block text-left">
                             <h1 class="wow fadeInDown">{{$banner->title}}</h1>
                             <p>{!! html_entity_decode($banner->description) !!}</p>
-                            <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{route('product-grids')}}"
+                            <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{route('front.product-grids')}}"
                                role="button">Shop Now<i class="far fa-arrow-alt-circle-right"></i></i></a>
                         </div>
                     </div>
