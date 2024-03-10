@@ -7,12 +7,12 @@ use Spatie\SchemaOrg\Schema;
 
 class SchemaOrgViewComposer
 {
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $localBusiness = Schema::localBusiness()
-                               ->name('EcommLaravel')
-                               ->email('zbogoevski@gmail.com')
-                               ->contactPoint(Schema::contactPoint()->areaServed('Worldwide'));
+            ->name('EcommLaravel')
+            ->email('zbogoevski@gmail.com')
+            ->contactPoint(Schema::contactPoint()->areaServed('Worldwide'));
         $view->with('schema', $localBusiness->toScript());
     }
 }

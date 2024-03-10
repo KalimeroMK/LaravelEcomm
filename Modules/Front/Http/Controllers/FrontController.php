@@ -73,7 +73,7 @@ class FrontController extends Controller
      */
     public function bundles()
     {
-        return view('front::pages.product-grids', $this->front_service->productGrids());
+        return view('front::pages.bundles', $this->front_service->productBundles());
     }
 
     /**

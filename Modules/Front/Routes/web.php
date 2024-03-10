@@ -30,8 +30,8 @@ Route::get('blog-cat/{slug}', [FrontController::class, 'blogByCategory'])->name(
 Route::get('blog-tag/{slug}', [FrontController::class, 'blogByTag'])->name('front.blog-by-tag');
 Route::get('/product/deal', [FrontController::class, 'productDeal'])->name('front.product-deal');
 Route::post('cart/order', [FrontController::class, 'store'])->name('front.cart.order');
-Route::get('/product-lists', [FrontController::class, 'productLists'])->name('front.product-lists');
 Route::match(['get', 'post'], '/filter', [FrontController::class, 'productFilter'])->name('front.product-filter');
+Route::get('/product-lists', [FrontController::class, 'productLists'])->name('front.product-lists');
 Route::get('/product-grids', [FrontController::class, 'productGrids'])->name('front.product-grids');
 Route::get('/bundles', [FrontController::class, 'bundles'])->name('front.bundles');
 

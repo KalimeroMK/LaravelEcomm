@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="online shop, purchase, cart, ecommerce site, best online shopping">
     <meta name="description" content="{{$product_detail->summary ??''}}">
-    <meta property="og:url" content="{{route('product-detail',$product_detail->slug ??'')}}">
+    <meta property="og:url" content="{{route('front.product-detail',$product_detail->slug ??'')}}">
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{$product_detail->title ?? ''}}">
     <meta property="og:image" content="{{$product_detail->imageUrl ?? ''}}">
@@ -154,7 +154,7 @@
 
                                     <p class="cat">Category :
                                         @foreach($product_detail->categories as $category)
-                                            <a href="{{route('product-cat',$category->slug)}}">{{$category->title}}</a>
+                                            <a href="{{route('front.product-cat',$category->slug)}}">{{$category->title}}</a>
                                         @endforeach
                                     </p>
 
@@ -389,7 +389,7 @@
                                 <!-- Start Single Product -->
                                 <div class="single-product">
                                     <div class="product-img">
-                                        <a href="{{route('product-detail',$data->slug)}}">
+                                        <a href="{{route('front.product-detail',$data->slug)}}">
                                             <img class="default-img" src="{{$data->imageUrl}}"
                                                  alt="{{$data->imageUrl}}">
                                             <img class="hover-img" src="{{$data->imageUrl}}" alt="{{$data->imageUrl}}">
@@ -409,7 +409,8 @@
                                         </div>
                                     </div>
                                     <div class="product-content">
-                                        <h3><a href="{{route('product-detail',$data->slug)}}">{{$data->title}}</a></h3>
+                                        <h3><a href="{{route('front.product-detail',$data->slug)
+                                        }}">{{$data->title}}</a></h3>
                                         <div class="product-price">
                                             @php
                                                 $after_discount=($data->price-(($data->discount*$data->price)/100));

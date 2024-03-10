@@ -190,7 +190,8 @@
                                         </div>
                                     </div>
                                     <ul class="view-mode">
-                                        <li><a href="{{route('grid')}}"><i class="fa fa-th-large"></i></a></li>
+                                        <li><a href="{{route('front.product-grids')}}"><i
+                                                        class="fa fa-th-large"></i></a></li>
                                         <li class="active"><a href="javascript:void(0)"><i
                                                         class="fa fa-th-list"></i></a></li>
                                     </ul>

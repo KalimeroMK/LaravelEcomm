@@ -25,7 +25,8 @@ class Bundle extends Core implements HasMedia
     protected $fillable = [
         'name',
         'description',
-        'price'
+        'price',
+        'slug'
     ];
 
     /**

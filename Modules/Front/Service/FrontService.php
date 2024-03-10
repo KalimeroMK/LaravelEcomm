@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Repository\BrandRepository;
+use Modules\Bundle\Models\Bundle;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Coupon\Models\Coupon;
@@ -501,10 +502,20 @@ class FrontService
             'brand' => $data['brand'] ? implode(',', $data['brand']) : null,
             'price' => $data['price_range'] ?? null,
         ]);
+        $appUrl = config('app.url');
 
-        $routeName = request()->is('e-shop.loc/product-grids') ? 'product-grids' : 'product-lists';
+        // Determine the correct route name based on the current request
+        $routeSuffix = request()->is($appUrl.'/product-grids') ? 'product-grids' : 'product-lists';
+
+        // Prefix the route name with 'front.'
+        $routeName = 'front.'.$routeSuffix;
+
+        // Build the route parameters string
         $routeParameters = http_build_query($query);
 
+        // Use the config app url as the base for the redirect
+
+        // Return a redirect to the constructed URL
         return redirect()->route($routeName, $routeParameters);
     }
 
@@ -652,5 +663,14 @@ class FrontService
         return Newsletter::whereId($id)->delete();
     }
 
-
+    public function productBundles()
+    {
+        $query = Bundle::query();
+        $recentProducts = $this->recentProducts();
+        $products = $this->pagination($query);
+        return [
+            'recent_products' => $recentProducts,
+            'products' => $products,
+        ];
+    }
 }
