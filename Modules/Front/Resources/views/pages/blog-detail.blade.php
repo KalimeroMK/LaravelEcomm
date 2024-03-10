@@ -144,7 +144,7 @@
                     <div class="main-sidebar">
                         <!-- Single Widget -->
                         <div class="single-widget search">
-                            <form class="form" method="GET" action="{{route('blog.search')}}">
+                            <form class="form" method="GET" action="{{route('front.blog-search')}}">
                                 <input type="text" placeholder="Search Here..." name="search">
                                 <button class="button" type="sumbit"><i class="fa fa-search"></i></button>
                             </form>

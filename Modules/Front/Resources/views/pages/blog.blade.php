@@ -45,10 +45,10 @@
                                                 @endif
                                             </span>
                                         </p>
-                                        <a href="{{route('blog.detail',$post->slug)}}"
+                                        <a href="{{route('front.blog-detail',$post->slug)}}"
                                            class="title">{{$post->title}}</a>
                                         <p>{!! html_entity_decode($post->summary) !!}</p>
-                                        <a href="{{route('blog.detail',$post->slug)}}" class="more-btn">Continue
+                                        <a href="{{route('front.blog-detail',$post->slug)}}" class="more-btn">Continue
                                             Reading</a>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                     <div class="main-sidebar">
                         <!-- Single Widget -->
                         <div class="single-widget search">
-                            <form class="form" method="GET" action="{{route('blog.search')}}">
+                            <form class="form" method="GET" action="{{route('front.blog-search')}}">
                                 <input type="text" placeholder="Search Here..." name="search">
                                 <button class="button" type="sumbit"><i class="fa fa-search"></i></button>
                             </form>
@@ -77,12 +77,12 @@
                             <h3 class="title">Blog Categories</h3>
                             <ul class="categor-list">
 
-                                <form action="{{route('blog.filter')}}" method="POST">
+                                <form action="{{route('front.blog-filter')}}" method="POST">
                                     @csrf
                                     {{count(Helper::postCategoryList())}}
                                     @foreach(Helper::postCategoryList() as $cat)
                                         <li>
-                                            <a href="{{route('blog.category',$cat->slug)}}">{{$cat->title}} </a>
+                                            <a href="{{route('front.blog-by-category',$cat->slug)}}">{{$cat->title}} </a>
                                         </li>
                                     @endforeach
                                 </form>

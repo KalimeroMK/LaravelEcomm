@@ -36,7 +36,7 @@
                                     @endauth</h3>
                             </div>
                             <form class="form-contact form contact_form" method="post"
-                                  action="{{route('contact.store')}}" id="contactForm" novalidate="novalidate">
+                                  action="{{route('front.store-message')}}" id="contactForm" novalidate="novalidate">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-6 col-12">

@@ -75,7 +75,8 @@
                                                 {{$category->title}}
                                             @endforeach</p>
                                         <h3>{{$featured_product->title}}</h3>
-                                        <a href="{{route('product-detail',$featured_product->slug)}}">{{$featured_product->title}}</a>
+                                        <a href="{{route('front.product-detail',$featured_product->slug)
+                                        }}">{{$featured_product->title}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -197,9 +198,10 @@
                                         <img src="{{$post->getImageUrlAttribute()}}" alt="{{$post->title}}">
                                         <div class="content">
                                             <p class="date">{{$post->created_at->format('d M , Y. D')}}</p>
-                                            <a href="{{route('blog.detail',$post->slug)}}"
+                                            <a href="{{route('front.blog-detail',$post->slug)}}"
                                                class="title">{{$post->title}}</a>
-                                            <a href="{{route('blog.detail',$post->slug)}}" class="more-btn">Continue
+                                            <a href="{{route('front.blog-detail',$post->slug)}}"
+                                               class="more-btn">Continue
                                                 Reading</a>
                                         </div>
                                     </div>
