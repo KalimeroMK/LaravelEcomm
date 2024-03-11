@@ -11,6 +11,7 @@
 - Blog: category, tag, content, web page
 - Module/Extension: Shipping, payment, discount, ...
 - Upload manager: banner, images,..
+- Bundles module
 - SEO support: customer URL
 - Newsletter management
 - Contact forms with the real-time notification (Laravel Pusher)
@@ -27,6 +28,7 @@
 - Product manager
 - Media manager using unisharp laravel file manager
 - Banner manager
+- Bundles manager
 - Order management
 - Category management
 - Brand management
@@ -107,6 +109,8 @@
 * **ENV**: rename DB_HOST=127.0.0.1 to DB_HOST=mysql
 * **Container ssh**: docker-compose exec app sh
 * **Run migrations**: php artisan:migrate:fresh --seed.
+
+### Demo page:https://e-comm.mk
 
 <p style="text-align:center">Thank You so much for your time !!!</p>
 
