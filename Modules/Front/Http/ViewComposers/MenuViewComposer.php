@@ -9,6 +9,7 @@ class MenuViewComposer
 {
     public function compose(View $view): void
     {
-        $view->with('categories', Category::whereNull('parent_id')->with('childrenCategories')->get());
+        $categories = Category::whereNull('parent_id')->with('childrenCategories')->get();
+        $view->with('categories', $categories);
     }
 }

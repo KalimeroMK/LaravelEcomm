@@ -104,16 +104,16 @@ use Modules\Product\Models\Product;
 class Category extends Core
 {
     use NodeTrait;
-    
+
     protected $table = 'categories';
-    
+
     protected $casts = [
-        'status'    => 'int',
+        'status' => 'int',
         'parent_id' => 'int',
-        '_lft'      => 'int',
-        '_rgt'      => 'int',
+        '_lft' => 'int',
+        '_rgt' => 'int',
     ];
-    
+
     protected $fillable = [
         'title',
         'slug',
@@ -122,7 +122,7 @@ class Category extends Core
         '_lft',
         '_rgt',
     ];
-    
+
     /**
      * @return CategoryFactory
      */
@@ -130,60 +130,26 @@ class Category extends Core
     {
         return CategoryFactory::new();
     }
-    
+
     /**
      * @return string
      */
     public static function getTree()
     {
         $categories = self::get()->toTree();
-        $traverse   = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
+        $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
             foreach ($categories as $category) {
                 $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
                 $traverse($category->children, $prefix.'-');
             }
-            
+
             return $allCats;
         };
-        
+
         return $traverse($categories);
     }
     
-    /**
-     * @return string
-     */
-    public static function getList(): string
-    {
-        $categories = self::get()->toTree();
-        $lists      = '<li class="list-unstyled">';
-        foreach ($categories as $category) {
-            $lists .= self::renderNodeHP($category);
-        }
-        $lists .= "</li>";
-        
-        return $lists;
-    }
-    
-    /**
-     * @param $node
-     *
-     * @return string
-     */
-    public static function renderNodeHP($node): string
-    {
-        $list = '<li class="dropdown-item"><a class="nav-link" href="/categories/'.$node->slug.'">'.$node->title.'</a>';
-        if ($node->children()->count() > 0) {
-            $list .= '<ul class="dropdown border-0 shadow">';
-            foreach ($node->children as $child) {
-                $list .= self::renderNodeHP($child);
-            }
-            $list .= "</ul>";
-        }
-        $list .= "</li>";
-        
-        return $list;
-    }
-    
+
     /**
      * @return int
      */
@@ -193,10 +159,10 @@ class Category extends Core
         if ($data) {
             return $data;
         }
-        
+
         return 0;
     }
-    
+
     /**
      * @return Builder[]|Collection
      */
@@ -207,7 +173,7 @@ class Category extends Core
             'ASC'
         )->get();
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -215,7 +181,7 @@ class Category extends Core
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
-    
+
     /**
      * @return HasMany
      */
@@ -223,7 +189,7 @@ class Category extends Core
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
-    
+
     /**
      * @return HasMany
      */
@@ -231,7 +197,7 @@ class Category extends Core
     {
         return $this->hasMany(Category::class, 'parent_id')->with('categories');
     }
-    
+
     /**
      * @return BelongsToMany
      */
@@ -239,7 +205,7 @@ class Category extends Core
     {
         return $this->belongsToMany(Product::class);
     }
-    
+
     /**
      * @param $slug
      *
@@ -248,14 +214,14 @@ class Category extends Core
     public function incrementSlug($slug): mixed
     {
         $original = $slug;
-        $count    = 2;
+        $count = 2;
         while (static::whereSlug($slug)->exists()) {
             $slug = "{$original}-".$count++;
         }
-        
+
         return $slug;
     }
-    
+
     /**
      * @return HasOne
      */
@@ -263,7 +229,7 @@ class Category extends Core
     {
         return $this->hasOne(Category::class, 'id', 'parent_id');
     }
-    
+
     /**
      * @return HasMany
      */
@@ -271,7 +237,7 @@ class Category extends Core
     {
         return $this->hasMany(Category::class, 'parent_id', 'id')->where('status', 'active');
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -279,7 +245,7 @@ class Category extends Core
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
-    
+
     /**
      * @return string
      */

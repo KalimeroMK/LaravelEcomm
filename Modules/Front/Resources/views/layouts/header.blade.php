@@ -185,23 +185,29 @@
             <div class="cat-nav-head">
                 <div class="row">
                     @if (Request::path() == '/')
-                        <div class="col-lg-3">
-                            <div class="all-category">
-                                <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>CATEGORIES</h3>
-                                <ul class="main-category">
-                                    @foreach ($categories as $category)
-                                        <li>
-                                            <a href="{{ route('front.product-cat',$category->slug) }}">{{ $category->title }}
-                                                <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                        <div class="all-category">
+                            <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>CATEGORIES</h3>
+                            <ul class="main-category">
+                                @foreach ($categories as $category)
+                                    <li>
+                                        <a href="{{ route('front.product-cat', $category->slug) }}">{{ $category->title }}
+                                            @if($category->childrenCategories->isNotEmpty())
+                                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                            @endif
+                                        </a>
+                                        @if($category->childrenCategories->isNotEmpty())
                                             <ul class="sub-category">
                                                 @foreach ($category->childrenCategories as $childCategory)
                                                     @include('front::layouts.child_category', ['child_category' => $childCategory])
                                                 @endforeach
                                             </ul>
-                                    @endforeach
-                                </ul>
-                            </div>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
+
+
                         <div class="col-lg-9 col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
