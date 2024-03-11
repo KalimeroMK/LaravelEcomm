@@ -14,21 +14,7 @@ class UserFactory extends Factory
 {
     protected $model = User::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array{
-     *  name: string,
-     *  email: string,
-     *  email_verified_at: Carbon,
-     *  password: string,
-     *  photo: string,
-     *  provider: string,
-     *  provider_id: string,
-     *  remember_token: string,
-     *  created_at: Carbon,
-     *  updated_at: Carbon }
-     */
+
     public function definition(): array
     {
         return [

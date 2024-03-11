@@ -26,7 +26,7 @@ class Bundle extends Core implements HasMedia
         'name',
         'description',
         'price',
-        'slug'
+        'slug',
     ];
 
     /**

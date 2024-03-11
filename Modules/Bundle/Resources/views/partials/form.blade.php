@@ -32,7 +32,7 @@
                         {{-- Products Select --}}
                         <div class="form-group">
                             <label for="products">Products</label>
-                            <select class="form-control js-example-basic-multiple" id="products" name="products[]"
+                            <select class="form-control js-example-basic-multiple" id="products" name="product_id[]"
                                     multiple="multiple">
                                 @foreach ($products as $product)
                                     <option value="{{ $product->id }}">{{ $product->title }}</option>

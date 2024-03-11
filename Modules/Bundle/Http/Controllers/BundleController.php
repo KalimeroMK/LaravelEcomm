@@ -41,7 +41,7 @@ class BundleController extends Controller
                 $fileAdder->preservingOriginal()->toMediaCollection('item_images');
             });
         }
-        return redirect()->route('bundles.index')->with('status', 'Brand created successfully.');
+        return redirect()->route('bundle.index')->with('status', 'Brand created successfully.');
     }
 
     public function edit(Bundle $bundle): View
@@ -61,14 +61,14 @@ class BundleController extends Controller
                 $fileAdder->preservingOriginal()->toMediaCollection('bundle');
             });
         }
-        return redirect()->route('bundles.edit', $bundle)->with('status', 'Brand updated successfully.');
+        return redirect()->route('bundle.edit', $bundle)->with('status', 'Brand updated successfully.');
     }
 
     public function destroy(Bundle $bundle): RedirectResponse
     {
         $this->bundleService->destroy($bundle->id);
 
-        return redirect()->route('bundles.index')->with('status', 'Brand deleted successfully.');
+        return redirect()->route('bundle.index')->with('status', 'Brand deleted successfully.');
     }
 
     public function deleteMedia($modelId, $mediaId)
