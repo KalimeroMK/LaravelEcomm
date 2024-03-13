@@ -12,9 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
 use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
@@ -103,8 +101,6 @@ use Modules\Product\Models\Product;
  */
 class Category extends Core
 {
-    use NodeTrait;
-
     protected $table = 'categories';
 
     protected $casts = [
@@ -131,24 +127,6 @@ class Category extends Core
         return CategoryFactory::new();
     }
 
-    /**
-     * @return string
-     */
-    public static function getTree()
-    {
-        $categories = self::get()->toTree();
-        $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
-            foreach ($categories as $category) {
-                $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
-                $traverse($category->children, $prefix.'-');
-            }
-
-            return $allCats;
-        };
-
-        return $traverse($categories);
-    }
-    
 
     /**
      * @return int
@@ -161,17 +139,6 @@ class Category extends Core
         }
 
         return 0;
-    }
-
-    /**
-     * @return Builder[]|Collection
-     */
-    public static function getAllParentWithChild(): Collection|array
-    {
-        return Category::with('child_cat')->where('parent_id', 1)->where('status', 'active')->orderBy(
-            'title',
-            'ASC'
-        )->get();
     }
 
     /**
@@ -223,22 +190,6 @@ class Category extends Core
     }
 
     /**
-     * @return HasOne
-     */
-    public function parent_info(): HasOne
-    {
-        return $this->hasOne(Category::class, 'id', 'parent_id');
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function child_cat(): HasMany
-    {
-        return $this->hasMany(Category::class, 'parent_id', 'id')->where('status', 'active');
-    }
-
-    /**
      * @return BelongsTo
      */
     public function parent(): BelongsTo
@@ -249,7 +200,7 @@ class Category extends Core
     /**
      * @return string
      */
-    public function getParentsNames()
+    public function getParentsNames(): string
     {
         if ($this->parent) {
             return $this->parent->getParentsNames();

@@ -188,13 +188,12 @@ return [
          */
         Barryvdh\DomPDF\ServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
-        PrettyRoutes\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Spatie\Feed\FeedServiceProvider::class,
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
-        PrettyRoutes\ServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
         FilterableServiceProvider::class,
+        jeremykenedy\LaravelBlocker\LaravelBlockerServiceProvider::class,
 
         /*
          * Application Service Providers...
