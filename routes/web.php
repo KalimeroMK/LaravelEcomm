@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\MagicLoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Feed\Http\FeedController;
@@ -21,4 +22,7 @@ Auth::routes();
 // Socialite
 Route::get('login/{provider}/', [LoginController::class, 'redirect'])->name('login.redirect');
 Route::get('login/{provider}/callback/', [LoginController::class, 'Callback'])->name('login.callback');
-
+Route::post('/magic/send', 'MagicLoginConAuth\troller@sendToken')->name('magic.send');
+Route::post('/magic/send', [MagicLoginController::class, 'sendToken'])->name('magic.send');
+Route::get('/magic/login/{token}', [MagicLoginController::class, 'login'])->name('magic.login');
+Route::get('/magic/generate', [MagicLoginController::class, 'showLoginForm'])->name('magic.login');

@@ -102,7 +102,7 @@ class PermissionTableSeeder extends Seeder
         $user = User::factory()->create([
             'name' => $name,
             'email' => $email,
-            'password' => Hash::make('password') // Replace with a secure default password or mechanism
+            'password' => Hash::make('test')
         ]);
         $user->assignRole($roleName);
     }
