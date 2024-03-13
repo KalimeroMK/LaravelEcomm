@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MagicLoginLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Modules\User\Models\User;
 
@@ -25,8 +27,7 @@ class MagicLoginController extends Controller
         $user->save();
 
         // Send the magic link. Implement this in your Mail class.
-        // Mail::to($user->email)->send(new MagicLoginLink($user));
-
+        Mail::to($user->email)->send(new MagicLoginLink($user));
         return back()->with('magic_link_sent', 'We have emailed you a magic link!');
     }
 
@@ -42,6 +43,6 @@ class MagicLoginController extends Controller
         $user->token_expires_at = null;
         $user->save();
 
-        return redirect('/home'); // Or wherever you want to redirect users after login
+        return redirect('/admin'); // Or wherever you want to redirect users after login
     }
 }

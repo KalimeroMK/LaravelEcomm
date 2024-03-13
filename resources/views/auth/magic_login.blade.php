@@ -29,7 +29,7 @@
                                 @endif
                                 <div class="form-group">
 
-                                    <form method="POST" action="{{ route('magic.login') }}">
+                                    <form method="POST" action="{{ route('magic.send') }}">
                                         @csrf
                                         <div class="form-group">
                                             <input type="email"

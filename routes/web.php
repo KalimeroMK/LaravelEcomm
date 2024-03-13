@@ -25,4 +25,4 @@ Route::get('login/{provider}/callback/', [LoginController::class, 'Callback'])->
 Route::post('/magic/send', 'MagicLoginConAuth\troller@sendToken')->name('magic.send');
 Route::post('/magic/send', [MagicLoginController::class, 'sendToken'])->name('magic.send');
 Route::get('/magic/login/{token}', [MagicLoginController::class, 'login'])->name('magic.login');
-Route::get('/magic/generate', [MagicLoginController::class, 'showLoginForm'])->name('magic.login');
+Route::get('/magic/generate', [MagicLoginController::class, 'showLoginForm'])->name('magic-login.show-login-form');
