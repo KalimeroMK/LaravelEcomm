@@ -52,7 +52,7 @@ class ProductRepository extends Repository
     {
         $cacheKey = 'search_'.md5(json_encode($data));
 
-        return Cache::remember($cacheKey, 86400, function () use ($data) {
+        return Cache::store('redis')->remember($cacheKey, 86400, function () use ($data) {
             $query = $this->model::query();
 
             $searchableFields = [
@@ -74,15 +74,17 @@ class ProductRepository extends Repository
             }
 
             $query->orderBy(
-                Arr::get($data, 'order_by') ?? self::DEFAULT_ORDER_BY,
-                Arr::get($data, 'sort') ?? self::DEFAULT_SORT
+                Arr::get($data, 'order_by') ?? 'id', // Assuming 'id' as the default order by
+                Arr::get($data, 'sort') ?? 'desc' // Assuming 'desc' as the default sort
             );
 
+            // Assuming withRelations() is a method that returns an array of relations to load
             return $query->with($this->withRelations())->paginate(
                 Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()
             );
         });
     }
+
 
     public function getLatestProducts(): Collection
     {

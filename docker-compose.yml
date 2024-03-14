@@ -9,7 +9,7 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-      - ./.docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./.docker/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
     networks:
       - laravelapp
