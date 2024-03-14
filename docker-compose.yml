@@ -50,6 +50,8 @@ services:
       - laravelapp
     ports:
       - "6379:6379"
+    volumes:
+      - ./.docker/redis:/data
 networks:
   laravelapp:
     driver: bridge

@@ -366,10 +366,8 @@ class FrontService
         $cacheKey = 'productSearch_'.implode('_', $data);
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($data) {
-            // Get recent products.
             $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
-            // Search products by name, description, and brand name.
             $products = Product::whereLike(Product::likeRows, Arr::get($data, 'search'))
                 ->orderBy('id', 'DESC')
                 ->paginate('9');
