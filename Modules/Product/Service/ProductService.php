@@ -17,6 +17,8 @@ use Modules\Tag\Models\Tag;
 
 class ProductService extends CoreService
 {
+    use ImageUpload;
+
     public ProductRepository $product_repository;
 
     public function __construct(ProductRepository $product_repository)
@@ -24,7 +26,6 @@ class ProductService extends CoreService
         $this->product_repository = $product_repository;
     }
 
-    use ImageUpload;
 
     public function getAll($data): mixed
     {

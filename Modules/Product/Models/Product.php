@@ -38,7 +38,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $slug
  * @property string $summary
  * @property string|null $description
- * @property string $photo
  * @property int $stock
  * @property string|null $size
  * @property string $condition

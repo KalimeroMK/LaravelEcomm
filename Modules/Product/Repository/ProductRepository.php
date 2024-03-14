@@ -73,10 +73,6 @@ class ProductRepository extends Repository
                 }
             }
 
-            if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
-                return $query->with($this->withRelations())->get();
-            }
-
             $query->orderBy(
                 Arr::get($data, 'order_by') ?? self::DEFAULT_ORDER_BY,
                 Arr::get($data, 'sort') ?? self::DEFAULT_SORT
