@@ -10,8 +10,8 @@ return new class extends Migration {
     {
         Schema::create('shipping', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->decimal('price');
+            $table->string('type')->index();
+            $table->decimal('price')->index();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

@@ -10,26 +10,22 @@ use Modules\Category\Models\Category;
 class CategoryFactory extends Factory
 {
     protected $model = Category::class;
-    
+
     /**
      * Define the model's default state.
      *
      * @return array
      */
     #[ArrayShape([
-        'title'      => "string",
-        'slug'       => "string",
-        '_lft'       => "int",
-        '_rgt'       => "int",
+        'title' => "string",
+        'slug' => "string",
         'created_at' => "\Illuminate\Support\Carbon",
         'updated_at' => "\Illuminate\Support\Carbon",
     ])] public function definition(): array
     {
         return [
-            'title'      => $this->faker->word,
-            'slug'       => $this->faker->slug,
-            '_lft'       => $this->faker->randomNumber(),
-            '_rgt'       => $this->faker->randomNumber(),
+            'title' => $this->faker->word,
+            'slug' => $this->faker->slug,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

@@ -20,13 +20,12 @@ return new class extends Migration {
             $table->boolean('boolean_value')->nullable();
             $table->integer('integer_value')->nullable();
             $table->decimal('decimal_value', 7, 4)->nullable();
-            $table->unsignedBigInteger('attribute_id');
-            $table->timestamps();
-            
+            $table->unsignedBigInteger('attribute_id')->index();
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
+            $table->timestamps();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('attribute_values');

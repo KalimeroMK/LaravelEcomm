@@ -9,13 +9,13 @@ return new class extends Migration {
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('order_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->float('price');
+            $table->float('price')->index();
             $table->enum('status', ['new', 'progress', 'delivered', 'cancel'])->default('new');
             $table->integer('quantity');
             $table->float('amount');
+            $table->unsignedBigInteger('product_id')->index();
+            $table->unsignedBigInteger('order_id')->nullable()->index();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('CASCADE');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('SET NULL');

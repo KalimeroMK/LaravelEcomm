@@ -9,22 +9,21 @@ use Modules\Settings\Models\Setting;
 class SettingFactory extends Factory
 {
     protected $model = Setting::class;
-    
+
     public function definition(): array
     {
         return [
-            'description'              => $this->faker->text(),
-            'short_des'                => $this->faker->word(),
-            'logo'                     => $this->faker->imageUrl(),
-            'address'                  => $this->faker->address(),
-            'phone'                    => $this->faker->phoneNumber(),
-            'email'                    => $this->faker->unique()->safeEmail(),
-            'site-name'                => $this->faker->word(),
-            'fb_app_id'                => $this->faker->word(),
-            'keywords'                 => $this->faker->word(),
+            'description' => $this->faker->text(),
+            'short_des' => $this->faker->word(),
+            'logo' => $this->faker->imageUrl(),
+            'address' => $this->faker->address(),
+            'phone' => $this->faker->phoneNumber(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'site-name' => $this->faker->word(),
+            'keywords' => $this->faker->word(),
             'google-site-verification' => $this->faker->word(),
-            'created_at'               => Carbon::now(),
-            'updated_at'               => Carbon::now(),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 }

@@ -9,9 +9,9 @@ return new class extends Migration {
     {
         Schema::create('bundles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->string('slug');
+            $table->string('name')->index();
+            $table->text('description')->index();
+            $table->string('slug')->unique();
             $table->decimal('price', 15, 2);
             $table->timestamps();
         });
