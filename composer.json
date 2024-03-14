@@ -22,7 +22,7 @@
     "laravel/framework": "^11.0",
     "laravel/helpers": "*",
     "laravel/sanctum": "^4.0",
-    "laravel/socialite": "*",
+    "laravel/socialite": "^5.12",
     "laravel/telescope": "*",
     "laravel/tinker": "^2.8",
     "laravel/ui": "*",
