@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="text-center">
                                     @if (Route::has('password.request'))
-                                        <a class="btn btn-link small" href="{{ route('magic.login') }}">
+                                        <a class="btn btn-link small" href="{{ route('magic-login.show-login-form') }}">
                                             {{ __('Login with magic link ?') }}
                                         </a>
                                     @endif
