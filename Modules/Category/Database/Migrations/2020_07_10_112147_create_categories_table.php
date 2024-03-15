@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->foreign('parent_id')->references('id')->on('categories');
+            $table->integer('_lft')->nullable();
+            $table->integer('_rgt')->nullable();
             $table->timestamps();
         });
     }

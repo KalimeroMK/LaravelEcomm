@@ -4,33 +4,37 @@ namespace Modules\User\Providers;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\Core\Traits\AutoRegistersCommands;
 use Modules\User\Models\Observers\UserObserver;
 use Modules\User\Models\User;
 
 class UserServiceProvider extends ServiceProvider
 {
+    use AutoRegistersCommands;
+
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'User';
+    protected string $moduleName = 'User';
 
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'user';
+    protected string $moduleNameLower = 'user';
 
     /**
      * Boot the application events.
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         User::observe(UserObserver::class);
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        $this->autoRegisterCommands($this->moduleName);
     }
 
     /**
@@ -38,7 +42,7 @@ class UserServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerTranslations()
+    public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 

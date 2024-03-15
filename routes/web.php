@@ -29,3 +29,6 @@ Route::get('/login/{social}', [AuthController::class, 'socialLogin'])->where('so
     'twitter|facebook|linkedin|google|github|bitbucket');
 Route::get('/login/{social}/callback', [AuthController::class, 'handleProviderCallback'])->where('social',
     'twitter|facebook|linkedin|google|github|bitbucket');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

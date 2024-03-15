@@ -15,10 +15,11 @@
     "guzzlehttp/guzzle": "^7.2",
     "intervention/image": "^2.7",
     "jeremykenedy/laravel-blocker": "dev-master",
-    "jeremykenedy/laravel-logger": "dev-master",
+    "jeremykenedy/laravel-logger": "^2.5",
     "kalimeromk/filterable": "^1.5",
     "kalimeromk/laravel-translation-manager": "^1.5",
     "lab404/laravel-impersonate": "*",
+    "kalnoy/nestedset": "dev-master",
     "laravel/framework": "^11.0",
     "laravel/helpers": "*",
     "laravel/sanctum": "^4.0",
@@ -66,7 +67,7 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/KalimeroMK/laravel-logger"
+      "url": "https://github.com/laravel-shift/laravel-nestedset.git"
     }
   ],
   "autoload": {

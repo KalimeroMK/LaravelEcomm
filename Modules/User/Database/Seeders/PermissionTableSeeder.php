@@ -3,8 +3,6 @@
 namespace Modules\User\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Modules\User\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -76,11 +74,6 @@ class PermissionTableSeeder extends Seeder
         // Super-admin gets all permissions
         $role3 = Role::create(['name' => 'super-admin']);
         $role3->givePermissionTo(Permission::all());
-
-        // Create demo users and assign roles
-        $this->createUserWithRole('Example User', 'manager@mail.com', 'manager');
-        $this->createUserWithRole('Example client User', 'client@mail.com', 'client');
-        $this->createUserWithRole('Example Super-Admin User', 'superadmin@mail.com', 'super-admin');
     }
 
     /**
@@ -97,13 +90,4 @@ class PermissionTableSeeder extends Seeder
         }
     }
 
-    private function createUserWithRole(string $name, string $email, string $roleName): void
-    {
-        $user = User::factory()->create([
-            'name' => $name,
-            'email' => $email,
-            'password' => Hash::make('test')
-        ]);
-        $user->assignRole($roleName);
-    }
 }

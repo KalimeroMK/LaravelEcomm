@@ -99,7 +99,7 @@ class User extends Authenticatable
     use Impersonate;
 
     protected $table = 'users';
-    
+
     /**
      * @var string[]
      */
@@ -117,9 +117,6 @@ class User extends Authenticatable
         'email',
         'email_verified_at',
         'password',
-        'photo',
-        'provider',
-        'provider_id',
         'status',
         'remember_token',
     ];

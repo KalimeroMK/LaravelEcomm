@@ -17,6 +17,7 @@ class ResetPasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
+
     use ResetsPasswords;
 
     /**
@@ -24,15 +25,5 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected string $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
+    protected $redirectTo = '/home';
 }
