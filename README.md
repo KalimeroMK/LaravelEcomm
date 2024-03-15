@@ -114,6 +114,10 @@
 * **Container ssh**: docker-compose exec app sh
 * **Run migrations**: php artisan:migrate:fresh --seed.
 
+### Menagment
+
+* **User create** `` php artisan user:create``
+
 ### Demo page:https://e-comm.mk
 
 <p style="text-align:center">Thank You so much for your time !!!</p>
