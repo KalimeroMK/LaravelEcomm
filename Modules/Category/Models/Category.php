@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
 use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
@@ -101,6 +102,8 @@ use Modules\Product\Models\Product;
  */
 class Category extends Core
 {
+    use NodeTrait;
+
     protected $table = 'categories';
 
     protected $casts = [
@@ -127,6 +130,58 @@ class Category extends Core
         return CategoryFactory::new();
     }
 
+    /**
+     * @return string
+     */
+    public static function getTree()
+    {
+        $categories = self::get()->toTree();
+        $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
+            foreach ($categories as $category) {
+                $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
+                $traverse($category->children, $prefix.'-');
+            }
+
+            return $allCats;
+        };
+
+        return $traverse($categories);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getList(): string
+    {
+        $categories = self::get()->toTree();
+        $lists = '<li class="list-unstyled">';
+        foreach ($categories as $category) {
+            $lists .= self::renderNodeHP($category);
+        }
+        $lists .= "</li>";
+
+        return $lists;
+    }
+
+    /**
+     * @param $node
+     *
+     * @return string
+     */
+    public static function renderNodeHP($node): string
+    {
+        $list = '<li class="dropdown-item"><a class="nav-link" href="/categories/'.$node->slug.'">'.$node->title.'</a>';
+        if ($node->children()->count() > 0) {
+            $list .= '<ul class="dropdown border-0 shadow">';
+            foreach ($node->children as $child) {
+                $list .= self::renderNodeHP($child);
+            }
+            $list .= "</ul>";
+        }
+        $list .= "</li>";
+
+        return $list;
+    }
 
     /**
      * @return int
@@ -200,7 +255,7 @@ class Category extends Core
     /**
      * @return string
      */
-    public function getParentsNames(): string
+    public function getParentsNames()
     {
         if ($this->parent) {
             return $this->parent->getParentsNames();
