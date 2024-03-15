@@ -390,11 +390,9 @@ class FrontService
     public function productDeal(): array|string
     {
         return Cache::remember('productDeal', 24 * 60, function () {
-            // Get recent products.
             $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
-            // Get deal products.
-            $products = Product::where('d_deal', true)
+            $products = Product::with('categories')->where('d_deal', true)
                 ->orderBy('id', 'DESC')
                 ->paginate('9');
 

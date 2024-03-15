@@ -4,7 +4,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Admin</div>
+        <div class="sidebar-brand-text mx-3">@lang('sidebar.admin')</div>
     </a>
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
@@ -13,7 +13,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="{{route('admin')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>@lang('sidebar.dashboard')</span></a>
     </li>
     @can('super-admin')
         <!-- Divider -->
@@ -21,7 +21,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Banner
+            @lang('sidebar.banners')
         </div>
 
         <li class="nav-item">
@@ -29,13 +29,13 @@
                aria-expanded="true"
                aria-controls="collapseTwo">
                 <i class="fas fa-image"></i>
-                <span>Banners</span>
+                <span>@lang('sidebar.banners')</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Banner Options:</h6>
-                    <a class="collapse-item" href="{{route('banner.index')}}">Banners</a>
-                    <a class="collapse-item" href="{{route('banner.create')}}">Add Banners</a>
+                    <h6 class="collapse-header">@lang('sidebar.banner_options'):</h6>
+                    <a class="collapse-item" href="{{route('banner.index')}}">@lang('sidebar.banners')</a>
+                    <a class="collapse-item" href="{{route('banner.create')}}">@lang('sidebar.add_banners')</a>
                 </div>
             </div>
         </li>
@@ -53,13 +53,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#categoryCollapse"
            aria-expanded="true" aria-controls="categoryCollapse">
             <i class="fas fa-sitemap"></i>
-            <span>Category</span>
+            <span>@lang('sidebar.category')</span>
         </a>
         <div id="categoryCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Category Options:</h6>
-                <a class="collapse-item" href="{{route('category.index')}}">Category</a>
-                <a class="collapse-item" href="{{route('category.create')}}">Add Category</a>
+                <h6 class="collapse-header">@lang('sidebar.category_options'):</h6>
+                <a class="collapse-item" href="{{route('category.index')}}">@lang('sidebar.category')</a>
+                <a class="collapse-item" href="{{route('category.create')}}">@lang('sidebar.add_category')</a>
             </div>
         </div>
     </li>
@@ -68,13 +68,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#attributeCollapse"
            aria-expanded="true" aria-controls="attributeCollapse">
             <i class="fas fa-cubes"></i>
-            <span>Attribute</span>
+            <span>@lang('sidebar.attributes')</span>
         </a>
         <div id="attributeCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Attribute Options:</h6>
-                <a class="collapse-item" href="{{route('attribute.index')}}">Attributes</a>
-                <a class="collapse-item" href="{{route('attribute.create')}}">Add attribute</a>
+                <h6 class="collapse-header">@lang('sidebar.attribute_options'):</h6>
+                <a class="collapse-item" href="{{route('attribute.index')}}">@lang('sidebar.attributes')</a>
+                <a class="collapse-item" href="{{route('attribute.create')}}">@lang('sidebar.add_attribute')</a>
             </div>
         </div>
     </li>
@@ -83,14 +83,14 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productCollapse"
            aria-expanded="true" aria-controls="productCollapse">
             <i class="fas fa-cubes"></i>
-            <span>Products</span>
+            <span>@lang('sidebar.products')</span>
         </a>
         <div id="productCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Product Options:</h6>
-                <a class="collapse-item" href="{{route('product.index')}}">Products</a>
-                <a class="collapse-item" href="{{route('product.create')}}">Add Product</a>
-                <a class="collapse-item" href="{{route('export-import-product.index')}}">Add Product</a>
+                <h6 class="collapse-header">@lang('sidebar.product_options'):</h6>
+                <a class="collapse-item" href="{{route('product.index')}}">@lang('sidebar.products')</a>
+                <a class="collapse-item" href="{{route('product.create')}}">@lang('sidebar.add_product')</a>
+                <a class="collapse-item" href="{{route('export-import-product.index')}}">CSV Import & Export</a>
             </div>
         </div>
     </li>
@@ -99,13 +99,14 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#bundleCollapse"
            aria-expanded="true" aria-controls="bundleCollapse">
             <i class="fas fa-cubes"></i>
-            <span>Bundles</span>
+            <span>@lang('sidebar.bundles')</span>
         </a>
         <div id="bundleCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Bundle Options:</h6>
-                <a class="collapse-item" href="{{route('bundle.index')}}">Bundles</a>
-                <a class="collapse-item" href="{{route('bundle.create')}}">CSV Import & Export</a>
+                <h6 class="collapse-header">@lang('sidebar.bundles_options'):</h6>
+                <a class="collapse-item" href="{{route('bundle.index')}}">@lang('sidebar.bundles')</a>
+                <a class="collapse-item" href="{{route('bundle.create')}}">@lang('sidebar.add_bundles')</a>
+
             </div>
         </div>
     </li>
@@ -115,13 +116,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#brandCollapse" aria-expanded="true"
            aria-controls="brandCollapse">
             <i class="fas fa-table"></i>
-            <span>Brands</span>
+            <span>@lang('sidebar.brands')</span>
         </a>
         <div id="brandCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Brand Options:</h6>
-                <a class="collapse-item" href="{{route('brand.index')}}">Brands</a>
-                <a class="collapse-item" href="{{route('brand.create')}}">Add Brand</a>
+                <h6 class="collapse-header">@lang('sidebar.brand_options'):</h6>
+                <a class="collapse-item" href="{{route('brand.index')}}">@lang('sidebar.brands')</a>
+                <a class="collapse-item" href="{{route('brand.create')}}">@lang('sidebar.add_brand')</a>
             </div>
         </div>
     </li>
@@ -130,13 +131,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#shippingCollapse"
            aria-expanded="true" aria-controls="shippingCollapse">
             <i class="fas fa-truck"></i>
-            <span>Shipping</span>
+            <span>@lang('sidebar.shipping')</span>
         </a>
         <div id="shippingCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Shipping Options:</h6>
-                <a class="collapse-item" href="{{route('shipping.index')}}">Shipping</a>
-                <a class="collapse-item" href="{{route('shipping.create')}}">Add Shipping</a>
+                <h6 class="collapse-header">@lang('sidebar.shipping_options'):</h6>
+                <a class="collapse-item" href="{{route('shipping.index')}}">@lang('sidebar.shipping')</a>
+                <a class="collapse-item" href="{{route('shipping.create')}}">@lang('sidebar.add_shipping')</a>
             </div>
         </div>
     </li>
@@ -145,13 +146,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#newsletterCollapse"
            aria-expanded="true" aria-controls="newsletterCollapse">
             <i class="fas fa-truck"></i>
-            <span>Newsletters</span>
+            <span>@lang('sidebar.newsletters')</span>
         </a>
         <div id="newsletterCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Newsletter Options:</h6>
-                <a class="collapse-item" href="{{route('newsletter.index')}}">Newsletters</a>
-                <a class="collapse-item" href="{{route('newsletter.create')}}">Add newsletter</a>
+                <h6 class="collapse-header">@lang('sidebar.newsletters_options'):</h6>
+                <a class="collapse-item" href="{{route('newsletter.index')}}">@lang('sidebar.newsletters')</a>
+                <a class="collapse-item" href="{{route('newsletter.create')}}">@lang('sidebar.add_newsletter')</a>
             </div>
         </div>
     </li>
@@ -161,7 +162,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{route('order.index')}}">
             <i class="fas fa-hammer fa-chart-area"></i>
-            <span>Orders</span>
+            <span>@lang('sidebar.orders')</span>
         </a>
     </li>
 
@@ -169,7 +170,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{route('reviews.index')}}">
             <i class="fas fa-comments"></i>
-            <span>Reviews</span></a>
+            <span>@lang('sidebar.reviews')</span></a>
     </li>
 
 
@@ -187,13 +188,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#postCollapse" aria-expanded="true"
            aria-controls="postCollapse">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Posts</span>
+            <span>@lang('sidebar.posts')</span>
         </a>
         <div id="postCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Post Options:</h6>
-                <a class="collapse-item" href="{{route('post.index')}}">Posts</a>
-                <a class="collapse-item" href="{{route('post.create')}}">Add Post</a>
+                <h6 class="collapse-header">@lang('sidebar.post_options'):</h6>
+                <a class="collapse-item" href="{{route('post.index')}}">@lang('sidebar.posts')</a>
+                <a class="collapse-item" href="{{route('post.create')}}">@lang('sidebar.add_post')</a>
             </div>
         </div>
     </li>
@@ -203,27 +204,27 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#tagCollapse" aria-expanded="true"
            aria-controls="tagCollapse">
             <i class="fas fa-tags fa-folder"></i>
-            <span>Tags</span>
+            <span>@lang('sidebar.tags')</span>
         </a>
         <div id="tagCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Tag Options:</h6>
-                <a class="collapse-item" href="{{route('tag.index')}}">Tag</a>
-                <a class="collapse-item" href="{{route('tag.create')}}">Add Tag</a>
+                <h6 class="collapse-header">@lang('sidebar.tags_options'):</h6>
+                <a class="collapse-item" href="{{route('tag.index')}}">@lang('sidebar.tags')</a>
+                <a class="collapse-item" href="{{route('tag.create')}}">@lang('sidebar.add_tag')</a>
             </div>
         </div>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{route('coupon.index')}}">
             <i class="fas fa-table"></i>
-            <span>Coupon</span></a>
+            <span>@lang('sidebar.coupons')</span></a>
     </li>
     @endhasrole
     <!-- Comments -->
     <li class="nav-item">
         <a class="nav-link" href="{{route('comment.index')}}">
             <i class="fas fa-comments fa-chart-area"></i>
-            <span>Comments</span>
+            <span>@lang('sidebar.comments')</span>
         </a>
     </li>
 
@@ -232,7 +233,7 @@
     <hr class="sidebar-divider d-none d-md-block">
     <!-- Heading -->
     <div class="sidebar-heading">
-        General Settings
+        @lang('sidebar.general_settings')
     </div>
 
     <!-- Users -->
@@ -240,15 +241,15 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userCollapse"
            aria-expanded="true" aria-controls="shippingCollapse">
             <i class="fas fa-wrench"></i>
-            <span>User</span>
+            <span>@lang('sidebar.users')</span>
         </a>
         <div id="userCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">User configuration:</h6>
-                <a class="collapse-item" href="{{route('user.index')}}">User</a>
+                <h6 class="collapse-header">@lang('sidebar.user_options'):</h6>
+                <a class="collapse-item" href="{{route('user.index')}}">@lang('sidebar.users')</a>
                 @hasrole('super-admin')
-                <a class="collapse-item" href="{{route('role.index')}}">Role</a>
-                <a class="collapse-item" href="{{route('permission.index')}}">Permission</a>
+                <a class="collapse-item" href="{{route('role.index')}}">@lang('sidebar.roles')</a>
+                <a class="collapse-item" href="{{route('permission.index')}}">@lang('sidebar.permissions')</a>
                 @endhasrole
             </div>
         </div>
@@ -260,16 +261,17 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#configCollapse"
            aria-expanded="true" aria-controls="shippingCollapse">
             <i class="fas fa-wrench"></i>
-            <span>Configuration</span>
+            <span>@lang('sidebar.configuration')</span>
         </a>
         <div id="configCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Configuration Options:</h6>
-                <a class="collapse-item" href="{{route('setting.index')}}">Settings</a>
-                <a class="collapse-item" href="{{route('all.notification')}}">Notifications</a>
-                <a class="collapse-item" href="{{route('laravelblocker::blocker.index')}}">Blocked IP</a>
-                <a class="collapse-item" href="{{route('activity')}}">Activity log</a>
-                <a class="collapse-item" href="{{ url('translations/') }}">Translation</a>
+                <h6 class="collapse-header">@lang('sidebar.configuration_options'):</h6>
+                <a class="collapse-item" href="{{route('setting.index')}}">@lang('sidebar.settings')</a>
+                <a class="collapse-item" href="{{route('all.notification')}}">@lang('sidebar.notifications')</a>
+                <a class="collapse-item"
+                   href="{{route('laravelblocker::blocker.index')}}">@lang('sidebar.blocked_ip')</a>
+                <a class="collapse-item" href="{{route('activity')}}">@lang('sidebar.activity_log')</a>
+                <a class="collapse-item" href="{{ url('translations/') }}">@lang('sidebar.translation')</a>
             </div>
         </div>
     </li>
