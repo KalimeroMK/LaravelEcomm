@@ -255,16 +255,6 @@
     </li>
     @hasrole('super-admin')
     <!-- General settings -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{route('setting.index')}}">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{route('all.notification')}}">
-            <i class="fas fa-info"></i>
-            <span>Notification</span></a>
-    </li>
     {{-- Config --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#configCollapse"
@@ -275,8 +265,10 @@
         <div id="configCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Configuration Options:</h6>
-                <a class="collapse-item" href="{{route('activity')}}">Activity log</a>
+                <a class="collapse-item" href="{{route('setting.index')}}">Settings</a>
+                <a class="collapse-item" href="{{route('all.notification')}}">Notifications</a>
                 <a class="collapse-item" href="{{route('laravelblocker::blocker.index')}}">Blocked IP</a>
+                <a class="collapse-item" href="{{route('activity')}}">Activity log</a>
                 <a class="collapse-item" href="{{ url('translations/') }}">Translation</a>
             </div>
         </div>
