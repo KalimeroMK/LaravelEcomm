@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dashboard' => 'Контролна Табла',
+    'dashboard' => 'Контролна табла',
     'banners' => 'Банери',
     'add_banners' => 'Додади Банери',
     'shop' => 'Продавница',
@@ -19,7 +19,7 @@ return [
     'newsletters' => 'Новости',
     'add_newsletter' => 'Додади Новост',
     'orders' => 'Нарачки',
-    'reviews' => 'Рецензии',
+    'reviews' => 'Оценки',
     'posts' => 'Постови',
     'add_post' => 'Додади Пост',
     'tags' => 'Тагови',
@@ -28,7 +28,7 @@ return [
     'comments' => 'Коментари',
     'settings' => 'Поставки',
     'notifications' => 'Известувања',
-    'blocked_ip' => 'Блокирани IP',
+    'blocked_ip' => 'Блокирани IP адреси',
     'activity_log' => 'Лог на Активности',
     'translation' => 'Превод',
     'users' => 'Корисници',
@@ -36,6 +36,16 @@ return [
     'permissions' => 'Дозволи',
     'configuration' => 'Конфигурација',
     'logout' => 'Одјави се',
-    'admin' => 'Admin',
-
+    'category' => 'Категорија',
+    'banner_options' => 'Опции за банери',
+    'category_options' => 'Опции за категории',
+    'attribute_options' => 'Опции за атрибути',
+    'product_options' => 'Опции за продукти',
+    'add_bundles' => 'Додади пакети',
+    'brand_options' => 'Опции за брендови',
+    'shipping_options' => 'Опции за испорака',
+    'newsletters_options' => 'Опции за новости',
+    'post_options' => 'Опции за постови',
+    'tag_options' => 'Опции за тагови',
+    'general_settings' => 'Општи поставки',
 ];

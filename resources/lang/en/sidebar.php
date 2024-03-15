@@ -49,5 +49,4 @@ return [
     'tag_options' => 'Tag options',
     'general_settings' => 'General settings',
 
-
 ];

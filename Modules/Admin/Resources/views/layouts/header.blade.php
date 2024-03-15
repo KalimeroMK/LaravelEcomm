@@ -108,6 +108,25 @@
         </li>
 
     </ul>
-
+    <div class="dropdown">
+        <button type="button" class="btn header-item waves-effect" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            @switch(Session::get('locale', 'en'))
+                @case('mk')
+                    <img src="{{ asset('/assets/images/flags/mk.jpg') }}" alt="Macedonian Language" height="16">
+                    @break
+                @case('de')
+                    <img src="{{ asset('/assets/images/flags/de.jpg') }}" alt="German Language" height="16">
+                    @break
+                @default
+                    <img src="{{ asset('/assets/images/flags/us.jpg') }}" alt="English Language" height="16">
+            @endswitch
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="{{ route('lang.switch', 'en') }}">English</a>
+            <a class="dropdown-item" href="{{ route('lang.switch', 'mk') }}">Macedonian</a>
+            <a class="dropdown-item" href="{{ route('lang.switch', 'de') }}">German</a>
+        </div>
+    </div>
 </nav>
 {{--@include('notification::notification')--}}

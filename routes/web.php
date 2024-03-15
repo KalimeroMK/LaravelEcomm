@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MagicLoginController;
+use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Feed\Http\FeedController;
@@ -29,6 +30,5 @@ Route::get('/login/{social}', [AuthController::class, 'socialLogin'])->where('so
     'twitter|facebook|linkedin|google|github|bitbucket');
 Route::get('/login/{social}/callback', [AuthController::class, 'handleProviderCallback'])->where('social',
     'twitter|facebook|linkedin|google|github|bitbucket');
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
