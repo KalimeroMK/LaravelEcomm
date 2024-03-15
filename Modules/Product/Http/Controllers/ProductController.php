@@ -2,30 +2,23 @@
 
 namespace Modules\Product\Http\Controllers;
 
+use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Maatwebsite\Excel\Exporter;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Product\Http\Requests\Api\Search;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
-use Modules\Product\Import\Products;
-use Modules\Product\Import\Products as ProductImport;
 use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
-use PhpOffice\PhpSpreadsheet\Exception;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProductController extends CoreController
 {
     private ProductService $product_service;
-    private Exporter $excel;
 
-    public function __construct(ProductService $product_service, Exporter $excel)
+    public function __construct(ProductService $product_service)
     {
         $this->product_service = $product_service;
-        $this->excel = $excel;
         $this->authorizeResource(Product::class, 'product');
     }
 
@@ -40,7 +33,7 @@ class ProductController extends CoreController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(Store $request): RedirectResponse
     {
@@ -59,7 +52,7 @@ class ProductController extends CoreController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(Update $request, Product $product): RedirectResponse
     {
@@ -76,21 +69,6 @@ class ProductController extends CoreController
     {
         $this->product_service->destroy($product->id);
         return redirect()->route('product.index');
-    }
-
-    /**
-     * @throws Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     */
-    public function export(): BinaryFileResponse
-    {
-        return $this->excel->download(new Products, 'Products.xlsx');
-    }
-
-    public function import(ImportRequest $request): RedirectResponse
-    {
-        $this->excel->import(new ProductImport(), $request->file('file'));
-        return redirect()->back();
     }
 
     public function deleteMedia($modelId, $mediaId)

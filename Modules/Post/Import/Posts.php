@@ -22,18 +22,18 @@ class Posts implements ToCollection, WithHeadingRow
         Schema::disableForeignKeyConstraints();
         foreach ($collection as $item) {
             Post::Create([
-                'title'       => $item['title'],
-                'slug'        => $item['slug'],
-                'summary'     => $item['summary'],
+                'title' => $item['title'],
+                'slug' => $item['slug'],
+                'summary' => $item['summary'],
                 'description' => $item['summary'],
-                'quote'       => $item['quote'],
-                'photo'       => $item['photo'],
-                'tags'        => $item['tags'],
-                'status'      => $item['status'],
+                'quote' => $item['quote'],
+                'photo' => $item['photo'],
+                'tags' => $item['tags'],
+                'status' => $item['status'],
             ]);
         }
         Schema::enableForeignKeyConstraints();
-        
+
         return 'Update done ';
     }
 }

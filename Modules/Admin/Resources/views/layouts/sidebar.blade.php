@@ -90,6 +90,7 @@
                 <h6 class="collapse-header">Product Options:</h6>
                 <a class="collapse-item" href="{{route('product.index')}}">Products</a>
                 <a class="collapse-item" href="{{route('product.create')}}">Add Product</a>
+                <a class="collapse-item" href="{{route('export-import-product.index')}}">Add Product</a>
             </div>
         </div>
     </li>
@@ -104,7 +105,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Bundle Options:</h6>
                 <a class="collapse-item" href="{{route('bundle.index')}}">Bundles</a>
-                <a class="collapse-item" href="{{route('bundle.create')}}">Add Bundle</a>
+                <a class="collapse-item" href="{{route('bundle.create')}}">CSV Import & Export</a>
             </div>
         </div>
     </li>

@@ -1,8 +1,7 @@
 <?php
 
-namespace Modules\Product\Export;
+namespace Modules\Product\Exports;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -11,7 +10,7 @@ use Modules\Product\Models\Product;
 
 class Products implements FromCollection, WithHeadings, WithMapping
 {
-    
+
     public function headings(): array
     {
         return [
@@ -20,30 +19,28 @@ class Products implements FromCollection, WithHeadings, WithMapping
             'slug',
             'summary',
             'description',
-            'photo',
             'stock',
-            'size',
-            'condition',
+            'condition_id',
             'status',
             'price',
             'discount',
             'is_featured',
             'brand_id',
             'color',
-            'created_at',
-            'updated_at',
-        
+            'special_price',
+            'special_price_start',
+            'special_price_end'
         ];
     }
-    
+
     /**
      * @return Collection
      */
     public function collection(): Collection
     {
-        return Product::with('brand')->get();
+        return Product::all();
     }
-    
+
     public function map($row): array
     {
         return [
@@ -52,18 +49,17 @@ class Products implements FromCollection, WithHeadings, WithMapping
             $row->slug,
             $row->summary ?? 'no data',
             $row->description ?? 'no data',
-            $row->photo ?? 'no data',
             $row->stock ?? 'no data',
-            $row->size ?? 'no data',
-            $row->condition ?? 'no data',
+            $row->condition_id ?? 'no data',
             $row->status ?? 'no data',
             $row->price ?? 'no data',
             $row->discount ?? 'no data',
             $row->is_featured ?? 'no data',
-            $row->brand->title ?? 'no data',
+            $row->brand_id ?? 'no data',
             $row->color ?? 'no data',
-            Carbon::parse($row->created_at)->toFormattedDateString() ?? '/',
-            Carbon::parse($row->update_at)->toFormattedDateString() ?? '/',
+            $row->special_price ?? 'no data',
+            $row->special_price_start ?? 'no data',
+            $row->special_price_end ?? 'no data',
         ];
     }
 }
