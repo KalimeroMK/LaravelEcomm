@@ -1,12 +1,10 @@
 @extends('admin::layouts.master')
-
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="row">
             <div class="col-md-12">
                 @include('notification::notification')
-
             </div>
         </div>
         <div class="card-header py-3">
@@ -15,65 +13,88 @@
                data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>@lang('partials.create')</a>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                @if(count($categories)>0)
-                    <table class="table table-bordered" id="data-table">
-                        <thead>
-                        <tr>
-                            <th>@lang('partials.s_n')</th>
-                            <th>@lang('partials.title')</th>
-                            <th>@lang('partials.slug')</th>
-                            <th>@lang('partials.status')</th>
-                            <th>@lang('partials.action')</th>
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <th>@lang('partials.s_n')</th>
-                            <th>@lang('partials.title')</th>
-                            <th>@lang('partials.slug')</th>
-                            <th>@lang('partials.status')</th>
-                            <th>@lang('partials.action')</th>
-                        </tr>
-                        </tfoot>
-                        <tbody>
-                        @foreach($categories as $category)
-                            <tr>
-                                <td>{{$category['id']}}</td>
-                                <td>{{$category['title']}}</td>
-                                <td>{{$category['slug']}}</td>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="border-bottom title-part-padding">
+                            <a href="{{ route('category.order') }}" class="btn btn-default">Add
+                                Category</a>
+                        </div>
+                        <div class="card-body">
+                            {!! $categories !!}
+                        </div>
 
-                                <td>
-                                    @if($category['status']=='active')
-                                        <span class="badge badge-success">@lang('partials.active')</span>
-                                    @else
-                                        <span class="badge badge-warning">@lang('partials.inactive')</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{route('category.edit',$category['id'])}}"
-                                       class="btn btn-primary btn-sm float-left mr-1"
-                                       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                       title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('category.destroy',[$category['id']])}}">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-danger btn-sm dltBtn"
-                                                data-id="{{$category['id']}}" data-placement="bottom" title="Delete">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
 
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                @else
-                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
-                @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script src="{{ asset('js/jquery.nestable.js') }}"></script>
+    <script>
+        $(document).ready(function () {
 
+            const updateOutput = function (e) {
+                const list = e.length ? e : $(e.target),
+                    output = list.data("output");
+                if (window.JSON) {
+                    output.val(window.JSON.stringify(list.nestable("serialize"))); //, null, 2));
+                } else {
+                    output.val("JSON browser support required for this demo.");
+                }
+
+
+                const order = $('.dd').nestable('serialize');
+
+
+                // Make an AJAX call to update the order on the backend
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('category.order') }}',
+                    data: {order: order},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ @csrf_token() }}"
+                    },
+                    success: function (response) {
+                        console.log(response); // Handle the success response
+                    },
+                    error: function (error) {
+                        console.log(error); // Handle the error
+                    }
+                });
+            };
+
+            $("#nestable")
+                .nestable({
+                    group: 1,
+                })
+                .on("change", updateOutput);
+
+            updateOutput($("#nestable").data("output", $("#nestable-output")));
+
+
+        });
+    </script>
+@endpush
+@push('styles')
+    <link href="{{asset('css/nestable.css')}}" rel="stylesheet">
+    <style>
+        .dd-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .edit-category-icon {
+            margin-left: auto;
+            padding: 0 10px;
+        }
+
+        .edit-category-icon i {
+            font-size: 1.2em;
+        }
+    </style>
+@endpush

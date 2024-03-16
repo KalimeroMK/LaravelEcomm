@@ -130,71 +130,47 @@ class Category extends Core
         return CategoryFactory::new();
     }
 
-    /**
-     * @return string
-     */
+    protected static int $depth = 0;
+
     public static function getTree()
     {
-        $categories = self::get()->toTree();
-        $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
-            foreach ($categories as $category) {
-                $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
-                $traverse($category->children, $prefix.'-');
-            }
-
-            return $allCats;
-        };
-
-        return $traverse($categories);
+        $categories = self::whereNull('parent_id')->get();
+        return '<div class="myadmin-dd dd" id="nestable">'.self::renderTree($categories).'</div>';
     }
 
-    /**
-     * @return string
-     */
-    public static function getList(): string
+    public static function renderTree($nodes)
     {
-        $categories = self::get()->toTree();
-        $lists = '<li class="list-unstyled">';
-        foreach ($categories as $category) {
-            $lists .= self::renderNodeHP($category);
+        $list = '<ol class="dd-list">';
+        foreach ($nodes as $node) {
+            $list .= self::renderNode($node);
         }
-        $lists .= "</li>";
-
-        return $lists;
-    }
-
-    /**
-     * @param $node
-     *
-     * @return string
-     */
-    public static function renderNodeHP($node): string
-    {
-        $list = '<li class="dropdown-item"><a class="nav-link" href="/categories/'.$node->slug.'">'.$node->title.'</a>';
-        if ($node->children()->count() > 0) {
-            $list .= '<ul class="dropdown border-0 shadow">';
-            foreach ($node->children as $child) {
-                $list .= self::renderNodeHP($child);
-            }
-            $list .= "</ul>";
-        }
-        $list .= "</li>";
-
+        $list .= '</ol>';
         return $list;
     }
 
-    /**
-     * @return int
-     */
-    public static function countActiveCategory(): int
+    public static function renderNode($node)
     {
-        $data = Category::where('status', 'active')->count();
-        if ($data) {
-            return $data;
+        $editRoute = route('category.edit', $node->id);
+
+        $listItem = '<li class="dd-item" data-id="'.$node->id.'">
+                    <div class="dd-handle">'.$node->title.'</div>
+                    <a class="edit-category-icon" href="'.$editRoute.'">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </li>';
+
+        $children = self::where('parent_id', '=', $node->id)->get();
+        $count = $children->count();
+
+        if ($count > 0) {
+            $listItem .= self::renderTree($children);
         }
 
-        return 0;
+        $listItem .= '</li>';
+
+        return $listItem;
     }
+
 
     /**
      * @return BelongsTo
@@ -262,5 +238,10 @@ class Category extends Core
         } else {
             return $this->title;
         }
+    }
+
+    public static function getCategoriesArray()
+    {
+        return Category::all()->toArray();
     }
 }
