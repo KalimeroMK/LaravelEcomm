@@ -11,9 +11,10 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>Name:</strong>
-                            <input type="text" id="name" value="{{ $permission->name ?? null }}" name="name"
-                                   class="form-control">
+                            <strong>@lang('partials.name'):</strong>
+                            <label for="name"></label><input type="text" id="name"
+                                                             value="{{ $permission->name ?? null }}" name="name"
+                                                             class="form-control">
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">

@@ -10,9 +10,9 @@
             </div>
         </div>
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary float-left">User Lists</h6>
+            <h6 class="m-0 font-weight-bold text-primary float-left">@lang('partials.list')</h6>
             <a href="{{route('user.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add user</a>
+               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>@lang('partials.create')</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -20,32 +20,32 @@
                     <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Photo</th>
-                            <th>Join Date</th>
-                            <th>Role</th>
-                            <th>Status</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.name')</th>
+                            <th>@lang('partials.email')</th>
+                            <th>@lang('partials.image')</th>
+                            <th>@lang('partials.date')</th>
+                            <th>@lang('messages.role')</th>
+                            <th>@lang('partials.status')</th>
                             @role('super-admin')
-                            <th>Impersonate</th>
+                            <th>@lang('partials.impersonate')</th>
                             @endrole
-                            <th>Action</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Photo</th>
-                            <th>Join Date</th>
-                            <th>Role</th>
-                            <th>Status</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.name')</th>
+                            <th>@lang('partials.email')</th>
+                            <th>@lang('partials.image')</th>
+                            <th>@lang('partials.date')</th>
+                            <th>@lang('messages.role')</th>
+                            <th>@lang('partials.status')</th>
                             @role('super-admin')
-                            <th>Impersonate</th>
+                            <th>@lang('partials.impersonate')</th>
                             @endrole
-                            <th>Action</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -84,7 +84,7 @@
                                 <td>
                                     @if($user->id != auth()->id())
                                         <a href="{{ route('users.impersonate', $user->id) }}"
-                                           class="btn btn-warning btn-sm">Impersonate</a>
+                                           class="btn btn-warning btn-sm">@lang('partials.impersonate')</a>
                                     @endif
                                 </td>
                                 @endrole
@@ -109,7 +109,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No Products found!!! Please create Product</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>

@@ -1,4 +1,4 @@
-@extends('layouts.master-without-nav')
+@extends('admin::layouts.master')
 
 @section('content')
     <div class="container">

@@ -13,15 +13,15 @@
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
-                        <th>S.N.</th>
-                        <th>Order No.</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Quantity</th>
-                        <th>Charge</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>@lang('partials.s_n')</th>
+                        <th>e</th>
+                        <th>@lang('partials.name')</th>
+                        <th>@lang('partials.email')</th>
+                        <th>@lang('partials.quantity')</th>
+                        <th>@lang('partials.charge')</th>
+                        <th>@lang('partials.total_amount')</th>
+                        <th>@lang('partials.status')</th>
+                        <th>@lang('partials.action')</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -67,7 +67,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-lx-4">
                                 <div class="order-info">
-                                    <h4 class="text-center pb-4">ORDER INFORMATION</h4>
+                                    <h4 class="text-center pb-4">@lang('partials.order_info')</h4>
                                     <table class="table">
                                         <tr class="">
                                             <td>Order Number</td>
@@ -107,7 +107,7 @@
 
                             <div class="col-lg-6 col-lx-4">
                                 <div class="shipping-info">
-                                    <h4 class="text-center pb-4">SHIPPING INFORMATION</h4>
+                                    <h4 class="text-center pb-4">@lang('partials.shipping_info')</h4>
                                     <table class="table">
                                         <tr class="">
                                             <td>Full Name</td>

@@ -13,24 +13,24 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Author</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.author')</th>
                             <th>Post Title</th>
                             <th>Message</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.date')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Author</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.author')</th>
                             <th>Post Title</th>
                             <th>Message</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.date')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>

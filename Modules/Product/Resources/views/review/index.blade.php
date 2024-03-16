@@ -5,7 +5,7 @@
     <div class="card shadow mb-4">
 
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary float-left">Review Lists</h6>
+            <h6 class="m-0 font-weight-bold text-primary float-left">@lang('partials.list')</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -13,26 +13,26 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Review By</th>
-                            <th>Product Title</th>
-                            <th>Review</th>
-                            <th>Rate</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.review_by')y</th>
+                            <th>@lang('partials.product_title')/th>
+                            <th>@lang('partials.review')</th>
+                            <th>@lang('partials.rate')</th>
+                            <th>@lang('partials.date')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Review By</th>
-                            <th>Product Title</th>
-                            <th>Review</th>
-                            <th>Rate</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.review_by')y</th>
+                            <th>@lang('partials.product_title')/th>
+                            <th>@lang('partials.review')</th>
+                            <th>@lang('partials.rate')</th>
+                            <th>@lang('partials.date')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -81,7 +81,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No reviews found!!!</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>

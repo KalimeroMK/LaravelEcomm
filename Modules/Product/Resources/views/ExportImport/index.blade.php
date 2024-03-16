@@ -4,10 +4,10 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Product Lists</h6>
+            <h6 class="m-0 font-weight-bold text-primary">@lang('partials.list')</h6>
             <a href="{{ route('product.index') }}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
                title="Add User">
-                <i class="fas fa-plus"></i> List product
+                <i class="fas fa-plus"></i>@lang('partials.list')
             </a>
         </div>
 

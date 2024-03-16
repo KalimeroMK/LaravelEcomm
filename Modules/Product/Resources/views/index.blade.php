@@ -4,10 +4,10 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Product Lists</h6>
+            <h6 class="m-0 font-weight-bold text-primary">@lang('partials.list')</h6>
             <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
                title="Add User">
-                <i class="fas fa-plus"></i> Add Product
+                <i class="fas fa-plus"></i> @lang('partials.create')
             </a>
         </div>
 
@@ -17,20 +17,20 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Is Featured</th>
-                            <th>Price</th>
-                            <th>Discount</th>
-                            <th>Size</th>
-                            <th>Condition</th>
-                            <th>Brand</th>
-                            <th>Stock</th>
-                            <th>Photo</th>
-                            <th>Status</th>
-                            <th>Attributes</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.title')</th>
+                            <th>@lang('sidebar.category')</th>
+                            <th>@lang('partials.is_featured')</th>
+                            <th>@lang('partials.price')</th>
+                            <th>@lang('messages.discount')</th>
+                            <th>@lang('partials.size')</th>
+                            <th>@lang('partials.conditions')</th>
+                            <th>@lang('sidebar.brands')</th>
+                            <th>@lang('partials.quantity')</th>
+                            <th>@lang('partials.image')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('sidebar.attributes')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -80,16 +80,9 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No Products found! Please create a product.</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <!-- Custom scripts for this page -->
-    <script>
-        // Custom JS here (if necessary)
-    </script>
-@endpush

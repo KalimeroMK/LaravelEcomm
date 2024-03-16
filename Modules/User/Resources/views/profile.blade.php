@@ -48,7 +48,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="inputTitle" class="col-form-label">Name</label>
-                            <input id="inputTitle" type="text" name="name" placeholder="Enter name"
+                            <input id="inputTitle" type="text" name="name" placeholder="@lang('partials.name')"
                                    value="{{$profile->name}}" class="form-control">
                             @error('name')
 

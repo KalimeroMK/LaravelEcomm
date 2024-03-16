@@ -9,15 +9,16 @@
                 @csrf
                 @endif
                 <div class="form-group">
-                    <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
-                    <input id="inputTitle" type="text" name="title" placeholder="Enter title"
+                    <label for="inputTitle" class="col-form-label">@lang('partials.title') <span
+                                class="text-danger">*</span></label>
+                    <input id="inputTitle" type="text" name="title" placeholder="@lang('partials.title')"
                            value="{{$post->title}}"
                            class="form-control">
 
                 </div>
 
                 <div class="form-group">
-                    <label for="quote" class="col-form-label">Quote</label>
+                    <label for="quote" class="col-form-label">@lang('partials.quote')</label>
                     <textarea class="form-control" id="quote" name="quote">{{$post->quote}}</textarea>
                     @error('quote')
 
@@ -25,20 +26,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="summary" class="col-form-label">Summary <span class="text-danger">*</span></label>
+                    <label for="summary" class="col-form-label">@lang('partials.summary') <span
+                                class="text-danger">*</span></label>
                     <textarea class="form-control" id="summary" name="summary">{{$post->summary}}</textarea>
 
                 </div>
 
                 <div class="form-group">
-                    <label for="description" class="col-form-label">Description</label>
+                    <label for="description" class="col-form-label">@lang('partials.description')</label>
                     <textarea class="form-control" id="description"
                               name="description">{{$post->description}}</textarea>
 
                 </div>
 
                 <div class="form-group">
-                    <label for="cat_id">Category <span class="text-danger">*</span></label>
+                    <label for="cat_id">@lang('partials.categories') <span class="text-danger">*</span></label>
                     <select class="form-control js-example-basic-multiple" id="category" name="category[]"
                             multiple="multiple">
                         @foreach ($categories as $category)
@@ -48,7 +50,7 @@
                         @endforeach
                     </select>
                 </div>
-                <label for="size">Tags</label>
+                <label for="size">@lang('partials.tag')</label>
                 <select class="form-control js-example-basic-multiple" id="tags" name="tag[]"
                         multiple="multiple">
                     @foreach ($tags as $tag)
@@ -56,7 +58,7 @@
                     @endforeach
                 </select>
                 <div class="form-group">
-                    <label for="added_by">Author</label>
+                    <label for="added_by">@lang('partials.author')</label>
                     <select name="added_by" class="form-control">
                         <option value="">--Select any one--</option>
                         @foreach($users as $key=>$data)
@@ -66,7 +68,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputImage" class="col-form-label">Image <span
+                    <label for="inputImage" class="col-form-label">@lang('partials.image') <span
                                 class="text-danger">*</span></label>
                     <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
                 </div>
@@ -80,7 +82,7 @@
 
                 </div>
                 <div class="form-group mb-3">
-                    <button class="btn btn-success" type="submit">Update</button>
+                    <button class="btn btn-success" type="submit">@lang('partials.update')</button>
                 </div>
             </form>
             {{-- Images Display and Deletion --}}

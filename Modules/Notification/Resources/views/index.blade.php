@@ -13,22 +13,22 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
+                            <th>@lang('partials.s_n')</th>
                             <th>Time</th>
-                            <th>Title</th>
+                            <th>@lang('partials.title')</th>
                             <th>Url</th>
-                            <th>Type</th>
-                            <th>Action</th>
+                            <th>@lang('partials.type')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
+                            <th>@lang('partials.s_n')</th>
                             <th>Time</th>
-                            <th>Title</th>
+                            <th>@lang('partials.title')</th>
                             <th>Url</th>
-                            <th>Type</th>
-                            <th>Action</th>
+                            <th>@lang('partials.type')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>

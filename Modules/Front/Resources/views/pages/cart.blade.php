@@ -28,8 +28,8 @@
                     <table class="table shopping-summery">
                         <thead>
                         <tr class="main-hading">
-                            <th>PRODUCT</th>
-                            <th>NAME</th>
+                            <th>@lang('partials.product')</th>
+                            <th>@lang('partials.name')</th>
                             <th class="text-center">UNIT PRICE</th>
                             <th class="text-center">QUANTITY</th>
                             <th class="text-center">TOTAL</th>

@@ -11,21 +11,21 @@
                     <a href="{{route('permissions.create')}}" class="btn btn-primary btn-sm float-right"
                     <a href="{{route('permissions.create')}}" class="btn btn-primary btn-sm float-right"
                        data-toggle="tooltip"
-                       data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add permission</a>
+                       data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>@lang('partials.create')</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="data-table">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Action</th>
+                                <th>@lang('partials.name')</th>
+                                <th>@lang('partials.action')</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
-                                <th>Name</th>
-                                <th>Action</th>
+                                <th>@lang('partials.name')</th>
+                                <th>@lang('partials.action')</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -34,7 +34,7 @@
                                     <td>{{ $permission->name }}</td>
                                     <td class="float-right">
                                         <a class="btn btn-primary"
-                                           href="{{ route('permissions.edit',$permission->id) }}">Edit</a>
+                                           href="{{ route('permissions.edit',$permission->id) }}">@lang('partials.edit')</a>
                                         <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST"
                                               style="display:inline">
                                             @csrf

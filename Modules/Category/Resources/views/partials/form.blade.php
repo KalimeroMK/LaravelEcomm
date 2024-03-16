@@ -27,7 +27,7 @@
                                             value=""
                                             selected>{{ $category->getParentsNames()}}</option>
                                 @else
-                                    <option value="">Select category</option>
+                                    <option value="">@lang('sidebar.category')</option>
                                 @endif
                                 @if ($categories)
                                     @foreach ($categories as $categoryList)
@@ -41,8 +41,8 @@
                 <div class="form-group">
                     <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
                     <select name="status" class="form-control">
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="active">@lang('partials.active')</option>
+                        <option value="inactive">@lang('partials.inactive')</option>
                     </select>
 
                 </div>

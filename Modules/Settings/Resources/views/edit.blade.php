@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="card">
-        <h5 class="card-header">Edit Banner</h5>
+        <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
             @include('settings::partials.form')
         </div>

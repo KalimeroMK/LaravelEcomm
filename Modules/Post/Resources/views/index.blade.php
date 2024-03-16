@@ -7,16 +7,16 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">Post Lists</h6>
             <a href="{{route('post.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Create Post</a><br><br>
+               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>@lang('partials.create')</a><br><br>
 
             <form action="{{ route('posts.import') }}" method="POST" enctype="multipart/form-data"
                   class="col-3 float-right">
                 @csrf
                 <input type="file" name="file" class="form-control">
                 <br>
-                <button class="btn btn-primary btn-sm">Import post data</button>
+                <button class="btn btn-primary btn-sm">@lang('messages.import')</button>
                 <a href="{{route('posts.export')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-                   data-placement="bottom" title="Export posts"><i class="fas fa-plus"></i> Export posts</a>
+                   data-placement="bottom" title="Export posts"><i class="fas fa-plus"></i>@lang('partials.export')</a>
             </form>
         </div>
         <div class="card-body">
@@ -25,28 +25,28 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Tag</th>
-                            <th>Author</th>
-                            <th>Photo</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.title')</th>
+                            <th>@lang('sidebar.category')</th>
+                            <th>@lang('partials.description')</th>
+                            <th>@lang('partials.tags')</th>
+                            <th>@lang('partials.author')</th>
+                            <th>@lang('partials.image')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Tag</th>
-                            <th>Author</th>
-                            <th>Photo</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.title')</th>
+                            <th>@lang('sidebar.category')</th>
+                            <th>@lang('partials.description')</th>
+                            <th>@lang('partials.tags')</th>
+                            <th>@lang('partials.author')</th>
+                            <th>@lang('partials.image')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>

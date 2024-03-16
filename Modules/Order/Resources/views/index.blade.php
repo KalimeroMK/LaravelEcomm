@@ -17,28 +17,28 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Order No.</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Quantity</th>
-                            <th>Shipping</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.order_no')</th>
+                            <th>@lang('partials.name')</th>
+                            <th>@lang('partials.email')</th>
+                            <th>@lang('partials.quantity')</th>
+                            <th>@lang('sidebar.shipping')</th>
+                            <th>@lang('partials.total_amount')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Order No.</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Quantity</th>
-                            <th>Shipping</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.order_no')</th>
+                            <th>@lang('partials.name')</th>
+                            <th>@lang('partials.email')</th>
+                            <th>@lang('partials.quantity')</th>
+                            <th>@lang('sidebar.shipping')</th>
+                            <th>@lang('partials.total_amount')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -86,7 +86,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No orders found!!! Please order some products</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>

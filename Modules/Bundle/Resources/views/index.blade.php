@@ -14,22 +14,22 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Product</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.name')</th>
+                            <th>@lang('partials.description')</th>
+                            <th>@lang('partials.price')</th>
+                            <th>@lang('partials.product')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Product</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.name')</th>
+                            <th>@lang('partials.description')</th>
+                            <th>@lang('partials.price')</th>
+                            <th>@lang('partials.product')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -61,7 +61,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No bundle found!!! Please create bundle</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>

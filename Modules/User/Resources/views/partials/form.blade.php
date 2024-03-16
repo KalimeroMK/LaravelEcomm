@@ -21,21 +21,21 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <strong>Password:</strong>
+                    <strong>@lang('partials.password'):</strong>
                     <div class="form-group">
                         <input id="password" class="form-control" placeholder="password" name="password"
                                type="password">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <strong>Confirm Password:</strong>
+                    <strong>@lang('partials.confirm_password'):</strong>
                     <div class="form-group">
                         <input id="password" class="form-control" placeholder="Confirm Password" name="confirm-password"
                                type="password">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <strong>Role:</strong>
+                    <strong>@lang('messages.role'):</strong>
                     <div class="form-group">
                         <select data-placeholder="Select a Roles" class="form-control js-example-basic-multiple"
                                 name="roles[]"
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">@lang('partials.update')</button>
                 </div>
             </form>
     </form>

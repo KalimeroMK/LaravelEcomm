@@ -10,39 +10,42 @@
                 @endif
                 <div class="row">
                     <div class="form-group col-9">
-                        <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
-                        <input id="inputTitle" type="text" name="title" placeholder="Enter title"
+                        <label for="inputTitle" class="col-form-label">@lang('partials.title') <span
+                                    class="text-danger">*</span></label>
+                        <input id="inputTitle" type="text" name="title" placeholder="@lang('partials.title')"
                                value="{{ $product->title ?? '' }}"
                                class="form-control">
-                        <label for="summary" class="col-form-label">Summary <span class="text-danger">*</span></label>
+                        <label for="summary" class="col-form-label">@lang('partials.summary') <span
+                                    class="text-danger">*</span></label>
                         <textarea class="form-control" id="summary"
                                   name="summary">{{$product->summary ?? ''}}</textarea>
-                        <label for="description" class="col-form-label">Description</label>
-                        <textarea class="form-control" id="description"
-                                  name="description">{{ $product->description ??''}}</textarea>
+                        <label for="description" class="col-form-label">@lang('partials.description')</label> <textarea
+                                class="form-control" id="description"
+                                name="description">{{ $product->description ??''}}</textarea>
                     </div>
                     <div class="form-group col-3">
                         <div class="form-group">
-                            <label for="inputImage" class="col-form-label">Image <span
+                            <label for="inputImage" class="col-form-label">@lang('partials.image') <span
                                         class="text-danger">*</span></label>
                             <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
                         </div>
-                        <label for="price" class="col-form-label">Price <span class="text-danger">*</span></label>
+                        <label for="price" class="col-form-label">@lang('partials.price') <span
+                                    class="text-danger">*</span></label>
                         <input id="price" type="number" name="price" placeholder="Enter price"
                                value="{{ $product->price ?? '' }}" class="form-control">
-                        <label for="price" class="col-form-label">Special price<span
+                        <label for="price" class="col-form-label">@lang('partials.special_price')<span
                                     class="text-danger">*</span></label>
                         <input id="price" type="number" name="special_price" placeholder="Enter special price"
                                value="{{ $product->special_price ?? '' }}" class="form-control">
-                        <label for="price" class="col-form-label">Special price start date<span
+                        <label for="price" class="col-form-label">@lang('messages.start_date')<span
                                     class="text-danger">*</span></label>
                         <input id="price" type="date" name="special_price_start"
                                value="{{ $product->special_price_start ?? '' }}" class="form-control">
-                        <label for="price" class="col-form-label">Special price start date<span
+                        <label for="price" class="col-form-label">@lang('partials.end_date')<span
                                     class="text-danger">*</span></label>
                         <input id="price" type="date" name="special_price_start"
                                value="{{ $product->special_price_start ?? '' }}" class="form-control">
-                        <label for="price" class="col-form-label">Stock count<span
+                        <label for="price" class="col-form-label">@lang('partials.quantity')<span
                                     class="text-danger">*</span></label>
                         <input id="price" type="number" name="stock" placeholder="Enter stock value"
                                value="{{ $product->stock ?? '' }}" class="form-control">
@@ -59,12 +62,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="is_featured">Is Featured</label><br>
+                    <label for="is_featured">@lang('partials.is_featured')</label><br>
                     <input type="checkbox" name='is_featured' id='is_featured' value='1' checked> Yes
                 </div>
                 <div class="form-group row">
                     <div class="col-3">
-                        <label for="cat_id">Category <span class="text-danger">*</span></label>
+                        <label for="cat_id">@lang('partials.categories') <span class="text-danger">*</span></label>
                         <select class="form-control js-example-basic-multiple" id="category" name="category[]"
                                 multiple="multiple">
                             @foreach ($categories as $category)
@@ -75,7 +78,7 @@
 
 
                     <div class="form-group col-3">
-                        <label for="size">Size</label>
+                        <label for="size">@lang('partials.size')</label>
                         <select class="form-control js-example-basic-multiple" id="size" name="size[]"
                                 multiple="multiple">
                             @foreach ($sizes as $size)
@@ -84,12 +87,12 @@
                         </select>
                     </div>
                     <div class="form-group col-3">
-                        <label for="color" class="col-form-label">Color</label>
+                        <label for="color" class="col-form-label">@lang('partials.color')</label>
                         <input id="color" type="text" name="color[]" placeholder="Enter color"
                                class="form-control">
                     </div>
                     <div class="form-group col-3">
-                        <label for="size">Tags</label>
+                        <label for="size">@lang('partials.tag')</label>
                         <select class="form-control js-example-basic-multiple" id="tags" name="tag[]"
                                 multiple="multiple">
                             @foreach ($tags as $tag)
@@ -98,7 +101,7 @@
                         </select>
                     </div>
                     <div class="form-group col-3">
-                        <label for="condition_id">Condition</label>
+                        <label for="condition_id">@lang('partials.conditions')</label>
                         <select name="condition_id" class="form-control">
                             <option value="">--Select condition--</option>
                             @foreach($conditions as $condition)
@@ -181,8 +184,8 @@
                         </div>
                     @endforeach
                 </div>
-                <button type="reset" class="btn btn-warning">Reset</button>
-                <button class="btn btn-success" type="submit">Submit</button>
+                <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
+                <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
             </form>
             <div class="row">
                 @foreach($product->getMedia('product') as $media)

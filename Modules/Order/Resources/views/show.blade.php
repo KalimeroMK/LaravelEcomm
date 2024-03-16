@@ -4,9 +4,9 @@
 
 @section('content')
     <div class="card">
-        <h5 class="card-header">Order <a href="{{route('order.pdf',$order->id)}}"
-                                         class=" btn btn-sm btn-primary shadow-sm float-right"><i
-                        class="fas fa-download fa-sm text-white-50"></i> Generate PDF</a>
+        <h5 class="card-header">@lang('sidebar.orders') <a href="{{route('order.pdf',$order->id)}}"
+                                                           class=" btn btn-sm btn-primary shadow-sm float-right"><i
+                        class="fas fa-download fa-sm text-white-50"></i> @lang('partials.pdf')</a>
         </h5>
         <div class="card-body">
             @if($order)
@@ -14,15 +14,15 @@
 
                     <thead>
                     <tr>
-                        <th>S.N.</th>
-                        <th>Order No.</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Quantity</th>
-                        <th>Charge</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>@lang('partials.s_n')</th>
+                        <th>@lang('partials.order_no')</th>
+                        <th>@lang('partials.name')</th>
+                        <th>@lang('partials.edit')</th>
+                        <th>@lang('partials.quantity')</th>
+                        <th>@lang('partials.charge')</th>
+                        <th>@lang('partials.total_amount')</th>
+                        <th>@lang('partials.status')</th>
+                        <th>@lang('partials.action')</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -70,7 +70,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-lx-4">
                                 <div class="order-info">
-                                    <h4 class="text-center pb-4">ORDER INFORMATION</h4>
+                                    <h4 class="text-center pb-4">@lang('partials.order_info')</h4>
                                     <table class="table">
                                         <tr class="">
                                             <td>Order Number</td>
@@ -122,33 +122,33 @@
 
                             <div class="col-lg-6 col-lx-4">
                                 <div class="shipping-info">
-                                    <h4 class="text-center pb-4">SHIPPING INFORMATION</h4>
-                                    <table class="table">
-                                        <tr class="">
-                                            <td>Full Name</td>
-                                            <td> : {{$order->first_name}} {{$order->last_name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Email</td>
-                                            <td> : {{$order->email}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Phone No.</td>
-                                            <td> : {{$order->phone}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Address</td>
-                                            <td> : {{$order->address1}}, {{$order->address2}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Country</td>
-                                            <td> : {{$order->country}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Post Code</td>
-                                            <td> : {{$order->post_code}}</td>
-                                        </tr>
-                                    </table>
+                                    <h4 class="text-center pb-4">@lang('partials.shipping_info')/h4>
+                                        <table class="table">
+                                            <tr class="">
+                                                <td>Full Name</td>
+                                                <td> : {{$order->first_name}} {{$order->last_name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@lang('partials.email')</td>
+                                                <td> : {{$order->email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@lang('partials.Phone')</td>
+                                                <td> : {{$order->phone}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@lang('messages.address')</td>
+                                                <td> : {{$order->address1}}, {{$order->address2}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@lang('messages.country')</td>
+                                                <td> : {{$order->country}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@lang('partials.code')</td>
+                                                <td> : {{$order->post_code}}</td>
+                                            </tr>
+                                        </table>
                                 </div>
                             </div>
                         </div>

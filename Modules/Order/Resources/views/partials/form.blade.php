@@ -9,7 +9,7 @@
                 @csrf
                 @endif
                 <div class="form-group">
-                    <label for="status">Status :</label>
+                    <label for="status">@lang('partials.status') :</label>
                     <select name="status" id="" class="form-control">
                         <option value="">--Select Status--</option>
                         <option value="new" {{(($order->status=='new')? 'selected' : '')}}>New</option>
@@ -19,6 +19,6 @@
                         <option value="cancel" {{(($order->status=='cancel')? 'selected' : '')}}>Cancel</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">@lang('partials.update')</button>
             </form>
     </form>

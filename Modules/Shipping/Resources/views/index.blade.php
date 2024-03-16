@@ -10,9 +10,9 @@
             </div>
         </div>
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary float-left">Shipping List</h6>
+            <h6 class="m-0 font-weight-bold text-primary float-left">@lang('partials.list')</h6>
             <a href="{{route('shipping.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Shipping</a>
+               data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>@lang('partials.create')</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -20,20 +20,20 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Title</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.title')</th>
+                            <th>@lang('partials.price')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Title</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.title')</th>
+                            <th>@lang('partials.price')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -69,7 +69,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No shippings found!!! Please create shipping</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>

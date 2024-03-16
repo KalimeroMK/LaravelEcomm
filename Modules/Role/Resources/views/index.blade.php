@@ -10,21 +10,21 @@
                                 href="{{route('role.index')}}">{{trans('messages.role')}}</a></p>
                     <a href="{{route('role.create')}}" class="btn btn-primary btn-sm float-right"
                        data-toggle="tooltip"
-                       data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add role</a>
+                       data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>@lang('partials.create')</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="data-table">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Action</th>
+                                <th>@lang('partials.name')</th>
+                                <th>@lang('partials.action')</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
-                                <th>Name</th>
-                                <th>Action</th>
+                                <th>@lang('partials.name')</th>
+                                <th>@lang('partials.action')</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -33,7 +33,7 @@
                                     <td>{{ $role->name }}</td>
                                     <td class="float-right">
                                         <a class="btn btn-primary"
-                                           href="{{ route('role.edit',$role->id) }}">Edit</a>
+                                           href="{{ route('role.edit',$role->id) }}">@lang('partials.edit')</a>
                                         <form action="{{ route('role.destroy', $role->id) }}" method="POST"
                                               style="display:inline">
                                             @csrf

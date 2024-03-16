@@ -13,11 +13,11 @@
                 <table class="table message-table" id="message-dataTable">
                     <thead>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Subject</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">@lang('partials.s_n')</th>
+                        <th scope="col">@lang('partials.name')</th>
+                        <th scope="col">@lang('partials.subject')</th>
+                        <th scope="col">@lang('partials.name')</th>
+                        <th scope="col">@lang('partials.active')</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,7 +48,7 @@
                     </tbody>
                 </table>
             @else
-                <h2>Messages Empty!</h2>
+                <h2>@lang('partials.no_records_found')</h2>
             @endif
         </div>
     </div>

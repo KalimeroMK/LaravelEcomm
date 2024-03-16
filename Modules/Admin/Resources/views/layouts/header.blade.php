@@ -113,13 +113,13 @@
                 aria-expanded="false">
             @switch(Session::get('locale', 'en'))
                 @case('mk')
-                    <img src="{{ asset('/assets/images/flags/mk.jpg') }}" alt="Macedonian Language" height="16">
+                    <img src="{{ asset('images/north-macedonia.png') }}" alt="Macedonian Language" height="32">
                     @break
                 @case('de')
-                    <img src="{{ asset('/assets/images/flags/de.jpg') }}" alt="German Language" height="16">
+                    <img src="{{ asset('images/germany.png') }}" alt="German Language" height="32">
                     @break
                 @default
-                    <img src="{{ asset('/assets/images/flags/us.jpg') }}" alt="English Language" height="16">
+                    <img src="{{ asset('images/united-kingdom.png') }}" alt="English Language" height="32">
             @endswitch
         </button>
         <div class="dropdown-menu dropdown-menu-right">

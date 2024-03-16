@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="card">
-        <h5 class="card-header">Add attribute</h5>
+        <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
             @include('attribute::partials.form')
         </div>

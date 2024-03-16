@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card">
-        <h5 class="card-header">Add Product</h5>
+        <h5 class="card-header">@lang('partials.create')</h5>
         <div class="card-body">
             @include('product::partials.form')
         </div>

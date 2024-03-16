@@ -20,22 +20,22 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Coupon Code</th>
-                            <th>Type</th>
-                            <th>Value</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.code')</th>
+                            <th>@lang('partials.type')</th>
+                            <th>@lang('partials.value')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Coupon Code</th>
-                            <th>Type</th>
-                            <th>Value</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.code')</th>
+                            <th>@lang('partials.type')</th>
+                            <th>@lang('partials.value')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -82,7 +82,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No Coupon found!!! Please create coupon</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>

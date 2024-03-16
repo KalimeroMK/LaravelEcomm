@@ -15,18 +15,18 @@
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.email')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>S.N.</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.email')</th>
+                            <th>@lang('partials.status')</th>
+                            <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -37,9 +37,9 @@
 
                                 <td>
                                     @if($newsletter->is_validated ==1)
-                                        <span class="badge badge-success">Validated</span>
+                                        <span class="badge badge-success">@lang('partials.validated')</span>
                                     @else
-                                        <span class="badge badge-warning">Not validated</span>
+                                        <span class="badge badge-warning">@lang('partials.not_validated')</span>
                                     @endif
                                 </td>
                                 <td>
@@ -61,7 +61,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">No brands found!!! Please create brand</h6>
+                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
             </div>
         </div>
