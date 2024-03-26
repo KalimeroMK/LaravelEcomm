@@ -4,6 +4,7 @@ namespace Modules\Core\Providers;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\Settings\Models\Setting;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -11,12 +12,12 @@ class CoreServiceProvider extends ServiceProvider
      * @var string $moduleName
      */
     protected string $moduleName = 'Core';
-    
+
     /**
      * @var string $moduleNameLower
      */
     protected string $moduleNameLower = 'core';
-    
+
     /**
      * Boot the application events.
      *
@@ -29,7 +30,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
     }
-    
+
     /**
      * Register the service provider.
      *
@@ -38,8 +39,11 @@ class CoreServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->app->singleton('settings', function () {
+            return Setting::get();
+        });
     }
-    
+
     /**
      * Register config.
      *
@@ -55,7 +59,7 @@ class CoreServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -64,16 +68,16 @@ class CoreServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
     /**
      * Register translations.
      *
@@ -82,14 +86,14 @@ class CoreServiceProvider extends ServiceProvider
     public function registerTranslations()
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Get the services provided by the provider.
      *
@@ -99,7 +103,7 @@ class CoreServiceProvider extends ServiceProvider
     {
         return [];
     }
-    
+
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -108,7 +112,7 @@ class CoreServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
 }
