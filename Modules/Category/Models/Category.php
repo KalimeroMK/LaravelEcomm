@@ -132,10 +132,9 @@ class Category extends Core
 
     protected static int $depth = 0;
 
-    public static function getTree()
+    public static function getTree(): array
     {
-        $categories = self::whereNull('parent_id')->get();
-        return '<div class="myadmin-dd dd" id="nestable">'.self::renderTree($categories).'</div>';
+        return self::whereNull('parent_id')->with('childrenCategories')->get()->toArray();
     }
 
     public static function renderTree($nodes)
@@ -171,6 +170,19 @@ class Category extends Core
         return $listItem;
     }
 
+
+    /**
+     * @return int
+     */
+    public static function countActiveCategory(): int
+    {
+        $data = Category::where('status', 'active')->count();
+        if ($data) {
+            return $data;
+        }
+
+        return 0;
+    }
 
     /**
      * @return BelongsTo
