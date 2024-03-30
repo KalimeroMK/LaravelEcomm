@@ -11,16 +11,16 @@
                 @csrf
                 @endif
                 <div class="form-group">
-                    <label for="title" class="control-label">{{trans('messages.title')}}</label>
+                    <label for="title" class="control-label">{{trans('partials.title')}}</label>
 
                     <input id="title" class="form-control" type="text" name="title"
-                           placeholder="{{trans('messages.enter_category_title')}}"
+                           placeholder="@lang('sidebar.category')"
                            value="{{ old('title', $category->title ?? null) }}"/>
                 </div>
                 @if ($categories == !null)
                     @if($categories>2)
                         <div class="form-group">
-                            <label for="name" class="control-label">{{trans('messages.sub_category')}}</label>
+                            <label for="name" class="control-label">{{trans('partials.sub_category')}}</label>
                             <select name="parent_id" id="parent_id" class="form-control">
                                 @if (!empty($category->getParentsNames()))
                                     <option

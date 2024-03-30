@@ -130,46 +130,73 @@ class Category extends Core
         return CategoryFactory::new();
     }
 
-    protected static int $depth = 0;
+    /**
+     * @return string
+     */
+    public static function getTree()
+    {
+        $categories = self::get()->toTree();
+        $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
+            foreach ($categories as $category) {
+                $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
+                $traverse($category->children, $prefix.'-');
+            }
 
-    public static function getTree(): array
+            return $allCats;
+        };
+
+        return $traverse($categories);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getList(): array
     {
         return self::whereNull('parent_id')->with('childrenCategories')->get()->toArray();
     }
 
-    public static function renderTree($nodes)
+    /**
+     * @param $node
+     *
+     * @return string
+     */
+    public static function renderNodeHP($node): string
     {
-        $list = '<ol class="dd-list">';
-        foreach ($nodes as $node) {
-            $list .= self::renderNode($node);
+        $list = '<li class="dropdown-item"><a class="nav-link" href="/categories/'.$node->slug.'">'.$node->title.'</a>';
+        if ($node->children()->count() > 0) {
+            $list .= '<ul class="dropdown border-0 shadow">';
+            foreach ($node->children as $child) {
+                $list .= self::renderNodeHP($child);
+            }
+            $list .= "</ul>";
         }
-        $list .= '</ol>';
+        $list .= '</ul>';
         return $list;
     }
 
     public static function renderNode($node)
     {
-        $editRoute = route('category.edit', $node->id);
+        $editRoute = route('category.edit', $node['id']);
 
-        $listItem = '<li class="dd-item" data-id="'.$node->id.'">
-                    <div class="dd-handle">'.$node->title.'</div>
+        $listItem = '<li class="dd-item" data-id="'.$node['id'].'">
+                    <div class="dd-handle">'.$node['title'].'</div>
                     <a class="edit-category-icon" href="'.$editRoute.'">
                         <i class="fas fa-edit"></i>
                     </a>
                 </li>';
 
-        $children = self::where('parent_id', '=', $node->id)->get();
+        $children = self::where('parent_id', '=', $node['id'])->get();
         $count = $children->count();
 
         if ($count > 0) {
-            $listItem .= self::renderTree($children);
+            $listItem .= '<ul class="dd-list">'.self::renderTree($children->toArray()).'</ul>';
         }
 
         $listItem .= '</li>';
 
         return $listItem;
     }
-
 
     /**
      * @return int
@@ -240,9 +267,7 @@ class Category extends Core
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    /**
-     * @return string
-     */
+
     public function getParentsNames()
     {
         if ($this->parent) {
@@ -250,10 +275,5 @@ class Category extends Core
         } else {
             return $this->title;
         }
-    }
-
-    public static function getCategoriesArray()
-    {
-        return Category::all()->toArray();
     }
 }

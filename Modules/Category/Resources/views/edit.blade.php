@@ -5,9 +5,9 @@
         <div class="content">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title "> {{trans('messages.ads_section')}}</h4>
+                    <h4 class="card-title "> {{trans('sidebar.category')}}</h4>
                     <p class="card-category"><a href="{{ route('admin')}}">{{trans('messages.home')}}</a> -> <a
-                                href="{{route('category.index')}}">{{trans('messages.ads_section')}}</a></p>
+                                href="{{route('category.index')}}">{{trans('sidebar.category')}}</a></p>
                 </div>
                 <div class="card-body">
                     @include('category::partials.form')

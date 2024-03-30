@@ -66,7 +66,6 @@ class Repository implements RepositoryInterface
         $item = $this->findById($id);
         $item->fill($data);
         $item->save();
-        $item->products()->sync($data['product_id']);
 
         return $item->fresh();
     }
