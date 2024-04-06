@@ -5,6 +5,7 @@
 ====== FRONT-END =======
 
 - Responsive Layout
+- Elastic Search
 - Shopping Cart, Wishlist, Product Reviews
 - Coupons & Discounts
 - Product attributes: cost price, promotion price, stock, size...
@@ -99,9 +100,9 @@
 9. npm run watch
 10. run command[laravel file manager]:- php artisan storage:link
 11. Edit .env file :- remove APP_URL
-10. php artisan serve or use virtual host
-11. Visit localhost:8000 in your browser
-12. Visit /admin if you want to access the admin panel. Admin Email/Password: superadmin@mail.com/password. User
+12. php artisan serve or use virtual host
+13. Visit localhost:8000 in your browser
+14. Visit /admin if you want to access the admin panel. Admin Email/Password: superadmin@mail.com/password. User
     Email/Password:
     client@mail.com/password
 
@@ -113,8 +114,12 @@
 * **ENV**: rename DB_HOST=127.0.0.1 to DB_HOST=mysql
 * **Container ssh**: docker-compose exec app sh
 * **Run migrations**: php artisan:migrate:fresh --seed.
+* **Enable ElasticSearch**:
+* php artisan scout:import Modules\\Product\\Models\\Product,
+* php artisan scout:import Modules\\Brand\\Models\\Brand,
+* php artisan scout:import Modules\\Category\\Models\\Category
 
-### Menagment
+### Management
 
 * **User create** `` php artisan user:create``
 

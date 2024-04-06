@@ -106,7 +106,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4">
@@ -134,28 +133,28 @@
 
         const data = {
             labels: @json($paidOrdersByMonth->pluck('month')),
-        datasets: [{
-            label: 'Number of Orders',
-            data: @json($paidOrdersByMonth->pluck('count')),
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    };
+            datasets: [{
+                label: 'Number of Orders',
+                data: @json($paidOrdersByMonth->pluck('count')),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
 
-    const myChart = new Chart(ordersCtx, {
-        type: 'bar',
-        data: data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
+        const myChart = new Chart(ordersCtx, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
     </script>
     <script>
         const userCtx = document.getElementById('userChart').getContext('2d');
@@ -163,25 +162,25 @@
             type: 'line',
             data: {
                 labels: @json(array_keys($data)),
-            datasets: [{
-                label: 'User Registrations',
-                data: @json(array_values($data)),
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
+                datasets: [{
+                    label: 'User Registrations',
+                    data: @json(array_values($data)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
     </script>
 
 @endpush

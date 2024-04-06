@@ -38,10 +38,10 @@
                                 <td>{{$loop->index +1}}</td>
                                 <td>{{$notification->created_at->format('F d, Y h:i A')}}</td>
                                 @php
-                                    $items = json_decode($notification->data);
+                                    $items = json_decode($notification->data, true) ?? [];
                                 @endphp
                                 @foreach($items as $key => $value)
-                                    <td>{{ $value  }}</td>
+                                    <td>{{ $value }}</td>
                                 @endforeach
                                 <td>
                                     <a href="{{route('admin.notification', $notification->id) }}"

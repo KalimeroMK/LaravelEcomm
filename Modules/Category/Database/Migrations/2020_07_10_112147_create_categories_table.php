@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->integer('_lft')->nullable();
             $table->integer('_rgt')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

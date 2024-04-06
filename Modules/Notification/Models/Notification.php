@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Core\Models\Core;
+use Modules\Notification\Database\Factories\NotificationFactory;
 
 /**
  * Class Notification
@@ -38,16 +39,15 @@ use Modules\Core\Models\Core;
  */
 class Notification extends Core
 {
-    public $incrementing = false;
     protected $table = 'notifications';
     protected $casts = [
         'notifiable_id' => 'int',
     ];
-    
-    protected $dates = [
+
+    protected array $dates = [
         'read_at',
     ];
-    
+
     protected $fillable = [
         'type',
         'notifiable_type',
@@ -55,4 +55,12 @@ class Notification extends Core
         'data',
         'read_at',
     ];
+
+    /**
+     * @return NotificationFactory
+     */
+    public static function Factory(): NotificationFactory
+    {
+        return NotificationFactory::new();
+    }
 }

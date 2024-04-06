@@ -363,23 +363,26 @@ class FrontService
      */
     public function productSearch($data): array|string
     {
-        $cacheKey = 'productSearch_'.implode('_', $data);
+        // Fetch recent products not using Elasticsearch since it's a straightforward query
+        $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($data) {
-            $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
+        // Perform search using Elasticsearch
+        $searchTerm = Arr::get($data, 'search', '');
+        // Use the search method from Scout to perform a full-text search
+        $products = Product::search($searchTerm)
+            ->where('status', 'active')
+            ->orderBy('id', 'desc')
+            ->paginate(9);
+        dd($products);
 
-            $products = Product::whereLike(Product::likeRows, Arr::get($data, 'search'))
-                ->orderBy('id', 'DESC')
-                ->paginate('9');
+        // you might need to adjust this to work with your Elasticsearch setup.
+        $brands = Brand::search($searchTerm)->get();
 
-            $brands = Brand::with('products')->get();
-
-            return [
-                "recent_products" => $recent_products,
-                "products" => $products,
-                "brands" => $brands,
-            ];
-        });
+        return [
+            "recent_products" => $recent_products,
+            "products" => $products,
+            "brands" => $brands,
+        ];
     }
 
     /**

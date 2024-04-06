@@ -52,6 +52,19 @@ services:
       - "6379:6379"
     volumes:
       - ./.docker/redis:/data
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: e_comm_elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./.docker/elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - laravelapp
 networks:
   laravelapp:
     driver: bridge

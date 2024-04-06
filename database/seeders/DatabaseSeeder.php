@@ -17,6 +17,7 @@ use Modules\Category\Database\Seeders\CategoryProductSeeder;
 use Modules\Coupon\Database\Seeders\CouponSeeder;
 use Modules\Message\Models\Message;
 use Modules\Newsletter\Models\Newsletter;
+use Modules\Notification\Models\Notification;
 use Modules\Order\Models\Order;
 use Modules\Post\Models\PostComment;
 use Modules\Product\Database\Seeders\ProductReviewSeeder;
@@ -54,6 +55,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AttributeDatabaseSeeder::class);
         $this->call(AttributeValueSeeder::class);
         BundleProduct::factory()->count(50)->create();
+        Notification::factory()->count(50)->create();
+
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

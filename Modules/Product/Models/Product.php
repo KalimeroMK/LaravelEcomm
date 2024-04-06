@@ -15,7 +15,11 @@ use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use JeroenG\Explorer\Application\Aliased;
+use JeroenG\Explorer\Application\Explored;
+use JeroenG\Explorer\Application\IndexSettings;
 use Kalimeromk\Filterable\app\Traits\Filterable;
+use Laravel\Scout\Searchable;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
@@ -85,11 +89,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string|null $color
  * @method static Builder|Product whereColor($value)
  */
-class Product extends Core implements HasMedia
+class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
 {
     use HasFactory;
     use Filterable;
     use InteractsWithMedia;
+    use Searchable;
 
     protected $table = 'products';
 
@@ -320,5 +325,83 @@ class Product extends Core implements HasMedia
     {
         return $this->belongsToMany(Bundle::class)
             ->withTimestamps();
+    }
+
+    public function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->with('categories', 'brand', 'sizes', 'condition');
+    }
+
+    public function toSearchableArray(): array
+    {
+        return $this->toArray();
+    }
+
+    public function mappableAs(): array
+    {
+        return [
+            'properties' => [
+                'id' => [
+                    'type' => 'integer',
+                ],
+                'title' => [
+                    'type' => 'text',
+                    'analyzer' => 'standard',
+                ],
+                'description' => [
+                    'type' => 'text',
+                    'analyzer' => 'standard',
+                ],
+                'price' => [
+                    'type' => 'float',
+                ],
+                'color' => [
+                    'type' => 'keyword',
+                ],
+                'status' => [
+                    'type' => 'keyword',
+                ],
+                // Assuming categories and brands are nested objects
+                'categories' => [
+                    'type' => 'nested',
+                    'properties' => [
+                        'title' => [
+                            'type' => 'text',
+                            'analyzer' => 'standard',
+                        ],
+                    ],
+                ],
+                'brands' => [
+                    'type' => 'nested',
+                    'properties' => [
+                        'title' => [
+                            'type' => 'text',
+                            'analyzer' => 'standard',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function indexSettings(): array
+    {
+        return [
+            'number_of_shards' => 1,
+            'number_of_replicas' => 0,
+            'analysis' => [
+                'analyzer' => [
+                    'default' => [
+                        'type' => 'standard',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function searchBrandsByProduct($searchTerm)
+    {
+        $productBrandIds = Product::search($searchTerm)->get()->pluck('brand_id')->unique();
+        return Brand::whereIn('id', $productBrandIds)->get();
     }
 }

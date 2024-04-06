@@ -12,6 +12,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use JeroenG\Explorer\Application\Aliased;
+use JeroenG\Explorer\Application\Explored;
+use JeroenG\Explorer\Application\IndexSettings;
+use Laravel\Scout\Searchable;
 use Modules\Brand\Database\Factories\BrandFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
@@ -41,17 +45,19 @@ use Modules\Product\Models\Product;
  * @property string $photo
  * @method static Builder|Brand wherePhoto($value)
  */
-class Brand extends Core
+class Brand extends Core implements Explored, IndexSettings, Aliased
 {
+    use Searchable;
+
     protected $table = 'brands';
-    
+
     protected $fillable = [
         'title',
         'slug',
         'status',
         'photo',
     ];
-    
+
     /**
      * @return BrandFactory
      */
@@ -59,7 +65,7 @@ class Brand extends Core
     {
         return BrandFactory::new();
     }
-    
+
     /**
      * @param $slug
      *
@@ -69,7 +75,7 @@ class Brand extends Core
     {
         return Brand::with('products')->whereSlug($slug)->first();
     }
-    
+
     /**
      * @return HasMany
      */
@@ -77,7 +83,7 @@ class Brand extends Core
     {
         return $this->hasMany(Product::class);
     }
-    
+
     /**
      * @param $slug
      *
@@ -86,11 +92,51 @@ class Brand extends Core
     public function incrementSlug($slug): mixed
     {
         $original = $slug;
-        $count    = 2;
+        $count = 2;
         while (static::whereSlug($slug)->exists()) {
             $slug = "{$original}-".$count++;
         }
-        
+
         return $slug;
+    }
+
+    public function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->with('products');
+    }
+
+    public function toSearchableArray(): array
+    {
+        return $this->toArray();
+    }
+
+    public function mappableAs(): array
+    {
+        return [
+            'properties' => [
+                'id' => [
+                    'type' => 'integer',
+                ],
+                'title' => [
+                    'type' => 'text',
+                    'analyzer' => 'standard',
+                ],
+            ],
+        ];
+    }
+
+    public function indexSettings(): array
+    {
+        return [
+            'number_of_shards' => 1,
+            'number_of_replicas' => 0,
+            'analysis' => [
+                'analyzer' => [
+                    'default' => [
+                        'type' => 'standard',
+                    ],
+                ],
+            ],
+        ];
     }
 }

@@ -12,9 +12,14 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use JeroenG\Explorer\Application\Aliased;
+use JeroenG\Explorer\Application\Explored;
+use JeroenG\Explorer\Application\IndexSettings;
 use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
+use Laravel\Scout\Searchable;
 use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
@@ -100,9 +105,11 @@ use Modules\Product\Models\Product;
  * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
  * @method static \Kalnoy\Nestedset\Collection|static[] all($columns = ['*'])
  */
-class Category extends Core
+class Category extends Core implements Explored, IndexSettings, Aliased
 {
-    use NodeTrait;
+    use NodeTrait, Searchable, SoftDeletes {
+        Searchable::usesSoftDelete insteadof NodeTrait;
+    }
 
     protected $table = 'categories';
 
@@ -275,5 +282,45 @@ class Category extends Core
         } else {
             return $this->title;
         }
+    }
+
+    public function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->with('products');
+    }
+
+    public function toSearchableArray(): array
+    {
+        return $this->toArray();
+    }
+
+    public function mappableAs(): array
+    {
+        return [
+            'properties' => [
+                'id' => [
+                    'type' => 'integer',
+                ],
+                'title' => [
+                    'type' => 'text',
+                    'analyzer' => 'standard',
+                ],
+            ],
+        ];
+    }
+
+    public function indexSettings(): array
+    {
+        return [
+            'number_of_shards' => 1,
+            'number_of_replicas' => 0,
+            'analysis' => [
+                'analyzer' => [
+                    'default' => [
+                        'type' => 'standard',
+                    ],
+                ],
+            ],
+        ];
     }
 }

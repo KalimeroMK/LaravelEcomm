@@ -4,15 +4,14 @@ namespace Modules\Core\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class StatusNotification extends Notification
 {
     use Queueable;
-    
-    private $details;
-    
+
+    private array $details;
+
     /**
      * Create a new notification instance.
      *
@@ -22,7 +21,7 @@ class StatusNotification extends Notification
     {
         $this->details = $details;
     }
-    
+
     /**
      * Get the notification's delivery channels.
      *
@@ -30,52 +29,20 @@ class StatusNotification extends Notification
      *
      * @return array
      */
-    public function via(mixed $notifiable)
+    public function via(mixed $notifiable): array
     {
         return ['database', 'broadcast'];
     }
-    
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     *
-     * @return MailMessage
-     */
-    // public function toMail($notifiable)
-    // {
-    //     return (new MailMessage)
-    //                 ->subject('Status Notification')
-    //                 ->from(env('MAIL_USERNAME','test@gmail.com'),'E-shop')
-    //                 ->line($this->details['title'])
-    //                 ->action('View Order', $this->details['actionURL'])
-    //                 ->line('Thank you!');
-    // }
-    
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     *
-     * @return array
-     */
-    // public function toArray($notifiable)
-    // {
-    //     return [
-    //         'title'=>$this->details['title'],
-    //         'actionURL'=>$this->details['actionURL'],
-    //         'fas'=>$this->details['fas']
-    //     ];
-    // }
+
     public function toArray(mixed $notifiable)
     {
         return [
-            'title'     => $this->details['title'],
+            'title' => $this->details['title'],
             'actionURL' => $this->details['actionURL'],
-            'fas'       => $this->details['fas'],
+            'fas' => $this->details['fas'],
         ];
     }
-    
+
     /**
      * Get the broadcastable representation of the notification.
      *
@@ -86,12 +53,12 @@ class StatusNotification extends Notification
     public function toBroadcast(mixed $notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
-            'title'     => $this->details['title'],
+            'title' => $this->details['title'],
             'actionURL' => $this->details['actionURL'],
-            'url'       => route('admin.notification', $this->id),
-            'fas'       => $this->details['fas'],
-            'time'      => date('F d, Y h:i A'),
+            'url' => route('admin.notification', $this->id),
+            'fas' => $this->details['fas'],
+            'time' => date('F d, Y h:i A'),
         ]);
     }
-    
+
 }

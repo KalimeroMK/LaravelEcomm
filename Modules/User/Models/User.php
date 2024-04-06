@@ -23,6 +23,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
 use Modules\Google2fa\Models\Google2fa;
+use Modules\Notification\Models\Notification;
 use Modules\Order\Models\Order;
 use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
@@ -193,5 +194,12 @@ class User extends Authenticatable
     public function loginSecurity(): HasOne
     {
         return $this->hasOne(Google2fa::class);
+    }
+
+    public function unreadNotifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'notifiable_id')
+            ->whereNull('read_at')
+            ->where('notifiable_type', get_class($this));
     }
 }
