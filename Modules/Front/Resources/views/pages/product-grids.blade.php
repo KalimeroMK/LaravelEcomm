@@ -88,7 +88,6 @@
                             <!-- Single Widget -->
                             <div class="single-widget recent-post">
                                 <h3 class="title">Recent post</h3>
-                                {{-- {{dd($recent_products)}} --}}
                                 @foreach($products as $product)
                                     <div class="single-post first">
                                         <div class="image">
@@ -341,7 +340,6 @@
                                                     <select>
                                                         @php
                                                             $sizes=explode(',',$product->size);
-                                                            // dd($sizes);
                                                         @endphp
                                                         @foreach($sizes as $size)
                                                             <option>{{$size}}</option>

@@ -27,7 +27,6 @@ class RolePolicy
 
     public function update(User $user, Role $role): bool
     {
-        dd();
         return $user->can('role-update');
     }
 

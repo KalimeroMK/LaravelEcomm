@@ -100,7 +100,6 @@
                             <!-- Single Widget -->
                             <div class="single-widget recent-post">
                                 <h3 class="title">Recent post</h3>
-                                {{-- {{dd($recent_products)}} --}}
                                 @foreach($products as $product)
                                     <!-- Single Post -->
                                     <div class="single-post first">
@@ -296,7 +295,6 @@
                                     <div class="quickview-slider-active">
                                         @php
                                             $photo=explode(',',$product->photo);
-                                        // dd($photo);
                                         @endphp
                                         @foreach($photo as $data)
                                             <div class="single-slider">
@@ -356,7 +354,6 @@
                                             <ul>
                                                 @php
                                                     $sizes=explode(',',$product->size);
-                                                    // dd($sizes);
                                                 @endphp
                                                 @foreach($sizes as $size)
                                                     <li><a href="#" class="one">{{$size}}</a></li>

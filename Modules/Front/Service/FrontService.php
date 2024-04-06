@@ -373,7 +373,6 @@ class FrontService
             ->where('status', 'active')
             ->orderBy('id', 'desc')
             ->paginate(9);
-        dd($products);
 
         // you might need to adjust this to work with your Elasticsearch setup.
         $brands = Brand::search($searchTerm)->get();
