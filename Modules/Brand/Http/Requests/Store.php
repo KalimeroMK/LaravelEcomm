@@ -12,7 +12,7 @@ class Store extends FormRequest
             'title' => 'string|required|unique:brands',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

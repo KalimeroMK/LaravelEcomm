@@ -54,15 +54,15 @@ use Modules\User\Models\User;
 class PostComment extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'post_comments';
-    
+
     protected $casts = [
-        'user_id'   => 'int',
-        'post_id'   => 'int',
+        'user_id' => 'int',
+        'post_id' => 'int',
         'parent_id' => 'int',
     ];
-    
+
     protected $fillable = [
         'user_id',
         'post_id',
@@ -71,7 +71,7 @@ class PostComment extends Core
         'replied_comment',
         'parent_id',
     ];
-    
+
     /**
      * @return PostCommentFactory
      */
@@ -79,7 +79,7 @@ class PostComment extends Core
     {
         return PostCommentFactory::new();
     }
-    
+
     /**
      * @return LengthAwarePaginator
      */
@@ -87,7 +87,7 @@ class PostComment extends Core
     {
         return PostComment::where('user_id', auth()->user()->id)->with('user_info')->paginate(10);
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -95,7 +95,7 @@ class PostComment extends Core
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -103,7 +103,7 @@ class PostComment extends Core
     {
         return $this->belongsTo(Post::class);
     }
-    
+
     /**
      * @return HasOne
      */
@@ -111,7 +111,7 @@ class PostComment extends Core
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-    
+
     /**
      * @return HasMany
      */

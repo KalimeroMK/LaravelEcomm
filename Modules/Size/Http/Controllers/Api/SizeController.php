@@ -15,15 +15,15 @@ use Modules\Size\Service\SizesService;
 
 class SizeController extends CoreController
 {
-    
+
     private SizesService $sizes_service;
-    
+
     public function __construct(SizesService $sizes_service)
     {
         $this->sizes_service = $sizes_service;
         $this->authorizeResource(Size::class);
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -31,7 +31,7 @@ class SizeController extends CoreController
     {
         return SizeResource::collection($this->sizes_service->getAll());
     }
-    
+
     /**
      *
      * @return mixed
@@ -56,7 +56,7 @@ class SizeController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     /**
      * @param $id
      *
@@ -81,7 +81,7 @@ class SizeController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     public function update(Update $request, $id)
     {
         try {
@@ -101,7 +101,7 @@ class SizeController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     /**
      * @param $id
      *

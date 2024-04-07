@@ -16,6 +16,6 @@ class CoreService
         $thumbnail = $base_path.'thumbnails/';
         $medium = $base_path.'medium/';
 
-        return (object)compact('original', 'thumbnail', 'medium');
+        return (object) compact('original', 'thumbnail', 'medium');
     }
 }

@@ -14,12 +14,12 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 class WishlistController extends CoreController
 {
     private WishlistService $wishlist_service;
-    
+
     public function __construct(WishlistService $wishlist_service)
     {
         $this->wishlist_service = $wishlist_service;
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -27,7 +27,7 @@ class WishlistController extends CoreController
     {
         return WishlistResource::collection($this->wishlist_service->getAll());
     }
-    
+
     /**
      * @param  Store  $request
      *
@@ -53,7 +53,7 @@ class WishlistController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     /**
      * @param $id
      *

@@ -13,19 +13,19 @@ class ConditionSeeder extends Seeder
         DB::table('conditions')->insert([
             0 =>
                 [
-                    'id'         => 1,
-                    'status'     => 'New',
+                    'id' => 1,
+                    'status' => 'New',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ],
             1 =>
                 [
-                    'id'         => 2,
-                    'status'     => 'Used',
+                    'id' => 2,
+                    'status' => 'Used',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ],
         ]);
     }
-    
+
 }

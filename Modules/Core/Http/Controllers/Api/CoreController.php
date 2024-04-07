@@ -9,7 +9,7 @@ use Modules\Core\Traits\ApiResponses;
 class CoreController extends Controller
 {
     use ApiResponses;
-    
+
     /**
      * @param $result
      * @param $message
@@ -20,13 +20,13 @@ class CoreController extends Controller
     {
         $response = [
             'success' => true,
-            'data'    => $result,
+            'data' => $result,
             'message' => $message,
         ];
-        
+
         return response()->json($response, 200);
     }
-    
+
     /**
      * return error response.
      *
@@ -38,11 +38,11 @@ class CoreController extends Controller
             'success' => false,
             'message' => $error,
         ];
-        
-        if ( ! empty($errorMessages)) {
+
+        if (!empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
-        
+
         return response()->json($response, $code);
     }
 }

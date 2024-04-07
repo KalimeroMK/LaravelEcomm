@@ -9,19 +9,19 @@ return new class extends Migration {
     {
         Schema::table('products', function (Blueprint $table) {
             $table->foreign('condition_id')
-                  ->references('id')
-                  ->on('conditions')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('conditions')
+                ->onDelete('cascade');
         });
     }
-    
+
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
             $table->foreign('condition_id')
-                  ->references('id')
-                  ->on('conditions')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('conditions')
+                ->onDelete('cascade');
         });
     }
 };

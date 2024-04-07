@@ -21,15 +21,15 @@ class MessageService
      */
     public function show($id): mixed
     {
-            $message = $this->message_repository->findById($id);
-            if (
-                true
-            ) {
-                $message->read_at = Carbon::now();
-                $message->save();
-            }
+        $message = $this->message_repository->findById($id);
+        if (
+            true
+        ) {
+            $message->read_at = Carbon::now();
+            $message->save();
+        }
 
-            return $message;
+        return $message;
     }
 
     /**
@@ -39,7 +39,7 @@ class MessageService
      */
     public function destroy($id)
     {
-            $this->message_repository->delete($id);
+        $this->message_repository->delete($id);
     }
 
     /**
@@ -47,7 +47,7 @@ class MessageService
      */
     public function getAll(): mixed
     {
-            return $this->message_repository->findAll();
+        return $this->message_repository->findAll();
     }
 
     /**
@@ -57,7 +57,7 @@ class MessageService
      */
     public function store($data): mixed
     {
-            return $this->message_repository->create($data);
+        return $this->message_repository->create($data);
     }
 
     /**
@@ -68,6 +68,6 @@ class MessageService
      */
     public function update($id, $data): mixed
     {
-            return $this->message_repository->update($id, $data);
+        return $this->message_repository->update($id, $data);
     }
 }

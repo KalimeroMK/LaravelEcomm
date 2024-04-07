@@ -20,7 +20,7 @@ class TagService
      */
     public function store($data): mixed
     {
-            return $this->tag_repository->create($data);
+        return $this->tag_repository->create($data);
     }
 
     /**
@@ -30,7 +30,7 @@ class TagService
      */
     public function edit($id): mixed
     {
-            return $this->tag_repository->findById($id);
+        return $this->tag_repository->findById($id);
     }
 
     /**
@@ -40,7 +40,7 @@ class TagService
      */
     public function show($id): mixed
     {
-            return $this->tag_repository->findById($id);
+        return $this->tag_repository->findById($id);
     }
 
     /**
@@ -51,7 +51,7 @@ class TagService
      */
     public function update($id, $data): mixed
     {
-            return $this->tag_repository->update($id, $data);
+        return $this->tag_repository->update($id, $data);
     }
 
     /**
@@ -61,7 +61,7 @@ class TagService
      */
     public function destroy($id)
     {
-            $this->tag_repository->delete($id);
+        $this->tag_repository->delete($id);
     }
 
     /**
@@ -69,6 +69,6 @@ class TagService
      */
     public function getAll(): mixed
     {
-            return $this->tag_repository->findAll();
+        return $this->tag_repository->findAll();
     }
 }

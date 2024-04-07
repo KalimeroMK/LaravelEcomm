@@ -45,9 +45,9 @@ use Modules\Settings\Database\Factories\SettingFactory;
 class Setting extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'settings';
-    
+
     protected $fillable = [
         'description',
         'short_des',
@@ -60,9 +60,9 @@ class Setting extends Core
         'fb_app_id',
         'keywords',
         'google-site-verification',
-    
+
     ];
-    
+
     /**
      * @return SettingFactory
      */

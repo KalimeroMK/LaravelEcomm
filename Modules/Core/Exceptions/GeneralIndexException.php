@@ -5,7 +5,7 @@ namespace Modules\Core\Exceptions;
 class GeneralIndexException extends GeneralException
 {
     public $code = 500;
-    
+
     /**
      * @return string|null
      */

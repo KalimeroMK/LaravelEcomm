@@ -9,9 +9,9 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'code'   => 'string|nullable|unique:coupons',
-            'type'   => 'nullable|in:fixed,percent',
-            'value'  => 'nullable|numeric',
+            'code' => 'string|nullable|unique:coupons',
+            'type' => 'nullable|in:fixed,percent',
+            'value' => 'nullable|numeric',
             'status' => 'nullable|in:active,inactive',
         ];
     }

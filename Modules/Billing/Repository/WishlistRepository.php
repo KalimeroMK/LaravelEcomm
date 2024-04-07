@@ -8,7 +8,7 @@ use Modules\Core\Repositories\Repository;
 class WishlistRepository extends Repository
 {
     public $model = Wishlist::class;
-    
+
     /**
      * @return mixed
      */
@@ -16,7 +16,7 @@ class WishlistRepository extends Repository
     {
         return $this->model::whereUserId(Auth()->id())->get();
     }
-    
+
     /**
      * @param  array  $data
      *
@@ -24,10 +24,10 @@ class WishlistRepository extends Repository
      */
     public function create(array $data): mixed
     {
-        $data['price']  = ($data['price'] - ($data['price'] * $data['discount']) / 100);
+        $data['price'] = ($data['price'] - ($data['price'] * $data['discount']) / 100);
         $data['amount'] = $data['price'] * $data['quantity'];
-        
+
         return $this->model::create($data)->fresh();
     }
-    
+
 }

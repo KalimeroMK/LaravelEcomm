@@ -20,7 +20,7 @@ class CouponService
      */
     public function store($data): mixed
     {
-            return $this->coupon_repository->create($data);
+        return $this->coupon_repository->create($data);
     }
 
     /**
@@ -30,7 +30,7 @@ class CouponService
      */
     public function edit($id): mixed
     {
-            return $this->coupon_repository->findById($id);
+        return $this->coupon_repository->findById($id);
     }
 
     /**
@@ -40,7 +40,7 @@ class CouponService
      */
     public function show($id): mixed
     {
-            return $this->coupon_repository->findById($id);
+        return $this->coupon_repository->findById($id);
     }
 
     /**
@@ -51,7 +51,7 @@ class CouponService
      */
     public function update($id, $data): mixed
     {
-            return $this->coupon_repository->update($id, $data);
+        return $this->coupon_repository->update($id, $data);
     }
 
     /**
@@ -61,7 +61,7 @@ class CouponService
      */
     public function destroy($id)
     {
-            $this->coupon_repository->delete($id);
+        $this->coupon_repository->delete($id);
     }
 
     /**
@@ -69,6 +69,6 @@ class CouponService
      */
     public function getAll(): mixed
     {
-            return $this->coupon_repository->findAll();
+        return $this->coupon_repository->findAll();
     }
 }

@@ -8,7 +8,7 @@ use Modules\Settings\Models\Setting;
 class SettingsRepository extends Repository
 {
     public $model = Setting::class;
-    
+
     /**
      * @return mixed
      */

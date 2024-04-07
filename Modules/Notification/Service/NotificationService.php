@@ -22,7 +22,7 @@ class NotificationService
      */
     public function destroy($id)
     {
-            $this->notification_repository->delete($id);
+        $this->notification_repository->delete($id);
     }
 
     /**
@@ -30,7 +30,7 @@ class NotificationService
      */
     public function getAll(): mixed
     {
-            return $this->notification_repository->findAll();
+        return $this->notification_repository->findAll();
     }
 
     /**
@@ -38,6 +38,6 @@ class NotificationService
      */
     public function getById($id): mixed
     {
-            return $this->notification_repository->getById($id);
+        return $this->notification_repository->getById($id);
     }
 }

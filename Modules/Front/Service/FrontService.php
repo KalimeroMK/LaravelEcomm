@@ -227,7 +227,7 @@ class FrontService
         $sortOrder,
         array $queryParams
     ) {
-        $perPage = (int)($queryParams['show'] ?? 9);
+        $perPage = (int) ($queryParams['show'] ?? 9);
 
         // Generate a unique cache key
         $cacheKey = 'products_'.md5(json_encode(compact(
@@ -594,7 +594,7 @@ class FrontService
 
     private function pagination(Builder $query)
     {
-        $perPage = isset($_GET['show']) ? (int)$_GET['show'] : 6;
+        $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
         return $query->paginate($perPage);
     }
 

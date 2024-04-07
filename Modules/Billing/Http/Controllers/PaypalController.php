@@ -27,8 +27,8 @@ class PaypalController extends CoreController
     {
         try {
             $response = $this->paypal_service->get_gateway()->purchase([
-                'amount'    => $this->payment->calculate($request),
-                'currency'  => config('paypal.currency'),
+                'amount' => $this->payment->calculate($request),
+                'currency' => config('paypal.currency'),
                 'returnUrl' => route('payment.success'),
                 'cancelUrl' => route('payment.cancel'),
             ])->send();

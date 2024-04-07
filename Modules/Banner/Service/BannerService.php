@@ -24,11 +24,11 @@ class BannerService extends CoreService
      */
     public function store($data): mixed
     {
-            return $this->banner_repository->create(
-                collect($data)->except(['photo'])->toArray() + [
-                    'photo' => $this->verifyAndStoreImage($data['photo']),
-                ]
-            );
+        return $this->banner_repository->create(
+            collect($data)->except(['photo'])->toArray() + [
+                'photo' => $this->verifyAndStoreImage($data['photo']),
+            ]
+        );
     }
 
     /**
@@ -48,7 +48,7 @@ class BannerService extends CoreService
      */
     public function show($id): mixed
     {
-            return $this->banner_repository->findById($id);
+        return $this->banner_repository->findById($id);
     }
 
     /**
@@ -59,16 +59,16 @@ class BannerService extends CoreService
      */
     public function update($id, $data): mixed
     {
-            if ( ! empty($data['photo'])) {
-                return $this->banner_repository->update(
-                    (int)$id,
-                    collect($data)->except(['photo'])->toArray() + [
-                        'photo' => $this->verifyAndStoreImage($data['photo']),
-                    ]
-                );
-            }
+        if (!empty($data['photo'])) {
+            return $this->banner_repository->update(
+                (int) $id,
+                collect($data)->except(['photo'])->toArray() + [
+                    'photo' => $this->verifyAndStoreImage($data['photo']),
+                ]
+            );
+        }
 
-            return $this->banner_repository->update((int)$id, $data);
+        return $this->banner_repository->update((int) $id, $data);
     }
 
     /**
@@ -80,8 +80,7 @@ class BannerService extends CoreService
      */
     public function destroy($id)
     {
-
-            $this->banner_repository->delete($id);
+        $this->banner_repository->delete($id);
     }
 
     /**
@@ -89,6 +88,6 @@ class BannerService extends CoreService
      */
     public function getAll($data): mixed
     {
-            return $this->banner_repository->search($data);
+        return $this->banner_repository->search($data);
     }
 }

@@ -19,12 +19,12 @@ class WishlistService
      */
     public function getAll(): mixed
     {
-            return $this->wishlist_repository->findAll();
+        return $this->wishlist_repository->findAll();
     }
 
     public function store($data)
     {
-            return $this->wishlist_repository->create($data);
+        return $this->wishlist_repository->create($data);
     }
 
     /**
@@ -36,7 +36,7 @@ class WishlistService
      */
     public function destroy($id)
     {
-            $this->wishlist_repository->delete($id);
+        $this->wishlist_repository->delete($id);
     }
 
 }

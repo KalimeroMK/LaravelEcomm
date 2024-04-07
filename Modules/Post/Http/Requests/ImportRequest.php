@@ -12,7 +12,7 @@ class ImportRequest extends FormRequest
             'file' => 'required|mimes:xlsx, csv, xls',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

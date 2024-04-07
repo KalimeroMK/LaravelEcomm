@@ -38,17 +38,17 @@ use Modules\Product\Models\Product;
 class CategoryProduct extends Core
 {
     protected $table = 'category_product';
-    
+
     protected $casts = [
-        'product_id'  => 'int',
+        'product_id' => 'int',
         'category_id' => 'int',
     ];
-    
+
     protected $fillable = [
         'product_id',
         'category_id',
     ];
-    
+
     /**
      * @return CategoryProductFactory
      */
@@ -56,7 +56,7 @@ class CategoryProduct extends Core
     {
         return CategoryProductFactory::new();
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -64,7 +64,7 @@ class CategoryProduct extends Core
     {
         return $this->belongsTo(Category::class);
     }
-    
+
     /**
      * @return BelongsTo
      */

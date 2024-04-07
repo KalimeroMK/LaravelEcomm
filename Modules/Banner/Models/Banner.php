@@ -40,7 +40,7 @@ use Modules\Core\Models\Core;
 class Banner extends Core
 {
     protected $table = 'banners';
-    
+
     protected $fillable = [
         'title',
         'slug',
@@ -48,7 +48,7 @@ class Banner extends Core
         'description',
         'status',
     ];
-    
+
     /**
      * @return BannerFactory
      */
@@ -56,7 +56,7 @@ class Banner extends Core
     {
         return BannerFactory::new();
     }
-    
+
     /**
      * @param $slug
      *
@@ -65,11 +65,11 @@ class Banner extends Core
     public function incrementSlug($slug): mixed
     {
         $original = $slug;
-        $count    = 2;
+        $count = 2;
         while (static::whereSlug($slug)->exists()) {
             $slug = "{$original}-".$count++;
         }
-        
+
         return $slug;
     }
 }

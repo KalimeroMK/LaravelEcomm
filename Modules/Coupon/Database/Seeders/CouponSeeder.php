@@ -16,19 +16,19 @@ class CouponSeeder extends Seeder
     {
         $data = [
             [
-                'code'   => 'abc123',
-                'type'   => 'fixed',
-                'value'  => '300',
+                'code' => 'abc123',
+                'type' => 'fixed',
+                'value' => '300',
                 'status' => 'active',
             ],
             [
-                'code'   => '111111',
-                'type'   => 'percent',
-                'value'  => '10',
+                'code' => '111111',
+                'type' => 'percent',
+                'value' => '10',
                 'status' => 'active',
             ],
         ];
-        
+
         DB::table('coupons')->insert($data);
     }
 }

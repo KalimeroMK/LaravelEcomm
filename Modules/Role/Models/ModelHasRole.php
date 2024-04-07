@@ -33,10 +33,10 @@ class ModelHasRole extends Model
     public $timestamps = false;
     protected $table = 'model_has_roles';
     protected $casts = [
-        'role_id'  => 'int',
+        'role_id' => 'int',
         'model_id' => 'int',
     ];
-    
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);

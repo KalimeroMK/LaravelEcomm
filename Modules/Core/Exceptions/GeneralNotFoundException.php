@@ -5,7 +5,7 @@ namespace Modules\Core\Exceptions;
 class GeneralNotFoundException extends GeneralException
 {
     public $code = 404;
-    
+
     /**
      * @return string|null
      */

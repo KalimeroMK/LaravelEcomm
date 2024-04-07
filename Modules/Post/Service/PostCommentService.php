@@ -13,12 +13,12 @@ use Modules\User\Models\User;
 class PostCommentService
 {
     private PostCommentRepository $post_comment_repository;
-    
+
     public function __construct(PostCommentRepository $post_comment_repository)
     {
         $this->post_comment_repository = $post_comment_repository;
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -28,19 +28,19 @@ class PostCommentService
      */
     public function store($request): void
     {
-        $post_info       = Post::getPostBySlug($request->slug);
-        $data            = $request;
+        $post_info = Post::getPostBySlug($request->slug);
+        $data = $request;
         $data['user_id'] = $request->user()->id;
-        $data['status']  = 'active';
+        $data['status'] = 'active';
         PostComment::create($data);
         $details = [
-            'title'     => "New Comment created",
+            'title' => "New Comment created",
             'actionURL' => route('blog.detail', $post_info->slug),
-            'fas'       => 'fas fa-comment',
+            'fas' => 'fas fa-comment',
         ];
         Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
     }
-    
+
     /**
      * @param $id
      *
@@ -50,7 +50,7 @@ class PostCommentService
     {
         return $this->post_comment_repository->findById($id);
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -63,7 +63,7 @@ class PostCommentService
     {
         return $this->post_comment_repository->update($id, $data);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -75,7 +75,7 @@ class PostCommentService
     {
         $this->post_comment_repository->delete($id);
     }
-    
+
     /**
      * @return mixed
      */

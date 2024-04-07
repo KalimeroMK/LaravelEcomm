@@ -12,7 +12,7 @@ class Store extends FormRequest
             'email' => 'required|email|unique:newsletters',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

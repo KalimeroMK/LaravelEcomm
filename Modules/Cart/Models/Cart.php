@@ -57,18 +57,18 @@ use Modules\User\Models\User;
 class Cart extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'carts';
-    
+
     protected $casts = [
         'product_id' => 'int',
-        'order_id'   => 'int',
-        'user_id'    => 'int',
-        'price'      => 'float',
-        'quantity'   => 'int',
-        'amount'     => 'float',
+        'order_id' => 'int',
+        'user_id' => 'int',
+        'price' => 'float',
+        'quantity' => 'int',
+        'amount' => 'float',
     ];
-    
+
     protected $fillable = [
         'product_id',
         'order_id',
@@ -78,7 +78,7 @@ class Cart extends Core
         'quantity',
         'amount',
     ];
-    
+
     /**
      * @return CartFactory
      */
@@ -86,7 +86,7 @@ class Cart extends Core
     {
         return CartFactory::new();
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -94,7 +94,7 @@ class Cart extends Core
     {
         return $this->belongsTo(Order::class);
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -102,7 +102,7 @@ class Cart extends Core
     {
         return $this->belongsTo(Product::class);
     }
-    
+
     /**
      * @return BelongsTo
      */
@@ -110,7 +110,7 @@ class Cart extends Core
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
      * @return HasMany
      */
@@ -118,5 +118,5 @@ class Cart extends Core
     {
         return $this->hasMany(Wishlist::class);
     }
-    
+
 }

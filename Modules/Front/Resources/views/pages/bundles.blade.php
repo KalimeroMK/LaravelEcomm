@@ -368,7 +368,7 @@
             // Your existing script content
 
             // Sorting filter handler
-            $('#sortFilter').change(function() {
+            $('#sortFilter').change(function () {
                 var sortByValue = $(this).val(); // Get the selected sort by value
                 var currentUrl = window.location.href; // Get current URL
                 var newUrl;

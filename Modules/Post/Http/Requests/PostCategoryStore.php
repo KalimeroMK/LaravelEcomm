@@ -9,11 +9,11 @@ class PostCategoryStore extends FormRequest
     public function rules(): array
     {
         return [
-            'title'  => 'string|required',
+            'title' => 'string|required',
             'status' => 'required|in:active,inactive',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

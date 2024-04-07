@@ -9,11 +9,11 @@ use Modules\Product\Models\Product;
 class Size extends Core
 {
     protected $table = 'sizes';
-    
+
     protected $fillable = [
         'name',
     ];
-    
+
     /**
      * @return BelongsToMany
      */

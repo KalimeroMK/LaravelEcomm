@@ -11,7 +11,7 @@ use Modules\Post\Models\Post;
 
 class Posts implements FromCollection, WithHeadings, WithMapping
 {
-    
+
     public function headings(): array
     {
         return [
@@ -26,10 +26,10 @@ class Posts implements FromCollection, WithHeadings, WithMapping
             'status',
             'created_at',
             'updated_at',
-        
+
         ];
     }
-    
+
     /**
      * @return Collection
      */
@@ -37,7 +37,7 @@ class Posts implements FromCollection, WithHeadings, WithMapping
     {
         return Post::all();
     }
-    
+
     public function map($row): array
     {
         return [

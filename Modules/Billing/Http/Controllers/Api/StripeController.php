@@ -21,9 +21,9 @@ class StripeController extends CoreController
     {
         Stripe::setApiKey(config('stripe.sandbox.client_secret'));
         Charge::create([
-            "amount"      => Payment::calculate($request) * 100,
-            "currency"    => "usd",
-            "source"      => $request->stripeToken,
+            "amount" => Payment::calculate($request) * 100,
+            "currency" => "usd",
+            "source" => $request->stripeToken,
             "description" => "KalimeroMK E-comm",
         ]);
     }

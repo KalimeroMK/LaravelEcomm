@@ -9,7 +9,7 @@ use Modules\Message\Models\Message;
 class MessageFactory extends Factory
 {
     protected $model = Message::class;
-    
+
     /**
      * Define the model's default state.
      *
@@ -18,11 +18,11 @@ class MessageFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'    => $this->faker->name,
+            'name' => $this->faker->name,
             'subject' => $this->faker->word,
-            'email'   => $this->faker->unique()->safeEmail,
-            'photo'   => $this->faker->word,
-            'phone'   => $this->faker->phoneNumber,
+            'email' => $this->faker->unique()->safeEmail,
+            'photo' => $this->faker->word,
+            'phone' => $this->faker->phoneNumber,
             'message' => $this->faker->word,
             'read_at' => Carbon::now()
         ];

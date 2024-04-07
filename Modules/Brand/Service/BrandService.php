@@ -24,11 +24,11 @@ class BrandService extends CoreService
      */
     public function store($data): mixed
     {
-            return $this->brand_repository->create(
-                collect($data)->except(['photo'])->toArray() + [
-                    'photo' => $this->verifyAndStoreImage($data['photo']),
-                ]
-            );
+        return $this->brand_repository->create(
+            collect($data)->except(['photo'])->toArray() + [
+                'photo' => $this->verifyAndStoreImage($data['photo']),
+            ]
+        );
     }
 
     /**
@@ -38,7 +38,7 @@ class BrandService extends CoreService
      */
     public function edit($id): mixed
     {
-            return $this->brand_repository->findById($id);
+        return $this->brand_repository->findById($id);
     }
 
     /**
@@ -59,17 +59,16 @@ class BrandService extends CoreService
      */
     public function update($id, $data): mixed
     {
+        if (!empty($data['photo'])) {
+            return $this->brand_repository->update(
+                (int) $id,
+                collect($data)->except(['photo'])->toArray() + [
+                    'photo' => $this->verifyAndStoreImage($data['photo']),
+                ]
+            );
+        }
 
-            if ( ! empty($data['photo'])) {
-                return $this->brand_repository->update(
-                    (int)$id,
-                    collect($data)->except(['photo'])->toArray() + [
-                        'photo' => $this->verifyAndStoreImage($data['photo']),
-                    ]
-                );
-            }
-
-            return $this->brand_repository->update((int)$id, $data);
+        return $this->brand_repository->update((int) $id, $data);
     }
 
     /**
@@ -80,7 +79,7 @@ class BrandService extends CoreService
 
     public function destroy($id)
     {
-            $this->brand_repository->delete($id);
+        $this->brand_repository->delete($id);
     }
 
     /**
@@ -88,6 +87,6 @@ class BrandService extends CoreService
      */
     public function getAll($data): mixed
     {
-            return $this->brand_repository->search($data);
+        return $this->brand_repository->search($data);
     }
 }

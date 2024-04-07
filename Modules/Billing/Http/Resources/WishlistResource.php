@@ -18,17 +18,17 @@ class WishlistResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'         => $this->id,
-            'price'      => $this->price,
-            'quantity'   => $this->quantity,
-            'amount'     => $this->amount,
+            'id' => $this->id,
+            'price' => $this->price,
+            'quantity' => $this->quantity,
+            'amount' => $this->amount,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            
+
             'product_id' => $this->product_id,
-            'cart_id'    => $this->cart_id,
-            'user_id'    => $this->user_id,
-            
+            'cart_id' => $this->cart_id,
+            'user_id' => $this->user_id,
+
             'product' => new ProductResource($this->whenLoaded('product')),
         ];
     }

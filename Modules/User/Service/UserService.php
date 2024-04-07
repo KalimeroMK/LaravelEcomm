@@ -14,12 +14,12 @@ use Spatie\Permission\Models\Role;
 class UserService
 {
     private UserRepository $user_repository;
-    
+
     public function __construct(UserRepository $user_repository)
     {
         $this->user_repository = $user_repository;
     }
-    
+
     /**
      * @return mixed
      */
@@ -28,7 +28,7 @@ class UserService
         $currentUser = auth()->user();
 
         if ($currentUser->isSuperAdmin()) {
-         return $this->user_repository->findAll();
+            return $this->user_repository->findAll();
         } else {
             return collect([$this->user_repository->findById($currentUser->id)]);
         }
@@ -42,11 +42,11 @@ class UserService
      */
     public function register($request): void
     {
-        $input             = $request->all();
-        $user              = User::create($input);
+        $input = $request->all();
+        $user = User::create($input);
         $user->assignRole($request->input('roles'));
     }
-    
+
     /**
      * @param $id
      * @param $data
@@ -56,20 +56,20 @@ class UserService
     public function update($id, $data): void
     {
         $input = $data;
-        
-        if ( ! empty($input['password'])) {
+
+        if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {
             $input = Arr::except($input, ['password']);
         }
-        
+
         $user = User::findOrFail($id);
-        
+
         $user->update($input);
         DB::table('model_has_roles')->where('model_id', $id)->delete();
         $user->assignRole($data->input('roles'));
     }
-    
+
     /**
      * @param $id
      *
@@ -78,12 +78,12 @@ class UserService
     public function edit($id): array
     {
         return [
-            'user'     => User::find($id),
-            'roles'    => Role::all(),
+            'user' => User::find($id),
+            'roles' => Role::all(),
             'userRole' => User::find($id)->roles->pluck('name', 'name')->all(),
         ];
     }
-    
+
     /**
      * @param $id
      *
@@ -93,15 +93,15 @@ class UserService
     {
         return $this->user_repository->findById($id);
     }
-    
+
     public function create(): array
     {
         return [
-            'user'  => new User(),
+            'user' => new User(),
             'roles' => Role::all(),
         ];
     }
-    
+
     /**
      * @param $id
      *
@@ -111,7 +111,7 @@ class UserService
     {
         $this->user_repository->delete($id);
     }
-    
+
     /**
      * @param $id
      *
@@ -121,7 +121,7 @@ class UserService
     {
         return Order::with('shipping', 'user')->orderBy('id', 'DESC')->whereUserId($id)->paginate(10);
     }
-    
+
     /**
      * @param $data
      *
@@ -131,5 +131,5 @@ class UserService
     {
         $this->user_repository->create($data);
     }
-    
+
 }

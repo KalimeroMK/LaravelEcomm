@@ -238,7 +238,7 @@ class FrontController extends Controller
     public function verifyNewsletter($token): string
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->validation((int)['id' => Newsletter::where('token', $token)->first()->id]);
+            $this->front_service->validation((int) ['id' => Newsletter::where('token', $token)->first()->id]);
 
             return redirect()->back()->with('message', "Your email is successfully validated.");
         }
@@ -249,7 +249,7 @@ class FrontController extends Controller
     public function deleteNewsletter($token)
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->deleteNewsletter((int)['id' => Newsletter::where('token', $token)->first()->id]);
+            $this->front_service->deleteNewsletter((int) ['id' => Newsletter::where('token', $token)->first()->id]);
 
             return redirect()->back()->with('message', "Your email is successfully deleted.");
         }

@@ -42,15 +42,15 @@ use Modules\Tag\Database\Factories\TagFactory;
 class Tag extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'tags';
-    
+
     protected $fillable = [
         'title',
         'slug',
         'status',
     ];
-    
+
     /**
      * @return TagFactory
      */
@@ -58,7 +58,7 @@ class Tag extends Core
     {
         return TagFactory::new();
     }
-    
+
     /**
      * @return HasMany
      */
@@ -66,7 +66,7 @@ class Tag extends Core
     {
         return $this->hasMany(Post::class);
     }
-    
+
     /**
      * @param $slug
      *
@@ -75,11 +75,11 @@ class Tag extends Core
     public function incrementSlug($slug): mixed
     {
         $original = $slug;
-        $count    = 2;
+        $count = 2;
         while (static::whereSlug($slug)->exists()) {
             $slug = "{$original}-".$count++;
         }
-        
+
         return $slug;
     }
 }

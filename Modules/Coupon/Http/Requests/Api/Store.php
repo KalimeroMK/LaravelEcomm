@@ -9,9 +9,9 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'code'   => 'string|required|unique:coupons',
-            'type'   => 'required|in:fixed,percent',
-            'value'  => 'required|numeric',
+            'code' => 'string|required|unique:coupons',
+            'type' => 'required|in:fixed,percent',
+            'value' => 'required|numeric',
             'status' => 'required|in:active,inactive',
         ];
     }

@@ -8,7 +8,7 @@ use Modules\Message\Models\Message;
 class MessageRepository extends Repository
 {
     public $model = Message::class;
-    
+
     /**
      * @return mixed
      */

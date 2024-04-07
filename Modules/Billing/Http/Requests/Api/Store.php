@@ -15,16 +15,16 @@ class Store extends CoreRequest
             'slug' => new WishlistRule(),
         ];
     }
-    
+
     public function passedValidation()
     {
         $this->merge([
             'product_id' => Product::whereSlug($this->get('slug'))->first()->id,
-            'quantity'   => 1,
-            'user_id'    => Auth::id(),
-            'discount'   => Product::whereSlug($this->get('slug'))->first()->discount,
-            'price'      => Product::whereSlug($this->get('slug'))->first()->price,
-        
+            'quantity' => 1,
+            'user_id' => Auth::id(),
+            'discount' => Product::whereSlug($this->get('slug'))->first()->discount,
+            'price' => Product::whereSlug($this->get('slug'))->first()->price,
+
         ]);
     }
 }

@@ -9,7 +9,7 @@ use Modules\Coupon\Models\Coupon;
 class CouponFactory extends Factory
 {
     protected $model = Coupon::class;
-    
+
     /**
      * Define the model's default state.
      *
@@ -18,7 +18,7 @@ class CouponFactory extends Factory
     #[ArrayShape(['code' => "string", 'value' => "float"])] public function definition(): array
     {
         return [
-            'code'  => $this->faker->word,
+            'code' => $this->faker->word,
             'value' => $this->faker->randomFloat(),
         ];
     }

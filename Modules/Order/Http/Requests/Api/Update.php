@@ -10,7 +10,7 @@ class Update extends CoreRequest
      * @var mixed
      */
     public mixed $shipping;
-    
+
     public function rules(): array
     {
         return [

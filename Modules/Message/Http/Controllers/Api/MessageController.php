@@ -14,15 +14,15 @@ use Modules\Message\Service\MessageService;
 
 class MessageController extends CoreController
 {
-    
+
     private MessageService $message_service;
-    
+
     public function __construct(MessageService $message_service)
     {
         $this->message_service = $message_service;
         $this->authorizeResource(Message::class);
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -30,7 +30,7 @@ class MessageController extends CoreController
     {
         return MessageResource::collection($this->message_service->getAll());
     }
-    
+
     public function store(Store $request)
     {
         try {
@@ -50,7 +50,7 @@ class MessageController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     /**
      * @param $id
      *
@@ -75,7 +75,7 @@ class MessageController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     /**
      * @param $id
      *
@@ -100,7 +100,7 @@ class MessageController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     /**
      * @param  Store  $request
      * @param $id

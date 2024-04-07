@@ -11,15 +11,15 @@ class CoreRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-        
+
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;
     }
-    
+
     protected function failedValidation(Validator|\Illuminate\Contracts\Validation\Validator $validator)
     {
         throw new HttpResponseException(response()->json($validator->errors(), 422));

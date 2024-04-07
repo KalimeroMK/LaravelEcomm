@@ -8,7 +8,7 @@ use Modules\Coupon\Models\Coupon;
 class CouponRepository extends Repository
 {
     public $model = Coupon::class;
-    
+
     /**
      * @return mixed
      */

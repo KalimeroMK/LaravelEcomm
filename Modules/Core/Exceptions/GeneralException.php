@@ -14,17 +14,17 @@ class GeneralException extends Exception
      * @var array
      */
     public array $data = [];
-    
+
     protected $code = 500;
-    
+
     protected $message = 'Internal system error';
-    
+
     protected string $logMessage = 'Internal system error';
-    
+
     protected bool $log = true;
-    
+
     protected $exception = null;
-    
+
     /**
      * GeneralException constructor.
      *
@@ -35,10 +35,10 @@ class GeneralException extends Exception
     {
         $this->setException($exception);
         $this->setData($data);
-        
+
         parent::__construct($this->message());
     }
-    
+
     /**
      * @return string|null
      */
@@ -46,7 +46,7 @@ class GeneralException extends Exception
     {
         return $this->message;
     }
-    
+
     /**
      * @return null
      */
@@ -54,7 +54,7 @@ class GeneralException extends Exception
     {
         return $this->exception;
     }
-    
+
     /**
      * @param  null  $exception
      */
@@ -62,7 +62,7 @@ class GeneralException extends Exception
     {
         $this->exception = $exception;
     }
-    
+
     /**
      * @return array
      */
@@ -70,7 +70,7 @@ class GeneralException extends Exception
     {
         return $this->data;
     }
-    
+
     /**
      * Set the extra data to send with the response.
      *
@@ -81,10 +81,10 @@ class GeneralException extends Exception
     public function setData(array $data): GeneralException
     {
         $this->data = $data;
-        
+
         return $this;
     }
-    
+
     /**
      * @param  int  $code
      */
@@ -92,7 +92,7 @@ class GeneralException extends Exception
     {
         $this->code = $code;
     }
-    
+
     /**
      * @param  string  $message
      */
@@ -100,14 +100,14 @@ class GeneralException extends Exception
     {
         $this->message = $message;
     }
-    
+
     public function render($request): JsonResponse
     {
         $this->isLog() ? $this->renderLog() : null;
-        
+
         return $this->prepareResponse();
     }
-    
+
     /**
      * @return bool
      */
@@ -115,7 +115,7 @@ class GeneralException extends Exception
     {
         return $this->log;
     }
-    
+
     /**
      * @param  bool  $log
      */
@@ -123,7 +123,7 @@ class GeneralException extends Exception
     {
         $this->log = $log;
     }
-    
+
     /**
      * Log error
      */
@@ -131,7 +131,7 @@ class GeneralException extends Exception
     {
         Log::error(print_r($this->getLogResponse(), true));
     }
-    
+
     /**
      * @return array
      */
@@ -139,12 +139,12 @@ class GeneralException extends Exception
     {
         return [
             'message' => $this->getLogMessage(),
-            'code'    => $this->getCode(),
-            'line'    => $this->line(),
-            'file'    => $this->file(),
+            'code' => $this->getCode(),
+            'line' => $this->line(),
+            'file' => $this->file(),
         ];
     }
-    
+
     /**
      * @return string
      */
@@ -152,7 +152,7 @@ class GeneralException extends Exception
     {
         return $this->exception ? $this->exception->getMessage() : '';
     }
-    
+
     /**
      * @param  string  $logMessage
      */
@@ -160,7 +160,7 @@ class GeneralException extends Exception
     {
         $this->logMessage = $logMessage;
     }
-    
+
     /**
      * @return int
      */
@@ -168,7 +168,7 @@ class GeneralException extends Exception
     {
         return $this->exception ? $this->exception->getLine() : 'none';
     }
-    
+
     /**
      * @return int
      */
@@ -176,7 +176,7 @@ class GeneralException extends Exception
     {
         return $this->exception ? $this->exception->getFile() : 'none';
     }
-    
+
     /**
      * Handle an ajax response.
      */
@@ -184,16 +184,16 @@ class GeneralException extends Exception
     {
         return response()->json($this->getResponse());
     }
-    
+
     /**
      * @return array
      */
     public function getResponse(): array
     {
         return [
-            'code'    => $this->getCode(),
+            'code' => $this->getCode(),
             'message' => $this->message(),
         ];
     }
-    
+
 }

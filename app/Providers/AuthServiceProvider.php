@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Policies\ownerPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\Policies\AttributePolicy;
@@ -37,6 +38,7 @@ use Modules\Size\Models\Policies\SizePolicy;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Policies\TagPolicy;
 use Modules\Tag\Models\Tag;
+use Modules\Tenant\Models\tenant;
 use Modules\User\Models\Policies\UserPolicy;
 use Modules\User\Models\User;
 use Spatie\Permission\Models\Permission;
@@ -71,6 +73,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
 
 
+        tenant::class => ownerPolicy::class,
     ];
 
     /**

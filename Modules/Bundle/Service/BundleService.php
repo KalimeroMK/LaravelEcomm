@@ -60,7 +60,7 @@ class BundleService
      */
     public function update($id, $data): mixed
     {
-        return $this->bundleRepository->update((int)$id, $data);
+        return $this->bundleRepository->update((int) $id, $data);
     }
 
     /**

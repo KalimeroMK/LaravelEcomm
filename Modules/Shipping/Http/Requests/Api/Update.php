@@ -9,8 +9,8 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'type'   => 'string|required',
-            'price'  => 'nullable|numeric',
+            'type' => 'string|required',
+            'price' => 'nullable|numeric',
             'status' => 'required|in:active,inactive',
         ];
     }

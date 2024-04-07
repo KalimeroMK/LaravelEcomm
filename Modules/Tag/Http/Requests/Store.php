@@ -9,11 +9,11 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'title'  => 'string|required|unique:tags',
+            'title' => 'string|required|unique:tags',
             'status' => 'required|in:active,inactive',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

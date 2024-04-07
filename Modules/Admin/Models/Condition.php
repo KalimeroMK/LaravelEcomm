@@ -13,11 +13,11 @@ use Modules\Product\Models\Product;
 class Condition extends Core
 {
     protected $table = 'conditions';
-    
+
     protected $fillable = [
         'status',
     ];
-    
+
     /**
      * @return BelongsToMany
      */
@@ -25,5 +25,5 @@ class Condition extends Core
     {
         return $this->belongsToMany(Product::class);
     }
-    
+
 }

@@ -3,7 +3,6 @@
 namespace Modules\Newsletter\Providers;
 
 use Config;
-use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\ServiceProvider;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Models\Observer\NewsletterObserver;

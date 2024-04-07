@@ -17,11 +17,11 @@ class CouponResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'         => $this->id,
-            'code'       => $this->code,
-            'type'       => $this->type,
-            'value'      => $this->value,
-            'status'     => $this->status,
+            'id' => $this->id,
+            'code' => $this->code,
+            'type' => $this->type,
+            'value' => $this->value,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

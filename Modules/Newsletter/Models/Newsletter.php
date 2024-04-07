@@ -9,23 +9,23 @@ use Modules\Newsletter\Database\Factories\NewsletterFactory;
 class Newsletter extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'newsletters';
-    
+
     protected $casts = [
         'is_validated' => 'bool',
     ];
-    
+
     protected $hidden = [
         'token',
     ];
-    
+
     protected $fillable = [
         'email',
         'token',
         'is_validated',
     ];
-    
+
     /**
      * @return NewsletterFactory
      */
@@ -33,5 +33,5 @@ class Newsletter extends Core
     {
         return NewsletterFactory::new();
     }
-    
+
 }

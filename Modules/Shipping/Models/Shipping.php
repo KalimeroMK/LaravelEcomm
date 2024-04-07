@@ -42,19 +42,19 @@ use Modules\Shipping\Database\Factories\ShippingFactory;
 class Shipping extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'shipping';
-    
+
     protected $casts = [
         'price' => 'float',
     ];
-    
+
     protected $fillable = [
         'type',
         'price',
         'status',
     ];
-    
+
     /**
      * @return ShippingFactory
      */
@@ -62,7 +62,7 @@ class Shipping extends Core
     {
         return ShippingFactory::new();
     }
-    
+
     /**
      * @return HasMany
      */

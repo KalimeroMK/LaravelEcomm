@@ -45,13 +45,13 @@ use Modules\Message\Database\Factories\MessageFactory;
 class Message extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'messages';
-    
+
     protected $dates = [
         'read_at',
     ];
-    
+
     protected $fillable = [
         'name',
         'subject',
@@ -61,7 +61,7 @@ class Message extends Core
         'message',
         'read_at',
     ];
-    
+
     /**
      * @return MessageFactory
      */

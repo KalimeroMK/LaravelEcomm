@@ -32,7 +32,7 @@ class AttributeRepository extends Repository implements SearchInterface
 
         foreach ($filterableKeys as $key) {
             if (Arr::has($data, $key)) {
-                $query->where($key, 'like', '%' . Arr::get($data, $key) . '%');
+                $query->where($key, 'like', '%'.Arr::get($data, $key).'%');
             }
         }
 
@@ -44,7 +44,7 @@ class AttributeRepository extends Repository implements SearchInterface
             }
         }
 
-        if ((bool)Arr::get($data, 'all_included') || empty($data)) {
+        if ((bool) Arr::get($data, 'all_included') || empty($data)) {
             return $query->get();
         }
 

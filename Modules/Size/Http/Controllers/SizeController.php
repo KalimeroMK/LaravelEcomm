@@ -16,7 +16,7 @@ class SizeController extends CoreController
     {
         return view('size::index');
     }
-    
+
     /**
      * Show the form for creating a new resource.
      * @return Renderable
@@ -25,7 +25,7 @@ class SizeController extends CoreController
     {
         return view('size::create');
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -37,7 +37,7 @@ class SizeController extends CoreController
     {
         //
     }
-    
+
     /**
      * Show the specified resource.
      *
@@ -49,7 +49,7 @@ class SizeController extends CoreController
     {
         return view('size::show');
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -61,7 +61,7 @@ class SizeController extends CoreController
     {
         return view('size::edit');
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -74,7 +74,7 @@ class SizeController extends CoreController
     {
         //
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

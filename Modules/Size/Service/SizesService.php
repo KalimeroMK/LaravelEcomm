@@ -22,7 +22,7 @@ class SizesService extends CoreService
      */
     public function store($data): mixed
     {
-            return $this->sizes_repository->create($data);
+        return $this->sizes_repository->create($data);
     }
 
     /**
@@ -32,7 +32,7 @@ class SizesService extends CoreService
      */
     public function edit($id): mixed
     {
-            return $this->sizes_repository->findById($id);
+        return $this->sizes_repository->findById($id);
     }
 
     /**
@@ -42,7 +42,7 @@ class SizesService extends CoreService
      */
     public function show($id): mixed
     {
-            return $this->sizes_repository->findById($id);
+        return $this->sizes_repository->findById($id);
     }
 
     /**
@@ -53,7 +53,7 @@ class SizesService extends CoreService
      */
     public function update($id, $data): mixed
     {
-            return $this->sizes_repository->update($id, $data);
+        return $this->sizes_repository->update($id, $data);
     }
 
     /**
@@ -63,7 +63,7 @@ class SizesService extends CoreService
      */
     public function destroy($id)
     {
-            $this->sizes_repository->delete($id);
+        $this->sizes_repository->delete($id);
     }
 
     /**
@@ -71,7 +71,7 @@ class SizesService extends CoreService
      */
     public function getAll(): mixed
     {
-            return $this->sizes_repository->findAll();
+        return $this->sizes_repository->findAll();
     }
 
 }

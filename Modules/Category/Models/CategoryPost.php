@@ -42,19 +42,19 @@ use Modules\Product\Models\Product;
 class CategoryPost extends Core
 {
     use HasNewFactory;
-    
+
     protected $table = 'category_post';
-    
+
     protected $casts = [
-        'post_id'     => 'int',
+        'post_id' => 'int',
         'category_id' => 'int',
     ];
-    
+
     protected $fillable = [
         'post_id',
         'category_id',
     ];
-    
+
     /**
      * @return BelongsTo
      */
@@ -62,7 +62,7 @@ class CategoryPost extends Core
     {
         return $this->belongsTo(Category::class);
     }
-    
+
     /**
      * @return BelongsTo
      */

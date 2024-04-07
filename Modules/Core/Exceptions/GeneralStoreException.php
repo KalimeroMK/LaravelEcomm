@@ -5,7 +5,7 @@ namespace Modules\Core\Exceptions;
 class GeneralStoreException extends GeneralException
 {
     public $code = 422;
-    
+
     /**
      * @return string|null
      */

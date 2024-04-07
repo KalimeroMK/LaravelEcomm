@@ -17,15 +17,15 @@ class CategoryResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'         => $this->id,
-            'title'      => $this->title,
-            'slug'       => $this->slug,
-            'status'     => $this->status,
-            '_lft'       => $this->_lft,
-            '_rgt'       => $this->_rgt,
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'status' => $this->status,
+            '_lft' => $this->_lft,
+            '_rgt' => $this->_rgt,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'parent_id'  => $this->parent_id,
+            'parent_id' => $this->parent_id,
         ];
     }
 }

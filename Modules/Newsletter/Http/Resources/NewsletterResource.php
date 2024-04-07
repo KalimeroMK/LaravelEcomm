@@ -17,12 +17,12 @@ class NewsletterResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'           => $this->id,
-            'email'        => $this->email,
-            'token'        => $this->token,
+            'id' => $this->id,
+            'email' => $this->email,
+            'token' => $this->token,
             'is_validated' => $this->is_validated,
-            'created_at'   => $this->created_at,
-            'updated_at'   => $this->updated_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

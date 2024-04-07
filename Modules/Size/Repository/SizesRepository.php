@@ -8,7 +8,7 @@ use Modules\Size\Models\Size;
 class SizesRepository extends Repository
 {
     public $model = Size::class;
-    
+
     /**
      * @return mixed
      */

@@ -8,7 +8,7 @@ use Modules\Core\Repositories\Repository;
 class CategoryRepository extends Repository
 {
     public $model = Category::class;
-    
+
     /**
      * @return mixed
      */

@@ -26,7 +26,7 @@ class PaypalService
     {
         if ($request->input('paymentId') && $request->input('PayerID')) {
             $transaction = $this->gateway->completePurchase([
-                'payer_id'             => $request->input('PayerID'),
+                'payer_id' => $request->input('PayerID'),
                 'transactionReference' => $request->input('paymentId'),
             ]);
             $response = $transaction->send();
@@ -35,7 +35,7 @@ class PaypalService
                 $order_data = $response->getData();
                 $this->orderSave(Helper::totalCartPrice());
 
-                return "Payment is successful. Your transaction id is: " . $order_data['id'];
+                return "Payment is successful. Your transaction id is: ".$order_data['id'];
             } else {
                 return $response->getMessage();
             }

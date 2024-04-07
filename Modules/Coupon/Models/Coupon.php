@@ -37,20 +37,20 @@ use Modules\Core\Models\Core;
  */
 class Coupon extends Core
 {
-    
+
     protected $table = 'coupons';
-    
+
     protected $casts = [
         'value' => 'float',
     ];
-    
+
     protected $fillable = [
         'code',
         'type',
         'value',
         'status',
     ];
-    
+
     /**
      * @param $code
      *
@@ -60,7 +60,7 @@ class Coupon extends Core
     {
         return self::where('code', $code)->first();
     }
-    
+
     /**
      * @param $total
      *

@@ -18,10 +18,10 @@ class CategoryProductSeeder extends Seeder
     {
         $categories = Category::factory()->count(10)->create();
         Brand::factory()->count(10)->create();
-        
+
         Product::factory()
-               ->count(10)
-               ->hasAttached($categories)
-               ->create();
+            ->count(10)
+            ->hasAttached($categories)
+            ->create();
     }
 }

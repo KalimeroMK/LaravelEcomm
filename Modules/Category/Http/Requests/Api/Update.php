@@ -9,7 +9,7 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'title'     => 'string|nullable',
+            'title' => 'string|nullable',
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }

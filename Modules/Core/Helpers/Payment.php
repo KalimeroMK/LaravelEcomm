@@ -13,10 +13,10 @@ class Payment
      */
     public static function calculate($data): float
     {
-        $order_data              = $data;
-        $shipping                = Shipping::whereId($order_data['shipping_id'])->pluck('price');
+        $order_data = $data;
+        $shipping = Shipping::whereId($order_data['shipping_id'])->pluck('price');
         $order_data['sub_total'] = Helper::totalCartPrice();
-        $order_data['quantity']  = Helper::cartCount();
+        $order_data['quantity'] = Helper::cartCount();
         if (session('coupon')) {
             $order_data['coupon'] = session('coupon')['value'];
         }
@@ -33,7 +33,7 @@ class Payment
                 $order_data['total_amount'] = Helper::totalCartPrice();
             }
         }
-        
+
         return $order_data['total_amount'];
     }
 }
