@@ -2,7 +2,6 @@
 
 namespace Modules\Banner\Http\Resource;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Banner\Models\Banner;
 
@@ -10,21 +9,21 @@ use Modules\Banner\Models\Banner;
 class BannerResource extends JsonResource
 {
     /**
-     * @param  Request  $request
+     * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string> Array of field rules.
      */
     public function toArray($request): array
     {
         return [
-            'id'          => $this->id,
-            'title'       => $this->title,
-            'slug'        => $this->slug,
-            'photo'       => $this->photo,
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'photo' => $this->photo,
             'description' => $this->description,
-            'status'      => $this->status,
-            'created_at'  => $this->created_at,
-            'updated_at'  => $this->updated_at,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

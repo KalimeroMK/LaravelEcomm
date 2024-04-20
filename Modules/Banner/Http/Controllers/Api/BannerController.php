@@ -42,7 +42,7 @@ class BannerController extends CoreController
      * @return JsonResponse
      * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): JsonResponse
     {
         return $this
             ->setMessage(
@@ -59,12 +59,12 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function show($id)
+    public function show(int $id)
     {
         return $this
             ->setMessage(
@@ -82,12 +82,12 @@ class BannerController extends CoreController
 
     /**
      * @param  Update  $request
-     * @param $id
+     * @param  int  $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function update(Update $request, $id)
+    public function update(Update $request, int $id)
     {
         return $this
             ->setMessage(
@@ -104,12 +104,12 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
         $this->banner_service->destroy($id);
 

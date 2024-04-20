@@ -8,7 +8,7 @@ use Modules\Core\Repositories\Repository;
 
 class BundleRepository extends Repository implements SearchInterface
 {
-    public $model = Bundle::class;
+    public \Illuminate\Database\Eloquent\Model $model = Bundle::class;
 
     public function search(array $data)
     {

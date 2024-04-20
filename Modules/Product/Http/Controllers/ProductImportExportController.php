@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Product\Exports\Products;
-use Modules\Product\Imports\Products;
+use PhpOffice\PhpSpreadsheet\Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProductImportExportController extends Controller
@@ -19,6 +19,8 @@ class ProductImportExportController extends Controller
 
     /**
      * @return BinaryFileResponse
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
 
     public function export()

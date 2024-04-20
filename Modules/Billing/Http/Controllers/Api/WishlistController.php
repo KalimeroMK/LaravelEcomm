@@ -10,16 +10,17 @@ use Modules\Billing\Http\Resources\WishlistResource;
 use Modules\Billing\Service\WishlistService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use ReflectionException;
 
 class WishlistController extends CoreController
 {
     private WishlistService $wishlist_service;
-    
+
     public function __construct(WishlistService $wishlist_service)
     {
         $this->wishlist_service = $wishlist_service;
     }
-    
+
     /**
      * @return ResourceCollection
      */
@@ -27,7 +28,7 @@ class WishlistController extends CoreController
     {
         return WishlistResource::collection($this->wishlist_service->getAll());
     }
-    
+
     /**
      * @param  Store  $request
      *
@@ -53,29 +54,27 @@ class WishlistController extends CoreController
             return $exception->getMessage();
         }
     }
-    
+
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
+     * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->wishlist_service->wishlist_repository->model
-                            ),
-                        ]
-                    )
+        $this->wishlist_service->destroy($id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->wishlist_service->wishlist_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->wishlist_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(null);
     }
 }

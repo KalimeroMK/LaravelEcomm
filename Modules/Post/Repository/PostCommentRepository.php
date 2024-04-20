@@ -8,9 +8,9 @@ use Modules\Post\Models\PostComment;
 
 class PostCommentRepository extends Repository
 {
-    
-    public $model = PostComment::class;
-    
+
+    public \Illuminate\Database\Eloquent\Model $model = PostComment::class;
+
     /**
      * @return mixed
      */
@@ -18,7 +18,7 @@ class PostCommentRepository extends Repository
     {
         return $this->model::with('user_info', 'user', 'post')->get();
     }
-    
+
     /**
      * @return mixed
      */

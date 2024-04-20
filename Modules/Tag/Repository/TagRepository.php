@@ -7,8 +7,8 @@ use Modules\Tag\Models\Tag;
 
 class TagRepository extends Repository
 {
-    public $model = Tag::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = Tag::class;
+
     /**
      * @return mixed
      */
@@ -16,5 +16,5 @@ class TagRepository extends Repository
     {
         return $this->model::orderBy('id', 'DESC')->get();
     }
-    
+
 }

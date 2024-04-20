@@ -12,7 +12,7 @@ use Modules\Post\Models\Post;
 
 class PostRepository extends Repository implements SearchInterface
 {
-    public $model = Post::class;
+    public \Illuminate\Database\Eloquent\Model $model = Post::class;
     private const LATEST_POSTS_LIMIT = 3;
 
     /**

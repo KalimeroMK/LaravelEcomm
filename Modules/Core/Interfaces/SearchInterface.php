@@ -13,5 +13,5 @@ interface SearchInterface
      *
      * @return mixed
      */
-    public function search(array $data);
+    public function search(array $data): mixed;
 }

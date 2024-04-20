@@ -1,6 +1,6 @@
 <?php
 
-  return [
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -12,7 +12,7 @@
     |
     */
 
-      '*' => [
+    '*' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@
         |
         */
 
-          'path' => app_path('Models'),
+        'path' => app_path('Models'),
 
         /*
         |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@
         |
         */
 
-          'namespace' => 'App\Models',
+        'namespace' => 'App\Models',
 
         /*
         |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@
         |
         */
 
-          'parent' => Illuminate\Database\Eloquent\Model::class,
+        'parent' => Illuminate\Database\Eloquent\Model::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -67,10 +67,10 @@
         |
         */
 
-          'use' => [
+        'use' => [
             // Reliese\Database\Eloquent\BitBooleans::class,
             // Reliese\Database\Eloquent\BlamableBehavior::class,
-          ],
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@
         |
         */
 
-          'connection' => false,
+        'connection' => false,
 
         /*
         |--------------------------------------------------------------------------
@@ -99,7 +99,7 @@
         |
         */
 
-          'timestamps' => true,
+        'timestamps' => true,
 
         // 'timestamps' => [
         //     'enabled' => true,
@@ -123,7 +123,7 @@
         |
         */
 
-          'soft_deletes' => true,
+        'soft_deletes' => true,
 
         // 'soft_deletes' => [
         //     'enabled' => true,
@@ -141,7 +141,7 @@
         |
         */
 
-          'date_format' => 'Y-m-d H:i:s',
+        'date_format' => 'Y-m-d H:i:s',
 
         /*
         |--------------------------------------------------------------------------
@@ -154,7 +154,7 @@
         |
         */
 
-          'per_page' => 15,
+        'per_page' => 15,
 
         /*
         |--------------------------------------------------------------------------
@@ -170,7 +170,7 @@
         |
         */
 
-          'base_files' => false,
+        'base_files' => false,
 
         /*
         |--------------------------------------------------------------------------
@@ -183,7 +183,7 @@
         |
         */
 
-          'snake_attributes' => true,
+        'snake_attributes' => true,
 
         /*
         |--------------------------------------------------------------------------
@@ -196,7 +196,7 @@
         |
         */
 
-          'indent_with_space' => 0,
+        'indent_with_space' => 0,
 
         /*
         |--------------------------------------------------------------------------
@@ -211,10 +211,10 @@
         | TRUE: Schema name will be prepended on the table
         | FALSE:Table name will be set without schema name.
         | NULL: Table name will follow laravel pattern,
-        |   i.e if class name(plural) matches table name, then table name will not be added
+        |   i.e. if class name(plural) matches table name, then table name will not be added
         */
 
-          'qualified_tables' => false,
+        'qualified_tables' => false,
 
         /*
         |--------------------------------------------------------------------------
@@ -228,11 +228,9 @@
         |
         */
 
-          'hidden' => [
-              '*secret*',
-              '*password',
-              '*token',
-          ],
+        'hidden' => [
+            '*secret*', '*password', '*token',
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -246,28 +244,28 @@
         |
         */
 
-          'guarded' => [
+        'guarded' => [
             // 'created_by', 'updated_by'
-          ],
+        ],
 
         /*
         |--------------------------------------------------------------------------
         | Casts
         |--------------------------------------------------------------------------
         |
-        | You may want to specify which of your table fields should be casted as
-        | something different than a string. For instance, you may want a
-        | text field be casted as an array or and object.
+        | You may want to specify which of your table fields should be cast as
+        | something other than a string. For instance, you may want a
+        | text field be cast as an array or and object.
         |
-        | You may define column patterns which will be casted using the value
+        | You may define column patterns which will be cast using the value
         | assigned. We have defined some fields for you. Feel free to
         | modify them to fit your needs.
         |
         */
 
-          'casts' => [
-              '*_json' => 'json',
-          ],
+        'casts' => [
+            '*_json' => 'json',
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -281,9 +279,13 @@
         |
         */
 
-          'except' => [
-              'migrations',
-          ],
+        'except' => [
+            'migrations',
+            'failed_jobs',
+            'password_resets',
+            'personal_access_tokens',
+            'password_reset_tokens',
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -295,9 +297,9 @@
         |
         */
 
-          'only' => [
+        'only' => [
             // 'users',
-          ],
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -309,7 +311,7 @@
         |
         */
 
-          'table_prefix' => '',
+        'table_prefix' => '',
 
         /*
         |--------------------------------------------------------------------------
@@ -321,7 +323,7 @@
         |
         */
 
-          'lower_table_name_first' => false,
+        'lower_table_name_first' => false,
 
         /*
         |--------------------------------------------------------------------------
@@ -339,9 +341,9 @@
         |     'billing_invoices' => 'Invoice',
         */
 
-          'model_names' => [
+        'model_names' => [
 
-          ],
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -370,7 +372,7 @@
         |                       generates Post::user() and User::posts()
         */
 
-          'relation_name_strategy'  => 'related',
+        'relation_name_strategy' => 'related',
         // 'relation_name_strategy' => 'foreign_key',
 
         /*
@@ -391,7 +393,7 @@
          | that helps to avoid typos in strings when typing field names and allows to use
          | code competition with available model's field names.
          */
-          'with_property_constants' => false,
+        'with_property_constants' => false,
 
         /*
         |--------------------------------------------------------------------------
@@ -401,7 +403,7 @@
         | You can disable pluralization tables and relations
         |
         */
-          'pluralize'               => true,
+        'pluralize' => true,
 
         /*
         |--------------------------------------------------------------------------
@@ -411,9 +413,20 @@
         | You can enable pluralization for certain tables
         |
         */
-          'override_pluralize_for'  => [
+        'override_pluralize_for' => [
 
-          ],
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Move $hidden property to base files
+        |--------------------------------------------------------------------------
+        | When base_files is true you can set hidden_in_base_files to true
+        | if you want the $hidden to be generated in base files
+        |
+        */
+        'hidden_in_base_files' => false,
+
         /*
         |--------------------------------------------------------------------------
         | Move $fillable property to base files
@@ -422,8 +435,20 @@
         | if you want the $fillable to be generated in base files
         |
         */
-          'fillable_in_base_files'  => false,
-      ],
+        'fillable_in_base_files' => false,
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate return types for relation methods.
+        |--------------------------------------------------------------------------
+        | When enable_return_types is set to true, return type declarations are added
+        | to all generated relation methods for your models.
+        |
+        | NOTE: This requires PHP 7.0 or later.
+        |
+        */
+        'enable_return_types' => false,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -493,4 +518,4 @@
 //            ]
 //        ],
 //    ],
-  ];
+];

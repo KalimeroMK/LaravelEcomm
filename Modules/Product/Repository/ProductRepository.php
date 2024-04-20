@@ -10,7 +10,7 @@ use Modules\Product\Models\Product;
 
 class ProductRepository extends Repository
 {
-    public $model = Product::class;
+    public \Illuminate\Database\Eloquent\Model $model = Product::class;
 
 
     const DEFAULT_ORDER_BY = 'id';

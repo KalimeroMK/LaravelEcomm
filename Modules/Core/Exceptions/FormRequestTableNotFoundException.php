@@ -4,9 +4,16 @@ namespace Modules\Core\Exceptions;
 
 class FormRequestTableNotFoundException extends GeneralException
 {
-    public $code = 404;
-    
     /**
+     * The HTTP status code for the exception.
+     *
+     * @var int
+     */
+    public int $code = 404;
+
+    /**
+     * Returns the error message for the exception.
+     *
      * @return string
      */
     public function message(): string

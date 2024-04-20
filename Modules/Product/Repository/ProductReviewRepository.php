@@ -7,8 +7,8 @@ use Modules\Product\Models\ProductReview;
 
 class ProductReviewRepository extends Repository
 {
-    public $model = ProductReview::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = ProductReview::class;
+
     /**
      * @return mixed
      */
@@ -16,7 +16,7 @@ class ProductReviewRepository extends Repository
     {
         return $this->model::getAllReview();
     }
-    
+
     public function findAllByUser()
     {
         return $this->model::getAllUserReview();

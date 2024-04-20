@@ -9,6 +9,12 @@ use Modules\Core\Repositories\Repository;
 
 class AttributeRepository extends Repository implements SearchInterface
 {
+    /**
+     * The model instance.
+     *
+     * @var string
+     *
+     */
     public $model = Attribute::class;
 
     /**
@@ -20,9 +26,10 @@ class AttributeRepository extends Repository implements SearchInterface
     }
 
     /**
-     * @param  array  $data
+     * Search for entries based on filter criteria provided in the `$data` array.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data  Associative array where keys are attribute names and values are the filter criteria.
+     * @return mixed The result of the query, either a collection or a paginated response.
      */
     public function search(array $data): mixed
     {
@@ -32,7 +39,7 @@ class AttributeRepository extends Repository implements SearchInterface
 
         foreach ($filterableKeys as $key) {
             if (Arr::has($data, $key)) {
-                $query->where($key, 'like', '%' . Arr::get($data, $key) . '%');
+                $query->where($key, 'like', '%'.Arr::get($data, $key).'%');
             }
         }
 
@@ -44,7 +51,7 @@ class AttributeRepository extends Repository implements SearchInterface
             }
         }
 
-        if ((bool)Arr::get($data, 'all_included') || empty($data)) {
+        if ((bool) Arr::get($data, 'all_included') || empty($data)) {
             return $query->get();
         }
 

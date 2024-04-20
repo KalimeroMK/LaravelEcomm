@@ -14,32 +14,67 @@ class AttributeService extends CoreService
         $this->attribute_repository = $attribute_repository;
     }
 
-    public function getAll()
+    /**
+     * Get all attributes.
+     *
+     * @return object
+     */
+    public function getAll(): object
     {
         return $this->attribute_repository->findAll();
     }
 
-    public function store(array $data)
+    /**
+     * Store a new attribute.
+     *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
+     * @return mixed
+     */
+    public function store(array $data): mixed
     {
         return $this->attribute_repository->create($data);
     }
 
-    public function show(int $id)
+    /**
+     * Show details of an attribute.
+     *
+     * @param  int  $id  The attribute ID.
+     * @return mixed
+     */
+    public function show(int $id): mixed
     {
         return $this->attribute_repository->findById($id);
     }
 
-    public function update(int $id, array $data)
+    /**
+     * Update an existing attribute.
+     *
+     * @param  int  $id  The attribute ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the attribute.
+     * @return mixed
+     */
+    public function update(int $id, array $data): mixed
     {
         return $this->attribute_repository->update($id, $data);
     }
 
+    /**
+     * Delete an attribute.
+     *
+     * @param  int  $id  The attribute ID.
+     */
     public function destroy(int $id): void
     {
         $this->attribute_repository->delete($id);
     }
 
-    public function search(array $data)
+    /**
+     * Search for attributes based on given criteria.
+     *
+     * @param  array<string, mixed>  $data  The search criteria.
+     * @return mixed
+     */
+    public function search(array $data): mixed
     {
         return $this->attribute_repository->search($data);
     }

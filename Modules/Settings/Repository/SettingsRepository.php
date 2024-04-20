@@ -7,8 +7,8 @@ use Modules\Settings\Models\Setting;
 
 class SettingsRepository extends Repository
 {
-    public $model = Setting::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = Setting::class;
+
     /**
      * @return mixed
      */

@@ -7,8 +7,8 @@ use Modules\Core\Repositories\Repository;
 
 class CartRepository extends Repository
 {
-    public $model = Cart::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = Cart::class;
+
     /**
      * @return mixed
      */
@@ -16,7 +16,7 @@ class CartRepository extends Repository
     {
         return $this->model::get();
     }
-    
+
     /**
      * @return mixed
      */
@@ -24,5 +24,5 @@ class CartRepository extends Repository
     {
         return $this->model::whereUserId(Auth()->id())->get();
     }
-    
+
 }

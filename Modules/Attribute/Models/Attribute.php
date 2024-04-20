@@ -2,21 +2,48 @@
 
 namespace Modules\Attribute\Models;
 
+use App\Models\AttributeValue;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Attribute\Database\Factories\AttributeFactory;
 use Modules\Core\Models\Core;
 
+/**
+ * Class Attribute
+ *
+ * @property int $id
+ * @property string|null $name
+ * @property string $code
+ * @property string $type
+ * @property string $display
+ * @property bool $filterable
+ * @property bool $configurable
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @property Collection|AttributeValue[] $attribute_values
+ *
+ */
 class Attribute extends Core
 {
+    protected $table = 'attributes';
+
+    protected $casts = [
+        'filterable' => 'bool',
+        'configurable' => 'bool'
+    ];
+
     protected $fillable = [
         'name',
         'code',
         'type',
         'display',
         'filterable',
-        'configurable',
+        'configurable'
     ];
-    
+
     const TYPE_URL = 'url';
     const TYPE_HEX = 'hex';
     const TYPE_TEXT = 'text';
@@ -27,7 +54,7 @@ class Attribute extends Core
     const TYPE_INTEGER = 'integer';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_DECIMAL = 'decimal';
-    
+
     const DISPLAY_INPUT = 'input';
     const DISPLAY_RADIO = 'radio';
     const DISPLAY_COLOR = 'color';
@@ -57,7 +84,7 @@ class Attribute extends Core
         self::DISPLAY_CHECKBOX,
         self::DISPLAY_MULTI_SELECT,
     ];
-    
+
     /**
      * @return AttributeFactory
      */
@@ -65,14 +92,14 @@ class Attribute extends Core
     {
         return AttributeFactory::new();
     }
-    
+
     public function values(): HasMany
     {
         return $this->hasMany(AttributeValue::class);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getValueColumnName(): string
     {
@@ -87,7 +114,7 @@ class Attribute extends Core
             self::TYPE_INTEGER => 'integer_value',
             self::TYPE_BOOLEAN => 'boolean_value',
             self::TYPE_DECIMAL => 'decimal_value',
-            default => throw new \Exception("Invalid attribute type"),
+            default => throw new Exception("Invalid attribute type"),
         };
     }
 }

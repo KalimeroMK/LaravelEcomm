@@ -7,7 +7,7 @@ use Modules\Core\Repositories\Repository;
 
 class BrandRepository extends Repository
 {
-    public $model = Brand::class;
+    public \Illuminate\Database\Eloquent\Model $model = Brand::class;
 
     /**
      * @param  array  $data

@@ -7,8 +7,8 @@ use Modules\Notification\Models\Notification;
 
 class NotificationRepository extends Repository
 {
-    public $model = Notification::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = Notification::class;
+
     /**
      * @return mixed
      */
@@ -16,7 +16,7 @@ class NotificationRepository extends Repository
     {
         return $this->model::get();
     }
-    
+
     /**
      * @param  string  $id
      *

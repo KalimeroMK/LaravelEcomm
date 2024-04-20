@@ -34,12 +34,5 @@ class BannerPolicy
     {
         return $user->can('brand-delete');
     }
-
-    public function restore(User $user, Banner $banner): bool
-    {
-    }
-
-    public function forceDelete(User $user, Banner $banner): bool
-    {
-    }
+    
 }

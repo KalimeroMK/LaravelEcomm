@@ -10,7 +10,7 @@ use Modules\Order\Models\Order;
 
 class OrderRepository extends Repository implements SearchInterface
 {
-    public $model = Order::class;
+    public \Illuminate\Database\Eloquent\Model $model = Order::class;
 
     /**
      * @return mixed
@@ -46,7 +46,7 @@ class OrderRepository extends Repository implements SearchInterface
             }
         }
 
-        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
+        if (Arr::has($data, 'all_included') && (bool) Arr::get($data, 'all_included') === true || empty($data)) {
             $query->with('shipping', 'user', 'carts')->get();
         } else {
             $orderBy = Arr::get($data, 'order_by', 'id');

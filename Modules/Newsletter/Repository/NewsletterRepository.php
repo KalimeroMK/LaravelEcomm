@@ -7,8 +7,8 @@ use Modules\Newsletter\Models\Newsletter;
 
 class NewsletterRepository extends Repository
 {
-    public $model = Newsletter::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = Newsletter::class;
+
     /**
      * @return mixed
      */

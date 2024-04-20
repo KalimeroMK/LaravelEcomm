@@ -7,8 +7,8 @@ use Modules\User\Models\User;
 
 class UserRepository extends Repository
 {
-    public $model = User::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = User::class;
+
     /**
      * @return mixed
      */
@@ -16,5 +16,5 @@ class UserRepository extends Repository
     {
         return $this->model::with('roles')->orderBy('id', 'DESC')->get();
     }
-    
+
 }

@@ -7,8 +7,8 @@ use Modules\Shipping\Models\Shipping;
 
 class ShippingRepository extends Repository
 {
-    public $model = Shipping::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = Shipping::class;
+
     /**
      * @return mixed
      */

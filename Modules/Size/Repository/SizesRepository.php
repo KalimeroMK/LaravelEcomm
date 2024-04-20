@@ -7,8 +7,8 @@ use Modules\Size\Models\Size;
 
 class SizesRepository extends Repository
 {
-    public $model = Size::class;
-    
+    public \Illuminate\Database\Eloquent\Model $model = Size::class;
+
     /**
      * @return mixed
      */

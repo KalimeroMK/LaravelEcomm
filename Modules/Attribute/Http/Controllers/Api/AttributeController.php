@@ -52,7 +52,7 @@ class AttributeController extends Controller
     /**
      * @throws ReflectionException
      */
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -71,7 +71,7 @@ class AttributeController extends Controller
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, $id): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -90,7 +90,7 @@ class AttributeController extends Controller
     /**
      * @throws ReflectionException
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->attribute_service->destroy($id);
         return $this

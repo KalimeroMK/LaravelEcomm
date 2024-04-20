@@ -10,7 +10,10 @@ use Modules\User\Models\User;
 
 class AdminRepository
 {
-
+    /**
+     *
+     * @return array<string, int> Array of paths.
+     */
     public function usersLastSevenDays(): array
     {
         $usersCount = [];
