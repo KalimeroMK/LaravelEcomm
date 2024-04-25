@@ -15,31 +15,29 @@ class MessageService
     }
 
     /**
-     * @param $id
+     * Show details of an attribute.
      *
+     * @param  int  $id  The attribute ID.
      * @return mixed
      */
-    public function show($id): mixed
+    public function show(int $id): mixed
     {
-            $message = $this->message_repository->findById($id);
-            if (
-                true
-            ) {
-                $message->read_at = Carbon::now();
-                $message->save();
-            }
+        $message = $this->message_repository->findById($id);
+        $message->read_at = Carbon::now();
+        $message->save();
 
-            return $message;
+        return $message;
     }
 
+
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return string|void
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(int $id): void
     {
-            $this->message_repository->delete($id);
+        $this->message_repository->delete($id);
     }
 
     /**
@@ -47,27 +45,29 @@ class MessageService
      */
     public function getAll(): mixed
     {
-            return $this->message_repository->findAll();
+        return $this->message_repository->findAll();
     }
 
+
     /**
-     * @param $data
+     * Store a new attribute.
      *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
      * @return mixed
      */
-    public function store($data): mixed
+    public function store(array $data): mixed
     {
-            return $this->message_repository->create($data);
+        return $this->message_repository->create($data);
     }
 
     /**
-     * @param $id
-     * @param $data
-     *
-     * @return mixed|string
+     * Update the specified coupon.
+     * @param  int  $id  The ID of the coupon to update.
+     * @param  array<string, mixed>  $data  Data to update the coupon.
+     * @return bool Result of the update operation.
      */
-    public function update($id, $data): mixed
+    public function update(int $id, array $data): mixed
     {
-            return $this->message_repository->update($id, $data);
+        return $this->message_repository->update($id, $data);
     }
 }

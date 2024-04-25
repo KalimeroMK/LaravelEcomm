@@ -2,9 +2,10 @@
 
 namespace Modules\Google2fa\Providers;
 
-use Config;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\Brand\Providers\RouteServiceProvider;
 
 class Google2faServiceProvider extends ServiceProvider
 {
@@ -42,10 +43,10 @@ class Google2faServiceProvider extends ServiceProvider
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
-            $this->loadJsonTranslationsFrom($langPath, $this->moduleNameLower);
+            $this->loadJsonTranslationsFrom($langPath,);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
-            $this->loadJsonTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
+            $this->loadJsonTranslationsFrom(module_path($this->moduleName, 'Resources/lang'));
         }
     }
 
@@ -70,7 +71,7 @@ class Google2faServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerViews()
+    public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
 
@@ -83,6 +84,11 @@ class Google2faServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -91,6 +97,7 @@ class Google2faServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
+
         return $paths;
     }
 
@@ -105,11 +112,10 @@ class Google2faServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }

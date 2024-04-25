@@ -22,6 +22,7 @@ use Kalnoy\Nestedset\QueryBuilder;
 use Laravel\Scout\Searchable;
 use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
+use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 
 /**
@@ -138,7 +139,7 @@ class Category extends Core implements Explored, IndexSettings, Aliased
     }
 
     /**
-     * @return string
+     * @return string[]
      */
     public static function getTree()
     {
@@ -155,55 +156,6 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         return $traverse($categories);
     }
 
-    /**
-     * @return array
-     */
-    public static function getList(): array
-    {
-        return self::whereNull('parent_id')->with('childrenCategories')->get()->toArray();
-    }
-
-    /**
-     * @param $node
-     *
-     * @return string
-     */
-    public static function renderNodeHP($node): string
-    {
-        $list = '<li class="dropdown-item"><a class="nav-link" href="/categories/'.$node->slug.'">'.$node->title.'</a>';
-        if ($node->children()->count() > 0) {
-            $list .= '<ul class="dropdown border-0 shadow">';
-            foreach ($node->children as $child) {
-                $list .= self::renderNodeHP($child);
-            }
-            $list .= "</ul>";
-        }
-        $list .= '</ul>';
-        return $list;
-    }
-
-    public static function renderNode($node)
-    {
-        $editRoute = route('category.edit', $node['id']);
-
-        $listItem = '<li class="dd-item" data-id="'.$node['id'].'">
-                    <div class="dd-handle">'.$node['title'].'</div>
-                    <a class="edit-category-icon" href="'.$editRoute.'">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                </li>';
-
-        $children = self::where('parent_id', '=', $node['id'])->get();
-        $count = $children->count();
-
-        if ($count > 0) {
-            $listItem .= '<ul class="dd-list">'.self::renderTree($children->toArray()).'</ul>';
-        }
-
-        $listItem .= '</li>';
-
-        return $listItem;
-    }
 
     /**
      * @return int
@@ -251,11 +203,20 @@ class Category extends Core implements Explored, IndexSettings, Aliased
     }
 
     /**
-     * @param $slug
-     *
-     * @return mixed|string
+     * @return BelongsToMany
      */
-    public function incrementSlug($slug): mixed
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class);
+    }
+
+
+    /**
+     * @param  string  $slug
+     *
+     * @return string
+     */
+    public function incrementSlug(string $slug): string
     {
         $original = $slug;
         $count = 2;
@@ -289,11 +250,21 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         return $query->with('products');
     }
 
+    /**
+     * Converts the model instance to an array format suitable for search indexing.
+     *
+     * @return array<string, mixed> Returns an array where keys are column names and values are column values.
+     */
     public function toSearchableArray(): array
     {
         return $this->toArray();
     }
 
+    /**
+     * Defines the mapping for the search engine.
+     *
+     * @return array<string, array<string, mixed>> Returns an array of settings for each model attribute.
+     */
     public function mappableAs(): array
     {
         return [
@@ -309,6 +280,11 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         ];
     }
 
+    /**
+     * Configuration settings for the search index.
+     *
+     * @return array<string, mixed> Returns an array where keys are configuration settings and values are the settings' values.
+     */
     public function indexSettings(): array
     {
         return [

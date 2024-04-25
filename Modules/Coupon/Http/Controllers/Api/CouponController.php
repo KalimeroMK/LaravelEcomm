@@ -75,12 +75,12 @@ class CouponController extends CoreController
 
     /**
      * @param  Update  $request
-     * @param $id
+     * @param  int  $id
      *
-     * @return string
+     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function update(Update $request, $id)
+    public function update(Update $request, int $id)
     {
         return $this
             ->setMessage(
@@ -97,12 +97,11 @@ class CouponController extends CoreController
     }
 
     /**
-     * @param  Coupon  $coupon
-     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy(Coupon $coupon)
+    public function destroy(int $id): JsonResponse
     {
+        $this->coupon_service->destroy($id);
         return $this
             ->setMessage(
                 __(
@@ -114,6 +113,6 @@ class CouponController extends CoreController
                     ]
                 )
             )
-            ->respond($this->coupon_service->destroy($coupon->id));
+            ->respond(null);
     }
 }

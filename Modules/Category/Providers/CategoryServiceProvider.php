@@ -83,6 +83,11 @@ class CategoryServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -100,17 +105,17 @@ class CategoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }
 
     /**
-     * Get the services provided by the provider.
+     * Gets the publishable view paths for the module.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }

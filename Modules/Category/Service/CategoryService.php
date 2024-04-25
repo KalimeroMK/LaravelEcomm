@@ -13,27 +13,54 @@ class CategoryService
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function getAll()
+    /**
+     *
+     * @return mixed
+     */
+    public function getAll(): mixed
     {
         return $this->categoryRepository->findAll();
     }
 
-    public function store(array $data)
+    /**
+     * Store a new attribute.
+     *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
+     * @return mixed
+     */
+    public function store(array $data): mixed
     {
         return $this->categoryRepository->create($data);
     }
 
-    public function show(int $id)
+    /**
+     * @param  int  $id
+     *
+     * @return mixed
+     */
+    public function show(int $id): mixed
     {
         return $this->categoryRepository->findById($id);
     }
 
-    public function edit(int $id)
+    /**
+     * @param  int  $id
+     *
+     * @return mixed
+     */
+    public function edit(int $id): mixed
     {
         return $this->categoryRepository->findById($id);
     }
 
-    public function update(int $id, array $data)
+    /**
+     * Update an existing attribute.
+     *
+     * @param  int  $id  The attribute ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the attribute.
+     * @return mixed
+     */
+    public function update(int $id, array $data): mixed
     {
         return $this->categoryRepository->update($id, $data);
     }

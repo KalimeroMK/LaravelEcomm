@@ -2,6 +2,7 @@
 
 namespace Modules\Order\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Modules\Core\Interfaces\SearchInterface;
@@ -10,7 +11,7 @@ use Modules\Order\Models\Order;
 
 class OrderRepository extends Repository implements SearchInterface
 {
-    public \Illuminate\Database\Eloquent\Model $model = Order::class;
+    public Model $model = Order::class;
 
     /**
      * @return mixed

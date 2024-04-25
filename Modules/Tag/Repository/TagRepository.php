@@ -2,12 +2,13 @@
 
 namespace Modules\Tag\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Tag\Models\Tag;
 
 class TagRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Tag::class;
+    public Model $model = Tag::class;
 
     /**
      * @return mixed

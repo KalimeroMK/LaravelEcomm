@@ -2,6 +2,8 @@
 
 namespace Modules\Category\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Modules\Category\Http\Requests\Api\Store;
@@ -20,6 +22,9 @@ class CategoryController extends CoreController
         $this->category_service = $category_service;
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Contracts\View\View|Application|RedirectResponse|View
+     */
     public function index()
     {
         $categories = $this->category_service->getAll();

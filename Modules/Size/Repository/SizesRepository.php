@@ -2,12 +2,13 @@
 
 namespace Modules\Size\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Size\Models\Size;
 
 class SizesRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Size::class;
+    public Model $model = Size::class;
 
     /**
      * @return mixed

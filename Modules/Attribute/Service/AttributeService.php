@@ -47,13 +47,12 @@ class AttributeService extends CoreService
     }
 
     /**
-     * Update an existing attribute.
-     *
-     * @param  int  $id  The attribute ID to update.
-     * @param  array<string, mixed>  $data  The data for updating the attribute.
-     * @return mixed
+     * Update the specified coupon.
+     * @param  int  $id  The ID of the coupon to update.
+     * @param  array<string, mixed>  $data  Data to update the coupon.
+     * @return bool Result of the update operation.
      */
-    public function update(int $id, array $data): mixed
+    public function update(int $id, array $data,): mixed
     {
         return $this->attribute_repository->update($id, $data);
     }

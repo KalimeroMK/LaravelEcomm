@@ -84,7 +84,7 @@ class AttributeController extends Controller
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->update($id, $request->all())));
+            ->respond(new AttributeResource($this->attribute_service->update($id, $request->validated())));
     }
 
     /**

@@ -34,7 +34,7 @@
     "nwidart/laravel-modules": "^10.0.5",
     "omnipay/paypal": "*",
     "pragmarx/google2fa": "*",
-    "pragmarx/google2fa-laravel": "*",
+    "pragmarx/google2fa-laravel": "^2.2",
     "pragmarx/google2fa-qrcode": "^3.0",
     "predis/predis": "^2.2",
     "psr/simple-cache": "*",

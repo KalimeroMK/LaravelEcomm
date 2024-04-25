@@ -7,8 +7,11 @@ use Modules\Core\Repositories\Repository;
 
 class CategoryRepository extends Repository
 {
+    /**
+     * @var string
+     */
     public $model = Category::class;
-    
+
     /**
      * @return mixed
      */

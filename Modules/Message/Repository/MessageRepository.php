@@ -7,7 +7,10 @@ use Modules\Message\Models\Message;
 
 class MessageRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Message::class;
+    /**
+     * @var string
+     */
+    public $model = Message::class;
 
     /**
      * @return mixed

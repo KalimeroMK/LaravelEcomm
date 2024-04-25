@@ -10,31 +10,42 @@ class StatusNotification extends Notification
 {
     use Queueable;
 
+    /**
+     * The details of the notification.
+     *
+     * @var array<string, mixed>
+     */
     private array $details;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param  array<string, mixed>  $details  An associative array containing details like 'title' and 'actionURL'.
      */
-    public function __construct($details)
+    public function __construct(array $details)
     {
         $this->details = $details;
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Get the notification delivery channels.
      *
      * @param  mixed  $notifiable
-     *
-     * @return array
+     * @return array<string> The delivery channels.
      */
     public function via(mixed $notifiable): array
     {
         return ['database', 'broadcast'];
     }
 
-    public function toArray(mixed $notifiable)
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array<string, mixed> An array containing notification data.
+     */
+    public function toArray(mixed $notifiable): array
     {
         return [
             'title' => $this->details['title'],
@@ -44,7 +55,7 @@ class StatusNotification extends Notification
     }
 
     /**
-     * Get the broadcastable representation of the notification.
+     * Get the broadcast representation of the notification.
      *
      * @param  mixed  $notifiable
      *

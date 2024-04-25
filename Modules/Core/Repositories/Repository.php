@@ -2,19 +2,16 @@
 
 namespace Modules\Core\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Interfaces\RepositoryInterface;
 
 class Repository implements RepositoryInterface
 {
     /**
-     * Model::class
+     * The model class or instance used by the repository.
+     * @var Model|string
      */
     public $model;
-
-    /**
-     * @var array
-     */
-    public array $filters = [];
 
     /**
      * @return mixed
@@ -25,20 +22,24 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param  string  $column
-     * @param $value
+     * Find a record by the given column and value.
+     *
+     * @param  string  $column  The column to query against.
+     * @param  mixed  $value  The value to search for in the specified column.
      *
      * @return mixed
      */
-    public function findBy(string $column, $value): mixed
+    public function findBy(string $column, mixed $value): mixed
     {
         return $this->model::where($column, $value);
     }
 
     /**
-     * @param  array  $data
+     * Create a new record in the repository.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data  The data for creating the new record.
+     *
+     * @return mixed The newly created model instance.
      */
     public function create(array $data): mixed
     {
@@ -46,8 +47,9 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param  array  $data
+     * Insert a new record into the database.
      *
+     * @param  array<string, mixed>  $data  Data to insert, keyed by column names.
      * @return mixed
      */
     public function insert(array $data): mixed
@@ -56,12 +58,14 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param  $id
-     * @param  array  $data
+     * Update an existing record in the repository.
      *
-     * @return mixed
+     * @param  int  $id  The ID of the model to update.
+     * @param  array<string, mixed>  $data  The data to update in the model.
+     *
+     * @return mixed The updated model instance.
      */
-    public function update($id, array $data): mixed
+    public function update(int $id, array $data): mixed
     {
         $item = $this->findById($id);
         $item->fill($data);
@@ -71,31 +75,31 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param  $id
+     * @param  int  $id
      *
      * @return mixed
      */
-    public function findById($id): mixed
+    public function findById(int $id): mixed
     {
         return $this->model::find($id);
     }
 
     /**
-     * @param  $id
+     * @param  int  $id
      *
      * @return void
      */
-    public function delete($id): void
+    public function delete(int $id): void
     {
         $this->model::destroy($id);
     }
 
     /**
-     * @param  $id
+     * @param  int  $id
      *
      * @return mixed
      */
-    public function restore($id): mixed
+    public function restore(int $id): mixed
     {
         if (!method_exists($this->model, 'isSoftDelete')) {
             return null;
@@ -111,17 +115,20 @@ class Repository implements RepositoryInterface
         return $object;
     }
 
-    /**
-     * @param  $id
-     *
-     * @return mixed
-     */
-    public function findByIdWithTrashed($id): mixed
+
+    public function findByIdWithTrashed(int $id): mixed
     {
         if (!method_exists($this->model, 'isSoftDelete')) {
             return null;
         }
 
-        return $this->model->withTrashed()->find($id);
+        if (is_string($this->model)) {
+            $modelInstance = new $this->model;
+        } else {
+            $modelInstance = $this->model;
+        }
+
+        return $modelInstance->withTrashed()->find($id);
     }
+
 }

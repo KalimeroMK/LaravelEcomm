@@ -14,54 +14,57 @@ class CouponService
     }
 
     /**
-     * @param $data
+     * Store a new attribute.
      *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
      * @return mixed
      */
-    public function store($data): mixed
+    public function store(array $data): mixed
     {
-            return $this->coupon_repository->create($data);
+        return $this->coupon_repository->create($data);
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return mixed|string
      */
-    public function edit($id): mixed
+    public function edit(int $id): mixed
     {
-            return $this->coupon_repository->findById($id);
+        return $this->coupon_repository->findById($id);
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return mixed|string
      */
-    public function show($id): mixed
+    public function show(int $id): mixed
     {
-            return $this->coupon_repository->findById($id);
+        return $this->coupon_repository->findById($id);
     }
 
     /**
-     * @param $id
-     * @param $data
+     * Update an existing attribute.
      *
-     * @return mixed|string
+     * @param  int  $id  The attribute ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the attribute.
+     * @return mixed
      */
-    public function update($id, $data): mixed
+    public function update(int $id, array $data): mixed
     {
-            return $this->coupon_repository->update($id, $data);
+        return $this->coupon_repository->update($id, $data);
     }
 
+
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return string|void
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(int $id): void
     {
-            $this->coupon_repository->delete($id);
+        $this->coupon_repository->delete($id);
     }
 
     /**
@@ -69,6 +72,6 @@ class CouponService
      */
     public function getAll(): mixed
     {
-            return $this->coupon_repository->findAll();
+        return $this->coupon_repository->findAll();
     }
 }

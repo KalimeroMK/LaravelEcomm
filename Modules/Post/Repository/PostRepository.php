@@ -4,6 +4,7 @@ namespace Modules\Post\Repository;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Modules\Core\Interfaces\SearchInterface;
@@ -12,7 +13,7 @@ use Modules\Post\Models\Post;
 
 class PostRepository extends Repository implements SearchInterface
 {
-    public \Illuminate\Database\Eloquent\Model $model = Post::class;
+    public Model $model = Post::class;
     private const LATEST_POSTS_LIMIT = 3;
 
     /**

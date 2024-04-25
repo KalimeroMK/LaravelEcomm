@@ -2,12 +2,13 @@
 
 namespace Modules\Product\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Product\Models\ProductReview;
 
 class ProductReviewRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = ProductReview::class;
+    public Model $model = ProductReview::class;
 
     /**
      * @return mixed

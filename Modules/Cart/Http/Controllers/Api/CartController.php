@@ -95,13 +95,14 @@ class CartController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
+        $this->cart_service->destroy($id);
         return $this
             ->setMessage(
                 __(
@@ -113,6 +114,6 @@ class CartController extends CoreController
                     ]
                 )
             )
-            ->respond($this->cart_service->destroy($id));
+            ->respond(null);
     }
 }

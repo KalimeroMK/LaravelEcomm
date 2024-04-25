@@ -12,16 +12,23 @@ class BundleProductFactory extends Factory
 {
     protected $model = BundleProduct::class;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'bundle_id' => function () {
-                return Bundle::factory()->create()->id;
+                /** @var Bundle $bundle */
+                $bundle = Bundle::factory()->create();
+                return $bundle->id;
             },
             'product_id' => function () {
-                return Product::factory()->create()->id;
+                /** @var Product $product */
+                $product = Product::factory()->create();
+                return $product->id;
             },
         ];
     }

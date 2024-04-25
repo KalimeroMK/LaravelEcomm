@@ -9,7 +9,7 @@ class FormRequestTableNotFoundException extends GeneralException
      *
      * @var int
      */
-    public int $code = 404;
+    public $code = 404;
 
     /**
      * Returns the error message for the exception.

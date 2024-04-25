@@ -95,15 +95,20 @@ class CoreServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
+     * Gets the publishable view paths for the module.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }
 
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];

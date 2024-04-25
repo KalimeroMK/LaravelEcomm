@@ -14,11 +14,14 @@ class Store extends CoreRequest
      * @var mixed
      */
     public mixed $parent_id;
-    
+
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
-            'title'     => 'string|required|unique:categories',
+            'title' => 'string|required|unique:categories',
             'parent_id' => 'nullable|exists:categories,id',
         ];
     }

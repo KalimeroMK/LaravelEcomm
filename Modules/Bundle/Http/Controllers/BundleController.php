@@ -71,11 +71,21 @@ class BundleController extends Controller
         return redirect()->route('bundle.index')->with('status', 'Brand deleted successfully.');
     }
 
-    public function deleteMedia($modelId, $mediaId)
+
+    /**
+     * Deletes a media item associated with a bundle.
+     *
+     * @param  int  $modelId  The ID of the bundle.
+     * @param  int  $mediaId  The ID of the media to be deleted.
+     * @return RedirectResponse
+     */
+    public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
         $model = Bundle::findOrFail($modelId);
-        $model->media()->where('id', $mediaId)->first()->delete();
+        $media = $model->media()->where('id', $mediaId)->firstOrFail();
+        $media->delete();
 
-        return back()->with('success', 'Media deleted successfully.');
+        return redirect()->route('bundle.index')->with('status', 'Media deleted successfully.');
     }
+
 }

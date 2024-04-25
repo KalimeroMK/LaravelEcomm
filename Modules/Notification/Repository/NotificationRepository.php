@@ -2,12 +2,13 @@
 
 namespace Modules\Notification\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Notification\Models\Notification;
 
 class NotificationRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Notification::class;
+    public Model $model = Notification::class;
 
     /**
      * @return mixed

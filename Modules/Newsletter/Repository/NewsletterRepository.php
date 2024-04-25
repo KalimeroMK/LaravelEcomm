@@ -2,12 +2,13 @@
 
 namespace Modules\Newsletter\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Newsletter\Models\Newsletter;
 
 class NewsletterRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Newsletter::class;
+    public Model $model = Newsletter::class;
 
     /**
      * @return mixed

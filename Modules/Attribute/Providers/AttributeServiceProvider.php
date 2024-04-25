@@ -93,7 +93,6 @@ class AttributeServiceProvider extends ServiceProvider
     }
 
     /**
-     * Gets the publishable view paths for the module.
      *
      * @return array<string> Array of paths.
      */

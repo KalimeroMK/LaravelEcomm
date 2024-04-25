@@ -12,12 +12,12 @@ class BillingServiceProvider extends ServiceProvider
      * @var string $moduleName
      */
     protected string $moduleName = 'Billing';
-    
+
     /**
      * @var string $moduleNameLower
      */
     protected string $moduleNameLower = 'billing';
-    
+
     /**
      * Boot the application events.
      *
@@ -30,7 +30,7 @@ class BillingServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
     }
-    
+
     /**
      * Register translations.
      *
@@ -39,14 +39,14 @@ class BillingServiceProvider extends ServiceProvider
     public function registerTranslations()
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Register config.
      *
@@ -62,7 +62,7 @@ class BillingServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -71,16 +71,21 @@ class BillingServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -89,10 +94,10 @@ class BillingServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Register the service provider.
      *
@@ -102,11 +107,10 @@ class BillingServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
     }
-    
+
     /**
-     * Get the services provided by the provider.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
     public function provides(): array
     {

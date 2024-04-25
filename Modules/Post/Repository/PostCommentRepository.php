@@ -2,6 +2,7 @@
 
 namespace Modules\Post\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Modules\Core\Repositories\Repository;
 use Modules\Post\Models\PostComment;
@@ -9,7 +10,7 @@ use Modules\Post\Models\PostComment;
 class PostCommentRepository extends Repository
 {
 
-    public \Illuminate\Database\Eloquent\Model $model = PostComment::class;
+    public Model $model = PostComment::class;
 
     /**
      * @return mixed

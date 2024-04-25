@@ -30,6 +30,9 @@ class BrandController extends CoreController
         return BrandResource::collection($this->brand_service->getAll($request->validated()));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function store(Store $request): JsonResponse
     {
         return $this
@@ -85,11 +88,11 @@ class BrandController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $this->brand_service->destroy($id);
 

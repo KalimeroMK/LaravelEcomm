@@ -19,24 +19,30 @@ class WishlistService
      */
     public function getAll(): mixed
     {
-            return $this->wishlist_repository->findAll();
+        return $this->wishlist_repository->findAll();
     }
 
-    public function store($data)
+    /**
+     * Store a new attribute.
+     *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
+     * @return mixed
+     */
+    public function store(array $data): mixed
     {
-            return $this->wishlist_repository->create($data);
+        return $this->wishlist_repository->create($data);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
+     * @param  int  $id
      *
      * @return void
      */
-    public function destroy($id)
+    public function destroy(int $id): void
     {
-            $this->wishlist_repository->delete($id);
+        $this->wishlist_repository->delete($id);
     }
 
 }

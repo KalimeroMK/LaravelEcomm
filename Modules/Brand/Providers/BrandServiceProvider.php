@@ -24,7 +24,7 @@ class BrandServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Brand::observe(BrandObserver::class);
         $this->registerTranslations();
@@ -70,7 +70,7 @@ class BrandServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerViews()
+    public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
 
@@ -83,6 +83,11 @@ class BrandServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -106,11 +111,10 @@ class BrandServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }

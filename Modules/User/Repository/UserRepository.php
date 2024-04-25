@@ -2,12 +2,13 @@
 
 namespace Modules\User\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\User\Models\User;
 
 class UserRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = User::class;
+    public Model $model = User::class;
 
     /**
      * @return mixed

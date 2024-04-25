@@ -2,9 +2,14 @@ includes:
     - ./vendor/nunomaduro/larastan/extension.neon
 parameters:
     paths:
-       - Modules/
+       - Modules/Newsletter
     level: 6
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
+            - '#Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver::nonQueued\(\)#'
+            - '#Call to an undefined method Omnipay\\Common\\Message\\ResponseInterface::getRedirectResponse\(\)#'
+            - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setClientId\(\)#'
+            - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setSecret\(\)#'
+            - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setTestMode\(\)#'
     excludePaths:

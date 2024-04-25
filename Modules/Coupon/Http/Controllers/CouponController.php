@@ -73,12 +73,11 @@ class CouponController extends CoreController
      *
      * @param  Update  $request
      * @param  Coupon  $coupon
-     *
      * @return RedirectResponse
      */
     public function update(Update $request, Coupon $coupon): RedirectResponse
     {
-        return $this->coupon_service->update($request->validated(), $coupon->id);
+        return $this->coupon_service->update($coupon->id, $request->validated());
     }
 
     /**

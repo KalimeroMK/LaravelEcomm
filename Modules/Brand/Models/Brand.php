@@ -67,14 +67,16 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
     }
 
     /**
-     * @param $slug
+     * Retrieves a Brand model with associated products based on a given slug.
      *
+     * @param  string  $slug  The slug used to find a specific brand.
      * @return Model|Builder|null
      */
-    public static function getProductByBrand($slug): Model|Builder|null
+    public static function getProductByBrand(string $slug): Model|Builder|null
     {
-        return Brand::with('products')->whereSlug($slug)->first();
+        return Brand::with('products')->where('slug', $slug)->first();
     }
+
 
     /**
      * @return HasMany
@@ -85,11 +87,11 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
-     * @return mixed|string
+     * @return string
      */
-    public function incrementSlug($slug): mixed
+    public function incrementSlug(string $slug): string
     {
         $original = $slug;
         $count = 2;
@@ -105,11 +107,22 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
         return $query->with('products');
     }
 
+    /**
+     * Converts the model instance to an array format suitable for search indexing.
+     *
+     * @return array<string, mixed> Returns an array where keys are column names and values are column values.
+     */
     public function toSearchableArray(): array
     {
         return $this->toArray();
     }
 
+
+    /**
+     * Defines the mapping for the search engine.
+     *
+     * @return array<string, array<string, mixed>> Returns an array of settings for each model attribute.
+     */
     public function mappableAs(): array
     {
         return [
@@ -125,6 +138,12 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
         ];
     }
 
+
+    /**
+     * Configuration settings for the search index.
+     *
+     * @return array<string, mixed> Returns an array where keys are configuration settings and values are the settings' values.
+     */
     public function indexSettings(): array
     {
         return [
@@ -139,4 +158,5 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
             ],
         ];
     }
+
 }

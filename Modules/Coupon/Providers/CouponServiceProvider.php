@@ -2,22 +2,22 @@
 
 namespace Modules\Coupon\Providers;
 
-use Config;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\Brand\Providers\RouteServiceProvider;
 
 class CouponServiceProvider extends ServiceProvider
 {
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Coupon';
-    
+    protected string $moduleName = 'Coupon';
+
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'coupon';
-    
+    protected string $moduleNameLower = 'coupon';
+
     /**
      * Boot the application events.
      *
@@ -30,7 +30,7 @@ class CouponServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
     }
-    
+
     /**
      * Register translations.
      *
@@ -39,14 +39,14 @@ class CouponServiceProvider extends ServiceProvider
     public function registerTranslations()
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Register config.
      *
@@ -62,7 +62,7 @@ class CouponServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -71,16 +71,21 @@ class CouponServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -89,26 +94,25 @@ class CouponServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Register the service provider.
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }
-    
+
     /**
-     * Get the services provided by the provider.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }

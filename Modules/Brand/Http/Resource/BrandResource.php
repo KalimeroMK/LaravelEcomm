@@ -9,19 +9,18 @@ use Modules\Brand\Models\Brand;
 /** @mixin Brand */
 class BrandResource extends JsonResource
 {
+
     /**
-     * @param  Request  $request
-     *
-     * @return array
+     * @return string[]
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
-            'title'      => $this->title,
-            'slug'       => $this->slug,
-            'photo'      => $this->photo,
-            'status'     => $this->status,
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'photo' => $this->photo,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

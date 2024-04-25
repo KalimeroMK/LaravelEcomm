@@ -7,7 +7,10 @@ use Modules\Core\Repositories\Repository;
 
 class WishlistRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Wishlist::class;
+    /**
+     * @var string
+     */
+    public $model = Wishlist::class;
 
     /**
      * @return mixed
@@ -18,9 +21,13 @@ class WishlistRepository extends Repository
     }
 
     /**
-     * @param  array  $data
+     * Creates a new Wishlist entry.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data  Data needed for creating the wishlist entry. Expected keys:
+     *                                   - 'price' (float): The original price of the item.
+     *                                   - 'discount' (float): The discount rate on the item.
+     *                                   - 'quantity' (int): The number of items.
+     * @return mixed Returns the newly created wishlist entry.
      */
     public function create(array $data): mixed
     {
@@ -29,5 +36,6 @@ class WishlistRepository extends Repository
 
         return $this->model::create($data)->fresh();
     }
+
 
 }

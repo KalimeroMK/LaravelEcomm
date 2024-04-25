@@ -18,7 +18,7 @@ class BannerService extends CoreService
     }
 
     /**
-     * Store a new attribute.
+     * Store a new banner.
      *
      * @param  array<string, mixed>  $data  The data to create the attribute.
      * @return mixed
@@ -55,7 +55,7 @@ class BannerService extends CoreService
     /**
      * Update an existing attribute.
      *
-     * @param  int  $id  The attribute ID to update.
+     * @param  int  $id  The banner ID to update.
      * @param  array<string, mixed>  $data  The data for updating the attribute.
      * @return mixed
      */
@@ -86,7 +86,7 @@ class BannerService extends CoreService
     }
 
     /**
-     * Store a new attribute.
+     * Store a new banner.
      *
      * @param  array<string, mixed>  $data  The data to create the attribute.
      * @return mixed

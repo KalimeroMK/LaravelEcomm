@@ -7,7 +7,10 @@ use Modules\Core\Repositories\Repository;
 
 class CartRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Cart::class;
+    /**
+     * @var string
+     */
+    public $model = Cart::class;
 
     /**
      * @return mixed

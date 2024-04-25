@@ -2,7 +2,6 @@
 
 namespace Modules\Attribute\Models;
 
-use App\Models\AttributeValue;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;

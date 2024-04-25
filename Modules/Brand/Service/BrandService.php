@@ -18,76 +18,77 @@ class BrandService extends CoreService
     }
 
     /**
-     * @param $data
+     * Store a new attribute.
      *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
      * @return mixed
      */
-    public function store($data): mixed
+    public function store(array $data): mixed
     {
-            return $this->brand_repository->create(
-                collect($data)->except(['photo'])->toArray() + [
-                    'photo' => $this->verifyAndStoreImage($data['photo']),
-                ]
-            );
+        $processedData = collect($data)->except(['photo'])->toArray() + [
+                'photo' => $this->verifyAndStoreImage($data['photo'] ?? null),
+            ];
+        return $this->brand_repository->create($processedData);
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return mixed
      */
-    public function edit($id): mixed
-    {
-            return $this->brand_repository->findById($id);
-    }
-
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function show($id): mixed
+    public function edit(int $id): mixed
     {
         return $this->brand_repository->findById($id);
     }
 
     /**
-     * @param $id
-     * @param $data
+     * @param  int  $id
      *
-     * @return mixed|string
+     * @return mixed
      */
-    public function update($id, $data): mixed
+    public function show(int $id): mixed
     {
-
-            if ( ! empty($data['photo'])) {
-                return $this->brand_repository->update(
-                    (int)$id,
-                    collect($data)->except(['photo'])->toArray() + [
-                        'photo' => $this->verifyAndStoreImage($data['photo']),
-                    ]
-                );
-            }
-
-            return $this->brand_repository->update((int)$id, $data);
+        return $this->brand_repository->findById($id);
     }
 
     /**
-     * @param $id
+     * Update an existing attribute.
      *
-     * @return string|void
+     * @param  int  $id  The attribute ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the attribute.
+     * @return mixed
+     */
+    public function update(int $id, array $data): mixed
+    {
+        if (!empty($data['photo'])) {
+            $processedData = collect($data)->except(['photo'])->toArray() + [
+                    'photo' => $this->verifyAndStoreImage($data['photo']),
+                ];
+            return $this->brand_repository->update($id, $processedData);
+        }
+
+        return $this->brand_repository->update($id, $data);
+    }
+
+
+    /**
+     * @param  int  $id
+     *
+     * @return void
      */
 
-    public function destroy($id)
+    public function destroy(int $id): void
     {
-            $this->brand_repository->delete($id);
+        $this->brand_repository->delete($id);
     }
 
     /**
-     * @return mixed|string
+     *
+     * @param  array<string, mixed>  $data  The search criteria.
+     * @return mixed
      */
-    public function getAll($data): mixed
+    public function getAll(array $data): mixed
     {
-            return $this->brand_repository->search($data);
+        return $this->brand_repository->search($data);
     }
 }

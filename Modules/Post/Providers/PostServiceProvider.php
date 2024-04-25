@@ -110,9 +110,8 @@ class PostServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
     public function provides(): array
     {

@@ -10,18 +10,16 @@ use Modules\Coupon\Models\Coupon;
 class CouponResource extends JsonResource
 {
     /**
-     * @param  Request  $request
-     *
-     * @return array
+     * @return string[]
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
-            'code'       => $this->code,
-            'type'       => $this->type,
-            'value'      => $this->value,
-            'status'     => $this->status,
+            'id' => $this->id,
+            'code' => $this->code,
+            'type' => $this->type,
+            'value' => $this->value,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

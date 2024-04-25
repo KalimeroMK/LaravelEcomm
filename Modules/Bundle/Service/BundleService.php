@@ -16,11 +16,33 @@ class BundleService
     }
 
     /**
-     * @param $data
+     * @return mixed|string
+     */
+    public function getAll(): mixed
+    {
+        return $this->bundleRepository->findAll();
+    }
+
+    /**
+     * Prepares data needed to create a new bundle.
      *
+     * @return array<string, mixed> Data needed for creating a new bundle.
+     */
+    public function create(): array
+    {
+        return [
+            'products' => Product::get(),
+            'bundle' => new Bundle(),
+        ];
+    }
+
+    /**
+     * Store a new bundle.
+     *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
      * @return mixed
      */
-    public function store($data): mixed
+    public function store(array $data): mixed
     {
         $bundle = $this->bundleRepository->create($data);
 
@@ -30,9 +52,10 @@ class BundleService
     }
 
     /**
-     * @param  int  $id
+     * Retrieves data necessary for editing a bundle.
      *
-     * @return mixed
+     * @param  int  $id  The ID of the bundle to edit.
+     * @return array<string, mixed> Data needed for the edit operation.
      */
     public function edit(int $id): array
     {
@@ -43,50 +66,37 @@ class BundleService
     }
 
     /**
-     * @param $id
+     * Update an existing attribute.
+     *
+     * @param  int  $id  The bundle ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the attribute.
+     * @return mixed
+     */
+    public function update(int $id, array $data): mixed
+    {
+        return $this->bundleRepository->update($id, $data);
+    }
+
+    /**
+     * @param  int  $id
      *
      * @return mixed
      */
-    public function show($id): mixed
+    public function show(int $id): mixed
     {
         return $this->bundleRepository->findById($id);
     }
 
     /**
-     * @param $id
-     * @param $data
-     *
-     * @return mixed|string
-     */
-    public function update($id, $data): mixed
-    {
-        return $this->bundleRepository->update((int)$id, $data);
-    }
-
-    /**
-     * @param $id
+     * @param  int  $id
      *
      * @return void
      */
 
-    public function destroy($id): void
+    public function destroy(int $id): void
     {
         $this->bundleRepository->delete($id);
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function getAll(): mixed
-    {
-        return $this->bundleRepository->findAll();
-    }
 
-    public function create(): array
-    {
-        return [
-            'products' => Product::get(),
-            'bundle' => new Bundle(),
-        ];
-    }
 }

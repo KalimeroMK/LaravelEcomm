@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -10,7 +11,7 @@ use Modules\Product\Models\Product;
 
 class ProductRepository extends Repository
 {
-    public \Illuminate\Database\Eloquent\Model $model = Product::class;
+    public Model $model = Product::class;
 
 
     const DEFAULT_ORDER_BY = 'id';
