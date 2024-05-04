@@ -13,6 +13,7 @@ use Modules\Newsletter\Http\Requests\Api\Store as Update;
 use Modules\Newsletter\Http\Resources\NewsletterResource;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Service\NewsletterService;
+use ReflectionException;
 
 class NewsletterController extends CoreController
 {
@@ -33,7 +34,10 @@ class NewsletterController extends CoreController
         return NewsletterResource::collection($this->newsletter_service->getAll());
     }
 
-    public function store(Store $request)
+    /**
+     * @throws ReflectionException
+     */
+    public function store(Store $request): JsonResponse
     {
         return $this
             ->setMessage(
@@ -46,12 +50,14 @@ class NewsletterController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->newsletter_service->store($request->validated())));
+            ->respond(new NewsletterResource($this->newsletter_service->store($request->validated())));
     }
+
 
     /**
      * @param  Newsletter  $newsletter
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function show(Newsletter $newsletter)
     {
@@ -73,6 +79,7 @@ class NewsletterController extends CoreController
      * @param  Update  $request
      * @param  Newsletter  $newsletter
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function update(Update $request, Newsletter $newsletter)
     {
@@ -91,9 +98,9 @@ class NewsletterController extends CoreController
     }
 
     /**
-     * @param $id
-     *
+     * @param  Newsletter  $newsletter
      * @return JsonResponse
+     * @throws ReflectionException
      */
     public function destroy(Newsletter $newsletter)
     {

@@ -16,13 +16,13 @@ class NotificationService
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
+     * @param  int  $id
      *
-     * @return string|void
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(int $id): void
     {
-            $this->notification_repository->delete($id);
+        $this->notification_repository->delete($id);
     }
 
     /**
@@ -30,14 +30,15 @@ class NotificationService
      */
     public function getAll(): mixed
     {
-            return $this->notification_repository->findAll();
+        return $this->notification_repository->findAll();
     }
 
     /**
-     * @return mixed|string
+     * @param  int  $id
+     * @return mixed
      */
-    public function getById($id): mixed
+    public function getById(int $id): mixed
     {
-            return $this->notification_repository->getById($id);
+        return $this->notification_repository->getById($id);
     }
 }

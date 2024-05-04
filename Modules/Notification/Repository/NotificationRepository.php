@@ -2,13 +2,12 @@
 
 namespace Modules\Notification\Repository;
 
-use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Notification\Models\Notification;
 
 class NotificationRepository extends Repository
 {
-    public Model $model = Notification::class;
+    public $model = Notification::class;
 
     /**
      * @return mixed
@@ -19,11 +18,11 @@ class NotificationRepository extends Repository
     }
 
     /**
-     * @param  string  $id
+     * @param  int  $id
      *
      * @return mixed
      */
-    public function getById(string $id): mixed
+    public function getById(int $id): mixed
     {
         return $this->model::find($id);
     }

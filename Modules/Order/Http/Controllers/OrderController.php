@@ -4,8 +4,10 @@ namespace Modules\Order\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Order\Http\Requests\Api\Store;
 use Modules\Order\Http\Requests\Api\Update;
@@ -22,6 +24,9 @@ class OrderController extends CoreController
         $this->authorizeResource(Order::class);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Contracts\View\View|Application|View
+     */
     public function index()
     {
         $orders = auth()->user()->hasRole('super-admin')
@@ -69,11 +74,11 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return Response
      */
-    public function pdf($id): Response
+    public function pdf(int $id): Response
     {
         $order = Order::getAllOrder($id);
         $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
@@ -83,7 +88,7 @@ class OrderController extends CoreController
     }
 
     // Income chart
-    public function incomeChart(Request $request)
+    public function incomeChart()
     {
         $year = Carbon::now()->year;
         // dd($year);

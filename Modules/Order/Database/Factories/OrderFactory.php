@@ -27,6 +27,7 @@ class OrderFactory extends Factory
             'updated_at' => Carbon::now(),
             'user_id' => $this->faker->numberBetween(1, 3),
             'shipping_id' => function () {
+                // Ensure that create() returns a single model instance
                 return Shipping::factory()->create()->id;
             },
         ];

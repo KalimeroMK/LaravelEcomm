@@ -30,7 +30,7 @@ class OrderService
         return $this->order_repository->findById($id);
     }
 
-    public function destroy($id)
+    public function destroy($id): void
     {
         $this->order_repository->delete($id);
     }
@@ -112,9 +112,9 @@ class OrderService
     }
 
 
-    public function update($data, Order $order)
+    public function update($data, $id)
     {
-        $order = $this->order_repository->findById($order->id);
+        $order = $this->order_repository->findById($id);
 
         if ($data->status == 'delivered') {
             foreach ($order->cart as $cart) {

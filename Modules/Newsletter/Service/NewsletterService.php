@@ -13,32 +13,66 @@ class NewsletterService
         $this->newsletter_repository = $newsletter_repository;
     }
 
-    public function store($data)
+    /**
+     * Store a new attribute.
+     *
+     * @param  array<string, mixed>  $data  The data to create the attribute.
+     * @return mixed
+     */
+    public function store(array $data): mixed
     {
         return $this->newsletter_repository->create($data);
     }
 
-    public function edit($id)
+    /**
+     * Show details of an attribute.
+     *
+     * @param  int  $id  The attribute ID.
+     * @return mixed
+     */
+    public function edit(int $id): mixed
     {
         return $this->newsletter_repository->findById($id);
     }
 
-    public function show($id)
+    /**
+     * Show details of an attribute.
+     *
+     * @param  int  $id  The attribute ID.
+     * @return mixed
+     */
+    public function show(int $id): mixed
     {
         return $this->newsletter_repository->findById($id);
     }
 
-    public function update($id, $data)
+    /**
+     * Update the specified coupon.
+     * @param  int  $id  The ID of the coupon to update.
+     * @param  array<string, mixed>  $data  Data to update the coupon.
+     * @return bool Result of the update operation.
+     */
+    public function update(int $id, array $data): mixed
     {
         return $this->newsletter_repository->update($id, $data);
     }
 
-    public function destroy($id): void
+    /**
+     * Delete an attribute.
+     *
+     * @param  int  $id  The attribute ID.
+     */
+    public function destroy(int $id): void
     {
         $this->newsletter_repository->delete($id);
     }
 
-    public function getAll()
+    /**
+     * Get all attributes.
+     *
+     * @return object
+     */
+    public function getAll(): object
     {
         return $this->newsletter_repository->findAll();
     }

@@ -78,13 +78,11 @@ class OrderController extends CoreController
             ->respond(new OrderResource($this->order_service->show($order->id)));
     }
 
+
     /**
-     * @param  Update  $request
-     * @param  Order  $order
-     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function update(Update $request, Order $order)
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -97,7 +95,7 @@ class OrderController extends CoreController
                     ]
                 )
             )
-            ->respond(new OrderResource($this->order_service->update($order->id, $request->validated())));
+            ->respond(new OrderResource($this->order_service->update($id, $request->validated())));
     }
 
     /**
