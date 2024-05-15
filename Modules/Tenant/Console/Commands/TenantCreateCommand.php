@@ -20,7 +20,10 @@ class TenantCreateCommand extends Command
         // Validate input
         $validator = Validator::make(compact('name', 'domain', 'database'), [
             'name' => ['required', 'string', 'max:255'],
-            'domain' => ['required', 'string', 'max:255', 'unique:owner.tenants'],
+            'domain' => [
+                'required', 'string', 'max:255', 'unique:owner.tenants',
+                'regex:/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/'
+            ],
             'database' => ['required', 'string', 'max:255', 'unique:owner.tenants'],
         ]);
 

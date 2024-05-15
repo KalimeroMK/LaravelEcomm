@@ -27,9 +27,9 @@ services:
     ports:
       - "3302:3306"
     volumes:
-      - ./.docker/dbdata:/var/lib/mysql
+      - db_data:/var/lib/mysql
       - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
-      - ./.docker/db-init:/docker-entrypoint-initdb.d
+      - ./.docker/mysql/init:/docker-entrypoint-initdb.d
     networks:
       - laravelapp
   nginx:
@@ -52,7 +52,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./.docker/redis:/data
+      - redis_data:/data
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
     container_name: e_comm_elasticsearch
@@ -60,7 +60,7 @@ services:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
-      - ./.docker/elasticsearch/data:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -69,3 +69,7 @@ services:
 networks:
   laravelapp:
     driver: bridge
+volumes:
+  db_data:
+  redis_data:
+  elasticsearch_data:
