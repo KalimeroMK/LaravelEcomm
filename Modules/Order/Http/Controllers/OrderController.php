@@ -6,6 +6,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
@@ -36,12 +37,12 @@ class OrderController extends CoreController
         return view('order::index', ['orders' => $orders]);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('order::create', ['order' => new Order()]);
     }
 
-    public function store(Store $request)
+    public function store(Store $request): RedirectResponse
     {
         $this->order_service->store($request->all());
         session()->forget(['cart', 'coupon']);
@@ -49,24 +50,24 @@ class OrderController extends CoreController
         return redirect()->route('home');
     }
 
-    public function update(Update $request, Order $order)
+    public function update(Update $request, Order $order): RedirectResponse
     {
-        $this->order_service->update($request->all(), $order);
+        $this->order_service->update($order->id, $request->all());
 
         return redirect()->route('orders.index');
     }
 
-    public function show(Order $order)
+    public function show(Order $order): View
     {
         return view('order::show', ['order' => $order]);
     }
 
-    public function edit(Order $order)
+    public function edit(Order $order): View
     {
         return view('order::edit', ['order' => $this->order_service->edit($order->id)]);
     }
 
-    public function destroy(Order $order)
+    public function destroy(Order $order): RedirectResponse
     {
         $this->order_service->destroy($order->id);
 
@@ -74,43 +75,50 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param  int  $id
+     * Generate PDF for a given order ID.
      *
+     * @param  int  $id
      * @return Response
      */
     public function pdf(int $id): Response
     {
-        $order = Order::getAllOrder($id);
+        $order = Order::findOrFail($id);  // Ensure we get a single order or fail
+
         $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
         $pdf = PDF::loadview('order::pdf', compact('order'));
 
         return $pdf->download($file_name);
     }
 
-    // Income chart
-    public function incomeChart()
+    /**
+     * Generate income chart data for the current year.
+     *
+     * @return array<string, float>
+     */
+    public function incomeChart(): array
     {
         $year = Carbon::now()->year;
-        // dd($year);
-        $items = Order::with(['cart_info'])->whereYear('created_at', $year)->where('status', 'delivered')->get()
+        $items = Order::with(['cart_info'])
+            ->whereYear('created_at', $year)
+            ->where('status', 'delivered')
+            ->get()
             ->groupBy(function ($d) {
                 return Carbon::parse($d->created_at)->format('m');
             });
-        // dd($items);
+
         $result = [];
         foreach ($items as $month => $item_collections) {
             foreach ($item_collections as $item) {
                 $amount = $item->cart_info->sum('amount');
-                // dd($amount);
                 $m = intval($month);
-                // return $m;
                 isset($result[$m]) ? $result[$m] += $amount : $result[$m] = $amount;
             }
         }
+
         $data = [];
         for ($i = 1; $i <= 12; $i++) {
             $monthName = date('F', mktime(0, 0, 0, $i, 1));
-            $data[$monthName] = (!empty($result[$i])) ? number_format((float) ($result[$i]), 2, '.', '') : 0.0;
+            $data[$monthName] = !empty($result[$i]) ? number_format((float) $result[$i], 2, '.', '') : 0.0;
         }
 
         return $data;

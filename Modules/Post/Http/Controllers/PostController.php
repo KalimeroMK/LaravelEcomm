@@ -15,6 +15,7 @@ use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
 use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
+use PhpOffice\PhpSpreadsheet\Exception;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -120,6 +121,8 @@ class PostController extends Controller
 
     /**
      * @return BinaryFileResponse
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function export()
     {
@@ -146,7 +149,7 @@ class PostController extends Controller
         $this->post_service->upload($request);
     }
 
-    public function deleteMedia($modelId, $mediaId)
+    public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
         $model = Post::findOrFail($modelId);
         $model->media()->where('id', $mediaId)->first()->delete();

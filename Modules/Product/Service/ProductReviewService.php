@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Service;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
 use Modules\Core\Notifications\StatusNotification;
 use Modules\Product\Models\Product;
@@ -19,40 +21,45 @@ class ProductReviewService
     }
 
     /**
-     * @return mixed
+     * Get all product reviews.
+     *
+     * @return Collection
      */
-    public function index(): mixed
+    public function index(): Collection
     {
         return $this->product_review_repository->findAll();
     }
 
     /**
-     * @param $id
-     * @param $data
+     * Update a product review.
      *
+     * @param  int  $id
+     * @param  array<string, mixed>  $data
      * @return mixed
      */
-    public function update($id, $data): mixed
+    public function update(int $id, array $data): mixed
     {
         return $this->product_review_repository->update($id, $data);
     }
 
     /**
-     * @param $id
+     * Edit a product review.
      *
+     * @param  int  $id
      * @return mixed
      */
-    public function edit($id): mixed
+    public function edit(int $id): mixed
     {
         return $this->product_review_repository->findById($id);
     }
 
     /**
-     * @param $request
+     * Store a newly created product review.
      *
+     * @param  Request  $request
      * @return void
      */
-    public function store($request): void
+    public function store(Request $request): void
     {
         $product_info = Product::getProductBySlug($request['slug']);
         $data = $request->all();
@@ -69,19 +76,22 @@ class ProductReviewService
     }
 
     /**
-     * @param $id
+     * Delete a product review.
      *
+     * @param  int  $id
      * @return void
      */
-    public function destroy($id): void
+    public function destroy(int $id): void
     {
         $this->product_review_repository->delete($id);
     }
 
     /**
-     * @return mixed
+     * Find all product reviews by user.
+     *
+     * @return Collection
      */
-    public function findAllByUser(): mixed
+    public function findAllByUser(): Collection
     {
         return $this->product_review_repository->findAllByUser();
     }

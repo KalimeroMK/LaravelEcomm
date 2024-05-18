@@ -8,10 +8,17 @@ use Modules\Order\Rules\CartRule;
 class Store extends FormRequest
 {
     /**
-     * @return string[]
+     * Shipping information.
+     *
+     * @var string[]
      */
-    public mixed $shipping;
+    public array $shipping;
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string|CartRule>
+     */
     public function rules(): array
     {
         return [
@@ -23,10 +30,15 @@ class Store extends FormRequest
             'phone' => 'numeric|required',
             'post_code' => 'string|nullable',
             'email' => 'string|required',
-            new CartRule(),
+            'cart' => new CartRule(), // Ensure this custom rule is properly included
         ];
     }
 
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;

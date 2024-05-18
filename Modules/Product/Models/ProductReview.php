@@ -9,6 +9,7 @@ namespace Modules\Product\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 use Modules\User\Models\User;
 
 /**
@@ -54,5 +55,25 @@ class ProductReview extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all reviews.
+     *
+     * @return Collection<int, self>
+     */
+    public static function getAllReview(): Collection
+    {
+        return self::all();
+    }
+
+    /**
+     * Get all reviews by user.
+     *
+     * @return Collection<int, self>
+     */
+    public static function getAllUserReview(): Collection
+    {
+        return self::where('user_id', auth()->id())->get();
     }
 }

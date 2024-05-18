@@ -26,12 +26,22 @@ class ProductService extends CoreService
         $this->product_repository = $product_repository;
     }
 
-
-    public function getAll($data): mixed
+    /**
+     * Get all products based on given data.
+     *
+     * @param  array<string, mixed>  $data
+     * @return mixed
+     */
+    public function getAll(array $data): mixed
     {
         return $this->product_repository->search($data);
     }
 
+    /**
+     * Create a new product.
+     *
+     * @return array<string, mixed>
+     */
     public function create(): array
     {
         return [
@@ -46,6 +56,10 @@ class ProductService extends CoreService
     }
 
     /**
+     * Store a newly created product.
+     *
+     * @param  array<string, mixed>  $data
+     * @return Product
      * @throws Exception
      */
     public function store(array $data): Product
@@ -54,7 +68,6 @@ class ProductService extends CoreService
 
         $product = $this->product_repository->create($data);
 
-        // Check if 'attributes' key exists in the data array
         if (isset($data['attributes'])) {
             $this->syncAttributes($product, $data['attributes']);
         }
@@ -70,7 +83,12 @@ class ProductService extends CoreService
         return $product;
     }
 
-
+    /**
+     * Get the data for editing a product.
+     *
+     * @param  int  $id
+     * @return array<string, mixed>
+     */
     public function edit(int $id): array
     {
         return [
@@ -85,6 +103,11 @@ class ProductService extends CoreService
     }
 
     /**
+     * Update an existing product.
+     *
+     * @param  int  $id
+     * @param  array<string, mixed>  $data
+     * @return Product
      * @throws Exception
      */
     public function update(int $id, array $data): Product
@@ -98,14 +121,17 @@ class ProductService extends CoreService
         }
 
         $product = $this->product_repository->update($id, $data);
+
         if (isset($data['attributes'])) {
             $this->syncAttributes($product, $data['attributes']);
         }
+
         $product->categories()->sync($data['category']);
 
         if (isset($data['size'])) {
             $product->sizes()->sync($data['size']);
         }
+
         if (isset($data['tag'])) {
             $product->tags()->sync($data['tag']);
         }
@@ -113,12 +139,23 @@ class ProductService extends CoreService
         return $product;
     }
 
-
+    /**
+     * Delete a product.
+     *
+     * @param  int  $id
+     * @return void
+     */
     public function destroy(int $id): void
     {
         $this->product_repository->delete($id);
     }
 
+    /**
+     * Handle the color data for the product.
+     *
+     * @param  array<string, mixed>  $data
+     * @return void
+     */
     private function handleColor(array &$data): void
     {
         $color = $data['color'];
@@ -128,12 +165,23 @@ class ProductService extends CoreService
         }
     }
 
-    public function show(int $id)
+    /**
+     * Show a specific product.
+     *
+     * @param  int  $id
+     * @return mixed
+     */
+    public function show(int $id): mixed
     {
         return $this->product_repository->findById($id);
     }
 
     /**
+     * Sync attributes for the product.
+     *
+     * @param  Product  $product
+     * @param  array<string, mixed>  $attributeData
+     * @return void
      * @throws Exception
      */
     private function syncAttributes(Product $product, array $attributeData): void
@@ -150,5 +198,4 @@ class ProductService extends CoreService
             $product->attributeValues()->syncWithoutDetaching([$attributeValue->id]);
         }
     }
-
 }

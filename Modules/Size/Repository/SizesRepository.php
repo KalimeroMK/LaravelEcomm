@@ -2,18 +2,17 @@
 
 namespace Modules\Size\Repository;
 
-use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Size\Models\Size;
 
 class SizesRepository extends Repository
 {
-    public Model $model = Size::class;
+    public $model = Size::class;
 
     /**
-     * @return mixed
+     * @return object
      */
-    public function findAll(): mixed
+    public function findAll(): object
     {
         return $this->model::get();
     }

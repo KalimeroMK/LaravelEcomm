@@ -58,12 +58,12 @@ class PostController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function show($id): JsonResponse|string
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -98,7 +98,7 @@ class PostController extends CoreController
                     ]
                 )
             )
-            ->respond(new PostResource($this->post_service->update($post->id, $request->validated())));
+            ->respond(new PostResource($this->post_service->update($request->validated(), $post)));
     }
 
     /**

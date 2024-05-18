@@ -11,7 +11,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,7 +27,6 @@ use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Helpers\Condition;
 use Modules\Core\Models\Core;
-use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;
 use Spatie\MediaLibrary\HasMedia;
@@ -143,40 +141,32 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     ];
 
     /**
-     * @return ProductFactory
-     */
-    public static function Factory(): ProductFactory
-    {
-        return ProductFactory::new();
-    }
-
-    /**
-     * @param $slug
+     * Get product by slug.
      *
+     * @param  string  $slug
      * @return object|null
      */
-    public static function getProductBySlug($slug): object|null
+    public static function getProductBySlug(string $slug): ?object
     {
         return Product::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
     }
 
     /**
+     * Count active products.
+     *
      * @return int
      */
     public static function countActiveProduct(): int
     {
-        $data = Product::where('status', 'active')->count();
-        if ($data) {
-            return $data;
-        }
-
-        return 0;
+        return Product::where('status', 'active')->count() ?: 0;
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * Get feed items.
+     *
+     * @return Collection
      */
-    public static function getFeedItems(): \Illuminate\Support\Collection
+    public static function getFeedItems(): Collection
     {
         return Product::orderBy('created_at', 'desc')
             ->limit(20)
@@ -184,6 +174,8 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     }
 
     /**
+     * Get the brand associated with the product.
+     *
      * @return BelongsTo
      */
     public function brand(): BelongsTo
@@ -192,6 +184,8 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     }
 
     /**
+     * Get the carts associated with the product.
+     *
      * @return HasMany
      */
     public function carts(): HasMany
@@ -200,6 +194,8 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     }
 
     /**
+     * Get the product reviews associated with the product.
+     *
      * @return HasMany
      */
     public function product_reviews(): HasMany
@@ -208,6 +204,8 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     }
 
     /**
+     * Get the wishlists associated with the product.
+     *
      * @return HasMany
      */
     public function wishlists(): HasMany
@@ -215,28 +213,36 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         return $this->hasMany(Wishlist::class);
     }
 
-    public function categories(): belongsToMany
+    /**
+     * Get the categories associated with the product.
+     *
+     * @return BelongsToMany
+     */
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
     }
 
     /**
+     * Get the reviews associated with the product.
+     *
      * @return HasMany
      */
     public function getReview(): HasMany
     {
-        return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where(
-            'status',
-            'active'
-        )->orderBy('id', 'DESC');
+        return $this->hasMany(ProductReview::class, 'product_id', 'id')
+            ->with('user')
+            ->where('status', 'active')
+            ->orderBy('id', 'DESC');
     }
 
     /**
-     * @param $slug
+     * Increment the slug if it already exists.
      *
-     * @return mixed|string
+     * @param  string  $slug
+     * @return string
      */
-    public function incrementSlug($slug): mixed
+    public function incrementSlug(string $slug): string
     {
         $original = $slug;
         $count = 2;
@@ -248,34 +254,30 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     }
 
     /**
+     * Get the image URL attribute.
+     *
      * @return string|null
      */
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-
-        if ($mediaItem) {
-            return $mediaItem->first()->getUrl();
-        }
-
-        return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     /**
+     * Get the image thumbnail URL attribute.
+     *
      * @return string|null
      */
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-
-        if ($mediaItem) {
-            return $mediaItem->first()->getUrl();
-        }
-
-        return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     /**
+     * Get the condition associated with the product.
+     *
      * @return BelongsTo
      */
     public function condition(): BelongsTo
@@ -284,26 +286,31 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     }
 
     /**
+     * Get the sizes associated with the product.
+     *
      * @return BelongsToMany
      */
-    public function sizes(): belongsToMany
+    public function sizes(): BelongsToMany
     {
         return $this->belongsToMany(Size::class);
     }
 
     /**
+     * Get the tags associated with the product.
+     *
      * @return BelongsToMany
      */
-    public function tags(): belongsToMany
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
     }
 
-
     /**
-     * @return HigherOrderBuilderProxy|mixed|null
+     * Get the current price of the product.
+     *
+     * @return float|int|null
      */
-    public function getCurrentPrice(): mixed
+    public function getCurrentPrice(): float|int|null
     {
         $today = now();
 
@@ -311,9 +318,14 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
             return $this->special_price;
         }
 
-        return null;
+        return $this->price;
     }
 
+    /**
+     * Get the attribute values associated with the product.
+     *
+     * @return BelongsToMany
+     */
     public function attributeValues(): BelongsToMany
     {
         return $this->belongsToMany(AttributeValue::class, 'product_attribute_value')
@@ -321,22 +333,42 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
             ->withTimestamps();
     }
 
+    /**
+     * Get the bundles associated with the product.
+     *
+     * @return BelongsToMany
+     */
     public function bundles(): BelongsToMany
     {
-        return $this->belongsToMany(Bundle::class)
-            ->withTimestamps();
+        return $this->belongsToMany(Bundle::class)->withTimestamps();
     }
 
+    /**
+     * Make all searchable using the query.
+     *
+     * @param  Builder  $query
+     * @return Builder
+     */
     public function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->with('categories', 'brand', 'sizes', 'condition');
     }
 
+    /**
+     * Convert the product to a searchable array.
+     *
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return $this->toArray();
     }
 
+    /**
+     * Get the mapping properties for the product.
+     *
+     * @return array<string, mixed>
+     */
     public function mappableAs(): array
     {
         return [
@@ -384,6 +416,11 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         ];
     }
 
+    /**
+     * Get the index settings for the product.
+     *
+     * @return array<string, mixed>
+     */
     public function indexSettings(): array
     {
         return [
@@ -399,9 +436,4 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         ];
     }
 
-    public function searchBrandsByProduct($searchTerm)
-    {
-        $productBrandIds = Product::search($searchTerm)->get()->pluck('brand_id')->unique();
-        return Brand::whereIn('id', $productBrandIds)->get();
-    }
 }

@@ -12,7 +12,7 @@ class ProductObserver
      *
      * @param  Product  $product
      */
-    public function creating(Product $product)
+    public function creating(Product $product): void
     {
         $slug = Str::slug($product->title);
         if (Product::whereSlug($slug)->count() > 0) {

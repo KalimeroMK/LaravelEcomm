@@ -38,7 +38,7 @@ class OrderController extends CoreController
 
     /**
      *
-     * @return mixed
+     * @return JsonResponse
      * @throws Exception
      */
     public function store(Store $request)

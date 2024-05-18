@@ -2,7 +2,6 @@
 
 namespace Modules\Brand\Repository;
 
-use Illuminate\Database\Eloquent\Collection;
 use Modules\Brand\Models\Brand;
 use Modules\Core\Repositories\Repository;
 
@@ -42,15 +41,5 @@ class BrandRepository extends Repository
         return $query->orderBy($orderBy, $sort)->paginate((new $this->model)->getPerPage());
     }
 
-
-    /**
-     * Retrieves all active brands ordered by title.
-     *
-     * @return Collection<Brand>
-     */
-    public function getActiveBrands(): Collection
-    {
-        return $this->model::where('status', 'active')->orderBy('title')->get();
-    }
 
 }

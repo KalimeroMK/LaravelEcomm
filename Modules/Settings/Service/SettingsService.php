@@ -17,12 +17,24 @@ class SettingsService extends CoreService
         $this->settings_repository = $settings_repository;
     }
 
-    public function getData()
+    /**
+     * Get the first settings data.
+     *
+     * @return object
+     */
+    public function getData(): object
     {
         return $this->settings_repository->findFirst();
     }
 
-    public function update($id, $data)
+    /**
+     * Update settings.
+     *
+     * @param  int  $id
+     * @param  array<string, mixed>  $data
+     * @return mixed
+     */
+    public function update(int $id, array $data): mixed
     {
         return $this->settings_repository->update($id,
             collect($data)->except(['logo'])->toArray() + [
@@ -30,5 +42,4 @@ class SettingsService extends CoreService
             ]
         );
     }
-
 }

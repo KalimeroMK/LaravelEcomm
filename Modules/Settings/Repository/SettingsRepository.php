@@ -2,18 +2,17 @@
 
 namespace Modules\Settings\Repository;
 
-use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Settings\Models\Setting;
 
 class SettingsRepository extends Repository
 {
-    public Model $model = Setting::class;
+    public $model = Setting::class;
 
     /**
-     * @return mixed
+     * @return object
      */
-    public function findFirst(): mixed
+    public function findFirst(): object
     {
         return $this->model::first();
     }

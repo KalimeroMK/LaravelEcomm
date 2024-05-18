@@ -2,6 +2,7 @@
 
 namespace Modules\Order\Service;
 
+use Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
@@ -20,44 +21,48 @@ class OrderService
         $this->order_repository = $order_repository;
     }
 
-    public function edit($id)
+    public function edit(int $id): ?Order
     {
         return $this->order_repository->findById($id);
     }
 
-    public function show($id)
+    public function show(int $id): ?Order
     {
         return $this->order_repository->findById($id);
     }
 
-    public function destroy($id): void
+    public function destroy(int $id): void
     {
         $this->order_repository->delete($id);
     }
 
-    public function getAll()
+    public function getAll(): object
     {
         return $this->order_repository->findAll();
     }
 
-    public function search($data)
+    /**
+     * Search orders based on given data.
+     *
+     * @param  array<string, mixed>  $data
+     * @return mixed
+     */
+    public function search(array $data): mixed
     {
         return $this->order_repository->search($data);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param $data
-     *
-     * @return string
+     * @param  array<string, mixed>  $data
+     * @return int
      */
-    public function store($data): string
+    public function store(array $data): int
     {
         $order_data = [
             'order_number' => 'ORD-'.strtoupper(Str::random(10)),
-            'user_id' => $user->id,
+            'user_id' => Auth::user()->id,
             'shipping_id' => $data['shipping'],
             'sub_total' => Helper::totalCartPrice(),
             'quantity' => Helper::cartCount(),
@@ -72,11 +77,7 @@ class OrderService
 
         $shippingPrice = $order->shipping->price ?? 0;
 
-        if ($data->shipping) {
-            $order->total_amount = Helper::totalCartPrice() + $shippingPrice - ($order_data['coupon'] ?? 0);
-        } else {
-            $order->total_amount = Helper::totalCartPrice() - ($order_data['coupon'] ?? 0);
-        }
+        $order->total_amount = Helper::totalCartPrice() + $shippingPrice - ($order_data['coupon'] ?? 0);
 
         $order->payment_method = (request('payment_method') == 'paypal') ? 'paypal' : 'cod';
         $order->payment_status = ($order->payment_method === 'paypal') ? 'paid' : 'unpaid';
@@ -84,7 +85,6 @@ class OrderService
         $order->save();
 
         $this->sendNewOrderNotification($order);
-
         $this->updateCartWithOrderId($order);
 
         return $order->id;
@@ -103,20 +103,28 @@ class OrderService
     }
 
     /**
-     * @param $order
+     * Update cart with order ID.
+     *
+     * @param  Order  $order
      * @return void
      */
-    private function updateCartWithOrderId($order): void
+    private function updateCartWithOrderId(Order $order): void
     {
-        Cart::whereUserId(Auth()->id())->whereOrderId(null)->update(['order_id' => $order->id]);
+        Cart::whereUserId(Auth::id())->whereOrderId(null)->update(['order_id' => $order->id]);
     }
 
-
-    public function update($data, $id)
+    /**
+     * Update the specified order.
+     *
+     * @param  array<string, mixed>  $data
+     * @param  int  $id
+     * @return bool
+     */
+    public function update(int $id, array $data): bool
     {
         $order = $this->order_repository->findById($id);
 
-        if ($data->status == 'delivered') {
+        if ($data['status'] == 'delivered') {
             foreach ($order->cart as $cart) {
                 $product = $cart->product;
                 $product->stock -= $cart->quantity;
@@ -128,6 +136,8 @@ class OrderService
     }
 
     /**
+     * Find all orders by user.
+     *
      * @return mixed
      */
     public function findByAllUser(): mixed

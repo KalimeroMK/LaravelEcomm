@@ -2,7 +2,8 @@
 
 namespace Modules\Order\Repository;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Modules\Core\Interfaces\SearchInterface;
@@ -11,7 +12,7 @@ use Modules\Order\Models\Order;
 
 class OrderRepository extends Repository implements SearchInterface
 {
-    public Model $model = Order::class;
+    public $model = Order::class;
 
     /**
      * @return mixed
@@ -22,9 +23,10 @@ class OrderRepository extends Repository implements SearchInterface
     }
 
     /**
-     * @param  array  $data
+     * Search orders based on given data.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data
+     * @return Builder|LengthAwarePaginator
      */
     public function search(array $data): mixed
     {

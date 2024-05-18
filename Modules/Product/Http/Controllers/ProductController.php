@@ -71,7 +71,7 @@ class ProductController extends CoreController
         return redirect()->route('product.index');
     }
 
-    public function deleteMedia($modelId, $mediaId)
+    public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
         $model = Product::findOrFail($modelId);
         $model->media()->where('id', $mediaId)->first()->delete();

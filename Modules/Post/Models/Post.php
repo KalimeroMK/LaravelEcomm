@@ -121,21 +121,21 @@ class Post extends Core implements HasMedia
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return LengthAwarePaginator
      */
-    public static function getBlogByTag($slug): LengthAwarePaginator
+    public static function getBlogByTag(string $slug): LengthAwarePaginator
     {
         return Post::where('tags', $slug)->paginate(8);
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return Builder|Model
      */
-    public static function getPostBySlug($slug): Model|Builder
+    public static function getPostBySlug(string $slug): Model|Builder
     {
         return Post::whereSlug($slug)->with('comments')->firstOrFail();
     }
@@ -202,11 +202,11 @@ class Post extends Core implements HasMedia
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return mixed|string
      */
-    public function incrementSlug($slug): mixed
+    public function incrementSlug(string $slug): mixed
     {
         $original = $slug;
         $count = 2;

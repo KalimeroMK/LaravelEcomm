@@ -2,38 +2,45 @@
 
 namespace Modules\Post\Repository;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 use Modules\Post\Models\Post;
 
 class PostRepository extends Repository implements SearchInterface
 {
-    public Model $model = Post::class;
+    public $model = Post::class;
     private const LATEST_POSTS_LIMIT = 3;
 
     /**
-     * @param  array  $data
+     * Search posts based on given data.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data
+     * @return LengthAwarePaginator
      */
     public function search(array $data): LengthAwarePaginator
     {
         $query = $this->buildQuery($data);
 
         if (Arr::get($data, 'all_included', false)) {
-            return $this->eagerLoadRelations($query)->get();
+            return $this->eagerLoadRelations($query)->paginate(); // Adjusted to return a LengthAwarePaginator
         }
 
         return $this->applySortingAndPaginate($query, $data);
     }
 
+    /**
+     * Build query based on search data.
+     *
+     * @param  array<string, mixed>  $data
+     * @return Builder
+     */
     private function buildQuery(array $data): Builder
     {
+        /** @var Builder<Post> $query */
         $query = $this->model::query();
 
         foreach ($this->searchableFields() as $key) {
@@ -45,27 +52,49 @@ class PostRepository extends Repository implements SearchInterface
         return $query;
     }
 
+    /**
+     * Get searchable fields.
+     *
+     * @return array<int, string>
+     */
     private function searchableFields(): array
     {
         return ['title', 'quote', 'summary', 'description', 'status'];
     }
 
+    /**
+     * Eager load relations for the query.
+     *
+     * @param  Builder<Post>  $query
+     * @return Builder<Post>
+     */
     private function eagerLoadRelations(Builder $query): Builder
     {
         return $query->with(['categories', 'comments', 'post_comments', 'tags', 'author_info', 'media']);
     }
 
+    /**
+     * Apply sorting and paginate the query results.
+     *
+     * @param  Builder<Post>  $query
+     * @param  array<string, mixed>  $data
+     * @return LengthAwarePaginator
+     */
     private function applySortingAndPaginate(Builder $query, array $data): LengthAwarePaginator
     {
-        $orderBy = Arr::get($data, 'order_by', $this->model::DEFAULT_ORDER_BY);
-        $sort = Arr::get($data, 'sort', $this->model::DEFAULT_SORT);
+        $orderBy = Arr::get($data, 'order_by', 'id');
+        $sort = Arr::get($data, 'sort', 'desc');
         $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
 
         return $this->eagerLoadRelations($query)->orderBy($orderBy, $sort)->paginate($perPage);
     }
 
-
-    public function getActivePosts()
+    /**
+     * Get active posts.
+     *
+     * @return Collection<int, Post>
+     */
+    public function getActivePosts(): Collection
     {
         return $this->model::where('status', 'active')
             ->orderBy('id', 'desc')
@@ -74,11 +103,14 @@ class PostRepository extends Repository implements SearchInterface
     }
 
     /**
-     * @return Collection
+     * Find all posts.
+     *
+     * @return Collection<int, Post>
      */
     public function findAll(): Collection
     {
-        return $this->eagerLoadRelations($this->model::query())->get();
+        /** @var Collection<int, Post> $posts */
+        $posts = $this->eagerLoadRelations($this->model::query())->get();
+        return $posts;
     }
-
 }

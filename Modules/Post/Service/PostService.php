@@ -22,7 +22,13 @@ class PostService extends CoreService
         $this->post_repository = $post_repository;
     }
 
-    public function store($data): Post
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  array<string, mixed>  $data
+     * @return Post
+     */
+    public function store(array $data): Post
     {
         $post = $this->post_repository->create($data);
 
@@ -37,7 +43,12 @@ class PostService extends CoreService
         return $post;
     }
 
-
+    /**
+     * Get the data for editing a post.
+     *
+     * @param  int  $id
+     * @return array<string, mixed>
+     */
     public function edit(int $id): array
     {
         return [
@@ -48,6 +59,11 @@ class PostService extends CoreService
         ];
     }
 
+    /**
+     * Get the data for creating a post.
+     *
+     * @return array<string, mixed>
+     */
     public function create(): array
     {
         return [
@@ -58,7 +74,13 @@ class PostService extends CoreService
         ];
     }
 
-    public function update($data, $post): Post
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  array<string, mixed>  $data
+     * @param  $post
+     */
+    public function update(array $data, $post): object
     {
         $post->update($data);
         if (isset($data['category'])) {
@@ -72,30 +94,53 @@ class PostService extends CoreService
         return $post;
     }
 
-
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return void
+     */
     public function destroy(int $id): void
     {
         $this->post_repository->delete($id);
     }
 
+    /**
+     * Search posts based on given data.
+     *
+     * @param  array<string, mixed>  $data
+     * @return mixed
+     */
     public function search(array $data): mixed
     {
         return $this->post_repository->search($data);
     }
 
+    /**
+     * Get all posts.
+     *
+     * @return mixed
+     */
     public function getAll(): mixed
     {
         return $this->post_repository->findAll();
     }
 
+    /**
+     * Show a specific post.
+     *
+     * @param  int  $id
+     * @return mixed
+     */
     public function show(int $id): mixed
     {
         return $this->post_repository->findById($id);
     }
 
     /**
-     * @param  Request  $request
+     * Upload an image.
      *
+     * @param  Request  $request
      * @return void
      */
     public function upload(Request $request): void

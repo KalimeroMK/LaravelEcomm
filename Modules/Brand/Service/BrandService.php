@@ -5,6 +5,7 @@ namespace Modules\Brand\Service;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
+use Reliese\Coders\Model\Model;
 
 class BrandService extends CoreService
 {
@@ -21,34 +22,14 @@ class BrandService extends CoreService
      * Store a new attribute.
      *
      * @param  array<string, mixed>  $data  The data to create the attribute.
-     * @return mixed
+     * @return Model|null
      */
-    public function store(array $data): mixed
+    public function store(array $data): ?Model
     {
         $processedData = collect($data)->except(['photo'])->toArray() + [
                 'photo' => $this->verifyAndStoreImage($data['photo'] ?? null),
             ];
         return $this->brand_repository->create($processedData);
-    }
-
-    /**
-     * @param  int  $id
-     *
-     * @return mixed
-     */
-    public function edit(int $id): mixed
-    {
-        return $this->brand_repository->findById($id);
-    }
-
-    /**
-     * @param  int  $id
-     *
-     * @return mixed
-     */
-    public function show(int $id): mixed
-    {
-        return $this->brand_repository->findById($id);
     }
 
     /**
@@ -68,27 +49,5 @@ class BrandService extends CoreService
         }
 
         return $this->brand_repository->update($id, $data);
-    }
-
-
-    /**
-     * @param  int  $id
-     *
-     * @return void
-     */
-
-    public function destroy(int $id): void
-    {
-        $this->brand_repository->delete($id);
-    }
-
-    /**
-     *
-     * @param  array<string, mixed>  $data  The search criteria.
-     * @return mixed
-     */
-    public function getAll(array $data): mixed
-    {
-        return $this->brand_repository->search($data);
     }
 }

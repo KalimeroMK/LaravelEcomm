@@ -6,13 +6,16 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ImportRequest extends FormRequest
 {
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
             'file' => 'required|mimes:xlsx, csv, xls',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

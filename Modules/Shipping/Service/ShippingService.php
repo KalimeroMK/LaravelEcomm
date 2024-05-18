@@ -14,47 +14,53 @@ class ShippingService
     }
 
     /**
-     * @return mixed
+     * Get all shipping records.
+     *
+     * @return object
      */
-    public function getAll(): mixed
+    public function getAll(): object
     {
         return $this->shipping_repository->findAll();
     }
 
     /**
-     * @param $data
+     * Store a new shipping record.
      *
+     * @param  array<string, mixed>  $data
      * @return mixed
      */
-    public function store($data): mixed
+    public function store(array $data): mixed
     {
         return $this->shipping_repository->create($data);
     }
 
     /**
-     * @param $id
-     * @param $data
+     * Update an existing shipping record.
      *
+     * @param  int  $id
+     * @param  array<string, mixed>  $data
      * @return mixed
      */
-    public function update($id, $data): mixed
+    public function update(int $id, array $data): mixed
     {
         return $this->shipping_repository->update($id, $data);
     }
 
     /**
-     * @param $id
+     * Get the data for editing a shipping record.
      *
-     * @return mixed|string
+     * @param  int  $id
+     * @return mixed
      */
-    public function edit($id): mixed
+    public function edit(int $id): mixed
     {
         return $this->shipping_repository->findById($id);
     }
 
     /**
-     * @param  int  $id
+     * Delete a shipping record.
      *
+     * @param  int  $id
      * @return void
      */
     public function destroy(int $id): void
@@ -63,13 +69,13 @@ class ShippingService
     }
 
     /**
-     * @param $id
+     * Show a specific shipping record.
      *
-     * @return mixed|string
+     * @param  int  $id
+     * @return mixed
      */
-    public function show($id): mixed
+    public function show(int $id): mixed
     {
         return $this->shipping_repository->findById($id);
     }
-
 }

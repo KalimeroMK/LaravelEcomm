@@ -34,12 +34,4 @@ class SizePolicy
     {
         return $user->can('size-delete');
     }
-
-    public function restore(User $user, Size $size): bool
-    {
-    }
-
-    public function forceDelete(User $user, Size $size): bool
-    {
-    }
 }

@@ -2,18 +2,17 @@
 
 namespace Modules\Shipping\Repository;
 
-use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\Repository;
 use Modules\Shipping\Models\Shipping;
 
 class ShippingRepository extends Repository
 {
-    public Model $model = Shipping::class;
+    public $model = Shipping::class;
 
     /**
-     * @return mixed
+     * @return object
      */
-    public function findAll(): mixed
+    public function findAll(): object
     {
         return $this->model::orderBy('id', 'DESC')->get();
     }

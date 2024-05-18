@@ -2,7 +2,7 @@ includes:
     - ./vendor/nunomaduro/larastan/extension.neon
 parameters:
     paths:
-       - Modules/Order
+       - Modules/Size
     level: 6
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false

@@ -7,6 +7,7 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 
+
 class AttributeRepository extends Repository implements SearchInterface
 {
     /**
@@ -16,14 +17,6 @@ class AttributeRepository extends Repository implements SearchInterface
      *
      */
     public $model = Attribute::class;
-
-    /**
-     * @return mixed
-     */
-    public function findAll(): mixed
-    {
-        return $this->model::get();
-    }
 
     /**
      * Search for entries based on filter criteria provided in the `$data` array.
