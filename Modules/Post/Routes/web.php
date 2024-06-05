@@ -16,8 +16,8 @@ use Modules\Post\Http\Controllers\PostCommentController;
 use Modules\Post\Http\Controllers\PostController;
 
 Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('post', PostController::class)->except('show');
-    Route::delete('post/{modelId}/media/{mediaId}',
+    Route::resource('posts', PostController::class)->except('show')->names('post');
+    Route::delete('posts/{modelId}/media/{mediaId}',
         [PostController::class, 'deleteMedia'])->name('posts.delete-media');
     /*Excel import export*/
     Route::get('post/export', [PostController::class, 'export'])->name('posts.export');

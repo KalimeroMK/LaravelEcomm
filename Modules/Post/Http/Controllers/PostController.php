@@ -9,12 +9,15 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Category\Models\Category;
 use Modules\Post\Export\Posts as PostExport;
 use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
 use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
+use Modules\Tag\Models\Tag;
+use Modules\User\Models\User;
 use PhpOffice\PhpSpreadsheet\Exception;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -67,7 +70,12 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post::create')->with($this->post_service->create());
+        return view('post::create', [
+            'categories' => Category::all(),
+            'tags' => Tag::all(),
+            'users' => User::all(),
+            'post' => new Post()
+        ]);
     }
 
     /**
@@ -79,7 +87,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('post::edit')->with($this->post_service->edit($post->id));
+        $categories = Category::all();
+        $tags = Tag::all();
+        $users = User::all();
+        $post = $this->post_service->edit($post->id);
+        return view('post::edit', compact('categories', 'tags', 'users', 'post'));
     }
 
     /**
@@ -94,7 +106,7 @@ class PostController extends Controller
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
-        $this->post_service->update($request->all(), $post);
+        $this->post_service->update($post->id, $request->validated());
         if (request()->hasFile('images')) {
             $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
                 $fileAdder->preservingOriginal()->toMediaCollection('post');

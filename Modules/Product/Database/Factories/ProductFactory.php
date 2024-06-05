@@ -11,7 +11,7 @@ class ProductFactory extends Factory
     protected $model = Product::class;
 
     /**
-     * @return array|mixed[]
+     * @return array
      */
     public function definition(): array
     {

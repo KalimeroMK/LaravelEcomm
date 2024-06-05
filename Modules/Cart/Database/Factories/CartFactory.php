@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use Modules\Cart\Models\Cart;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;
+use Modules\User\Models\User;
 
 class CartFactory extends Factory
 {
@@ -15,9 +16,9 @@ class CartFactory extends Factory
     public function definition(): array
     {
         return [
-            'amount' => $this->faker->numberBetween(1, 7777),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'price' => $this->faker->randomFloat(),
+            'quantity' => $this->faker->randomNumber(),
+            'amount' => $this->faker->randomFloat(),
             'product_id' => function () {
                 /** @var Product $product */
                 $product = Product::factory()->create();
@@ -28,7 +29,13 @@ class CartFactory extends Factory
                 $order = Order::factory()->create();
                 return $order->id;
             },
+            'user_id' => function () {
+                /** @var Product $product */
+                $user = User::factory()->create();
+                return $user->id;
+            }, 'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+
         ];
     }
-
 }

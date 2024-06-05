@@ -2,6 +2,8 @@
 
 namespace Modules\Size\Service;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Modules\Core\Service\CoreService;
 use Modules\Size\Repository\SizesRepository;
 
@@ -12,6 +14,7 @@ class SizesService extends CoreService
 
     public function __construct(SizesRepository $sizes_repository)
     {
+        parent::__construct($sizes_repository);
         $this->sizes_repository = $sizes_repository;
     }
 
@@ -28,9 +31,9 @@ class SizesService extends CoreService
     /**
      * @param  int  $id
      *
-     * @return mixed|string
+     * @return Model|null
      */
-    public function edit(int $id): mixed
+    public function edit(int $id): ?Model
     {
         return $this->sizes_repository->findById($id);
     }
@@ -38,20 +41,20 @@ class SizesService extends CoreService
     /**
      * @param  int  $id
      *
-     * @return mixed|string
+     * @return Model
      */
-    public function show(int $id): mixed
+    public function show(int $id): Model
     {
         return $this->sizes_repository->findById($id);
     }
 
     /**
      * @param  int  $id
-     * @param $data
+     * @param  array  $data
      *
-     * @return mixed|string
+     * @return Model
      */
-    public function update(int $id, $data):
+    public function update(int $id, array $data): Model
     {
         return $this->sizes_repository->update($id, $data);
     }
@@ -67,9 +70,9 @@ class SizesService extends CoreService
     }
 
     /**
-     * @return object
+     * @return Collection
      */
-    public function getAll(): object
+    public function getAll(): Collection
     {
         return $this->sizes_repository->findAll();
     }

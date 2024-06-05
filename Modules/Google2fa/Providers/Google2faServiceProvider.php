@@ -12,12 +12,12 @@ class Google2faServiceProvider extends ServiceProvider
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Google2fa';
+    protected string $moduleName = 'Google2fa';
 
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'google2fa';
+    protected string $moduleNameLower = 'google2fa';
 
     /**
      * Boot the application events.
@@ -37,7 +37,7 @@ class Google2faServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerTranslations()
+    public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 
@@ -55,7 +55,7 @@ class Google2faServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerConfig()
+    protected function registerConfig(): void
     {
         $this->publishes([
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
@@ -106,7 +106,7 @@ class Google2faServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }

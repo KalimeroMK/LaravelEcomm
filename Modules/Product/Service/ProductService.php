@@ -3,6 +3,7 @@
 namespace Modules\Product\Service;
 
 use Exception;
+use Illuminate\Support\Collection;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Brand\Models\Brand;
@@ -23,6 +24,7 @@ class ProductService extends CoreService
 
     public function __construct(ProductRepository $product_repository)
     {
+        parent::__construct($product_repository);
         $this->product_repository = $product_repository;
     }
 
@@ -30,29 +32,11 @@ class ProductService extends CoreService
      * Get all products based on given data.
      *
      * @param  array<string, mixed>  $data
-     * @return mixed
+     * @return Collection
      */
-    public function getAll(array $data): mixed
+    public function search(array $data): Collection
     {
         return $this->product_repository->search($data);
-    }
-
-    /**
-     * Create a new product.
-     *
-     * @return array<string, mixed>
-     */
-    public function create(): array
-    {
-        return [
-            'brands' => Brand::get(),
-            'categories' => Category::get(),
-            'product' => new Product(),
-            'sizes' => Size::get(),
-            'conditions' => Condition::get(),
-            'tags' => Tag::get(),
-            'attributes' => Attribute::all()
-        ];
     }
 
     /**

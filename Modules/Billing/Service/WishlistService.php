@@ -2,7 +2,7 @@
 
 namespace Modules\Billing\Service;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Modules\Billing\Repository\WishlistRepository;
 use Modules\Core\Service\CoreService;
 
@@ -17,9 +17,9 @@ class WishlistService extends CoreService
     }
 
     /**
-     * @return Model|null
+     * @return Collection
      */
-    public function getAll(): ?Model
+    public function getAll(): Collection
     {
         $colum = "user_id";
         $value = auth()->user()->id;

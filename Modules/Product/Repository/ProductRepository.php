@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -24,9 +25,9 @@ class ProductRepository extends Repository
      *
      * @param  int  $id
      * @param  array<string, mixed>  $data
-     * @return mixed
+     * @return Model
      */
-    public function update(int $id, array $data): mixed
+    public function update(int $id, array $data): Model
     {
         $item = $this->findById($id);
         $item->fill($data);
@@ -39,9 +40,9 @@ class ProductRepository extends Repository
      * Find a product by ID.
      *
      * @param  int  $id
-     * @return mixed
+     * @return Model|null
      */
-    public function findById(int $id): mixed
+    public function findById(int $id): ?Model
     {
         return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
     }

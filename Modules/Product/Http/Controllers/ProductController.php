@@ -5,12 +5,18 @@ namespace Modules\Product\Http\Controllers;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Modules\Attribute\Models\Attribute;
+use Modules\Brand\Models\Brand;
+use Modules\Category\Models\Category;
+use Modules\Core\Helpers\Condition;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Product\Http\Requests\Api\Search;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
+use Modules\Size\Models\Size;
+use Modules\Tag\Models\Tag;
 
 class ProductController extends CoreController
 {
@@ -24,12 +30,21 @@ class ProductController extends CoreController
 
     public function index(Search $request): Renderable
     {
-        return view('product::index', ['products' => $this->product_service->getAll($request->validated())]);
+        return view('product::index', ['products' => $this->product_service->search($request->validated())]);
     }
 
     public function create(): Renderable
     {
-        return view('product::create')->with($this->product_service->create());
+        return view('product::create', [
+                'brands' => Brand::get(),
+                'categories' => Category::get(),
+                'product' => new Product(),
+                'sizes' => Size::get(),
+                'conditions' => Condition::get(),
+                'tags' => Tag::get(),
+                'attributes' => Attribute::all()
+            ]
+        );
     }
 
     /**

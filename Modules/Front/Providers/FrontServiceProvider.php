@@ -123,4 +123,14 @@ class FrontServiceProvider extends ServiceProvider
 
         return $paths;
     }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        $this->app->register(RouteServiceProvider::class);
+    }
 }

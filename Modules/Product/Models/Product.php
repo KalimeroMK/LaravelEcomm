@@ -27,6 +27,7 @@ use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Helpers\Condition;
 use Modules\Core\Models\Core;
+use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;
 use Spatie\MediaLibrary\HasMedia;
@@ -139,6 +140,11 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         'brand.title',
         'color',
     ];
+
+    public static function factory(): ProductFactory
+    {
+        return ProductFactory::new();
+    }
 
     /**
      * Get product by slug.

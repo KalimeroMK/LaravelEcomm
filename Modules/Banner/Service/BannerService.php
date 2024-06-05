@@ -24,9 +24,9 @@ class BannerService extends CoreService
      *
      * @param  int  $id  The banner ID to update.
      * @param  array<string, mixed>  $data  The data for updating the attribute.
-     * @return Model|null
+     * @return Model
      */
-    public function update(int $id, array $data): ?Model
+    public function update(int $id, array $data): Model
     {
         if (!empty($data['photo'])) {
             return $this->banner_repository->update($id,

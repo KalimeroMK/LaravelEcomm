@@ -5,6 +5,7 @@ namespace Modules\Post\Repository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
@@ -112,5 +113,23 @@ class PostRepository extends Repository implements SearchInterface
         /** @var Collection<int, Post> $posts */
         $posts = $this->eagerLoadRelations($this->model::query())->get();
         return $posts;
+    }
+
+    /**
+     * Update an existing record in the repository.
+     *
+     * @param  int  $id  The ID of the model to update.
+     * @param  array<string, mixed>  $data  The data to update in the model.
+     *
+     * @return Model The updated model instance.
+     */
+    public function update(int $id, array $data): Model
+    {
+        $item = $this->findById($id);
+        $item->categories()->sync($data['category'] ?? []);
+        $item->tags()->sync($data['tags'] ?? []);
+        $item->fill($data)->save();
+
+        return $item->fresh();
     }
 }

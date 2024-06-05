@@ -2,6 +2,7 @@
 
 namespace Modules\Notification\Repository;
 
+use Illuminate\Support\Collection;
 use Modules\Core\Repositories\Repository;
 use Modules\Notification\Models\Notification;
 
@@ -10,9 +11,9 @@ class NotificationRepository extends Repository
     public $model = Notification::class;
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function findAll(): mixed
+    public function findAll(): Collection
     {
         return $this->model::get();
     }

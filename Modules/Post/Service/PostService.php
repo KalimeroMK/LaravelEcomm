@@ -2,14 +2,14 @@
 
 namespace Modules\Post\Service;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Modules\Category\Models\Category;
+use Illuminate\Support\Collection;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
 use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
-use Modules\Tag\Models\Tag;
-use Modules\User\Models\User;
 
 class PostService extends CoreService
 {
@@ -19,6 +19,7 @@ class PostService extends CoreService
 
     public function __construct(PostRepository $post_repository)
     {
+        parent::__construct($post_repository);
         $this->post_repository = $post_repository;
     }
 
@@ -47,51 +48,23 @@ class PostService extends CoreService
      * Get the data for editing a post.
      *
      * @param  int  $id
-     * @return array<string, mixed>
+     * @return Model
      */
-    public function edit(int $id): array
+    public function edit(int $id): Model
     {
-        return [
-            'categories' => Category::all(),
-            'tags' => Tag::all(),
-            'users' => User::all(),
-            'post' => $this->post_repository->findById($id),
-        ];
-    }
-
-    /**
-     * Get the data for creating a post.
-     *
-     * @return array<string, mixed>
-     */
-    public function create(): array
-    {
-        return [
-            'categories' => Category::all(),
-            'tags' => Tag::all(),
-            'users' => User::all(),
-            'post' => new Post(),
-        ];
+        return $this->post_repository->findById($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
+     * @param $id
      * @param  array<string, mixed>  $data
-     * @param  $post
+     * @return Model
      */
-    public function update(array $data, $post): object
+    public function update($id, array $data): Model
     {
-        $post->update($data);
-        if (isset($data['category'])) {
-            $post->categories()->sync($data['category']);
-        }
-
-        if (isset($data['tags'])) {
-            $post->tags()->sync($data['tags']);
-        }
-
-        return $post;
+        return $this->post_repository->update($id, $data);
     }
 
     /**
@@ -109,9 +82,9 @@ class PostService extends CoreService
      * Search posts based on given data.
      *
      * @param  array<string, mixed>  $data
-     * @return mixed
+     * @return LengthAwarePaginator
      */
-    public function search(array $data): mixed
+    public function search(array $data): LengthAwarePaginator
     {
         return $this->post_repository->search($data);
     }
@@ -119,9 +92,9 @@ class PostService extends CoreService
     /**
      * Get all posts.
      *
-     * @return mixed
+     * @return Collection
      */
-    public function getAll(): mixed
+    public function getAll(): Collection
     {
         return $this->post_repository->findAll();
     }
@@ -130,9 +103,9 @@ class PostService extends CoreService
      * Show a specific post.
      *
      * @param  int  $id
-     * @return mixed
+     * @return Model|null
      */
-    public function show(int $id): mixed
+    public function show(int $id): ?Model
     {
         return $this->post_repository->findById($id);
     }
