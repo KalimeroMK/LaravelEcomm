@@ -13,12 +13,4 @@ use Modules\Attribute\Http\Controllers\Api\AttributeController;
 |
 */
 
-Route::apiResource('attribute', AttributeController::class)
-    ->names([
-        'index' => 'api.attribute.index',
-        'store' => 'api.attribute.store',
-        'show' => 'api.attribute.show',
-        'destroy' => 'api.attribute.destroy',
-        'update' => 'api.attribute.update',
-        'create' => 'api.attribute.create',
-    ]);
+Route::apiResource('attributes', AttributeController::class)->names('api.attribute.index');

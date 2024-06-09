@@ -14,7 +14,7 @@ class Update extends CoreRequest
     {
         return [
             'name' => 'required',
-            'code' => 'required|unique:attributes,code,'.$this->attribute->id,
+            'code' => 'required|unique:attributes,code,' . $this->route()->id,
             'display' => 'sometimes|in:input,radio,color,button,select,checkbox,multiselect',
             'filterable' => 'sometimes|in:0,1',
             'configurable' => 'sometimes|in:0,1',

@@ -72,6 +72,7 @@ trait BaseTestTrait
             $url . $id,
             $data
         );
+        dd($response->getContent());
         Log::info(1, [$response->getContent()]);
 
         return $response->assertStatus(200);

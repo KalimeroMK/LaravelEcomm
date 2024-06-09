@@ -6,12 +6,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Modules\Attribute\Http\Requests\Api\SearchRequest;
+use Modules\Attribute\Http\Requests\Store;
+use Modules\Attribute\Http\Requests\Update;
 use Modules\Attribute\Resource\AttributeResource;
 use Modules\Attribute\Service\AttributeService;
-use Modules\Brand\Http\Requests\Api\Update;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Traits\ApiResponses;
-use Modules\Coupon\Http\Requests\Api\Store;
 use ReflectionException;
 
 class AttributeController extends Controller

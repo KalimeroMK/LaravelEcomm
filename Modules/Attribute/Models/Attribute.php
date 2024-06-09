@@ -29,11 +29,6 @@ class Attribute extends Core
 {
     protected $table = 'attributes';
 
-    protected $casts = [
-        'filterable' => 'bool',
-        'configurable' => 'bool'
-    ];
-
     protected $fillable = [
         'name',
         'code',

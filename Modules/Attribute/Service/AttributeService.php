@@ -12,12 +12,13 @@ class AttributeService extends CoreService
     public function __construct(AttributeRepository $attributeRepository)
     {
         parent::__construct($attributeRepository);
+        $this->attribute_repository = $attributeRepository;
     }
 
     /**
      * Search for attributes based on given criteria.
      *
-     * @param  array<string, mixed>  $data  The search criteria.
+     * @param array<string, mixed> $data The search criteria.
      * @return mixed
      */
     public function search(array $data): mixed
