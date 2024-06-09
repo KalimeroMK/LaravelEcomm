@@ -19,7 +19,9 @@ class BrandResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'photo' => $this->photo,
+            'images' => $this->getMedia('brand')->map(function ($media) {
+                return $media->getUrl();
+            }),
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

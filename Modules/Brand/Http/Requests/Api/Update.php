@@ -13,6 +13,8 @@ class Update extends CoreRequest
     {
         return [
             'title' => 'string|required|unique:brands',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

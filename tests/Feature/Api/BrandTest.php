@@ -12,12 +12,12 @@ use Tests\TestCase;
 
 class BrandTest extends TestCase
 {
-    
+
     public string $url = '/api/v1/brand/';
-    
+
     use BaseTestTrait;
     use WithoutMiddleware;
-    
+
     /**
      * test create product.
      *
@@ -26,16 +26,16 @@ class BrandTest extends TestCase
     public function test_create_brand(): TestResponse
     {
         Storage::fake('uploads');
-        
+
         $data = [
-            'title'  => time() . 'Test title',
-            'photo'  => UploadedFile::fake()->image('file.png', 600, 600),
+            'title' => time() . 'Test title',
+            'images' => [UploadedFile::fake()->image('updated_file.png', 600, 600)],
             'status' => 'inactive',
         ];
-        
+
         return $this->create($this->url, $data);
     }
-    
+
     /**
      * test update product.
      *
@@ -44,16 +44,16 @@ class BrandTest extends TestCase
     public function test_update_brand(): TestResponse
     {
         $data = [
-            'title'       => time() . 'Test title1',
+            'title' => time() . 'Test title1',
             'description' => time() . 'test-description',
-            'status'      => 'inactive',
+            'status' => 'inactive',
         ];
-        
+
         $id = Brand::firstOrFail()->id;
-        
+
         return $this->update($this->url, $data, $id);
     }
-    
+
     /**
      * test find product.
      *
@@ -62,10 +62,10 @@ class BrandTest extends TestCase
     public function test_find_brand(): TestResponse
     {
         $id = Brand::firstOrFail()->id;
-        
+
         return $this->show($this->url, $id);
     }
-    
+
     /**
      * test get all products.
      *
@@ -75,7 +75,7 @@ class BrandTest extends TestCase
     {
         return $this->list($this->url);
     }
-    
+
     /**
      * test delete products.
      *
@@ -84,15 +84,15 @@ class BrandTest extends TestCase
     public function test_delete_brand(): TestResponse
     {
         $id = Brand::firstOrFail()->id;
-        
+
         return $this->destroy($this->url, $id);
     }
-    
+
     public function test_structure()
     {
         $response = $this->json('GET', '/api/v1/brand/');
         $response->assertStatus(200);
-        
+
         $response->assertJsonStructure(
             [
                 'data' => [
@@ -100,15 +100,15 @@ class BrandTest extends TestCase
                         'id',
                         'title',
                         'slug',
-                        'photo',
+                        'images',
                         'status',
                         'created_at',
                         'updated_at',
                     ],
                 ],
-            
+
             ]
         );
     }
-    
+
 }

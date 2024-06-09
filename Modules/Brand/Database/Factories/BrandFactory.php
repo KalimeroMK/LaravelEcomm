@@ -19,7 +19,6 @@ class BrandFactory extends Factory
             'title' => $this->faker->unique(true)->title,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'photo' => $this->faker->imageUrl(640, 480),
         ];
     }
 }

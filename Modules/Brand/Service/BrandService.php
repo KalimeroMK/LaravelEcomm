@@ -22,33 +22,61 @@ class BrandService extends CoreService
     /**
      * Store a new attribute.
      *
-     * @param  array<string, mixed>  $data  The data to create the attribute.
+     * @param array<string, mixed> $data The data to create the attribute.
      * @return Model|null
      */
-    public function store(array $data): ?Model
+    /**
+     * Create a new banner with possible media files.
+     *
+     * @param array<string, mixed> $data The data for creating the banner.
+     * @return Model The newly created banner model.
+     */
+    public function create(array $data): Model
     {
-        $processedData = collect($data)->except(['photo'])->toArray() + [
-                'photo' => $this->verifyAndStoreImage($data['photo'] ?? null),
-            ];
-        return $this->brand_repository->create($processedData);
+        $brand = $this->brand_repository->create($data);
+
+        // Handle image uploads
+        if (request()->hasFile('images')) {
+            $brand->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('brand');
+                });
+        }
+
+        return $brand;
     }
 
     /**
-     * Update an existing attribute.
+     * Update an existing banner with new data and possibly new media files.
      *
-     * @param  int  $id  The attribute ID to update.
-     * @param  array<string, mixed>  $data  The data for updating the attribute.
-     * @return Model
+     * @param int $id The banner ID to update.
+     * @param array<string, mixed> $data The data for updating the banner.
+     * @return Model The updated banner model.
      */
     public function update(int $id, array $data): Model
     {
-        if (!empty($data['photo'])) {
-            $processedData = collect($data)->except(['photo'])->toArray() + [
-                    'photo' => $this->verifyAndStoreImage($data['photo']),
-                ];
-            return $this->brand_repository->update($id, $processedData);
+        $brand = $this->brand_repository->findById($id);
+
+        $brand->update($data);
+
+        // Check for new image uploads and handle them
+        if (request()->hasFile('images')) {
+            $brand->clearMediaCollection('brand'); // Optionally clear existing media
+            $brand->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('brand');
+                });
         }
 
-        return $this->brand_repository->update($id, $data);
+        return $brand;
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function search(array $data): mixed
+    {
+        return $this->brand_repository->search($data);
     }
 }

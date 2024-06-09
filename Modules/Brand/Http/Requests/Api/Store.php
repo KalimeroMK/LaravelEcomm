@@ -13,7 +13,8 @@ class Store extends CoreRequest
     {
         return [
             'title' => 'string|required|unique:brands',
-            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

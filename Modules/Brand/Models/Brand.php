@@ -19,6 +19,8 @@ use Laravel\Scout\Searchable;
 use Modules\Brand\Database\Factories\BrandFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Class Brand
@@ -45,9 +47,10 @@ use Modules\Product\Models\Product;
  * @property string $photo
  * @method static Builder|Brand wherePhoto($value)
  */
-class Brand extends Core implements Explored, IndexSettings, Aliased
+class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
 {
     use Searchable;
+    use InteractsWithMedia;
 
     protected $table = 'brands';
 
@@ -69,7 +72,7 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
     /**
      * Retrieves a Brand model with associated products based on a given slug.
      *
-     * @param  string  $slug  The slug used to find a specific brand.
+     * @param string $slug The slug used to find a specific brand.
      * @return Model|Builder|null
      */
     public static function getProductByBrand(string $slug): Model|Builder|null
@@ -87,7 +90,7 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return string
      */
@@ -96,7 +99,7 @@ class Brand extends Core implements Explored, IndexSettings, Aliased
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count++;
         }
 
         return $slug;
