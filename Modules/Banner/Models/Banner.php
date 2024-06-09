@@ -11,6 +11,8 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Banner\Database\Factories\BannerFactory;
 use Modules\Core\Models\Core;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Class Banner
@@ -37,14 +39,15 @@ use Modules\Core\Models\Core;
  * @method static Builder|Banner whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Banner extends Core
+class Banner extends Core implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $table = 'banners';
 
     protected $fillable = [
         'title',
         'slug',
-        'photo',
         'description',
         'status',
     ];
@@ -58,7 +61,7 @@ class Banner extends Core
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return string
      */
@@ -67,7 +70,7 @@ class Banner extends Core
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count++;
         }
 
         return $slug;

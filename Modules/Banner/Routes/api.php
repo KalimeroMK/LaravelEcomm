@@ -14,13 +14,5 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Banner\Http\Controllers\Api\BannerController;
 
-Route::apiResource('banner', BannerController::class)
-    ->except('update')
-    ->names([
-        'index' => 'api.banner.index',
-        'store' => 'api.banner.store',
-        'show' => 'api.banner.show',
-        'destroy' => 'api.banner.destroy',
-        'create' => 'api.banner.create'
-    ]);
-Route::post('banner/{id}', [BannerController::class, 'update'])->name('api.banner.update');
+Route::apiResource('banners', BannerController::class)
+    ->names('api.banner.index');

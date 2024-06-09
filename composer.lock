@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2696a55edd6c08e44a32e2a6ed8cafb6",
+    "content-hash": "eb9f2f4fd9bf0cb1b80bfb720de7115d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2029,16 +2029,16 @@
         },
         {
             "name": "jaybizzle/crawler-detect",
-            "version": "v1.2.118",
+            "version": "v1.2.119",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JayBizzle/Crawler-Detect.git",
-                "reference": "9b8912ac5b78b780a0ead552b4c3dc9ddfdea4fd"
+                "reference": "275002e22b0333c15a7c6792fdae5d5deefc9ef0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JayBizzle/Crawler-Detect/zipball/9b8912ac5b78b780a0ead552b4c3dc9ddfdea4fd",
-                "reference": "9b8912ac5b78b780a0ead552b4c3dc9ddfdea4fd",
+                "url": "https://api.github.com/repos/JayBizzle/Crawler-Detect/zipball/275002e22b0333c15a7c6792fdae5d5deefc9ef0",
+                "reference": "275002e22b0333c15a7c6792fdae5d5deefc9ef0",
                 "shasum": ""
             },
             "require": {
@@ -2075,9 +2075,9 @@
             ],
             "support": {
                 "issues": "https://github.com/JayBizzle/Crawler-Detect/issues",
-                "source": "https://github.com/JayBizzle/Crawler-Detect/tree/v1.2.118"
+                "source": "https://github.com/JayBizzle/Crawler-Detect/tree/v1.2.119"
             },
-            "time": "2024-04-23T17:07:05+00:00"
+            "time": "2024-06-07T07:58:43+00:00"
         },
         {
             "name": "jaybizzle/laravel-crawler-detect",
@@ -11289,16 +11289,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.9.2",
+            "version": "4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "256d42cb07ba1c2206d66bc7516ee3d3e3e9f0b2"
+                "reference": "2d983ce67b9eb7e18403ae7bc5e765f8ce7b8d56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/256d42cb07ba1c2206d66bc7516ee3d3e3e9f0b2",
-                "reference": "256d42cb07ba1c2206d66bc7516ee3d3e3e9f0b2",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/2d983ce67b9eb7e18403ae7bc5e765f8ce7b8d56",
+                "reference": "2d983ce67b9eb7e18403ae7bc5e765f8ce7b8d56",
                 "shasum": ""
             },
             "require": {
@@ -11364,9 +11364,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.9.2"
+                "source": "https://github.com/zircote/swagger-php/tree/4.10.0"
             },
-            "time": "2024-05-02T21:36:00+00:00"
+            "time": "2024-06-06T22:42:02+00:00"
         }
     ],
     "packages-dev": [
@@ -12623,109 +12623,6 @@
             "time": "2024-03-06T16:20:09+00:00"
         },
         {
-            "name": "nunomaduro/larastan",
-            "version": "v2.9.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/larastan/larastan.git",
-                "reference": "5c805f636095cc2e0b659e3954775cf8f1dad1bb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/5c805f636095cc2e0b659e3954775cf8f1dad1bb",
-                "reference": "5c805f636095cc2e0b659e3954775cf8f1dad1bb",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "illuminate/console": "^9.52.16 || ^10.28.0 || ^11.0",
-                "illuminate/container": "^9.52.16 || ^10.28.0 || ^11.0",
-                "illuminate/contracts": "^9.52.16 || ^10.28.0 || ^11.0",
-                "illuminate/database": "^9.52.16 || ^10.28.0 || ^11.0",
-                "illuminate/http": "^9.52.16 || ^10.28.0 || ^11.0",
-                "illuminate/pipeline": "^9.52.16 || ^10.28.0 || ^11.0",
-                "illuminate/support": "^9.52.16 || ^10.28.0 || ^11.0",
-                "php": "^8.0.2",
-                "phpmyadmin/sql-parser": "^5.9.0",
-                "phpstan/phpstan": "^1.11.1"
-            },
-            "require-dev": {
-                "doctrine/coding-standard": "^12.0",
-                "nikic/php-parser": "^4.19.1",
-                "orchestra/canvas": "^7.11.1 || ^8.11.0 || ^9.0.2",
-                "orchestra/testbench": "^7.33.0 || ^8.13.0 || ^9.0.3",
-                "phpunit/phpunit": "^9.6.13 || ^10.5.16"
-            },
-            "suggest": {
-                "orchestra/testbench": "Using Larastan for analysing a package needs Testbench"
-            },
-            "type": "phpstan-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                },
-                "phpstan": {
-                    "includes": [
-                        "extension.neon"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Larastan\\Larastan\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Can Vural",
-                    "email": "can9119@gmail.com"
-                },
-                {
-                    "name": "Nuno Maduro",
-                    "email": "enunomaduro@gmail.com"
-                }
-            ],
-            "description": "Larastan - Discover bugs in your code without running it. A phpstan/phpstan wrapper for Laravel",
-            "keywords": [
-                "PHPStan",
-                "code analyse",
-                "code analysis",
-                "larastan",
-                "laravel",
-                "package",
-                "php",
-                "static analysis"
-            ],
-            "support": {
-                "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/v2.9.7"
-            },
-            "funding": [
-                {
-                    "url": "https://www.paypal.com/paypalme/enunomaduro",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/canvural",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/nunomaduro",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/nunomaduro",
-                    "type": "patreon"
-                }
-            ],
-            "abandoned": "larastan/larastan",
-            "time": "2024-05-27T18:33:26+00:00"
-        },
-        {
             "name": "phar-io/manifest",
             "version": "2.0.4",
             "source": {
@@ -13091,16 +12988,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.11.3",
+            "version": "1.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e64220a05c1209fc856d58e789c3b7a32c0bb9a5"
+                "reference": "9100a76ce8015b9aa7125b9171ae3a76887b6c82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e64220a05c1209fc856d58e789c3b7a32c0bb9a5",
-                "reference": "e64220a05c1209fc856d58e789c3b7a32c0bb9a5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9100a76ce8015b9aa7125b9171ae3a76887b6c82",
+                "reference": "9100a76ce8015b9aa7125b9171ae3a76887b6c82",
                 "shasum": ""
             },
             "require": {
@@ -13145,7 +13042,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-31T13:53:37+00:00"
+            "time": "2024-06-06T12:19:22+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -13571,16 +13468,16 @@
         },
         {
             "name": "reliese/laravel",
-            "version": "v1.3.1",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reliese/laravel.git",
-                "reference": "7f8f3770512ffcc6bbce257d0e529dbc22ca52db"
+                "reference": "c286d2815987fa627a26cce3d2f1f04dd031c626"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reliese/laravel/zipball/7f8f3770512ffcc6bbce257d0e529dbc22ca52db",
-                "reference": "7f8f3770512ffcc6bbce257d0e529dbc22ca52db",
+                "url": "https://api.github.com/repos/reliese/laravel/zipball/c286d2815987fa627a26cce3d2f1f04dd031c626",
+                "reference": "c286d2815987fa627a26cce3d2f1f04dd031c626",
                 "shasum": ""
             },
             "require": {
@@ -13630,7 +13527,7 @@
                 "issues": "https://github.com/reliese/laravel/issues",
                 "source": "https://github.com/reliese/laravel"
             },
-            "time": "2024-05-10T11:56:37+00:00"
+            "time": "2024-06-06T14:27:32+00:00"
         },
         {
             "name": "sebastian/cli-parser",

@@ -46,7 +46,7 @@ class AttributeController extends Controller
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->store($request->validated())));
+            ->respond(new AttributeResource($this->attribute_service->create($request->validated())));
     }
 
     /**
@@ -65,7 +65,7 @@ class AttributeController extends Controller
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->show($id)));
+            ->respond(new AttributeResource($this->attribute_service->findById($id)));
     }
 
     /**
@@ -92,7 +92,7 @@ class AttributeController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->attribute_service->destroy($id);
+        $this->attribute_service->delete($id);
         return $this
             ->setMessage(
                 __(

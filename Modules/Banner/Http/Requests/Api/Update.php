@@ -16,7 +16,8 @@ class Update extends CoreRequest
         return [
             'title' => 'string|required|max:50',
             'description' => 'string|nullable',
-            'photo' => 'sometimes|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:active,inactive',
         ];
     }

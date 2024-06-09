@@ -17,7 +17,6 @@ class BannerFactory extends Factory
     {
         return [
             'title' => $this->faker->unique()->word,
-            'photo' => $this->faker->word,
             'description' => $this->faker->text,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
