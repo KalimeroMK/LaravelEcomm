@@ -9,7 +9,7 @@
         </div>
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">@lang('partials.list')</h6>
-            <a href="{{route('category.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+            <a href="{{route('categories.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
                data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>@lang('partials.create')</a>
         </div>
         <div class="card-body">
@@ -49,11 +49,11 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('category.edit',$category['id'])}}"
+                                    <a href="{{route('categories.edit',$category['id'])}}"
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('category.destroy',[$category['id']])}}">
+                                    <form method="POST" action="{{route('categories.destroy',[$category['id']])}}">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"

@@ -14,7 +14,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\AdminController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
+Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
     Route::get('/messages/five', [AdminController::class, 'messageFive'])->name('messages.five');
 });

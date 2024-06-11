@@ -14,4 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Message\Http\Controllers\MessageController;
 
-Route::resource('message', MessageController::class)->only('index', 'show', 'destroy');
+Route::resource('messages', MessageController::class)->only('index', 'show', 'destroy');
