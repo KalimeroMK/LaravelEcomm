@@ -8,7 +8,6 @@ use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Message\Http\Requests\Api\Store;
 use Modules\Message\Http\Resources\MessageResource;
-use Modules\Message\Models\Message;
 use Modules\Message\Service\MessageService;
 use ReflectionException;
 
@@ -20,7 +19,6 @@ class MessageController extends CoreController
     public function __construct(MessageService $message_service)
     {
         $this->message_service = $message_service;
-        $this->authorizeResource(Message::class);
     }
 
     /**
@@ -47,11 +45,11 @@ class MessageController extends CoreController
                     ]
                 )
             )
-            ->respond(new MessageResource($this->message_service->store($request->validated())));
+            ->respond(new MessageResource($this->message_service->create($request->validated())));
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
@@ -72,32 +70,10 @@ class MessageController extends CoreController
             ->respond(new MessageResource($this->message_service->show($id)));
     }
 
-    /**
-     * @param  int  $id
-     *
-     * @return JsonResponse
-     * @throws ReflectionException
-     */
-    public function destroy(int $id)
-    {
-        $this->message_service->destroy($id);
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->message_service->message_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(null);
-    }
 
     /**
-     * @param  Store  $request
-     * @param  int  $id
+     * @param Store $request
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
@@ -117,4 +93,28 @@ class MessageController extends CoreController
             )
             ->respond(new MessageResource($this->message_service->update($id, $request->validated())));
     }
+
+    /**
+     * @param int $id
+     *
+     * @return JsonResponse
+     * @throws ReflectionException
+     */
+    public function destroy(int $id)
+    {
+        $this->message_service->delete($id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->message_service->message_repository->model
+                        ),
+                    ]
+                )
+            )
+            ->respond(null);
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Http\Controllers\Api;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
@@ -46,7 +47,7 @@ class ProductController extends CoreController
                     ]
                 )
             )
-            ->respond(new ProductResource($this->product_service->store($request->validated())));
+            ->respond(new ProductResource($this->product_service->create($request->validated())));
     }
 
     /**
@@ -65,13 +66,14 @@ class ProductController extends CoreController
                     ]
                 )
             )
-            ->respond(new ProductResource($this->product_service->show($product->id)));
+            ->respond(new ProductResource($this->product_service->findById($product->id)));
     }
 
     /**
      * @throws ReflectionException
+     * @throws Exception
      */
-    public function update(Update $request, Product $product): JsonResponse
+    public function update(Update $request, $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -84,15 +86,15 @@ class ProductController extends CoreController
                     ]
                 )
             )
-            ->respond(new ProductResource($this->product_service->update($product->id, $request->validated())));
+            ->respond(new ProductResource($this->product_service->update($id, $request->validated())));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function destroy(Product $product): JsonResponse
+    public function destroy($id): JsonResponse
     {
-        $this->product_service->destroy($product->id);
+        $this->product_service->delete($id);
         return $this
             ->setMessage(
                 __(

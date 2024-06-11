@@ -23,7 +23,6 @@ class NewsletterController extends CoreController
     public function __construct(NewsletterService $newsletter_service)
     {
         $this->newsletter_service = $newsletter_service;
-        $this->authorizeResource(Newsletter::class, 'newsletter');
     }
 
     /**
@@ -50,12 +49,12 @@ class NewsletterController extends CoreController
                     ]
                 )
             )
-            ->respond(new NewsletterResource($this->newsletter_service->store($request->validated())));
+            ->respond(new NewsletterResource($this->newsletter_service->create($request->validated())));
     }
 
 
     /**
-     * @param  Newsletter  $newsletter
+     * @param Newsletter $newsletter
      * @return JsonResponse
      * @throws ReflectionException
      */
@@ -72,12 +71,12 @@ class NewsletterController extends CoreController
                     ]
                 )
             )
-            ->respond(new CouponResource($this->newsletter_service->show($newsletter->id)));
+            ->respond(new CouponResource($this->newsletter_service->findById($newsletter->id)));
     }
 
     /**
-     * @param  Update  $request
-     * @param  Newsletter  $newsletter
+     * @param Update $request
+     * @param Newsletter $newsletter
      * @return JsonResponse
      * @throws ReflectionException
      */
@@ -98,13 +97,13 @@ class NewsletterController extends CoreController
     }
 
     /**
-     * @param  Newsletter  $newsletter
+     * @param Newsletter $newsletter
      * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(Newsletter $newsletter)
     {
-        $this->newsletter_service->destroy($newsletter->id);
+        $this->newsletter_service->delete($newsletter->id);
         return $this
             ->setMessage(
                 __(

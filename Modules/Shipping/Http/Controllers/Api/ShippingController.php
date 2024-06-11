@@ -51,11 +51,11 @@ class ShippingController extends CoreController
                     ]
                 )
             )
-            ->respond(new ShippingResource($this->shipping_service->store($request->validated())));
+            ->respond(new ShippingResource($this->shipping_service->create($request->validated())));
     }
 
     /**
-     * @param  Shipping  $shipping
+     * @param Shipping $shipping
      * @return JsonResponse
      * @throws ReflectionException
      */
@@ -72,12 +72,12 @@ class ShippingController extends CoreController
                     ]
                 )
             )
-            ->respond(new ShippingResource($this->shipping_service->show($shipping->id)));
+            ->respond(new ShippingResource($this->shipping_service->findById($shipping->id)));
     }
 
     /**
-     * @param  Update  $request
-     * @param  Shipping  $shipping
+     * @param Update $request
+     * @param Shipping $shipping
      * @return JsonResponse
      * @throws ReflectionException
      */
@@ -98,13 +98,13 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @param  Shipping  $shipping
+     * @param Shipping $shipping
      * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(Shipping $shipping)
     {
-        $this->shipping_service->destroy($shipping->id);
+        $this->shipping_service->delete($shipping->id);
         return $this
             ->setMessage(
                 __(

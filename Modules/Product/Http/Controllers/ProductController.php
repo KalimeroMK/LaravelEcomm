@@ -82,7 +82,7 @@ class ProductController extends CoreController
 
     public function destroy(Product $product): RedirectResponse
     {
-        $this->product_service->destroy($product->id);
+        $this->product_service->delete($product->id);
         return redirect()->route('product.index');
     }
 

@@ -6,7 +6,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Cart\Http\Requests\Api\Store;
 use Modules\Cart\Http\Resources\CartResource;
-use Modules\Cart\Models\Cart;
 use Modules\Cart\Service\CartService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -19,7 +18,6 @@ class CartController extends CoreController
     public function __construct(CartService $cart_service)
     {
         $this->cart_service = $cart_service;
-        $this->authorizeResource(Cart::class, 'cart');
     }
 
     /**
@@ -31,7 +29,7 @@ class CartController extends CoreController
     }
 
     /**
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return JsonResponse|string
      * @throws ReflectionException
@@ -73,7 +71,7 @@ class CartController extends CoreController
     }
 
     /**
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return JsonResponse
      * @throws ReflectionException
@@ -95,7 +93,7 @@ class CartController extends CoreController
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException

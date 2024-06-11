@@ -5,6 +5,7 @@ namespace Modules\Coupon\Http\Controllers;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Coupon\Http\Requests\Store;
@@ -35,13 +36,13 @@ class CouponController extends CoreController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->coupon_service->store($request->validated());
+        $this->coupon_service->create($request->validated());
 
         return redirect()->route('coupons.index');
     }
@@ -59,23 +60,23 @@ class CouponController extends CoreController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Coupon  $coupon
+     * @param Coupon $coupon
      *
      * @return Application|Factory|View
      */
     public function edit(Coupon $coupon): View|Factory|Application
     {
-        return view('coupon::edit', ['coupon' => $this->coupon_service->edit($coupon->id)]);
+        return view('coupon::edit', ['coupon' => $this->coupon_service->findById($coupon->id)]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Update  $request
-     * @param  Coupon  $coupon
-     * @return RedirectResponse
+     * @param Update $request
+     * @param Coupon $coupon
+     * @return Model
      */
-    public function update(Update $request, Coupon $coupon): RedirectResponse
+    public function update(Update $request, Coupon $coupon): Model
     {
         return $this->coupon_service->update($coupon->id, $request->validated());
     }
@@ -83,13 +84,13 @@ class CouponController extends CoreController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Coupon  $coupon
+     * @param Coupon $coupon
      *
      * @return RedirectResponse
      */
     public function destroy(Coupon $coupon): RedirectResponse
     {
-        $this->coupon_service->destroy($coupon->id);
+        $this->coupon_service->delete($coupon->id);
 
         return redirect()->back();
     }

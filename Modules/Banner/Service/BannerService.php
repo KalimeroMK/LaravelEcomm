@@ -5,11 +5,9 @@ namespace Modules\Banner\Service;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Service\CoreService;
-use Modules\Core\Traits\ImageUpload;
 
 class BannerService extends CoreService
 {
-    use ImageUpload;
 
     public BannerRepository $banner_repository;
 

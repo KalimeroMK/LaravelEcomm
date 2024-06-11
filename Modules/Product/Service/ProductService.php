@@ -3,18 +3,14 @@
 namespace Modules\Product\Service;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
-use Modules\Brand\Models\Brand;
-use Modules\Category\Models\Category;
-use Modules\Core\Helpers\Condition;
 use Modules\Core\Service\CoreService;
 use Modules\Core\Traits\ImageUpload;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
-use Modules\Size\Models\Size;
-use Modules\Tag\Models\Tag;
 
 class ProductService extends CoreService
 {
@@ -31,7 +27,7 @@ class ProductService extends CoreService
     /**
      * Get all products based on given data.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return Collection
      */
     public function search(array $data): Collection
@@ -42,7 +38,7 @@ class ProductService extends CoreService
     /**
      * Store a newly created product.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return Product
      * @throws Exception
      */
@@ -67,42 +63,18 @@ class ProductService extends CoreService
         return $product;
     }
 
-    /**
-     * Get the data for editing a product.
-     *
-     * @param  int  $id
-     * @return array<string, mixed>
-     */
-    public function edit(int $id): array
-    {
-        return [
-            'brands' => Brand::get(),
-            'categories' => Category::all(),
-            'product' => $this->product_repository->findById($id),
-            'sizes' => Size::get(),
-            'conditions' => Condition::get(),
-            'tags' => Tag::get(),
-            'attributes' => Attribute::all()
-        ];
-    }
 
     /**
      * Update an existing product.
      *
-     * @param  int  $id
-     * @param  array<string, mixed>  $data
-     * @return Product
+     * @param int $id
+     * @param array<string, mixed> $data
+     * @return Model
      * @throws Exception
      */
-    public function update(int $id, array $data): Product
+    public function update(int $id, array $data): Model
     {
         $this->handleColor($data);
-
-        if (isset($data['photo'])) {
-            $data['photo'] = $this->verifyAndStoreImage($data['photo']);
-        } else {
-            $data['photo'] = Product::find($id)->photo;
-        }
 
         $product = $this->product_repository->update($id, $data);
 
@@ -124,20 +96,9 @@ class ProductService extends CoreService
     }
 
     /**
-     * Delete a product.
-     *
-     * @param  int  $id
-     * @return void
-     */
-    public function destroy(int $id): void
-    {
-        $this->product_repository->delete($id);
-    }
-
-    /**
      * Handle the color data for the product.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return void
      */
     private function handleColor(array &$data): void
@@ -149,22 +110,12 @@ class ProductService extends CoreService
         }
     }
 
-    /**
-     * Show a specific product.
-     *
-     * @param  int  $id
-     * @return mixed
-     */
-    public function show(int $id): mixed
-    {
-        return $this->product_repository->findById($id);
-    }
 
     /**
      * Sync attributes for the product.
      *
-     * @param  Product  $product
-     * @param  array<string, mixed>  $attributeData
+     * @param Product $product
+     * @param array<string, mixed> $attributeData
      * @return void
      * @throws Exception
      */

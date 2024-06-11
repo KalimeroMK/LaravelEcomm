@@ -112,16 +112,18 @@ class BannerController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-
         $this->banner_service->delete($id);
-
-        $resourceName = Helper::getResourceName(
-            $this->banner_service->banner_repository->model
-        );
-
-        $message = __('apiResponse.deleteSuccess', ['resource' => $resourceName]);
-
-        // Assuming you have a method to set response message and status
-        return $this->setMessage($message)->respond(null);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->banner_service->banner_repository->model
+                        ),
+                    ]
+                )
+            )
+            ->respond(null);
     }
 }

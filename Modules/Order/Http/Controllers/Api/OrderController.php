@@ -23,11 +23,10 @@ class OrderController extends CoreController
     public function __construct(OrderService $order_service)
     {
         $this->order_service = $order_service;
-        $this->authorizeResource(Order::class, 'order');
     }
 
     /**
-     * @param  Search  $request
+     * @param Search $request
      *
      * @return ResourceCollection
      */
@@ -58,11 +57,11 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param  Order  $order
+     * @param Order $order
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function show(Order $order)
+    public function show($id)
     {
         return $this
             ->setMessage(
@@ -75,7 +74,7 @@ class OrderController extends CoreController
                     ]
                 )
             )
-            ->respond(new OrderResource($this->order_service->show($order->id)));
+            ->respond(new OrderResource($this->order_service->findById($id)));
     }
 
 
@@ -99,13 +98,13 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param  Order  $order
+     * @param $id
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy(Order $order)
+    public function destroy($id)
     {
-        $this->order_service->destroy($order->id);
+        $this->order_service->delete($id);
         return $this
             ->setMessage(
                 __(

@@ -28,24 +28,24 @@ class  NotificationController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function show(Request $request)
     {
-        $notification = $this->notification_service->getById($request->id);
+        $notification = $this->notification_service->findById($request->id);
 
         return view('notification::', compact('notification'));
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return RedirectResponse
      */
     public function destroy(int $id): RedirectResponse
     {
-        $this->notification_service->destroy($id);
+        $this->notification_service->delete($id);
 
         return redirect()->back();
     }

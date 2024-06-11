@@ -46,7 +46,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return RedirectResponse
      * @throws FileDoesNotExist
@@ -54,12 +54,7 @@ class PostController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $post = $this->post_service->store($request->validated());
-        if (request()->hasFile('images')) {
-            $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('post');
-            });
-        }
+        $post = $this->post_service->create($request->validated());
         return redirect()->route('posts.index');
     }
 
@@ -81,7 +76,7 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Post  $post
+     * @param Post $post
      *
      * @return Application|Factory|View
      */
@@ -90,35 +85,28 @@ class PostController extends Controller
         $categories = Category::all();
         $tags = Tag::all();
         $users = User::all();
-        $post = $this->post_service->edit($post->id);
+        $post = $this->post_service->findById($post->id);
         return view('post::edit', compact('categories', 'tags', 'users', 'post'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Update  $request
-     * @param  Post  $post
+     * @param Update $request
+     * @param Post $post
      *
      * @return RedirectResponse
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
         $this->post_service->update($post->id, $request->validated());
-        if (request()->hasFile('images')) {
-            $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('post');
-            });
-        }
         return redirect()->route('posts.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Post  $post
+     * @param Post $post
      *
      * @return RedirectResponse
      */
@@ -126,7 +114,7 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post);
 
-        $this->post_service->destroy($post->id);
+        $this->post_service->delete($post->id);
 
         return redirect()->back();
     }
@@ -152,7 +140,7 @@ class PostController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return void
      */

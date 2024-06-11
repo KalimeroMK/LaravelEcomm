@@ -46,7 +46,7 @@ class CategoryController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->category_service->store($request->validated());
+        $this->category_service->create($request->validated());
 
         return redirect()->route('category.index');
     }
@@ -54,7 +54,7 @@ class CategoryController extends CoreController
     public function edit(Category $category): View
     {
         return view('category::edit', [
-            'category' => $this->category_service->edit($category->id),
+            'category' => $this->category_service->findById($category->id),
             'categories' => Category::getTree()
         ]);
     }
@@ -68,7 +68,7 @@ class CategoryController extends CoreController
 
     public function destroy(Category $category): RedirectResponse
     {
-        $this->category_service->destroy($category->id);
+        $this->category_service->delete($category->id);
 
         return redirect()->route('categories.index')->with('flash_message', 'Category successfully deleted!');
     }

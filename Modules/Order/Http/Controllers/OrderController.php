@@ -64,12 +64,12 @@ class OrderController extends CoreController
 
     public function edit(Order $order): View
     {
-        return view('order::edit', ['order' => $this->order_service->edit($order->id)]);
+        return view('order::edit', ['order' => $this->order_service->findById($order->id)]);
     }
 
     public function destroy(Order $order): RedirectResponse
     {
-        $this->order_service->destroy($order->id);
+        $this->order_service->delete($order->id);
 
         return redirect()->back();
     }
@@ -77,14 +77,14 @@ class OrderController extends CoreController
     /**
      * Generate PDF for a given order ID.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function pdf(int $id): Response
     {
         $order = Order::findOrFail($id);  // Ensure we get a single order or fail
 
-        $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
+        $file_name = $order->order_number . '-' . $order->first_name . '.pdf';
         $pdf = PDF::loadview('order::pdf', compact('order'));
 
         return $pdf->download($file_name);
@@ -118,7 +118,7 @@ class OrderController extends CoreController
         $data = [];
         for ($i = 1; $i <= 12; $i++) {
             $monthName = date('F', mktime(0, 0, 0, $i, 1));
-            $data[$monthName] = !empty($result[$i]) ? number_format((float) $result[$i], 2, '.', '') : 0.0;
+            $data[$monthName] = !empty($result[$i]) ? number_format((float)$result[$i], 2, '.', '') : 0.0;
         }
 
         return $data;

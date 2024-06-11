@@ -20,7 +20,6 @@ class CouponController extends CoreController
     public function __construct(CouponService $coupon_service)
     {
         $this->coupon_service = $coupon_service;
-        $this->authorizeResource(Coupon::class, 'coupon');
     }
 
     /**
@@ -32,7 +31,7 @@ class CouponController extends CoreController
     }
 
     /**
-     * @param  Store  $request
+     * @param Store $request
      * @return JsonResponse
      * @throws ReflectionException
      */
@@ -49,11 +48,11 @@ class CouponController extends CoreController
                     ]
                 )
             )
-            ->respond(new CouponResource($this->coupon_service->store($request->validated())));
+            ->respond(new CouponResource($this->coupon_service->create($request->validated())));
     }
 
     /**
-     * @param  Coupon  $coupon
+     * @param Coupon $coupon
      * @return JsonResponse
      * @throws ReflectionException
      * q*/
@@ -70,12 +69,12 @@ class CouponController extends CoreController
                     ]
                 )
             )
-            ->respond(new CouponResource($this->coupon_service->show($coupon->id)));
+            ->respond(new CouponResource($this->coupon_service->findById($coupon->id)));
     }
 
     /**
-     * @param  Update  $request
-     * @param  int  $id
+     * @param Update $request
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
@@ -101,7 +100,7 @@ class CouponController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->coupon_service->destroy($id);
+        $this->coupon_service->delete($id);
         return $this
             ->setMessage(
                 __(

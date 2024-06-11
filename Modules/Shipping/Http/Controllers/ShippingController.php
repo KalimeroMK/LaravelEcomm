@@ -29,7 +29,7 @@ class ShippingController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->shipping_service->store($request->validated());
+        $this->shipping_service->create($request->validated());
         return redirect()->route('shippings.index');
     }
 
@@ -40,7 +40,7 @@ class ShippingController extends CoreController
 
     public function edit(Shipping $shipping): Application|Factory|View
     {
-        return view('shipping::edit')->with(['shipping' => $this->shipping_service->edit($shipping->id)]);
+        return view('shipping::edit')->with(['shipping' => $this->shipping_service->findById($shipping->id)]);
     }
 
     public function update(Update $request, Shipping $shipping): RedirectResponse
@@ -51,7 +51,7 @@ class ShippingController extends CoreController
 
     public function destroy(Shipping $shipping): RedirectResponse
     {
-        $this->shipping_service->destroy($shipping->id);
+        $this->shipping_service->delete($shipping->id);
         return redirect()->back();
     }
 }

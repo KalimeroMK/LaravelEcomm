@@ -22,7 +22,6 @@ class CategoryController extends CoreController
     public function __construct(CategoryService $category_service)
     {
         $this->category_service = $category_service;
-        $this->authorizeResource(Category::class, 'category');
     }
 
     public function index(): ResourceCollection
@@ -46,7 +45,7 @@ class CategoryController extends CoreController
                     ]
                 )
             )
-            ->respond(new CategoryResource($this->category_service->store($request->validated())));
+            ->respond(new CategoryResource($this->category_service->create($request->validated())));
     }
 
     /**
@@ -65,7 +64,7 @@ class CategoryController extends CoreController
                     ]
                 )
             )
-            ->respond(new CategoryResource($this->category_service->show($category->id)));
+            ->respond(new CategoryResource($this->category_service->findById($category->id)));
     }
 
     /**
@@ -88,21 +87,24 @@ class CategoryController extends CoreController
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
-        $this->category_service->destroy($id);
-
-        $resourceName = Helper::getResourceName(
-            $this->category_service->categoryRepository->model
-        );
-
-        $message = __('apiResponse.deleteSuccess', ['resource' => $resourceName]);
-
-        // Assuming you have a method to set response message and status
-        return $this->setMessage($message)->respond(null);
+        $this->category_service->delete($id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->category_service->categoryRepository->model
+                        ),
+                    ]
+                )
+            )
+            ->respond(null);
     }
 }

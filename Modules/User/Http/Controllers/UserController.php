@@ -8,10 +8,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\User\Http\Requests\StoreRequest;
 use Modules\User\Http\Requests\UpdateRequest;
 use Modules\User\Models\User;
 use Modules\User\Service\UserService;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -32,21 +34,26 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return view('user::index', ['users' => $this->user_service->index()])->with('i',
+        if (Auth::user()->isSuperAdmin()) {
+            $users = $this->user_service->getAll();
+        } else {
+            $users = $this->user_service->findById(Auth::id());
+        }
+        return view('user::index', ['users' => $users])->with('i',
             ($request->input('page', 1) - 1) * 5);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StoreRequest  $request
+     * @param StoreRequest $request
      *
      * @return RedirectResponse
      */
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $this->user_service->store($request->validated());
+        $this->user_service->create($request->validated());
 
         return redirect()->route('users.index')->with('success', 'User created successfully');
     }
@@ -56,45 +63,52 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user::create')->with($this->user_service->create());
+        return view('user::create', compact([
+            'user' => new User(),
+            'roles' => Role::all(),
+        ]));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  User  $user
+     * @param User $user
      * @return Application|Factory|View
      */
 
     public function show(User $user)
     {
-        return view('user::edit', ['user' => $this->user_service->show($user->id)]);
+        return view('user::edit', ['user' => $this->user_service->findById($user->id)]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  User  $user
+     * @param User $user
      * @return Application|Factory|View
      */
 
     public function edit(User $user)
     {
-        return view('user::edit')->with($this->user_service->edit($user->id));
+        return view('user::edit', compact([
+            'user' => $user,
+            'roles' => Role::all(),
+            'userRole' => User::find($user->id)->roles->pluck('name', 'name')->all(),
+        ]));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateRequest  $request
-     * @param  int  $id
+     * @param UpdateRequest $request
+     * @param int $id
      *
      * @return RedirectResponse
      */
 
     public function update(UpdateRequest $request, int $id): RedirectResponse
     {
-        $this->user_service->update($request, $id);
+        $this->user_service->update($id, $request->validated());
 
         return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
@@ -102,14 +116,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  User  $user
+     * @param User $user
      *
      * @return RedirectResponse
      */
 
     public function destroy(User $user): RedirectResponse
     {
-        $this->user_service->destroy($user->id);
+        $this->user_service->delete($user->id);
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
@@ -123,7 +137,7 @@ class UserController extends Controller
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      *
      * @return RedirectResponse
      */
@@ -157,8 +171,8 @@ class UserController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     * @param  User  $user
+     * @param Request $request
+     * @param User $user
      * @return RedirectResponse
      */
     public function profileUpdate(Request $request, User $user)

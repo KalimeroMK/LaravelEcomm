@@ -152,7 +152,7 @@ class CartService
     /**
      * Delete an attribute.
      *
-     * @param  int  $id  The attribute ID.
+     * @param int $id The attribute ID.
      */
 
     public function destroy(int $id): void
