@@ -12,8 +12,7 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|nullable',
-            'parent_id' => 'nullable|exists:categories,id',
+            'title' => 'string|unique:categories,title,' . $this->route('category'),
         ];
     }
 }

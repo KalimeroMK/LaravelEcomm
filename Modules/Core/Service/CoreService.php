@@ -31,7 +31,7 @@ abstract class CoreService
     /**
      * Retrieve a single entity by its ID.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Model|null
      */
     public function findById(int $id): ?Model
@@ -42,7 +42,7 @@ abstract class CoreService
     /**
      * Create a new record.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Model
      */
     public function create(array $data): Model
@@ -53,8 +53,8 @@ abstract class CoreService
     /**
      * Update an existing record.
      *
-     * @param  int  $id
-     * @param  array  $data
+     * @param int $id
+     * @param array $data
      * @return Model
      */
     public function update(int $id, array $data): Model
@@ -65,7 +65,7 @@ abstract class CoreService
     /**
      * Delete a record by its ID.
      *
-     * @param  int  $id
+     * @param int $id
      * @return void
      */
     public function delete(int $id): void

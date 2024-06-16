@@ -5,7 +5,6 @@ namespace Modules\Coupon\Http\Controllers;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Coupon\Http\Requests\Store;
@@ -74,11 +73,13 @@ class CouponController extends CoreController
      *
      * @param Update $request
      * @param Coupon $coupon
-     * @return Model
+     * @return RedirectResponse
      */
-    public function update(Update $request, Coupon $coupon): Model
+    public function update(Update $request, Coupon $coupon): RedirectResponse
     {
-        return $this->coupon_service->update($coupon->id, $request->validated());
+        $this->coupon_service->update($coupon->id, $request->validated());
+        return redirect()->route('coupon.index');
+
     }
 
     /**

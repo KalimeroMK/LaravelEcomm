@@ -9,7 +9,6 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
-use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Service\CouponService;
 use ReflectionException;
 
@@ -52,11 +51,11 @@ class CouponController extends CoreController
     }
 
     /**
-     * @param Coupon $coupon
+     * @param int $id
      * @return JsonResponse
-     * @throws ReflectionException
-     * q*/
-    public function show(Coupon $coupon)
+     * @throws ReflectionException q
+     */
+    public function show(int $id)
     {
         return $this
             ->setMessage(
@@ -69,7 +68,7 @@ class CouponController extends CoreController
                     ]
                 )
             )
-            ->respond(new CouponResource($this->coupon_service->findById($coupon->id)));
+            ->respond(new CouponResource($this->coupon_service->findById($id)));
     }
 
     /**

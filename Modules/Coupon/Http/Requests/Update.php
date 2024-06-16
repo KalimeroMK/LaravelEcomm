@@ -12,7 +12,7 @@ class Update extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'string|required|unique:coupons',
+            'code' => 'string|required|unique:coupons,code,' . $this->coupon->id,
             'type' => 'required|in:fixed,percent',
             'value' => 'required|numeric',
             'status' => 'required|in:active,inactive',

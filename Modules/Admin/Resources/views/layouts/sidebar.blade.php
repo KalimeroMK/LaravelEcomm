@@ -73,8 +73,8 @@
         <div id="attributeCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">@lang('sidebar.attribute_options'):</h6>
-                <a class="collapse-item" href="{{route('attribute.index')}}">@lang('sidebar.attributes')</a>
-                <a class="collapse-item" href="{{route('attribute.create')}}">@lang('sidebar.add_attribute')</a>
+                <a class="collapse-item" href="{{route('attributes.index')}}">@lang('sidebar.attributes')</a>
+                <a class="collapse-item" href="{{route('attributes.create')}}">@lang('sidebar.add_attribute')</a>
             </div>
         </div>
     </li>

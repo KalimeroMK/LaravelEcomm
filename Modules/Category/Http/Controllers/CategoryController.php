@@ -48,7 +48,7 @@ class CategoryController extends CoreController
     {
         $this->category_service->create($request->validated());
 
-        return redirect()->route('category.index');
+        return redirect()->route('categories.index');
     }
 
     public function edit(Category $category): View
@@ -63,7 +63,7 @@ class CategoryController extends CoreController
     {
         $this->category_service->update($category->id, $request->all());
 
-        return redirect()->route('category.index');
+        return redirect()->route('categories.index');
     }
 
     public function destroy(Category $category): RedirectResponse

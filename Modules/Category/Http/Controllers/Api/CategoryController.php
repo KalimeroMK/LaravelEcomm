@@ -4,11 +4,9 @@ namespace Modules\Category\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Brand\Http\Resource\BrandResource;
 use Modules\Category\Http\Requests\Api\Store;
 use Modules\Category\Http\Requests\Api\Update;
 use Modules\Category\Http\Resources\CategoryResource;
-use Modules\Category\Models\Category;
 use Modules\Category\Service\CategoryService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -26,7 +24,7 @@ class CategoryController extends CoreController
 
     public function index(): ResourceCollection
     {
-        return BrandResource::collection($this->category_service->getAll());
+        return CategoryResource::collection($this->category_service->getAll());
     }
 
     /**
@@ -51,7 +49,7 @@ class CategoryController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(Category $category): JsonResponse
+    public function show($id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -64,13 +62,13 @@ class CategoryController extends CoreController
                     ]
                 )
             )
-            ->respond(new CategoryResource($this->category_service->findById($category->id)));
+            ->respond(new CategoryResource($this->category_service->findById($id)));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, Category $category): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -83,7 +81,7 @@ class CategoryController extends CoreController
                     ]
                 )
             )
-            ->respond(new CategoryResource($this->category_service->update($category->id, $request->validated())));
+            ->respond(new CategoryResource($this->category_service->update($id, $request->validated())));
     }
 
     /**
