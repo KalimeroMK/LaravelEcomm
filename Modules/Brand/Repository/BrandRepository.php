@@ -7,12 +7,19 @@ use Modules\Core\Repositories\Repository;
 
 class BrandRepository extends Repository
 {
+    /**
+     * The model instance.
+     *
+     * @var string
+     *
+     */
     public $model = Brand::class;
 
     /**
-     * @param  array  $data
+     * Search for entries based on filter criteria provided in the `$data` array.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data  Associative array where keys are attribute names and values are the filter criteria.
+     * @return mixed The result of the query, either a collection or a paginated response.
      */
     public function search(array $data): mixed
     {
@@ -31,11 +38,8 @@ class BrandRepository extends Repository
         $orderBy = $data['order_by'] ?? 'id';
         $sort = $data['sort'] ?? 'desc';
 
-        return $query->orderBy($orderBy, $sort)->paginate($this->model->getPerPage());
+        return $query->orderBy($orderBy, $sort)->paginate((new $this->model)->getPerPage());
     }
 
-    public function getActiveBrands()
-    {
-        return $this->model::where('status', 'active')->orderBy('title')->get();
-    }
+
 }

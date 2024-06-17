@@ -26,12 +26,11 @@ class CartController extends CoreController
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return RedirectResponse
-     * @throws Exception
      */
-    public function addToCart($slug): RedirectResponse
+    public function addToCart(string $slug): RedirectResponse
     {
         if (empty($slug || Product::whereSlug($slug)->first())) {
             request()->session()->flash('error', 'Product not added to cart');
@@ -72,10 +71,10 @@ class CartController extends CoreController
     }
 
     /**
-     * @param  Request  $request
+     * Updates cart information.
      *
+     * @param  Request  $request
      * @return RedirectResponse
-     * @throws Exception
      */
     public function cartUpdate(Request $request): RedirectResponse
     {

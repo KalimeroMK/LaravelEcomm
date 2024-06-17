@@ -17,19 +17,18 @@ use Stripe\Stripe;
 class StripeService
 {
     use Order;
-    
+
     private Payment $payment;
-    
+
     public function __construct(Payment $payment)
     {
         $this->payment = $payment;
     }
-    
+
     /**
-     * success response method.
+     * Saves the order amount.
      *
      * @param  Request  $request
-     *
      * @return RedirectResponse
      * @throws ApiErrorException
      */
@@ -37,25 +36,25 @@ class StripeService
     {
         Stripe::setApiKey(config('stripe.sandbox.client_secret'));
         Charge::create([
-            "amount"      => $this->payment->calculate($request) * 100,
-            "currency"    => "usd",
-            "source"      => $request->stripeToken,
+            "amount" => $this->payment->calculate($request) * 100,
+            "currency" => "usd",
+            "source" => $request->stripeToken,
             "description" => "KalimeroMK E-comm",
         ]);
         $this->orderSave($this->payment->calculate($request));
         Session::flash('success', 'Payment successful!');
-        
+
         return redirect()->route('order.index');
     }
-    
+
     /**
      * success response method.
      *
-     * @param $id
+     * @param  int  $id
      *
      * @return Application|Factory|View
      */
-    public function stripe($id): View|Factory|Application
+    public function stripe(int $id): View|Factory|Application
     {
         return view('front::pages.stripe', compact('id'));
     }

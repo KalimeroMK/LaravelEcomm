@@ -14,4 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Role\Http\Controllers\RoleController;
 
-Route::resource('role', RoleController::class);
+Route::resource('roles', RoleController::class);

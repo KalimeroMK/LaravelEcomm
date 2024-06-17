@@ -2,17 +2,21 @@
 
 namespace Modules\Coupon\Repository;
 
+use Illuminate\Support\Collection;
 use Modules\Core\Repositories\Repository;
 use Modules\Coupon\Models\Coupon;
 
 class CouponRepository extends Repository
 {
-    public $model = Coupon::class;
-    
     /**
-     * @return mixed
+     * @var string
      */
-    public function findAll(): mixed
+    public $model = Coupon::class;
+
+    /**
+     * @return Collection
+     */
+    public function findAll(): Collection
     {
         return $this->model::get();
     }

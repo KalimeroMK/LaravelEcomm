@@ -11,19 +11,19 @@ use Modules\Size\Models\Size;
 class SizeResource extends JsonResource
 {
     /**
-     * @param  Request  $request
+     * Transform the resource into an array.
      *
-     * @return array
+     * @param  Request  $request
+     * @return array<string, mixed>
      */
     public function toArray($request): array
     {
         return [
-            'id'         => $this->id,
-            'name'       => $this->name,
+            'id' => $this->id,
+            'name' => $this->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'products'   => ProductResource::collection($this->whenLoaded('products')),
-        
+            'products' => ProductResource::collection($this->whenLoaded('products')),
         ];
     }
 }

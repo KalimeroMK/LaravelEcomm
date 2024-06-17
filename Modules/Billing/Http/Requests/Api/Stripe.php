@@ -7,21 +7,24 @@ use Modules\Core\Http\Requests\Api\CoreRequest;
 
 class Stripe extends CoreRequest
 {
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
-            'first_name'     => 'string|required',
-            'last_name'      => 'string|required',
-            'address1'       => 'string|required',
-            'address2'       => 'string|nullable',
-            'coupon'         => 'nullable|numeric',
-            'phone'          => 'numeric|required',
-            'post_code'      => 'string|nullable',
-            'email'          => 'string|required',
-            'shipping'       => 'string|nullable',
+            'first_name' => 'string|required',
+            'last_name' => 'string|required',
+            'address1' => 'string|required',
+            'address2' => 'string|nullable',
+            'coupon' => 'nullable|numeric',
+            'phone' => 'numeric|required',
+            'post_code' => 'string|nullable',
+            'email' => 'string|required',
+            'shipping' => 'string|nullable',
             'payment_method' => 'string|nullable',
-            'status'         => 'string|nullable',
-            
+            'status' => 'string|nullable',
+
             new CartExistRule(),
         ];
     }

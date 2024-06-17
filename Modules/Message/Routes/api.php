@@ -14,5 +14,12 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Message\Http\Controllers\Api\MessageController;
 
-Route::apiResource('message', MessageController::class);
+Route::apiResource('messages', MessageController::class)->names([
+    'index' => 'api.message.index',
+    'create' => 'api.message.create',
+    'store' => 'api.message.store',
+    'show' => 'api.message.show',
+    'update' => 'api.message.update',
+    'destroy' => 'api.message.destroy',
+]);;
 

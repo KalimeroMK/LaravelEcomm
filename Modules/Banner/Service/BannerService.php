@@ -2,93 +2,64 @@
 
 namespace Modules\Banner\Service;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Service\CoreService;
-use Modules\Core\Traits\ImageUpload;
 
 class BannerService extends CoreService
 {
-    use ImageUpload;
 
     public BannerRepository $banner_repository;
 
     public function __construct(BannerRepository $banner_repository)
     {
+        parent::__construct($banner_repository);
         $this->banner_repository = $banner_repository;
     }
 
     /**
-     * @param $data
+     * Create a new banner with possible media files.
      *
-     * @return mixed
+     * @param array<string, mixed> $data The data for creating the banner.
+     * @return Model The newly created banner model.
      */
-    public function store($data): mixed
+    public function create(array $data): Model
     {
-            return $this->banner_repository->create(
-                collect($data)->except(['photo'])->toArray() + [
-                    'photo' => $this->verifyAndStoreImage($data['photo']),
-                ]
-            );
+        $banner = $this->banner_repository->create($data);
+
+        // Handle image uploads
+        if (request()->hasFile('images')) {
+            $banner->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('banner');
+                });
+        }
+
+        return $banner;
     }
 
     /**
-     * @param $id
+     * Update an existing banner with new data and possibly new media files.
      *
-     * @return mixed|string
+     * @param int $id The banner ID to update.
+     * @param array<string, mixed> $data The data for updating the banner.
+     * @return Model The updated banner model.
      */
-    public function edit($id): mixed
+    public function update(int $id, array $data): Model
     {
-        return $this->banner_repository->findById($id);
-    }
+        $banner = $this->banner_repository->findById($id);
 
-    /**
-     * @param $id
-     *
-     * @return mixed|string
-     */
-    public function show($id): mixed
-    {
-            return $this->banner_repository->findById($id);
-    }
+        $banner->update($data);
 
-    /**
-     * @param $id
-     * @param $data
-     *
-     * @return mixed|string
-     */
-    public function update($id, $data): mixed
-    {
-            if ( ! empty($data['photo'])) {
-                return $this->banner_repository->update(
-                    (int)$id,
-                    collect($data)->except(['photo'])->toArray() + [
-                        'photo' => $this->verifyAndStoreImage($data['photo']),
-                    ]
-                );
-            }
+        // Check for new image uploads and handle them
+        if (request()->hasFile('images')) {
+            $banner->clearMediaCollection('banner'); // Optionally clear existing media
+            $banner->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('banner');
+                });
+        }
 
-            return $this->banner_repository->update((int)$id, $data);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     *
-     * @return void
-     */
-    public function destroy($id)
-    {
-
-            $this->banner_repository->delete($id);
-    }
-
-    /**
-     * @return mixed|string
-     */
-    public function getAll($data): mixed
-    {
-            return $this->banner_repository->search($data);
+        return $banner;
     }
 }

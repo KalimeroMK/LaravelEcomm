@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Bundle\Database\Factories\BundleFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
+use Spatie\Image\Drivers\ImageDriver;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -43,6 +44,10 @@ class Bundle extends Core implements HasMedia
             ->withTimestamps();
     }
 
+    /**
+     * @mixin ImageDriver
+     * @method $this nonQueued()
+     */
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('preview')

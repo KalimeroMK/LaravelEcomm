@@ -34,13 +34,13 @@ class TagController extends CoreController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->tag_service->store($request->validated());
+        $this->tag_service->create($request->validated());
 
         return redirect()->route('tags.index');
     }
@@ -58,26 +58,26 @@ class TagController extends CoreController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Tag  $tag
+     * @param Tag $tag
      *
      * @return Application|Factory|View
      */
     public function edit(Tag $tag)
     {
-        return view('tag::edit', ['tag' => $this->tag_service->edit($tag->id)]);
+        return view('tag::edit', ['tag' => $this->tag_service->findById($tag->id)]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Store  $request
-     * @param  Tag  $tag
+     * @param Store $request
+     * @param Tag $tag
      *
      * @return RedirectResponse
      */
     public function update(Store $request, Tag $tag): RedirectResponse
     {
-        $this->tag_service->update($request->validated(), $tag->id);
+        $this->tag_service->update($tag->id, $request->validated());
 
         return redirect()->route('post-tag.index');
     }
@@ -85,13 +85,13 @@ class TagController extends CoreController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Tag  $tag
+     * @param Tag $tag
      *
      * @return RedirectResponse
      */
     public function destroy(Tag $tag): RedirectResponse
     {
-        $this->tag_service->destroy($tag->id);
+        $this->tag_service->delete($tag->id);
 
         return redirect()->route('tags.index');
     }

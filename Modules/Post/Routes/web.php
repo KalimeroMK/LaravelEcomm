@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Route;
 use Modules\Post\Http\Controllers\PostCommentController;
 use Modules\Post\Http\Controllers\PostController;
 
-Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('post', PostController::class)->except('show');
-    Route::delete('post/{modelId}/media/{mediaId}',
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::resource('posts', PostController::class)->except('show');
+    Route::delete('posts/{modelId}/media/{mediaId}',
         [PostController::class, 'deleteMedia'])->name('posts.delete-media');
     /*Excel import export*/
     Route::get('post/export', [PostController::class, 'export'])->name('posts.export');
     Route::post('post/import', [PostController::class, 'import'])->name('posts.import');
     Route::post('ckeditor/upload', [PostController::class, 'upload'])->name('ckeditor.image-upload');
-    Route::resource('comment', PostCommentController::class)->except('create');
+    Route::resource('comments', PostCommentController::class)->except('create');
 });
 Route::post('comments/{slug}', [PostCommentController::class, 'store'])->name('post-comment.store');

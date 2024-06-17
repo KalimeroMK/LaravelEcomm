@@ -4,40 +4,44 @@ namespace Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Product\Exports\Products;
-use Modules\Product\Imports\Products;
+use PhpOffice\PhpSpreadsheet\Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProductImportExportController extends Controller
 {
-
-    public function index()
+    /**
+     * Display the import/export view.
+     *
+     * @return View
+     */
+    public function index(): View
     {
         return view('product::ExportImport.index');
     }
 
     /**
+     * Export the products to an Excel file.
+     *
      * @return BinaryFileResponse
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-
-    public function export()
-
+    public function export(): BinaryFileResponse
     {
         return Excel::download(new Products(), 'products.xlsx');
     }
 
-
     /**
+     * Import products from an uploaded Excel file.
+     *
      * @return RedirectResponse
      */
-
-    public function import()
-
+    public function import(): RedirectResponse
     {
         Excel::import(new Products(), request()->file('file'));
-
-
         return back();
     }
 }

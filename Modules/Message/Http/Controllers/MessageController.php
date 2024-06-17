@@ -33,7 +33,7 @@ class MessageController extends CoreController
     /**
      * Display the specified resource.
      *
-     * @param  Message  $message
+     * @param Message $message
      *
      * @return Application|Factory|View
      */
@@ -45,13 +45,13 @@ class MessageController extends CoreController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Message  $message
+     * @param Message $message
      *
      * @return RedirectResponse
      */
     public function destroy(Message $message): RedirectResponse
     {
-        $this->message_service->destroy($message->id);
+        $this->message_service->delete($message->id);
 
         return redirect()->back();
     }

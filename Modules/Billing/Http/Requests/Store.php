@@ -2,6 +2,7 @@
 
 namespace Modules\Billing\Http\Requests;
 
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Rules\WishlistRule;
@@ -9,27 +10,42 @@ use Modules\Product\Models\Product;
 
 class Store extends FormRequest
 {
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, Rule|string>
+     */
     public function rules(): array
     {
         return [
-            'slug' => new WishlistRule(),
+            'slug' => new WishlistRule(),  // Custom rule object
         ];
     }
-    
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
-    
-    public function passedValidation()
+
+    /**
+     * Handle a passed validation attempt.
+     * Merge additional fields into the request data.
+     */
+    public function passedValidation(): void
     {
+        $product = Product::whereSlug($this->slug)->firstOrFail();
+
         $this->merge([
-            'product_id' => Product::whereSlug(request()->slug)->first()->id,
-            'quantity'   => 1,
-            'user_id'    => Auth::id(),
-            'discount'   => Product::whereSlug(request()->slug)->first()->discount,
-            'price'      => Product::whereSlug(request()->slug)->first()->price,
-        
+            'product_id' => $product->id,
+            'quantity' => 1,
+            'user_id' => Auth::id(),
+            'discount' => $product->discount,
+            'price' => $product->price,
         ]);
     }
 }

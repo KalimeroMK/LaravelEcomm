@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use JetBrains\PhpStorm\NoReturn;
 use Modules\Front\Http\Requests\ProductSearchRequest;
 use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Api\Store;
@@ -51,11 +50,11 @@ class FrontController extends Controller
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return Application|Factory|View
      */
-    public function productDetail($slug)
+    public function productDetail(string $slug)
     {
         return view('front::pages.product_detail', $this->front_service->productDetail($slug));
     }
@@ -127,11 +126,11 @@ class FrontController extends Controller
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return Application|Factory|View
      */
-    public function productCat($slug)
+    public function productCat(string $slug)
     {
         if (request()->is('e-shop.loc/product-grids')) {
             return view('front::pages.product-grids', $this->front_service->productCat($slug));
@@ -149,11 +148,11 @@ class FrontController extends Controller
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return Application|Factory|View
      */
-    public function blogDetail($slug)
+    public function blogDetail(string $slug)
     {
         return view('front::pages.blog-detail', $this->front_service->blogDetail($slug));
     }
@@ -231,14 +230,14 @@ class FrontController extends Controller
     }
 
     /**
-     * @param $token
+     * @param  string  $token
      *
      * @return string
      */
-    public function verifyNewsletter($token): string
+    public function verifyNewsletter(string $token): string
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->validation((int)['id' => Newsletter::where('token', $token)->first()->id]);
+            $this->front_service->validation($token);
 
             return redirect()->back()->with('message', "Your email is successfully validated.");
         }
@@ -246,10 +245,10 @@ class FrontController extends Controller
         return redirect()->back()->with('message', "token mismatch ");
     }
 
-    public function deleteNewsletter($token)
+    public function deleteNewsletter(string $token): string
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->deleteNewsletter((int)['id' => Newsletter::where('token', $token)->first()->id]);
+            $this->front_service->deleteNewsletter($token);
 
             return redirect()->back()->with('message', "Your email is successfully deleted.");
         }
@@ -264,7 +263,7 @@ class FrontController extends Controller
      *
      * @return string|null
      */
-    #[NoReturn] public function messageStore(Store $request): string|null
+    public function messageStore(Store $request): string|null
     {
         return $this->front_service->messageStore($request);
     }

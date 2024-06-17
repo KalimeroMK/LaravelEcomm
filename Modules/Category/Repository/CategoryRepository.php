@@ -7,13 +7,9 @@ use Modules\Core\Repositories\Repository;
 
 class CategoryRepository extends Repository
 {
-    public $model = Category::class;
-    
     /**
-     * @return mixed
+     * @var string
      */
-    public function findAll(): mixed
-    {
-        return $this->model::get();
-    }
+    public $model = Category::class;
+
 }

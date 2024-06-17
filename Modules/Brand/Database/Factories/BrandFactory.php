@@ -9,17 +9,16 @@ use Modules\Brand\Models\Brand;
 class BrandFactory extends Factory
 {
     protected $model = Brand::class;
-    
+
     /**
-     * @return array
+     * @return array<String>
      */
     public function definition(): array
     {
         return [
-            'title'      => $this->faker->unique(true)->title,
+            'title' => $this->faker->unique(true)->title,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'photo'      => $this->faker->imageUrl(640, 480),
         ];
     }
 }

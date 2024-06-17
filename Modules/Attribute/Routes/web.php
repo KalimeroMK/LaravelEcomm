@@ -13,4 +13,4 @@
 
 use Modules\Attribute\Http\Controllers\AttributeController;
 
-Route::resource('/attribute', AttributeController::class)->except('shows');
+Route::resource('attributes', AttributeController::class)->except('shows');

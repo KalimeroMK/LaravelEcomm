@@ -2,20 +2,23 @@
 
 namespace Modules\Bundle\Repository;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Modules\Bundle\Models\Bundle;
-use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 
-class BundleRepository extends Repository implements SearchInterface
+class BundleRepository extends Repository
 {
+    /**
+     * The model instance.
+     *
+     * @var string
+     *
+     */
     public $model = Bundle::class;
 
-    public function search(array $data)
-    {
-        // TODO: Implement search() method.
-    }
 
-    public function findAll(): mixed
+    public function findAll(): Collection
 
     {
         return $this->model::with(['products', 'media'])->get();
@@ -24,9 +27,9 @@ class BundleRepository extends Repository implements SearchInterface
     /**
      * @param  $id
      *
-     * @return mixed
+     * @return Model|null
      */
-    public function findById($id): mixed
+    public function findById($id): ?Model
     {
         return $this->model::with('media')->find($id);
     }

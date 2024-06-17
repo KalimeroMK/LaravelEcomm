@@ -7,10 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 class Store extends FormRequest
 {
     /**
-     * @var mixed
+     * @return string[]
      */
-    public mixed $category;
-
     public function rules(): array
     {
         return [

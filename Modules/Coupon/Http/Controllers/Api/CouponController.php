@@ -9,7 +9,6 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
-use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Service\CouponService;
 use ReflectionException;
 
@@ -20,7 +19,6 @@ class CouponController extends CoreController
     public function __construct(CouponService $coupon_service)
     {
         $this->coupon_service = $coupon_service;
-        $this->authorizeResource(Coupon::class, 'coupon');
     }
 
     /**
@@ -32,7 +30,7 @@ class CouponController extends CoreController
     }
 
     /**
-     * @param  Store  $request
+     * @param Store $request
      * @return JsonResponse
      * @throws ReflectionException
      */
@@ -49,15 +47,15 @@ class CouponController extends CoreController
                     ]
                 )
             )
-            ->respond(new CouponResource($this->coupon_service->store($request->validated())));
+            ->respond(new CouponResource($this->coupon_service->create($request->validated())));
     }
 
     /**
-     * @param  Coupon  $coupon
+     * @param int $id
      * @return JsonResponse
-     * @throws ReflectionException
-     * q*/
-    public function show(Coupon $coupon)
+     * @throws ReflectionException q
+     */
+    public function show(int $id)
     {
         return $this
             ->setMessage(
@@ -70,17 +68,17 @@ class CouponController extends CoreController
                     ]
                 )
             )
-            ->respond(new CouponResource($this->coupon_service->show($coupon->id)));
+            ->respond(new CouponResource($this->coupon_service->findById($id)));
     }
 
     /**
-     * @param  Update  $request
-     * @param $id
+     * @param Update $request
+     * @param int $id
      *
-     * @return string
+     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function update(Update $request, $id)
+    public function update(Update $request, int $id)
     {
         return $this
             ->setMessage(
@@ -97,12 +95,11 @@ class CouponController extends CoreController
     }
 
     /**
-     * @param  Coupon  $coupon
-     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy(Coupon $coupon)
+    public function destroy(int $id): JsonResponse
     {
+        $this->coupon_service->delete($id);
         return $this
             ->setMessage(
                 __(
@@ -114,6 +111,6 @@ class CouponController extends CoreController
                     ]
                 )
             )
-            ->respond($this->coupon_service->destroy($coupon->id));
+            ->respond(null);
     }
 }

@@ -34,12 +34,5 @@ class MessagePolicy
     {
         return $user->can('message-delete');
     }
-
-    public function restore(User $user, Message $message): bool
-    {
-    }
-
-    public function forceDelete(User $user, Message $message): bool
-    {
-    }
+    
 }

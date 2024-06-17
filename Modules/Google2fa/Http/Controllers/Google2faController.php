@@ -7,16 +7,17 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Modules\Google2fa\Models\Google2fa;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
-use PragmaRX\Google2FAQRCode\Exceptions\MissingQrCodeServiceException;
 use PragmaRX\Google2FAQRCode\Google2FA as PragmaRXGoogle2FA;
 
 class Google2faController extends Controller
@@ -24,8 +25,7 @@ class Google2faController extends Controller
 
 
     /**
-     * Show 2FA Setting form
-     * @throws MissingQrCodeServiceException
+     * @return Application|Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|RedirectResponse|View
      */
     public function show2faForm()
     {
@@ -68,7 +68,7 @@ class Google2faController extends Controller
         // Add the secret key to the registration data
         $login_security = Google2fa::firstOrNew(['user_id' => $user->id]);
         $login_security->user_id = $user->id;
-        $login_security->google2fa_enable = 0;
+        $login_security->google2fa_enable = false;
         $login_security->google2fa_secret = $google2fa->generateSecretKey();
         $login_security->save();
         return redirect()->route('2fa')->with('success', "Secret key is generated.");

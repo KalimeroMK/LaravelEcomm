@@ -28,6 +28,9 @@ use Modules\Product\Repository\ProductRepository;
 
 class FrontService
 {
+    /**
+     * @var string
+     */
     public $model = Product::class;
 
     protected ProductRepository $productRepository;
@@ -66,11 +69,11 @@ class FrontService
 
 
     /**
-     * @param $slug
-     *
-     * @return array|string
+     * Retrieves product categories based on a slug.
+     * @param  string  $slug  The slug of the category.
+     * @return array The products under the category.
      */
-    public function productCat($slug): array|string
+    public function productCat(string $slug): array
     {
         $cacheKey = 'productCat_'.$slug;
 
@@ -129,9 +132,9 @@ class FrontService
     /**
      * @param $request
      *
-     * @return string|void
+     * @return string
      */
-    public function messageStore($request)
+    public function messageStore($request): string
     {
         try {
             $message = Message::create($request->validated());
@@ -148,7 +151,7 @@ class FrontService
 
             event(new MessageSent($data));
 
-            return;
+            return 'message sent';
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -164,11 +167,11 @@ class FrontService
     {
         $queryParams = $this->retrieveQueryParameters();
 
-        list($categoryIds, $brandIds) = $this->retrieveIdsFromSlugs($queryParams);
+        [$categoryIds, $brandIds] = $this->retrieveIdsFromSlugs($queryParams);
 
-        list($minPrice, $maxPrice) = $this->retrievePriceRange($queryParams);
+        [$minPrice, $maxPrice] = $this->retrievePriceRange($queryParams);
 
-        list($sortColumn, $sortOrder) = $this->retrieveSortOrder($queryParams);
+        [$sortColumn, $sortOrder] = $this->retrieveSortOrder($queryParams);
 
         $products = $this->retrieveProducts($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder,
             $queryParams);
@@ -227,7 +230,7 @@ class FrontService
         $sortOrder,
         array $queryParams
     ) {
-        $perPage = (int)($queryParams['show'] ?? 9);
+        $perPage = (int) ($queryParams['show'] ?? 9);
 
         // Generate a unique cache key
         $cacheKey = 'products_'.md5(json_encode(compact(
@@ -363,7 +366,6 @@ class FrontService
      */
     public function productSearch($data): array|string
     {
-        // Fetch recent products not using Elasticsearch since it's a straightforward query
         $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
         // Perform search using Elasticsearch
@@ -408,7 +410,7 @@ class FrontService
         });
     }
 
-    public function productDetail($slug): array
+    public function productDetail(string $slug): array
     {
         $cacheKey = 'productDetail_'.$slug;
 
@@ -435,11 +437,11 @@ class FrontService
     /**
      * Get data for a blog post detail page.
      *
-     * @param $slug
+     * @param  string  $slug
      *
      * @return array|string
      */
-    public function blogDetail($slug): array|string
+    public function blogDetail(string $slug): array|string
     {
         $cacheKey = 'blogDetail_'.$slug;
 
@@ -594,7 +596,7 @@ class FrontService
 
     private function pagination(Builder $query)
     {
-        $perPage = isset($_GET['show']) ? (int)$_GET['show'] : 6;
+        $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
         return $query->paginate($perPage);
     }
 
@@ -624,9 +626,9 @@ class FrontService
      * Create a new newsletter entry and send a verification email to the provided email address.
      *
      * @param  array  $data  The data for the new newsletter entry.
-     * @return void Returns an error message if an exception occurs, otherwise returns nothing.
+     * @return string Returns an error message if an exception occurs, otherwise returns nothing.
      */
-    public function newsletter(array $data): void
+    public function newsletter(array $data): string
     {
         Newsletter::create([
             'email' => $data['email'],
@@ -639,6 +641,7 @@ class FrontService
                 $message->subject('Email Verification Mail');
             });
         });
+        return 'Email successfully add to the database ';
     }
 
     /**
@@ -646,9 +649,10 @@ class FrontService
      *
      * @return string Returns an error message if an exception occurs, otherwise returns nothing.
      */
-    public function validation(int $id): string
+    public function validation($token): string
     {
-        return Newsletter::whereId($id)->update(['is_validated' => 1]);
+        Newsletter::where('token', $token)->update(['is_validated' => 1]);
+        return 'Your email is successfully validated';
     }
 
     /**
@@ -656,12 +660,16 @@ class FrontService
      *
      * @return string Returns an error message if an exception occurs, otherwise returns nothing.
      */
-    public function deleteNewsletter(int $id): string
+    public function deleteNewsletter($token): string
     {
-        return Newsletter::whereId($id)->delete();
+        Newsletter::where('token', $token)->first()->delete();
+        return 'Your email is successfully deleted';
     }
 
-    public function productBundles()
+    /**
+     * @return array
+     */
+    public function productBundles(): array
     {
         $query = Bundle::query();
         $recentProducts = $this->recentProducts();

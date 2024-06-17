@@ -13,7 +13,11 @@ use Modules\User\Models\User;
 
 trait Order
 {
-    public function orderSave($amount): void
+    /**
+     * @param  int  $amount
+     * @return void
+     */
+    public function orderSave(int $amount): void
     {
         $order = new \Modules\Order\Models\Order();
         Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $order->id]);

@@ -10,21 +10,19 @@ use Modules\Message\Models\Message;
 class MessageResource extends JsonResource
 {
     /**
-     * @param  Request  $request
-     *
-     * @return array
+     * @return string[]
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
-            'name'       => $this->name,
-            'subject'    => $this->subject,
-            'email'      => $this->email,
-            'photo'      => $this->photo,
-            'phone'      => $this->phone,
-            'message'    => $this->message,
-            'read_at'    => $this->read_at,
+            'id' => $this->id,
+            'name' => $this->name,
+            'subject' => $this->subject,
+            'email' => $this->email,
+            'photo' => $this->photo,
+            'phone' => $this->phone,
+            'message' => $this->message,
+            'read_at' => $this->read_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

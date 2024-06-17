@@ -9,7 +9,6 @@ use Modules\Banner\Http\Requests\Api\Search;
 use Modules\Banner\Http\Requests\Api\Store;
 use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
-use Modules\Banner\Models\Banner;
 use Modules\Banner\Service\BannerService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -23,11 +22,10 @@ class BannerController extends CoreController
     public function __construct(BannerService $banner_service)
     {
         $this->banner_service = $banner_service;
-        $this->authorizeResource(Banner::class, 'banners');
     }
 
     /**
-     * @param  Search  $request
+     * @param Search $request
      *
      * @return ResourceCollection
      */
@@ -37,13 +35,14 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return JsonResponse
      * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): JsonResponse
     {
+
         return $this
             ->setMessage(
                 __(
@@ -55,17 +54,18 @@ class BannerController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_service->store($request->validated())));
+            ->respond(new BannerResource($this->banner_service->create($request->validated())));
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function show($id)
+    public function show(int $id)
     {
+
         return $this
             ->setMessage(
                 __(
@@ -77,18 +77,19 @@ class BannerController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_service->show($id)));
+            ->respond(new BannerResource($this->banner_service->findById($id)));
     }
 
     /**
-     * @param  Update  $request
-     * @param $id
+     * @param Update $request
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function update(Update $request, $id)
+    public function update(Update $request, int $id)
     {
+
         return $this
             ->setMessage(
                 __(
@@ -104,22 +105,25 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
-        $this->banner_service->destroy($id);
-
-        $resourceName = Helper::getResourceName(
-            $this->banner_service->banner_repository->model
-        );
-
-        $message = __('apiResponse.deleteSuccess', ['resource' => $resourceName]);
-
-        // Assuming you have a method to set response message and status
-        return $this->setMessage($message)->respond(null);
+        $this->banner_service->delete($id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->banner_service->banner_repository->model
+                        ),
+                    ]
+                )
+            )
+            ->respond(null);
     }
 }
