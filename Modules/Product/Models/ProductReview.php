@@ -64,7 +64,7 @@ class ProductReview extends Model
      */
     public static function getAllReview(): Collection
     {
-        return self::all();
+        return self::with('product', 'user')->get();
     }
 
     /**

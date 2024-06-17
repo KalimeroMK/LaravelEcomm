@@ -33,7 +33,7 @@ Route::post('cart/order', [FrontController::class, 'store'])->name('front.cart.o
 Route::match(['get', 'post'], '/filter', [FrontController::class, 'productFilter'])->name('front.product-filter');
 Route::get('/product-lists', [FrontController::class, 'productLists'])->name('front.product-lists');
 Route::get('/product-grids', [FrontController::class, 'productGrids'])->name('front.product-grids');
-Route::get('/bundles', [FrontController::class, 'bundles'])->name('front.bundles');
+Route::get('/bundle', [FrontController::class, 'bundles'])->name('front.bundles');
 
 // NewsLetter
 Route::post('/subscribe', [\Modules\Front\Http\Controllers\Api\FrontController::class, 'subscribe'])->name('subscribe');

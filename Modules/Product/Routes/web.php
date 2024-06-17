@@ -16,9 +16,9 @@ use Modules\Product\Http\Controllers\ProductImportExportController;
 use Modules\Product\Http\Controllers\ProductReviewController;
 
 Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('product', ProductController::class)->except('show');
+    Route::resource('products', ProductController::class)->except('show');
     Route::resource('reviews', ProductReviewController::class)->except('show', 'create');
-    Route::delete('/product/{modelId}/media/{mediaId}',
+    Route::delete('/products/{modelId}/media/{mediaId}',
         [ProductController::class, 'deleteMedia'])->name('product.delete-media');
 
     /*Excel import export*/

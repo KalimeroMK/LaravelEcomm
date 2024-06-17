@@ -14,6 +14,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Order\Http\Controllers\OrderController;
 
-Route::resource('/order', OrderController::class);
-Route::get('order/pdf/{id}', [OrderController::class, 'pdf'])->name('order.pdf');
+Route::resource('/orders', OrderController::class);
+Route::get('orders/pdf/{id}', [OrderController::class, 'pdf'])->name('order.pdf');
 Route::get('/income', [OrderController::class, 'incomeChart'])->name('product.order.income');

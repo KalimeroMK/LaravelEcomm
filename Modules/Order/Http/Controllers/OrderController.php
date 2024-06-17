@@ -22,7 +22,6 @@ class OrderController extends CoreController
     public function __construct(OrderService $order_service)
     {
         $this->order_service = $order_service;
-        $this->authorizeResource(Order::class);
     }
 
     /**

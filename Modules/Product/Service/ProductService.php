@@ -4,7 +4,6 @@ namespace Modules\Product\Service;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Core\Service\CoreService;
@@ -28,9 +27,8 @@ class ProductService extends CoreService
      * Get all products based on given data.
      *
      * @param array<string, mixed> $data
-     * @return Collection
      */
-    public function search(array $data): Collection
+    public function search(array $data)
     {
         return $this->product_repository->search($data);
     }

@@ -6,9 +6,10 @@
     <div class="card">
         <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
-            <form action="{{route('comments.update',$comment->id)}}" method="POST">
+            <form action="{{route('comment.update',$comment->id)}}" method="POST">
                 @csrf
-                @method('PATCH')
+                @method('PATCH') <h5 class="card-header">Comment Edit</h5>
+
                 <div class="form-group">
                     <label for="name">@lang('partials.author'):</label>
                     <input type="text" disabled class="form-control" value="{{$comment->user_info->name}}">
@@ -22,9 +23,11 @@
                     <label for="status">@lang('partials.status') :</label>
                     <select name="status" id="" class="form-control">
                         <option value="">--Select Status--</option>
-                        <option value="active" {{(($comment->status=='active')? 'selected' : '')}}>@lang('partials.active')
+                        <option
+                            value="active" {{(($comment->status=='active')? 'selected' : '')}}>@lang('partials.active')
                         </option>
-                        <option value="inactive" {{(($comment->status=='inactive')? 'selected' : '')}}>@lang('partials.inactive')
+                        <option
+                            value="inactive" {{(($comment->status=='inactive')? 'selected' : '')}}>@lang('partials.inactive')
                         </option>
                     </select>
                 </div>

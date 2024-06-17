@@ -63,7 +63,16 @@ class ProductController extends CoreController
 
     public function edit(Product $product): Renderable
     {
-        return view('product::edit')->with($this->product_service->edit($product->id));
+        return view('product::edit', [
+                'brands' => Brand::get(),
+                'categories' => Category::get(),
+                'product' => $product,
+                'sizes' => Size::get(),
+                'conditions' => Condition::get(),
+                'tags' => Tag::get(),
+                'attributes' => Attribute::all()
+            ]
+        );
     }
 
     /**

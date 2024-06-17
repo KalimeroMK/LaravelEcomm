@@ -16,7 +16,6 @@ class NewsletterController extends CoreController
     public function __construct(NewsletterService $newsletter_service)
     {
         $this->newsletter_service = $newsletter_service;
-        $this->authorizeResource(Newsletter::class, 'newsletter');
     }
 
     public function index(): View
