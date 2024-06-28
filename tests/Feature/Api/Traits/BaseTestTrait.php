@@ -7,24 +7,23 @@ use Illuminate\Testing\TestResponse;
 
 trait BaseTestTrait
 {
-    
+
     /**
-     * @param  string  $url
+     * @param string $url
      *
      * @return TestResponse
      */
     public function list(string $url): TestResponse
     {
         $response = $this->json('GET', $url);
-        
         Log::info(1, [$response->getContent()]);
-        
+
         return $response->assertStatus(200);
     }
-    
+
     /**
-     * @param  string  $url
-     * @param  array  $data
+     * @param string $url
+     * @param array $data
      *
      * @return TestResponse
      */
@@ -36,14 +35,13 @@ trait BaseTestTrait
             $data
         );
         Log::info(1, [$response->getContent()]);
-        
         return $response->assertStatus(200);
     }
-    
+
     /**
-     * @param  string  $url
-     * @param  array  $data
-     * @param  int  $id
+     * @param string $url
+     * @param array $data
+     * @param int $id
      *
      * @return TestResponse
      */
@@ -54,15 +52,16 @@ trait BaseTestTrait
             $url . $id,
             $data
         );
+
         Log::info(1, [$response->getContent()]);
-        
+
         return $response->assertStatus(200);
     }
-    
+
     /**
-     * @param  string  $url
-     * @param  array  $data
-     * @param  int  $id
+     * @param string $url
+     * @param array $data
+     * @param int $id
      *
      * @return TestResponse
      */
@@ -74,38 +73,37 @@ trait BaseTestTrait
             $data
         );
         Log::info(1, [$response->getContent()]);
-        
+
         return $response->assertStatus(200);
     }
-    
+
     /**
-     * @param  string  $url
-     * @param  int  $id
+     * @param string $url
+     * @param int $id
      *
      * @return TestResponse
      */
     public function show(string $url, int $id): TestResponse
     {
         $response = $this->json('GET', $url . $id);
-        
         Log::info(1, [$response->getContent()]);
-        
+
         return $response->assertStatus(200);
     }
-    
+
     /**
-     * @param  string  $url
-     * @param  int  $id
+     * @param string $url
+     * @param int $id
      *
      * @return TestResponse
      */
     public function destroy(string $url, int $id): TestResponse
     {
         $response = $this->json('DELETE', $url . $id);
-        
+
         Log::info(1, [$response->getContent()]);
-        
+
         return $response->assertStatus(200);
     }
-    
+
 }

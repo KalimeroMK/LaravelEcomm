@@ -16,8 +16,6 @@ class BundleServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerCommands();
-        $this->registerCommandSchedules();
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -32,24 +30,6 @@ class BundleServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
     }
 
-    /**
-     * Register commands in the format of Command::class
-     */
-    protected function registerCommands(): void
-    {
-        // $this->commands([]);
-    }
-
-    /**
-     * Register command Schedules.
-     */
-    protected function registerCommandSchedules(): void
-    {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
-    }
 
     /**
      * Register translations.
@@ -96,13 +76,19 @@ class BundleServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
+     *
+     * @return array<string> Array of paths.
      */
     public function provides(): array
     {
         return [];
     }
 
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -114,4 +100,6 @@ class BundleServiceProvider extends ServiceProvider
 
         return $paths;
     }
+
+
 }

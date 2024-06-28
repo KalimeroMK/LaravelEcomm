@@ -2,17 +2,15 @@
 
 namespace Modules\Newsletter\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Newsletter\Models\Newsletter;
 
 /** @mixin Newsletter */
 class NewsletterResource extends JsonResource
 {
+
     /**
-     * @param  Request  $request
-     *
-     * @return array
+     * @return string[]
      */
     public function toArray($request): array
     {

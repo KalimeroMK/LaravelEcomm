@@ -14,4 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Banner\Http\Controllers\BannerController;
 
-Route::resource('banner', BannerController::class)->except('show');
+Route::resource('banners', BannerController::class)->except('show');

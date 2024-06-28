@@ -25,7 +25,7 @@
     <!-- Start Checkout -->
     <section class="shop checkout section">
         <div class="container">
-            <form class="form" method="POST" action="{{route('cart.order')}}">
+            <form class="form" method="POST" action="{{route('front.cart.order')}}">
                 @csrf
                 <div class="row">
                     <div class="col-lg-8 col-12">

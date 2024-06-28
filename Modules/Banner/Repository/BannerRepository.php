@@ -2,6 +2,7 @@
 
 namespace Modules\Banner\Repository;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Modules\Banner\Models\Banner;
 use Modules\Core\Interfaces\SearchInterface;
@@ -9,13 +10,20 @@ use Modules\Core\Repositories\Repository;
 
 class BannerRepository extends Repository implements SearchInterface
 {
+    /**
+     * The model instance.
+     *
+     * @var string
+     *
+     */
     public $model = Banner::class;
     private const LATEST_BANNERS_LIMIT = 3;
 
     /**
-     * @param  array  $data
+     * Search for entries based on filter criteria provided in the `$data` array.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data  Associative array where keys are attribute names and values are the filter criteria.
+     * @return mixed The result of the query, either a collection or a paginated response.
      */
     public function search(array $data): mixed
     {
@@ -37,7 +45,7 @@ class BannerRepository extends Repository implements SearchInterface
 
             $orderBy = $data['order_by'] ?? 'id';
             $sort = $data['sort'] ?? 'desc';
-            $perPage = $data['per_page'] ?? $this->model->getPerPage();
+            $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
 
             return $query->orderBy($orderBy, $sort)->paginate($perPage);
         });

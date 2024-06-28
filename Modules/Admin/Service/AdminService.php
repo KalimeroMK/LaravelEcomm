@@ -14,6 +14,10 @@ class AdminService
         $this->admin_repository = $admin_repository;
     }
 
+    /**
+     *
+     * @return array<string, int> Array of paths.
+     */
     public function index(): array
     {
         return $this->admin_repository->usersLastSevenDays();

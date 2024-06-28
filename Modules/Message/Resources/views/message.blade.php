@@ -43,7 +43,7 @@
                 @endif
             @endforeach
         </div>
-        <a class="dropdown-item text-center small text-gray-500" href="{{route('message.index')}}">Read More
+        <a class="dropdown-item text-center small text-gray-500" href="{{route('messages.index')}}">Read More
             Messages</a>
     </div>
 </div>

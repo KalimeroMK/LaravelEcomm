@@ -13,7 +13,7 @@
 
 use Modules\Post\Http\Controllers\Api\PostController;
 
-Route::apiResource('post', PostController::class)
+Route::apiResource('posts', PostController::class)
     ->names([
         'index' => 'api.post.index',
         'store' => 'api.post.store',

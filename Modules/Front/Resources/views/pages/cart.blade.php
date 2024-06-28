@@ -49,7 +49,7 @@
                                         </td>
                                         <td class="product-des" data-title="Description">
                                             <p class="product-name"><a
-                                                        href="{{route('product-detail',$cart->product['slug'])}}"
+                                                        href="{{route('front.product-detail',$cart->product['slug'])}}"
                                                         target="_blank">{{$cart->product['title']}}</a></p>
                                             <p class="product-des">{!!($cart['summary']) !!}</p>
                                         </td>

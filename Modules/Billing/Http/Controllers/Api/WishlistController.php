@@ -10,6 +10,7 @@ use Modules\Billing\Http\Resources\WishlistResource;
 use Modules\Billing\Service\WishlistService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use ReflectionException;
 
 class WishlistController extends CoreController
 {
@@ -55,27 +56,25 @@ class WishlistController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
+     * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->wishlist_service->wishlist_repository->model
-                            ),
-                        ]
-                    )
+        $this->wishlist_service->destroy($id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->wishlist_service->wishlist_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->wishlist_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(null);
     }
 }

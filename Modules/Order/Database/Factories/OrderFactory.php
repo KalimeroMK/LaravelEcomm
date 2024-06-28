@@ -11,11 +11,7 @@ class OrderFactory extends Factory
 {
     protected $model = Order::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
+
     public function definition(): array
     {
         return [
@@ -27,7 +23,10 @@ class OrderFactory extends Factory
             'updated_at' => Carbon::now(),
             'user_id' => $this->faker->numberBetween(1, 3),
             'shipping_id' => function () {
-                return Shipping::factory()->create()->id;
+                /** @var Shipping $shipping */
+                // Ensure that create() returns a single model instance
+                $shipping = Shipping::factory()->create();
+                return $shipping->id;
             },
         ];
     }

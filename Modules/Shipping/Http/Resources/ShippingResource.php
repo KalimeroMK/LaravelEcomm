@@ -11,9 +11,10 @@ use Modules\Shipping\Models\Shipping;
 class ShippingResource extends JsonResource
 {
     /**
-     * @param  Request  $request
+     * Transform the resource into an array.
      *
-     * @return array
+     * @param  Request  $request
+     * @return array<string, mixed>
      */
     public function toArray($request): array
     {

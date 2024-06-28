@@ -9,9 +9,15 @@ namespace Modules\Core\Interfaces;
 interface SearchInterface
 {
     /**
-     * @param  array  $data
+     * Performs a search based on the provided criteria.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data  Criteria used for the search. Expected keys might include:
+     *                                    - 'query': string, The search text.
+     *                                    - 'limit': int, Optional. The number of results to return.
+     *                                    - 'page': int, Optional. Page number for paginated results.
+     *                                    - 'filters': array<string, mixed>, Optional. Additional filters to apply.
+     *
+     * @return mixed Results of the search operation, typically an array or a collection.
      */
-    public function search(array $data);
+    public function search(array $data): mixed;
 }

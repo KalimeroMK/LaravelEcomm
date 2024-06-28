@@ -13,11 +13,12 @@ use Modules\Product\Http\Resources\ProductResource;
 class CartResource extends JsonResource
 {
     /**
-     * @param  Request  $request
+     * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string> Array of field rules.
      */
-    public function toArray($request): array
+
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

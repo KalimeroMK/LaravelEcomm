@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use JetBrains\PhpStorm\NoReturn;
 use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Api\Store;
 use Modules\Newsletter\Models\Newsletter;
@@ -32,11 +31,11 @@ class FrontController extends Controller
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return JsonResponse
      */
-    public function productDetail($slug)
+    public function productDetail(string $slug)
     {
         return response()->json($this->front_service->productDetail($slug), 200);
     }
@@ -96,11 +95,11 @@ class FrontController extends Controller
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return JsonResponse
      */
-    public function productCat($slug)
+    public function productCat(string $slug)
     {
         return response()->json($this->front_service->productCat($slug), 200);
     }
@@ -114,11 +113,11 @@ class FrontController extends Controller
     }
 
     /**
-     * @param $slug
+     * @param  string  $slug
      *
      * @return JsonResponse
      */
-    public function blogDetail($slug)
+    public function blogDetail(string $slug)
     {
         return response()->json($this->front_service->blogDetail($slug), 200);
     }
@@ -185,32 +184,31 @@ class FrontController extends Controller
     public function subscribe(Request $request): JsonResponse
     {
         if (Newsletter::whereEmail($request->email) !== null) {
-            return response()->json($this->front_service->newsletter($request->all(), 200), 200);
+            return response()->json($this->front_service->newsletter($request->all()), 200);
         }
 
         return response()->json('Email already present in the database ', 200);
     }
 
     /**
-     * @param $token
+     * @param  string  $token
      *
      * @return string
      */
-    public function verifyNewsletter($token): string
+    public function verifyNewsletter(string $token): string
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->validation(['id' => Newsletter::where('token', $token)->first()->id]);
-
+            $this->front_service->validation($token);
             return redirect()->back()->with('message', "Your email is successfully validated.");
         }
 
         return redirect()->back()->with('message', "token mismatch ");
     }
 
-    public function deleteNewsletter($token)
+    public function deleteNewsletter(string $token): string
     {
         if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->deleteNewsletter(['id' => Newsletter::where('token', $token)->first()->id]);
+            $this->front_service->deleteNewsletter($token);
 
             return response()->json('Your email is successfully deleted ', 200);
         }
@@ -225,7 +223,7 @@ class FrontController extends Controller
      *
      * @return string|null
      */
-    #[NoReturn] public function messageStore(Store $request): string|null
+    public function messageStore(Store $request): string|null
     {
         return $this->front_service->messageStore($request);
     }

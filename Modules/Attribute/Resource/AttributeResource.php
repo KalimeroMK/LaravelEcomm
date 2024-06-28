@@ -2,7 +2,6 @@
 
 namespace Modules\Attribute\Resource;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Attribute\Models\Attribute;
 
@@ -10,9 +9,7 @@ use Modules\Attribute\Models\Attribute;
 class AttributeResource extends JsonResource
 {
     /**
-     * @param  Request  $request
-     *
-     * @return array
+     * @return string[]
      */
     public function toArray($request): array
     {

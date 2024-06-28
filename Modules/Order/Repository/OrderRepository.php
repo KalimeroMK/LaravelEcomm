@@ -2,7 +2,10 @@
 
 namespace Modules\Order\Repository;
 
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
@@ -21,9 +24,10 @@ class OrderRepository extends Repository implements SearchInterface
     }
 
     /**
-     * @param  array  $data
+     * Search orders based on given data.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data
+     * @return Builder|LengthAwarePaginator
      */
     public function search(array $data): mixed
     {
@@ -63,9 +67,9 @@ class OrderRepository extends Repository implements SearchInterface
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function findAll(): mixed
+    public function findAll(): Collection
     {
         return $this->model::with('user', 'carts', 'shipping')->get();
     }

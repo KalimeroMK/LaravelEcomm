@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PostCategoryStore extends FormRequest
 {
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [

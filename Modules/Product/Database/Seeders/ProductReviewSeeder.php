@@ -13,7 +13,7 @@ class ProductReviewSeeder extends Seeder
     /**
      * @throws Exception
      */
-    public function run()
+    public function run(): void
     {
         for ($i = 0; $i < 300; $i++) {
             ProductReview::create([

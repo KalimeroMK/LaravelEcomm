@@ -1,7 +1,8 @@
 @extends('admin::layouts.master')
 
-@section('content')
+@section('title','E-SHOP || Product Create')
 
+@section('content')
     <div class="card">
         <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
@@ -10,6 +11,7 @@
     </div>
 
 @endsection
+
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">

@@ -11,9 +11,7 @@ class ShippingFactory extends Factory
     protected $model = Shipping::class;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * @return array|mixed[]
      */
     public function definition(): array
     {

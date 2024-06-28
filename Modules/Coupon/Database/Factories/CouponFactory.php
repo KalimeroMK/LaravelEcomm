@@ -3,7 +3,6 @@
 namespace Modules\Coupon\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use JetBrains\PhpStorm\ArrayShape;
 use Modules\Coupon\Models\Coupon;
 
 class CouponFactory extends Factory
@@ -11,11 +10,9 @@ class CouponFactory extends Factory
     protected $model = Coupon::class;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * @return array<string, string>
      */
-    #[ArrayShape(['code' => "string", 'value' => "float"])] public function definition(): array
+    public function definition(): array
     {
         return [
             'code' => $this->faker->word,

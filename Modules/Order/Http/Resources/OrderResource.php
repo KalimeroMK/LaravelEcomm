@@ -10,11 +10,12 @@ use Modules\Order\Models\Order;
 class OrderResource extends JsonResource
 {
     /**
-     * @param  Request  $request
+     * Transform the resource into an array.
      *
-     * @return array
+     * @param  Request  $request
+     * @return array<string, mixed>
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

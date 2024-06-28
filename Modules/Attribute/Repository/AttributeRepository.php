@@ -7,22 +7,22 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 
+
 class AttributeRepository extends Repository implements SearchInterface
 {
+    /**
+     * The model instance.
+     *
+     * @var string
+     *
+     */
     public $model = Attribute::class;
 
     /**
-     * @return mixed
-     */
-    public function findAll(): mixed
-    {
-        return $this->model::get();
-    }
-
-    /**
-     * @param  array  $data
+     * Search for entries based on filter criteria provided in the `$data` array.
      *
-     * @return mixed
+     * @param  array<string, mixed>  $data  Associative array where keys are attribute names and values are the filter criteria.
+     * @return mixed The result of the query, either a collection or a paginated response.
      */
     public function search(array $data): mixed
     {

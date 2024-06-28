@@ -3,6 +3,7 @@
 namespace Modules\Post\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -38,6 +39,7 @@ class PostCommentController extends Controller
      * @param  Request  $request
      *
      * @return RedirectResponse
+     * @throws Exception
      */
     public function store(Request $request): RedirectResponse
     {
@@ -68,7 +70,7 @@ class PostCommentController extends Controller
      */
     public function update(Request $request, PostComment $comment): Application|Factory|View
     {
-        return view('post::comment.index')->with($this->postCommentService->update($request, $comment->id));
+        return view('post::comment.index')->with($this->postCommentService->update($request->all(), $comment->id));
     }
 
     /**

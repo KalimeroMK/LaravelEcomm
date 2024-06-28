@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class ConditionSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         DB::table('conditions')->insert([
             0 =>

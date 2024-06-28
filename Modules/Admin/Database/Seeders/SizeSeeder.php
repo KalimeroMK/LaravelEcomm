@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class SizeSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         DB::table('sizes')->insert([
             0 =>

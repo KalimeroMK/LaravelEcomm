@@ -7,6 +7,9 @@ use Modules\Core\Http\Requests\Api\CoreRequest;
 
 class Stripe extends CoreRequest
 {
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [

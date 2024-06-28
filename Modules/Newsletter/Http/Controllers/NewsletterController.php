@@ -16,7 +16,6 @@ class NewsletterController extends CoreController
     public function __construct(NewsletterService $newsletter_service)
     {
         $this->newsletter_service = $newsletter_service;
-        $this->authorizeResource(Newsletter::class, 'newsletter');
     }
 
     public function index(): View
@@ -32,7 +31,7 @@ class NewsletterController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->newsletter_service->store($request->validated());
+        $this->newsletter_service->create($request->validated());
         return redirect()->route('newsletters.index')->with('status', 'Newsletter created successfully!');
     }
 
@@ -49,7 +48,7 @@ class NewsletterController extends CoreController
 
     public function destroy(Newsletter $newsletter): RedirectResponse
     {
-        $this->newsletter_service->destroy($newsletter->id);
+        $this->newsletter_service->delete($newsletter->id);
         return redirect()->route('newsletters.index')->with('status', 'Newsletter deleted successfully!');
     }
 }

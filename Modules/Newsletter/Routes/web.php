@@ -13,4 +13,4 @@
 
 use Modules\Newsletter\Http\Controllers\NewsletterController;
 
-Route::resource('newsletter', NewsletterController::class)->except('show');
+Route::resource('newsletters', NewsletterController::class)->except('show');

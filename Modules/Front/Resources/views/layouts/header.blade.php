@@ -116,7 +116,7 @@
                                                    title="Remove this item"><i class="fa fa-remove"></i></a>
                                                 <a class="cart-img" href="#"><img src="{{$photo[0]}}"
                                                                                   alt="{{$photo[0]}}"></a>
-                                                <h4><a href="{{route('product-detail',$data->product['slug'])}}"
+                                                <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
                                                        target="_blank">{{$data->product['title']}}</a></h4>
                                                 <p class="quantity">{{$data->quantity}} x - <span
                                                             class="amount">${{number_format($data->price,2)}}</span></p>
@@ -155,7 +155,7 @@
                                                    title="Remove this item"><i class="fa fa-remove"></i></a>
                                                 <a class="cart-img" href="#"><img src="{{$photo[0]}}"
                                                                                   alt="{{$photo[0]}}"></a>
-                                                <h4><a href="{{route('product-detail',$data->product['slug'])}}"
+                                                <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
                                                        target="_blank">{{$data->product['title']}}</a></h4>
                                                 <p class="quantity">{{$data->quantity}} x - <span
                                                             class="amount">${{number_format($data->price,2)}}</span></p>

@@ -2,6 +2,8 @@
 
 namespace Modules\Category\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Modules\Category\Http\Requests\Api\Store;
@@ -20,6 +22,9 @@ class CategoryController extends CoreController
         $this->category_service = $category_service;
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Contracts\View\View|Application|RedirectResponse|View
+     */
     public function index()
     {
         $categories = $this->category_service->getAll();
@@ -41,15 +46,15 @@ class CategoryController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->category_service->store($request->validated());
+        $this->category_service->create($request->validated());
 
-        return redirect()->route('category.index');
+        return redirect()->route('categories.index');
     }
 
     public function edit(Category $category): View
     {
         return view('category::edit', [
-            'category' => $this->category_service->edit($category->id),
+            'category' => $this->category_service->findById($category->id),
             'categories' => Category::getTree()
         ]);
     }
@@ -58,12 +63,12 @@ class CategoryController extends CoreController
     {
         $this->category_service->update($category->id, $request->all());
 
-        return redirect()->route('category.index');
+        return redirect()->route('categories.index');
     }
 
     public function destroy(Category $category): RedirectResponse
     {
-        $this->category_service->destroy($category->id);
+        $this->category_service->delete($category->id);
 
         return redirect()->route('categories.index')->with('flash_message', 'Category successfully deleted!');
     }

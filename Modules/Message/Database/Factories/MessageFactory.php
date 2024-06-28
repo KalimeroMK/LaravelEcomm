@@ -11,9 +11,7 @@ class MessageFactory extends Factory
     protected $model = Message::class;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * @return array<String>
      */
     public function definition(): array
     {

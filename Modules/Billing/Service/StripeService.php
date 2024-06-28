@@ -26,10 +26,9 @@ class StripeService
     }
 
     /**
-     * success response method.
+     * Saves the order amount.
      *
      * @param  Request  $request
-     *
      * @return RedirectResponse
      * @throws ApiErrorException
      */
@@ -51,11 +50,11 @@ class StripeService
     /**
      * success response method.
      *
-     * @param $id
+     * @param  int  $id
      *
      * @return Application|Factory|View
      */
-    public function stripe($id): View|Factory|Application
+    public function stripe(int $id): View|Factory|Application
     {
         return view('front::pages.stripe', compact('id'));
     }

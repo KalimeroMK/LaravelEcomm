@@ -1,6 +1,8 @@
 version: "3.7"
 services:
   app:
+    ports:
+      - "11111:11111"  # Add this line to publish PHPStan Pro's port
     build:
       context: .docker
       dockerfile: Dockerfile

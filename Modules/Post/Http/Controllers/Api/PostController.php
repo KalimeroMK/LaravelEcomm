@@ -26,7 +26,7 @@ class PostController extends CoreController
     }
 
     /**
-     * @param  Search  $request
+     * @param Search $request
      *
      * @return ResourceCollection
      */
@@ -37,7 +37,7 @@ class PostController extends CoreController
 
     /**
      *
-     * @param  Store  $request
+     * @param Store $request
      * @return JsonResponse
      * @throws ReflectionException
      */
@@ -58,12 +58,12 @@ class PostController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function show($id): JsonResponse|string
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -76,16 +76,16 @@ class PostController extends CoreController
                     ]
                 )
             )
-            ->respond(new PostResource($this->post_service->show($id)));
+            ->respond(new PostResource($this->post_service->findById($id)));
     }
 
     /**
-     * @param  Update  $request
-     * @param  Post  $post
+     * @param Update $request
+     * @param $id
      * @return JsonResponse|string
      * @throws ReflectionException
      */
-    public function update(Update $request, Post $post): JsonResponse|string
+    public function update(Update $request, $id): JsonResponse|string
     {
         return $this
             ->setMessage(
@@ -98,17 +98,17 @@ class PostController extends CoreController
                     ]
                 )
             )
-            ->respond(new PostResource($this->post_service->update($post->id, $request->validated())));
+            ->respond(new PostResource($this->post_service->update($id, $request->validated())));
     }
 
     /**
-     * @param  Post  $post
+     * @param $id
      * @return JsonResponse|string
      * @throws ReflectionException
      */
-    public function destroy(Post $post): JsonResponse|string
+    public function destroy($id): JsonResponse|string
     {
-        $this->post_service->destroy($post->id);
+        $this->post_service->delete($id);
         return $this
             ->setMessage(
                 __(

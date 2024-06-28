@@ -10,11 +10,9 @@ use Modules\Category\Models\Category;
 class CategoryResource extends JsonResource
 {
     /**
-     * @param  Request  $request
-     *
-     * @return array
+     * @return string[]
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

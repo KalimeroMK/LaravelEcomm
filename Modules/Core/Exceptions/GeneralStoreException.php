@@ -4,6 +4,9 @@ namespace Modules\Core\Exceptions;
 
 class GeneralStoreException extends GeneralException
 {
+    /**
+     * @var int
+     */
     public $code = 422;
 
     /**

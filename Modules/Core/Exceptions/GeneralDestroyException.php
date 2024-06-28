@@ -4,6 +4,11 @@ namespace Modules\Core\Exceptions;
 
 class GeneralDestroyException extends GeneralException
 {
+    /**
+     * The HTTP status code for the exception.
+     *
+     * @var int
+     */
     public $code = 422;
 
     /**

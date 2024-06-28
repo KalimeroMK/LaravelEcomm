@@ -4,6 +4,9 @@ namespace Modules\Core\Exceptions;
 
 class GeneralSearchException extends GeneralException
 {
+    /**
+     * @var int
+     */
     public $code = 500;
 
     /**

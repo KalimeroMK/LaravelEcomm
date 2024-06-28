@@ -13,7 +13,7 @@
 
 use Modules\Product\Http\Controllers\Api\ProductController;
 
-Route::apiResource('product', ProductController::class)
+Route::apiResource('products', ProductController::class)
     ->except('update')
     ->names([
         'index' => 'api.product.index',
@@ -22,4 +22,4 @@ Route::apiResource('product', ProductController::class)
         'create' => 'api.product.create',
         'destroy' => 'api.product.destroy'
     ]);
-Route::post('product/{id}', [ProductController::class, 'update'])->name('api.product.update');
+Route::post('products/{id}', [ProductController::class, 'update'])->name('api.product.update');

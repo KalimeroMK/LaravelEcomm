@@ -6,12 +6,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Modules\Attribute\Http\Requests\Api\SearchRequest;
+use Modules\Attribute\Http\Requests\Store;
+use Modules\Attribute\Http\Requests\Update;
 use Modules\Attribute\Resource\AttributeResource;
 use Modules\Attribute\Service\AttributeService;
-use Modules\Brand\Http\Requests\Api\Update;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Traits\ApiResponses;
-use Modules\Coupon\Http\Requests\Api\Store;
 use ReflectionException;
 
 class AttributeController extends Controller
@@ -46,13 +46,13 @@ class AttributeController extends Controller
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->store($request->validated())));
+            ->respond(new AttributeResource($this->attribute_service->create($request->validated())));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -65,13 +65,13 @@ class AttributeController extends Controller
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->show($id)));
+            ->respond(new AttributeResource($this->attribute_service->findById($id)));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, $id): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -84,15 +84,15 @@ class AttributeController extends Controller
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->update($id, $request->all())));
+            ->respond(new AttributeResource($this->attribute_service->update($id, $request->validated())));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->attribute_service->destroy($id);
+        $this->attribute_service->delete($id);
         return $this
             ->setMessage(
                 __(

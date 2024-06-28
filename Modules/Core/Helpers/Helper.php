@@ -2,7 +2,7 @@
 
 namespace Modules\Core\Helpers;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
@@ -35,22 +35,20 @@ class Helper
         return $user_id !== 0 ? Cart::whereUserId($user_id)->whereOrderId(null)->sum('quantity') : 0;
     }
 
-    public static function getAllProductFromWishlist(string $user_id = ''): Collection|array|int
+    public static function getAllProductFromWishlist(string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
-
         return $user_id !== 0
             ? Wishlist::with('product')->where('user_id', $user_id)->where('cart_id', null)->get()
-            : 0;
+            : collect(); // Return an empty collection instead of 0
     }
 
-    public static function getAllProductFromCart(string $user_id = ''): Collection|array|int
+    public static function getAllProductFromCart(string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
-
         return $user_id !== 0
             ? Cart::with('product')->where('user_id', $user_id)->where('order_id', null)->get()
-            : 0;
+            : collect(); // Return an empty collection instead of 0
     }
 
     // Total amount cart
@@ -88,21 +86,28 @@ class Helper
     }
 
     /**
+     * @param  object|string  $class  The class name or object instance.
+     * @return string The class short name.
      * @throws ReflectionException
      */
-    public static function getResourceName($class): string
+    public static function getResourceName(object|string $class): string
     {
         $reflectionClass = new ReflectionClass($class);
         return $reflectionClass->getShortName();
     }
 
 
-    public static function postCategoryList(string $option = "all")
+    /**
+     * Retrieves a list of categories based on the option.
+     * @param  string  $option  Filter option, 'all' or categories with posts.
+     * @return Collection Returns a collection of categories.
+     */
+    public static function postCategoryList(string $option = "all"): Collection
     {
         $query = Category::orderBy('id', 'DESC');
 
         if ($option !== 'all') {
-            $query->has('posts');
+            $query->whereHas('posts');
         }
 
         return $query->get();

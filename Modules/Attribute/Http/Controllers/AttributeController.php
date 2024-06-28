@@ -33,14 +33,14 @@ class AttributeController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->attribute_service->store($request->validated());
+        $this->attribute_service->create($request->validated());
 
         return redirect()->route('attributes.index');
     }
 
     public function edit(Attribute $attribute): Renderable
     {
-        return view('attribute::edit', ['attribute' => $this->attribute_service->show($attribute->id)]);
+        return view('attribute::edit', ['attribute' => $this->attribute_service->findById($attribute->id)]);
     }
 
     public function update(Update $request, Attribute $attribute): RedirectResponse
@@ -52,7 +52,7 @@ class AttributeController extends CoreController
 
     public function destroy(Attribute $attribute): RedirectResponse
     {
-        $this->attribute_service->destroy($attribute->id);
+        $this->attribute_service->delete($attribute->id);
 
         return redirect()->route('attributes.index');
     }

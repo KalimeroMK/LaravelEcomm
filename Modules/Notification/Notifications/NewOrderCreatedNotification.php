@@ -12,7 +12,7 @@ class NewOrderCreatedNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    private $order;
+    private object $order;
 
     public function __construct($order)
     {
@@ -35,7 +35,7 @@ class NewOrderCreatedNotification extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray($notifiable): array
+    public function toArray(): array
     {
         return [
             'order_id' => $this->order->id,

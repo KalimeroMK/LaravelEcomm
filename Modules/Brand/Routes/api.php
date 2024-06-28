@@ -13,7 +13,7 @@ use Modules\Brand\Http\Controllers\Api\BrandController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::apiResource('brand', BrandController::class)
+Route::apiResource('brands', BrandController::class)
     ->except('update')
     ->names([
         'index' => 'api.brand.index',
@@ -22,4 +22,4 @@ Route::apiResource('brand', BrandController::class)
         'destroy' => 'api.brand.destroy',
         'create' => 'api.brand.create', // if you're using forms for APIs
     ]);
-Route::post('brand/{id}', [BrandController::class, 'update'])->name('api.brand.update');
+Route::post('brands/{id}', [BrandController::class, 'update'])->name('api.brand.update');

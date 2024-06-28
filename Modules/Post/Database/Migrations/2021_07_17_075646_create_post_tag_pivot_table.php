@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 
 return new class extends Migration {
-    public function up()
+    public function up(): void
     {
         Schema::create('post_tag', function (Blueprint $table) {
             $table->unsignedBigInteger('post_id')->index();
@@ -21,7 +21,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('post_tag');
     }
