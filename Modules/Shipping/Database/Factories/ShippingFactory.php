@@ -9,17 +9,15 @@ use Modules\Shipping\Models\Shipping;
 class ShippingFactory extends Factory
 {
     protected $model = Shipping::class;
-    
+
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * @return array|mixed[]
      */
     public function definition(): array
     {
         return [
-            'type'       => $this->faker->word,
-            'price'      => $this->faker->numberBetween(1, 100),
+            'type' => $this->faker->word,
+            'price' => $this->faker->numberBetween(1, 100),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

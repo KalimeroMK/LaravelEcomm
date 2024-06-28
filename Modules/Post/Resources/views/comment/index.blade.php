@@ -50,17 +50,17 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('comment.edit',$comment->id)}}"
+                                    <a href="{{route('comments.edit',$comment->id)}}"
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('comment.destroy',$comment->id)}}">
+                                    <form method="POST" action="{{route('comments.destroy',$comment->id)}}">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
                                                 data-id="{{$comment->id}}" style="height:30px; width:30px;border-radius:50%
                                         " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                    class="fas fa-trash-alt"></i></button>
+                                                class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

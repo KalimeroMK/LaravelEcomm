@@ -14,7 +14,7 @@ use Modules\Bundle\Http\Controllers\Api\BundleController;
     |
 */
 
-Route::apiResource('bundle', BundleController::class)
+Route::apiResource('bundles', BundleController::class)
     ->except('update')
     ->names([
         'index' => 'api.bundle.index',
@@ -23,5 +23,5 @@ Route::apiResource('bundle', BundleController::class)
         'destroy' => 'api.bundle.destroy',
         'create' => 'api.bundle.create', // if you're using forms for APIs
     ]);
-Route::delete('/bundle/{modelId}/media/{mediaId}',
+Route::delete('/bundles/{modelId}/media/{mediaId}',
     [BundleController::class, 'deleteMedia'])->name('api.bundle.delete-media');

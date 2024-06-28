@@ -14,7 +14,7 @@ use Modules\Category\Http\Controllers\Api\CategoryController;
 |
 */
 
-Route::apiResource('category', CategoryController::class)
+Route::apiResource('categories', CategoryController::class)
     ->names([
         'index' => 'api.category.index',
         'store' => 'api.category.store',

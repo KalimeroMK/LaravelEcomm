@@ -2,22 +2,35 @@
 
 namespace Modules\Product\Repository;
 
+use Illuminate\Support\Collection;
 use Modules\Core\Repositories\Repository;
 use Modules\Product\Models\ProductReview;
 
 class ProductReviewRepository extends Repository
 {
-    public $model = ProductReview::class;
-    
     /**
-     * @return mixed
+     * The model that the repository works with.
+     *
+     * @var string
      */
-    public function findAll(): mixed
+    public $model = ProductReview::class;
+
+    /**
+     * Find all product reviews.
+     *
+     * @return Collection<int, ProductReview>
+     */
+    public function findAll(): Collection
     {
         return $this->model::getAllReview();
     }
-    
-    public function findAllByUser()
+
+    /**
+     * Find all product reviews by user.
+     *
+     * @return Collection<int, ProductReview>
+     */
+    public function findAllByUser(): Collection
     {
         return $this->model::getAllUserReview();
     }

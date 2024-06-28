@@ -2,37 +2,27 @@
 
 namespace Modules\Bundle\Service;
 
-use Modules\Bundle\Models\Bundle;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Bundle\Repository\BundleRepository;
+use Modules\Core\Service\CoreService;
 use Modules\Product\Models\Product;
 
-class BundleService
+class BundleService extends CoreService
 {
     public BundleRepository $bundleRepository;
 
     public function __construct(BundleRepository $bundleRepository)
     {
+        parent::__construct($bundleRepository);
         $this->bundleRepository = $bundleRepository;
     }
 
-    /**
-     * @param $data
-     *
-     * @return mixed
-     */
-    public function store($data): mixed
-    {
-        $bundle = $this->bundleRepository->create($data);
-
-        $bundle->products()->attach($data['product']);
-
-        return $bundle;
-    }
 
     /**
-     * @param  int  $id
+     * Retrieves data necessary for editing a bundle.
      *
-     * @return mixed
+     * @param int $id The ID of the bundle to edit.
+     * @return array<string, mixed> Data needed for the edit operation.
      */
     public function edit(int $id): array
     {
@@ -43,50 +33,51 @@ class BundleService
     }
 
     /**
-     * @param $id
+     * Create a new banner with possible media files.
      *
-     * @return mixed
+     * @param array<string, mixed> $data The data for creating the banner.
+     * @return Model The newly created banner model.
      */
-    public function show($id): mixed
+    public function create(array $data): Model
     {
-        return $this->bundleRepository->findById($id);
+        $bundle = $this->bundleRepository->create($data);
+        $bundle->products()->attach($data['product']);
+
+        // Handle image uploads
+        if (request()->hasFile('images')) {
+            $bundle->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('bundle');
+                });
+        }
+
+        return $bundle;
     }
 
     /**
-     * @param $id
-     * @param $data
+     * Update an existing banner with new data and possibly new media files.
      *
-     * @return mixed|string
+     * @param int $id The banner ID to update.
+     * @param array<string, mixed> $data The data for updating the banner.
+     * @return Model The updated banner model.
      */
-    public function update($id, $data): mixed
+    public function update(int $id, array $data): Model
     {
-        return $this->bundleRepository->update((int)$id, $data);
+        $bundle = $this->bundleRepository->findById($id);
+        $bundle->products()->sync($data['product']);
+        $bundle->update($data);
+
+        // Check for new image uploads and handle them
+        if (request()->hasFile('images')) {
+            $bundle->clearMediaCollection('bundle'); // Optionally clear existing media
+            $bundle->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('bundle');
+                });
+        }
+
+        return $bundle;
     }
 
-    /**
-     * @param $id
-     *
-     * @return void
-     */
 
-    public function destroy($id): void
-    {
-        $this->bundleRepository->delete($id);
-    }
-
-    /**
-     * @return mixed|string
-     */
-    public function getAll(): mixed
-    {
-        return $this->bundleRepository->findAll();
-    }
-
-    public function create(): array
-    {
-        return [
-            'products' => Product::get(),
-            'bundle' => new Bundle(),
-        ];
-    }
 }

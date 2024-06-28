@@ -14,25 +14,25 @@ use Stripe\Exception\ApiErrorException;
 class StripeController extends CoreController
 {
     private StripeService $stripe_service;
-    
+
     public function __construct(StripeService $stripe_service)
     {
         $this->stripe_service = $stripe_service;
     }
-    
+
     /**
      * success response method.
      *
-     * @param $id
+     * @param  int  $id
      *
      * @return Application|Factory|View
      */
-    
-    public function stripe($id): View|Factory|Application
+
+    public function stripe(int $id): View|Factory|Application
     {
         return $this->stripe_service->stripe($id);
     }
-    
+
     /**
      * success response method.
      *
@@ -41,7 +41,7 @@ class StripeController extends CoreController
      * @return RedirectResponse
      * @throws ApiErrorException
      */
-    
+
     public function stripePost(Request $request): RedirectResponse
     {
         return $this->stripe_service->stripePost($request);

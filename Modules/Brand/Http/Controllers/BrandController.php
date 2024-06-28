@@ -34,7 +34,7 @@ class BrandController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->brand_service->store($request->validated());
+        $this->brand_service->create($request->validated());
 
         return redirect()->route('brands.index')->with('status', 'Brand created successfully.');
     }

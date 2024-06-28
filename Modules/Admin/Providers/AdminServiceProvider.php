@@ -11,12 +11,12 @@ class AdminServiceProvider extends ServiceProvider
      * @var string $moduleName
      */
     protected string $moduleName = 'Admin';
-    
+
     /**
      * @var string $moduleNameLower
      */
     protected string $moduleNameLower = 'admin';
-    
+
     /**
      * Boot the application events.
      *
@@ -29,7 +29,7 @@ class AdminServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
     }
-    
+
     /**
      * Register translations.
      *
@@ -38,20 +38,20 @@ class AdminServiceProvider extends ServiceProvider
     public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
-        
+
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
         } else {
             $this->loadTranslationsFrom(module_path($this->moduleName, 'Resources/lang'), $this->moduleNameLower);
         }
     }
-    
+
     /**
      * Register config.
      *
      * @return void
      */
-    protected function registerConfig()
+    protected function registerConfig(): void
     {
         $this->publishes([
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
@@ -61,7 +61,7 @@ class AdminServiceProvider extends ServiceProvider
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register views.
      *
@@ -70,16 +70,21 @@ class AdminServiceProvider extends ServiceProvider
     public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
-        
+
         $sourcePath = module_path($this->moduleName, 'Resources/views');
-        
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
-        
+
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
-    
+
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -88,10 +93,10 @@ class AdminServiceProvider extends ServiceProvider
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Register the service provider.
      *
@@ -101,11 +106,11 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
     }
-    
+
     /**
-     * Get the services provided by the provider.
+     * Gets the publishable view paths for the module.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
     public function provides(): array
     {

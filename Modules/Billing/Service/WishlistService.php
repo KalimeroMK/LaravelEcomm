@@ -2,41 +2,29 @@
 
 namespace Modules\Billing\Service;
 
+use Illuminate\Support\Collection;
 use Modules\Billing\Repository\WishlistRepository;
+use Modules\Core\Service\CoreService;
 
-class WishlistService
+class WishlistService extends CoreService
 {
 
     public WishlistRepository $wishlist_repository;
 
     public function __construct(WishlistRepository $wishlist_repository)
     {
-        $this->wishlist_repository = $wishlist_repository;
+        parent::__construct($wishlist_repository);
     }
 
     /**
-     * @return mixed|string
+     * @return Collection
      */
-    public function getAll(): mixed
+    public function getAll(): Collection
     {
-            return $this->wishlist_repository->findAll();
+        $colum = "user_id";
+        $value = auth()->user()->id;
+        return $this->wishlist_repository->findBy($colum, $value);
     }
 
-    public function store($data)
-    {
-            return $this->wishlist_repository->create($data);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     *
-     * @return void
-     */
-    public function destroy($id)
-    {
-            $this->wishlist_repository->delete($id);
-    }
 
 }

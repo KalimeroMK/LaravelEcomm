@@ -7,28 +7,25 @@ use Modules\Cart\Rules\ProductStockRule;
 
 class AddToCartSingle extends FormRequest
 {
-    
+
     /**
-     * @var mixed
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string> Array of field rules.
      */
-    public mixed $slug;
-    /**
-     * @var mixed
-     */
-    public mixed $quantity;
-    
+
     public function rules(): array
     {
         return [
-            'slug'     => 'required|exists:products',
+            'slug' => 'required|exists:products',
             'quantity' => [
                 'required',
                 new ProductStockRule(),
             ],
-        
+
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

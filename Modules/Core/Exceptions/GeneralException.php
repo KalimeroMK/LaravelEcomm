@@ -9,36 +9,46 @@ use Illuminate\Support\Facades\Log;
 class GeneralException extends Exception
 {
     /**
-     * Any extra data to send with the response.
-     *
-     * @var array
+     * Additional data related to the exception.
+     * @var array<string, mixed>
      */
     public array $data = [];
-    
-    protected $code = 500;
-    
-    protected $message = 'Internal system error';
-    
-    protected string $logMessage = 'Internal system error';
-    
-    protected bool $log = true;
-    
-    protected $exception = null;
-    
+
     /**
-     * GeneralException constructor.
-     *
+     * @var int
+     */
+    protected $code = 500;
+    /**
+     * @var string
+     */
+    protected $message = 'Internal system error';
+    /**
+     * @var bool
+     */
+    protected bool $log = true;
+    /**
      * @param  Exception|null  $exception
      * @param  array  $data
      */
-    public function __construct(?Exception $exception = null, $data = [])
+
+    /**
+     * The exception to log.
+     * @var Exception|null
+     */
+    protected ?Exception $exception = null;
+
+    /**
+     * Initializes a new instance of the GeneralException class.
+     * @param  Exception|null  $exception  The related exception, if any.
+     * @param  array<string, mixed>  $data  Additional data about the exception.
+     */
+    public function __construct(?Exception $exception = null, array $data = [])
     {
         $this->setException($exception);
         $this->setData($data);
-        
         parent::__construct($this->message());
     }
-    
+
     /**
      * @return string|null
      */
@@ -46,68 +56,60 @@ class GeneralException extends Exception
     {
         return $this->message;
     }
-    
+
     /**
      * @return null
      */
-    public function getException()
+    public function getException(): null
     {
         return $this->exception;
     }
-    
+
     /**
-     * @param  null  $exception
+     * Set the exception.
+     * @param  Exception|null  $exception
      */
-    public function setException($exception): void
+    public function setException(?Exception $exception): void
     {
         $this->exception = $exception;
     }
-    
+
     /**
-     * @return array
+     * Retrieves the additional data related to the exception.
+     * @return array<string, mixed>
      */
     public function getData(): array
     {
         return $this->data;
     }
-    
+
     /**
-     * Set the extra data to send with the response.
-     *
-     * @param  array  $data
-     *
+     * Sets the additional data related to the exception.
+     * @param  array<string, mixed>  $data  Additional data about the exception.
      * @return $this
      */
-    public function setData(array $data): GeneralException
+    public function setData(array $data): self
     {
         $this->data = $data;
-        
         return $this;
     }
-    
-    /**
-     * @param  int  $code
-     */
-    public function setCode(int $code)
-    {
-        $this->code = $code;
-    }
-    
+
+
     /**
      * @param  string  $message
      */
-    public function setMessage(string $message)
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
-    
-    public function render($request): JsonResponse
+
+    public function render(): JsonResponse
     {
         $this->isLog() ? $this->renderLog() : null;
-        
+
         return $this->prepareResponse();
     }
-    
+
     /**
      * @return bool
      */
@@ -115,68 +117,57 @@ class GeneralException extends Exception
     {
         return $this->log;
     }
-    
-    /**
-     * @param  bool  $log
-     */
-    public function setLog(bool $log): void
-    {
-        $this->log = $log;
-    }
-    
+
     /**
      * Log error
      */
-    public function renderLog()
+    public function renderLog(): void
     {
         Log::error(print_r($this->getLogResponse(), true));
     }
-    
+
     /**
-     * @return array
+     * Returns a structured array for logging purposes.
+     * @return array<string, mixed>
      */
     public function getLogResponse(): array
     {
         return [
             'message' => $this->getLogMessage(),
-            'code'    => $this->getCode(),
-            'line'    => $this->line(),
-            'file'    => $this->file(),
+            'code' => $this->getCode(),
+            'line' => $this->line(),
+            'file' => $this->file(),
         ];
     }
-    
+
+
     /**
+     * Returns the log message; defaults to an empty string if no exception is set.
      * @return string
      */
     public function getLogMessage(): string
     {
         return $this->exception ? $this->exception->getMessage() : '';
     }
-    
+
     /**
-     * @param  string  $logMessage
+     * Returns the exception line number or 'none'.
+     * @return int|string
      */
-    public function setLogMessage(string $logMessage): void
-    {
-        $this->logMessage = $logMessage;
-    }
-    
-    /**
-     * @return int
-     */
-    public function line()
+    public function line(): int|string
     {
         return $this->exception ? $this->exception->getLine() : 'none';
     }
-    
+
     /**
-     * @return int
+     * Returns the file in which the exception was thrown or 'none'.
+     * @return int|string
      */
-    public function file()
+    public function file(): int|string
     {
         return $this->exception ? $this->exception->getFile() : 'none';
     }
-    
+
     /**
      * Handle an ajax response.
      */
@@ -184,16 +175,17 @@ class GeneralException extends Exception
     {
         return response()->json($this->getResponse());
     }
-    
+
     /**
-     * @return array
+     * Returns a structured array to form the basis of a response.
+     * @return array<string, mixed>
      */
     public function getResponse(): array
     {
         return [
-            'code'    => $this->getCode(),
+            'code' => $this->getCode(),
             'message' => $this->message(),
         ];
     }
-    
+
 }

@@ -12,6 +12,7 @@ use Modules\Size\Http\Requests\Api\Store as Update;
 use Modules\Tag\Http\Resources\TagResource;
 use Modules\Tag\Models\Tag;
 use Modules\Tag\Service\TagService;
+use ReflectionException;
 
 class TagController extends CoreController
 {
@@ -50,13 +51,14 @@ class TagController extends CoreController
                     ]
                 )
             )
-            ->respond(new TagResource($this->tag_service->store($request->validated())));
+            ->respond(new TagResource($this->tag_service->create($request->validated())));
     }
 
     /**
      * @param $id
      *
-     * @return JsonResponse|string
+     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function show($id)
     {
@@ -71,9 +73,12 @@ class TagController extends CoreController
                     ]
                 )
             )
-            ->respond(new TagResource($this->tag_service->show($id)));
+            ->respond(new TagResource($this->tag_service->findById($id)));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function update(Update $request, $id)
     {
         return $this
@@ -94,9 +99,11 @@ class TagController extends CoreController
      * @param $id
      *
      * @return JsonResponse
+     * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
+        $this->tag_service->delete($id);
         return $this
             ->setMessage(
                 __(
@@ -108,6 +115,6 @@ class TagController extends CoreController
                     ]
                 )
             )
-            ->respond($this->tag_service->destroy($id));
+            ->respond(null);
     }
 }

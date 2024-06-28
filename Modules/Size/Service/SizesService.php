@@ -2,6 +2,8 @@
 
 namespace Modules\Size\Service;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Modules\Core\Service\CoreService;
 use Modules\Size\Repository\SizesRepository;
 
@@ -12,6 +14,7 @@ class SizesService extends CoreService
 
     public function __construct(SizesRepository $sizes_repository)
     {
+        parent::__construct($sizes_repository);
         $this->sizes_repository = $sizes_repository;
     }
 
@@ -22,56 +25,56 @@ class SizesService extends CoreService
      */
     public function store($data): mixed
     {
-            return $this->sizes_repository->create($data);
+        return $this->sizes_repository->create($data);
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return mixed|string
+     * @return Model|null
      */
-    public function edit($id): mixed
+    public function edit(int $id): ?Model
     {
-            return $this->sizes_repository->findById($id);
+        return $this->sizes_repository->findById($id);
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return mixed|string
+     * @return Model
      */
-    public function show($id): mixed
+    public function show(int $id): Model
     {
-            return $this->sizes_repository->findById($id);
+        return $this->sizes_repository->findById($id);
     }
 
     /**
-     * @param $id
-     * @param $data
+     * @param  int  $id
+     * @param  array  $data
      *
-     * @return mixed|string
+     * @return Model
      */
-    public function update($id, $data): mixed
+    public function update(int $id, array $data): Model
     {
-            return $this->sizes_repository->update($id, $data);
+        return $this->sizes_repository->update($id, $data);
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
-     * @return string|void
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(int $id): void
     {
-            $this->sizes_repository->delete($id);
+        $this->sizes_repository->delete($id);
     }
 
     /**
-     * @return mixed|string
+     * @return Collection
      */
-    public function getAll(): mixed
+    public function getAll(): Collection
     {
-            return $this->sizes_repository->findAll();
+        return $this->sizes_repository->findAll();
     }
 
 }

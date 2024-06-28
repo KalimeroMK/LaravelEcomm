@@ -5,12 +5,18 @@ namespace Modules\Product\Http\Controllers;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Modules\Attribute\Models\Attribute;
+use Modules\Brand\Models\Brand;
+use Modules\Category\Models\Category;
+use Modules\Core\Helpers\Condition;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Product\Http\Requests\Api\Search;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
+use Modules\Size\Models\Size;
+use Modules\Tag\Models\Tag;
 
 class ProductController extends CoreController
 {
@@ -24,12 +30,21 @@ class ProductController extends CoreController
 
     public function index(Search $request): Renderable
     {
-        return view('product::index', ['products' => $this->product_service->getAll($request->validated())]);
+        return view('product::index', ['products' => $this->product_service->search($request->validated())]);
     }
 
     public function create(): Renderable
     {
-        return view('product::create')->with($this->product_service->create());
+        return view('product::create', [
+                'brands' => Brand::get(),
+                'categories' => Category::get(),
+                'product' => new Product(),
+                'sizes' => Size::get(),
+                'conditions' => Condition::get(),
+                'tags' => Tag::get(),
+                'attributes' => Attribute::all()
+            ]
+        );
     }
 
     /**
@@ -48,7 +63,16 @@ class ProductController extends CoreController
 
     public function edit(Product $product): Renderable
     {
-        return view('product::edit')->with($this->product_service->edit($product->id));
+        return view('product::edit', [
+                'brands' => Brand::get(),
+                'categories' => Category::get(),
+                'product' => $product,
+                'sizes' => Size::get(),
+                'conditions' => Condition::get(),
+                'tags' => Tag::get(),
+                'attributes' => Attribute::all()
+            ]
+        );
     }
 
     /**
@@ -67,11 +91,11 @@ class ProductController extends CoreController
 
     public function destroy(Product $product): RedirectResponse
     {
-        $this->product_service->destroy($product->id);
+        $this->product_service->delete($product->id);
         return redirect()->route('product.index');
     }
 
-    public function deleteMedia($modelId, $mediaId)
+    public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
         $model = Product::findOrFail($modelId);
         $model->media()->where('id', $mediaId)->first()->delete();

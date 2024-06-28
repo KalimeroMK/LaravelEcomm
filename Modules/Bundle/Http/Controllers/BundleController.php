@@ -8,8 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Models\Bundle;
 use Modules\Bundle\Service\BundleService;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Modules\Product\Models\Product;
 
 class BundleController extends Controller
 {
@@ -30,17 +29,16 @@ class BundleController extends Controller
 
     public function create(): View
     {
-        return view('bundle::create')->with($this->bundleService->create());
+        return view('bundle::create', compact([
+            'products' => Product::get(),
+            'bundle' => new Bundle(),
+        ]));
     }
 
     public function store(Store $request): RedirectResponse
     {
-        $bundle = $this->bundleService->store($request->all());
-        if (request()->hasFile('images')) {
-            $bundle->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('item_images');
-            });
-        }
+        $bundle = $this->bundleService->create($request->all());
+
         return redirect()->route('bundle.index')->with('status', 'Brand created successfully.');
     }
 
@@ -48,19 +46,10 @@ class BundleController extends Controller
     {
         return view('bundle::edit')->with($this->bundleService->edit($bundle->id));
     }
-
-    /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
+    
     public function update(Store $request, Bundle $bundle): RedirectResponse
     {
         $this->bundleService->update($bundle->id, $request->all());
-        if (request()->hasFile('images')) {
-            $bundle->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('bundle');
-            });
-        }
         return redirect()->route('bundle.edit', $bundle)->with('status', 'Brand updated successfully.');
     }
 
@@ -71,11 +60,21 @@ class BundleController extends Controller
         return redirect()->route('bundle.index')->with('status', 'Brand deleted successfully.');
     }
 
-    public function deleteMedia($modelId, $mediaId)
+
+    /**
+     * Deletes a media item associated with a bundle.
+     *
+     * @param int $modelId The ID of the bundle.
+     * @param int $mediaId The ID of the media to be deleted.
+     * @return RedirectResponse
+     */
+    public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
         $model = Bundle::findOrFail($modelId);
-        $model->media()->where('id', $mediaId)->first()->delete();
+        $media = $model->media()->where('id', $mediaId)->firstOrFail();
+        $media->delete();
 
-        return back()->with('success', 'Media deleted successfully.');
+        return redirect()->route('bundle.index')->with('status', 'Media deleted successfully.');
     }
+
 }

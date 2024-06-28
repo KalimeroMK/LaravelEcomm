@@ -11,9 +11,7 @@ class PostFactory extends Factory
     protected $model = Post::class;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array
+     * @return array|mixed[]
      */
     public function definition(): array
     {

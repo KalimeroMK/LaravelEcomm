@@ -9,40 +9,50 @@ use Modules\Core\Traits\ApiResponses;
 class CoreController extends Controller
 {
     use ApiResponses;
-    
+
     /**
-     * @param $result
-     * @param $message
+     * Send a JSON response back to the client.
+     *
+     * @param  array<mixed>  $result  The result data to send back. Expected keys and types:
+     *                              - 'items': array<Item>
+     *                              - 'count': int
+     *                              - 'totalPrice': float
+     *                              - etc., depending on what $result can include
+     * @param  string  $message  The message to include in the response.
      *
      * @return JsonResponse
      */
-    public function sendResponse($result, $message)
+    public function sendResponse(array $result, string $message): JsonResponse
     {
         $response = [
             'success' => true,
-            'data'    => $result,
+            'data' => $result,
             'message' => $message,
         ];
-        
-        return response()->json($response, 200);
+
+        return response()->json($response);
     }
-    
+
+
     /**
-     * return error response.
+     * Return an error response.
+     *
+     * @param  string  $error  The main error message.
+     * @param  array<string>  $errorMessages  Additional error messages or details, typically strings.
+     * @param  int  $code  HTTP status code, defaults to 404.
      *
      * @return JsonResponse
      */
-    public function sendError($error, $errorMessages = [], $code = 404)
+    public function sendError(string $error, array $errorMessages = [], int $code = 404): JsonResponse
     {
         $response = [
             'success' => false,
             'message' => $error,
+            'errors' => $errorMessages,
         ];
-        
-        if ( ! empty($errorMessages)) {
-            $response['data'] = $errorMessages;
-        }
-        
+
         return response()->json($response, $code);
     }
+
+
 }

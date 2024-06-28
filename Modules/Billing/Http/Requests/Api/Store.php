@@ -9,22 +9,25 @@ use Modules\Product\Models\Product;
 
 class Store extends CoreRequest
 {
+    /**
+     * @return WishlistRule[]
+     */
     public function rules(): array
     {
         return [
             'slug' => new WishlistRule(),
         ];
     }
-    
-    public function passedValidation()
+
+    public function passedValidation(): void
     {
         $this->merge([
             'product_id' => Product::whereSlug($this->get('slug'))->first()->id,
-            'quantity'   => 1,
-            'user_id'    => Auth::id(),
-            'discount'   => Product::whereSlug($this->get('slug'))->first()->discount,
-            'price'      => Product::whereSlug($this->get('slug'))->first()->price,
-        
+            'quantity' => 1,
+            'user_id' => Auth::id(),
+            'discount' => Product::whereSlug($this->get('slug'))->first()->discount,
+            'price' => Product::whereSlug($this->get('slug'))->first()->price,
+
         ]);
     }
 }

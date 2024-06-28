@@ -35,7 +35,7 @@ class BundleController extends CoreController
     }
 
     /**
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return JsonResponse
      * @throws Exception
@@ -57,12 +57,12 @@ class BundleController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function show($id)
+    public function show(int $id)
     {
         return $this
             ->setMessage(
@@ -75,17 +75,17 @@ class BundleController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->bundleService->show($id)));
+            ->respond(new BannerResource($this->bundleService->findById($id)));
     }
 
     /**
-     * @param  Update  $request
-     * @param $id
+     * @param Update $request
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function update(Update $request, $id)
+    public function update(Update $request, int $id)
     {
         return $this
             ->setMessage(
@@ -102,22 +102,26 @@ class BundleController extends CoreController
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
-        $this->bundleService->destroy($id);
-
-        $resourceName = Helper::getResourceName(
-            $this->bundleService->bundleRepository->model
-        );
-
-        $message = __('apiResponse.deleteSuccess', ['resource' => $resourceName]);
-
-        return $this->setMessage($message)->respond(null);
+        $this->bundleService->delete($id);
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->bundleService->bundleRepository->model
+                        ),
+                    ]
+                )
+            )
+            ->respond(null);
     }
 
 }

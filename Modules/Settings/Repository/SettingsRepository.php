@@ -8,11 +8,11 @@ use Modules\Settings\Models\Setting;
 class SettingsRepository extends Repository
 {
     public $model = Setting::class;
-    
+
     /**
-     * @return mixed
+     * @return object
      */
-    public function findFirst(): mixed
+    public function findFirst(): object
     {
         return $this->model::first();
     }

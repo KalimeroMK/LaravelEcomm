@@ -11,14 +11,14 @@ use Modules\Post\Models\Post;
 class PostNewsletterCommand extends Command
 {
     protected $signature = 'newsletter:post';
-    
+
     protected $description = 'Command description';
-    
-    public function handle()
+
+    public function handle(): void
     {
-        $posts       = Post::orderBy('id', 'asc')
-                           ->take(10)
-                           ->get();
+        $posts = Post::orderBy('id')
+            ->take(10)
+            ->get();
         $newsletters = Newsletter::whereIsValidated(true)->get();
         foreach ($newsletters as $newsletter) {
             Mail::to($newsletter->email)->send(new PostNewsletterMail($posts));

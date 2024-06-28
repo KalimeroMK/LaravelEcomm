@@ -11,7 +11,7 @@ class Products implements ToCollection, WithHeadingRow
 {
     /**
      * @param  Collection  $collection
-     * @return Product
+     * @return string
      */
     function collection(Collection $collection): string
     {

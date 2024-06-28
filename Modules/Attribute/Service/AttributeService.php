@@ -9,37 +9,19 @@ class AttributeService extends CoreService
 {
     public AttributeRepository $attribute_repository;
 
-    public function __construct(AttributeRepository $attribute_repository)
+    public function __construct(AttributeRepository $attributeRepository)
     {
-        $this->attribute_repository = $attribute_repository;
+        parent::__construct($attributeRepository);
+        $this->attribute_repository = $attributeRepository;
     }
 
-    public function getAll()
-    {
-        return $this->attribute_repository->findAll();
-    }
-
-    public function store(array $data)
-    {
-        return $this->attribute_repository->create($data);
-    }
-
-    public function show(int $id)
-    {
-        return $this->attribute_repository->findById($id);
-    }
-
-    public function update(int $id, array $data)
-    {
-        return $this->attribute_repository->update($id, $data);
-    }
-
-    public function destroy(int $id): void
-    {
-        $this->attribute_repository->delete($id);
-    }
-
-    public function search(array $data)
+    /**
+     * Search for attributes based on given criteria.
+     *
+     * @param array<string, mixed> $data The search criteria.
+     * @return mixed
+     */
+    public function search(array $data): mixed
     {
         return $this->attribute_repository->search($data);
     }

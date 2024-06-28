@@ -16,6 +16,6 @@ use Modules\Coupon\Http\Controllers\CouponController;
 use Modules\Front\Http\Controllers\Api\FrontController;
 
 Route::prefix('admin')->middleware(['auth',])->group(function () {
-    Route::resource('coupon', CouponController::class)->except('show');
+    Route::resource('coupons', CouponController::class)->except('show');
 });
-Route::post('/coupon-store', [FrontController::class, 'couponStore'])->name('coupon-store');
+Route::post('/coupons-store', [FrontController::class, 'couponStore'])->name('coupon-store');

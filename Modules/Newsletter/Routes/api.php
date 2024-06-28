@@ -14,7 +14,7 @@ use Modules\Newsletter\Http\Controllers\Api\NewsletterController;
 |
 */
 
-Route::apiResource('newsletter', NewsletterController::class)
+Route::apiResource('newsletters', NewsletterController::class)
     ->names([
         'index' => 'api.newsletter.index',
         'store' => 'api.newsletter.store',

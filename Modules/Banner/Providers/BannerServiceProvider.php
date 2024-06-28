@@ -83,6 +83,11 @@ class BannerServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -106,9 +111,9 @@ class BannerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
+     * Gets the publishable view paths for the module.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
     public function provides(): array
     {

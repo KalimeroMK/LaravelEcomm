@@ -4,6 +4,7 @@ namespace Modules\Core\Providers;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\Front\Providers\RouteServiceProvider;
 use Modules\Settings\Models\Setting;
 
 class CoreServiceProvider extends ServiceProvider
@@ -23,7 +24,7 @@ class CoreServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerTranslations();
         $this->registerConfig();
@@ -36,7 +37,7 @@ class CoreServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
         $this->app->singleton('settings', function () {
@@ -49,7 +50,7 @@ class CoreServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerConfig()
+    protected function registerConfig(): void
     {
         $this->publishes([
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
@@ -65,7 +66,7 @@ class CoreServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerViews()
+    public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
 
@@ -83,7 +84,7 @@ class CoreServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerTranslations()
+    public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 
@@ -95,15 +96,20 @@ class CoreServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
+     * Gets the publishable view paths for the module.
      *
-     * @return array
+     * @return array<string> Array of paths.
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }
 
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -115,4 +121,5 @@ class CoreServiceProvider extends ServiceProvider
 
         return $paths;
     }
+
 }

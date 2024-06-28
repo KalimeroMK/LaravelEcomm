@@ -7,17 +7,16 @@ use Illuminate\Foundation\Http\FormRequest;
 class ProductReviewStore extends FormRequest
 {
     /**
-     * @var mixed
+     * @return string[]
      */
-    public $slug;
-    
+
     public function rules(): array
     {
         return [
             'rate' => 'required|numeric|min:1',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

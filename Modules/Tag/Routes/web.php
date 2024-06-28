@@ -14,4 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Tag\Http\Controllers\TagController;
 
-Route::resource('tag', TagController::class)->except('show');
+Route::resource('tags', TagController::class)->except('show');

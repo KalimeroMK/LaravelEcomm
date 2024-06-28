@@ -13,30 +13,31 @@ use Modules\Product\Http\Resources\ProductResource;
 class CartResource extends JsonResource
 {
     /**
-     * @param  Request  $request
+     * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string> Array of field rules.
      */
-    public function toArray($request): array
+
+    public function toArray(Request $request): array
     {
         return [
-            'id'              => $this->id,
-            'price'           => $this->price,
-            'status'          => $this->status,
-            'quantity'        => $this->quantity,
-            'amount'          => $this->amount,
-            'created_at'      => $this->created_at,
-            'updated_at'      => $this->updated_at,
+            'id' => $this->id,
+            'price' => $this->price,
+            'status' => $this->status,
+            'quantity' => $this->quantity,
+            'amount' => $this->amount,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'wishlists_count' => $this->wishlists_count,
-            
+
             'product_id' => $this->product_id,
-            'order_id'   => $this->order_id,
-            'user_id'    => $this->user_id,
-            
-            'order'     => new OrderResource($this->whenLoaded('order')),
-            'product'   => new ProductResource($this->whenLoaded('product')),
+            'order_id' => $this->order_id,
+            'user_id' => $this->user_id,
+
+            'order' => new OrderResource($this->whenLoaded('order')),
+            'product' => new ProductResource($this->whenLoaded('product')),
             'wishlists' => WishlistResource::collection($this->whenLoaded('wishlists')),
-        
+
         ];
     }
 }

@@ -14,4 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Brand\Http\Controllers\BrandController;
 
-Route::resource('brand', BrandController::class)->except('show');
+Route::resource('brands', BrandController::class)->except('show');

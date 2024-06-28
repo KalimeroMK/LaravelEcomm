@@ -10,7 +10,11 @@ use Modules\Product\Models\Product;
 
 class Products implements FromCollection, WithHeadings, WithMapping
 {
-
+    /**
+     * Get the headers for the export.
+     *
+     * @return array<int, string>
+     */
     public function headings(): array
     {
         return [
@@ -34,13 +38,21 @@ class Products implements FromCollection, WithHeadings, WithMapping
     }
 
     /**
-     * @return Collection
+     * Get the collection of products for the export.
+     *
+     * @return Collection<int, Product>
      */
     public function collection(): Collection
     {
         return Product::all();
     }
 
+    /**
+     * Map the data for each product.
+     *
+     * @param  Product  $row
+     * @return array<int, mixed>
+     */
     public function map($row): array
     {
         return [

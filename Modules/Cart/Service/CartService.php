@@ -3,8 +3,8 @@
 namespace Modules\Cart\Service;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
@@ -22,7 +22,9 @@ class CartService
     }
 
     /**
-     * @return mixed|string
+     * Get all attributes.
+     *
+     * @return object
      */
     public function getAll(): mixed
     {
@@ -31,7 +33,6 @@ class CartService
 
     /**
      * @param $data
-     *
      * @return Cart|Core
      */
     public function apiAddToCart($data): Cart|Core
@@ -141,7 +142,7 @@ class CartService
     }
 
     /**
-     * @return Builder[]|Collection
+     * @return Builder[]|Collection|Core[]
      */
     public function checkout(): Collection|array
     {
@@ -149,17 +150,23 @@ class CartService
     }
 
     /**
-     * @param $id
+     * Delete an attribute.
      *
-     * @return string|void
+     * @param int $id The attribute ID.
      */
 
-    public function destroy($id)
+    public function destroy(int $id): void
     {
         $this->cart_repository->delete($id);
     }
 
-    public function cartUpdate($data): RedirectResponse
+    /**
+     * Update an existing attribute.
+     *
+     * @param $data
+     * @return mixed
+     */
+    public function cartUpdate($data): mixed
     {
         if ($data->quantity) {
             $error = [];

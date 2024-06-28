@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -10,21 +11,23 @@ use Modules\Product\Models\Product;
 
 class ProductRepository extends Repository
 {
+    /**
+     * The model that the repository works with.
+     *
+     * @var string
+     */
     public $model = Product::class;
-
-
-    const DEFAULT_ORDER_BY = 'id';
-    const DEFAULT_SORT = 'desc';
 
     private const LATEST_PRODUCTS_LIMIT = 4;
 
     /**
-     * @param  $id
-     * @param  array  $data
+     * Update a product by ID.
      *
-     * @return mixed
+     * @param  int  $id
+     * @param  array<string, mixed>  $data
+     * @return Model
      */
-    public function update($id, array $data): mixed
+    public function update(int $id, array $data): Model
     {
         $item = $this->findById($id);
         $item->fill($data);
@@ -34,20 +37,32 @@ class ProductRepository extends Repository
     }
 
     /**
-     * @param $id
+     * Find a product by ID.
      *
-     * @return mixed
+     * @param  int  $id
+     * @return Model|null
      */
-    public function findById($id): mixed
+    public function findById(int $id): ?Model
     {
         return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
     }
 
+    /**
+     * Get the relations to be loaded.
+     *
+     * @return array<int, string>
+     */
     protected function withRelations(): array
     {
         return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags', 'attributeValues.attribute'];
     }
 
+    /**
+     * Search for products based on given data.
+     *
+     * @param  array<string, mixed>  $data
+     * @return mixed
+     */
     public function search(array $data): mixed
     {
         $cacheKey = 'search_'.md5(json_encode($data));
@@ -74,18 +89,21 @@ class ProductRepository extends Repository
             }
 
             $query->orderBy(
-                Arr::get($data, 'order_by') ?? 'id', // Assuming 'id' as the default order by
-                Arr::get($data, 'sort') ?? 'desc' // Assuming 'desc' as the default sort
+                Arr::get($data, 'order_by', 'id'),
+                Arr::get($data, 'sort', 'desc')
             );
 
-            // Assuming withRelations() is a method that returns an array of relations to load
             return $query->with($this->withRelations())->paginate(
-                Arr::get($data, 'per_page') ?? (new $this->model)->getPerPage()
+                Arr::get($data, 'per_page', (new $this->model)->getPerPage())
             );
         });
     }
 
-
+    /**
+     * Get the latest products.
+     *
+     * @return Collection<int, Product>
+     */
     public function getLatestProducts(): Collection
     {
         return Cache::remember('latest_products', 86400, function () {
@@ -100,7 +118,7 @@ class ProductRepository extends Repository
     /**
      * Get the featured products.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection<int, Product>
      */
     public function getFeaturedProducts(): Collection
     {
@@ -111,5 +129,4 @@ class ProductRepository extends Repository
                 ->get();
         });
     }
-
 }

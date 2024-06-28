@@ -6,7 +6,7 @@
     <div class="card">
         <h5 class="card-header">Order <a href="{{route('order.pdf',$order->id)}}"
                                          class=" btn btn-sm btn-primary shadow-sm float-right"><i
-                        class="fas fa-download fa-sm text-white-50"></i> Generate PDF</a>
+                    class="fas fa-download fa-sm text-white-50"></i> Generate PDF</a>
         </h5>
         <div class="card-body">
             @if($order)
@@ -45,16 +45,16 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{route('order.edit',$order->id)}}" class="btn btn-primary btn-sm float-left mr-1"
+                            <a href="{{route('orders.edit',$order->id)}}" class="btn btn-primary btn-sm float-left mr-1"
                                style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
                                data-placement="bottom"><i class="fas fa-edit"></i></a>
-                            <form method="POST" action="{{route('order.destroy',[$order->id])}}">
+                            <form method="POST" action="{{route('orders.destroy',[$order->id])}}">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px;
                                         width:30px;border-radius:50%
                                 " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                        class="fas fa-trash-alt"></i></button>
+                                    class="fas fa-trash-alt"></i></button>
                             </form>
                         </td>
 

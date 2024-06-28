@@ -45,10 +45,14 @@ use Modules\Message\Database\Factories\MessageFactory;
 class Message extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'messages';
-    
-    protected $dates = [
+
+    /**
+     * The attributes that should be mutated to dates.
+     * @var string[]
+     */
+    protected array $dates = [
         'read_at',
     ];
     
@@ -61,7 +65,7 @@ class Message extends Core
         'message',
         'read_at',
     ];
-    
+
     /**
      * @return MessageFactory
      */

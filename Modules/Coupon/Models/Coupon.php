@@ -9,7 +9,6 @@ namespace Modules\Coupon\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Models\Core;
 
 /**
@@ -37,43 +36,37 @@ use Modules\Core\Models\Core;
  */
 class Coupon extends Core
 {
-    
+
     protected $table = 'coupons';
-    
+
     protected $casts = [
         'value' => 'float',
     ];
-    
+
     protected $fillable = [
         'code',
         'type',
         'value',
         'status',
     ];
-    
+
     /**
-     * @param $code
+     * Calculates the discount based on the total amount and the coupon type.
      *
-     * @return Model|Builder|Coupon|null
+     * @param  float  $total  The total amount on which the discount is to be applied.
+     * @return float The amount of discount.
      */
-    public static function findByCode($code): Model|Builder|Coupon|null
-    {
-        return self::where('code', $code)->first();
-    }
-    
-    /**
-     * @param $total
-     *
-     * @return float|int
-     */
-    public function discount($total): float|int
+    public function discount(float $total): float
     {
         if ($this->type == "fixed") {
-            return $this->value;
+            // Assuming 'value' is the fixed discount amount.
+            return min($this->value, $total); // Ensure discount does not exceed the total.
         } elseif ($this->type == "percent") {
-            return ($this->value / 100) * $total;
-        } else {
-            return 0;
+            // Assuming 'value' is the percentage discount.
+            return $total * ($this->value / 100);
         }
+
+        return 0; // No discount applicable.
     }
+
 }

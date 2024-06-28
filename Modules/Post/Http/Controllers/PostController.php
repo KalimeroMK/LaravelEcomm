@@ -9,12 +9,16 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Category\Models\Category;
 use Modules\Post\Export\Posts as PostExport;
 use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
 use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
+use Modules\Tag\Models\Tag;
+use Modules\User\Models\User;
+use PhpOffice\PhpSpreadsheet\Exception;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -42,7 +46,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return RedirectResponse
      * @throws FileDoesNotExist
@@ -50,12 +54,7 @@ class PostController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $post = $this->post_service->store($request->validated());
-        if (request()->hasFile('images')) {
-            $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('post');
-            });
-        }
+        $post = $this->post_service->create($request->validated());
         return redirect()->route('posts.index');
     }
 
@@ -66,46 +65,48 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post::create')->with($this->post_service->create());
+        return view('post::create', [
+            'categories' => Category::all(),
+            'tags' => Tag::all(),
+            'users' => User::all(),
+            'post' => new Post()
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Post  $post
+     * @param Post $post
      *
      * @return Application|Factory|View
      */
     public function edit(Post $post)
     {
-        return view('post::edit')->with($this->post_service->edit($post->id));
+        $categories = Category::all();
+        $tags = Tag::all();
+        $users = User::all();
+        $post = $this->post_service->findById($post->id);
+        return view('post::edit', compact('categories', 'tags', 'users', 'post'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Update  $request
-     * @param  Post  $post
+     * @param Update $request
+     * @param Post $post
      *
      * @return RedirectResponse
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
-        $this->post_service->update($request->all(), $post);
-        if (request()->hasFile('images')) {
-            $post->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('post');
-            });
-        }
+        $this->post_service->update($post->id, $request->validated());
         return redirect()->route('posts.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Post  $post
+     * @param Post $post
      *
      * @return RedirectResponse
      */
@@ -113,13 +114,15 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post);
 
-        $this->post_service->destroy($post->id);
+        $this->post_service->delete($post->id);
 
         return redirect()->back();
     }
 
     /**
      * @return BinaryFileResponse
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function export()
     {
@@ -137,7 +140,7 @@ class PostController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return void
      */
@@ -146,7 +149,7 @@ class PostController extends Controller
         $this->post_service->upload($request);
     }
 
-    public function deleteMedia($modelId, $mediaId)
+    public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
         $model = Post::findOrFail($modelId);
         $model->media()->where('id', $mediaId)->first()->delete();

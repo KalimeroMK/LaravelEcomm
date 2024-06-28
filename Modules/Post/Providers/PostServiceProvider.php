@@ -87,6 +87,20 @@ class PostServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
+    /**
+     *
+     * @return array<string> Array of paths.
+     */
+    public function provides(): array
+    {
+        return [];
+    }
+
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
@@ -107,16 +121,6 @@ class PostServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides(): array
-    {
-        return [];
     }
 
     protected function registerPolicies(): void

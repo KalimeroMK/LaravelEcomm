@@ -30,7 +30,7 @@ use Modules\User\Models\User;
  * @property int|null $shipping_id
  * @property float|null $coupon
  * @property float $total_amount
- * @property int $quantityity
+ * @property int $quantity
  * @property string $payment_method
  * @property string $payment_status
  * @property string $status
@@ -122,11 +122,11 @@ class Order extends Core
     }
 
     /**
-     * @param $id
+     * @param  int  $id
      *
      * @return Builder|Builder[]|Collection|Model|null
      */
-    public static function getAllOrder($id): Model|Collection|Builder|array|null
+    public static function getAllOrder(int $id): Model|Collection|Builder|array|null
     {
         return Order::with('cart_info')->find($id);
     }
