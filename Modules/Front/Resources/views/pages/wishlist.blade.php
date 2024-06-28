@@ -45,7 +45,8 @@
                                     <td class="image" data-title="No"><img src="{{$photo[0]}}" alt="{{$photo[0]}}"></td>
                                     <td class="product-des" data-title="Description">
                                         <p class="product-name"><a
-                                                    href="{{route('product-detail',$wishlist->product['slug'])}}">{{$wishlist->product['title']}}</a>
+                                                    href="{{route('front.product-detail',$wishlist->product['slug'])
+                                                    }}">{{$wishlist->product['title']}}</a>
                                         </p>
                                         <p class="product-des">{!!($wishlist['summary']) !!}</p>
                                     </td>
