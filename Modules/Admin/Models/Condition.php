@@ -6,18 +6,19 @@
 
 namespace Modules\Admin\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
-class Condition extends Core
+class Condition extends Model
 {
     protected $table = 'conditions';
-    
-    protected $fillable = [
-        'status',
-    ];
-    
+
+    protected $fillable
+        = [
+            'status',
+        ];
+
     /**
      * @return BelongsToMany
      */
@@ -25,5 +26,5 @@ class Condition extends Core
     {
         return $this->belongsToMany(Product::class);
     }
-    
+
 }

@@ -20,13 +20,13 @@ use JeroenG\Explorer\Application\Explored;
 use JeroenG\Explorer\Application\IndexSettings;
 use Kalimeromk\Filterable\app\Traits\Filterable;
 use Laravel\Scout\Searchable;
+use Modules\Admin\Models\Condition;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
 use Modules\Bundle\Models\Bundle;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
-use Modules\Core\Helpers\Condition;
 use Modules\Core\Models\Core;
 use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
@@ -107,7 +107,9 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
             'brand_id' => 'int',
             'special_price_start' => 'date',
             'special_price_end' => 'date',
-            'special_price' => 'float'
+            'special_price' => 'float',
+            'condition_id' => 'int',
+
         ];
 
     protected $fillable
@@ -127,7 +129,9 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
             'color',
             'special_price',
             'special_price_start',
-            'special_price_end'
+            'special_price_end',
+            'condition_id',
+
         ];
 
     public const likeRows

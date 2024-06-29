@@ -71,5 +71,6 @@ return [
     'database' => 'Database',
     'categories' => 'Categories',
     'sku' => 'SKU',
+    'stock' => 'Stock',
 
 ];

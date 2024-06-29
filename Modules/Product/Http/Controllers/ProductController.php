@@ -5,10 +5,10 @@ namespace Modules\Product\Http\Controllers;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Modules\Admin\Models\Condition;
 use Modules\Attribute\Models\Attribute;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
-use Modules\Core\Helpers\Condition;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Product\Http\Requests\Api\Search;
 use Modules\Product\Http\Requests\Store;
@@ -58,17 +58,17 @@ class ProductController extends CoreController
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
         }
-        return redirect()->route('product.index');
+        return redirect()->route('products.index');
     }
 
     public function edit(Product $product): Renderable
     {
         return view('product::edit', [
                 'brands' => Brand::get(),
-                'categories' => Category::get(),
+                'categories' => Category::all(),
                 'product' => $product,
                 'sizes' => Size::get(),
-                'conditions' => Condition::get(),
+                'conditions' => Condition::all(),
                 'tags' => Tag::get(),
                 'attributes' => Attribute::all()
             ]
@@ -86,13 +86,13 @@ class ProductController extends CoreController
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
         }
-        return redirect()->route('product.index');
+        return redirect()->route('products.index');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
         $this->product_service->delete($product->id);
-        return redirect()->route('product.index');
+        return redirect()->route('products.index');
     }
 
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse

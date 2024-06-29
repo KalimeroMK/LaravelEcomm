@@ -26,7 +26,7 @@ class ProductService extends CoreService
     /**
      * Get all products based on given data.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function search(array $data)
     {
@@ -36,7 +36,7 @@ class ProductService extends CoreService
     /**
      * Store a newly created product.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return Product
      * @throws Exception
      */
@@ -65,8 +65,8 @@ class ProductService extends CoreService
     /**
      * Update an existing product.
      *
-     * @param int $id
-     * @param array<string, mixed> $data
+     * @param  int                   $id
+     * @param  array<string, mixed>  $data
      * @return Model
      * @throws Exception
      */
@@ -77,7 +77,7 @@ class ProductService extends CoreService
         $product = $this->product_repository->update($id, $data);
 
         if (isset($data['attributes'])) {
-            $this->syncAttributes($product, $data['attributes']);
+            $this->syncAttributes($id, $data['attributes']);
         }
 
         $product->categories()->sync($data['category']);
@@ -96,7 +96,7 @@ class ProductService extends CoreService
     /**
      * Handle the color data for the product.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return void
      */
     private function handleColor(array &$data): void
@@ -112,12 +112,12 @@ class ProductService extends CoreService
     /**
      * Sync attributes for the product.
      *
-     * @param Product $product
-     * @param array<string, mixed> $attributeData
+     * @param                        $id
+     * @param  array<string, mixed>  $attributeData
      * @return void
      * @throws Exception
      */
-    private function syncAttributes(Product $product, array $attributeData): void
+    private function syncAttributes($id, array $attributeData): void
     {
         foreach ($attributeData as $attributeId => $value) {
             $attribute = Attribute::findOrFail($attributeId);
@@ -127,7 +127,7 @@ class ProductService extends CoreService
                 'attribute_id' => $attributeId,
                 $valueColumn => $value,
             ]);
-
+            $product = Product::findOrFail($id);
             $product->attributeValues()->syncWithoutDetaching([$attributeValue->id]);
         }
     }
