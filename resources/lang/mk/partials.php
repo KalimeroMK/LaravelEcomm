@@ -67,6 +67,8 @@ return [
     'impersonate' => 'Претставување',
     'password' => 'Лозинка',
     'confirm_password' => 'Потврди лозинка',
-    'phone' => 'Tелефон'
+    'phone' => 'Tелефон',
+    'domain' => 'Домен',
+    'database' => 'Датабасза',
 
 ];

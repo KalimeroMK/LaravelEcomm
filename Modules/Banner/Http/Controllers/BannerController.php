@@ -6,13 +6,11 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Modules\Banner\Http\Requests\Api\Search;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Service\BannerService;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\Core\Traits\ImageUpload;
 
 class BannerController extends CoreController
 {
@@ -24,18 +22,15 @@ class BannerController extends CoreController
         $this->banner_service = $banner_service;
     }
 
-    use ImageUpload;
-
     /**
      * Display a listing of the resource.
      *
-     * @param Search $request
      *
      * @return Application|Factory|View
      */
-    public function index(Search $request): Factory|View|Application
+    public function index(): Factory|View|Application
     {
-        return view('banner::index', ['banners' => $this->banner_service->getAll($request->validated())]);
+        return view('banner::index', ['banners' => $this->banner_service->getAll()]);
     }
 
     /**
@@ -51,7 +46,7 @@ class BannerController extends CoreController
     /**
      * Store a newly created resource in storage.
      *
-     * @param Store $request
+     * @param  Store  $request
      *
      * @return RedirectResponse
      */
@@ -65,7 +60,7 @@ class BannerController extends CoreController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Banner $banner
+     * @param  Banner  $banner
      *
      * @return Application|Factory|View
      */
@@ -79,8 +74,8 @@ class BannerController extends CoreController
     /**
      * Update the specified resource in storage.
      *
-     * @param Update $request
-     * @param Banner $banner
+     * @param  Update  $request
+     * @param  Banner  $banner
      *
      * @return RedirectResponse
      */
@@ -94,7 +89,7 @@ class BannerController extends CoreController
     /**
      * Remove the specified resource from storage.
      *
-     * @param Banner $banner
+     * @param  Banner  $banner
      *
      * @return RedirectResponse
      */

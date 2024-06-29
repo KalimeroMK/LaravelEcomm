@@ -37,6 +37,8 @@ use Modules\Size\Models\Policies\SizePolicy;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Policies\TagPolicy;
 use Modules\Tag\Models\Tag;
+use Modules\Tenant\Models\Policy\TenantPolicy;
+use Modules\Tenant\Models\Tenant;
 use Modules\User\Models\Policies\UserPolicy;
 use Modules\User\Models\User;
 use Spatie\Permission\Models\Permission;
@@ -71,6 +73,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
 
 
+        Tenant::class => TenantPolicy::class,
     ];
 
     /**

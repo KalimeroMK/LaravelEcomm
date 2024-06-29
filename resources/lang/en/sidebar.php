@@ -48,5 +48,6 @@ return [
     'post_options' => 'Post options',
     'tag_options' => 'Tag options',
     'general_settings' => 'General settings',
+    'tenant' => 'Tenant',
 
 ];

@@ -67,7 +67,9 @@ return [
     'impersonate' => 'Impersonate',
     'password' => 'Password',
     'confirm_password' => 'Confirm Password',
-    'phone' => 'Phone'
+    'phone' => 'Phone',
+    'domain' => 'Domain',
+    'database' => 'Database',
 
 ];
 

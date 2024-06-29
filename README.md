@@ -1,5 +1,7 @@
 # E-commerce website in  Laravel 11
 
+### Demo page:https://e-comm.mk
+
 ## Features :
 
 ====== FRONT-END =======
@@ -121,9 +123,43 @@
 
 ### Management
 
-* **User create** `` php artisan user:create``
+- **User create**: `php artisan user:create`
 
-### Demo page:https://e-comm.mk
+### Enabling Multi-Tenant Functionality
+
+To enable and configure the multi-tenant functionality in your application, follow these steps:
+
+1. **Add Multi-Tenant Configuration**:
+
+   Update your `.env` file to include the multi-tenant configuration:
+
+   ```env
+   MULTI_TENANT_ENABLED=true
+   
+   WNER_DB_CONNECTION=owner
+   OWNER_DB_HOST=127.0.0.1
+   OWNER_DB_PORT=3306
+   OWNER_DB_DATABASE=homestead
+   OWNER_DB_USERNAME=homestead
+   OWNER_DB_PASSWORD=secret
+2. **Init Multi-Tenant database**:
+
+   ```env
+   php artisan tenant:init
+3. **Creating a Tenant**:
+
+   You will be prompted to provide the tenant's name, domain, and database name.
+   ```env
+   php artisan tenant:create
+4. **Migrate Tenant**:
+
+   The command tenants:migrate has optional arguments (tenant) and options (--fresh and --seed).
+   Single Tenant Migration: If a tenant ID is provided (tenant argument), it finds the tenant and calls the migrate
+   method for that specific tenant.
+   All Tenants Migration: If no tenant ID is provided, it fetches all tenants and calls the migrate method for each
+   one using each, also it accepts --fresh and --seed options.
+   ```env
+   php artisan tenant:migrate
 
 <p style="text-align:center">Thank You so much for your time !!!</p>
 

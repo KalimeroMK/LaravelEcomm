@@ -48,4 +48,6 @@ return [
     'post_options' => 'Beitragsoptionen',
     'tag_options' => 'Tagoptionen',
     'general_settings' => 'Allgemeine Einstellungen',
+    'tenant' => 'Tenant',
+
 ];

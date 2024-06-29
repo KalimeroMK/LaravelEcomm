@@ -295,8 +295,13 @@
         </a>
         <div id="configCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">@lang('sidebar.configuration_options'):</h6>
+                <h6 class="collapse-header">@lang('sidebar.configuration'):</h6>
                 <a class="collapse-item" href="{{route('settings.index')}}">@lang('sidebar.settings')</a>
+                @if (config('tenant.multi_tenant.enabled'))
+                    {
+                    <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>
+                    }
+                @endif
                 <a class="collapse-item" href="{{route('all.notification')}}">@lang('sidebar.notifications')</a>
                 <a class="collapse-item"
                    href="{{route('laravelblocker::blocker.index')}}">@lang('sidebar.blocked_ip')</a>

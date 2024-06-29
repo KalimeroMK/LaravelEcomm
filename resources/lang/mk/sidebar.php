@@ -48,4 +48,6 @@ return [
     'post_options' => 'Опции за постови',
     'tag_options' => 'Опции за тагови',
     'general_settings' => 'Општи поставки',
+    'tenant' => 'Tenant',
+
 ];
