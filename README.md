@@ -136,7 +136,7 @@ To enable and configure the multi-tenant functionality in your application, foll
    ```env
    MULTI_TENANT_ENABLED=true
    
-   WNER_DB_CONNECTION=owner
+   OWNER_DB_CONNECTION=owner
    OWNER_DB_HOST=127.0.0.1
    OWNER_DB_PORT=3306
    OWNER_DB_DATABASE=homestead
