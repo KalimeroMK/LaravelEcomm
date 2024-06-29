@@ -1,0 +1,30 @@
+{
+  "name": "nwidart/tenant",
+  "description": "",
+  "authors": [
+    {
+      "name": "Nicolas Widart",
+      "email": "n.widart@gmail.com"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [],
+      "aliases": {
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\Tenant\\": "",
+      "Modules\\Tenant\\App\\": "app/",
+      "Modules\\Tenant\\Database\\Factories\\": "database/factories/",
+      "Modules\\Tenant\\Database\\Seeders\\": "database/seeders/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Modules\\Tenant\\Tests\\": "tests/"
+    }
+  }
+}

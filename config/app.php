@@ -30,6 +30,7 @@ use Modules\Settings\Providers\SettingsServiceProvider;
 use Modules\Shipping\Providers\ShippingServiceProvider;
 use Modules\Size\Providers\SizeServiceProvider;
 use Modules\Tag\Providers\TagServiceProvider;
+use Modules\Tenant\Providers\TenantServiceProvider;
 use Modules\User\Providers\UserServiceProvider;
 use Spatie\Feed\FeedServiceProvider;
 
@@ -72,7 +73,7 @@ return [
     |
     */
 
-    'debug' => (bool)env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -253,6 +254,7 @@ return [
         PermissionServiceProvider::class,
         Google2faServiceProvider::class,
         BundleServiceProvider::class,
+        TenantServiceProvider::class,
 
 
         /*
