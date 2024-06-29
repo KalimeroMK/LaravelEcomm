@@ -70,6 +70,8 @@ return [
     'phone' => 'Phone',
     'domain' => 'Domain',
     'database' => 'Database',
+    'categories' => 'Categories',
+    'sku' => 'SKU',
 
 ];
 

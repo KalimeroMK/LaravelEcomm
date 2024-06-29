@@ -68,5 +68,8 @@ return [
     'password' => 'Passwort',
     'confirm_password' => 'Passwort bestätigen',
     'domain' => 'Domain',
-    'database' => 'Database'
+    'database' => 'Database',
+    'categories' => 'Categories',
+    'sku' => 'SKU',
+
 ];

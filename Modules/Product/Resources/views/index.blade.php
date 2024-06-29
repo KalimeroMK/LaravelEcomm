@@ -18,6 +18,7 @@
                         <thead>
                         <tr>
                             <th>@lang('partials.s_n')</th>
+                            <th>@lang('partials.sku')</th>
                             <th>@lang('partials.title')</th>
                             <th>@lang('sidebar.category')</th>
                             <th>@lang('partials.is_featured')</th>
@@ -37,6 +38,7 @@
                         @foreach($products as $product)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $loop->sku ?? 'N/A' }}</td>
                                 <td>{{ $product->title }}</td>
                                 <td>{{ $product->category->title ?? 'N/A' }}</td>
                                 <td>{{ $product->is_featured ? 'Yes' : 'No' }}</td>

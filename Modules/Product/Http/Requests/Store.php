@@ -15,6 +15,7 @@ class Store extends FormRequest
             'title' => 'string|required',
             'summary' => 'string|required',
             'description' => 'string|nullable',
+            'sku' => 'string|nullable|unique:products,sku',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'size' => 'required',

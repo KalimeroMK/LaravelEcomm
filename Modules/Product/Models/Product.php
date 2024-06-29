@@ -37,32 +37,32 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Product
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $summary
- * @property string|null $description
- * @property int $stock
- * @property string|null $size
- * @property string $condition
- * @property string $status
- * @property float $price
- * @property float $special_price
- * @property float $discount
- * @property bool $is_featured
- * @property Carbon|null $special_price_start
- * @property Carbon|null $special_price_end
- * @property int|null $brand_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Brand|null $brand
- * @property Collection|Cart[] $carts
- * @property Collection|ProductReview[] $product_reviews
- * @property Collection|Wishlist[] $wishlists
+ * @property int                                          $id
+ * @property string                                       $title
+ * @property string                                       $slug
+ * @property string                                       $summary
+ * @property string|null                                  $description
+ * @property int                                          $stock
+ * @property string|null                                  $size
+ * @property string                                       $condition
+ * @property string                                       $status
+ * @property float                                        $price
+ * @property float                                        $special_price
+ * @property float                                        $discount
+ * @property bool                                         $is_featured
+ * @property Carbon|null                                  $special_price_start
+ * @property Carbon|null                                  $special_price_end
+ * @property int|null                                     $brand_id
+ * @property Carbon|null                                  $created_at
+ * @property Carbon|null                                  $updated_at
+ * @property Brand|null                                   $brand
+ * @property Collection|Cart[]                            $carts
+ * @property Collection|ProductReview[]                   $product_reviews
+ * @property Collection|Wishlist[]                        $wishlists
  * @package App\Models
- * @property-read int|null $carts_count
- * @property-read int|null $product_reviews_count
- * @property-read int|null $wishlists_count
+ * @property-read int|null                                $carts_count
+ * @property-read int|null                                $product_reviews_count
+ * @property-read int|null                                $wishlists_count
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
  * @method static Builder|Product query()
@@ -84,9 +84,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Product whereUpdatedAt($value)
  * @mixin Eloquent
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
- * @property-read int|null $categories_count
- * @property-read string $image_url
- * @property string|null $color
+ * @property-read int|null                                $categories_count
+ * @property-read string                                  $image_url
+ * @property string|null                                  $color
  * @method static Builder|Product whereColor($value)
  */
 class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
@@ -98,49 +98,53 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
 
     protected $table = 'products';
 
-    protected $casts = [
-        'stock' => 'int',
-        'price' => 'float',
-        'discount' => 'float',
-        'is_featured' => 'bool',
-        'brand_id' => 'int',
-        'special_price_start' => 'date',
-        'special_price_end' => 'date',
-        'special_price' => 'float'
-    ];
+    protected $casts
+        = [
+            'stock' => 'int',
+            'price' => 'float',
+            'discount' => 'float',
+            'is_featured' => 'bool',
+            'brand_id' => 'int',
+            'special_price_start' => 'date',
+            'special_price_end' => 'date',
+            'special_price' => 'float'
+        ];
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'summary',
-        'description',
-        'stock',
-        'condition_id',
-        'status',
-        'price',
-        'discount',
-        'is_featured',
-        'brand_id',
-        'color',
-        'special_price',
-        'special_price_start',
-        'special_price_end'
-    ];
+    protected $fillable
+        = [
+            'title',
+            'slug',
+            'sku',
+            'summary',
+            'description',
+            'stock',
+            'condition_id',
+            'status',
+            'price',
+            'discount',
+            'is_featured',
+            'brand_id',
+            'color',
+            'special_price',
+            'special_price_start',
+            'special_price_end'
+        ];
 
-    public const likeRows = [
-        'title',
-        'slug',
-        'summary',
-        'description',
-        'stock',
-        'sizes.name',
-        'condition.status',
-        'status',
-        'price',
-        'discount',
-        'brand.title',
-        'color',
-    ];
+    public const likeRows
+        = [
+            'title',
+            'slug',
+            'summary',
+            'description',
+            'stock',
+            'sizes.name',
+            'condition.status',
+            'status',
+            'price',
+            'discount',
+            'brand.title',
+            'color',
+        ];
 
     /**
      * @return ProductFactory

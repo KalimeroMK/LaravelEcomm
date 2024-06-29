@@ -16,6 +16,7 @@ class Update extends FormRequest
         return [
             'title' => 'string|required',
             'summary' => 'string|required',
+            'sku' => 'string|nullable|unique:products,sku',
             'description' => 'string|nullable',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',

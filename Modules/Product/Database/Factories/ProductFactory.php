@@ -17,6 +17,7 @@ class ProductFactory extends Factory
     {
         return [
             'title' => $this->faker->unique(true)->word,
+            'sku' => $this->faker->unique(true)->word,
             'summary' => $this->faker->text,
             'description' => $this->faker->text,
             'condition_id' => $this->faker->numberBetween(1, 2),

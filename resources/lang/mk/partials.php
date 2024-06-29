@@ -70,5 +70,7 @@ return [
     'phone' => 'Tелефон',
     'domain' => 'Домен',
     'database' => 'Датабасза',
+    'categories' => 'Категории',
+    'sku' => 'Бар код',
 
 ];
