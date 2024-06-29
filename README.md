@@ -116,7 +116,9 @@
 * **ENV**: rename DB_HOST=127.0.0.1 to DB_HOST=mysql
 * **Container ssh**: docker-compose exec app sh
 * **Run migrations**: php artisan:migrate:fresh --seed.
-* **Enable ElasticSearch**:
+
+### Enable ElasticSearch:
+
 * php artisan scout:import Modules\\Product\\Models\\Product,
 * php artisan scout:import Modules\\Brand\\Models\\Brand,
 * php artisan scout:import Modules\\Category\\Models\\Category
