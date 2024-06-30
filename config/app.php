@@ -22,6 +22,7 @@ use Modules\Message\Providers\MessageServiceProvider;
 use Modules\Newsletter\Providers\NewsletterServiceProvider;
 use Modules\Notification\Providers\NotificationServiceProvider;
 use Modules\Order\Providers\OrderServiceProvider;
+use Modules\Page\Providers\PageServiceProvider;
 use Modules\Permission\Providers\PermissionServiceProvider;
 use Modules\Post\Providers\PostServiceProvider;
 use Modules\Product\Providers\ProductServiceProvider;
@@ -73,7 +74,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -255,6 +256,7 @@ return [
         Google2faServiceProvider::class,
         BundleServiceProvider::class,
         TenantServiceProvider::class,
+        PageServiceProvider::class,
 
 
         /*

@@ -5,12 +5,9 @@ namespace Modules\Brand\Service;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Service\CoreService;
-use Modules\Core\Traits\ImageUpload;
 
 class BrandService extends CoreService
 {
-    use ImageUpload;
-
     public BrandRepository $brand_repository;
 
     public function __construct(BrandRepository $brand_repository)
@@ -22,13 +19,13 @@ class BrandService extends CoreService
     /**
      * Store a new attribute.
      *
-     * @param array<string, mixed> $data The data to create the attribute.
+     * @param  array<string, mixed>  $data  The data to create the attribute.
      * @return Model|null
      */
     /**
      * Create a new banner with possible media files.
      *
-     * @param array<string, mixed> $data The data for creating the banner.
+     * @param  array<string, mixed>  $data  The data for creating the banner.
      * @return Model The newly created banner model.
      */
     public function create(array $data): Model
@@ -49,8 +46,8 @@ class BrandService extends CoreService
     /**
      * Update an existing banner with new data and possibly new media files.
      *
-     * @param int $id The banner ID to update.
-     * @param array<string, mixed> $data The data for updating the banner.
+     * @param  int                   $id  The banner ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the banner.
      * @return Model The updated banner model.
      */
     public function update(int $id, array $data): Model
@@ -72,7 +69,7 @@ class BrandService extends CoreService
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      * @return mixed
      */
     public function search(array $data): mixed

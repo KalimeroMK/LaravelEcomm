@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="POST" action="{{ route('setting.update', $settings->id) }}"
+<form class="form-horizontal" method="POST" action="{{ route('settings.update', $settings->id) }}"
       enctype="multipart/form-data">
     @method('put')
     @csrf
