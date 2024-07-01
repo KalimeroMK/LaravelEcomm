@@ -53,7 +53,7 @@ class BrandController extends CoreController
 
     public function destroy(Brand $brand): RedirectResponse
     {
-        $this->brand_service->destroy($brand->id);
+        $this->brand_service->delete($brand->id);
 
         return redirect()->route('brands.index')->with('status', 'Brand deleted successfully.');
     }

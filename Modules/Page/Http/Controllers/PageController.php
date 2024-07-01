@@ -3,65 +3,56 @@
 namespace Modules\Page\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Modules\Page\Http\Requests\Store;
+use Modules\Page\Models\Page;
+use Modules\Page\Service\PageService;
 
 class PageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected PageService $page_service;
+
+    public function __construct(PageService $page_service)
     {
-        return view('page::index');
+        $this->page_service = $page_service;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(): View
     {
-        return view('page::create');
+        $pages = $this->page_service->getAll();
+
+        return view('page::index', compact('pages'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
+    public function create(): View
     {
-        //
+        return view('page::create', ['page' => new Page()]);
     }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function store(Store $request): RedirectResponse
     {
-        return view('page::show');
+        $this->page_service->create($request->validated());
+
+        return redirect()->route('pages.index')->with('status', 'Page created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function edit(Page $page): View
     {
-        return view('page::edit');
+        return view('page::edit', compact('page'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Store $request, Page $page): RedirectResponse
     {
-        //
+        $this->page_service->update($page->id, $request->validated());
+
+        return redirect()->route('pages.edit', $page)->with('status', 'Page updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function destroy(Page $page): RedirectResponse
     {
-        //
+        $this->page_service->delete($page->id);
+
+        return redirect()->route('pages.index')->with('status', 'Page deleted successfully.');
     }
 }
