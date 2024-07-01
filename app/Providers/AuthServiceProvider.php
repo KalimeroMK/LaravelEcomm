@@ -71,8 +71,6 @@ class AuthServiceProvider extends ServiceProvider
         Size::class => SizePolicy::class,
         Tag::class => TagPolicy::class,
         User::class => UserPolicy::class,
-
-
         Tenant::class => TenantPolicy::class,
     ];
 
