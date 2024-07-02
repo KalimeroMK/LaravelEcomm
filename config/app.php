@@ -255,8 +255,9 @@ return [
         PermissionServiceProvider::class,
         Google2faServiceProvider::class,
         BundleServiceProvider::class,
-        TenantServiceProvider::class,
         PageServiceProvider::class,
+        TenantServiceProvider::class,
+
 
 
         /*

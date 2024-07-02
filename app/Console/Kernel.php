@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Modules\Newsletter\Console\PostNewsletterCommand;
 use Modules\Newsletter\Console\ProductNewsletterCommand;
+use Modules\Product\Console\StockNotifyCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -18,8 +19,10 @@ class Kernel extends ConsoleKernel
         //
         ProductNewsletterCommand::class,
         PostNewsletterCommand::class,
+        StockNotifyCommand::class,
+
     ];
-    
+
     /**
      * Define the application's command schedule.
      *
@@ -32,8 +35,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('sitemap:generate')->daily();
         $schedule->command('newsletter:product')->weekly();
         $schedule->command('newsletter:post')->weekly();
+        $schedule->command('stock:notify')->daily()->onQueue('default');
+
     }
-    
+
     /**
      * Register the commands for the application.
      *
@@ -42,7 +47,7 @@ class Kernel extends ConsoleKernel
     protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
-        
+
         require base_path('routes/console.php');
     }
 }

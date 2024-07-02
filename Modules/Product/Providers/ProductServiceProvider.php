@@ -5,6 +5,7 @@ namespace Modules\Product\Providers;
 use Config;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\Core\Traits\AutoRegistersCommands;
 use Modules\Product\Models\Observers\ProductObserver;
 use Modules\Product\Models\Policies\ProductReviewPolicy;
 use Modules\Product\Models\Product;
@@ -12,6 +13,7 @@ use Modules\Product\Models\ProductReview;
 
 class ProductServiceProvider extends ServiceProvider
 {
+    use AutoRegistersCommands;
     /**
      * @var string $moduleName
      */
@@ -35,6 +37,8 @@ class ProductServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         $this->registerPolicies();
+        $this->autoRegisterCommands($this->moduleName);
+
     }
 
     /**

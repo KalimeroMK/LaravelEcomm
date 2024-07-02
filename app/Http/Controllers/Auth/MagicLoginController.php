@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\MagicLoginLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Modules\Product\Mail\MagicLoginLink;
 use Modules\User\Models\User;
 
 class MagicLoginController extends Controller
