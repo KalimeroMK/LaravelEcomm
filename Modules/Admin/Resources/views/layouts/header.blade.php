@@ -54,7 +54,7 @@
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
-            @include('notification::show')
+            @include('notification::list')
         </li>
 
         <!-- Nav Item - Messages -->

@@ -7,7 +7,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Modules\Notification\Service\NotificationService;
 
 class  NotificationController extends Controller
@@ -28,14 +27,14 @@ class  NotificationController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param $id
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        $notification = $this->notification_service->findById($request->id);
+        $notification = $this->notification_service->findById($id);
 
-        return view('notification::', compact('notification'));
+        return view('notification::show', compact('notification'));
     }
 
     /**
