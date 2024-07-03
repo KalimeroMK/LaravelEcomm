@@ -47,7 +47,8 @@
         "spatie/laravel-robots-middleware": "*",
         "spatie/laravel-sitemap": "*",
         "spatie/schema-org": "*",
-        "stripe/stripe-php": "*"
+        "stripe/stripe-php": "*",
+        "unisharp/laravel-filemanager": "^2.9"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "*",

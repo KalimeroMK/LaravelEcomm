@@ -70,11 +70,11 @@
                         <label for="status">Status</label>
                         <select name="status" class="form-control" required>
                             <option
-                                    value="active" {{ (isset($product->status) && $product->status == 'active') ? 'selected' : '' }}>
+                                value="active" {{ (isset($product->status) && $product->status == 'active') ? 'selected' : '' }}>
                                 Active
                             </option>
                             <option
-                                    value="inactive" {{ (isset($product->status) && $product->status == 'inactive') ? 'selected' : '' }}>
+                                value="inactive" {{ (isset($product->status) && $product->status == 'inactive') ? 'selected' : '' }}>
                                 Inactive
                             </option>
                         </select>
@@ -107,7 +107,8 @@
                         <label for="status">@lang('partials.conditions')</label>
                         <select name="condition_id" class="form-control" required>
                             @foreach($conditions as $condition)
-                                <option value="{{ $condition->id }}" {{ (isset($product->condition_id) && $product->condition_id == $condition->id) ? 'selected' : '' }}>
+                                <option
+                                    value="{{ $condition->id }}" {{ (isset($product->condition_id) && $product->condition_id == $condition->id) ? 'selected' : '' }}>
                                     {{ $condition->status }}
                                 </option>
                             @endforeach
@@ -130,7 +131,7 @@
                             @foreach($brands as $brand)
                                 <option value="{{$brand->id}}" @if (!empty($product->brand->id))
                                     {{($brand->id==$product->brand->id)? 'selected':'' }}
-                                        @endif>{{$brand->title}}</option>
+                                    @endif>{{$brand->title}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -167,9 +168,10 @@
     </div>
 
     @push('scripts')
-        <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
+        <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
         <script>
             CKEDITOR.replace('description', {
+                versionCheck: false,
                 filebrowserUploadUrl: "{{ route('ckeditor.image-upload', ['_token' => csrf_token() ]) }}",
                 filebrowserUploadMethod: 'form'
             });

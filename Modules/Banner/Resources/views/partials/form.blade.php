@@ -37,8 +37,18 @@
         </select>
     </div>
 
-    <div class="form-group mb-3">
+    <div class="button-container">
         <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
         <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
     </div>
 </form>
+@push('scripts')
+    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('description', {
+            versionCheck: false,
+            filebrowserUploadUrl: "{{ route('ckeditor.image-upload', ['_token' => csrf_token() ]) }}",
+            filebrowserUploadMethod: 'form'
+        });
+    </script>
+@endpush

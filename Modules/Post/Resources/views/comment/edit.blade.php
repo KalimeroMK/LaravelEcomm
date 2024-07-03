@@ -6,7 +6,7 @@
     <div class="card">
         <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
-            <form action="{{route('comment.update',$comment->id)}}" method="POST">
+            <form action="{{route('comments.update',$comment->id)}}" method="POST">
                 @csrf
                 @method('PATCH') <h5 class="card-header">Comment Edit</h5>
 

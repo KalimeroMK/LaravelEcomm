@@ -64,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group mb-3">
+    <div class="button-container">
         <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
         <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
     </div>

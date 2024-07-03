@@ -7,13 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Core\Service\CoreService;
-use Modules\Core\Traits\ImageUpload;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 
 class ProductService extends CoreService
 {
-    use ImageUpload;
 
     public ProductRepository $product_repository;
 
@@ -26,7 +24,7 @@ class ProductService extends CoreService
     /**
      * Get all products based on given data.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      */
     public function search(array $data)
     {
@@ -36,7 +34,7 @@ class ProductService extends CoreService
     /**
      * Store a newly created product.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return Product
      * @throws Exception
      */
@@ -65,8 +63,8 @@ class ProductService extends CoreService
     /**
      * Update an existing product.
      *
-     * @param  int                   $id
-     * @param  array<string, mixed>  $data
+     * @param int $id
+     * @param array<string, mixed> $data
      * @return Model
      * @throws Exception
      */
@@ -96,7 +94,7 @@ class ProductService extends CoreService
     /**
      * Handle the color data for the product.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return void
      */
     private function handleColor(array &$data): void
@@ -113,7 +111,7 @@ class ProductService extends CoreService
      * Sync attributes for the product.
      *
      * @param                        $id
-     * @param  array<string, mixed>  $attributeData
+     * @param array<string, mixed> $attributeData
      * @return void
      * @throws Exception
      */
