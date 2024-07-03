@@ -9,9 +9,9 @@ namespace Modules\Billing\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Cart\Models\Cart;
+use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 
@@ -45,7 +45,7 @@ use Modules\User\Models\User;
  * @method static Builder|Wishlist whereUserId($value)
  * @mixin Eloquent
  */
-class Wishlist extends Model
+class Wishlist extends Core
 {
 
     protected $table = 'wishlists';

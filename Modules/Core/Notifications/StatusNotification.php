@@ -68,8 +68,7 @@ class StatusNotification extends Notification
             'actionURL' => $this->details['actionURL'],
             'url' => route('admin.notification', $this->id),
             'fas' => $this->details['fas'],
-            'time' => date('F d, Y h:i A'),
+            'time' => now()->format('F d, Y h:i A'),
         ]);
     }
-
 }

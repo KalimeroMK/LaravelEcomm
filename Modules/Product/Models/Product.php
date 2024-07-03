@@ -28,6 +28,7 @@ use Modules\Bundle\Models\Bundle;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\ClearsCache;
 use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;

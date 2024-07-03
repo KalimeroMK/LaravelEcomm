@@ -14,6 +14,7 @@ class NotificationFactory extends Factory
     public function definition(): array
     {
         return [
+            'id' => $this->faker->uuid(),
             'type' => $this->faker->word(),
             'notifiable_id' => User::role('super-admin')->first()->id ?? 3,
             'notifiable_type' => $this->faker->word(),

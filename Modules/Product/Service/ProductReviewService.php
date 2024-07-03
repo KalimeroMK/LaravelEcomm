@@ -69,11 +69,12 @@ class ProductReviewService
         ProductReview::create($data);
         $details = [
             'title' => 'New Product Rating!',
-            'actionURL' => route('product-detail', $product_info->slug),
+            'actionURL' => route('front.product-detail', $product_info->slug),
             'fas' => 'fa-star',
         ];
         Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
     }
+
 
     /**
      * Delete a product review.

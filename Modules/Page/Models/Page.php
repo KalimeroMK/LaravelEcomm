@@ -7,27 +7,27 @@
 namespace Modules\Page\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Core\Models\Core;
 use Modules\User\Models\User;
 
 /**
  * Class Page
  *
- * @property int         $id
- * @property string      $title
- * @property string      $slug
- * @property string      $content
- * @property bool        $is_active
- * @property int         $user_id
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $content
+ * @property bool $is_active
+ * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property User        $user
+ * @property User $user
  *
  * @package App\Models
  */
-class Page extends Model
+class Page extends Core
 {
     protected $table = 'pages';
 

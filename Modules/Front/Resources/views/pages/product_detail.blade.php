@@ -1,6 +1,6 @@
 @extends('front::layouts.master')
-
 @section('SOE')
+    <title>{{$product_detail->title ?? ''}} || PRODUCT DETAIL</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name='copyright' content=''>
@@ -14,9 +14,7 @@
     <meta property="og:image" content="{{$product_detail->imageUrl ?? ''}}">
     <meta property="og:description" content="{{$product_detail->description ?? ''}}">
 @endsection
-@section('title','E-SHOP || PRODUCT DETAIL')
 @section('content')
-
     <!-- Breadcrumbs -->
     <div class="breadcrumbs">
         <div class="container">

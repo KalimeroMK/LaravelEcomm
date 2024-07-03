@@ -2,10 +2,10 @@
 
 namespace Modules\Tenant\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Modules\Core\Models\Core;
 
-class Tenant extends Model
+class Tenant extends Core
 {
     /**
      * The connection name for the model.
@@ -26,7 +26,7 @@ class Tenant extends Model
         DB::purge('mysql');
 
         app('cache')->purge(config('cache.default'));
-        
+
         return $this;
     }
 

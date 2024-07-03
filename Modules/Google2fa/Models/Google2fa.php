@@ -9,7 +9,7 @@ namespace Modules\Google2fa\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\Core;
 
 /**
  * Class LoginSecurity
@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Google2fa whereUserId($value)
  * @mixin Eloquent
  */
-class Google2fa extends Model
+class Google2fa extends Core
 {
     protected $table = 'login_securities';
 

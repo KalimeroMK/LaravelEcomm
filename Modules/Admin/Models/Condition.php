@@ -6,11 +6,11 @@
 
 namespace Modules\Admin\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
 
-class Condition extends Model
+class Condition extends Core
 {
     protected $table = 'conditions';
 

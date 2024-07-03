@@ -22,6 +22,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
+use Modules\Core\Traits\ClearsCache;
 use Modules\Google2fa\Models\Google2fa;
 use Modules\Notification\Models\Notification;
 use Modules\Order\Models\Order;
@@ -98,6 +99,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasApiTokens;
     use Impersonate;
+    use ClearsCache;
 
     protected $table = 'users';
 
