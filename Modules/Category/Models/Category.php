@@ -22,6 +22,7 @@ use Kalnoy\Nestedset\QueryBuilder;
 use Laravel\Scout\Searchable;
 use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\HasSlug;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 
@@ -111,6 +112,7 @@ class Category extends Core implements Explored, IndexSettings, Aliased
     use NodeTrait, Searchable, SoftDeletes {
         Searchable::usesSoftDelete insteadof NodeTrait;
     }
+    use HasSlug;
 
     protected $table = 'categories';
 
@@ -146,8 +148,8 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         $categories = self::get()->toTree();
         $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
             foreach ($categories as $category) {
-                $allCats[] = ["title" => $prefix.' '.$category->title, "id" => $category->id];
-                $traverse($category->children, $prefix.'-');
+                $allCats[] = ["title" => $prefix . ' ' . $category->title, "id" => $category->id];
+                $traverse($category->children, $prefix . '-');
             }
 
             return $allCats;
@@ -208,23 +210,6 @@ class Category extends Core implements Explored, IndexSettings, Aliased
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class);
-    }
-
-
-    /**
-     * @param  string  $slug
-     *
-     * @return string
-     */
-    public function incrementSlug(string $slug): string
-    {
-        $original = $slug;
-        $count = 2;
-        while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
-        }
-
-        return $slug;
     }
 
     /**

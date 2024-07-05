@@ -12,7 +12,10 @@
         <input id="inputTitle" type="text" name="title" placeholder="@lang('partials.title')"
                value="{{ $page->title ?? null }}" class="form-control">
     </div>
-
+    <div class="form-group">
+        <label for="description">@lang('partials.description')</label>
+        <textarea class="form-control" id="description" name="content">{{$page->content}}</textarea>
+    </div>
     <div class="form-group">
         <label for="status" class="col-form-label">@lang('partials.status') <span class="text-danger">*</span></label>
         <select name="status" class="form-control">
@@ -27,3 +30,13 @@
         <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
     </div>
 </form>
+@push('scripts')
+    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('description', {
+            versionCheck: false,
+            filebrowserUploadUrl: "{{ route('ckeditor.image-upload', ['_token' => csrf_token() ]) }}",
+            filebrowserUploadMethod: 'form'
+        });
+    </script>
+@endpush

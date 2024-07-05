@@ -34,8 +34,8 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">@lang('sidebar.banner_options'):</h6>
-                    <a class="collapse-item" href="{{route('banner.index')}}">@lang('sidebar.banners')</a>
-                    <a class="collapse-item" href="{{route('banner.create')}}">@lang('sidebar.add_banners')</a>
+                    <a class="collapse-item" href="{{route('banners.index')}}">@lang('sidebar.banners')</a>
+                    <a class="collapse-item" href="{{route('banners.create')}}">@lang('sidebar.add_banners')</a>
                 </div>
             </div>
         </li>
@@ -283,6 +283,7 @@
                 <a class="collapse-item" href="{{route('roles.index')}}">@lang('sidebar.roles')</a>
                 <a class="collapse-item" href="{{route('permissions.index')}}">@lang('sidebar.permissions')</a>
                 <a class="collapse-item" href="{{route('settings.index')}}">@lang('sidebar.settings')</a>
+                <a class="collapse-item" href="{{route('pages.index')}}">@lang('sidebar.page')</a>
                 @if (config('tenant.multi_tenant.enabled'))
                     <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>
                 @endif

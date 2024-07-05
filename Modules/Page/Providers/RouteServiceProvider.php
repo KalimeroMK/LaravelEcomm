@@ -2,8 +2,8 @@
 
 namespace Modules\Page\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -39,7 +39,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware(['web','auth','verified'])
+        Route::middleware(['web', 'auth', 'verified'])
+            ->prefix('admin')
             ->group(module_path('Page', '/Routes/web.php'));
     }
 

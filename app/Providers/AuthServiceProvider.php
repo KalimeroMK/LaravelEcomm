@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\Policies\AttributePolicy;
 use Modules\Banner\Models\Banner;
@@ -22,6 +23,8 @@ use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Models\Policies\NewsletterPolicy;
 use Modules\Order\Models\Order;
 use Modules\Order\Models\Policies\OrderPolicy;
+use Modules\Page\Models\Page;
+use Modules\Page\Models\Policy\PagePolicy;
 use Modules\Permission\Models\Polices\PermissionPolicy;
 use Modules\Post\Models\Policies\PostCommentPolicy;
 use Modules\Post\Models\Policies\PostPolicy;
@@ -72,6 +75,7 @@ class AuthServiceProvider extends ServiceProvider
         Tag::class => TagPolicy::class,
         User::class => UserPolicy::class,
         Tenant::class => TenantPolicy::class,
+        Page::class => PagePolicy::class,
     ];
 
     /**
@@ -82,8 +86,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
-//        Gate::before(function ($user, $ability) {
-//            return $user->hasRole('super-admin') ? true : null;
-//        });
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('super-admin') ? true : null;
+        });
     }
 }

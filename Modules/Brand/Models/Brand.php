@@ -18,6 +18,7 @@ use JeroenG\Explorer\Application\IndexSettings;
 use Laravel\Scout\Searchable;
 use Modules\Brand\Database\Factories\BrandFactory;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\HasSlug;
 use Modules\Product\Models\Product;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -51,6 +52,7 @@ class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
 {
     use Searchable;
     use InteractsWithMedia;
+    use HasSlug;
 
     protected $table = 'brands';
 

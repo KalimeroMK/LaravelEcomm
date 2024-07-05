@@ -45,13 +45,9 @@
                                 <td>{{$banner->title}}</td>
                                 <td>{{$banner->slug}}</td>
                                 <td>
-                                    @if($banner->photo)
-                                        <img src="{{$banner->photo}}" class="img-fluid zoom" style="max-width:80px"
-                                             alt="{{$banner->photo}}">
-                                    @else
-                                        <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid zoom"
-                                             style="max-width:100%" alt="avatar.png">
-                                    @endif
+                                    <img src="{{$banner->ImageUrl}}" class="img-fluid zoom" style="max-width:80px"
+                                         alt="{{$banner->title}}">
+
                                 </td>
                                 <td>
                                     @if($banner->status=='active')
@@ -71,7 +67,7 @@
                                         <button class="btn btn-danger btn-sm dltBtn"
                                                 data-id="{{$banner->id}}" style="height:30px; width:30px;border-radius:50%
                                         " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                    class="fas fa-trash-alt"></i></button>
+                                                class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

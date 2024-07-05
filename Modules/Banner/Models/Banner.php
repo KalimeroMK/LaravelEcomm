@@ -9,8 +9,10 @@ namespace Modules\Banner\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Banner\Database\Factories\BannerFactory;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\HasSlug;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -42,6 +44,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Banner extends Core implements HasMedia
 {
     use InteractsWithMedia;
+    use HasSlug;
+    use HasFactory;
 
     protected $table = 'banners';
 
@@ -60,19 +64,14 @@ class Banner extends Core implements HasMedia
         return BannerFactory::new();
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return string
-     */
-    public function incrementSlug(string $slug): string
+    public function getImageUrlAttribute(): ?string
     {
-        $original = $slug;
-        $count = 2;
-        while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+        $mediaItem = $this->getFirstMedia('banner');
+
+        if ($mediaItem) {
+            return $mediaItem->first()->getUrl();
         }
 
-        return $slug;
+        return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 }

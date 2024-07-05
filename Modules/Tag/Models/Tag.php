@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\HasSlug;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 use Modules\Tag\Database\Factories\TagFactory;
@@ -44,6 +45,7 @@ use Modules\Tag\Database\Factories\TagFactory;
 class Tag extends Core
 {
     use HasFactory;
+    use HasSlug;
 
     protected $table = 'tags';
 

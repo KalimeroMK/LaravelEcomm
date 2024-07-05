@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\HasSlug;
 use Modules\Post\Database\Factories\PostFactory;
 use Modules\Tag\Models\Tag;
 use Modules\User\Models\User;
@@ -82,6 +83,7 @@ class Post extends Core implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
+    use HasSlug;
 
     protected $table = 'posts';
 
@@ -198,22 +200,6 @@ class Post extends Core implements HasMedia
         $this->addMediaConversion('preview')
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
-    }
-
-    /**
-     * @param string $slug
-     *
-     * @return mixed|string
-     */
-    public function incrementSlug(string $slug): mixed
-    {
-        $original = $slug;
-        $count = 2;
-        while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
-        }
-
-        return $slug;
     }
 
     /**

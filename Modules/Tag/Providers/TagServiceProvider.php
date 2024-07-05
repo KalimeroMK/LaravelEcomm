@@ -5,7 +5,6 @@ namespace Modules\Tag\Providers;
 use Config;
 use Illuminate\Support\ServiceProvider;
 use Modules\Tag\Models\Observers\TagObserver;
-use Modules\Tag\Models\Tag;
 
 class TagServiceProvider extends ServiceProvider
 {
@@ -26,7 +25,6 @@ class TagServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Tag::observe(TagObserver::class);
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();

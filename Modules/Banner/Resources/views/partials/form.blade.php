@@ -14,8 +14,8 @@
     </div>
 
     <div class="form-group">
-        <label for="inputDesc" class="col-form-label">@lang('partials.description')</label>
-        <textarea class="form-control" id="description" name="description">{{$banner->description ?? null }}</textarea>
+        <label for="description">@lang('partials.description')</label>
+        <textarea class="form-control" id="description" name="description">{{$banner->description}}</textarea>
     </div>
 
     <div class="form-group">
@@ -42,13 +42,20 @@
         <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
     </div>
 </form>
+
+@push('styles')
+    <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+@endpush
 @push('scripts')
-    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+    <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
     <script>
-        CKEDITOR.replace('description', {
-            versionCheck: false,
-            filebrowserUploadUrl: "{{ route('ckeditor.image-upload', ['_token' => csrf_token() ]) }}",
-            filebrowserUploadMethod: 'form'
+        $(document).ready(function () {
+            $('#description').summernote({
+                placeholder: "Write short description.....",
+                tabsize: 2,
+                height: 150
+            });
         });
     </script>
 @endpush

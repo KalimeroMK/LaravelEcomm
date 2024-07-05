@@ -7,8 +7,11 @@
 namespace Modules\Page\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Models\Core;
+use Modules\Core\Traits\HasSlug;
+use Modules\Page\Database\Factories\PageFactory;
 use Modules\User\Models\User;
 
 /**
@@ -29,6 +32,9 @@ use Modules\User\Models\User;
  */
 class Page extends Core
 {
+    use HasSlug;
+    use hasFactory;
+
     protected $table = 'pages';
 
     protected $casts
@@ -45,6 +51,11 @@ class Page extends Core
             'is_active',
             'user_id'
         ];
+
+    public static function Factory(): PageFactory
+    {
+        return PageFactory::new();
+    }
 
     public function user(): BelongsTo
     {

@@ -18,6 +18,7 @@ use Modules\Message\Models\Message;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Notification\Models\Notification;
 use Modules\Order\Models\Order;
+use Modules\Page\Database\Seeders\PageSeeder;
 use Modules\Post\Models\Post;
 use Modules\Product\Database\Seeders\ProductReviewSeeder;
 use Modules\Product\Models\Product;
@@ -48,6 +49,7 @@ class DatabaseSeeder extends Seeder
         Order::factory()->count(200)->create();
         $this->call(CategoryPostSeeder::class);
         Message::factory()->count(50)->create();
+        $this->call(PageSeeder::class);
         Post::factory()->count(200)->withCategoriesAndTags()->create();
         Product::factory()->count(200)->withCategoriesAndTags()->create();
         BundleProduct::factory()->count(50)->create();

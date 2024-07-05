@@ -49,5 +49,6 @@ return [
     'tag_options' => 'Tag options',
     'general_settings' => 'General settings',
     'tenant' => 'Tenant',
+    'page' => 'Page',
 
 ];

@@ -8,12 +8,12 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Core\Traits\AutoRegistersCommands;
 use Modules\Product\Models\Observers\ProductObserver;
 use Modules\Product\Models\Policies\ProductReviewPolicy;
-use Modules\Product\Models\Product;
 use Modules\Product\Models\ProductReview;
 
 class ProductServiceProvider extends ServiceProvider
 {
     use AutoRegistersCommands;
+
     /**
      * @var string $moduleName
      */
@@ -31,7 +31,6 @@ class ProductServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Product::observe(ProductObserver::class);
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();

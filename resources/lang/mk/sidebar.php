@@ -49,5 +49,7 @@ return [
     'tag_options' => 'Опции за тагови',
     'general_settings' => 'Општи поставки',
     'tenant' => 'Tenant',
+    'page' => 'Страна',
+
 
 ];

@@ -14,4 +14,4 @@ use Modules\Page\Http\Controllers\PageController;
 |
 */
 
-Route::resource('page', PageController::class)->names('page');
+Route::resource('pages', PageController::class);

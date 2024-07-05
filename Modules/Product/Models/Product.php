@@ -28,7 +28,7 @@ use Modules\Bundle\Models\Bundle;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
-use Modules\Core\Traits\ClearsCache;
+use Modules\Core\Traits\HasSlug;
 use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;
@@ -38,32 +38,32 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Product
  *
- * @property int                                          $id
- * @property string                                       $title
- * @property string                                       $slug
- * @property string                                       $summary
- * @property string|null                                  $description
- * @property int                                          $stock
- * @property string|null                                  $size
- * @property string                                       $condition
- * @property string                                       $status
- * @property float                                        $price
- * @property float                                        $special_price
- * @property float                                        $discount
- * @property bool                                         $is_featured
- * @property Carbon|null                                  $special_price_start
- * @property Carbon|null                                  $special_price_end
- * @property int|null                                     $brand_id
- * @property Carbon|null                                  $created_at
- * @property Carbon|null                                  $updated_at
- * @property Brand|null                                   $brand
- * @property Collection|Cart[]                            $carts
- * @property Collection|ProductReview[]                   $product_reviews
- * @property Collection|Wishlist[]                        $wishlists
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $summary
+ * @property string|null $description
+ * @property int $stock
+ * @property string|null $size
+ * @property string $condition
+ * @property string $status
+ * @property float $price
+ * @property float $special_price
+ * @property float $discount
+ * @property bool $is_featured
+ * @property Carbon|null $special_price_start
+ * @property Carbon|null $special_price_end
+ * @property int|null $brand_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Brand|null $brand
+ * @property Collection|Cart[] $carts
+ * @property Collection|ProductReview[] $product_reviews
+ * @property Collection|Wishlist[] $wishlists
  * @package App\Models
- * @property-read int|null                                $carts_count
- * @property-read int|null                                $product_reviews_count
- * @property-read int|null                                $wishlists_count
+ * @property-read int|null $carts_count
+ * @property-read int|null $product_reviews_count
+ * @property-read int|null $wishlists_count
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
  * @method static Builder|Product query()
@@ -85,9 +85,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Product whereUpdatedAt($value)
  * @mixin Eloquent
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
- * @property-read int|null                                $categories_count
- * @property-read string                                  $image_url
- * @property string|null                                  $color
+ * @property-read int|null $categories_count
+ * @property-read string $image_url
+ * @property string|null $color
  * @method static Builder|Product whereColor($value)
  */
 class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
@@ -96,6 +96,7 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     use Filterable;
     use InteractsWithMedia;
     use Searchable;
+    use HasSlug;
 
     protected $table = 'products';
 
@@ -250,7 +251,7 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count++;
         }
 
         return $slug;
