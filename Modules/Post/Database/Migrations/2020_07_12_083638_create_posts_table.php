@@ -14,11 +14,8 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->text('summary');
             $table->longText('description')->nullable();
-            $table->text('quote')->nullable();
-            $table->string('tags')->nullable();
-            $table->unsignedBigInteger('added_by')->nullable();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->foreign('added_by')->references('id')->on('users')->onDelete('SET NULL');
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class CategoryPostSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $categories = Category::factory()->count(10)->create();
         Post::factory()

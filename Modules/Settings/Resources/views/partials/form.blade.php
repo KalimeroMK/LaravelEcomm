@@ -11,7 +11,7 @@
     </div>
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">@lang('partials.email') <span
-                    class="text-danger">*</span></label>
+                class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="email" placeholder="Short description"
                value="{{ $settings->email ?? null }}"
                class="form-control">
@@ -19,7 +19,7 @@
     </div>
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">@lang('partials.phone') <span
-                    class="text-danger">*</span></label>
+                class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="phone" placeholder="Short description"
                value="{{ $settings->phone ?? null }}"
                class="form-control">
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">@lang('messages.address') <span
-                    class="text-danger">*</span></label>
+                class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="address" placeholder="address"
                value="{{ $settings->address ?? null }}"
                class="form-control">
@@ -49,7 +49,7 @@
               </span>
         </div>
 
-        <div class="form-group mb-3">
+        <div class="button-container">
             <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
             <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
         </div>

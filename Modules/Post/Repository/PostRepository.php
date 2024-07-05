@@ -19,7 +19,7 @@ class PostRepository extends Repository implements SearchInterface
     /**
      * Search posts based on given data.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return LengthAwarePaginator
      */
     public function search(array $data): LengthAwarePaginator
@@ -36,7 +36,7 @@ class PostRepository extends Repository implements SearchInterface
     /**
      * Build query based on search data.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      * @return Builder
      */
     private function buildQuery(array $data): Builder
@@ -46,7 +46,7 @@ class PostRepository extends Repository implements SearchInterface
 
         foreach ($this->searchableFields() as $key) {
             if (!empty($data[$key])) {
-                $query->where($key, 'like', '%'.$data[$key].'%');
+                $query->where($key, 'like', '%' . $data[$key] . '%');
             }
         }
 
@@ -66,19 +66,19 @@ class PostRepository extends Repository implements SearchInterface
     /**
      * Eager load relations for the query.
      *
-     * @param  Builder<Post>  $query
+     * @param Builder<Post> $query
      * @return Builder<Post>
      */
     private function eagerLoadRelations(Builder $query): Builder
     {
-        return $query->with(['categories', 'comments', 'post_comments', 'tags', 'author_info', 'media']);
+        return $query->with(['categories', 'comments', 'post_comments', 'tags', 'author', 'media']);
     }
 
     /**
      * Apply sorting and paginate the query results.
      *
-     * @param  Builder<Post>  $query
-     * @param  array<string, mixed>  $data
+     * @param Builder<Post> $query
+     * @param array<string, mixed> $data
      * @return LengthAwarePaginator
      */
     private function applySortingAndPaginate(Builder $query, array $data): LengthAwarePaginator
@@ -118,8 +118,8 @@ class PostRepository extends Repository implements SearchInterface
     /**
      * Update an existing record in the repository.
      *
-     * @param  int  $id  The ID of the model to update.
-     * @param  array<string, mixed>  $data  The data to update in the model.
+     * @param int $id The ID of the model to update.
+     * @param array<string, mixed> $data The data to update in the model.
      *
      * @return Model The updated model instance.
      */

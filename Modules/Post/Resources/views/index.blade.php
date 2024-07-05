@@ -61,7 +61,7 @@
                                 </td>
                                 <td>{{$post->tags}}</td>
                                 <td>{{$post->description}}</td>
-                                <td>{{ $post->author_info->name}}</td>
+                                <td>{{ $post->author->name}}</td>
                                 <td>
                                     @if($post->photo)
                                         <img src="{{$post->photo}}" class="img-fluid zoom" style="max-width:80px"

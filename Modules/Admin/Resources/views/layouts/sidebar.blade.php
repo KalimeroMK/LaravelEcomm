@@ -267,23 +267,6 @@
     </div>
 
     <!-- Users -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userCollapse"
-           aria-expanded="true" aria-controls="shippingCollapse">
-            <i class="fas fa-wrench"></i>
-            <span>@lang('sidebar.users')</span>
-        </a>
-        <div id="userCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">@lang('sidebar.user_options'):</h6>
-                <a class="collapse-item" href="{{route('users.index')}}">@lang('sidebar.users')</a>
-                @hasrole('super-admin')
-                <a class="collapse-item" href="{{route('roles.index')}}">@lang('sidebar.roles')</a>
-                <a class="collapse-item" href="{{route('permissions.index')}}">@lang('sidebar.permissions')</a>
-                @endhasrole
-            </div>
-        </div>
-    </li>
     @hasrole('super-admin')
     <!-- General settings -->
     {{-- Config --}}
@@ -296,6 +279,9 @@
         <div id="configCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">@lang('sidebar.configuration'):</h6>
+                <a class="collapse-item" href="{{route('users.index')}}">@lang('sidebar.users')</a>
+                <a class="collapse-item" href="{{route('roles.index')}}">@lang('sidebar.roles')</a>
+                <a class="collapse-item" href="{{route('permissions.index')}}">@lang('sidebar.permissions')</a>
                 <a class="collapse-item" href="{{route('settings.index')}}">@lang('sidebar.settings')</a>
                 @if (config('tenant.multi_tenant.enabled'))
                     <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>

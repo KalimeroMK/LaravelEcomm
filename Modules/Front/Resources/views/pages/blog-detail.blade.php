@@ -30,14 +30,15 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="image">
-                                    <img src="{{$post->photo}}" alt="{{$post->photo}}">
+                                    <img src="{{$post->ImageUrl}}" alt="{{$post->title}}">
                                 </div>
                                 <div class="blog-detail">
                                     <h2 class="blog-title">{{$post->title}}</h2>
                                     <div class="blog-meta">
-                                        <span class="author"><a href="javascript:void(0);"><i class="fa fa-user"></i>By {{$post->author_info['name']}}</a><a
-                                                    href="javascript:void(0);"><i class="fa fa-calendar"></i>{{$post->created_at->format('M d, Y')}}</a><a
-                                                    href="javascript:void(0);"><i class="fa fa-comments"></i>Comment ({{$post->allComments->count()}})</a></span>
+                                        <span class="author"><a href="javascript:void(0);"><i class="fa
+                                        fa-user"></i>By {{$post->author->name}}</a><a
+                                                href="javascript:void(0);"><i class="fa fa-calendar"></i>{{$post->created_at->format('M d, Y')}}</a><a
+                                                href="javascript:void(0);"><i class="fa fa-comments"></i>Comment ({{$post->allComments->count()}})</a></span>
                                     </div>
                                     <div class="sharethis-inline-reaction-buttons"></div>
                                     <div class="content">
@@ -54,11 +55,9 @@
                                             <div class="content-tags">
                                                 <h4>Tags:</h4>
                                                 <ul class="tag-inner">
-                                                    @php
-                                                        $tags=explode(',',$post->tags);
-                                                    @endphp
+
                                                     @foreach($tags as $tag)
-                                                        <li><a href="javascript:void(0);">{{$tag}}</a></li>
+                                                        <li>{{$tag->title}}</a></li>
                                                     @endforeach
                                                 </ul>
                                             </div>
@@ -104,9 +103,9 @@
                                                     <div class="col-12">
                                                         <div class="form-group button">
                                                             <button type="submit" class="btn"><span
-                                                                        class="comment_btn comment">Post Comment</span><span
-                                                                        class="comment_btn reply"
-                                                                        style="display: none;">Reply Comment</span>
+                                                                    class="comment_btn comment">Post Comment</span><span
+                                                                    class="comment_btn reply"
+                                                                    style="display: none;">Reply Comment</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -146,84 +145,76 @@
                         <div class="single-widget search">
                             <form class="form" method="GET" action="{{route('front.blog-search')}}">
                                 <input type="text" placeholder="Search Here..." name="search">
-                                <button class="button" type="sumbit"><i class="fa fa-search"></i></button>
+                                <button class="button" type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
-                        {{--                        <div class="single-widget category">--}}
-                        {{--                            <h3 class="title">Blog Categories</h3>--}}
-                        {{--                            <ul class="categor-list">--}}
-                        {{--                                --}}{{-- {{count(\App\Helpers\Helper::postCategoryList())}} --}}
-                        {{--                                @foreach(\App\Helpers\Helper::postCategoryList() as $cat)--}}
-                        {{--                                    <li><a href="#">{{$cat->title}} </a></li>--}}
-                        {{--                                @endforeach--}}
-                        {{--                            </ul>--}}
-                        {{--                        </div>--}}
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-                        <div class="single-widget recent-post">
-                            <h3 class="title">Recent post</h3>
-                            @foreach($recantPosts as $post)
-                                <!-- Single Post -->
-                                <div class="single-post">
-                                    <div class="image">
-                                        <img src="{{$post->photo}}" alt="{{$post->photo}}">
-                                    </div>
-                                    <div class="content">
-                                        <h5><a href="#">{{$post->title}}</a></h5>
-                                        <ul class="comment">
-                                            @php
-                                                $author_info=DB::table('users')->select('name')->where('id',$post->added_by)->get();
-                                            @endphp
-                                            <li><i class="fa fa-calendar"
-                                                   aria-hidden="true"></i>{{$post->created_at->format('d M, y')}}</li>
-                                            <li><i class="fa fa-user" aria-hidden="true"></i>
-                                                @foreach($author_info as $data)
-                                                    @if($data->name)
-                                                        {{$data->name}}
-                                                    @else
-                                                        Anonymous
-                                                    @endif
-                                                @endforeach
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <!-- End Single Post -->
-                            @endforeach
-                        </div>
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
                         <div class="single-widget side-tags">
-                            <h3 class="title">Tags</h3>
+                            <h3 class="title">Categories</h3>
                             <ul class="tag">
-                                @foreach(Helper::postTagList() as $tag)
-                                    <li><a href="">{{$tag->title}}</a></li>
+                                @foreach(Helper::postCategoryList() as $cat)
+                                    <li><a href="{{ route('front.blog-by-category', $cat->slug) }}">{{$cat->title}}
+                                        </a></li>
                                 @endforeach
                             </ul>
                         </div>
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-                        <div class="single-widget newsletter">
-                            <h3 class="title">Newslatter</h3>
-                            <div class="letter-inner">
-                                <h4>Subscribe & get news <br> latest updates.</h4>
-                                <form action="{{route('subscribe')}}" method="POST">
-                                    @csrf
-                                    <div class="form-inner">
-                                        <input type="email" name="email" placeholder="Enter your email">
-                                        <button type="submit" class="btn mt-2">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <!--/ End Single Widget -->
                     </div>
+                    <!--/ End Single Widget -->
+                    <!-- Single Widget -->
+                    <div class="single-widget recent-post">
+                        <h3 class="title">Recent post</h3>
+                        @foreach($recantPosts as $post)
+                            <!-- Single Post -->
+                            <div class="single-post">
+                                <div class="image">
+                                    <img src="{{$post->ImageUrl}}" alt="{{$post->title}}">
+                                </div>
+                                <div class="content">
+                                    <h5><a href="#">{{$post->title}}</a></h5>
+                                    <ul class="comment">
+                                        <li><i class="fa fa-calendar"
+                                               aria-hidden="true"></i>{{$post->created_at->format('d M, y')}}</li>
+                                        <li><i class="fa fa-user" aria-hidden="true"></i>
+                                            {{ $post->author->name ?? 'Anonymous' }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- End Single Post -->
+                        @endforeach
+                    </div>
+                    <!--/ End Single Widget -->
+                    <!-- Single Widget -->
+                    <!--/ End Single Widget -->
+                    <!-- Single Widget -->
+                    <div class="single-widget side-tags">
+                        <h3 class="title">Tags</h3>
+                        <ul class="tag">
+                            @foreach(Helper::postTagList() as $tag)
+                                <li><a href="{{ route('front.blog-by-tag', $tag->slug) }}">{{$tag->title}}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <!--/ End Single Widget -->
+                    <!-- Single Widget -->
+                    <div class="single-widget newsletter">
+                        <h3 class="title">Newslatter</h3>
+                        <div class="letter-inner">
+                            <h4>Subscribe & get news <br> latest updates.</h4>
+                            <form action="{{route('subscribe')}}" method="POST">
+                                @csrf
+                                <div class="form-inner">
+                                    <input type="email" name="email" placeholder="Enter your email">
+                                    <button type="submit" class="btn mt-2">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--/ End Single Widget -->
                 </div>
             </div>
+        </div>
         </div>
     </section>
     <!--/ End Blog Single -->

@@ -11,9 +11,11 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Core\Models\Core;
 use Modules\Post\Models\Post;
+use Modules\Product\Models\Product;
 use Modules\Tag\Database\Factories\TagFactory;
 
 /**
@@ -42,15 +44,15 @@ use Modules\Tag\Database\Factories\TagFactory;
 class Tag extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'tags';
-    
+
     protected $fillable = [
         'title',
         'slug',
         'status',
     ];
-    
+
     /**
      * @return TagFactory
      */
@@ -58,15 +60,7 @@ class Tag extends Core
     {
         return TagFactory::new();
     }
-    
-    /**
-     * @return HasMany
-     */
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class);
-    }
-    
+
     /**
      * @param $slug
      *
@@ -75,11 +69,21 @@ class Tag extends Core
     public function incrementSlug($slug): mixed
     {
         $original = $slug;
-        $count    = 2;
+        $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count++;
         }
-        
+
         return $slug;
+    }
+
+    public function product(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_tag', 'tag_id', 'post_id');
     }
 }

@@ -50,7 +50,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return Application|Factory|View
      */
@@ -84,7 +84,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -94,7 +94,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  ProductSearchRequest  $request
+     * @param ProductSearchRequest $request
      *
      * @return Application|Factory|View
      */
@@ -112,7 +112,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Application|Factory|View
      */
@@ -126,7 +126,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return Application|Factory|View
      */
@@ -148,7 +148,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return Application|Factory|View
      */
@@ -158,7 +158,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Application|Factory|View
      */
@@ -168,7 +168,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -180,23 +180,22 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Application|Factory|View
      */
-    public function blogByCategory(Request $request)
+    public function blogByCategory($slug)
     {
-        return view('front::pages.blog', $this->front_service->blogByCategory($request));
+        return view('front::pages.blog', $this->front_service->blogByCategory($slug));
     }
 
     /**
-     * @param  Request  $request
-     *
+     * @param $slug
      * @return Application|Factory|View
      */
-    public function blogByTag(Request $request)
+    public function blogByTag($slug)
     {
-        return view('front::pages.blog', $this->front_service->blogByTag($request));
+        return view('front::pages.blog', $this->front_service->blogByTag($slug));
     }
 
     /**
@@ -204,7 +203,7 @@ class FrontController extends Controller
      */
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -214,7 +213,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -230,7 +229,7 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  string  $token
+     * @param string $token
      *
      * @return string
      */
@@ -259,7 +258,7 @@ class FrontController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Store  $request
+     * @param Store $request
      *
      * @return string|null
      */
@@ -271,7 +270,7 @@ class FrontController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return RedirectResponse
      */

@@ -37,9 +37,9 @@
         <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
     </div>
 
-    <div class="form-group">
+    <div class="button-container">
         <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
-        <button type="submit" class="btn btn-success">@lang('partials.submit')</button>
+        <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
     </div>
 </form>
 

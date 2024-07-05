@@ -24,7 +24,7 @@ class PostCommentService
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return void
      * @throws Exception
      */
@@ -40,7 +40,7 @@ class PostCommentService
 
         $details = [
             'title' => "New Comment created",
-            'actionURL' => route('blog.detail', $post_info->slug),
+            'actionURL' => route('front.blog-detail', $post_info->slug),
             'fas' => 'fas fa-comment',
         ];
 
@@ -50,7 +50,7 @@ class PostCommentService
     /**
      * Edit the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return mixed
      */
     public function edit(int $id): mixed
@@ -61,8 +61,8 @@ class PostCommentService
     /**
      * Update the specified resource in storage.
      *
-     * @param  array  $data
-     * @param  int  $id
+     * @param array $data
+     * @param int $id
      * @return RedirectResponse
      */
     public function update(array $data, int $id): RedirectResponse
@@ -73,7 +73,7 @@ class PostCommentService
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return void
      */
     public function destroy(int $id): void

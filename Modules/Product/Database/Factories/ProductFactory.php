@@ -4,15 +4,14 @@ namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Modules\Category\Models\Category;
 use Modules\Product\Models\Product;
+use Modules\Tag\Models\Tag;
 
 class ProductFactory extends Factory
 {
     protected $model = Product::class;
 
-    /**
-     * @return array
-     */
     public function definition(): array
     {
         return [
@@ -29,5 +28,41 @@ class ProductFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
+    }
+
+    /**
+     * Configure the factory to create a product with categories.
+     */
+    public function withCategories(): ProductFactory
+    {
+        return $this->afterCreating(function (Product $product) {
+            $categories = Category::factory()->count(3)->create();
+            $product->categories()->attach($categories);
+        });
+    }
+
+    /**
+     * Configure the factory to create a product with tags.
+     */
+    public function withTags(): ProductFactory
+    {
+        return $this->afterCreating(function (Product $product) {
+            $tags = Tag::factory()->count(5)->create();
+            $product->tags()->attach($tags);
+        });
+    }
+
+    /**
+     * Configure the factory to create a product with categories and tags.
+     */
+    public function withCategoriesAndTags(): ProductFactory
+    {
+        return $this->afterCreating(function (Product $product) {
+            $categories = Category::factory()->count(3)->create();
+            $product->categories()->attach($categories);
+
+            $tags = Tag::factory()->count(5)->create();
+            $product->tags()->attach($tags);
+        });
     }
 }

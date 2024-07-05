@@ -25,6 +25,7 @@ use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
+use Modules\Tag\Models\Tag;
 
 class FrontService
 {
@@ -70,12 +71,12 @@ class FrontService
 
     /**
      * Retrieves product categories based on a slug.
-     * @param  string  $slug  The slug of the category.
+     * @param string $slug The slug of the category.
      * @return array The products under the category.
      */
     public function productCat(string $slug): array
     {
-        $cacheKey = 'productCat_'.$slug;
+        $cacheKey = 'productCat_' . $slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             $category = Category::whereSlug($slug)->first();
@@ -107,13 +108,13 @@ class FrontService
 
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return array|string
      */
     public function blogSearch(Request $request): array|string
     {
-        $cacheKey = 'blogSearch_'.$request->input('search');
+        $cacheKey = 'blogSearch_' . $request->input('search');
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($request) {
             $recentPosts = Post::where('status', 'active')->latest()->limit(3)->get();
@@ -190,8 +191,8 @@ class FrontService
         $brandSlugs = explode(',', $queryParams['brand'] ?? '');
 
         // Generate unique cache keys
-        $categoryCacheKey = 'category_ids_'.md5(json_encode($categorySlugs));
-        $brandCacheKey = 'brand_ids_'.md5(json_encode($brandSlugs));
+        $categoryCacheKey = 'category_ids_' . md5(json_encode($categorySlugs));
+        $brandCacheKey = 'brand_ids_' . md5(json_encode($brandSlugs));
 
         // Cache for 24 hours (86400 seconds)
         $categoryIds = Cache::remember($categoryCacheKey, 86400, function () use ($categorySlugs) {
@@ -207,7 +208,7 @@ class FrontService
 
     private function retrievePriceRange(array $queryParams): array
     {
-        return array_map('intval', explode('-', $queryParams['price'] ?? '0-'.PHP_INT_MAX));
+        return array_map('intval', explode('-', $queryParams['price'] ?? '0-' . PHP_INT_MAX));
     }
 
     private function retrieveSortOrder(array $queryParams): array
@@ -230,10 +231,10 @@ class FrontService
         $sortOrder,
         array $queryParams
     ) {
-        $perPage = (int) ($queryParams['show'] ?? 9);
+        $perPage = (int)($queryParams['show'] ?? 9);
 
         // Generate a unique cache key
-        $cacheKey = 'products_'.md5(json_encode(compact(
+        $cacheKey = 'products_' . md5(json_encode(compact(
                 'categoryIds', 'brandIds', 'minPrice', 'maxPrice', 'sortColumn', 'sortOrder', 'perPage'
             )));
 
@@ -267,17 +268,20 @@ class FrontService
 
 
     /**
-     * @param $request
-     *
+     * @param string $slug
      * @return array|string
      */
-    public function blogByTag($request): array|string
+    public function blogByTag(string $slug): array|string
     {
-        $cacheKey = 'blogByTag_'.$request->slug;
+        $cacheKey = 'blogByTag_' . $slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($request) {
-            $posts = Post::getBlogByTag($request->slug);
-            $recent_posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+            $posts = Post::with(['author', 'tags'])
+                ->whereHas('tags', function ($q) use ($slug) {
+                    $q->where('slug', $slug);
+                })
+                ->paginate(10);
+            $recent_posts = Post::with('author')->where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
             return [
                 "posts" => $posts,
@@ -347,10 +351,10 @@ class FrontService
      *
      * @return array|string
      */
-    public function blogByCategory($request): array|string
+    public function blogByCategory($slug): array|string
     {
-        $posts = Post::with('author_info')->whereHas('categories', static function ($q) use ($request) {
-            $q->whereSlug($request->slug);
+        $posts = Post::with('author')->whereHas('categories', static function ($q) use ($slug) {
+            $q->whereSlug($slug);
         })->paginate(10);
         $recantPosts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
@@ -412,7 +416,7 @@ class FrontService
 
     public function productDetail(string $slug): array
     {
-        $cacheKey = 'productDetail_'.$slug;
+        $cacheKey = 'productDetail_' . $slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             // Get the product detail by slug.
@@ -437,28 +441,27 @@ class FrontService
     /**
      * Get data for a blog post detail page.
      *
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return array|string
      */
     public function blogDetail(string $slug): array|string
     {
-        $cacheKey = 'blogDetail_'.$slug;
+        $cacheKey = 'blogDetail_' . $slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
-            // Get post data
-            $post = Post::getPostBySlug($slug);
+            $post = Post::with('author', 'categories')->whereSlug($slug)->FirstOrFail();
+            $recentPosts = Post::with('author')->whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
+            $tags = Tag::whereHas('posts')->take(50)->get();
 
-            // Get recent posts
-            $recentPosts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
-
-            // Return data
             return [
                 "post" => $post,
                 "recantPosts" => $recentPosts,
+                "tags" => $tags,
             ];
         });
     }
+
 
     /**
      * Get data for a product brand page.
@@ -505,10 +508,10 @@ class FrontService
         $appUrl = config('app.url');
 
         // Determine the correct route name based on the current request
-        $routeSuffix = request()->is($appUrl.'/product-grids') ? 'product-grids' : 'product-lists';
+        $routeSuffix = request()->is($appUrl . '/product-grids') ? 'product-grids' : 'product-lists';
 
         // Prefix the route name with 'front.'
-        $routeName = 'front.'.$routeSuffix;
+        $routeName = 'front.' . $routeSuffix;
 
         // Build the route parameters string
         $routeParameters = http_build_query($query);
@@ -596,7 +599,7 @@ class FrontService
 
     private function pagination(Builder $query)
     {
-        $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
+        $perPage = isset($_GET['show']) ? (int)$_GET['show'] : 6;
         return $query->paginate($perPage);
     }
 
@@ -615,9 +618,10 @@ class FrontService
     {
         return Cache::remember('blog', 24 * 60, function () {
             return [
-                "posts" => Post::with(['categories', 'author_info'])->whereStatus('active')->orderBy('id',
+                "posts" => Post::with(['author'])->whereStatus('active')->orderBy('id',
                     'DESC')->paginate(9),
-                "recantPosts" => Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get(),
+                "recantPosts" => Post::with(['author'])->whereStatus('active')->orderBy('id',
+                    'DESC')->limit(3)->get(),
             ];
         });
     }
@@ -625,7 +629,7 @@ class FrontService
     /**
      * Create a new newsletter entry and send a verification email to the provided email address.
      *
-     * @param  array  $data  The data for the new newsletter entry.
+     * @param array $data The data for the new newsletter entry.
      * @return string Returns an error message if an exception occurs, otherwise returns nothing.
      */
     public function newsletter(array $data): string

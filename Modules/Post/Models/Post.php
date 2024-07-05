@@ -8,7 +8,6 @@ namespace Modules\Post\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Post\Database\Factories\PostFactory;
@@ -50,7 +49,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @package App\Models
  * @property-read Collection|PostComment[] $allComments
  * @property-read int|null $all_comments_count
- * @property-read User|null $author_info
+ * @property-read User|null $author
  * @property-read Collection|PostComment[] $fpost_comments
  * @property-read int|null $fpost_comments_count
  * @method static Builder|Post newModelQuery()
@@ -97,7 +96,7 @@ class Post extends Core implements HasMedia
         'description',
         'quote',
         'photo',
-        'author_info.name',
+        'author.name',
         'status',
     ];
 
@@ -112,16 +111,13 @@ class Post extends Core implements HasMedia
         'status',
     ];
 
-    /**
-     * @return PostFactory
-     */
     public static function Factory(): PostFactory
     {
         return PostFactory::new();
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return LengthAwarePaginator
      */
@@ -131,7 +127,7 @@ class Post extends Core implements HasMedia
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return Builder|Model
      */
@@ -161,73 +157,30 @@ class Post extends Core implements HasMedia
         return $this->belongsToMany(Category::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'added_by');
-    }
-
-    /**
-     * @return BelongsToMany
-     */
     public function tags(): BelongsToMany
     {
-        return $this->BelongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
     }
 
-    /**
-     * @return HasMany
-     */
-    public function post_comments(): HasMany
+    public function postComments(): HasMany
     {
         return $this->hasMany(PostComment::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function allComments(): HasMany
     {
         return $this->hasMany(PostComment::class)->where('status', 'active');
     }
 
-    /**
-     * @return HasMany
-     */
     public function comments(): HasMany
     {
         return $this->hasMany(PostComment::class)->whereNull('parent_id')->orderBy('id', 'DESC');
     }
 
-    /**
-     * @param  string  $slug
-     *
-     * @return mixed|string
-     */
-    public function incrementSlug(string $slug): mixed
+    public function author(): BelongsTo
     {
-        $original = $slug;
-        $count = 2;
-        while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
-        }
-
-        return $slug;
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
-    /**
-     * @return HasOne
-     */
-    public function author_info(): HasOne
-    {
-        return $this->hasOne(User::class, 'id', 'added_by');
-    }
-
-    /**
-     * @return string|null
-     */
 
     public function getImageUrlAttribute(): ?string
     {
@@ -242,9 +195,46 @@ class Post extends Core implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this
-            ->addMediaConversion('preview')
+        $this->addMediaConversion('preview')
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
     }
+
+    /**
+     * @param string $slug
+     *
+     * @return mixed|string
+     */
+    public function incrementSlug(string $slug): mixed
+    {
+        $original = $slug;
+        $count = 2;
+        while (static::whereSlug($slug)->exists()) {
+            $slug = "{$original}-" . $count++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Configure the factory to create a post with categories and tags.
+     */
+    public function withCategoriesAndTags(): PostFactory
+    {
+        return $this->afterCreating(function (Post $post) {
+            $categories = Category::factory()->count(3)->create();
+            $post->categories()->attach($categories);
+
+            $tags = Tag::factory()->count(5)->create();
+            $post->tags()->attach($tags);
+        });
+    }
+
+
+    public function post_comments(): HasMany
+    {
+        return $this->hasMany(PostComment::class);
+    }
+
+
 }
