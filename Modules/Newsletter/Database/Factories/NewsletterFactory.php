@@ -9,14 +9,14 @@ use Modules\Newsletter\Models\Newsletter;
 class NewsletterFactory extends Factory
 {
     protected $model = Newsletter::class;
-    
+
     public function definition(): array
     {
         return [
-            'email'        => $this->faker->unique()->safeEmail(),
+            'email' => $this->faker->unique()->safeEmail(),
             'is_validated' => true,
-            'created_at'   => Carbon::now(),
-            'updated_at'   => Carbon::now(),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 }

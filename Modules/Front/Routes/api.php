@@ -25,4 +25,3 @@ Route::get('/blog/search', [FrontController::class, 'blogSearch'])->name('api.bl
 Route::get('blog-cat/{slug}', [FrontController::class, 'blogByCategory'])->name('api.blog.category');
 Route::get('blog-tag/{slug}', [FrontController::class, 'blogByTag'])->name('api.blog.tag');
 Route::get('/product/deal', [FrontController::class, 'productDeal'])->name('api.product.deal');
-

@@ -21,7 +21,7 @@ use Modules\Core\Models\Core;
  * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @package App\Models
+ *
  * @method static Builder|Coupon newModelQuery()
  * @method static Builder|Coupon newQuery()
  * @method static Builder|Coupon query()
@@ -32,11 +32,11 @@ use Modules\Core\Models\Core;
  * @method static Builder|Coupon whereType($value)
  * @method static Builder|Coupon whereUpdatedAt($value)
  * @method static Builder|Coupon whereValue($value)
+ *
  * @mixin Eloquent
  */
 class Coupon extends Core
 {
-
     protected $table = 'coupons';
 
     protected $casts = [
@@ -58,15 +58,14 @@ class Coupon extends Core
      */
     public function discount(float $total): float
     {
-        if ($this->type == "fixed") {
+        if ($this->type == 'fixed') {
             // Assuming 'value' is the fixed discount amount.
             return min($this->value, $total); // Ensure discount does not exceed the total.
-        } elseif ($this->type == "percent") {
+        } elseif ($this->type == 'percent') {
             // Assuming 'value' is the percentage discount.
             return $total * ($this->value / 100);
         }
 
         return 0; // No discount applicable.
     }
-
 }

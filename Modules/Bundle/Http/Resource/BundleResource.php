@@ -16,6 +16,7 @@ use Modules\Product\Http\Resources\ProductResource;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property int $products_count
+ *
  * @mixin Bundle
  */
 class BundleResource extends JsonResource
@@ -23,7 +24,6 @@ class BundleResource extends JsonResource
     /**
      * Transforms the resource into an array.
      *
-     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array

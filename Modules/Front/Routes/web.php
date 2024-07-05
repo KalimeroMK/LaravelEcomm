@@ -39,4 +39,3 @@ Route::get('/bundle', [FrontController::class, 'bundles'])->name('front.bundles'
 Route::post('/subscribe', [\Modules\Front\Http\Controllers\Api\FrontController::class, 'subscribe'])->name('subscribe');
 Route::get('/validation/{token}', [FrontController::class, 'verifyNewsletter'])->name('validation');
 Route::get('/delete/{token}', [FrontController::class, 'deleteNewsletter'])->name('delete-newsletter');
-

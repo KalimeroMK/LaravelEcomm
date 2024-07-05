@@ -14,5 +14,4 @@ class CategoryService extends CoreService
         parent::__construct($categoryRepository);
         $this->categoryRepository = $categoryRepository;
     }
-
 }

@@ -15,7 +15,6 @@ class AdminService
     }
 
     /**
-     *
      * @return array<string, int> Array of paths.
      */
     public function index(): array
@@ -27,5 +26,4 @@ class AdminService
     {
         return $this->admin_repository->getPaidOrdersCountByMonth();
     }
-
 }

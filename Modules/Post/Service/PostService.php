@@ -10,7 +10,6 @@ use Modules\Post\Repository\PostRepository;
 
 class PostService extends CoreService
 {
-
     public PostRepository $post_repository;
 
     public function __construct(PostRepository $post_repository)
@@ -19,11 +18,10 @@ class PostService extends CoreService
         $this->post_repository = $post_repository;
     }
 
-
     /**
      * Create a new banner with possible media files.
      *
-     * @param array<string, mixed> $data The data for creating the banner.
+     * @param  array<string, mixed>  $data  The data for creating the banner.
      * @return Model The newly created banner model.
      */
     public function create(array $data): Model
@@ -50,8 +48,8 @@ class PostService extends CoreService
     /**
      * Update an existing banner with new data and possibly new media files.
      *
-     * @param int $id The banner ID to update.
-     * @param array<string, mixed> $data The data for updating the banner.
+     * @param  int  $id  The banner ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the banner.
      * @return Model The updated banner model.
      */
     public function update(int $id, array $data): Model
@@ -79,12 +77,10 @@ class PostService extends CoreService
         return $post;
     }
 
-
     /**
      * Search posts based on given data.
      *
-     * @param array<string, mixed> $data
-     * @return LengthAwarePaginator
+     * @param  array<string, mixed>  $data
      */
     public function search(array $data): LengthAwarePaginator
     {
@@ -93,9 +89,6 @@ class PostService extends CoreService
 
     /**
      * Upload an image.
-     *
-     * @param Request $request
-     * @return void
      */
     public function upload(Request $request): void
     {
@@ -103,12 +96,12 @@ class PostService extends CoreService
             $originName = $request->file('upload')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
             $extension = $request->file('upload')->getClientOriginalExtension();
-            $fileName = $fileName . '_' . time() . '.' . $extension;
+            $fileName = $fileName.'_'.time().'.'.$extension;
 
             $request->file('upload')->move(public_path('images'), $fileName);
 
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-            $url = asset('images/' . $fileName);
+            $url = asset('images/'.$fileName);
             $msg = 'Image uploaded successfully';
             $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
 

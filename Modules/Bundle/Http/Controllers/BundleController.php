@@ -46,27 +46,26 @@ class BundleController extends Controller
     {
         return view('bundle::edit')->with($this->bundleService->edit($bundle->id));
     }
-    
+
     public function update(Store $request, Bundle $bundle): RedirectResponse
     {
         $this->bundleService->update($bundle->id, $request->all());
+
         return redirect()->route('bundle.edit', $bundle)->with('status', 'Brand updated successfully.');
     }
 
     public function destroy(Bundle $bundle): RedirectResponse
     {
-        $this->bundleService->destroy($bundle->id);
+        $this->bundleService->delete($bundle->id);
 
         return redirect()->route('bundle.index')->with('status', 'Brand deleted successfully.');
     }
 
-
     /**
      * Deletes a media item associated with a bundle.
      *
-     * @param int $modelId The ID of the bundle.
-     * @param int $mediaId The ID of the media to be deleted.
-     * @return RedirectResponse
+     * @param  int  $modelId  The ID of the bundle.
+     * @param  int  $mediaId  The ID of the media to be deleted.
      */
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
@@ -76,5 +75,4 @@ class BundleController extends Controller
 
         return redirect()->route('bundle.index')->with('status', 'Media deleted successfully.');
     }
-
 }

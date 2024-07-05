@@ -7,20 +7,12 @@ use Illuminate\Support\ServiceProvider;
 
 class MessageServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'Message';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'message';
 
     /**
      * Boot the application events.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -32,12 +24,10 @@ class MessageServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
+        $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
@@ -48,13 +38,11 @@ class MessageServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
         $this->publishes([
-            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower . '.php'),
+            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
         ], 'config');
         $this->mergeConfigFrom(
             module_path($this->moduleName, 'Config/config.php'),
@@ -64,24 +52,21 @@ class MessageServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/' . $this->moduleNameLower);
+        $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
 
         $sourcePath = module_path($this->moduleName, 'Resources/views');
 
         $this->publishes([
             $sourcePath => $viewPath,
-        ], ['views', $this->moduleNameLower . '-module-views']);
+        ], ['views', $this->moduleNameLower.'-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
     /**
-     *
      * @return array<string> Array of paths.
      */
     public function provides(): array
@@ -98,8 +83,8 @@ class MessageServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (Config::get('view.paths') as $path) {
-            if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
-                $paths[] = $path . '/modules/' . $this->moduleNameLower;
+            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
+                $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
 
@@ -108,8 +93,6 @@ class MessageServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {

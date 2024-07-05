@@ -36,14 +36,14 @@ class ProductController extends CoreController
     public function create(): Renderable
     {
         return view('product::create', [
-                'brands' => Brand::get(),
-                'categories' => Category::get(),
-                'product' => new Product(),
-                'sizes' => Size::get(),
-                'conditions' => Condition::get(),
-                'tags' => Tag::get(),
-                'attributes' => Attribute::all()
-            ]
+            'brands' => Brand::get(),
+            'categories' => Category::get(),
+            'product' => new Product(),
+            'sizes' => Size::get(),
+            'conditions' => Condition::get(),
+            'tags' => Tag::get(),
+            'attributes' => Attribute::all(),
+        ]
         );
     }
 
@@ -58,20 +58,21 @@ class ProductController extends CoreController
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
         }
+
         return redirect()->route('products.index');
     }
 
     public function edit(Product $product): Renderable
     {
         return view('product::edit', [
-                'brands' => Brand::get(),
-                'categories' => Category::all(),
-                'product' => $product,
-                'sizes' => Size::get(),
-                'conditions' => Condition::all(),
-                'tags' => Tag::get(),
-                'attributes' => Attribute::all()
-            ]
+            'brands' => Brand::get(),
+            'categories' => Category::all(),
+            'product' => $product,
+            'sizes' => Size::get(),
+            'conditions' => Condition::all(),
+            'tags' => Tag::get(),
+            'attributes' => Attribute::all(),
+        ]
         );
     }
 
@@ -86,12 +87,14 @@ class ProductController extends CoreController
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
         }
+
         return redirect()->route('products.index');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
         $this->product_service->delete($product->id);
+
         return redirect()->route('products.index');
     }
 
@@ -102,5 +105,4 @@ class ProductController extends CoreController
 
         return back()->with('success', 'Media deleted successfully.');
     }
-
 }

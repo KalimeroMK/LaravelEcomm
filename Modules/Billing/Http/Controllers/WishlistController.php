@@ -31,11 +31,6 @@ class WishlistController extends CoreController
         return back();
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
-     */
     public function wishlistDelete(Request $request): RedirectResponse
     {
         $this->wishlist_service->delete($request->id);
@@ -44,5 +39,4 @@ class WishlistController extends CoreController
 
         return back();
     }
-
 }

@@ -12,7 +12,6 @@ class Store extends CoreRequest
      *
      * @return array<string, string> Array of field rules.
      */
-
     public function rules(): array
     {
         return [

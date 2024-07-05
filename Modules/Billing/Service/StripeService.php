@@ -28,18 +28,16 @@ class StripeService
     /**
      * Saves the order amount.
      *
-     * @param  Request  $request
-     * @return RedirectResponse
      * @throws ApiErrorException
      */
     public function stripePost(Request $request): RedirectResponse
     {
         Stripe::setApiKey(config('stripe.sandbox.client_secret'));
         Charge::create([
-            "amount" => $this->payment->calculate($request) * 100,
-            "currency" => "usd",
-            "source" => $request->stripeToken,
-            "description" => "KalimeroMK E-comm",
+            'amount' => $this->payment->calculate($request) * 100,
+            'currency' => 'usd',
+            'source' => $request->stripeToken,
+            'description' => 'KalimeroMK E-comm',
         ]);
         $this->orderSave($this->payment->calculate($request));
         Session::flash('success', 'Payment successful!');
@@ -49,10 +47,6 @@ class StripeService
 
     /**
      * success response method.
-     *
-     * @param  int  $id
-     *
-     * @return Application|Factory|View
      */
     public function stripe(int $id): View|Factory|Application
     {

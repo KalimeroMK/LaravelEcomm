@@ -22,8 +22,6 @@ class ProductReviewService
 
     /**
      * Get all product reviews.
-     *
-     * @return Collection
      */
     public function index(): Collection
     {
@@ -33,9 +31,7 @@ class ProductReviewService
     /**
      * Update a product review.
      *
-     * @param  int  $id
      * @param  array<string, mixed>  $data
-     * @return mixed
      */
     public function update(int $id, array $data): mixed
     {
@@ -44,9 +40,6 @@ class ProductReviewService
 
     /**
      * Edit a product review.
-     *
-     * @param  int  $id
-     * @return mixed
      */
     public function edit(int $id): mixed
     {
@@ -55,9 +48,6 @@ class ProductReviewService
 
     /**
      * Store a newly created product review.
-     *
-     * @param  Request  $request
-     * @return void
      */
     public function store(Request $request): void
     {
@@ -75,12 +65,8 @@ class ProductReviewService
         Notification::send(User::role('super-admin')->get(), new StatusNotification($details));
     }
 
-
     /**
      * Delete a product review.
-     *
-     * @param  int  $id
-     * @return void
      */
     public function destroy(int $id): void
     {
@@ -89,8 +75,6 @@ class ProductReviewService
 
     /**
      * Find all product reviews by user.
-     *
-     * @return Collection
      */
     public function findAllByUser(): Collection
     {

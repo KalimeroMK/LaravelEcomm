@@ -14,7 +14,6 @@ use Modules\Tenant\Service\TenantService;
 
 class TenantController extends Controller
 {
-
     protected TenantService $tenantService;
 
     public function __construct(TenantService $tenantService)
@@ -24,9 +23,6 @@ class TenantController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     *
-     * @return Factory|View|Application
      */
     public function index(): Factory|View|Application
     {
@@ -35,8 +31,6 @@ class TenantController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
      */
     public function create(): View|Factory|Application
     {
@@ -45,10 +39,6 @@ class TenantController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
@@ -59,9 +49,6 @@ class TenantController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  Tenant  $tenant
-     * @return Application|Factory|View
      */
     public function edit(Tenant $tenant): View|Factory|Application
     {
@@ -72,10 +59,6 @@ class TenantController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Update  $request
-     * @param  Tenant  $tenant
-     * @return RedirectResponse
      */
     public function update(Update $request, Tenant $tenant): RedirectResponse
     {
@@ -86,9 +69,6 @@ class TenantController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Tenant  $tenant
-     * @return RedirectResponse
      */
     public function destroy(Tenant $tenant): RedirectResponse
     {

@@ -37,8 +37,8 @@ use Modules\User\Models\User;
  * @property Product $product
  * @property User|null $user
  * @property Collection|Wishlist[] $wishlists
- * @package App\Models
  * @property-read int|null $wishlists_count
+ *
  * @method static Builder|Cart newModelQuery()
  * @method static Builder|Cart newQuery()
  * @method static Builder|Cart query()
@@ -52,23 +52,24 @@ use Modules\User\Models\User;
  * @method static Builder|Cart whereStatus($value)
  * @method static Builder|Cart whereUpdatedAt($value)
  * @method static Builder|Cart whereUserId($value)
+ *
  * @mixin Eloquent
  */
 class Cart extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'carts';
-    
+
     protected $casts = [
         'product_id' => 'int',
-        'order_id'   => 'int',
-        'user_id'    => 'int',
-        'price'      => 'float',
-        'quantity'   => 'int',
-        'amount'     => 'float',
+        'order_id' => 'int',
+        'user_id' => 'int',
+        'price' => 'float',
+        'quantity' => 'int',
+        'amount' => 'float',
     ];
-    
+
     protected $fillable = [
         'product_id',
         'order_id',
@@ -78,45 +79,29 @@ class Cart extends Core
         'quantity',
         'amount',
     ];
-    
-    /**
-     * @return CartFactory
-     */
+
     public static function Factory(): CartFactory
     {
         return CartFactory::new();
     }
-    
-    /**
-     * @return BelongsTo
-     */
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
-    
-    /**
-     * @return BelongsTo
-     */
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
-    
-    /**
-     * @return BelongsTo
-     */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-    
-    /**
-     * @return HasMany
-     */
+
     public function wishlists(): HasMany
     {
         return $this->hasMany(Wishlist::class);
     }
-    
 }

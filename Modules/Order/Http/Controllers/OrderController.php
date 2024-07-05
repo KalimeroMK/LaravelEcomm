@@ -75,15 +75,12 @@ class OrderController extends CoreController
 
     /**
      * Generate PDF for a given order ID.
-     *
-     * @param int $id
-     * @return Response
      */
     public function pdf(int $id): Response
     {
         $order = Order::findOrFail($id);  // Ensure we get a single order or fail
 
-        $file_name = $order->order_number . '-' . $order->first_name . '.pdf';
+        $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
         $pdf = PDF::loadview('order::pdf', compact('order'));
 
         return $pdf->download($file_name);
@@ -117,7 +114,7 @@ class OrderController extends CoreController
         $data = [];
         for ($i = 1; $i <= 12; $i++) {
             $monthName = date('F', mktime(0, 0, 0, $i, 1));
-            $data[$monthName] = !empty($result[$i]) ? number_format((float)$result[$i], 2, '.', '') : 0.0;
+            $data[$monthName] = ! empty($result[$i]) ? number_format((float) $result[$i], 2, '.', '') : 0.0;
         }
 
         return $data;

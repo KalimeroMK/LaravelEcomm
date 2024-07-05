@@ -17,9 +17,9 @@ class WishlistRepository extends Repository
      * Creates a new Wishlist entry.
      *
      * @param  array<string, mixed>  $data  Data needed for creating the wishlist entry. Expected keys:
-     *                                   - 'price' (float): The original price of the item.
-     *                                   - 'discount' (float): The discount rate on the item.
-     *                                   - 'quantity' (int): The number of items.
+     *                                      - 'price' (float): The original price of the item.
+     *                                      - 'discount' (float): The discount rate on the item.
+     *                                      - 'quantity' (int): The number of items.
      * @return Model Returns the newly created wishlist entry.
      */
     public function create(array $data): Model
@@ -29,6 +29,4 @@ class WishlistRepository extends Repository
 
         return $this->model::create($data)->fresh();
     }
-
-
 }

@@ -21,9 +21,7 @@ use Modules\Core\Models\Core;
  * @property bool $configurable
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property Collection|AttributeValue[] $attribute_values
- *
  */
 class Attribute extends Core
 {
@@ -35,26 +33,41 @@ class Attribute extends Core
         'type',
         'display',
         'filterable',
-        'configurable'
+        'configurable',
     ];
 
     const TYPE_URL = 'url';
+
     const TYPE_HEX = 'hex';
+
     const TYPE_TEXT = 'text';
+
     const TYPE_DATE = 'date';
+
     const TYPE_TIME = 'time';
+
     const TYPE_FLOAT = 'float';
+
     const TYPE_STRING = 'string';
+
     const TYPE_INTEGER = 'integer';
+
     const TYPE_BOOLEAN = 'boolean';
+
     const TYPE_DECIMAL = 'decimal';
 
     const DISPLAY_INPUT = 'input';
+
     const DISPLAY_RADIO = 'radio';
+
     const DISPLAY_COLOR = 'color';
+
     const DISPLAY_BUTTON = 'button';
+
     const DISPLAY_SELECT = 'select';
+
     const DISPLAY_CHECKBOX = 'checkbox';
+
     const DISPLAY_MULTI_SELECT = 'multiselect';
 
     const TYPES = [
@@ -79,9 +92,6 @@ class Attribute extends Core
         self::DISPLAY_MULTI_SELECT,
     ];
 
-    /**
-     * @return AttributeFactory
-     */
     public static function Factory(): AttributeFactory
     {
         return AttributeFactory::new();
@@ -108,7 +118,7 @@ class Attribute extends Core
             self::TYPE_INTEGER => 'integer_value',
             self::TYPE_BOOLEAN => 'boolean_value',
             self::TYPE_DECIMAL => 'decimal_value',
-            default => throw new Exception("Invalid attribute type"),
+            default => throw new Exception('Invalid attribute type'),
         };
     }
 }

@@ -20,7 +20,7 @@ use Modules\Core\Models\Core;
  * @property string|null $google2fa_secret
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @package App\Models
+ *
  * @method static Builder|Google2fa newModelQuery()
  * @method static Builder|Google2fa newQuery()
  * @method static Builder|Google2fa query()
@@ -30,6 +30,7 @@ use Modules\Core\Models\Core;
  * @method static Builder|Google2fa whereId($value)
  * @method static Builder|Google2fa whereUpdatedAt($value)
  * @method static Builder|Google2fa whereUserId($value)
+ *
  * @mixin Eloquent
  */
 class Google2fa extends Core
@@ -38,16 +39,16 @@ class Google2fa extends Core
 
     protected $casts = [
         'user_id' => 'int',
-        'google2fa_enable' => 'bool'
+        'google2fa_enable' => 'bool',
     ];
 
     protected $hidden = [
-        'google2fa_secret'
+        'google2fa_secret',
     ];
 
     protected $fillable = [
         'user_id',
         'google2fa_enable',
-        'google2fa_secret'
+        'google2fa_secret',
     ];
 }

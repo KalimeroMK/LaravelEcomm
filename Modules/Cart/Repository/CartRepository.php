@@ -13,20 +13,13 @@ class CartRepository extends Repository
      */
     public $model = Cart::class;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::get();
     }
 
-    /**
-     * @return mixed
-     */
     public function show(): mixed
     {
         return $this->model::whereUserId(Auth()->id())->get();
     }
-
 }

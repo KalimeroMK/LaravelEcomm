@@ -30,6 +30,7 @@ class ShippingController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $this->shipping_service->create($request->validated());
+
         return redirect()->route('shippings.index');
     }
 
@@ -46,12 +47,14 @@ class ShippingController extends CoreController
     public function update(Update $request, Shipping $shipping): RedirectResponse
     {
         $this->shipping_service->update($shipping->id, $request->validated());
+
         return redirect()->route('shippings.index');
     }
 
     public function destroy(Shipping $shipping): RedirectResponse
     {
         $this->shipping_service->delete($shipping->id);
+
         return redirect()->back();
     }
 }

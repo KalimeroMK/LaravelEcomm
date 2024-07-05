@@ -33,10 +33,6 @@ class TagController extends CoreController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param Store $request
-     *
-     * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
@@ -58,7 +54,6 @@ class TagController extends CoreController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Tag $tag
      *
      * @return Application|Factory|View
      */
@@ -69,11 +64,6 @@ class TagController extends CoreController
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param Store $request
-     * @param Tag $tag
-     *
-     * @return RedirectResponse
      */
     public function update(Store $request, Tag $tag): RedirectResponse
     {
@@ -84,10 +74,6 @@ class TagController extends CoreController
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Tag $tag
-     *
-     * @return RedirectResponse
      */
     public function destroy(Tag $tag): RedirectResponse
     {

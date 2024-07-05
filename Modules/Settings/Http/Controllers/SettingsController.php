@@ -29,7 +29,6 @@ class SettingsController extends Controller
         return view('settings::edit', ['settings' => $this->settings_service->getData()]);
     }
 
-
     public function Update(Update $request, Setting $setting): RedirectResponse
     {
         $this->settings_service->update($setting->id, $request->validated());

@@ -9,9 +9,6 @@ class SettingsRepository extends Repository
 {
     public $model = Setting::class;
 
-    /**
-     * @return object
-     */
     public function findFirst(): object
     {
         return $this->model::first();

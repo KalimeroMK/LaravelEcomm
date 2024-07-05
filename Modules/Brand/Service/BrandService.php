@@ -46,7 +46,7 @@ class BrandService extends CoreService
     /**
      * Update an existing banner with new data and possibly new media files.
      *
-     * @param  int                   $id  The banner ID to update.
+     * @param  int  $id  The banner ID to update.
      * @param  array<string, mixed>  $data  The data for updating the banner.
      * @return Model The updated banner model.
      */
@@ -68,10 +68,6 @@ class BrandService extends CoreService
         return $brand;
     }
 
-    /**
-     * @param  array  $data
-     * @return mixed
-     */
     public function search(array $data): mixed
     {
         return $this->brand_repository->search($data);

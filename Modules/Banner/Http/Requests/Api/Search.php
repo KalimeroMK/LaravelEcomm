@@ -21,5 +21,4 @@ class Search extends CoreRequest
             'all_included' => 'nullable|boolean',
         ];
     }
-
 }

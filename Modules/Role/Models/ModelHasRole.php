@@ -18,25 +18,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $model_type
  * @property int $model_id
  * @property Role $role
- * @package App\Models
+ *
  * @method static Builder|ModelHasRole newModelQuery()
  * @method static Builder|ModelHasRole newQuery()
  * @method static Builder|ModelHasRole query()
  * @method static Builder|ModelHasRole whereModelId($value)
  * @method static Builder|ModelHasRole whereModelType($value)
  * @method static Builder|ModelHasRole whereRoleId($value)
+ *
  * @mixin Eloquent
  */
 class ModelHasRole extends Model
 {
     public $incrementing = false;
+
     public $timestamps = false;
+
     protected $table = 'model_has_roles';
+
     protected $casts = [
-        'role_id'  => 'int',
+        'role_id' => 'int',
         'model_id' => 'int',
     ];
-    
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);

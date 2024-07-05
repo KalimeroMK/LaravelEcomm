@@ -47,10 +47,10 @@ use Modules\User\Models\User;
  * @property Shipping|null $shipping
  * @property User|null $user
  * @property Collection|Cart[] $carts
- * @package App\Models
  * @property-read Collection|Cart[] $cart_info
  * @property-read int|null $cart_info_count
  * @property-read int|null $carts_count
+ *
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
  * @method static Builder|Order query()
@@ -75,6 +75,7 @@ use Modules\User\Models\User;
  * @method static Builder|Order whereTotalAmount($value)
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereUserId($value)
+ *
  * @mixin Eloquent
  */
 class Order extends Core
@@ -113,17 +114,12 @@ class Order extends Core
         'address2',
     ];
 
-    /**
-     * @return OrderFactory
-     */
     public static function Factory(): OrderFactory
     {
         return OrderFactory::new();
     }
 
     /**
-     * @param  int  $id
-     *
      * @return Builder|Builder[]|Collection|Model|null
      */
     public static function getAllOrder(int $id): Model|Collection|Builder|array|null
@@ -131,9 +127,6 @@ class Order extends Core
         return Order::with('cart_info')->find($id);
     }
 
-    /**
-     * @return int
-     */
     public static function countActiveOrder(): int
     {
         $data = Order::count();
@@ -144,37 +137,23 @@ class Order extends Core
         return 0;
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function shipping(): BelongsTo
     {
         return $this->belongsTo(Shipping::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function cart_info(): HasMany
     {
         return $this->hasMany(Cart::class, 'order_id', 'id');
     }
-
-
 }

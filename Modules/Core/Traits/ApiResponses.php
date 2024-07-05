@@ -7,24 +7,13 @@ use Illuminate\Http\JsonResponse;
 
 trait ApiResponses
 {
-    /**
-     * @var int
-     */
     public int $responseCode = 200;
 
-    /**
-     * @var string
-     */
     public string $message = 'OK';
 
-    /**
-     * @var string
-     */
     public string $title = 'Success';
 
     /**
-     * @param  int  $code
-     *
      * @return $this
      */
     public function setCode(int $code = 200): static
@@ -37,7 +26,6 @@ trait ApiResponses
     /**
      * Set the message property.
      *
-     * @param  string  $message
      *
      * @return $this
      */
@@ -48,11 +36,9 @@ trait ApiResponses
         return $this;
     }
 
-
     /**
      * Set the title property.
      *
-     * @param  string  $title
      *
      * @return $this
      */
@@ -63,11 +49,6 @@ trait ApiResponses
         return $this;
     }
 
-    /**
-     * @param $data
-     *
-     * @return JsonResponse
-     */
     public function respond($data): JsonResponse
     {
         return response()
@@ -81,13 +62,6 @@ trait ApiResponses
             );
     }
 
-    /**
-     * @param  Exception  $exception
-     * @param  array  $data
-     * @param  string  $title
-     *
-     * @return JsonResponse
-     */
     public function exceptionRespond(Exception $exception, array $data = [], string $title = 'Error'): JsonResponse
     {
         return response()->json([
@@ -97,12 +71,6 @@ trait ApiResponses
         ], $exception->getCode());
     }
 
-    /**
-     * @param  Exception  $exception
-     * @param  string  $title
-     *
-     * @return JsonResponse
-     */
     public function respondWithExceptionError(Exception $exception, string $title = 'Error'): JsonResponse
     {
         return response()
@@ -115,15 +83,8 @@ trait ApiResponses
             );
     }
 
-    /**
-     * @param $message
-     * @param $code
-     *
-     * @return JsonResponse
-     */
     protected function errorResponse($message, $code): JsonResponse
     {
         return response()->json(['message' => $message, 'code' => $code], $code);
     }
-
 }

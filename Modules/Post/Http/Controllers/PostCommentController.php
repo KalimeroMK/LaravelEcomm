@@ -22,7 +22,6 @@ class PostCommentController extends Controller
         $this->authorizeResource(PostComment::class, 'comment');
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -36,9 +35,7 @@ class PostCommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      *
-     * @return RedirectResponse
      * @throws Exception
      */
     public function store(Request $request): RedirectResponse
@@ -51,7 +48,6 @@ class PostCommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  PostComment  $comment
      *
      * @return Application|Factory|View
      */
@@ -62,11 +58,6 @@ class PostCommentController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  PostComment  $comment
-     *
-     * @return Application|Factory|View
      */
     public function update(Request $request, PostComment $comment): Application|Factory|View
     {
@@ -75,10 +66,6 @@ class PostCommentController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  PostComment  $comment
-     *
-     * @return RedirectResponse
      */
     public function destroy(PostComment $comment): RedirectResponse
     {

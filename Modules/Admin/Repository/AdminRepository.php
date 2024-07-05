@@ -11,7 +11,6 @@ use Modules\User\Models\User;
 class AdminRepository
 {
     /**
-     *
      * @return array<string, int> Array of paths.
      */
     public function usersLastSevenDays(): array
@@ -23,13 +22,12 @@ class AdminRepository
             $count = User::whereDate('created_at', $date)->count();
             $usersCount[$date] = $count;
         }
+
         return $usersCount;
     }
 
     /**
      * Get the count of paid orders for each of the last 12 months.
-     *
-     * @return Collection
      */
     public function getPaidOrdersCountByMonth(): Collection
     {
@@ -45,5 +43,4 @@ class AdminRepository
             ->orderBy('month', 'desc')
             ->get();
     }
-
 }

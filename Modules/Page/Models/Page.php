@@ -25,22 +25,19 @@ use Modules\User\Models\User;
  * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property User $user
- *
- * @package App\Models
  */
 class Page extends Core
 {
-    use HasSlug;
     use hasFactory;
+    use HasSlug;
 
     protected $table = 'pages';
 
     protected $casts
         = [
             'is_active' => 'bool',
-            'user_id' => 'int'
+            'user_id' => 'int',
         ];
 
     protected $fillable
@@ -49,7 +46,7 @@ class Page extends Core
             'slug',
             'content',
             'is_active',
-            'user_id'
+            'user_id',
         ];
 
     public static function Factory(): PageFactory

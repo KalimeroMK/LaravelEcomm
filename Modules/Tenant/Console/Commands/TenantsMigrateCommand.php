@@ -18,8 +18,6 @@ class TenantsMigrateCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -29,22 +27,19 @@ class TenantsMigrateCommand extends Command
             );
         } else {
             Tenant::all()->each(
-                fn($tenant) => $this->migrate($tenant)
+                fn ($tenant) => $this->migrate($tenant)
             );
         }
     }
 
-    /**
-     * @param  Tenant  $tenant
-     */
     public function migrate(Tenant $tenant)
     {
         $tenant->configure()->use();
 
         $this->line('');
-        $this->line("-----------------------------------------");
+        $this->line('-----------------------------------------');
         $this->info("Migrating Tenant #{$tenant->id} ({$tenant->name})");
-        $this->line("-----------------------------------------");
+        $this->line('-----------------------------------------');
 
         $options = ['--force' => true];
 

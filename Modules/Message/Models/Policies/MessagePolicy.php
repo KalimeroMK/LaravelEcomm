@@ -34,5 +34,4 @@ class MessagePolicy
     {
         return $user->can('message-delete');
     }
-    
 }

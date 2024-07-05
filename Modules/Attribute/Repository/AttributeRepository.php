@@ -7,14 +7,12 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\Repository;
 
-
 class AttributeRepository extends Repository implements SearchInterface
 {
     /**
      * The model instance.
      *
      * @var string
-     *
      */
     public $model = Attribute::class;
 

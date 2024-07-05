@@ -7,7 +7,6 @@ use Modules\Page\Repository\PageRepository;
 
 class PageService extends CoreService
 {
-
     public PageRepository $pageRepository;
 
     public function __construct(PageRepository $pageRepository)
@@ -15,5 +14,4 @@ class PageService extends CoreService
         parent::__construct($pageRepository);
         $this->pageRepository = $pageRepository;
     }
-
 }

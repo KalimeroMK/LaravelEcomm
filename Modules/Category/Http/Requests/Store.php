@@ -6,13 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class Store extends FormRequest
 {
-    /**
-     * @var mixed
-     */
     public mixed $title;
-    /**
-     * @var mixed
-     */
+
     public mixed $parent_id;
 
     /**

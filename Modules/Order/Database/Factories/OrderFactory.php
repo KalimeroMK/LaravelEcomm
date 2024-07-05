@@ -11,7 +11,6 @@ class OrderFactory extends Factory
 {
     protected $model = Order::class;
 
-
     public function definition(): array
     {
         return [
@@ -26,6 +25,7 @@ class OrderFactory extends Factory
                 /** @var Shipping $shipping */
                 // Ensure that create() returns a single model instance
                 $shipping = Shipping::factory()->create();
+
                 return $shipping->id;
             },
         ];

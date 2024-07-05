@@ -17,7 +17,6 @@ use ReflectionException;
 
 class BundleController extends CoreController
 {
-
     private BundleService $bundleService;
 
     public function __construct(BundleService $bundleService)
@@ -26,18 +25,14 @@ class BundleController extends CoreController
         $this->authorizeResource(Banner::class);
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return BundleResource::collection($this->bundleService->getAll());
     }
 
     /**
-     * @param Store $request
-     *
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function store(Store $request)
@@ -53,13 +48,12 @@ class BundleController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->bundleService->store($request->validated())));
+            ->respond(new BannerResource($this->bundleService->create($request->validated())));
     }
 
     /**
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show(int $id)
@@ -79,10 +73,8 @@ class BundleController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function update(Update $request, int $id)
@@ -102,14 +94,12 @@ class BundleController extends CoreController
     }
 
     /**
-     * @param int $id
-     *
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
         $this->bundleService->delete($id);
+
         return $this
             ->setMessage(
                 __(
@@ -123,5 +113,4 @@ class BundleController extends CoreController
             )
             ->respond(null);
     }
-
 }

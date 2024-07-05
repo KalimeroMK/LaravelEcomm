@@ -21,7 +21,6 @@ class PageController extends CoreController
         $this->pageService = $pageService;
     }
 
-
     public function index(): ResourceCollection
     {
         return PageResource::collection($this->pageService->getAll());
@@ -85,8 +84,6 @@ class PageController extends CoreController
     }
 
     /**
-     * @param  int  $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     /**
@@ -95,6 +92,7 @@ class PageController extends CoreController
     public function destroy(int $id): JsonResponse
     {
         $this->pageService->delete($id);
+
         return $this
             ->setMessage(
                 __(

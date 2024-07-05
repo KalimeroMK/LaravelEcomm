@@ -22,7 +22,7 @@ class BrandController extends CoreController
 
     public function index(Search $request): View
     {
-        $brands = $this->brand_service->getAll($request->validated());
+        $brands = $this->brand_service->getAll();
 
         return view('brand::index', compact('brands'));
     }

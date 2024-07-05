@@ -47,12 +47,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property User|null $user
  * @property Tag|null $post_tag
  * @property Collection|PostComment[] $post_comments
- * @package App\Models
  * @property-read Collection|PostComment[] $allComments
  * @property-read int|null $all_comments_count
  * @property-read User|null $author
  * @property-read Collection|PostComment[] $fpost_comments
  * @property-read int|null $fpost_comments_count
+ *
  * @method static Builder|Post newModelQuery()
  * @method static Builder|Post newQuery()
  * @method static Builder|Post query()
@@ -70,7 +70,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder|Post whereTags($value)
  * @method static Builder|Post whereTitle($value)
  * @method static Builder|Post whereUpdatedAt($value)
+ *
  * @mixin Eloquent
+ *
  * @property-read int|null $post_comments_count
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
  * @property-read int|null $categories_count
@@ -82,8 +84,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Post extends Core implements HasMedia
 {
     use HasFactory;
-    use InteractsWithMedia;
     use HasSlug;
+    use InteractsWithMedia;
 
     protected $table = 'posts';
 
@@ -118,29 +120,16 @@ class Post extends Core implements HasMedia
         return PostFactory::new();
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return LengthAwarePaginator
-     */
     public static function getBlogByTag(string $slug): LengthAwarePaginator
     {
         return Post::where('tags', $slug)->paginate(8);
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return Builder|Model
-     */
     public static function getPostBySlug(string $slug): Model|Builder
     {
         return Post::whereSlug($slug)->with('comments')->firstOrFail();
     }
 
-    /**
-     * @return int
-     */
     public static function countActivePost(): int
     {
         $data = Post::where('status', 'active')->count();
@@ -151,9 +140,6 @@ class Post extends Core implements HasMedia
         return 0;
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
@@ -195,7 +181,7 @@ class Post extends Core implements HasMedia
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')
             ->fit(Fit::Contain, 300, 300)
@@ -216,11 +202,8 @@ class Post extends Core implements HasMedia
         });
     }
 
-
     public function post_comments(): HasMany
     {
         return $this->hasMany(PostComment::class);
     }
-
-
 }

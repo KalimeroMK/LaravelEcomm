@@ -10,12 +10,8 @@ class TagRepository extends Repository
 {
     public $model = Tag::class;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::orderBy('id', 'DESC')->get();
     }
-
 }

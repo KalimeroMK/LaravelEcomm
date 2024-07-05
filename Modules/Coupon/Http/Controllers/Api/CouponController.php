@@ -21,17 +21,14 @@ class CouponController extends CoreController
         $this->coupon_service = $coupon_service;
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return CouponResource::collection($this->coupon_service->getAll());
     }
 
     /**
-     * @param Store $request
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function store(Store $request)
@@ -51,8 +48,8 @@ class CouponController extends CoreController
     }
 
     /**
-     * @param int $id
      * @return JsonResponse
+     *
      * @throws ReflectionException q
      */
     public function show(int $id)
@@ -72,10 +69,8 @@ class CouponController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function update(Update $request, int $id)
@@ -100,6 +95,7 @@ class CouponController extends CoreController
     public function destroy(int $id): JsonResponse
     {
         $this->coupon_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

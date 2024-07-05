@@ -10,13 +10,11 @@ class Repository implements RepositoryInterface
 {
     /**
      * The model class or instance used by the repository.
+     *
      * @var Model|string
      */
     public $model;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::all();
@@ -25,9 +23,8 @@ class Repository implements RepositoryInterface
     /**
      * Find a single model by column value.
      *
-     * @param string $column Column to filter by.
-     * @param mixed $value Value to match in the specified column.
-     * @return Model|null
+     * @param  string  $column  Column to filter by.
+     * @param  mixed  $value  Value to match in the specified column.
      */
     public function findBy(string $column, mixed $value): ?Model
     {
@@ -37,8 +34,7 @@ class Repository implements RepositoryInterface
     /**
      * Create a new record in the repository.
      *
-     * @param array<string, mixed> $data The data for creating the new record.
-     *
+     * @param  array<string, mixed>  $data  The data for creating the new record.
      * @return Model The newly created model instance.
      */
     public function create(array $data): Model
@@ -49,8 +45,7 @@ class Repository implements RepositoryInterface
     /**
      * Insert a new record into the database.
      *
-     * @param array<string, mixed> $data Data to insert, keyed by column names.
-     * @return bool
+     * @param  array<string, mixed>  $data  Data to insert, keyed by column names.
      */
     public function insert(array $data): bool
     {
@@ -60,9 +55,8 @@ class Repository implements RepositoryInterface
     /**
      * Update an existing record in the repository.
      *
-     * @param int $id The ID of the model to update.
-     * @param array<string, mixed> $data The data to update in the model.
-     *
+     * @param  int  $id  The ID of the model to update.
+     * @param  array<string, mixed>  $data  The data to update in the model.
      * @return Model The updated model instance.
      */
     public function update(int $id, array $data): Model
@@ -74,39 +68,24 @@ class Repository implements RepositoryInterface
         return $item->fresh();
     }
 
-
-    /**
-     * @param int $id
-     * @return Model|null
-     */
     public function findById(int $id): ?Model
     {
         return $this->model::findOrFail($id);
     }
 
-    /**
-     * @param int $id
-     *
-     * @return void
-     */
     public function delete(int $id): void
     {
         $this->model::destroy($id);
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Model|null
-     */
     public function restore(int $id): ?Model
     {
-        if (!method_exists($this->model, 'isSoftDelete')) {
+        if (! method_exists($this->model, 'isSoftDelete')) {
             return null;
         }
 
         $object = $this->model->withTrashed()->find($id);
-        if (!$object) {
+        if (! $object) {
             return null;
         }
 
@@ -115,13 +94,9 @@ class Repository implements RepositoryInterface
         return $object;
     }
 
-    /**
-     * @param int $id
-     * @return Model|null
-     */
     public function findByIdWithTrashed(int $id): ?Model
     {
-        if (!method_exists($this->model, 'isSoftDelete')) {
+        if (! method_exists($this->model, 'isSoftDelete')) {
             return null;
         }
 
@@ -133,5 +108,4 @@ class Repository implements RepositoryInterface
 
         return $modelInstance->withTrashed()->find($id);
     }
-
 }

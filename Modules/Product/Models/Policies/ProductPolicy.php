@@ -34,5 +34,4 @@ class ProductPolicy
     {
         return $user->can('product-delete');
     }
-
 }

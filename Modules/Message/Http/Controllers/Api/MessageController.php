@@ -13,7 +13,6 @@ use ReflectionException;
 
 class MessageController extends CoreController
 {
-
     private MessageService $message_service;
 
     public function __construct(MessageService $message_service)
@@ -21,9 +20,6 @@ class MessageController extends CoreController
         $this->message_service = $message_service;
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return MessageResource::collection($this->message_service->getAll());
@@ -49,9 +45,8 @@ class MessageController extends CoreController
     }
 
     /**
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show(int $id)
@@ -70,12 +65,9 @@ class MessageController extends CoreController
             ->respond(new MessageResource($this->message_service->show($id)));
     }
 
-
     /**
-     * @param Store $request
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function update(Store $request, int $id)
@@ -95,14 +87,14 @@ class MessageController extends CoreController
     }
 
     /**
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function destroy(int $id)
     {
         $this->message_service->delete($id);
+
         return $this
             ->setMessage(
                 __(
@@ -116,5 +108,4 @@ class MessageController extends CoreController
             )
             ->respond(null);
     }
-
 }

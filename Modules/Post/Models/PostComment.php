@@ -33,9 +33,9 @@ use Modules\User\Models\User;
  * @property Carbon|null $updated_at
  * @property Post|null $post
  * @property User|null $user
- * @package App\Models
  * @property-read Collection|PostComment[] $replies
  * @property-read int|null $replies_count
+ *
  * @method static Builder|PostComment newModelQuery()
  * @method static Builder|PostComment newQuery()
  * @method static Builder|PostComment query()
@@ -48,21 +48,23 @@ use Modules\User\Models\User;
  * @method static Builder|PostComment whereStatus($value)
  * @method static Builder|PostComment whereUpdatedAt($value)
  * @method static Builder|PostComment whereUserId($value)
+ *
  * @mixin Eloquent
+ *
  * @property-read User|null $user_info
  */
 class PostComment extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'post_comments';
-    
+
     protected $casts = [
-        'user_id'   => 'int',
-        'post_id'   => 'int',
+        'user_id' => 'int',
+        'post_id' => 'int',
         'parent_id' => 'int',
     ];
-    
+
     protected $fillable = [
         'user_id',
         'post_id',
@@ -71,50 +73,32 @@ class PostComment extends Core
         'replied_comment',
         'parent_id',
     ];
-    
-    /**
-     * @return PostCommentFactory
-     */
+
     public static function Factory(): PostCommentFactory
     {
         return PostCommentFactory::new();
     }
-    
-    /**
-     * @return LengthAwarePaginator
-     */
+
     public static function getAllUserComments(): LengthAwarePaginator
     {
         return PostComment::where('user_id', auth()->user()->id)->with('user_info')->paginate(10);
     }
-    
-    /**
-     * @return BelongsTo
-     */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-    
-    /**
-     * @return BelongsTo
-     */
+
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
-    
-    /**
-     * @return HasOne
-     */
+
     public function user_info(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-    
-    /**
-     * @return HasMany
-     */
+
     public function replies(): HasMany
     {
         return $this->hasMany(PostComment::class, 'parent_id')->where('status', 'active');

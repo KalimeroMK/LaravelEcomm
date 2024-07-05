@@ -30,7 +30,7 @@ use Modules\User\Models\User;
  * @property Cart|null $cart
  * @property Product $product
  * @property User|null $user
- * @package App\Models
+ *
  * @method static Builder|Wishlist newModelQuery()
  * @method static Builder|Wishlist newQuery()
  * @method static Builder|Wishlist query()
@@ -43,11 +43,11 @@ use Modules\User\Models\User;
  * @method static Builder|Wishlist whereQuantity($value)
  * @method static Builder|Wishlist whereUpdatedAt($value)
  * @method static Builder|Wishlist whereUserId($value)
+ *
  * @mixin Eloquent
  */
 class Wishlist extends Core
 {
-
     protected $table = 'wishlists';
 
     protected $casts = [
@@ -68,25 +68,16 @@ class Wishlist extends Core
         'amount',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

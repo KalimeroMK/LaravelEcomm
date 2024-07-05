@@ -34,5 +34,4 @@ class ProductReviewPolicy
     {
         return $user->can('review-delete');
     }
-
 }

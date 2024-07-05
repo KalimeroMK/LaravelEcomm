@@ -26,7 +26,7 @@ use Modules\Message\Database\Factories\MessageFactory;
  * @property Carbon|null $read_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @package App\Models
+ *
  * @method static Builder|Message newModelQuery()
  * @method static Builder|Message newQuery()
  * @method static Builder|Message query()
@@ -40,6 +40,7 @@ use Modules\Message\Database\Factories\MessageFactory;
  * @method static Builder|Message whereReadAt($value)
  * @method static Builder|Message whereSubject($value)
  * @method static Builder|Message whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Message extends Core
@@ -50,12 +51,13 @@ class Message extends Core
 
     /**
      * The attributes that should be mutated to dates.
+     *
      * @var string[]
      */
     protected array $dates = [
         'read_at',
     ];
-    
+
     protected $fillable = [
         'name',
         'subject',
@@ -66,9 +68,6 @@ class Message extends Core
         'read_at',
     ];
 
-    /**
-     * @return MessageFactory
-     */
     public static function Factory(): MessageFactory
     {
         return MessageFactory::new();

@@ -7,20 +7,12 @@ use Illuminate\Support\ServiceProvider;
 
 class OrderServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'Order';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'order';
 
     /**
      * Boot the application events.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -32,8 +24,6 @@ class OrderServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
@@ -48,8 +38,6 @@ class OrderServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
@@ -64,8 +52,6 @@ class OrderServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
@@ -80,9 +66,7 @@ class OrderServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
-
     /**
-     *
      * @return array<string> Array of paths.
      */
     public function provides(): array
@@ -109,12 +93,9 @@ class OrderServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }
-
 }

@@ -7,14 +7,8 @@ use Illuminate\Support\ServiceProvider;
 
 class SettingsServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'Settings';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'settings';
 
     /**
@@ -32,8 +26,6 @@ class SettingsServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
@@ -48,8 +40,6 @@ class SettingsServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
@@ -64,8 +54,6 @@ class SettingsServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
@@ -80,9 +68,7 @@ class SettingsServiceProvider extends ServiceProvider
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
-
     /**
-     *
      * @return array<string> Array of paths.
      */
     public function provides(): array
@@ -109,12 +95,9 @@ class SettingsServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }
-
 }

@@ -26,7 +26,7 @@ use Modules\Settings\Database\Factories\SettingFactory;
  * @property string $email
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @package App\Models
+ *
  * @method static Builder|Setting newModelQuery()
  * @method static Builder|Setting newQuery()
  * @method static Builder|Setting query()
@@ -40,14 +40,15 @@ use Modules\Settings\Database\Factories\SettingFactory;
  * @method static Builder|Setting wherePhoto($value)
  * @method static Builder|Setting whereShortDes($value)
  * @method static Builder|Setting whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Setting extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'settings';
-    
+
     protected $fillable = [
         'description',
         'short_des',
@@ -60,12 +61,9 @@ class Setting extends Core
         'fb_app_id',
         'keywords',
         'google-site-verification',
-    
+
     ];
-    
-    /**
-     * @return SettingFactory
-     */
+
     public static function Factory(): SettingFactory
     {
         return SettingFactory::new();

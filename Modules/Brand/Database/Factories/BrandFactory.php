@@ -11,7 +11,7 @@ class BrandFactory extends Factory
     protected $model = Brand::class;
 
     /**
-     * @return array<String>
+     * @return array<string>
      */
     public function definition(): array
     {

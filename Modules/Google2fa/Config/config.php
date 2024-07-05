@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'name' => 'Google2fa'
+    'name' => 'Google2fa',
 ];

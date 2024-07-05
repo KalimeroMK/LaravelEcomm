@@ -14,8 +14,6 @@ class ProductImportExportController extends Controller
 {
     /**
      * Display the import/export view.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -25,7 +23,6 @@ class ProductImportExportController extends Controller
     /**
      * Export the products to an Excel file.
      *
-     * @return BinaryFileResponse
      * @throws Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
@@ -36,12 +33,11 @@ class ProductImportExportController extends Controller
 
     /**
      * Import products from an uploaded Excel file.
-     *
-     * @return RedirectResponse
      */
     public function import(): RedirectResponse
     {
         Excel::import(new Products(), request()->file('file'));
+
         return back();
     }
 }

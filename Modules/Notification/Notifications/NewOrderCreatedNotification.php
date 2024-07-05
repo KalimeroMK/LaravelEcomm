@@ -29,7 +29,6 @@ class NewOrderCreatedNotification extends Notification
         return ['database'];
     }
 
-
     /**
      * Get the array representation of the notification.
      *
@@ -40,7 +39,7 @@ class NewOrderCreatedNotification extends Notification
         return [
             'order_id' => $this->order->id,
             'amount' => $this->order->total,
-            'message' => "A new order has been created.",
+            'message' => 'A new order has been created.',
         ];
     }
 }

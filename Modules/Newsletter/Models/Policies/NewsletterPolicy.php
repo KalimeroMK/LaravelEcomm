@@ -34,5 +34,4 @@ class NewsletterPolicy
     {
         return $user->can('newsletter-delete');
     }
-
 }

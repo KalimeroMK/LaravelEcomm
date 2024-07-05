@@ -11,5 +11,4 @@ class TenantService extends CoreService
     {
         parent::__construct($tenantRepository);
     }
-
 }

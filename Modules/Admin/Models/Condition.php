@@ -19,12 +19,8 @@ class Condition extends Core
             'status',
         ];
 
-    /**
-     * @return BelongsToMany
-     */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class);
     }
-
 }

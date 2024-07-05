@@ -9,11 +9,7 @@ use Modules\Product\Models\Product;
 
 class Products implements ToCollection, WithHeadingRow
 {
-    /**
-     * @param  Collection  $collection
-     * @return string
-     */
-    function collection(Collection $collection): string
+    public function collection(Collection $collection): string
     {
         foreach ($collection as $item) {
             Product::Create([
@@ -29,7 +25,6 @@ class Products implements ToCollection, WithHeadingRow
                 'special_price' => $item['special_price'],
                 'special_price_start' => $item['special_price_start'],
                 'special_price_end' => $item['special_price_end'],
-
 
             ]);
         }

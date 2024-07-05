@@ -23,11 +23,8 @@ use Modules\User\Models\User;
  * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property Product|null $product
  * @property User|null $user
- *
- * @package App\Models
  */
 class ProductReview extends Model
 {
@@ -36,7 +33,7 @@ class ProductReview extends Model
     protected $casts = [
         'user_id' => 'int',
         'product_id' => 'int',
-        'rate' => 'int'
+        'rate' => 'int',
     ];
 
     protected $fillable = [
@@ -44,7 +41,7 @@ class ProductReview extends Model
         'product_id',
         'rate',
         'review',
-        'status'
+        'status',
     ];
 
     public function product(): BelongsTo

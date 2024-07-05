@@ -13,11 +13,9 @@ class FormRequestTableNotFoundException extends GeneralException
 
     /**
      * Returns the error message for the exception.
-     *
-     * @return string
      */
     public function message(): string
     {
-        return "Table not found in the form request";
+        return 'Table not found in the form request';
     }
 }

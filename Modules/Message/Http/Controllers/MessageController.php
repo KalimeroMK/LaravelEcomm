@@ -22,8 +22,6 @@ class MessageController extends CoreController
 
     /**
      * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
      */
     public function index(): View|Factory|Application
     {
@@ -32,10 +30,6 @@ class MessageController extends CoreController
 
     /**
      * Display the specified resource.
-     *
-     * @param Message $message
-     *
-     * @return Application|Factory|View
      */
     public function show(Message $message): Factory|View|Application
     {
@@ -44,10 +38,6 @@ class MessageController extends CoreController
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Message $message
-     *
-     * @return RedirectResponse
      */
     public function destroy(Message $message): RedirectResponse
     {

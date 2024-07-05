@@ -13,6 +13,4 @@ class PageRepository extends Repository
      * @var string
      */
     public $model = Page::class;
-
-
 }

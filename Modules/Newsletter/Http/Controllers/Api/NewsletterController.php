@@ -17,7 +17,6 @@ use ReflectionException;
 
 class NewsletterController extends CoreController
 {
-
     private NewsletterService $newsletter_service;
 
     public function __construct(NewsletterService $newsletter_service)
@@ -25,9 +24,6 @@ class NewsletterController extends CoreController
         $this->newsletter_service = $newsletter_service;
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return NewsletterResource::collection($this->newsletter_service->getAll());
@@ -52,10 +48,9 @@ class NewsletterController extends CoreController
             ->respond(new NewsletterResource($this->newsletter_service->create($request->validated())));
     }
 
-
     /**
-     * @param Newsletter $newsletter
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show(Newsletter $newsletter)
@@ -75,9 +70,8 @@ class NewsletterController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param Newsletter $newsletter
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function update(Update $request, Newsletter $newsletter)
@@ -97,13 +91,14 @@ class NewsletterController extends CoreController
     }
 
     /**
-     * @param Newsletter $newsletter
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function destroy(Newsletter $newsletter)
     {
         $this->newsletter_service->delete($newsletter->id);
+
         return $this
             ->setMessage(
                 __(

@@ -16,7 +16,6 @@ class Tenant extends Core
 
     protected $guarded = [];
 
-
     public function configure(): static
     {
         config([
@@ -29,7 +28,6 @@ class Tenant extends Core
 
         return $this;
     }
-
 
     public function use(): static
     {

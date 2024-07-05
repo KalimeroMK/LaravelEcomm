@@ -16,7 +16,6 @@ use ReflectionException;
 
 class ShippingController extends CoreController
 {
-
     private ShippingService $shipping_service;
 
     public function __construct(ShippingService $shipping_service)
@@ -25,17 +24,14 @@ class ShippingController extends CoreController
         $this->authorizeResource(Shipping::class, 'shipping');
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return ShippingResource::collection($this->shipping_service->getAll());
     }
 
     /**
-     *
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function store(Store $request)
@@ -55,8 +51,8 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @param Shipping $shipping
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show(Shipping $shipping)
@@ -76,9 +72,6 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param Shipping $shipping
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function update(Update $request, Shipping $shipping): JsonResponse
@@ -98,13 +91,14 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @param Shipping $shipping
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function destroy(Shipping $shipping)
     {
         $this->shipping_service->delete($shipping->id);
+
         return $this
             ->setMessage(
                 __(

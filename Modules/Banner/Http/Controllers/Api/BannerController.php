@@ -16,7 +16,6 @@ use ReflectionException;
 
 class BannerController extends CoreController
 {
-
     private BannerService $banner_service;
 
     public function __construct(BannerService $banner_service)
@@ -24,20 +23,12 @@ class BannerController extends CoreController
         $this->banner_service = $banner_service;
     }
 
-    /**
-     * @param Search $request
-     *
-     * @return ResourceCollection
-     */
     public function index(Search $request): ResourceCollection
     {
-        return BannerResource::collection($this->banner_service->getAll($request->validated()));
+        return BannerResource::collection($this->banner_service->getAll());
     }
 
     /**
-     * @param Store $request
-     *
-     * @return JsonResponse
      * @throws Exception
      */
     public function store(Store $request): JsonResponse
@@ -58,9 +49,8 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show(int $id)
@@ -81,10 +71,8 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param int $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function update(Update $request, int $id)
@@ -105,14 +93,12 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param int $id
-     *
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
         $this->banner_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

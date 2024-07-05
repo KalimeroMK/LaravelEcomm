@@ -14,5 +14,4 @@ class CouponService extends CoreService
         parent::__construct($coupon_repository);
         $this->coupon_repository = $coupon_repository;
     }
-
 }

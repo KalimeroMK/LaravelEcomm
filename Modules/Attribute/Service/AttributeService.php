@@ -18,8 +18,7 @@ class AttributeService extends CoreService
     /**
      * Search for attributes based on given criteria.
      *
-     * @param array<string, mixed> $data The search criteria.
-     * @return mixed
+     * @param  array<string, mixed>  $data  The search criteria.
      */
     public function search(array $data): mixed
     {

@@ -11,7 +11,7 @@ class MessageFactory extends Factory
     protected $model = Message::class;
 
     /**
-     * @return array<String>
+     * @return array<string>
      */
     public function definition(): array
     {
@@ -22,7 +22,7 @@ class MessageFactory extends Factory
             'photo' => $this->faker->word,
             'phone' => $this->faker->phoneNumber,
             'message' => $this->faker->word,
-            'read_at' => Carbon::now()
+            'read_at' => Carbon::now(),
         ];
     }
 }

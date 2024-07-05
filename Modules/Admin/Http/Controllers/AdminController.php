@@ -12,7 +12,6 @@ use Modules\Message\Models\Message;
 
 class AdminController extends CoreController
 {
-
     private AdminService $admin_service;
 
     public function __construct(AdminService $admin_service)
@@ -20,9 +19,6 @@ class AdminController extends CoreController
         $this->admin_service = $admin_service;
     }
 
-    /**
-     * @return Application|Factory|View
-     */
     public function index(): View|Factory|Application
     {
         $data = $this->admin_service->index();
@@ -31,9 +27,6 @@ class AdminController extends CoreController
         return view('admin::index', compact('paidOrdersByMonth', 'data'));
     }
 
-    /**
-     * @return JsonResponse
-     */
     public function messageFive(): JsonResponse
     {
         $message = Message::whereNull('read_at')->limit(5)->get();

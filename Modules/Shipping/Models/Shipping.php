@@ -26,8 +26,8 @@ use Modules\Shipping\Database\Factories\ShippingFactory;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Collection|Order[] $orders
- * @package App\Models
  * @property-read int|null $orders_count
+ *
  * @method static Builder|Shipping newModelQuery()
  * @method static Builder|Shipping newQuery()
  * @method static Builder|Shipping query()
@@ -37,35 +37,30 @@ use Modules\Shipping\Database\Factories\ShippingFactory;
  * @method static Builder|Shipping whereStatus($value)
  * @method static Builder|Shipping whereType($value)
  * @method static Builder|Shipping whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Shipping extends Core
 {
     use HasFactory;
-    
+
     protected $table = 'shipping';
-    
+
     protected $casts = [
         'price' => 'float',
     ];
-    
+
     protected $fillable = [
         'type',
         'price',
         'status',
     ];
-    
-    /**
-     * @return ShippingFactory
-     */
+
     public static function Factory(): ShippingFactory
     {
         return ShippingFactory::new();
     }
-    
-    /**
-     * @return HasMany
-     */
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

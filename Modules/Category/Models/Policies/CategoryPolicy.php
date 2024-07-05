@@ -34,5 +34,4 @@ class CategoryPolicy
     {
         return $user->can('categories-delete');
     }
-
 }

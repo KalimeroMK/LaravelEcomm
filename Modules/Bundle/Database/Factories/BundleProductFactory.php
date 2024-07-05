@@ -23,11 +23,13 @@ class BundleProductFactory extends Factory
             'bundle_id' => function () {
                 /** @var Bundle $bundle */
                 $bundle = Bundle::factory()->create();
+
                 return $bundle->id;
             },
             'product_id' => function () {
                 /** @var Product $product */
                 $product = Product::factory()->create();
+
                 return $product->id;
             },
         ];

@@ -24,9 +24,6 @@ class BannerController extends CoreController
 
     /**
      * Display a listing of the resource.
-     *
-     *
-     * @return Application|Factory|View
      */
     public function index(): Factory|View|Application
     {
@@ -35,8 +32,6 @@ class BannerController extends CoreController
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
      */
     public function create(): View|Factory|Application
     {
@@ -45,10 +40,6 @@ class BannerController extends CoreController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Store  $request
-     *
-     * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
@@ -59,10 +50,6 @@ class BannerController extends CoreController
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  Banner  $banner
-     *
-     * @return Application|Factory|View
      */
     public function edit(Banner $banner): View|Factory|Application
     {
@@ -73,11 +60,6 @@ class BannerController extends CoreController
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Update  $request
-     * @param  Banner  $banner
-     *
-     * @return RedirectResponse
      */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
@@ -88,10 +70,6 @@ class BannerController extends CoreController
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Banner  $banner
-     *
-     * @return RedirectResponse
      */
     public function destroy(Banner $banner): RedirectResponse
     {

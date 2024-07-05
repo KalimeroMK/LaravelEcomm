@@ -22,7 +22,7 @@ class Store extends CoreRequest
             'tag' => 'sometimes|array',
             'tag.*' => 'required|exists:tags,id',
             'condition_id' => 'required|exists:conditions,id',
-            'stock' => "required|numeric",
+            'stock' => 'required|numeric',
             'brand_id' => 'nullable|exists:brands,id',
             'is_featured' => 'sometimes|in:1',
             'status' => 'required|in:active,inactive',

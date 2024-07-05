@@ -17,7 +17,6 @@ class CartResource extends JsonResource
      *
      * @return array<string, string> Array of field rules.
      */
-
     public function toArray(Request $request): array
     {
         return [

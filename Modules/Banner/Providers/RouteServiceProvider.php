@@ -9,8 +9,6 @@ class RouteServiceProvider extends ServiceProvider
 {
     /**
      * The module namespace to assume when generating URLs to actions.
-     *
-     * @var string
      */
     protected string $moduleNamespace = 'Modules\Banner\Http\Controllers';
 
@@ -42,8 +40,6 @@ class RouteServiceProvider extends ServiceProvider
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
-     *
-     * @return void
      */
     protected function mapApiRoutes(): void
     {
@@ -56,8 +52,6 @@ class RouteServiceProvider extends ServiceProvider
      * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
      */
     protected function mapWebRoutes(): void
     {

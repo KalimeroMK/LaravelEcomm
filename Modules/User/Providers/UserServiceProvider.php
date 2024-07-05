@@ -12,20 +12,12 @@ class UserServiceProvider extends ServiceProvider
 {
     use AutoRegistersCommands;
 
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'User';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'user';
 
     /**
      * Boot the application events.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -39,8 +31,6 @@ class UserServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
@@ -55,8 +45,6 @@ class UserServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
@@ -71,8 +59,6 @@ class UserServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
@@ -101,8 +87,6 @@ class UserServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -111,8 +95,6 @@ class UserServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array
      */
     public function provides(): array
     {

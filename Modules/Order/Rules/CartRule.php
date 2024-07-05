@@ -7,10 +7,8 @@ use Modules\Cart\Models\Cart;
 
 class CartRule implements Rule
 {
-    public function __construct()
-    {
-    }
-    
+    public function __construct() {}
+
     public function passes($attribute, $value): bool
     {
         if (empty(Cart::whereUserId(Auth()->id())->whereOrderId(null)->first())) {
@@ -19,7 +17,7 @@ class CartRule implements Rule
             return true;
         }
     }
-    
+
     public function message(): string
     {
         return 'Cart is empty.';

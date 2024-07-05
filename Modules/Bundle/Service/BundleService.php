@@ -17,11 +17,10 @@ class BundleService extends CoreService
         $this->bundleRepository = $bundleRepository;
     }
 
-
     /**
      * Retrieves data necessary for editing a bundle.
      *
-     * @param int $id The ID of the bundle to edit.
+     * @param  int  $id  The ID of the bundle to edit.
      * @return array<string, mixed> Data needed for the edit operation.
      */
     public function edit(int $id): array
@@ -35,7 +34,7 @@ class BundleService extends CoreService
     /**
      * Create a new banner with possible media files.
      *
-     * @param array<string, mixed> $data The data for creating the banner.
+     * @param  array<string, mixed>  $data  The data for creating the banner.
      * @return Model The newly created banner model.
      */
     public function create(array $data): Model
@@ -57,8 +56,8 @@ class BundleService extends CoreService
     /**
      * Update an existing banner with new data and possibly new media files.
      *
-     * @param int $id The banner ID to update.
-     * @param array<string, mixed> $data The data for updating the banner.
+     * @param  int  $id  The banner ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the banner.
      * @return Model The updated banner model.
      */
     public function update(int $id, array $data): Model
@@ -78,6 +77,4 @@ class BundleService extends CoreService
 
         return $bundle;
     }
-
-
 }

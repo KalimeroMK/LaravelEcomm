@@ -13,9 +13,6 @@ class CouponRepository extends Repository
      */
     public $model = Coupon::class;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::get();

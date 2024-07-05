@@ -15,7 +15,6 @@ use ReflectionException;
 
 class BrandController extends CoreController
 {
-
     private BrandService $brand_service;
 
     public function __construct(BrandService $brand_service)
@@ -50,7 +49,7 @@ class BrandController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -69,7 +68,7 @@ class BrandController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, $id): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -86,8 +85,6 @@ class BrandController extends CoreController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     /**
@@ -96,6 +93,7 @@ class BrandController extends CoreController
     public function destroy(int $id): JsonResponse
     {
         $this->brand_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

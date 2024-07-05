@@ -11,7 +11,6 @@ class BrandRepository extends Repository
      * The model instance.
      *
      * @var string
-     *
      */
     public $model = Brand::class;
 
@@ -40,6 +39,4 @@ class BrandRepository extends Repository
 
         return $query->orderBy($orderBy, $sort)->paginate((new $this->model)->getPerPage());
     }
-
-
 }

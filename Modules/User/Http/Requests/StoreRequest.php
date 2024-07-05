@@ -9,13 +9,13 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'     => 'required',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles'    => 'required',
+            'roles' => 'required',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

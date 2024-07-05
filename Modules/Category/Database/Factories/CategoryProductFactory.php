@@ -23,11 +23,13 @@ class CategoryProductFactory extends Factory
             'product_id' => function () {
                 /** @var Product $product */
                 $product = Product::factory()->create();
+
                 return $product->id;
             },
             'category_id' => function () {
                 /** @var Category $category */
                 $category = Category::factory()->create();
+
                 return $category->id;
             },
         ];

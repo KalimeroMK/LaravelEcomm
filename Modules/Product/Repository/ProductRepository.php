@@ -23,9 +23,7 @@ class ProductRepository extends Repository
     /**
      * Update a product by ID.
      *
-     * @param  int  $id
      * @param  array<string, mixed>  $data
-     * @return Model
      */
     public function update(int $id, array $data): Model
     {
@@ -38,9 +36,6 @@ class ProductRepository extends Repository
 
     /**
      * Find a product by ID.
-     *
-     * @param  int  $id
-     * @return Model|null
      */
     public function findById(int $id): ?Model
     {
@@ -61,7 +56,6 @@ class ProductRepository extends Repository
      * Search for products based on given data.
      *
      * @param  array<string, mixed>  $data
-     * @return mixed
      */
     public function search(array $data): mixed
     {
@@ -79,7 +73,7 @@ class ProductRepository extends Repository
                 'brand_id',
                 'price',
                 'discount',
-                'status'
+                'status',
             ];
 
             foreach ($searchableFields as $field) {

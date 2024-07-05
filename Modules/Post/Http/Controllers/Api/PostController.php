@@ -16,7 +16,6 @@ use ReflectionException;
 
 class PostController extends CoreController
 {
-
     private PostService $post_service;
 
     public function __construct(PostService $post_service)
@@ -25,20 +24,12 @@ class PostController extends CoreController
         $this->authorizeResource(Post::class, 'post');
     }
 
-    /**
-     * @param Search $request
-     *
-     * @return ResourceCollection
-     */
     public function index(Search $request): ResourceCollection
     {
         return PostResource::collection($this->post_service->search($request->validated()));
     }
 
     /**
-     *
-     * @param Store $request
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
@@ -58,9 +49,6 @@ class PostController extends CoreController
     }
 
     /**
-     * @param int $id
-     *
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function show(int $id): JsonResponse
@@ -80,9 +68,6 @@ class PostController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param $id
-     * @return JsonResponse|string
      * @throws ReflectionException
      */
     public function update(Update $request, $id): JsonResponse|string
@@ -102,13 +87,12 @@ class PostController extends CoreController
     }
 
     /**
-     * @param $id
-     * @return JsonResponse|string
      * @throws ReflectionException
      */
     public function destroy($id): JsonResponse|string
     {
         $this->post_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

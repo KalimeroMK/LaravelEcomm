@@ -7,14 +7,8 @@ use Illuminate\Support\ServiceProvider;
 
 class AdminServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'Admin';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'admin';
 
     /**
@@ -32,8 +26,6 @@ class AdminServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
@@ -48,8 +40,6 @@ class AdminServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
@@ -64,8 +54,6 @@ class AdminServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
@@ -99,8 +87,6 @@ class AdminServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {

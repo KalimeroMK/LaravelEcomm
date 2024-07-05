@@ -13,6 +13,7 @@ class TenantServiceProvider extends ServiceProvider
     use AutoRegistersCommands;
 
     protected string $moduleName = 'Tenant';
+
     protected string $moduleNameLower = 'tenant';
 
     /**
@@ -77,7 +78,6 @@ class TenantServiceProvider extends ServiceProvider
         }
     }
 
-
     /**
      * Register views.
      */
@@ -120,7 +120,7 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function configureRequests(): void
     {
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             $host = $this->app['request']->getHost();
             Tenant::whereDomain($host)->firstOrFail()->configure()->use();
         }

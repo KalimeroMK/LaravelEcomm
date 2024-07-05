@@ -14,5 +14,4 @@ class ShippingService extends CoreService
         parent::__construct($shipping_repository);
         $this->shipping_repository = $shipping_repository;
     }
-
 }

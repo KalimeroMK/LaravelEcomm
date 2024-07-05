@@ -19,11 +19,8 @@ use Modules\Attribute\Models\AttributeValue;
  * @property int $attribute_value_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property AttributeValue $attribute_value
  * @property Product $product
- *
- * @package App\Models
  */
 class ProductAttributeValue extends Model
 {
@@ -31,12 +28,12 @@ class ProductAttributeValue extends Model
 
     protected $casts = [
         'product_id' => 'int',
-        'attribute_value_id' => 'int'
+        'attribute_value_id' => 'int',
     ];
 
     protected $fillable = [
         'product_id',
-        'attribute_value_id'
+        'attribute_value_id',
     ];
 
     public function attribute_value(): BelongsTo

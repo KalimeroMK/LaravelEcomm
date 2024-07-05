@@ -6,13 +6,8 @@ use Modules\Core\Http\Requests\Api\CoreRequest;
 
 class Store extends CoreRequest
 {
-    /**
-     * @var mixed
-     */
     public mixed $title;
-    /**
-     * @var mixed
-     */
+
     public mixed $parent_id;
 
     /**

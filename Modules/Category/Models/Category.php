@@ -40,10 +40,10 @@ use Modules\Product\Models\Product;
  * @property Carbon|null $updated_at
  * @property Category|null $category
  * @property Collection|Category[] $categories
- * @package App\Models
  * @property-read int|null $categories_count
  * @property-read Collection|Product[] $products
  * @property-read int|null $products_count
+ *
  * @method static Builder|Category newModelQuery()
  * @method static Builder|Category newQuery()
  * @method static Builder|Category query()
@@ -56,10 +56,13 @@ use Modules\Product\Models\Product;
  * @method static Builder|Category whereStatus($value)
  * @method static Builder|Category whereTitle($value)
  * @method static Builder|Category whereUpdatedAt($value)
+ *
  * @mixin Eloquent
+ *
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $children
  * @property-read int|null $children_count
  * @property-read Category|null $parent
+ *
  * @method static QueryBuilder|Category ancestorsAndSelf($id, array $columns = [])
  * @method static QueryBuilder|Category ancestorsOf($id, array $columns = [])
  * @method static QueryBuilder|Category applyNestedSetScope(?string $table = null)
@@ -99,20 +102,22 @@ use Modules\Product\Models\Product;
  * @method static QueryBuilder|Category whereNotDescendantOf($id)
  * @method static QueryBuilder|Category withDepth(string $as = 'depth')
  * @method static QueryBuilder|Category withoutRoot()
+ *
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $child_cat
  * @property-read int|null $child_cat_count
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $childrenCategories
  * @property-read int|null $children_categories_count
  * @property-read Category|null $parent_info
+ *
  * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
  * @method static \Kalnoy\Nestedset\Collection|static[] all($columns = ['*'])
  */
-class Category extends Core implements Explored, IndexSettings, Aliased
+class Category extends Core implements Aliased, Explored, IndexSettings
 {
+    use HasSlug;
     use NodeTrait, Searchable, SoftDeletes {
         Searchable::usesSoftDelete insteadof NodeTrait;
     }
-    use HasSlug;
 
     protected $table = 'categories';
 
@@ -132,9 +137,6 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         '_rgt',
     ];
 
-    /**
-     * @return CategoryFactory
-     */
     public static function Factory(): CategoryFactory
     {
         return CategoryFactory::new();
@@ -148,8 +150,8 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         $categories = self::get()->toTree();
         $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
             foreach ($categories as $category) {
-                $allCats[] = ["title" => $prefix . ' ' . $category->title, "id" => $category->id];
-                $traverse($category->children, $prefix . '-');
+                $allCats[] = ['title' => $prefix.' '.$category->title, 'id' => $category->id];
+                $traverse($category->children, $prefix.'-');
             }
 
             return $allCats;
@@ -158,10 +160,6 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         return $traverse($categories);
     }
 
-
-    /**
-     * @return int
-     */
     public static function countActiveCategory(): int
     {
         $data = Category::where('status', 'active')->count();
@@ -172,54 +170,35 @@ class Category extends Core implements Explored, IndexSettings, Aliased
         return 0;
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function childrenCategories(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id')->with('categories');
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
-
 
     public function getParentsNames()
     {

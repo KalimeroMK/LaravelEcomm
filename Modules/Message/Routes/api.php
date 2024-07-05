@@ -21,5 +21,4 @@ Route::apiResource('messages', MessageController::class)->names([
     'show' => 'api.message.show',
     'update' => 'api.message.update',
     'destroy' => 'api.message.destroy',
-]);;
-
+]);

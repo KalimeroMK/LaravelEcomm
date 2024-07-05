@@ -24,6 +24,6 @@ trait ClearsCache
 
     public function cacheKey(): string
     {
-        return get_class($this) . ':' . $this->id;
+        return get_class($this).':'.$this->id;
     }
 }

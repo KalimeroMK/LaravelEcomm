@@ -23,7 +23,7 @@ class Update extends FormRequest
             'size' => 'sometimes|array',
             'size.*' => 'required|exists:sizes,id',
             'color' => 'nullable',
-            'stock' => "required|numeric",
+            'stock' => 'required|numeric',
             'category' => 'sometimes|array',
             'category.*' => 'required|exists:categories,id',
             'child_cat_id' => 'nullable|exists:categories,id',

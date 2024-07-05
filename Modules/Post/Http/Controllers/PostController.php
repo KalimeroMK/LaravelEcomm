@@ -46,15 +46,14 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Store $request
      *
-     * @return RedirectResponse
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
     public function store(Store $request): RedirectResponse
     {
         $post = $this->post_service->create($request->validated());
+
         return redirect()->route('posts.index');
     }
 
@@ -69,14 +68,13 @@ class PostController extends Controller
             'categories' => Category::all(),
             'tags' => Tag::all(),
             'users' => User::all(),
-            'post' => new Post()
+            'post' => new Post(),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Post $post
      *
      * @return Application|Factory|View
      */
@@ -86,29 +84,22 @@ class PostController extends Controller
         $tags = Tag::all();
         $users = User::all();
         $post = $this->post_service->findById($post->id);
+
         return view('post::edit', compact('categories', 'tags', 'users', 'post'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param Update $request
-     * @param Post $post
-     *
-     * @return RedirectResponse
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
         $this->post_service->update($post->id, $request->validated());
+
         return redirect()->route('posts.index');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Post $post
-     *
-     * @return RedirectResponse
      */
     public function destroy(Post $post): RedirectResponse
     {
@@ -121,6 +112,7 @@ class PostController extends Controller
 
     /**
      * @return BinaryFileResponse
+     *
      * @throws Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
@@ -140,8 +132,6 @@ class PostController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return void
      */
     public function upload(Request $request)
@@ -156,5 +146,4 @@ class PostController extends Controller
 
         return back()->with('success', 'Media deleted successfully.');
     }
-
 }

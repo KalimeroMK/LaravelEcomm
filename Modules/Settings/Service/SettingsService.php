@@ -21,8 +21,6 @@ class SettingsService extends CoreService
 
     /**
      * Get the first settings data.
-     *
-     * @return object
      */
     public function getData(): object
     {
@@ -32,9 +30,7 @@ class SettingsService extends CoreService
     /**
      * Update settings.
      *
-     * @param  int  $id
      * @param  array<string, mixed>  $data
-     * @return Model
      */
     public function update(int $id, array $data): Model
     {

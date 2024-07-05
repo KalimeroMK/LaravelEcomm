@@ -25,7 +25,7 @@ class AttributeFactory extends Factory
                 'string',
                 'integer',
                 'boolean',
-                'decimal'
+                'decimal',
             ]),
             'display' => $this->faker->randomElement([
                 'input',
@@ -34,7 +34,7 @@ class AttributeFactory extends Factory
                 'button',
                 'select',
                 'checkbox',
-                'multiselect'
+                'multiselect',
             ]),
             'filterable' => $this->faker->numberBetween(0, 1),
             'configurable' => $this->faker->numberBetween(0, 1),

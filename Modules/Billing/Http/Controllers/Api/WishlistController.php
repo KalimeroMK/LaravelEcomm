@@ -21,18 +21,14 @@ class WishlistController extends CoreController
         $this->wishlist_service = $wishlist_service;
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return WishlistResource::collection($this->wishlist_service->getAll());
     }
 
     /**
-     * @param  Store  $request
-     *
      * @return mixed
+     *
      * @throws Exception
      */
     public function store(Store $request)
@@ -49,21 +45,19 @@ class WishlistController extends CoreController
                         ]
                     )
                 )
-                ->respond(new WishlistResource($this->wishlist_service->store($request->all())));
+                ->respond(new WishlistResource($this->wishlist_service->create($request->all())));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
     }
 
     /**
-     * @param  int  $id
-     *
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->wishlist_service->destroy($id);
+        $this->wishlist_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

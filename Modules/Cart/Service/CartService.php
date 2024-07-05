@@ -31,11 +31,7 @@ class CartService
         return $this->cart_repository->findAll();
     }
 
-    /**
-     * @param $data
-     * @return Cart|Core
-     */
-    public function apiAddToCart($data): Cart|Core
+    public function apiAddToCart(array $data): Cart|Core
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
 
@@ -54,11 +50,6 @@ class CartService
         return $cart;
     }
 
-    /**
-     * @param $data
-     *
-     * @return bool|int
-     */
     public function apiAUpdateCart($data): bool|int
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
@@ -76,8 +67,6 @@ class CartService
     }
 
     /**
-     * @param $data
-     *
      * @return RedirectResponse|void
      */
     public function addToCart($data)
@@ -110,8 +99,6 @@ class CartService
     }
 
     /**
-     * @param $data
-     *
      * @return RedirectResponse|void
      */
     public function singleAddToCart($data)
@@ -152,9 +139,8 @@ class CartService
     /**
      * Delete an attribute.
      *
-     * @param int $id The attribute ID.
+     * @param  int  $id  The attribute ID.
      */
-
     public function destroy(int $id): void
     {
         $this->cart_repository->delete($id);
@@ -162,9 +148,6 @@ class CartService
 
     /**
      * Update an existing attribute.
-     *
-     * @param $data
-     * @return mixed
      */
     public function cartUpdate($data): mixed
     {

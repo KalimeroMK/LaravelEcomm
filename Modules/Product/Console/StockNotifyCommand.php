@@ -11,6 +11,7 @@ use Modules\User\Models\User;
 class StockNotifyCommand extends Command
 {
     protected $signature = 'stock:notify';
+
     protected $description = 'Check product stock and notify admin if stock is less than 10';
 
     public function handle(): void

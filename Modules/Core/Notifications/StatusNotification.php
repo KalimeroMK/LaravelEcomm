@@ -30,7 +30,6 @@ class StatusNotification extends Notification
     /**
      * Get the notification delivery channels.
      *
-     * @param  mixed  $notifiable
      * @return array<string> The delivery channels.
      */
     public function via(mixed $notifiable): array
@@ -38,11 +37,9 @@ class StatusNotification extends Notification
         return ['database', 'broadcast'];
     }
 
-
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
      * @return array<string, mixed> An array containing notification data.
      */
     public function toArray(mixed $notifiable): array
@@ -56,10 +53,6 @@ class StatusNotification extends Notification
 
     /**
      * Get the broadcast representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     *
-     * @return BroadcastMessage
      */
     public function toBroadcast(mixed $notifiable): BroadcastMessage
     {

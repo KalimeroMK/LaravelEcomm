@@ -19,16 +19,13 @@ trait HasSlug
 
     /**
      * Increment slug if it already exists.
-     *
-     * @param string $slug
-     * @return string
      */
     public function incrementSlug(string $slug): string
     {
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
 
         return $slug;

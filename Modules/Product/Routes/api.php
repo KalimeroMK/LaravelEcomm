@@ -20,6 +20,6 @@ Route::apiResource('products', ProductController::class)
         'store' => 'api.product.store',
         'show' => 'api.product.show',
         'create' => 'api.product.create',
-        'destroy' => 'api.product.destroy'
+        'destroy' => 'api.product.destroy',
     ]);
 Route::post('products/{id}', [ProductController::class, 'update'])->name('api.product.update');

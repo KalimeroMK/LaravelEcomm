@@ -22,12 +22,7 @@ class StripeController extends CoreController
 
     /**
      * success response method.
-     *
-     * @param  int  $id
-     *
-     * @return Application|Factory|View
      */
-
     public function stripe(int $id): View|Factory|Application
     {
         return $this->stripe_service->stripe($id);
@@ -36,12 +31,9 @@ class StripeController extends CoreController
     /**
      * success response method.
      *
-     * @param  Request  $request
      *
-     * @return RedirectResponse
      * @throws ApiErrorException
      */
-
     public function stripePost(Request $request): RedirectResponse
     {
         return $this->stripe_service->stripePost($request);

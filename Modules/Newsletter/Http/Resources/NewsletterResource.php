@@ -8,7 +8,6 @@ use Modules\Newsletter\Models\Newsletter;
 /** @mixin Newsletter */
 class NewsletterResource extends JsonResource
 {
-
     /**
      * @return string[]
      */

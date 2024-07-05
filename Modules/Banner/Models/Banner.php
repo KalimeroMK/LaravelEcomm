@@ -27,7 +27,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @package App\Models
+ *
  * @method static Builder|Banner newModelQuery()
  * @method static Builder|Banner newQuery()
  * @method static Builder|Banner query()
@@ -39,13 +39,14 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Banner whereStatus($value)
  * @method static Builder|Banner whereTitle($value)
  * @method static Builder|Banner whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Banner extends Core implements HasMedia
 {
-    use InteractsWithMedia;
-    use HasSlug;
     use HasFactory;
+    use HasSlug;
+    use InteractsWithMedia;
 
     protected $table = 'banners';
 
@@ -56,9 +57,6 @@ class Banner extends Core implements HasMedia
         'status',
     ];
 
-    /**
-     * @return BannerFactory
-     */
     public static function Factory(): BannerFactory
     {
         return BannerFactory::new();

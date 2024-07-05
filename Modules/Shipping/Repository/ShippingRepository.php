@@ -10,9 +10,6 @@ class ShippingRepository extends Repository
 {
     public $model = Shipping::class;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::orderBy('id', 'DESC')->get();

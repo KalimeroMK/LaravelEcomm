@@ -23,7 +23,7 @@ use Modules\Notification\Database\Factories\NotificationFactory;
  * @property Carbon|null $read_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @package App\Models
+ *
  * @method static Builder|Notification newModelQuery()
  * @method static Builder|Notification newQuery()
  * @method static Builder|Notification query()
@@ -35,11 +35,13 @@ use Modules\Notification\Database\Factories\NotificationFactory;
  * @method static Builder|Notification whereReadAt($value)
  * @method static Builder|Notification whereType($value)
  * @method static Builder|Notification whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Notification extends Core
 {
     protected $table = 'notifications';
+
     protected $casts = [
         'notifiable_id' => 'int',
     ];
@@ -56,9 +58,6 @@ class Notification extends Core
         'read_at',
     ];
 
-    /**
-     * @return NotificationFactory
-     */
     public static function Factory(): NotificationFactory
     {
         return NotificationFactory::new();

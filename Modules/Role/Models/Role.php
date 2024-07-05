@@ -23,9 +23,9 @@ use Modules\Permission\Models\Permission;
  * @property Carbon|null $updated_at
  * @property Collection|ModelHasRole[] $model_has_roles
  * @property Collection|Permission[] $permissions
- * @package App\Models
  * @property-read int|null $model_has_roles_count
  * @property-read int|null $permissions_count
+ *
  * @method static Builder|Role newModelQuery()
  * @method static Builder|Role newQuery()
  * @method static Builder|Role query()
@@ -34,6 +34,7 @@ use Modules\Permission\Models\Permission;
  * @method static Builder|Role whereId($value)
  * @method static Builder|Role whereName($value)
  * @method static Builder|Role whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Role extends \Spatie\Permission\Models\Role

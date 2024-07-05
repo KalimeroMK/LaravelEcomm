@@ -14,13 +14,13 @@ use Modules\Post\Models\Post;
 class PostRepository extends Repository implements SearchInterface
 {
     public $model = Post::class;
+
     private const LATEST_POSTS_LIMIT = 3;
 
     /**
      * Search posts based on given data.
      *
-     * @param array<string, mixed> $data
-     * @return LengthAwarePaginator
+     * @param  array<string, mixed>  $data
      */
     public function search(array $data): LengthAwarePaginator
     {
@@ -36,8 +36,7 @@ class PostRepository extends Repository implements SearchInterface
     /**
      * Build query based on search data.
      *
-     * @param array<string, mixed> $data
-     * @return Builder
+     * @param  array<string, mixed>  $data
      */
     private function buildQuery(array $data): Builder
     {
@@ -45,8 +44,8 @@ class PostRepository extends Repository implements SearchInterface
         $query = $this->model::query();
 
         foreach ($this->searchableFields() as $key) {
-            if (!empty($data[$key])) {
-                $query->where($key, 'like', '%' . $data[$key] . '%');
+            if (! empty($data[$key])) {
+                $query->where($key, 'like', '%'.$data[$key].'%');
             }
         }
 
@@ -66,7 +65,7 @@ class PostRepository extends Repository implements SearchInterface
     /**
      * Eager load relations for the query.
      *
-     * @param Builder<Post> $query
+     * @param  Builder<Post>  $query
      * @return Builder<Post>
      */
     private function eagerLoadRelations(Builder $query): Builder
@@ -77,9 +76,8 @@ class PostRepository extends Repository implements SearchInterface
     /**
      * Apply sorting and paginate the query results.
      *
-     * @param Builder<Post> $query
-     * @param array<string, mixed> $data
-     * @return LengthAwarePaginator
+     * @param  Builder<Post>  $query
+     * @param  array<string, mixed>  $data
      */
     private function applySortingAndPaginate(Builder $query, array $data): LengthAwarePaginator
     {
@@ -112,15 +110,15 @@ class PostRepository extends Repository implements SearchInterface
     {
         /** @var Collection<int, Post> $posts */
         $posts = $this->eagerLoadRelations($this->model::query())->get();
+
         return $posts;
     }
 
     /**
      * Update an existing record in the repository.
      *
-     * @param int $id The ID of the model to update.
-     * @param array<string, mixed> $data The data to update in the model.
-     *
+     * @param  int  $id  The ID of the model to update.
+     * @param  array<string, mixed>  $data  The data to update in the model.
      * @return Model The updated model instance.
      */
     public function update(int $id, array $data): Model

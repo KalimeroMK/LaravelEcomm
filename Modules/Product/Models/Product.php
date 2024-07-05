@@ -60,10 +60,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Collection|Cart[] $carts
  * @property Collection|ProductReview[] $product_reviews
  * @property Collection|Wishlist[] $wishlists
- * @package App\Models
  * @property-read int|null $carts_count
  * @property-read int|null $product_reviews_count
  * @property-read int|null $wishlists_count
+ *
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
  * @method static Builder|Product query()
@@ -83,20 +83,23 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Product whereSummary($value)
  * @method static Builder|Product whereTitle($value)
  * @method static Builder|Product whereUpdatedAt($value)
+ *
  * @mixin Eloquent
+ *
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
  * @property-read int|null $categories_count
  * @property-read string $image_url
  * @property string|null $color
+ *
  * @method static Builder|Product whereColor($value)
  */
-class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
+class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
 {
-    use HasFactory;
     use Filterable;
+    use HasFactory;
+    use HasSlug;
     use InteractsWithMedia;
     use Searchable;
-    use HasSlug;
 
     protected $table = 'products';
 
@@ -152,27 +155,16 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
             'color',
         ];
 
-    /**
-     * @return ProductFactory
-     */
     public static function Factory(): ProductFactory
     {
         return ProductFactory::new();
     }
 
-    /**
-     * @param $slug
-     *
-     * @return object|null
-     */
-    public static function getProductBySlug($slug): object|null
+    public static function getProductBySlug($slug): ?object
     {
         return Product::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
     }
 
-    /**
-     * @return int
-     */
     public static function countActiveProduct(): int
     {
         $data = Product::whereStatus('active')->count();
@@ -183,9 +175,6 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         return 0;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public static function getFeedItems(): \Illuminate\Support\Collection
     {
         return Product::orderBy('created_at', 'desc')
@@ -193,33 +182,21 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
             ->get();
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function product_reviews(): HasMany
     {
         return $this->hasMany(ProductReview::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function wishlists(): HasMany
     {
         return $this->hasMany(Wishlist::class);
@@ -230,9 +207,6 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         return $this->belongsToMany(Category::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function getReview(): HasMany
     {
         return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where(
@@ -242,8 +216,6 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     }
 
     /**
-     * @param $slug
-     *
      * @return mixed|string
      */
     public function incrementSlug($slug): mixed
@@ -251,15 +223,12 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
 
         return $slug;
     }
 
-    /**
-     * @return string|null
-     */
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
@@ -271,9 +240,6 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
-    /**
-     * @return string|null
-     */
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
@@ -285,30 +251,20 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function condition(): BelongsTo
     {
         return $this->belongsTo(Condition::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function sizes(): belongsToMany
     {
         return $this->belongsToMany(Size::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function tags(): belongsToMany
     {
         return $this->belongsToMany(Tag::class);
     }
-
 
     /**
      * @return HigherOrderBuilderProxy|mixed|null
@@ -412,6 +368,7 @@ class Product extends Core implements HasMedia, Explored, IndexSettings, Aliased
     public function searchBrandsByProduct($searchTerm)
     {
         $productBrandIds = Product::search($searchTerm)->get()->pluck('brand_id')->unique();
+
         return Brand::whereIn('id', $productBrandIds)->get();
     }
 }

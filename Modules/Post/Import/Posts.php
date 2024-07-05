@@ -10,13 +10,7 @@ use Modules\Post\Models\Post;
 
 class Posts implements ToCollection, WithHeadingRow
 {
-    /**
-     * @param  Collection  $collection
-     *
-     * @return string
-     */
-    public
-    function collection(
+    public function collection(
         Collection $collection
     ): string {
         Schema::disableForeignKeyConstraints();

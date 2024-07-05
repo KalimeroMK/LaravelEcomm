@@ -10,12 +10,14 @@ use Modules\Product\Models\Product;
 class Store extends CoreRequest
 {
     /**
-     * @return WishlistRule[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
         return [
-            'slug' => new WishlistRule(),
+            'slug' => ['required', new WishlistRule()],
         ];
     }
 

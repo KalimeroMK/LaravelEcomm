@@ -16,11 +16,10 @@ class Bundle extends Core implements HasMedia
 {
     use InteractsWithMedia;
 
-
     protected $table = 'bundles';
 
     protected $casts = [
-        'price' => 'float'
+        'price' => 'float',
     ];
 
     protected $fillable = [
@@ -30,9 +29,6 @@ class Bundle extends Core implements HasMedia
         'slug',
     ];
 
-    /**
-     * @return BundleFactory
-     */
     public static function Factory(): BundleFactory
     {
         return BundleFactory::new();
@@ -46,9 +42,10 @@ class Bundle extends Core implements HasMedia
 
     /**
      * @mixin ImageDriver
+     *
      * @method $this nonQueued()
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')
             ->fit(Fit::Contain, 300, 300)

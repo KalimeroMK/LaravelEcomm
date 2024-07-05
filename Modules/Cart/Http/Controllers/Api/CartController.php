@@ -20,18 +20,12 @@ class CartController extends CoreController
         $this->cart_service = $cart_service;
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return CartResource::collection($this->cart_service->getAll());
     }
 
     /**
-     * @param Store $request
-     *
-     * @return JsonResponse|string
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse|string
@@ -52,6 +46,7 @@ class CartController extends CoreController
 
     /**
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show()
@@ -71,9 +66,8 @@ class CartController extends CoreController
     }
 
     /**
-     * @param Store $request
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function update(Store $request)
@@ -93,14 +87,12 @@ class CartController extends CoreController
     }
 
     /**
-     * @param int $id
-     *
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
         $this->cart_service->destroy($id);
+
         return $this
             ->setMessage(
                 __(

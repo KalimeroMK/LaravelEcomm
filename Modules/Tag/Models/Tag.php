@@ -29,8 +29,8 @@ use Modules\Tag\Database\Factories\TagFactory;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Collection|Post[] $posts
- * @package App\Models
  * @property-read int|null $posts_count
+ *
  * @method static Builder|Tag newModelQuery()
  * @method static Builder|Tag newQuery()
  * @method static Builder|Tag query()
@@ -40,6 +40,7 @@ use Modules\Tag\Database\Factories\TagFactory;
  * @method static Builder|Tag whereStatus($value)
  * @method static Builder|Tag whereTitle($value)
  * @method static Builder|Tag whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Tag extends Core
@@ -55,17 +56,12 @@ class Tag extends Core
         'status',
     ];
 
-    /**
-     * @return TagFactory
-     */
     public static function Factory(): TagFactory
     {
         return TagFactory::new();
     }
 
     /**
-     * @param $slug
-     *
      * @return mixed|string
      */
     public function incrementSlug($slug): mixed
@@ -73,7 +69,7 @@ class Tag extends Core
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
 
         return $slug;

@@ -27,8 +27,7 @@ class OrderService extends CoreService
     /**
      * Search orders based on given data.
      *
-     * @param array<string, mixed> $data
-     * @return mixed
+     * @param  array<string, mixed>  $data
      */
     public function search(array $data): mixed
     {
@@ -38,13 +37,12 @@ class OrderService extends CoreService
     /**
      * Store a newly created resource in storage.
      *
-     * @param array<string, mixed> $data
-     * @return int
+     * @param  array<string, mixed>  $data
      */
     public function store(array $data): int
     {
         $order_data = [
-            'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+            'order_number' => 'ORD-'.strtoupper(Str::random(10)),
             'user_id' => Auth::user()->id,
             'shipping_id' => $data['shipping'],
             'sub_total' => Helper::totalCartPrice(),
@@ -87,9 +85,6 @@ class OrderService extends CoreService
 
     /**
      * Update cart with order ID.
-     *
-     * @param Order $order
-     * @return void
      */
     private function updateCartWithOrderId(Order $order): void
     {
@@ -99,9 +94,7 @@ class OrderService extends CoreService
     /**
      * Update the specified order.
      *
-     * @param array<string, mixed> $data
-     * @param int $id
-     * @return Model
+     * @param  array<string, mixed>  $data
      */
     public function update(int $id, array $data): Model
     {
@@ -120,8 +113,6 @@ class OrderService extends CoreService
 
     /**
      * Find all orders by user.
-     *
-     * @return mixed
      */
     public function findByAllUser(): mixed
     {

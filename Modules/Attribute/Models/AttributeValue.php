@@ -28,10 +28,8 @@ use Modules\Product\Models\Product;
  * @property int $attribute_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property Attribute $attribute
  * @property Collection|Product[] $products
- *
  */
 class AttributeValue extends Core
 {
@@ -44,7 +42,7 @@ class AttributeValue extends Core
         'boolean_value' => 'bool',
         'integer_value' => 'int',
         'decimal_value' => 'float',
-        'attribute_id' => 'int'
+        'attribute_id' => 'int',
     ];
 
     protected $fillable = [
@@ -59,14 +57,11 @@ class AttributeValue extends Core
         'boolean_value',
         'integer_value',
         'decimal_value',
-        'attribute_id'
+        'attribute_id',
     ];
 
     protected $appends = ['value'];
 
-    /**
-     * @return AttributeValueFactory
-     */
     public static function Factory(): AttributeValueFactory
     {
         return AttributeValueFactory::new();
@@ -77,16 +72,14 @@ class AttributeValue extends Core
         return $this->belongsTo(Attribute::class);
     }
 
-    /**
-     * @return string
-     */
     public function getValueAttribute(): string
     {
-        if (!$this->relationLoaded('attribute')) {
+        if (! $this->relationLoaded('attribute')) {
             $this->load('attribute');
         }
 
         $type = $this->attribute->type;
+
         return match ($type) {
             Attribute::TYPE_URL => $this->url_value,
             Attribute::TYPE_HEX => $this->hex_value,

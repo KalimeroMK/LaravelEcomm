@@ -7,20 +7,12 @@ use Illuminate\Support\ServiceProvider;
 
 class RoleServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'Role';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'role';
 
     /**
      * Boot the application events.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -32,8 +24,6 @@ class RoleServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
@@ -48,8 +38,6 @@ class RoleServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
@@ -64,8 +52,6 @@ class RoleServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
@@ -81,7 +67,6 @@ class RoleServiceProvider extends ServiceProvider
     }
 
     /**
-     *
      * @return array<string> Array of paths.
      */
     public function provides(): array
@@ -108,12 +93,9 @@ class RoleServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }
-
 }

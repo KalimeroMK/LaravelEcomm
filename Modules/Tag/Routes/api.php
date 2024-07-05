@@ -22,4 +22,3 @@ Route::apiResource('tags', TagController::class)
         'update' => 'api.tag.update',
         'create' => 'api.tag.create',
     ]);
-

@@ -10,6 +10,7 @@ class Update extends FormRequest
 {
     /**
      * @return string[]
+     *
      * @throws Exception
      */
     public function rules(): array
@@ -17,8 +18,8 @@ class Update extends FormRequest
         $category = $this->route('category');
 
         // Ensure that $category is indeed a Category model instance
-        if (!$category instanceof Category) {
-            throw new Exception("Expected a Category model instance.");
+        if (! $category instanceof Category) {
+            throw new Exception('Expected a Category model instance.');
         }
 
         return [
@@ -31,18 +32,11 @@ class Update extends FormRequest
         ];
     }
 
-
-    /**
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * @return void
-     */
     public function passedValidation(): void
     {
         $this->merge([

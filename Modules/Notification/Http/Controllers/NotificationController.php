@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Notification\Service\NotificationService;
 
-class  NotificationController extends Controller
+class NotificationController extends Controller
 {
     private NotificationService $notification_service;
 
@@ -18,16 +18,12 @@ class  NotificationController extends Controller
         $this->notification_service = $notification_service;
     }
 
-    /**
-     * @return Application|Factory|View
-     */
     public function index(): View|Factory|Application
     {
         return view('notification::index', ['notifications' => $this->notification_service->getAll()]);
     }
 
     /**
-     * @param $id
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function show($id)
@@ -37,11 +33,6 @@ class  NotificationController extends Controller
         return view('notification::show', compact('notification'));
     }
 
-    /**
-     * @param int $id
-     *
-     * @return RedirectResponse
-     */
     public function destroy(int $id): RedirectResponse
     {
         $this->notification_service->delete($id);

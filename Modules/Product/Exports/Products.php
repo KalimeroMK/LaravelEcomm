@@ -33,7 +33,7 @@ class Products implements FromCollection, WithHeadings, WithMapping
             'color',
             'special_price',
             'special_price_start',
-            'special_price_end'
+            'special_price_end',
         ];
     }
 

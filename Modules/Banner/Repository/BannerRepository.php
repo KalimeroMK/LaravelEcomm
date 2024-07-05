@@ -14,9 +14,9 @@ class BannerRepository extends Repository implements SearchInterface
      * The model instance.
      *
      * @var string
-     *
      */
     public $model = Banner::class;
+
     private const LATEST_BANNERS_LIMIT = 3;
 
     /**
@@ -51,9 +51,6 @@ class BannerRepository extends Repository implements SearchInterface
         });
     }
 
-    /**
-     * @return mixed
-     */
     public function getActiveBanners(): mixed
     {
         $cacheKey = 'active_banners';
@@ -66,5 +63,4 @@ class BannerRepository extends Repository implements SearchInterface
                 ->get();
         });
     }
-
 }

@@ -15,7 +15,6 @@ use Modules\Size\Service\SizesService;
 
 class SizeController extends CoreController
 {
-
     private SizesService $sizes_service;
 
     public function __construct(SizesService $sizes_service)
@@ -24,17 +23,14 @@ class SizeController extends CoreController
         $this->authorizeResource(Size::class);
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return SizeResource::collection($this->sizes_service->getAll());
     }
 
     /**
-     *
      * @return JsonResponse|string
+     *
      * @throws Exception
      */
     public function store(Store $request)
@@ -58,8 +54,6 @@ class SizeController extends CoreController
     }
 
     /**
-     * @param  int  $id
-     *
      * @return JsonResponse|string
      */
     public function show(int $id)
@@ -103,8 +97,6 @@ class SizeController extends CoreController
     }
 
     /**
-     * @param  int  $id
-     *
      * @return JsonResponse|string
      */
     public function destroy(int $id)

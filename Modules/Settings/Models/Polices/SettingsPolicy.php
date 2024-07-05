@@ -34,5 +34,4 @@ class SettingsPolicy
     {
         return $user->can('settings-list');
     }
-
 }

@@ -9,7 +9,6 @@ class ProductReviewStore extends FormRequest
     /**
      * @return string[]
      */
-
     public function rules(): array
     {
         return [

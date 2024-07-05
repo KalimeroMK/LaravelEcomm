@@ -33,8 +33,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Collection|Product[] $products
- * @package App\Models
  * @property-read int|null $products_count
+ *
  * @method static Builder|Brand newModelQuery()
  * @method static Builder|Brand newQuery()
  * @method static Builder|Brand query()
@@ -44,15 +44,18 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Brand whereStatus($value)
  * @method static Builder|Brand whereTitle($value)
  * @method static Builder|Brand whereUpdatedAt($value)
+ *
  * @mixin Eloquent
+ *
  * @property string $photo
+ *
  * @method static Builder|Brand wherePhoto($value)
  */
-class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
+class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
 {
-    use Searchable;
-    use InteractsWithMedia;
     use HasSlug;
+    use InteractsWithMedia;
+    use Searchable;
 
     protected $table = 'brands';
 
@@ -63,9 +66,6 @@ class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
         'photo',
     ];
 
-    /**
-     * @return BrandFactory
-     */
     public static function Factory(): BrandFactory
     {
         return BrandFactory::new();
@@ -74,34 +74,24 @@ class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
     /**
      * Retrieves a Brand model with associated products based on a given slug.
      *
-     * @param string $slug The slug used to find a specific brand.
-     * @return Model|Builder|null
+     * @param  string  $slug  The slug used to find a specific brand.
      */
     public static function getProductByBrand(string $slug): Model|Builder|null
     {
         return Brand::with('products')->where('slug', $slug)->first();
     }
 
-
-    /**
-     * @return HasMany
-     */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return string
-     */
     public function incrementSlug(string $slug): string
     {
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
 
         return $slug;
@@ -121,7 +111,6 @@ class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
     {
         return $this->toArray();
     }
-
 
     /**
      * Defines the mapping for the search engine.
@@ -143,7 +132,6 @@ class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
         ];
     }
 
-
     /**
      * Configuration settings for the search index.
      *
@@ -163,5 +151,4 @@ class Brand extends Core implements HasMedia, Explored, IndexSettings, Aliased
             ],
         ];
     }
-
 }

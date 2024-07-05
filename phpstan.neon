@@ -1,15 +1,17 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - vendor/larastan/larastan/extension.neon
+
 parameters:
     paths:
-       - Modules/Size
+        - Modules
     level: 6
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
-            - '#Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver::nonQueued\(\)#'
-            - '#Call to an undefined method Omnipay\\Common\\Message\\ResponseInterface::getRedirectResponse\(\)#'
-            - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setClientId\(\)#'
-            - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setSecret\(\)#'
-            - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setTestMode\(\)#'
+        - '#Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver::nonQueued\(\)#'
+        - '#Call to an undefined method Omnipay\\Common\\Message\\ResponseInterface::getRedirectResponse\(\)#'
+        - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setClientId\(\)#'
+        - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setSecret\(\)#'
+        - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setTestMode\(\)#'
     excludePaths:
+        # Add paths to exclude here, or remove this line if not needed

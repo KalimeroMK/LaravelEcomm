@@ -13,9 +13,6 @@ class MessageRepository extends Repository
      */
     public $model = Message::class;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::get();

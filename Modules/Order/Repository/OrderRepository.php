@@ -15,9 +15,6 @@ class OrderRepository extends Repository implements SearchInterface
 {
     public $model = Order::class;
 
-    /**
-     * @return mixed
-     */
     public function findAllByUser(): mixed
     {
         return $this->model::with('shipping', 'user', 'carts')->where('user_id', Auth::id())->paginate(10);
@@ -66,12 +63,8 @@ class OrderRepository extends Repository implements SearchInterface
         return $query;
     }
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::with('user', 'carts', 'shipping')->get();
     }
-
 }

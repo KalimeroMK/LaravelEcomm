@@ -9,7 +9,7 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'title'  => 'string|required|unique:tags',
+            'title' => 'string|required|unique:tags',
             'status' => 'required|in:active,inactive',
         ];
     }

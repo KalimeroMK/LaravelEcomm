@@ -32,12 +32,14 @@ class Helper
     public static function cartCount(string $user_id = ''): int
     {
         $user_id = self::getUserId($user_id);
+
         return $user_id !== 0 ? Cart::whereUserId($user_id)->whereOrderId(null)->sum('quantity') : 0;
     }
 
     public static function getAllProductFromWishlist(string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
+
         return $user_id !== 0
             ? Wishlist::with('product')->where('user_id', $user_id)->where('cart_id', null)->get()
             : collect(); // Return an empty collection instead of 0
@@ -46,6 +48,7 @@ class Helper
     public static function getAllProductFromCart(string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
+
         return $user_id !== 0
             ? Cart::with('product')->where('user_id', $user_id)->where('order_id', null)->get()
             : collect(); // Return an empty collection instead of 0
@@ -87,16 +90,17 @@ class Helper
     }
 
     /**
-     * @param object|string $class The class name or object instance.
+     * @param  object|string  $class  The class name or object instance.
      * @return string The class short name.
+     *
      * @throws ReflectionException
      */
     public static function getResourceName(object|string $class): string
     {
         $reflectionClass = new ReflectionClass($class);
+
         return $reflectionClass->getShortName();
     }
-
 
     public static function postCategoryList(): Collection
     {
@@ -105,6 +109,4 @@ class Helper
             ->take(10)
             ->get();
     }
-
-
 }

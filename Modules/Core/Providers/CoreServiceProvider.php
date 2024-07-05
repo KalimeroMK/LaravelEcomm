@@ -9,20 +9,12 @@ use Modules\Settings\Models\Setting;
 
 class CoreServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'Core';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'core';
 
     /**
      * Boot the application events.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -34,8 +26,6 @@ class CoreServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -47,8 +37,6 @@ class CoreServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
@@ -63,8 +51,6 @@ class CoreServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
@@ -81,8 +67,6 @@ class CoreServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
@@ -121,5 +105,4 @@ class CoreServiceProvider extends ServiceProvider
 
         return $paths;
     }
-
 }

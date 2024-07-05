@@ -9,13 +9,13 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'     => 'required',
-            'email'    => 'required|email|unique:users,email,'.$id = $this->route('users')->id,
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$id = $this->route('users')->id,
             'password' => 'same:confirm-password',
-            'roles'    => 'required',
+            'roles' => 'required',
         ];
     }
-    
+
     public function authorize(): bool
     {
         return true;

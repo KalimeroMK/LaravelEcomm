@@ -16,7 +16,6 @@ use Modules\Product\Models\Product;
 
 class CartController extends CoreController
 {
-
     private CartService $cart_service;
 
     public function __construct(CartService $cart_service)
@@ -25,11 +24,6 @@ class CartController extends CoreController
         $this->authorizeResource(Cart::class);
     }
 
-    /**
-     * @param  string  $slug
-     *
-     * @return RedirectResponse
-     */
     public function addToCart(string $slug): RedirectResponse
     {
         if (empty($slug || Product::whereSlug($slug)->first())) {
@@ -44,9 +38,6 @@ class CartController extends CoreController
     }
 
     /**
-     * @param  AddToCartSingle  $request
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
     public function singleAddToCart(AddToCartSingle $request): RedirectResponse
@@ -58,9 +49,6 @@ class CartController extends CoreController
     }
 
     /**
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
     public function cartDelete(Request $request): RedirectResponse
@@ -72,9 +60,6 @@ class CartController extends CoreController
 
     /**
      * Updates cart information.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function cartUpdate(Request $request): RedirectResponse
     {
@@ -84,7 +69,6 @@ class CartController extends CoreController
     }
 
     /**
-     * @return Application|Factory|View|RedirectResponse
      * @throws Exception
      */
     public function checkout(): View|Factory|RedirectResponse|Application
@@ -95,7 +79,6 @@ class CartController extends CoreController
 
             return redirect()->back();
         }
-
 
         return view('front::pages.checkout');
     }

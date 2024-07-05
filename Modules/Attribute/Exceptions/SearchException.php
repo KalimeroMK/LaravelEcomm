@@ -4,6 +4,4 @@ namespace Modules\Attribute\Exceptions;
 
 use Exception;
 
-class SearchException extends Exception
-{
-}
+class SearchException extends Exception {}

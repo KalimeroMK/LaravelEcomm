@@ -22,8 +22,6 @@ use PragmaRX\Google2FAQRCode\Google2FA as PragmaRXGoogle2FA;
 
 class Google2faController extends Controller
 {
-
-
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|RedirectResponse|View
      */
@@ -47,14 +45,18 @@ class Google2faController extends Controller
             $qrImage = $writer->writeString($google2fa_url);
             $google2fa_url = 'data:image/svg+xml;base64,'.base64_encode($qrImage);
             $secret_key = $user->loginSecurity->google2fa_secret;
+
             return view('google2fa::2fa_settings', compact($user, $secret_key, $google2fa_url));
         }
-        return redirect()->route('user-profile')->with('error', "Pls enable 2FA");
+
+        return redirect()->route('user-profile')->with('error', 'Pls enable 2FA');
     }
 
     /**
      * Generate 2FA secret key
+     *
      * @return RedirectResponse
+     *
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
@@ -71,13 +73,15 @@ class Google2faController extends Controller
         $login_security->google2fa_enable = false;
         $login_security->google2fa_secret = $google2fa->generateSecretKey();
         $login_security->save();
-        return redirect()->route('2fa')->with('success', "Secret key is generated.");
+
+        return redirect()->route('2fa')->with('success', 'Secret key is generated.');
     }
 
     /**
      * Enable 2FA
-     * @param  Request  $request
+     *
      * @return RedirectResponse
+     *
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
@@ -92,14 +96,16 @@ class Google2faController extends Controller
         if ($valid) {
             $user->loginSecurity->google2fa_enable = 1;
             $user->loginSecurity->save();
-            return redirect()->route('2fa')->with('success', "2FA is enabled successfully.");
+
+            return redirect()->route('2fa')->with('success', '2FA is enabled successfully.');
         } else {
-            return redirect()->route('2fa')->with('error', "Invalid verification Code, Please try again.");
+            return redirect()->route('2fa')->with('error', 'Invalid verification Code, Please try again.');
         }
     }
 
     /**
      * Disable 2FA
+     *
      * @return RedirectResponse
      */
     public function disable2fa()
@@ -107,7 +113,8 @@ class Google2faController extends Controller
         $user = Auth::user();
         $user->loginSecurity->google2fa_enable = 0;
         $user->loginSecurity->save();
-        return redirect()->back()->with('success', "2FA is now disabled.");
+
+        return redirect()->back()->with('success', '2FA is now disabled.');
     }
 
     /**

@@ -19,12 +19,6 @@ class UserService extends CoreService
         $this->user_repository = $user_repository;
     }
 
-
-    /**
-     * @param $request
-     *
-     * @return void
-     */
     public function register($request): void
     {
         $input = $request->all();
@@ -32,12 +26,6 @@ class UserService extends CoreService
         $user->assignRole($request->input('roles'));
     }
 
-    /**
-     * @param $id
-     * @param $data
-     *
-     * @return Model
-     */
     public function update($id, $data): Model
     {
         $input = $this->prepareInputData($data);
@@ -50,9 +38,7 @@ class UserService extends CoreService
 
     private function prepareInputData($data): array
     {
-        return !empty($data['password']) ? ['password' => Hash::make($data['password'])] : Arr::except($data,
+        return ! empty($data['password']) ? ['password' => Hash::make($data['password'])] : Arr::except($data,
             ['password']);
     }
-
-
 }

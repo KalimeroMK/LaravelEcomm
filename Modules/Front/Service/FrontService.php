@@ -35,8 +35,11 @@ class FrontService
     public $model = Product::class;
 
     protected ProductRepository $productRepository;
+
     protected BrandRepository $brandRepository;
+
     private PostRepository $postRepository;
+
     private BannerRepository $bannerRepository;
 
     public function __construct(
@@ -53,10 +56,7 @@ class FrontService
 
     /**
      * Get data for the homepage.
-     *
-     * @return array
      */
-
     public function index(): array
     {
         return [
@@ -64,24 +64,24 @@ class FrontService
             'posts' => $this->postRepository->getActivePosts(),
             'banners' => $this->bannerRepository->getActiveBanners(),
             'latest_products' => $this->productRepository->getLatestProducts(),
-            'hot_products' => $this->productRepository->getLatestProducts()->splice(4)
+            'hot_products' => $this->productRepository->getLatestProducts()->splice(4),
         ];
     }
 
-
     /**
      * Retrieves product categories based on a slug.
-     * @param string $slug The slug of the category.
+     *
+     * @param  string  $slug  The slug of the category.
      * @return array The products under the category.
      */
     public function productCat(string $slug): array
     {
-        $cacheKey = 'productCat_' . $slug;
+        $cacheKey = 'productCat_'.$slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             $category = Category::whereSlug($slug)->first();
 
-            if (!$category) {
+            if (! $category) {
                 return 'Category not found';
             }
 
@@ -101,20 +101,14 @@ class FrontService
                 'category' => $category,
                 'products' => $products,
                 'recentProducts' => $recentProducts,
-                'brands' => $brands
+                'brands' => $brands,
             ];
         });
     }
 
-
-    /**
-     * @param Request $request
-     *
-     * @return array|string
-     */
     public function blogSearch(Request $request): array|string
     {
-        $cacheKey = 'blogSearch_' . $request->input('search');
+        $cacheKey = 'blogSearch_'.$request->input('search');
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($request) {
             $recentPosts = Post::where('status', 'active')->latest()->limit(3)->get();
@@ -123,18 +117,12 @@ class FrontService
                 ->paginate(8);
 
             return [
-                "posts" => $posts,
-                "recent_posts" => $recentPosts,
+                'posts' => $posts,
+                'recent_posts' => $recentPosts,
             ];
         });
     }
 
-
-    /**
-     * @param $request
-     *
-     * @return string
-     */
     public function messageStore($request): string
     {
         try {
@@ -157,7 +145,6 @@ class FrontService
             return $exception->getMessage();
         }
     }
-
 
     /**
      * Retrieves the product grids based on the query parameters.
@@ -191,8 +178,8 @@ class FrontService
         $brandSlugs = explode(',', $queryParams['brand'] ?? '');
 
         // Generate unique cache keys
-        $categoryCacheKey = 'category_ids_' . md5(json_encode($categorySlugs));
-        $brandCacheKey = 'brand_ids_' . md5(json_encode($brandSlugs));
+        $categoryCacheKey = 'category_ids_'.md5(json_encode($categorySlugs));
+        $brandCacheKey = 'brand_ids_'.md5(json_encode($brandSlugs));
 
         // Cache for 24 hours (86400 seconds)
         $categoryIds = Cache::remember($categoryCacheKey, 86400, function () use ($categorySlugs) {
@@ -208,7 +195,7 @@ class FrontService
 
     private function retrievePriceRange(array $queryParams): array
     {
-        return array_map('intval', explode('-', $queryParams['price'] ?? '0-' . PHP_INT_MAX));
+        return array_map('intval', explode('-', $queryParams['price'] ?? '0-'.PHP_INT_MAX));
     }
 
     private function retrieveSortOrder(array $queryParams): array
@@ -231,12 +218,12 @@ class FrontService
         $sortOrder,
         array $queryParams
     ) {
-        $perPage = (int)($queryParams['show'] ?? 9);
+        $perPage = (int) ($queryParams['show'] ?? 9);
 
         // Generate a unique cache key
-        $cacheKey = 'products_' . md5(json_encode(compact(
-                'categoryIds', 'brandIds', 'minPrice', 'maxPrice', 'sortColumn', 'sortOrder', 'perPage'
-            )));
+        $cacheKey = 'products_'.md5(json_encode(compact(
+            'categoryIds', 'brandIds', 'minPrice', 'maxPrice', 'sortColumn', 'sortOrder', 'perPage'
+        )));
 
         // Cache for 24 hours (86400 seconds)
         return Cache::remember($cacheKey, 86400, function () use (
@@ -249,9 +236,9 @@ class FrontService
             $perPage
         ) {
             return $this->model::query()
-                ->when($categoryIds, fn($query) => $query->whereIn('cat_id', $categoryIds))
-                ->when($brandIds, fn($query) => $query->whereIn('brand_id', $brandIds))
-                ->when($minPrice || $maxPrice, fn($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
+                ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
+                ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
+                ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
                 ->orderBy($sortColumn, $sortOrder)
                 ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
                 ->paginate($perPage);
@@ -266,14 +253,9 @@ class FrontService
         return compact('brands', 'recent_products', 'products');
     }
 
-
-    /**
-     * @param string $slug
-     * @return array|string
-     */
     public function blogByTag(string $slug): array|string
     {
-        $cacheKey = 'blogByTag_' . $slug;
+        $cacheKey = 'blogByTag_'.$slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             $posts = Post::with(['author', 'tags'])
@@ -284,25 +266,22 @@ class FrontService
             $recent_posts = Post::with('author')->where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
             return [
-                "posts" => $posts,
-                "recent_posts" => $recent_posts,
+                'posts' => $posts,
+                'recent_posts' => $recent_posts,
             ];
         });
     }
 
     /**
      * Store coupon and apply it to user's cart.
-     *
-     * @param $request
-     *
-     * @return RedirectResponse|string
      */
     public function couponStore($request): RedirectResponse|string
     {
         $coupon = Coupon::whereCode($request->code)->first();
-        if (!$coupon) {
+        if (! $coupon) {
             // Invalid coupon code, redirect back with error message.
             request()->session()->flash('error', 'Invalid coupon code, Please try again');
+
             return back();
         }
 
@@ -318,13 +297,13 @@ class FrontService
 
         // Redirect back with success message.
         request()->session()->flash('success', 'Coupon successfully applied');
+
         return redirect()->back();
     }
 
     /**
      * Filter blog posts based on selected categories and tags.
      *
-     * @param $request
      *
      * @return RedirectResponse|string
      */
@@ -333,23 +312,20 @@ class FrontService
         $category = $request['category'] ?? [];
         $tag = $request['tag'] ?? [];
 
-        $catURL = !empty($category) ? implode(',', $category) : '';
-        $tagURL = !empty($tag) ? implode(',', $tag) : '';
+        $catURL = ! empty($category) ? implode(',', $category) : '';
+        $tagURL = ! empty($tag) ? implode(',', $tag) : '';
 
         // Return an array with the filtered categories and tags.
         return [
             'category' => $catURL,
-            'tag' => $tagURL
+            'tag' => $tagURL,
         ];
     }
-
 
     /**
      * Get blog posts by category slug.
      *
-     * @param $request
-     *
-     * @return array|string
+     * @param  $request
      */
     public function blogByCategory($slug): array|string
     {
@@ -359,15 +335,11 @@ class FrontService
         $recantPosts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
         return [
-            "posts" => $posts,
-            "recantPosts" => $recantPosts,
+            'posts' => $posts,
+            'recantPosts' => $recantPosts,
         ];
     }
 
-    /**
-     * @param $data
-     * @return array|string
-     */
     public function productSearch($data): array|string
     {
         $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
@@ -384,9 +356,9 @@ class FrontService
         $brands = Brand::search($searchTerm)->get();
 
         return [
-            "recent_products" => $recent_products,
-            "products" => $products,
-            "brands" => $brands,
+            'recent_products' => $recent_products,
+            'products' => $products,
+            'brands' => $brands,
         ];
     }
 
@@ -407,16 +379,16 @@ class FrontService
             $brands = Brand::with('products')->get();
 
             return [
-                "recent_products" => $recent_products,
-                "products" => $products,
-                "brands" => $brands,
+                'recent_products' => $recent_products,
+                'products' => $products,
+                'brands' => $brands,
             ];
         });
     }
 
     public function productDetail(string $slug): array
     {
-        $cacheKey = 'productDetail_' . $slug;
+        $cacheKey = 'productDetail_'.$slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             // Get the product detail by slug.
@@ -437,17 +409,12 @@ class FrontService
         });
     }
 
-
     /**
      * Get data for a blog post detail page.
-     *
-     * @param string $slug
-     *
-     * @return array|string
      */
     public function blogDetail(string $slug): array|string
     {
-        $cacheKey = 'blogDetail_' . $slug;
+        $cacheKey = 'blogDetail_'.$slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             $post = Post::with('author', 'categories')->whereSlug($slug)->FirstOrFail();
@@ -455,19 +422,15 @@ class FrontService
             $tags = Tag::whereHas('posts')->take(50)->get();
 
             return [
-                "post" => $post,
-                "recantPosts" => $recentPosts,
-                "tags" => $tags,
+                'post' => $post,
+                'recantPosts' => $recentPosts,
+                'tags' => $tags,
             ];
         });
     }
 
-
     /**
      * Get data for a product brand page.
-     *
-     * @param $data
-     * @return array|string
      */
     public function productBrand($data): array|string
     {
@@ -483,17 +446,15 @@ class FrontService
 
         // Return data
         return [
-            "products" => $products,
-            "brands" => $brands,
+            'products' => $products,
+            'brands' => $brands,
             'recentProducts' => $recentProducts,
         ];
     }
 
-
     /**
      * Processes the product filter and redirects to either product-grids or product-lists route with the filtered parameters.
      *
-     * @param $data
      * @return RedirectResponse|string A redirect response to either product-grids or product-lists route with the filtered parameters, or an error message.
      */
     public function productFilter($data): RedirectResponse|string
@@ -508,10 +469,10 @@ class FrontService
         $appUrl = config('app.url');
 
         // Determine the correct route name based on the current request
-        $routeSuffix = request()->is($appUrl . '/product-grids') ? 'product-grids' : 'product-lists';
+        $routeSuffix = request()->is($appUrl.'/product-grids') ? 'product-grids' : 'product-lists';
 
         // Prefix the route name with 'front.'
-        $routeName = 'front.' . $routeSuffix;
+        $routeName = 'front.'.$routeSuffix;
 
         // Build the route parameters string
         $routeParameters = http_build_query($query);
@@ -522,11 +483,8 @@ class FrontService
         return redirect()->route($routeName, $routeParameters);
     }
 
-
     /**
      * Retrieve a list of products based on search criteria
-     *
-     * @return array
      */
     public function productLists(): array
     {
@@ -554,7 +512,7 @@ class FrontService
 
     private function filterByCategory(Builder $query): void
     {
-        if (!empty($_GET['category'])) {
+        if (! empty($_GET['category'])) {
             $catSlugs = explode(',', $_GET['category']);
             $catIds = Category::whereIn('slug', $catSlugs)->pluck('id')->toArray();
             $query->whereIn('cat_id', $catIds);
@@ -563,7 +521,7 @@ class FrontService
 
     private function filterByBrand(Builder $query): void
     {
-        if (!empty($_GET['brand'])) {
+        if (! empty($_GET['brand'])) {
             $brandSlugs = explode(',', $_GET['brand']);
             $brandIds = Brand::whereIn('slug', $brandSlugs)->pluck('id')->toArray();
             $query->whereIn('brand_id', $brandIds);
@@ -572,7 +530,7 @@ class FrontService
 
     private function sortBy(Builder $query): void
     {
-        if (!empty($_GET['sortBy'])) {
+        if (! empty($_GET['sortBy'])) {
             $sortBy = $_GET['sortBy'];
             if ($sortBy === 'title') {
                 $query->orderBy('title', 'ASC');
@@ -584,7 +542,7 @@ class FrontService
 
     private function filterByPriceRange(Builder $query): void
     {
-        if (!empty($_GET['price'])) {
+        if (! empty($_GET['price'])) {
             $priceRange = explode('-', $_GET['price']);
             $minPrice = $priceRange[0] ?? 0;
             $maxPrice = $priceRange[1] ?? PHP_INT_MAX;
@@ -599,7 +557,8 @@ class FrontService
 
     private function pagination(Builder $query)
     {
-        $perPage = isset($_GET['show']) ? (int)$_GET['show'] : 6;
+        $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
+
         return $query->paginate($perPage);
     }
 
@@ -608,19 +567,16 @@ class FrontService
         return Brand::whereStatus('active')->withCount('products')->get();
     }
 
-
     /**
      * Retrieve a list of blog posts
-     *
-     * @return array|string
      */
     public function blog(): array|string
     {
         return Cache::remember('blog', 24 * 60, function () {
             return [
-                "posts" => Post::with(['author'])->whereStatus('active')->orderBy('id',
+                'posts' => Post::with(['author'])->whereStatus('active')->orderBy('id',
                     'DESC')->paginate(9),
-                "recantPosts" => Post::with(['author'])->whereStatus('active')->orderBy('id',
+                'recantPosts' => Post::with(['author'])->whereStatus('active')->orderBy('id',
                     'DESC')->limit(3)->get(),
             ];
         });
@@ -629,7 +585,7 @@ class FrontService
     /**
      * Create a new newsletter entry and send a verification email to the provided email address.
      *
-     * @param array $data The data for the new newsletter entry.
+     * @param  array  $data  The data for the new newsletter entry.
      * @return string Returns an error message if an exception occurs, otherwise returns nothing.
      */
     public function newsletter(array $data): string
@@ -645,6 +601,7 @@ class FrontService
                 $message->subject('Email Verification Mail');
             });
         });
+
         return 'Email successfully add to the database ';
     }
 
@@ -656,6 +613,7 @@ class FrontService
     public function validation($token): string
     {
         Newsletter::where('token', $token)->update(['is_validated' => 1]);
+
         return 'Your email is successfully validated';
     }
 
@@ -667,17 +625,16 @@ class FrontService
     public function deleteNewsletter($token): string
     {
         Newsletter::where('token', $token)->first()->delete();
+
         return 'Your email is successfully deleted';
     }
 
-    /**
-     * @return array
-     */
     public function productBundles(): array
     {
         $query = Bundle::query();
         $recentProducts = $this->recentProducts();
         $products = $this->pagination($query);
+
         return [
             'recent_products' => $recentProducts,
             'products' => $products,

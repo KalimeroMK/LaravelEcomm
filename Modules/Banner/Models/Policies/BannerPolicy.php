@@ -34,5 +34,4 @@ class BannerPolicy
     {
         return $user->can('brand-delete');
     }
-    
 }

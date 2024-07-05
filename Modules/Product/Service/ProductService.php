@@ -12,7 +12,6 @@ use Modules\Product\Repository\ProductRepository;
 
 class ProductService extends CoreService
 {
-
     public ProductRepository $product_repository;
 
     public function __construct(ProductRepository $product_repository)
@@ -24,7 +23,7 @@ class ProductService extends CoreService
     /**
      * Get all products based on given data.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function search(array $data)
     {
@@ -34,8 +33,8 @@ class ProductService extends CoreService
     /**
      * Store a newly created product.
      *
-     * @param array<string, mixed> $data
-     * @return Product
+     * @param  array<string, mixed>  $data
+     *
      * @throws Exception
      */
     public function store(array $data): Product
@@ -59,13 +58,11 @@ class ProductService extends CoreService
         return $product;
     }
 
-
     /**
      * Update an existing product.
      *
-     * @param int $id
-     * @param array<string, mixed> $data
-     * @return Model
+     * @param  array<string, mixed>  $data
+     *
      * @throws Exception
      */
     public function update(int $id, array $data): Model
@@ -94,8 +91,7 @@ class ProductService extends CoreService
     /**
      * Handle the color data for the product.
      *
-     * @param array<string, mixed> $data
-     * @return void
+     * @param  array<string, mixed>  $data
      */
     private function handleColor(array &$data): void
     {
@@ -106,13 +102,11 @@ class ProductService extends CoreService
         }
     }
 
-
     /**
      * Sync attributes for the product.
      *
-     * @param                        $id
-     * @param array<string, mixed> $attributeData
-     * @return void
+     * @param  array<string, mixed>  $attributeData
+     *
      * @throws Exception
      */
     private function syncAttributes($id, array $attributeData): void

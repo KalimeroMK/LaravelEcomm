@@ -17,7 +17,6 @@ use ReflectionException;
 
 class OrderController extends CoreController
 {
-
     private OrderService $order_service;
 
     public function __construct(OrderService $order_service)
@@ -25,19 +24,14 @@ class OrderController extends CoreController
         $this->order_service = $order_service;
     }
 
-    /**
-     * @param Search $request
-     *
-     * @return ResourceCollection
-     */
     public function index(Search $request): ResourceCollection
     {
         return OrderResource::collection($this->order_service->search($request->validated()));
     }
 
     /**
-     *
      * @return JsonResponse
+     *
      * @throws Exception
      */
     public function store(Store $request)
@@ -57,8 +51,9 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param Order $order
+     * @param  Order  $order
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show($id)
@@ -76,7 +71,6 @@ class OrderController extends CoreController
             )
             ->respond(new OrderResource($this->order_service->findById($id)));
     }
-
 
     /**
      * @throws ReflectionException
@@ -98,13 +92,14 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param $id
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function destroy($id)
     {
         $this->order_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

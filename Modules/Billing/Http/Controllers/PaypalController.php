@@ -12,6 +12,7 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 class PaypalController extends CoreController
 {
     private Payment $payment;
+
     private PaypalService $paypal_service;
 
     public function __construct(Payment $payment, PaypalService $paypal_service)
@@ -19,7 +20,6 @@ class PaypalController extends CoreController
         $this->payment = $payment;
         $this->paypal_service = $paypal_service;
     }
-
 
     /**
      * Initiates a charge through PayPal.
@@ -50,9 +50,7 @@ class PaypalController extends CoreController
         }
     }
 
-
     /**
-     * @param  Request  $request
      * @return string|null
      */
     public function success(Request $request)

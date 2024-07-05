@@ -22,18 +22,23 @@ class CartFactory extends Factory
             'product_id' => function () {
                 /** @var Product $product */
                 $product = Product::factory()->create();
+
                 return $product->id;
             },
             'order_id' => function () {
                 /** @var Order $order */
                 $order = Order::factory()->create();
+
                 return $order->id;
             },
+            // Other definitions
             'user_id' => function () {
-                /** @var Product $product */
+                /** @var User $user */
                 $user = User::factory()->create();
+
                 return $user->id;
-            }, 'created_at' => Carbon::now(),
+            },
+            'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
         ];

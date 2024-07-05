@@ -10,9 +10,6 @@ class SizesRepository extends Repository
 {
     public $model = Size::class;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::get();

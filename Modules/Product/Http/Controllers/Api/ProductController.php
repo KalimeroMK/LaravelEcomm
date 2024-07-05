@@ -17,7 +17,6 @@ use ReflectionException;
 
 class ProductController extends CoreController
 {
-
     private ProductService $product_service;
 
     public function __construct(ProductService $product_service)
@@ -95,6 +94,7 @@ class ProductController extends CoreController
     public function destroy($id): JsonResponse
     {
         $this->product_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

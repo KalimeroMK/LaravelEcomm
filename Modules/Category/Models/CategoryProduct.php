@@ -24,7 +24,7 @@ use Modules\Product\Models\Product;
  * @property Carbon|null $updated_at
  * @property Category $category
  * @property Product $product
- * @package App\Models
+ *
  * @method static Builder|CategoryProduct newModelQuery()
  * @method static Builder|CategoryProduct newQuery()
  * @method static Builder|CategoryProduct query()
@@ -33,41 +33,33 @@ use Modules\Product\Models\Product;
  * @method static Builder|CategoryProduct whereId($value)
  * @method static Builder|CategoryProduct whereProductId($value)
  * @method static Builder|CategoryProduct whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class CategoryProduct extends Core
 {
     protected $table = 'category_product';
-    
+
     protected $casts = [
-        'product_id'  => 'int',
+        'product_id' => 'int',
         'category_id' => 'int',
     ];
-    
+
     protected $fillable = [
         'product_id',
         'category_id',
     ];
-    
-    /**
-     * @return CategoryProductFactory
-     */
+
     public static function Factory(): CategoryProductFactory
     {
         return CategoryProductFactory::new();
     }
-    
-    /**
-     * @return BelongsTo
-     */
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
-    
-    /**
-     * @return BelongsTo
-     */
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

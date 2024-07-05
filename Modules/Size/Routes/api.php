@@ -14,4 +14,3 @@ use Modules\Size\Http\Controllers\Api\SizeController;
 */
 
 Route::apiResource('sizes', SizeController::class);
-

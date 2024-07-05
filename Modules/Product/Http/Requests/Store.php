@@ -23,7 +23,7 @@ class Store extends FormRequest
             'category' => 'sometimes|array',
             'category.*' => 'required|exists:categories,id',
             'condition_id' => 'required|exists:conditions,id',
-            'stock' => "required|numeric",
+            'stock' => 'required|numeric',
             'brand_id' => 'nullable|exists:brands,id',
             'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',
@@ -32,7 +32,7 @@ class Store extends FormRequest
             'discount' => 'nullable|numeric',
             'special_price_start' => 'nullable|date',
             'special_price_end' => 'nullable|date|after:special_price_start',
-            'special_price' => 'nullable'
+            'special_price' => 'nullable',
         ];
     }
 

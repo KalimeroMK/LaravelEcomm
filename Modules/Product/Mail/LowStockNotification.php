@@ -16,7 +16,6 @@ class LowStockNotification extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param  Collection  $products
      * @return void
      */
     public function __construct(Collection $products)

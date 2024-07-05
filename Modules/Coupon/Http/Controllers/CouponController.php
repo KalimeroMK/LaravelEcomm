@@ -24,8 +24,6 @@ class CouponController extends CoreController
 
     /**
      * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
      */
     public function index(): Factory|View|Application
     {
@@ -34,10 +32,6 @@ class CouponController extends CoreController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param Store $request
-     *
-     * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
@@ -48,8 +42,6 @@ class CouponController extends CoreController
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
      */
     public function create(): View|Factory|Application
     {
@@ -58,10 +50,6 @@ class CouponController extends CoreController
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Coupon $coupon
-     *
-     * @return Application|Factory|View
      */
     public function edit(Coupon $coupon): View|Factory|Application
     {
@@ -70,24 +58,17 @@ class CouponController extends CoreController
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param Update $request
-     * @param Coupon $coupon
-     * @return RedirectResponse
      */
     public function update(Update $request, Coupon $coupon): RedirectResponse
     {
         $this->coupon_service->update($coupon->id, $request->validated());
+
         return redirect()->route('coupon.index');
 
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Coupon $coupon
-     *
-     * @return RedirectResponse
      */
     public function destroy(Coupon $coupon): RedirectResponse
     {

@@ -12,8 +12,6 @@ class PermissionTableSeeder extends Seeder
 {
     /**
      * Run the database seeders.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -41,7 +39,7 @@ class PermissionTableSeeder extends Seeder
             'post',
             'product',
             'order',
-            'attributes'
+            'attributes',
         ];
         $operations = ['list', 'create', 'update', 'delete'];
 
@@ -60,13 +58,13 @@ class PermissionTableSeeder extends Seeder
             'coupon',
             'brand',
             'banner',
-            'user'
+            'user',
         ];
         $clientPermissions = [
             'order',
             'comment',
             'review',
-            'user'
+            'user',
         ];
 
         $this->createRoleWithPermissions('manager', $managerPermissions, $operations);
@@ -101,7 +99,7 @@ class PermissionTableSeeder extends Seeder
         $user = User::factory()->create([
             'name' => $name,
             'email' => $email,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             // Replace with a secure default password or mechanism
         ]);
         $user->assignRole($roleName);

@@ -35,7 +35,7 @@ class PaypalService
                 $order_data = $response->getData();
                 $this->orderSave(Helper::totalCartPrice());
 
-                return "Payment is successful. Your transaction id is: ".$order_data['id'];
+                return 'Payment is successful. Your transaction id is: '.$order_data['id'];
             } else {
                 return $response->getMessage();
             }
@@ -46,8 +46,6 @@ class PaypalService
 
     /**
      * Get the configured PayPal gateway instance.
-     *
-     * @return GatewayInterface
      */
     public function get_gateway(): GatewayInterface
     {

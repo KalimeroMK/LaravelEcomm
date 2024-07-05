@@ -14,7 +14,6 @@ use ReflectionException;
 
 class CategoryController extends CoreController
 {
-
     public CategoryService $category_service;
 
     public function __construct(CategoryService $category_service)
@@ -49,7 +48,7 @@ class CategoryController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -85,13 +84,12 @@ class CategoryController extends CoreController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
         $this->category_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

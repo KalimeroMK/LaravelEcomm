@@ -7,20 +7,12 @@ use Illuminate\Support\ServiceProvider;
 
 class SizeServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string $moduleName
-     */
     protected string $moduleName = 'Size';
 
-    /**
-     * @var string $moduleNameLower
-     */
     protected string $moduleNameLower = 'size';
 
     /**
      * Boot the application events.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -32,8 +24,6 @@ class SizeServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
     public function registerTranslations(): void
     {
@@ -48,8 +38,6 @@ class SizeServiceProvider extends ServiceProvider
 
     /**
      * Register config.
-     *
-     * @return void
      */
     protected function registerConfig(): void
     {
@@ -64,8 +52,6 @@ class SizeServiceProvider extends ServiceProvider
 
     /**
      * Register views.
-     *
-     * @return void
      */
     public function registerViews(): void
     {
@@ -81,7 +67,6 @@ class SizeServiceProvider extends ServiceProvider
     }
 
     /**
-     *
      * @return array<string> Array of paths.
      */
     public function provides(): array
@@ -108,12 +93,9 @@ class SizeServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
     }
-
 }

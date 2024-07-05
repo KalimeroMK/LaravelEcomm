@@ -40,7 +40,7 @@ class CategoryController extends CoreController
     {
         return view('category::create', [
             'categories' => Category::getTree(),
-            'category' => new Category()
+            'category' => new Category(),
         ]);
     }
 
@@ -55,7 +55,7 @@ class CategoryController extends CoreController
     {
         return view('category::edit', [
             'category' => $this->category_service->findById($category->id),
-            'categories' => Category::getTree()
+            'categories' => Category::getTree(),
         ]);
     }
 

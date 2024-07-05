@@ -16,7 +16,6 @@ use ReflectionException;
 
 class TagController extends CoreController
 {
-
     private TagService $tag_service;
 
     public function __construct(TagService $tag_service)
@@ -25,17 +24,14 @@ class TagController extends CoreController
         $this->authorizeResource(Tag::class, 'tag');
     }
 
-    /**
-     * @return ResourceCollection
-     */
     public function index(): ResourceCollection
     {
         return TagResource::collection($this->tag_service->getAll());
     }
 
     /**
-     *
      * @return mixed
+     *
      * @throws Exception
      */
     public function store(Store $request)
@@ -55,9 +51,8 @@ class TagController extends CoreController
     }
 
     /**
-     * @param $id
-     *
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function show($id)
@@ -96,14 +91,12 @@ class TagController extends CoreController
     }
 
     /**
-     * @param $id
-     *
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
         $this->tag_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

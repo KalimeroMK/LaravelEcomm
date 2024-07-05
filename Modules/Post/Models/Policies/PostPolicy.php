@@ -34,5 +34,4 @@ class PostPolicy
     {
         return $user->can('post-delete') || $user->id == $post->added_by;
     }
-
 }

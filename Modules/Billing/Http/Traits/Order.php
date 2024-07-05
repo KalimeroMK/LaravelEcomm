@@ -13,10 +13,6 @@ use Modules\User\Models\User;
 
 trait Order
 {
-    /**
-     * @param  int  $amount
-     * @return void
-     */
     public function orderSave(int $amount): void
     {
         $order = new \Modules\Order\Models\Order();
@@ -25,7 +21,7 @@ trait Order
         $order_data['user_id'] = Auth::id();
         $order_data['sub_total'] = Helper::totalCartPrice();
         $order_data['quantity'] = Helper::cartCount();
-        $order_data['status'] = "new";
+        $order_data['status'] = 'new';
         $order_data['total_amount'] = $amount;
         $order_data['payment_method'] = 'stripe';
         $order_data['payment_status'] = 'paid';
@@ -42,5 +38,4 @@ trait Order
             $admin->notify(new NewOrderCreatedNotification($order));
         }
     }
-
 }

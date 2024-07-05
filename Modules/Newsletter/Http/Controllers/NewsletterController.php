@@ -21,6 +21,7 @@ class NewsletterController extends CoreController
     public function index(): View
     {
         $newsletters = $this->newsletter_service->getAll();
+
         return view('newsletter::index', compact('newsletters'));
     }
 
@@ -32,6 +33,7 @@ class NewsletterController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $this->newsletter_service->create($request->validated());
+
         return redirect()->route('newsletters.index')->with('status', 'Newsletter created successfully!');
     }
 
@@ -43,12 +45,14 @@ class NewsletterController extends CoreController
     public function update(Store $request, Newsletter $newsletter): RedirectResponse
     {
         $this->newsletter_service->update($newsletter->id, $request->validated());
+
         return redirect()->route('newsletters.index')->with('status', 'Newsletter updated successfully!');
     }
 
     public function destroy(Newsletter $newsletter): RedirectResponse
     {
         $this->newsletter_service->delete($newsletter->id);
+
         return redirect()->route('newsletters.index')->with('status', 'Newsletter deleted successfully!');
     }
 }

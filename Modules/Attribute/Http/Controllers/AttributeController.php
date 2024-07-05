@@ -12,7 +12,6 @@ use Modules\Core\Http\Controllers\CoreController;
 
 class AttributeController extends CoreController
 {
-
     protected AttributeService $attribute_service;
 
     public function __construct(AttributeService $attribute_service)

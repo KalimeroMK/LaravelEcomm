@@ -13,7 +13,7 @@
 
 use Modules\Google2fa\Http\Controllers\Google2faController;
 
-Route::get('/2fa',[Google2faController::class, 'show2faForm'])->name('2fa');
+Route::get('/2fa', [Google2faController::class, 'show2faForm'])->name('2fa');
 Route::post('/google-generateSecret', [Google2faController::class, 'generate2faSecret'])->name('generate2faSecret');
 Route::post('/google-enable2fa', [Google2faController::class, 'enable2fa'])->name('enable2fa');
 Route::get('/google-disable2fa', [Google2faController::class, 'disable2fa'])->name('disable2fa');

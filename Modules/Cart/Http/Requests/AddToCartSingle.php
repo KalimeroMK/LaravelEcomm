@@ -7,13 +7,11 @@ use Modules\Cart\Rules\ProductStockRule;
 
 class AddToCartSingle extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, string> Array of field rules.
      */
-
     public function rules(): array
     {
         return [

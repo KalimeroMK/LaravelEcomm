@@ -93,6 +93,7 @@ class AttributeController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $this->attribute_service->delete($id);
+
         return $this
             ->setMessage(
                 __(

@@ -16,25 +16,23 @@ use Modules\Size\Models\Size;
  * @property int $id
  * @property int $size_id
  * @property int $product_id
- *
  * @property Product $product
  * @property Size $size
- *
- * @package App\Models
  */
 class ProductSize extends Model
 {
     protected $table = 'product_size';
+
     public $timestamps = false;
 
     protected $casts = [
         'size_id' => 'int',
-        'product_id' => 'int'
+        'product_id' => 'int',
     ];
 
     protected $fillable = [
         'size_id',
-        'product_id'
+        'product_id',
     ];
 
     public function product(): BelongsTo

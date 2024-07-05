@@ -19,7 +19,6 @@ Route::apiResource('wishlist', WishlistController::class)
     ->names([
         'index' => 'api.wishlist.index',
         'store' => 'api.wishlist.store',
-        'create' => 'api.wishlist.create'
+        'create' => 'api.wishlist.create',
     ]);
 Route::post('stripe', [StripeController::class, 'stripe']);
-

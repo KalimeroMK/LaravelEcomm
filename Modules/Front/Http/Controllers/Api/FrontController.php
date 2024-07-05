@@ -14,7 +14,6 @@ use Modules\Newsletter\Models\Newsletter;
 
 class FrontController extends Controller
 {
-
     private FrontService $front_service;
 
     public function __construct(FrontService $frontService)
@@ -22,17 +21,12 @@ class FrontController extends Controller
         $this->front_service = $frontService;
     }
 
-    /**
-     * @return JsonResponse
-     */
     public function index(): JsonResponse
     {
         return response()->json($this->front_service->index(), 200);
     }
 
     /**
-     * @param  string  $slug
-     *
      * @return JsonResponse
      */
     public function productDetail(string $slug)
@@ -56,19 +50,12 @@ class FrontController extends Controller
         return response()->json($this->front_service->productLists(), 200);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return JsonResponse
-     */
     public function productFilter(Request $request): JsonResponse
     {
         return response()->json($this->front_service->productFilter($request), 200);
     }
 
     /**
-     * @param  Request  $request
-     *
      * @return JsonResponse
      */
     public function productSearch(Request $request)
@@ -85,8 +72,6 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     *
      * @return JsonResponse
      */
     public function productBrand(Request $request)
@@ -95,8 +80,6 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  string  $slug
-     *
      * @return JsonResponse
      */
     public function productCat(string $slug)
@@ -113,8 +96,6 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  string  $slug
-     *
      * @return JsonResponse
      */
     public function blogDetail(string $slug)
@@ -123,8 +104,6 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     *
      * @return JsonResponse
      */
     public function blogSearch(Request $request)
@@ -132,19 +111,12 @@ class FrontController extends Controller
         return response()->json($this->front_service->blogSearch($request), 200);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return JsonResponse
-     */
     public function blogFilter(Request $request): JsonResponse
     {
         return response()->json($this->front_service->blogFilter($request->all()), 200);
     }
 
     /**
-     * @param  Request  $request
-     *
      * @return JsonResponse
      */
     public function blogByCategory(Request $request)
@@ -153,8 +125,6 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     *
      * @return JsonResponse
      */
     public function blogByTag(Request $request)
@@ -165,22 +135,11 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-
-    /**
-     * @param  Request  $request
-     *
-     * @return JsonResponse
-     */
     public function couponStore(Request $request): JsonResponse
     {
         return response()->json($this->front_service->couponStore($request), 200);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return JsonResponse
-     */
     public function subscribe(Request $request): JsonResponse
     {
         if (Newsletter::whereEmail($request->email) !== null) {
@@ -190,19 +149,15 @@ class FrontController extends Controller
         return response()->json('Email already present in the database ', 200);
     }
 
-    /**
-     * @param  string  $token
-     *
-     * @return string
-     */
     public function verifyNewsletter(string $token): string
     {
         if (Newsletter::where('token', $token)->first() !== null) {
             $this->front_service->validation($token);
-            return redirect()->back()->with('message', "Your email is successfully validated.");
+
+            return redirect()->back()->with('message', 'Your email is successfully validated.');
         }
 
-        return redirect()->back()->with('message', "token mismatch ");
+        return redirect()->back()->with('message', 'token mismatch ');
     }
 
     public function deleteNewsletter(string $token): string
@@ -218,14 +173,9 @@ class FrontController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Store  $request
-     *
-     * @return string|null
      */
-    public function messageStore(Store $request): string|null
+    public function messageStore(Store $request): ?string
     {
         return $this->front_service->messageStore($request);
     }
-
 }

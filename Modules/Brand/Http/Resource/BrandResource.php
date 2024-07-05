@@ -9,7 +9,6 @@ use Modules\Brand\Models\Brand;
 /** @mixin Brand */
 class BrandResource extends JsonResource
 {
-
     /**
      * @return string[]
      */

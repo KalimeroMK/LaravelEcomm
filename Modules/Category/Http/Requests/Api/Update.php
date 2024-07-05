@@ -12,7 +12,7 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|unique:categories,title,' . $this->route('category'),
+            'title' => 'string|unique:categories,title,'.$this->route('category'),
         ];
     }
 }

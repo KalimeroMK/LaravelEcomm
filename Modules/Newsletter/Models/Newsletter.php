@@ -16,8 +16,6 @@ use Modules\Newsletter\Database\Factories\NewsletterFactory;
  * @property bool $is_validated
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
- * @package App\Models
  */
 class Newsletter extends Core
 {
@@ -39,12 +37,8 @@ class Newsletter extends Core
         'is_validated',
     ];
 
-    /**
-     * @return NewsletterFactory
-     */
     public static function Factory(): NewsletterFactory
     {
         return NewsletterFactory::new();
     }
-
 }

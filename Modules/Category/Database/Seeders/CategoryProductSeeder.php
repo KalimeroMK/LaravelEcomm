@@ -11,17 +11,15 @@ class CategoryProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
         $categories = Category::factory()->count(10)->create();
         Brand::factory()->count(10)->create();
-        
+
         Product::factory()
-               ->count(10)
-               ->hasAttached($categories)
-               ->create();
+            ->count(10)
+            ->hasAttached($categories)
+            ->create();
     }
 }

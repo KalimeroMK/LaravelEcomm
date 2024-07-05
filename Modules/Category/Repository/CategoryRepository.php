@@ -11,5 +11,4 @@ class CategoryRepository extends Repository
      * @var string
      */
     public $model = Category::class;
-
 }

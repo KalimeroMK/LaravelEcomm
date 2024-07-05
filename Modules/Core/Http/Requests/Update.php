@@ -9,13 +9,12 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'short_des'   => 'required|string',
+            'short_des' => 'required|string',
             'description' => 'required|string',
-            'logo'        => 'required',
-            'address'     => 'required|string',
-            'email'       => 'required|email',
-            'phone'       => 'required|string',
+            'logo' => 'required',
+            'address' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|string',
         ];
     }
-    
 }

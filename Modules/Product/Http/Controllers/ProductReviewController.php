@@ -38,10 +38,6 @@ class ProductReviewController extends CoreController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  ProductReviewStore  $request
-     *
-     * @return RedirectResponse
      */
     public function store(ProductReviewStore $request): RedirectResponse
     {
@@ -53,7 +49,6 @@ class ProductReviewController extends CoreController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  ProductReview  $review
      * @return Application|Factory|View
      */
     public function edit(ProductReview $review)
@@ -65,10 +60,6 @@ class ProductReviewController extends CoreController
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  ProductReview  $review
-     * @return RedirectResponse
      */
     public function update(Request $request, ProductReview $review): RedirectResponse
     {
@@ -81,9 +72,6 @@ class ProductReviewController extends CoreController
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  ProductReview  $review
-     * @return RedirectResponse
      */
     public function destroy(ProductReview $review): RedirectResponse
     {

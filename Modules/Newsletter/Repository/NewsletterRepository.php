@@ -10,9 +10,6 @@ class NewsletterRepository extends Repository
 {
     public $model = Newsletter::class;
 
-    /**
-     * @return Collection
-     */
     public function findAll(): Collection
     {
         return $this->model::get();

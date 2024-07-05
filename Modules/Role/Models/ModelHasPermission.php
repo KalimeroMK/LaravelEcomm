@@ -19,20 +19,24 @@ use Modules\Permission\Models\Permission;
  * @property string $model_type
  * @property int $model_id
  * @property Permission $permission
- * @package App\Models
+ *
  * @method static Builder|ModelHasPermission newModelQuery()
  * @method static Builder|ModelHasPermission newQuery()
  * @method static Builder|ModelHasPermission query()
  * @method static Builder|ModelHasPermission whereModelId($value)
  * @method static Builder|ModelHasPermission whereModelType($value)
  * @method static Builder|ModelHasPermission wherePermissionId($value)
+ *
  * @mixin Eloquent
  */
 class ModelHasPermission extends Model
 {
     public $incrementing = false;
+
     public $timestamps = false;
+
     protected $table = 'model_has_permissions';
+
     protected $casts = [
         'permission_id' => 'int',
         'model_id' => 'int',

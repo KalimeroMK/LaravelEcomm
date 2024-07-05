@@ -17,7 +17,6 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-
     private UserService $user_service;
 
     public function __construct(UserService $user_service)
@@ -31,7 +30,6 @@ class UserController extends Controller
      *
      * @return Application|Factory|View
      */
-
     public function index(Request $request)
     {
         if (Auth::user()->isSuperAdmin()) {
@@ -39,18 +37,14 @@ class UserController extends Controller
         } else {
             $users = $this->user_service->findById(Auth::id());
         }
+
         return view('user::index', ['users' => $users])->with('i',
             ($request->input('page', 1) - 1) * 5);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param StoreRequest $request
-     *
-     * @return RedirectResponse
      */
-
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->user_service->create($request->validated());
@@ -72,10 +66,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param User $user
      * @return Application|Factory|View
      */
-
     public function show(User $user)
     {
         return view('user::edit', ['user' => $this->user_service->findById($user->id)]);
@@ -84,26 +76,19 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param User $user
      * @return Application|Factory|View
      */
-
     public function edit(User $user)
     {
         $roles = Role::all();
         $userRole = User::find($user->id)->roles->pluck('name', 'name')->all();
+
         return view('user::edit', compact('user', 'roles', 'userRole'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param UpdateRequest $request
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
-
     public function update(UpdateRequest $request, int $id): RedirectResponse
     {
         $this->user_service->update($id, $request->validated());
@@ -113,12 +98,7 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param User $user
-     *
-     * @return RedirectResponse
      */
-
     public function destroy(User $user): RedirectResponse
     {
         $this->user_service->delete($user->id);
@@ -135,8 +115,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param User $user
-     *
      * @return RedirectResponse
      */
     public function impersonate(User $user)
@@ -169,8 +147,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return RedirectResponse
      */
     public function profileUpdate(Request $request, User $user)
@@ -181,7 +157,7 @@ class UserController extends Controller
         } else {
             request()->session()->flash('error', 'Please try again!');
         }
+
         return redirect()->back();
     }
-
 }

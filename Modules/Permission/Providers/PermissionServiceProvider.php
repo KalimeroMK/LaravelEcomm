@@ -30,7 +30,6 @@ class PermissionServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
     }
 
-
     /**
      * Register translations.
      */
@@ -53,7 +52,7 @@ class PermissionServiceProvider extends ServiceProvider
     protected function registerConfig(): void
     {
         $this->publishes([
-            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php')
+            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
         ], 'config');
         $this->mergeConfigFrom(module_path($this->moduleName, 'Config/config.php'), $this->moduleNameLower);
     }
@@ -76,7 +75,6 @@ class PermissionServiceProvider extends ServiceProvider
     }
 
     /**
-     *
      * @return array<string> Array of paths.
      */
     public function provides(): array
@@ -100,6 +98,4 @@ class PermissionServiceProvider extends ServiceProvider
 
         return $paths;
     }
-
-
 }

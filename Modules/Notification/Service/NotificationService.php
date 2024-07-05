@@ -17,11 +17,10 @@ class NotificationService extends CoreService
         $this->notification_repository = $notification_repository;
     }
 
-
     public function findById(int $id): ?Model
     {
         $this->notification_repository->update($id, ['read_at' => Carbon::now()]);
+
         return parent::findById($id);
     }
-
 }

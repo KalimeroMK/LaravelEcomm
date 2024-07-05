@@ -11,6 +11,7 @@ class Payment
      * Calculates the total amount due for an order, including shipping and taxes.
      *
      * @return float Total amount calculated.
+     *
      * @throws InvalidArgumentException If required keys are missing.
      */
     public static function calculate($data): float
