@@ -78,15 +78,16 @@ class Helper
         return Shipping::orderBy('id', 'DESC')->get();
     }
 
-    public static function postTagList(string $option = 'all'): Collection
+    public static function postTagList(): Collection
     {
-        return $option == 'all'
-            ? Tag::orderBy('id', 'desc')->get()
-            : Tag::has('posts')->orderBy('id', 'desc')->get();
+        return Tag::withCount('posts')
+            ->orderBy('posts_count', 'desc')
+            ->take(20)
+            ->get();
     }
 
     /**
-     * @param  object|string  $class  The class name or object instance.
+     * @param object|string $class The class name or object instance.
      * @return string The class short name.
      * @throws ReflectionException
      */
@@ -97,20 +98,13 @@ class Helper
     }
 
 
-    /**
-     * Retrieves a list of categories based on the option.
-     * @param  string  $option  Filter option, 'all' or categories with posts.
-     * @return Collection Returns a collection of categories.
-     */
-    public static function postCategoryList(string $option = "all"): Collection
+    public static function postCategoryList(): Collection
     {
-        $query = Category::orderBy('id', 'DESC');
-
-        if ($option !== 'all') {
-            $query->whereHas('posts');
-        }
-
-        return $query->get();
+        return Category::withCount('posts')
+            ->orderBy('posts_count', 'desc')
+            ->take(10)
+            ->get();
     }
+
 
 }
