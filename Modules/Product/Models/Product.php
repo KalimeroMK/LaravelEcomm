@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Created by Zoran Shefot Bogoevski.
- */
-
 namespace Modules\Product\Models;
 
 use Carbon\Carbon;
@@ -44,6 +40,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $summary
  * @property string|null $description
  * @property int $stock
+ * @property int $d_deal
  * @property string|null $size
  * @property string $condition
  * @property string $status
@@ -63,6 +60,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read int|null $carts_count
  * @property-read int|null $product_reviews_count
  * @property-read int|null $wishlists_count
+ * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read string $image_url
+ * @property string|null $color
  *
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
@@ -83,15 +84,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Product whereSummary($value)
  * @method static Builder|Product whereTitle($value)
  * @method static Builder|Product whereUpdatedAt($value)
+ * @method static Builder|Product whereColor($value)
  *
  * @mixin Eloquent
- *
- * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
- * @property-read int|null $categories_count
- * @property-read string $image_url
- * @property string|null $color
- *
- * @method static Builder|Product whereColor($value)
  */
 class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
 {
@@ -103,64 +98,63 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
 
     protected $table = 'products';
 
-    protected $casts
-        = [
-            'stock' => 'int',
-            'price' => 'float',
-            'discount' => 'float',
-            'is_featured' => 'bool',
-            'brand_id' => 'int',
-            'special_price_start' => 'date',
-            'special_price_end' => 'date',
-            'special_price' => 'float',
-            'condition_id' => 'int',
+    protected $casts = [
+        'stock' => 'int',
+        'price' => 'float',
+        'discount' => 'float',
+        'is_featured' => 'bool',
+        'brand_id' => 'int',
+        'special_price_start' => 'date',
+        'special_price_end' => 'date',
+        'special_price' => 'float',
+        'condition_id' => 'int',
+    ];
 
-        ];
+    protected $fillable = [
+        'title',
+        'slug',
+        'sku',
+        'summary',
+        'description',
+        'stock',
+        'condition_id',
+        'status',
+        'price',
+        'discount',
+        'is_featured',
+        'brand_id',
+        'color',
+        'special_price',
+        'special_price_start',
+        'special_price_end',
+        'condition_id',
+    ];
 
-    protected $fillable
-        = [
-            'title',
-            'slug',
-            'sku',
-            'summary',
-            'description',
-            'stock',
-            'condition_id',
-            'status',
-            'price',
-            'discount',
-            'is_featured',
-            'brand_id',
-            'color',
-            'special_price',
-            'special_price_start',
-            'special_price_end',
-            'condition_id',
-
-        ];
-
-    public const likeRows
-        = [
-            'title',
-            'slug',
-            'summary',
-            'description',
-            'stock',
-            'sizes.name',
-            'condition.status',
-            'status',
-            'price',
-            'discount',
-            'brand.title',
-            'color',
-        ];
+    public const likeRows = [
+        'title',
+        'slug',
+        'summary',
+        'description',
+        'stock',
+        'sizes.name',
+        'condition.status',
+        'status',
+        'price',
+        'discount',
+        'brand.title',
+        'color',
+    ];
 
     public static function Factory(): ProductFactory
     {
         return ProductFactory::new();
     }
 
-    public static function getProductBySlug($slug): ?object
+    /**
+     * @param string $slug
+     * @return Product|null
+     */
+    public static function getProductBySlug(string $slug): ?Product
     {
         return Product::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
     }
@@ -168,18 +162,12 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     public static function countActiveProduct(): int
     {
         $data = Product::whereStatus('active')->count();
-        if ($data) {
-            return $data;
-        }
-
-        return 0;
+        return $data ?: 0;
     }
 
     public static function getFeedItems(): \Illuminate\Support\Collection
     {
-        return Product::orderBy('created_at', 'desc')
-            ->limit(20)
-            ->get();
+        return Product::orderBy('created_at', 'desc')->limit(20)->get();
     }
 
     public function brand(): BelongsTo
@@ -202,53 +190,41 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
         return $this->hasMany(Wishlist::class);
     }
 
-    public function categories(): belongsToMany
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
     }
 
     public function getReview(): HasMany
     {
-        return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where(
-            'status',
-            'active'
-        )->orderBy('id', 'DESC');
+        return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where('status',
+            'active')->orderBy('id', 'DESC');
     }
 
     /**
-     * @return mixed|string
+     * @param string $slug
+     * @return string
      */
-    public function incrementSlug($slug): mixed
+    public function incrementSlug(string $slug): string
     {
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-" . $count++;
         }
-
         return $slug;
     }
 
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-
-        if ($mediaItem) {
-            return $mediaItem->first()->getUrl();
-        }
-
-        return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-
-        if ($mediaItem) {
-            return $mediaItem->first()->getUrl();
-        }
-
-        return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     public function condition(): BelongsTo
@@ -256,12 +232,12 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
         return $this->belongsTo(Condition::class);
     }
 
-    public function sizes(): belongsToMany
+    public function sizes(): BelongsToMany
     {
         return $this->belongsToMany(Size::class);
     }
 
-    public function tags(): belongsToMany
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
     }
@@ -272,25 +248,19 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     public function getCurrentPrice(): mixed
     {
         $today = now();
-
-        if ($this->special_price && $today->between($this->special_price_start, $this->special_price_end)) {
-            return $this->special_price;
-        }
-
-        return null;
+        return $this->special_price && $today->between($this->special_price_start,
+            $this->special_price_end) ? $this->special_price : null;
     }
 
     public function attributeValues(): BelongsToMany
     {
-        return $this->belongsToMany(AttributeValue::class, 'product_attribute_value')
-            ->withPivot('id')
-            ->withTimestamps();
+        return $this->belongsToMany(AttributeValue::class,
+            'product_attribute_value')->withPivot('id')->withTimestamps();
     }
 
     public function bundles(): BelongsToMany
     {
-        return $this->belongsToMany(Bundle::class)
-            ->withTimestamps();
+        return $this->belongsToMany(Bundle::class)->withTimestamps();
     }
 
     public function makeAllSearchableUsing(Builder $query): Builder
@@ -298,58 +268,46 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
         return $query->with('categories', 'brand', 'sizes', 'condition');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return $this->toArray();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function mappableAs(): array
     {
         return [
             'properties' => [
-                'id' => [
-                    'type' => 'integer',
-                ],
-                'title' => [
-                    'type' => 'text',
-                    'analyzer' => 'standard',
-                ],
-                'description' => [
-                    'type' => 'text',
-                    'analyzer' => 'standard',
-                ],
-                'price' => [
-                    'type' => 'float',
-                ],
-                'color' => [
-                    'type' => 'keyword',
-                ],
-                'status' => [
-                    'type' => 'keyword',
-                ],
-                // Assuming categories and brands are nested objects
+                'id' => ['type' => 'integer'],
+                'title' => ['type' => 'text', 'analyzer' => 'standard'],
+                'description' => ['type' => 'text', 'analyzer' => 'standard'],
+                'price' => ['type' => 'float'],
+                'color' => ['type' => 'keyword'],
+                'status' => ['type' => 'keyword'],
                 'categories' => [
                     'type' => 'nested',
                     'properties' => [
-                        'title' => [
-                            'type' => 'text',
-                            'analyzer' => 'standard',
-                        ],
+                        'title' => ['type' => 'text', 'analyzer' => 'standard'],
                     ],
                 ],
                 'brands' => [
                     'type' => 'nested',
                     'properties' => [
-                        'title' => [
-                            'type' => 'text',
-                            'analyzer' => 'standard',
-                        ],
+                        'title' => ['type' => 'text', 'analyzer' => 'standard'],
                     ],
                 ],
             ],
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function indexSettings(): array
     {
         return [
@@ -357,18 +315,19 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
             'number_of_replicas' => 0,
             'analysis' => [
                 'analyzer' => [
-                    'default' => [
-                        'type' => 'standard',
-                    ],
+                    'default' => ['type' => 'standard'],
                 ],
             ],
         ];
     }
 
-    public function searchBrandsByProduct($searchTerm)
+    /**
+     * @param string $searchTerm
+     * @return \Illuminate\Support\Collection
+     */
+    public function searchBrandsByProduct(string $searchTerm): \Illuminate\Support\Collection
     {
         $productBrandIds = Product::search($searchTerm)->get()->pluck('brand_id')->unique();
-
         return Brand::whereIn('id', $productBrandIds)->get();
     }
 }

@@ -10,17 +10,34 @@ class TenantPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user): bool {}
+    public function viewAny(User $user): bool
+    {
+        return $user->can('tenant-list');
 
-    public function view(User $user, Tenant $tenant): bool {}
+    }
 
-    public function create(User $user): bool {}
+    public function view(User $user, Tenant $tenant): bool
+    {
+        return $user->can('tenant-list');
 
-    public function update(User $user, Tenant $tenant): bool {}
+    }
 
-    public function delete(User $user, Tenant $tenant): bool {}
+    public function create(User $user): bool
+    {
+        return $user->can('tenant-create');
 
-    public function restore(User $user, Tenant $tenant): bool {}
+    }
 
-    public function forceDelete(User $user, Tenant $tenant): bool {}
+    public function update(User $user, Tenant $tenant): bool
+    {
+        return $user->can('tenant-update');
+
+    }
+
+    public function delete(User $user, Tenant $tenant): bool
+    {
+        return $user->can('tenant-delete');
+
+    }
+
 }

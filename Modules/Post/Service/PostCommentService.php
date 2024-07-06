@@ -3,8 +3,9 @@
 namespace Modules\Post\Service;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
 use Modules\Core\Notifications\StatusNotification;
 use Modules\Post\Models\Post;
@@ -24,10 +25,12 @@ class PostCommentService
     /**
      * Store a newly created resource in storage.
      *
+     * @param Request $request
      * @throws Exception
      */
     public function store(Request $request): void
     {
+        /** @var Post $post_info */
         $post_info = Post::getPostBySlug($request->slug);
 
         $data = $request->all();
@@ -47,22 +50,32 @@ class PostCommentService
 
     /**
      * Edit the specified resource.
+     *
+     * @param int $id
+     * @return Model
      */
-    public function edit(int $id): mixed
+    public function edit(int $id): Model
     {
         return $this->post_comment_repository->findById($id);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param array<string, mixed> $data
+     * @param int $id
+     * @return Model
      */
-    public function update(array $data, int $id): RedirectResponse
+    public function update(array $data, int $id): Model
     {
         return $this->post_comment_repository->update($id, $data);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return void
      */
     public function destroy(int $id): void
     {
@@ -71,8 +84,10 @@ class PostCommentService
 
     /**
      * Get all resources.
+     *
+     * @return Collection
      */
-    public function index(): mixed
+    public function index(): Collection
     {
         return $this->post_comment_repository->findAll();
     }

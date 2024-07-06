@@ -9,7 +9,13 @@ use Modules\Page\Models\Page;
 /** @mixin Page */
 class PageResource extends JsonResource
 {
-    public function toArray(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @param Request $request
+     * @return array<string, mixed>
+     */
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
@@ -19,7 +25,6 @@ class PageResource extends JsonResource
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-
             'user_id' => $this->user_id,
         ];
     }

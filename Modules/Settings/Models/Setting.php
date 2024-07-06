@@ -12,6 +12,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Core\Models\Core;
 use Modules\Settings\Database\Factories\SettingFactory;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Setting
@@ -40,12 +44,15 @@ use Modules\Settings\Database\Factories\SettingFactory;
  * @method static Builder|Setting wherePhoto($value)
  * @method static Builder|Setting whereShortDes($value)
  * @method static Builder|Setting whereUpdatedAt($value)
- *
+ * @method void clearMediaCollection(string $collectionName = '')
+ * @method MediaCollection addMultipleMediaFromRequest(array $keys)
+ * @method Media preservingOriginal()
  * @mixin Eloquent
  */
-class Setting extends Core
+class Setting extends Core implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $table = 'settings';
 

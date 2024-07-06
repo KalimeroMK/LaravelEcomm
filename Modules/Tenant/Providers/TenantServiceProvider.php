@@ -4,6 +4,7 @@ namespace Modules\Tenant\Providers;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Modules\Core\Traits\AutoRegistersCommands;
 use Modules\Tenant\Models\Tenant;
@@ -67,7 +68,7 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
+        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
@@ -83,36 +84,44 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
+        $viewPath = resource_path('views/modules/' . $this->moduleNameLower);
         $sourcePath = module_path($this->moduleName, 'Resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower.'-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
 
         $componentNamespace = str_replace('/', '\\',
-            config('modules.namespace').'\\'.$this->moduleName.'\\'.config('modules.paths.generator.component-class.path'));
+            config('modules.namespace') . '\\' . $this->moduleName . '\\' . config('modules.paths.generator.component-class.path'));
         Blade::componentNamespace($componentNamespace, $this->moduleNameLower);
     }
 
     /**
-     * Get the services provided by the provider.
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
      */
-    public function provides(): array
-    {
-        return [];
-    }
-
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (config('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
-                $paths[] = $path.'/modules/'.$this->moduleNameLower;
+        foreach (Config::get('view.paths') as $path) {
+            if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
+                $paths[] = $path . '/modules/' . $this->moduleNameLower;
             }
         }
 
         return $paths;
+    }
+
+
+    /**
+     * Gets the publishable view paths for the module.
+     *
+     * @return array<string> Array of paths.
+     */
+    public function provides(): array
+    {
+        return [];
     }
 
     /**
@@ -120,7 +129,7 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function configureRequests(): void
     {
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             $host = $this->app['request']->getHost();
             Tenant::whereDomain($host)->firstOrFail()->configure()->use();
         }

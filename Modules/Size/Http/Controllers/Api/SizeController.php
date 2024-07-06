@@ -12,6 +12,7 @@ use Modules\Size\Http\Requests\Api\Update;
 use Modules\Size\Http\Resources\SizeResource;
 use Modules\Size\Models\Size;
 use Modules\Size\Service\SizesService;
+use ReflectionException;
 
 class SizeController extends CoreController
 {
@@ -97,25 +98,25 @@ class SizeController extends CoreController
     }
 
     /**
-     * @return JsonResponse|string
+     * @param int $id
+     * @return JsonResponse
+     * @throws ReflectionException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
-        try {
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.deleteSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->sizes_service->sizes_repository->model
-                            ),
-                        ]
-                    )
+        $this->sizes_service->delete($id);
+
+        return $this
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->sizes_service->sizes_repository->model
+                        ),
+                    ]
                 )
-                ->respond($this->sizes_service->destroy($id));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+            )
+            ->respond(null);
     }
 }

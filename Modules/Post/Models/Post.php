@@ -188,20 +188,6 @@ class Post extends Core implements HasMedia
             ->nonQueued();
     }
 
-    /**
-     * Configure the factory to create a post with categories and tags.
-     */
-    public function withCategoriesAndTags(): PostFactory
-    {
-        return $this->afterCreating(function (Post $post) {
-            $categories = Category::factory()->count(3)->create();
-            $post->categories()->attach($categories);
-
-            $tags = Tag::factory()->count(5)->create();
-            $post->tags()->attach($tags);
-        });
-    }
-
     public function post_comments(): HasMany
     {
         return $this->hasMany(PostComment::class);

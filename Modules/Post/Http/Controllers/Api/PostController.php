@@ -45,7 +45,7 @@ class PostController extends CoreController
                     ]
                 )
             )
-            ->respond(new PostResource($this->post_service->store($request->validated())));
+            ->respond(new PostResource($this->post_service->create($request->validated())));
     }
 
     /**
@@ -68,9 +68,12 @@ class PostController extends CoreController
     }
 
     /**
+     * @param Update $request
+     * @param int $id
+     * @return JsonResponse|string
      * @throws ReflectionException
      */
-    public function update(Update $request, $id): JsonResponse|string
+    public function update(Update $request, int $id): JsonResponse|string
     {
         return $this
             ->setMessage(
@@ -87,9 +90,11 @@ class PostController extends CoreController
     }
 
     /**
+     * @param int $id
+     * @return JsonResponse|string
      * @throws ReflectionException
      */
-    public function destroy($id): JsonResponse|string
+    public function destroy(int $id): JsonResponse|string
     {
         $this->post_service->delete($id);
 

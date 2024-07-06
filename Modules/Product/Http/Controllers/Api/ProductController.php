@@ -2,7 +2,6 @@
 
 namespace Modules\Product\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
@@ -27,7 +26,7 @@ class ProductController extends CoreController
 
     public function index(Search $request): ResourceCollection
     {
-        return ProductResource::collection($this->product_service->getAll($request->validated()));
+        return ProductResource::collection($this->product_service->search($request->validated()));
     }
 
     /**
@@ -69,10 +68,12 @@ class ProductController extends CoreController
     }
 
     /**
+     * @param Update $request
+     * @param int $id
+     * @return JsonResponse
      * @throws ReflectionException
-     * @throws Exception
      */
-    public function update(Update $request, $id): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -89,9 +90,11 @@ class ProductController extends CoreController
     }
 
     /**
+     * @param int $id
+     * @return JsonResponse
      * @throws ReflectionException
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->product_service->delete($id);
 

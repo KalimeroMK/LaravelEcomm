@@ -14,6 +14,11 @@ class TenantsMigrateCommand extends Command
      */
     protected $signature = 'tenants:migrate {tenant?} {--fresh} {--seed}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Create clean migration and seed for one tenant or for all tenants';
 
     /**
@@ -21,18 +26,27 @@ class TenantsMigrateCommand extends Command
      */
     public function handle(): void
     {
-        if ($this->argument('tenant')) {
-            $this->migrate(
-                Tenant::find($this->argument('tenant'))
-            );
+        if ($tenantId = $this->argument('tenant')) {
+            $tenant = Tenant::find($tenantId);
+            if ($tenant) {
+                $this->migrate($tenant);
+            } else {
+                $this->error("Tenant with ID {$tenantId} not found.");
+            }
         } else {
             Tenant::all()->each(
-                fn ($tenant) => $this->migrate($tenant)
+                fn($tenant) => $this->migrate($tenant)
             );
         }
     }
 
-    public function migrate(Tenant $tenant)
+    /**
+     * Migrate the given tenant.
+     *
+     * @param Tenant $tenant
+     * @return void
+     */
+    public function migrate(Tenant $tenant): void
     {
         $tenant->configure()->use();
 

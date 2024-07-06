@@ -5,8 +5,23 @@ namespace Modules\Tenant\Models;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Models\Core;
 
+/**
+ * Class Tenant
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $domain
+ * @property string $database
+ */
 class Tenant extends Core
 {
+
+    protected $fillable = [
+        'name',
+        'domain',
+        'database',
+    ];
+
     /**
      * The connection name for the model.
      *
@@ -14,8 +29,20 @@ class Tenant extends Core
      */
     protected $connection = 'owner';
 
+    /**
+     * The database name for the tenant.
+     *
+     * @var string
+     */
+    public $database;
+
     protected $guarded = [];
 
+    /**
+     * Configure the tenant's database connection.
+     *
+     * @return static
+     */
     public function configure(): static
     {
         config([
@@ -29,6 +56,11 @@ class Tenant extends Core
         return $this;
     }
 
+    /**
+     * Set the tenant instance in the application.
+     *
+     * @return static
+     */
     public function use(): static
     {
         app()->forgetInstance('mysql');

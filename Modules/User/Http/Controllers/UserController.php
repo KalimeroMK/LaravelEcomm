@@ -9,8 +9,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Modules\User\Http\Requests\StoreRequest;
-use Modules\User\Http\Requests\UpdateRequest;
+use Modules\User\Http\Requests\Store;
+use Modules\User\Http\Requests\Update;
 use Modules\User\Models\User;
 use Modules\User\Service\UserService;
 use Spatie\Permission\Models\Role;
@@ -45,7 +45,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
         $this->user_service->create($request->validated());
 
@@ -89,7 +89,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, int $id): RedirectResponse
+    public function update(Update $request, int $id): RedirectResponse
     {
         $this->user_service->update($id, $request->validated());
 

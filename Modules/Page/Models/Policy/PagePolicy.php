@@ -10,17 +10,32 @@ class PagePolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user): bool {}
+    public function viewAny(User $user): bool
+    {
+        return $user->can('page-list');
 
-    public function view(User $user, Page $page): bool {}
+    }
 
-    public function create(User $user): bool {}
+    public function view(User $user, Page $page): bool
+    {
+        return $user->can('page-list');
 
-    public function update(User $user, Page $page): bool {}
+    }
 
-    public function delete(User $user, Page $page): bool {}
+    public function create(User $user): bool
+    {
+        return $user->can('page-create');
 
-    public function restore(User $user, Page $page): bool {}
+    }
 
-    public function forceDelete(User $user, Page $page): bool {}
+    public function update(User $user, Page $page): bool
+    {
+        return $user->can('page-edit');
+
+    }
+
+    public function delete(User $user, Page $page): bool
+    {
+        return $user->can('page-delete');
+    }
 }

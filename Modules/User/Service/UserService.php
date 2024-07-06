@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Modules\Core\Service\CoreService;
-use Modules\User\Models\User;
 use Modules\User\Repository\UserRepository;
 
 class UserService extends CoreService
@@ -19,26 +18,38 @@ class UserService extends CoreService
         $this->user_repository = $user_repository;
     }
 
-    public function register($request): void
-    {
-        $input = $request->all();
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
-    }
-
-    public function update($id, $data): Model
+    /**
+     * Updates a user.
+     *
+     * @param int $id The ID of the user to update.
+     * @param array<string, mixed> $data The data to update the user with.
+     * @return Model The updated user model.
+     */
+    public function update(int $id, array $data): Model
     {
         $input = $this->prepareInputData($data);
         $user = $this->user_repository->findById($id);
         $this->user_repository->update($id, $input);
-        $user->syncRoles($data['roles']);
+
+        if (method_exists($user, 'syncRoles')) {
+            $user->syncRoles($data['roles'] ?? []);
+        }
 
         return $user;
     }
 
-    private function prepareInputData($data): array
+    /**
+     * Prepares input data for updating a user.
+     *
+     * @param array<string, mixed> $data The data to prepare.
+     * @return array<string, mixed> The prepared data.
+     */
+    private function prepareInputData(array $data): array
     {
-        return ! empty($data['password']) ? ['password' => Hash::make($data['password'])] : Arr::except($data,
-            ['password']);
+        if (!empty($data['password'])) {
+            return ['password' => Hash::make($data['password'])];
+        }
+
+        return Arr::except($data, ['password']);
     }
 }

@@ -61,20 +61,6 @@ class Tag extends Core
         return TagFactory::new();
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function incrementSlug($slug): mixed
-    {
-        $original = $slug;
-        $count = 2;
-        while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
-        }
-
-        return $slug;
-    }
-
     public function product(): HasMany
     {
         return $this->hasMany(Product::class);

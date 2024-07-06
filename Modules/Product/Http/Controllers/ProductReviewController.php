@@ -65,7 +65,7 @@ class ProductReviewController extends CoreController
     {
         $this->authorize('update', $review);
 
-        $this->product_review_service->update($review->id, $request);
+        $this->product_review_service->update($review->id, $request->all());
 
         return redirect()->route('product::review.index');
     }

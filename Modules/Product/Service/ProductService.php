@@ -3,7 +3,6 @@
 namespace Modules\Product\Service;
 
 use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Core\Service\CoreService;
@@ -23,9 +22,10 @@ class ProductService extends CoreService
     /**
      * Get all products based on given data.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
+     * @return mixed
      */
-    public function search(array $data)
+    public function search(array $data): mixed
     {
         return $this->product_repository->search($data);
     }
@@ -33,14 +33,15 @@ class ProductService extends CoreService
     /**
      * Store a newly created product.
      *
-     * @param  array<string, mixed>  $data
-     *
+     * @param array<string, mixed> $data
+     * @return Product
      * @throws Exception
      */
     public function store(array $data): Product
     {
         $this->handleColor($data);
 
+        /** @var Product $product */
         $product = $this->product_repository->create($data);
 
         if (isset($data['attributes'])) {
@@ -53,7 +54,9 @@ class ProductService extends CoreService
             $product->sizes()->attach($data['size']);
         }
 
-        $product->tags()->attach($data['tag']);
+        if (isset($data['tag'])) {
+            $product->tags()->attach($data['tag']);
+        }
 
         return $product;
     }
@@ -61,18 +64,20 @@ class ProductService extends CoreService
     /**
      * Update an existing product.
      *
-     * @param  array<string, mixed>  $data
-     *
+     * @param int $id
+     * @param array<string, mixed> $data
+     * @return Product
      * @throws Exception
      */
-    public function update(int $id, array $data): Model
+    public function update(int $id, array $data): Product
     {
         $this->handleColor($data);
 
+        /** @var Product $product */
         $product = $this->product_repository->update($id, $data);
 
         if (isset($data['attributes'])) {
-            $this->syncAttributes($id, $data['attributes']);
+            $this->syncAttributes($product, $data['attributes']);
         }
 
         $product->categories()->sync($data['category']);
@@ -91,11 +96,12 @@ class ProductService extends CoreService
     /**
      * Handle the color data for the product.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
+     * @return void
      */
     private function handleColor(array &$data): void
     {
-        $color = $data['color'];
+        $color = $data['color'] ?? null;
         if (is_array($color)) {
             $color = preg_replace('/\s+/', '', $color);
             $data['color'] = implode(',', $color);
@@ -105,11 +111,12 @@ class ProductService extends CoreService
     /**
      * Sync attributes for the product.
      *
-     * @param  array<string, mixed>  $attributeData
-     *
+     * @param Product $product
+     * @param array<string, mixed> $attributeData
+     * @return void
      * @throws Exception
      */
-    private function syncAttributes($id, array $attributeData): void
+    private function syncAttributes(Product $product, array $attributeData): void
     {
         foreach ($attributeData as $attributeId => $value) {
             $attribute = Attribute::findOrFail($attributeId);
@@ -119,7 +126,7 @@ class ProductService extends CoreService
                 'attribute_id' => $attributeId,
                 $valueColumn => $value,
             ]);
-            $product = Product::findOrFail($id);
+
             $product->attributeValues()->syncWithoutDetaching([$attributeValue->id]);
         }
     }

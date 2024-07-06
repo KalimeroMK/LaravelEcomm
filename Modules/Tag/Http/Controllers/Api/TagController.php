@@ -55,7 +55,7 @@ class TagController extends CoreController
      *
      * @throws ReflectionException
      */
-    public function show($id)
+    public function show(int $id)
     {
         return $this
             ->setMessage(
@@ -72,9 +72,13 @@ class TagController extends CoreController
     }
 
     /**
+     * @param Update $request
+     * @param int $id
+     * @return JsonResponse
+     *
      * @throws ReflectionException
      */
-    public function update(Update $request, $id)
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
