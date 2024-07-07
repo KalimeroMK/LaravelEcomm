@@ -48,7 +48,7 @@ class PageController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -67,7 +67,7 @@ class PageController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, $id): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(

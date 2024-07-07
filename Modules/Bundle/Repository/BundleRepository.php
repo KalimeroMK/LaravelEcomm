@@ -21,7 +21,7 @@ class BundleRepository extends Repository
         return $this->model::with(['products', 'media'])->get();
     }
 
-    public function findById($id): ?Model
+    public function findById(int $id): ?Model
     {
         return $this->model::with('media')->find($id);
     }

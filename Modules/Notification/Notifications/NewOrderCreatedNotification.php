@@ -4,17 +4,22 @@ namespace Modules\Notification\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Modules\Order\Models\Order;
+
+// Adjust the namespace to your Order model
 
 class NewOrderCreatedNotification extends Notification
 {
     use Queueable;
 
+    private Order $order;
+
     /**
      * Create a new notification instance.
+     *
+     * @param Order $order
      */
-    private object $order;
-
-    public function __construct($order)
+    public function __construct(Order $order)
     {
         $this->order = $order;
     }
@@ -22,6 +27,7 @@ class NewOrderCreatedNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
+     * @param object $notifiable
      * @return array<int, string>
      */
     public function via(object $notifiable): array
@@ -32,13 +38,14 @@ class NewOrderCreatedNotification extends Notification
     /**
      * Get the array representation of the notification.
      *
+     * @param object $notifiable
      * @return array<string, mixed>
      */
-    public function toArray(): array
+    public function toArray(object $notifiable): array
     {
         return [
             'order_id' => $this->order->id,
-            'amount' => $this->order->total,
+            'amount' => $this->order->total_amount,
             'message' => 'A new order has been created.',
         ];
     }

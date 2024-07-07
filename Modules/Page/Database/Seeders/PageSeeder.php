@@ -7,7 +7,7 @@ use Modules\Page\Models\Page;
 
 class PageSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         $pages = [
             [

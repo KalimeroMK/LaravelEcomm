@@ -84,6 +84,16 @@ class Order extends Core
 
     protected $table = 'orders';
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected array $dates = [
+        'created_at',
+        'updated_at',
+    ];
+    
     protected $casts = [
         'user_id' => 'int',
         'sub_total' => 'float',
