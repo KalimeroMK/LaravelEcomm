@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-header card-header-primary">
                     <h4 class="card-title "> {{trans('messages.role')}}</h4>
-                    <p class="card-category"><a href="{{ route('home')}}">{{trans('messages.role')}}</a> -> <a
+                    <p class="card-category"><a href="{{ route('admin')}}">{{trans('messages.role')}}</a> -> <a
                                 href="{{route('role.index')}}">{{trans('messages.settings')}}</a></p>
                 </div>
                 <div class="card-body">

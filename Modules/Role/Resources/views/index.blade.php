@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-header card-header-primary">
                     <h4 class="card-title "> {{trans('messages.pages')}}</h4>
-                    <p class="card-category"><a href="{{ route('home')}}">{{trans('messages.home')}}</a> -> <a
+                    <p class="card-category"><a href="{{ route('admin')}}">{{trans('messages.home')}}</a> -> <a
                                 href="{{route('role.index')}}">{{trans('messages.role')}}</a></p>
                     <a href="{{route('role.create')}}" class="btn btn-primary btn-sm float-right"
                        data-toggle="tooltip"

@@ -6,8 +6,8 @@
             <div class="card">
                 <div class="card-header card-header-primary">
                     <h4 class="card-title ">@lang('messages.permission')</h4>
-                    <p class="card-category"><a href="{{ route('home')}}">{{trans('messages.home')}}</a> -> <a
-                                href="{{route('role.index')}}">{{trans('messages.permission')}}</a></p>
+                    <p class="card-category"><a href="{{ route('admin')}}">{{trans('messages.home')}}</a> -> <a
+                                href="{{route('roles.index')}}">{{trans('messages.permission')}}</a></p>
                     <a href="{{route('permissions.create')}}" class="btn btn-primary btn-sm float-right"
                     <a href="{{route('permissions.create')}}" class="btn btn-primary btn-sm float-right"
                        data-toggle="tooltip"
