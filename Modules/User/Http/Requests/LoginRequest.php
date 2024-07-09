@@ -2,9 +2,9 @@
 
 namespace Modules\User\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class LoginRequest extends FormRequest
+class LoginRequest extends CoreRequest
 {
     public string $name;
     public string $email;
@@ -24,13 +24,5 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
+
 }

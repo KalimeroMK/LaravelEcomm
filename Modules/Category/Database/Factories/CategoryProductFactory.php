@@ -13,7 +13,7 @@ class CategoryProductFactory extends Factory
     protected $model = CategoryProduct::class;
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function definition(): array
     {

@@ -9,12 +9,11 @@ class PageObserver
 {
     public function creating(Page $page): void
     {
-        $page->user_id = Auth::id();
-
+        $page->user_id = (int)Auth::id();
     }
 
     public function updating(Page $page): void
     {
-        $page->user_id = Auth::id();
+        $page->user_id = (int)Auth::id();
     }
 }

@@ -40,7 +40,7 @@ class CartService
         $product = Product::whereSlug($data['slug'])->firstOrFail();
 
         $cart = Cart::create([
-            'user_id' => Auth::id(),
+            'user_id' => (int)Auth::id(),
             'product_id' => $product->id,
             'price' => (int)($product->price - ($product->price * $product->discount) / 100),
             'quantity' => (int)$data['quantity'],
@@ -78,26 +78,31 @@ class CartService
         $already_cart = Cart::whereUserId(Auth::id())->where('order_id', null)->whereHas(
             'product',
             function (Builder $query) use ($data) {
-                $query->where('slug', $data->slug);
+                $query->where('slug', $data['slug']);
             }
         )->first();
+
         if ($already_cart) {
             $already_cart->quantity += 1;
-            $already_cart->amount += $data->price;
+            $already_cart->amount += $already_cart->price;
+
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
-                return back()->with('error', 'Stock not sufficient!.');
+                return back()->with('error', 'Stock not sufficient!');
             }
+
             $already_cart->save();
         } else {
             $cart = new Cart();
-            $cart->user_id = Auth::id();
+            $cart->user_id = (int)Auth::id();
             $cart->product_id = $data->id;
             $cart->price = (int)($data->price - ($data->price * $data->discount) / 100);
             $cart->quantity = 1;
             $cart->amount = (int)($cart->price * $cart->quantity);
+
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
-                return back()->with('error', 'Stock not sufficient!.');
+                return back()->with('error', 'Stock not sufficient!');
             }
+
             $cart->save();
         }
     }
@@ -116,19 +121,22 @@ class CartService
         )->first();
 
         if ($already_cart) {
-            $already_cart->quantity += (int)$data['quantity'][1];
-            $already_cart->amount += (int)($product->price * $data['quantity'][1]);
+            $already_cart->quantity += (int)$data['quantity'];
+            $already_cart->amount += (int)($product->price * $data['quantity']);
+
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
-                return back()->with('error', 'Stock not sufficient!.');
+                return back()->with('error', 'Stock not sufficient!');
             }
+
             $already_cart->save();
         } else {
             $cart = new Cart();
-            $cart->user_id = Auth::id();
+            $cart->user_id = (int)Auth::id();
             $cart->product_id = $product->id;
             $cart->price = (int)($product->price - ($product->price * $product->discount) / 100);
-            $cart->quantity = (int)$data['quantity'][1];
-            $cart->amount = (int)($product->price * $data['quantity'][1]);
+            $cart->quantity = (int)$data['quantity'];
+            $cart->amount = (int)($product->price * $data['quantity']);
+
             $cart->save();
         }
     }

@@ -2,9 +2,9 @@
 
 namespace Modules\Order\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Update extends FormRequest
+class Update extends CoreRequest
 {
     /**
      * Shipping information.
@@ -23,13 +23,5 @@ class Update extends FormRequest
         return [
             'status' => 'required|in:new,process,delivered,cancel',
         ];
-    }
-
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
     }
 }

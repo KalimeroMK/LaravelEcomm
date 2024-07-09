@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Bundle\Http\Requests;
+namespace Modules\Bundle\Http\Requests\Api;
 
 use Modules\Core\Http\Requests\CoreRequest;
 
@@ -20,7 +20,7 @@ class Store extends CoreRequest
             'product' => 'sometimes|array',
             'product.*' => 'required|exists:products,id',
             'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
 }

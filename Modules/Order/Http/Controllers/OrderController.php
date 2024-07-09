@@ -113,10 +113,17 @@ class OrderController extends CoreController
 
         $data = [];
         for ($i = 1; $i <= 12; $i++) {
-            $monthName = date('F', mktime(0, 0, 0, $i, 1));
-            $data[$monthName] = ! empty($result[$i]) ? number_format((float) $result[$i], 2, '.', '') : 0.0;
+            $timestamp = mktime(0, 0, 0, $i, 1);
+            if ($timestamp === false) {
+                // Handle the error if mktime fails (although unlikely for valid month values)
+                $monthName = "Invalid";
+            } else {
+                $monthName = date('F', $timestamp);
+            }
+            $data[$monthName] = !empty($result[$i]) ? (float)number_format($result[$i], 2, '.', '') : 0.0;
         }
 
         return $data;
     }
+
 }

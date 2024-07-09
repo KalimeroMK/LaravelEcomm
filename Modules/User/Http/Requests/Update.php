@@ -20,19 +20,11 @@ class Update extends FormRequest
 
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $userId,
+            'email' => 'required|email|unique:users,email,'.$userId,
             'password' => 'nullable|same:confirm-password',
             'roles' => 'required|string|max:255',
         ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
+
 }

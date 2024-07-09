@@ -2,45 +2,31 @@
 
 namespace Modules\Category\Http\Requests;
 
-use Exception;
-use Illuminate\Foundation\Http\FormRequest;
-use Modules\Category\Models\Category;
+use Illuminate\Validation\Rule;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Update extends FormRequest
+class Update extends CoreRequest
 {
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
      *
-     * @throws Exception
+     * @return array<string, string|array<string>>
      */
     public function rules(): array
     {
-        $category = $this->route('category');
-
-        // Ensure that $category is indeed a Category model instance
-        if (! $category instanceof Category) {
-            throw new Exception('Expected a Category model instance.');
-        }
+        $category = optional($this->route('category'))->id;
 
         return [
-            'title' => 'string|required',
-            'summary' => 'string|nullable',
-            'photo' => 'string|nullable',
-            'status' => 'required|in:active,inactive',
-            'is_parent' => 'sometimes|in:1',
-            'parent_id' => 'nullable|not_in:'.$category->id,
+            'title' => [
+                'nullable',
+                'string',
+                Rule::unique('categories', 'title')->ignore($category), // Specify the key and rule correctly.
+            ],
+            'parent_id' => [
+                'nullable',
+                'exists:categories,id',
+                Rule::notIn([$category]), // This rule is set correctly.
+            ],
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    public function passedValidation(): void
-    {
-        $this->merge([
-            'id' => $this->route('categories'),
-        ]);
     }
 }

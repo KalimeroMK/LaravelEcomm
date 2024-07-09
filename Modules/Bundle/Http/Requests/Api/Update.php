@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Bundle\Http\Requests;
+namespace Modules\Bundle\Http\Requests\Api;
 
 use Modules\Core\Http\Requests\CoreRequest;
 
-class Store extends CoreRequest
+class Update extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,10 +17,9 @@ class Store extends CoreRequest
             'name' => ['required'],
             'description' => ['nullable'],
             'price' => ['required', 'numeric'],
-            'product' => 'sometimes|array',
-            'product.*' => 'required|exists:products,id',
-            'images' => 'required|array',
+            'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
+
 }

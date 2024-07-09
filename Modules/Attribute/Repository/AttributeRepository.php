@@ -42,7 +42,7 @@ class AttributeRepository extends Repository implements SearchInterface
             }
         }
 
-        if ((bool) Arr::get($data, 'all_included') || empty($data)) {
+        if ((bool)Arr::get($data, 'all_included') || empty($data)) {
             return $query->get();
         }
 
@@ -51,7 +51,7 @@ class AttributeRepository extends Repository implements SearchInterface
 
         $query->orderBy($orderBy, $sort);
 
-        $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
+        $perPage = Arr::get($data, 'per_page', (new Attribute())->getPerPage());
 
         return $query->paginate($perPage);
     }

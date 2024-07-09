@@ -7,8 +7,11 @@ use Modules\Order\Rules\CartRule;
 
 class Store extends CoreRequest
 {
-    public mixed $shipping;
-
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string|array<string|CartRule>>
+     */
     public function rules(): array
     {
         return [
@@ -20,7 +23,7 @@ class Store extends CoreRequest
             'phone' => 'string|required',
             'post_code' => 'string|nullable',
             'email' => 'string|required',
-            new CartRule(),
+            'cart' => [new CartRule()]
         ];
     }
 }

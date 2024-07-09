@@ -2,70 +2,51 @@
 
 namespace Modules\Tenant\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Models\Core;
 
 /**
- * Class Tenant
- *
- * @property int $id
+ * @property int    $id
  * @property string $name
  * @property string $domain
- * @property string $database
+ * @property string $database Name of the tenant's database.
  */
-class Tenant extends Core
+class Tenant extends Model
 {
-
-    protected $fillable = [
-        'name',
-        'domain',
-        'database',
-    ];
+    protected $fillable = ['name', 'domain', 'database'];
+    protected $connection = 'owner'; // Default connection for the owner database
 
     /**
-     * The connection name for the model.
+     * Configure the tenant's database connection dynamically.
      *
-     * @var string|null
+     * @return self
      */
-    protected $connection = 'owner';
-
-    /**
-     * The database name for the tenant.
-     *
-     * @var string
-     */
-    public $database;
-
-    protected $guarded = [];
-
-    /**
-     * Configure the tenant's database connection.
-     *
-     * @return static
-     */
-    public function configure(): static
+    public function configure(): self
     {
+        // Update the configuration for the tenant connection dynamically
         config([
-            'database.connections.mysql.database' => $this->database,
+            'database.connections.tenant.database' => $this->database,
         ]);
 
-        DB::purge('mysql');
+        // Purge the 'tenant' connection to refresh its settings
+        DB::purge('tenant');
 
-        app('cache')->purge(config('cache.default'));
+        // Consider scoping the cache flush if possible
+        Cache::flush();
 
         return $this;
     }
 
     /**
-     * Set the tenant instance in the application.
+     * Activate the tenant context across the application.
      *
-     * @return static
+     * @return self
      */
-    public function use(): static
+    public function use(): self
     {
-        app()->forgetInstance('mysql');
-
-        app()->instance('mysql', $this);
+        // Set the default database connection to 'tenant'
+        DB::setDefaultConnection('tenant');
 
         return $this;
     }

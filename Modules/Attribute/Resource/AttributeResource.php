@@ -2,6 +2,7 @@
 
 namespace Modules\Attribute\Resource;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Attribute\Models\Attribute;
 
@@ -9,9 +10,12 @@ use Modules\Attribute\Models\Attribute;
 class AttributeResource extends JsonResource
 {
     /**
-     * @return string[]
+     * Transform the resource into an array.
+     *
+     * @param  Request  $request
+     * @return array<string, mixed>  // Mixed indicates that the array can contain multiple data types
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
@@ -21,9 +25,9 @@ class AttributeResource extends JsonResource
             'display' => $this->display,
             'filterable' => $this->filterable,
             'configurable' => $this->configurable,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'values_count' => $this->values_count,
+            'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
+            'values_count' => $this->when($this->values_count !== null, $this->values_count),
         ];
     }
 }

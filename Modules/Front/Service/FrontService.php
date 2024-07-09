@@ -209,8 +209,8 @@ class FrontService
         $categorySlugs = explode(',', $queryParams['category'] ?? '');
         $brandSlugs = explode(',', $queryParams['brand'] ?? '');
 
-        $categoryCacheKey = 'category_ids_'.md5(json_encode($categorySlugs));
-        $brandCacheKey = 'brand_ids_'.md5(json_encode($brandSlugs));
+        $categoryCacheKey = 'category_ids_'.json_encode($categorySlugs);
+        $brandCacheKey = 'brand_ids_'.json_encode($brandSlugs);
 
         $categoryIds = Cache::remember($categoryCacheKey, 86400, function () use ($categorySlugs) {
             return Category::whereIn('slug', $categorySlugs)->pluck('id')->toArray();
@@ -234,6 +234,7 @@ class FrontService
     {
         return array_map('intval', explode('-', $queryParams['price'] ?? '0-'.PHP_INT_MAX));
     }
+
 
     /**
      * Retrieve sort order.
@@ -279,18 +280,17 @@ class FrontService
         $perPage = (int)($queryParams['show'] ?? 9);
 
 // Generate a unique cache key
-        $cacheKey = 'products_'.md5(
-                json_encode(
-                    compact(
-                        'categoryIds',
-                        'brandIds',
-                        'minPrice',
-                        'maxPrice',
-                        'sortColumn',
-                        'sortOrder',
-                        'perPage'
-                    )
+        $cacheKey = 'products_'.json_encode(
+                compact(
+                    'categoryIds',
+                    'brandIds',
+                    'minPrice',
+                    'maxPrice',
+                    'sortColumn',
+                    'sortOrder',
+                    'perPage'
                 )
+
             );
 
 // Cache for 24 hours (86400 seconds)
@@ -362,27 +362,24 @@ class FrontService
     {
         $coupon = Coupon::whereCode($request->code)->first();
         if (!$coupon) {
-// Invalid coupon code, redirect back with error message.
             request()->session()->flash('error', 'Invalid coupon code, Please try again');
-
             return back();
         }
 
-// Get total price of user's cart.
-        $total_price = Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
+        // Cast the total price to a float to ensure the correct type is passed to the discount method
+        $total_price = (float)Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
 
-// Store coupon details in session.
         session()->put('coupon', [
             'id' => $coupon->id,
             'code' => $coupon->code,
             'value' => $coupon->discount($total_price),
         ]);
 
-// Redirect back with success message.
         request()->session()->flash('success', 'Coupon successfully applied');
 
         return redirect()->back();
     }
+
 
     /**
      * Filter blog posts based on selected categories and tags.
@@ -488,7 +485,6 @@ class FrontService
         $cacheKey = 'productDetail_'.$slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
-// Get the product detail by slug.
             $product_detail = Product::getProductBySlug($slug);
 
             $related = Product::with('categories')
@@ -537,17 +533,14 @@ class FrontService
      */
     public function productBrand(array $data): array|string
     {
-// Get products for brand
         $products = Product::whereHas('brand', function (Builder $query) use ($data) {
             $query->where('slug', $data['slug']);
         })->paginate(9);
         $brands = Brand::where('status', 'active')
             ->orderBy('title')
             ->get();
-// Get recent products
         $recentProducts = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
-// Return data
         return [
             'products' => $products,
             'brands' => $brands,
@@ -572,18 +565,13 @@ class FrontService
         ]);
         $appUrl = config('app.url');
 
-// Determine the correct route name based on the current request
         $routeSuffix = request()->is($appUrl.'/product-grids') ? 'product-grids' : 'product-lists';
 
-// Prefix the route name with 'front.'
         $routeName = 'front.'.$routeSuffix;
 
-// Build the route parameters string
         $routeParameters = http_build_query($query);
 
-// Use the config app url as the base for the redirect
 
-// Return a redirect to the constructed URL
         return redirect()->route($routeName, $routeParameters);
     }
 

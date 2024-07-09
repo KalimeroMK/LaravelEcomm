@@ -6,8 +6,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Modules\Category\Http\Requests\Api\Store;
-use Modules\Category\Http\Requests\Api\Update;
+use Modules\Category\Http\Requests\Store;
+use Modules\Category\Http\Requests\Update;
 use Modules\Category\Models\Category;
 use Modules\Category\Service\CategoryService;
 use Modules\Core\Http\Controllers\CoreController;
@@ -28,7 +28,6 @@ class CategoryController extends CoreController
     public function index()
     {
         $categories = $this->category_service->getAll();
-
         if ($categories->isEmpty()) {
             return redirect()->route('categories.create');
         }
@@ -61,7 +60,7 @@ class CategoryController extends CoreController
 
     public function update(Update $request, Category $category): RedirectResponse
     {
-        $this->category_service->update($category->id, $request->all());
+        $this->category_service->update($category->id, $request->validated());
 
         return redirect()->route('categories.index');
     }

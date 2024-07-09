@@ -2,9 +2,9 @@
 
 namespace Modules\Attribute\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
     /**
      * @return string[]
@@ -19,10 +19,5 @@ class Store extends FormRequest
             'filterable' => 'sometimes|in:0,1',
             'configurable' => 'sometimes|in:0,1',
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Modules\User\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\Api\CoreRequest;
 
-class RegisterRequest extends FormRequest
+class RegisterRequest extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,13 +20,5 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
+
 }

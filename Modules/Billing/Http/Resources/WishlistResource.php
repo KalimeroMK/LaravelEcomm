@@ -11,9 +11,10 @@ use Modules\Product\Http\Resources\ProductResource;
 class WishlistResource extends JsonResource
 {
     /**
-     * Get the validation rules that apply to the request.
+     * Transform the resource into an array.
      *
-     * @return array<string, string> Array of field rules.
+     * @param  Request  $request
+     * @return array<string, mixed> Array of various types depending on the property.
      */
     public function toArray(Request $request): array
     {
@@ -22,13 +23,11 @@ class WishlistResource extends JsonResource
             'price' => $this->price,
             'quantity' => $this->quantity,
             'amount' => $this->amount,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-
+            'created_at' => $this->created_at?->toDateTimeString(),
+            'updated_at' => $this->updated_at?->toDateTimeString(),
             'product_id' => $this->product_id,
             'cart_id' => $this->cart_id,
             'user_id' => $this->user_id,
-
             'product' => new ProductResource($this->whenLoaded('product')),
         ];
     }

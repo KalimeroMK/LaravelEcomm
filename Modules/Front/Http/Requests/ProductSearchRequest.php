@@ -2,22 +2,19 @@
 
 namespace Modules\Front\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class ProductSearchRequest extends FormRequest
+class ProductSearchRequest extends CoreRequest
 {
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string|array<string>>
      */
     public function rules(): array
     {
         return [
             'search' => 'required|string|max:255',
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

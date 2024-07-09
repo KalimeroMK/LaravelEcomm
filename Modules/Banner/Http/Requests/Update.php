@@ -2,9 +2,9 @@
 
 namespace Modules\Banner\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Update extends FormRequest
+class Update extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,10 +20,5 @@ class Update extends FormRequest
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:active,inactive',
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

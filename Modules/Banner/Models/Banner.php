@@ -44,9 +44,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Banner extends Core implements HasMedia
 {
+    use InteractsWithMedia;
     use HasFactory;
     use HasSlug;
-    use InteractsWithMedia;
 
     protected $table = 'banners';
 
@@ -72,10 +72,5 @@ class Banner extends Core implements HasMedia
         }
 
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('banner')->singleFile();
     }
 }

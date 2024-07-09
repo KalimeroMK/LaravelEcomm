@@ -2,9 +2,9 @@
 
 namespace Modules\User\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\Api\CoreRequest;
 
-class LoginRequest extends FormRequest
+class LoginRequest extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.

@@ -2,9 +2,9 @@
 
 namespace Modules\Banner\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.

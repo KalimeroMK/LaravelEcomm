@@ -2,6 +2,7 @@
 
 namespace Modules\User\Database\Seeders;
 
+use Exception;
 use Illuminate\Database\Seeder;
 use Modules\User\Models\User;
 use Spatie\Permission\Models\Permission;
@@ -40,6 +41,7 @@ class PermissionTableSeeder extends Seeder
             'product',
             'order',
             'attributes',
+            'page'
         ];
         $operations = ['list', 'create', 'update', 'delete'];
 
@@ -94,14 +96,23 @@ class PermissionTableSeeder extends Seeder
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function createUserWithRole(string $name, string $email, string $roleName): void
     {
         $user = User::factory()->create([
             'name' => $name,
             'email' => $email,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-            // Replace with a secure default password or mechanism
+            'password' => bcrypt('password')
         ]);
+
+        if (!$user instanceof User) {
+            throw new Exception('User creation did not return a User model instance.');
+        }
+
         $user->assignRole($roleName);
     }
+
+
 }

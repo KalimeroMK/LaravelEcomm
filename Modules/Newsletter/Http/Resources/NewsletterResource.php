@@ -2,6 +2,7 @@
 
 namespace Modules\Newsletter\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Newsletter\Models\Newsletter;
 
@@ -9,9 +10,12 @@ use Modules\Newsletter\Models\Newsletter;
 class NewsletterResource extends JsonResource
 {
     /**
-     * @return string[]
+     * Transform the resource into an array.
+     *
+     * @param  Request  $request
+     * @return array<string, mixed> Array of various types depending on the property.
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

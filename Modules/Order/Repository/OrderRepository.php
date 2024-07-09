@@ -47,7 +47,7 @@ class OrderRepository extends Repository implements SearchInterface
             }
         }
 
-        if (Arr::has($data, 'all_included') && (bool) Arr::get($data, 'all_included') === true || empty($data)) {
+        if (Arr::has($data, 'all_included') && (bool)Arr::get($data, 'all_included') === true || empty($data)) {
             $query->with('shipping', 'user', 'carts')->get();
         } else {
             $orderBy = Arr::get($data, 'order_by', 'id');
@@ -55,7 +55,7 @@ class OrderRepository extends Repository implements SearchInterface
 
             $query->orderBy($orderBy, $sort);
 
-            $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
+            $perPage = Arr::get($data, 'per_page', (new Order())->getPerPage());
 
             $query->with('shipping', 'user', 'carts')->paginate($perPage);
         }

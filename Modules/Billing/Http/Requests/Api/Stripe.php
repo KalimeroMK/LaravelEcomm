@@ -8,7 +8,9 @@ use Modules\Core\Http\Requests\Api\CoreRequest;
 class Stripe extends CoreRequest
 {
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string|CartExistRule>
      */
     public function rules(): array
     {
@@ -24,8 +26,7 @@ class Stripe extends CoreRequest
             'shipping' => 'string|nullable',
             'payment_method' => 'string|nullable',
             'status' => 'string|nullable',
-
-            new CartExistRule(),
+            'cart' => new CartExistRule(),  // Assign a key to the custom rule for clarity
         ];
     }
 }

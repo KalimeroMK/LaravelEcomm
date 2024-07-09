@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Brand\Http\Requests;
+namespace Modules\Core\Http\Requests;
 
-use Modules\Core\Http\Requests\CoreRequest;
+use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
 
-class Store extends CoreRequest
+class CoreRequest extends BaseFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,8 +14,12 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|required|unique:brands',
+
         ];
     }
 
+    public function authorize(): bool
+    {
+        return true;
+    }
 }

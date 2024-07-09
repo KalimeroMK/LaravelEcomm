@@ -2,9 +2,9 @@
 
 namespace Modules\Coupon\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Update extends FormRequest
+class Update extends CoreRequest
 {
     /**
      * @return string[]
@@ -17,10 +17,5 @@ class Update extends FormRequest
             'value' => 'required|numeric',
             'status' => 'required|in:active,inactive',
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

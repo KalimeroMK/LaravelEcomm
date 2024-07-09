@@ -2,26 +2,37 @@
 
 namespace Modules\Attribute\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Exception;
+use Illuminate\Validation\Rule;
+use Modules\Attribute\Models\Attribute;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Update extends FormRequest
+class Update extends CoreRequest
 {
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     * @throws Exception
      */
     public function rules(): array
     {
-        return [
-            'name' => 'nullable|unique:attributes,name,'.$this->route()->parameter('id'),
-            'code' => 'nullable|unique:attributes,code,'.$this->route()->parameter('id'),
-            'display' => 'sometimes|in:input,radio,color,button,select,checkbox,multiselect',
-            'filterable' => 'sometimes|in:0,1',
-            'configurable' => 'sometimes|in:0,1',
-        ];
-    }
+        $attribute = $this->route('attribute');
 
-    public function authorize(): bool
-    {
-        return true;
+        // Ensure that the attribute is indeed an Attribute model instance
+        if ($attribute instanceof Attribute) {
+            $attributeId = $attribute->id;
+        } else {
+            // Handle the error appropriately, maybe log it or throw an exception
+            throw new Exception("Expected an instance of Attribute, received ".gettype($attribute));
+        }
+
+        return [
+            'name' => ['sometimes', 'string', Rule::unique('attributes', 'name')->ignore($attributeId)],
+            'code' => ['sometimes', 'string', Rule::unique('attributes', 'code')->ignore($attributeId)],
+            'display' => ['sometimes', 'in:input,radio,color,button,select,checkbox,multiselect'],
+            'filterable' => ['sometimes', 'boolean'],
+            'configurable' => ['sometimes', 'boolean'],
+        ];
     }
 }

@@ -7,7 +7,9 @@ use Modules\Core\Http\Requests\Api\CoreRequest;
 class Update extends CoreRequest
 {
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string> Array of field rules.
      */
     public function rules(): array
     {

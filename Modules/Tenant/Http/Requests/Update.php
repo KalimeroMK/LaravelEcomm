@@ -2,14 +2,14 @@
 
 namespace Modules\Tenant\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Update extends FormRequest
+class Update extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, array<int, string>>
+     * @return array<string, string|array<string>>
      */
     public function rules(): array
     {
@@ -20,13 +20,5 @@ class Update extends FormRequest
         ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
+
 }

@@ -14,20 +14,18 @@ use Modules\Core\Models\Core;
 use Modules\Settings\Database\Factories\SettingFactory;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Setting
  *
- * @property int $id
- * @property string $description
- * @property string $short_des
- * @property string $logo
- * @property string $photo
- * @property string $address
- * @property string $phone
- * @property string $email
+ * @property int         $id
+ * @property string      $description
+ * @property string      $short_des
+ * @property string      $logo
+ * @property string      $photo
+ * @property string      $address
+ * @property string      $phone
+ * @property string      $email
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -44,9 +42,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder|Setting wherePhoto($value)
  * @method static Builder|Setting whereShortDes($value)
  * @method static Builder|Setting whereUpdatedAt($value)
- * @method void clearMediaCollection(string $collectionName = '')
- * @method MediaCollection addMultipleMediaFromRequest(array $keys)
- * @method Media preservingOriginal()
  * @mixin Eloquent
  */
 class Setting extends Core implements HasMedia
@@ -56,20 +51,21 @@ class Setting extends Core implements HasMedia
 
     protected $table = 'settings';
 
-    protected $fillable = [
-        'description',
-        'short_des',
-        'logo',
-        'photo',
-        'address',
-        'phone',
-        'email',
-        'site-name',
-        'fb_app_id',
-        'keywords',
-        'google-site-verification',
+    protected $fillable
+        = [
+            'description',
+            'short_des',
+            'logo',
+            'photo',
+            'address',
+            'phone',
+            'email',
+            'site-name',
+            'fb_app_id',
+            'keywords',
+            'google-site-verification',
 
-    ];
+        ];
 
     public static function Factory(): SettingFactory
     {

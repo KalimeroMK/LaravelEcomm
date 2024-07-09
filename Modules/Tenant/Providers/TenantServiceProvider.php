@@ -5,6 +5,8 @@ namespace Modules\Tenant\Providers;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use Modules\Core\Traits\AutoRegistersCommands;
 use Modules\Tenant\Models\Tenant;
@@ -29,7 +31,7 @@ class TenantServiceProvider extends ServiceProvider
             $this->registerViews();
             $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
             $this->autoRegisterCommands($this->moduleName);
-            $this->configureRequests();
+            $this->configureTenant();
             $this->configureQueue();
         }
     }
@@ -68,7 +70,7 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function registerTranslations(): void
     {
-        $langPath = resource_path('lang/modules/' . $this->moduleNameLower);
+        $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $this->moduleNameLower);
@@ -84,15 +86,20 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/' . $this->moduleNameLower);
+        $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
         $sourcePath = module_path($this->moduleName, 'Resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower . '-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower.'-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
 
-        $componentNamespace = str_replace('/', '\\',
-            config('modules.namespace') . '\\' . $this->moduleName . '\\' . config('modules.paths.generator.component-class.path'));
+        $componentNamespace = str_replace(
+            '/',
+            '\\',
+            config('modules.namespace').'\\'.$this->moduleName.'\\'.config(
+                'modules.paths.generator.component-class.path'
+            )
+        );
         Blade::componentNamespace($componentNamespace, $this->moduleNameLower);
     }
 
@@ -105,8 +112,8 @@ class TenantServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (Config::get('view.paths') as $path) {
-            if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
-                $paths[] = $path . '/modules/' . $this->moduleNameLower;
+            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
+                $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
         }
 
@@ -125,28 +132,37 @@ class TenantServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure requests.
+     * Configure tenant based on the domain.
      */
-    public function configureRequests(): void
+    protected function configureTenant(): void
     {
-        if (!$this->app->runningInConsole()) {
-            $host = $this->app['request']->getHost();
-            Tenant::whereDomain($host)->firstOrFail()->configure()->use();
+        if ($this->app->runningInConsole()) {
+            return;
         }
+
+        $host = request()->getHost();
+        $tenant = Tenant::whereDomain($host)->firstOrFail();
+        $tenant->configure()->use();  // Set up and use tenant configuration
     }
 
     /**
-     * Configure queue.
+     * Configure the queue system to be aware of tenants.
      */
-    public function configureQueue(): void
+    protected function configureQueue(): void
     {
-        $this->app['queue']->createPayloadUsing(function () {
-            return $this->app['tenant'] ? ['tenant_id' => $this->app['tenant']->id] : [];
+        Queue::createPayloadUsing(function () {
+            if ($this->app->bound('tenant')) {
+                $tenant = $this->app->make('tenant');
+                return ['tenant_id' => $tenant->id];
+            }
+            return [];
         });
 
-        $this->app['events']->listen(JobProcessing::class, function ($event) {
-            if (isset($event->job->payload()['tenant_id'])) {
-                Tenant::find($event->job->payload()['tenant_id'])->configure()->use();
+        Event::listen(JobProcessing::class, function (JobProcessing $event) {
+            $tenantId = $event->job->payload()['tenant_id'] ?? null;
+            if ($tenantId) {
+                $tenant = Tenant::find($tenantId);
+                $tenant?->configure()->use();
             }
         });
     }

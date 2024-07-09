@@ -2,12 +2,14 @@
 
 namespace Modules\Post\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string|array<string>>
      */
     public function rules(): array
     {
@@ -23,10 +25,5 @@ class Store extends FormRequest
             'added_by' => 'nullable',
             'status' => 'required|in:active,inactive',
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

@@ -28,18 +28,26 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  Request  $request
      * @return Application|Factory|View
      */
     public function index(Request $request)
     {
+        $userId = Auth::id(); // Get the authenticated user's ID, which can be null, int, or string
         if (Auth::user()->isSuperAdmin()) {
             $users = $this->user_service->getAll();
         } else {
-            $users = $this->user_service->findById(Auth::id());
+            if (!is_numeric($userId)) {
+                abort(404, "User not found.");
+            } else {
+                $users = $this->user_service->findById((int)$userId);
+            }
         }
 
-        return view('user::index', ['users' => $users])->with('i',
-            ($request->input('page', 1) - 1) * 5);
+        return view('user::index', ['users' => $users])->with(
+            'i',
+            ($request->input('page', 1) - 1) * 5
+        );
     }
 
     /**

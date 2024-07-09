@@ -2,12 +2,14 @@
 
 namespace Modules\Bundle\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Update extends FormRequest
+class Update extends CoreRequest
 {
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string|array<string>> Array of validation rules where values can be strings or arrays of strings.
      */
     public function rules(): array
     {

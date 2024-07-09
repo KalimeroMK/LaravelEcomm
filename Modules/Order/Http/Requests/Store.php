@@ -2,10 +2,10 @@
 
 namespace Modules\Order\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 use Modules\Order\Rules\CartRule;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
     /**
      * Shipping information.
@@ -32,13 +32,5 @@ class Store extends FormRequest
             'email' => 'string|required',
             'cart' => new CartRule(), // Ensure this custom rule is properly included
         ];
-    }
-
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
     }
 }

@@ -2,31 +2,29 @@
 
 namespace Modules\Category\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
-    public mixed $title;
-
-    public mixed $parent_id;
 
     /**
-     * @return string[]
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string|array<string>> Array of validation rules where values can be strings or arrays of strings.
      */
     public function rules(): array
     {
-        return [
-            'title' => 'string|required',
-            'summary' => 'string|nullable',
-            'photo' => 'string|nullable',
-            'status' => 'required|in:active,inactive',
-            'is_parent' => 'sometimes|in:1',
-            'parent_id' => 'nullable|exists:categories,id',
-        ];
-    }
+        $category = optional($this->route('category'))->id;
 
-    public function authorize(): bool
-    {
-        return true;
+        return [
+            'title' => 'string|required|unique:categories,title',
+            'status' => 'boolean|required',
+            'parent_id' => [
+                'nullable',
+                'exists:categories,id',
+                Rule::notIn([$category]), // Prevents setting the category itself as its parent.
+            ],
+        ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Modules\Banner\Http\Controllers;
 
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,6 +12,8 @@ use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Service\BannerService;
 use Modules\Core\Http\Controllers\CoreController;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class BannerController extends CoreController
 {
@@ -40,11 +43,21 @@ class BannerController extends CoreController
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  Store  $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     * @throws Exception
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->banner_service->create($request->validated());
-
+        $banner = $this->banner_service->create($request->validated());
+        if ($request->hasFile('images')) {
+            $banner->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('banner');
+            });
+        }
         return redirect()->route('banners.index');
     }
 
@@ -59,12 +72,22 @@ class BannerController extends CoreController
     }
 
     /**
-     * Update the specified resource in storage.
+     * @param  Update  $request
+     * @param  Banner  $banner
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
-        $banner = $this->banner_service->update($banner->id, $request->validated());
-
+        $this->banner_service->update($banner->id, $request->validated());
+        if ($request->hasFile('images')) {
+            $banner->clearMediaCollection('banner');
+            $banner->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('banner');
+                });
+        }
         return redirect()->route('banners.edit', $banner);
     }
 

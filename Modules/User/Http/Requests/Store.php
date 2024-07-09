@@ -2,9 +2,9 @@
 
 namespace Modules\User\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\CoreRequest;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -21,13 +21,5 @@ class Store extends FormRequest
         ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
+
 }

@@ -3,12 +3,15 @@
 namespace Modules\Bundle\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Models\Bundle;
 use Modules\Bundle\Service\BundleService;
 use Modules\Product\Models\Product;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class BundleController extends Controller
 {
@@ -35,10 +38,23 @@ class BundleController extends Controller
         ]));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  Store  $request
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     * @throws Exception
+     */
     public function store(Store $request): RedirectResponse
     {
-        $bundle = $this->bundleService->create($request->all());
-
+        $banner = $this->bundleService->create($request->validated());
+        if ($request->hasFile('images')) {
+            $banner->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('bundle');
+            });
+        }
         return redirect()->route('bundle.index')->with('status', 'Brand created successfully.');
     }
 
@@ -47,10 +63,23 @@ class BundleController extends Controller
         return view('bundle::edit')->with($this->bundleService->edit($bundle->id));
     }
 
+    /**
+     * @param  Store   $request
+     * @param  Bundle  $bundle
+     * @return RedirectResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function update(Store $request, Bundle $bundle): RedirectResponse
     {
         $this->bundleService->update($bundle->id, $request->all());
-
+        if ($request->hasFile('images')) {
+            $bundle->clearMediaCollection('bundle');
+            $bundle->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('bundle');
+                });
+        }
         return redirect()->route('bundle.edit', $bundle)->with('status', 'Brand updated successfully.');
     }
 

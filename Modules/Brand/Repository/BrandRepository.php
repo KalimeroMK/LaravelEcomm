@@ -37,6 +37,6 @@ class BrandRepository extends Repository
         $orderBy = $data['order_by'] ?? 'id';
         $sort = $data['sort'] ?? 'desc';
 
-        return $query->orderBy($orderBy, $sort)->paginate((new $this->model)->getPerPage());
+        return $query->orderBy($orderBy, $sort)->paginate((new Brand())->getPerPage());
     }
 }

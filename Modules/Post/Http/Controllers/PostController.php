@@ -122,14 +122,32 @@ class PostController extends Controller
     }
 
     /**
+     * Import posts from an uploaded Excel file.
+     *
+     * @param  ImportRequest  $request
      * @return RedirectResponse
      */
-    public function import(ImportRequest $request)
+    public function import(ImportRequest $request): RedirectResponse
     {
-        Excel::import(new Post, $request->file('file'));
+        // Ensure there is a file and it is not an array of files
+        $file = $request->file('file');
+        if (!$file) {
+            return back()->withErrors(['error' => 'Please upload a file.']);
+        }
 
-        return redirect()->back();
+        if (is_array($file)) {
+            return back()->withErrors(['error' => 'Please upload only one file.']);
+        }
+
+        try {
+            Excel::import(new PostExport(), $file);
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'An error occurred during import: '.$e->getMessage()]);
+        }
+
+        return redirect()->back()->with('success', 'Posts imported successfully.');
     }
+
 
     /**
      * @return void

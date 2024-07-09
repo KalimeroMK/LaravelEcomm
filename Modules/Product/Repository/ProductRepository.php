@@ -59,7 +59,7 @@ class ProductRepository extends Repository
      */
     public function search(array $data): mixed
     {
-        $cacheKey = 'search_'.md5(json_encode($data));
+        $cacheKey = 'search_'.(json_encode($data));
 
         return Cache::store('redis')->remember($cacheKey, 86400, function () use ($data) {
             $query = $this->model::query();
@@ -88,7 +88,7 @@ class ProductRepository extends Repository
             );
 
             return $query->with($this->withRelations())->paginate(
-                Arr::get($data, 'per_page', (new $this->model)->getPerPage())
+                Arr::get($data, 'per_page', (new Product())->getPerPage()) // Correct usage
             );
         });
     }

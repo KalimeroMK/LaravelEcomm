@@ -2,37 +2,28 @@
 
 namespace Modules\Billing\Http\Requests;
 
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Rules\WishlistRule;
+use Modules\Core\Http\Requests\CoreRequest;
 use Modules\Product\Models\Product;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, Rule|string>
+     * @return array<string, mixed>  // 'mixed' to indicate various possible types including custom rule objects
      */
     public function rules(): array
     {
         return [
-            'slug' => new WishlistRule(),  // Custom rule object
+            'slug' => new WishlistRule(),  // Custom rule object clearly indicated
         ];
     }
 
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
      * Handle a passed validation attempt.
-     * Merge additional fields into the request data.
+     * Merge additional fields into the request data based on the 'slug' provided.
      */
     public function passedValidation(): void
     {

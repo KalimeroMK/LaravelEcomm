@@ -2,14 +2,14 @@
 
 namespace Modules\Page\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Http\Requests\Api\CoreRequest;
 
-class Store extends FormRequest
+class Store extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, array<int, string>>
+     * @return array<string, string|array<string>>
      */
     public function rules(): array
     {
@@ -22,8 +22,4 @@ class Store extends FormRequest
         ];
     }
 
-    public function authorize(): bool
-    {
-        return true;
-    }
 }

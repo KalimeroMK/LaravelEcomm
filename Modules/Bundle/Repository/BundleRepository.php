@@ -23,6 +23,6 @@ class BundleRepository extends Repository
 
     public function findById(int $id): ?Model
     {
-        return $this->model::with('media')->find($id);
+        return $this->model::with('media')->findOrFail($id);
     }
 }
