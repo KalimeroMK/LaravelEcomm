@@ -18,8 +18,11 @@ class PostNewsletterCommand extends Command
     {
         $posts = Post::orderBy('id')
             ->take(10)
-            ->get();
+            ->get()
+            ->all(); // Convert the collection to an array
+
         $newsletters = Newsletter::whereIsValidated(true)->get();
+
         foreach ($newsletters as $newsletter) {
             Mail::to($newsletter->email)->send(new PostNewsletterMail($posts));
         }

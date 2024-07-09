@@ -82,7 +82,7 @@ class FrontController extends Controller
 
     public function productFilter(Request $request): RedirectResponse
     {
-        return $this->front_service->productFilter($request);
+        return $this->front_service->productFilter($request->all());
     }
 
     /**
@@ -107,9 +107,9 @@ class FrontController extends Controller
     public function productBrand(Request $request)
     {
         if (request()->is('e-shop.loc/product-grids')) {
-            return view('front::pages.product-grids', $this->front_service->productBrand($request));
+            return view('front::pages.product-grids', $this->front_service->productBrand($request->all()));
         } else {
-            return view('front::pages.product-lists', $this->front_service->productBrand($request));
+            return view('front::pages.product-lists', $this->front_service->productBrand($request->all()));
         }
     }
 
@@ -151,30 +151,35 @@ class FrontController extends Controller
 
     public function blogFilter(Request $request): RedirectResponse
     {
-        $filterData = $this->front_service->blogFilter($request);
+        $filterData = $this->front_service->blogFilter($request->all());
 
         return redirect()->route('blog', http_build_query($filterData));
     }
 
     /**
-     * @param  Request  $request
+     * @param  string  $slug
      * @return Application|Factory|View
      */
-    public function blogByCategory($slug)
+    public function blogByCategory(string $slug)
     {
         return view('front::pages.blog', $this->front_service->blogByCategory($slug));
     }
 
+
     /**
-     * @return Application|Factory|View
+     * Display the blog posts filtered by tag.
+     *
+     * @param  string  $slug  The tag slug to filter blog posts by.
+     * @return View The view displaying the filtered blog posts.
      */
-    public function blogByTag($slug)
+    public function blogByTag(string $slug): View
     {
         return view('front::pages.blog', $this->front_service->blogByTag($slug));
     }
 
     /**
-     * @return Application|Factory|View
+     * @param  Request  $request
+     * @return RedirectResponse
      */
     public function couponStore(Request $request): RedirectResponse
     {

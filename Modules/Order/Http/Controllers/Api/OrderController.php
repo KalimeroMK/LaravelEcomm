@@ -11,7 +11,6 @@ use Modules\Order\Http\Requests\Api\Search;
 use Modules\Order\Http\Requests\Api\Store;
 use Modules\Order\Http\Requests\Api\Update;
 use Modules\Order\Http\Resources\OrderResource;
-use Modules\Order\Models\Order;
 use Modules\Order\Service\OrderService;
 use ReflectionException;
 
@@ -51,12 +50,12 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param  Order  $order
+     * @param  int  $id
      * @return JsonResponse
      *
      * @throws ReflectionException
      */
-    public function show($id)
+    public function show(int $id)
     {
         return $this
             ->setMessage(
@@ -92,11 +91,11 @@ class OrderController extends CoreController
     }
 
     /**
+     * @param  int  $id
      * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $this->order_service->delete($id);
 

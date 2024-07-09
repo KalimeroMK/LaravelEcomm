@@ -29,6 +29,7 @@ use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Modules\Google2fa\Http\Middleware\Google2faMiddleware;
 use Spatie\CookieConsent\CookieConsentMiddleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
@@ -43,43 +44,45 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
-    protected $middleware = [
-        // \App\Http\Middleware\TrustHosts::class,
-        TrustProxies::class,
-        HandleCors::class,
-        CheckForMaintenanceMode::class,
-        ValidatePostSize::class,
-        TrimStrings::class,
-        ConvertEmptyStringsToNull::class,
-        CookieConsentMiddleware::class,
-        RobotsMiddleware::class,
-    ];
+    protected $middleware
+        = [
+            // \App\Http\Middleware\TrustHosts::class,
+            TrustProxies::class,
+            HandleCors::class,
+            CheckForMaintenanceMode::class,
+            ValidatePostSize::class,
+            TrimStrings::class,
+            ConvertEmptyStringsToNull::class,
+            CookieConsentMiddleware::class,
+            RobotsMiddleware::class,
+        ];
 
     /**
      * The application's route middleware groups.
      *
      * @var array
      */
-    protected $middlewareGroups = [
-        'web' => [
-            EncryptCookies::class,
-            AddQueuedCookiesToResponse::class,
-            StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
-            ShareErrorsFromSession::class,
-            VerifyCsrfToken::class,
-            SubstituteBindings::class,
-            Localization::class,
+    protected $middlewareGroups
+        = [
+            'web' => [
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                // \Illuminate\Session\Middleware\AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                VerifyCsrfToken::class,
+                SubstituteBindings::class,
+                Localization::class,
 
 
-        ],
+            ],
 
-        'api' => [
-            EnsureFrontendRequestsAreStateful::class,
-            'throttle:60,1',
-            SubstituteBindings::class,
-        ],
-    ];
+            'api' => [
+                EnsureFrontendRequestsAreStateful::class,
+                'throttle:60,1',
+                SubstituteBindings::class,
+            ],
+        ];
 
     /**
      * The application's route middleware.
@@ -88,22 +91,23 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
-    protected $routeMiddleware = [
-        'auth' => Authenticate::class,
-        'auth.basic' => AuthenticateWithBasicAuth::class,
-        'bindings' => SubstituteBindings::class,
-        'cache.headers' => SetCacheHeaders::class,
-        'can' => Authorize::class,
-        'guest' => RedirectIfAuthenticated::class,
-        'password.confirm' => RequirePassword::class,
-        'signed' => ValidateSignature::class,
-        'throttle' => ThrottleRequests::class,
-        'verified' => EnsureEmailIsVerified::class,
-        'role' => RoleMiddleware::class,
-        'permission' => PermissionMiddleware::class,
-        'role_or_permission' => RoleOrPermissionMiddleware::class,
-        '2fa' => LoginSecurityMiddleware::class,
-        'login' => AuthMiddleware::class,
+    protected $routeMiddleware
+        = [
+            'auth' => Authenticate::class,
+            'auth.basic' => AuthenticateWithBasicAuth::class,
+            'bindings' => SubstituteBindings::class,
+            'cache.headers' => SetCacheHeaders::class,
+            'can' => Authorize::class,
+            'guest' => RedirectIfAuthenticated::class,
+            'password.confirm' => RequirePassword::class,
+            'signed' => ValidateSignature::class,
+            'throttle' => ThrottleRequests::class,
+            'verified' => EnsureEmailIsVerified::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
+            '2fa' => Google2faMiddleware::class,
+            'login' => AuthMiddleware::class,
 
-    ];
+        ];
 }

@@ -3,6 +3,7 @@
 namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Modules\Category\Models\Category;
 use Modules\Product\Models\Product;
@@ -35,7 +36,9 @@ class ProductFactory extends Factory
      */
     public function withCategories(): ProductFactory
     {
-        return $this->afterCreating(function (Product $product) {
+        return $this->afterCreating(function (Model $model) {
+            /** @var Product $product */
+            $product = $model;
             $categories = Category::factory()->count(3)->create();
             $product->categories()->attach($categories);
         });
@@ -46,7 +49,9 @@ class ProductFactory extends Factory
      */
     public function withTags(): ProductFactory
     {
-        return $this->afterCreating(function (Product $product) {
+        return $this->afterCreating(function (Model $model) {
+            /** @var Product $product */
+            $product = $model;
             $tags = Tag::factory()->count(5)->create();
             $product->tags()->attach($tags);
         });
@@ -57,7 +62,9 @@ class ProductFactory extends Factory
      */
     public function withCategoriesAndTags(): ProductFactory
     {
-        return $this->afterCreating(function (Product $product) {
+        return $this->afterCreating(function (Model $model) {
+            /** @var Product $product */
+            $product = $model;
             $categories = Category::factory()->count(3)->create();
             $product->categories()->attach($categories);
 

@@ -26,7 +26,7 @@ class NotificationController extends Controller
     /**
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(int $id)
     {
         $notification = $this->notification_service->findById($id);
 

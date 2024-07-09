@@ -15,11 +15,11 @@ use Modules\Notification\Database\Factories\NotificationFactory;
 /**
  * Class Notification
  *
- * @property string $id
- * @property string $type
- * @property string $notifiable_type
- * @property int $notifiable_id
- * @property string $data
+ * @property string      $id
+ * @property string      $type
+ * @property string      $notifiable_type
+ * @property int         $notifiable_id
+ * @property string      $data
  * @property Carbon|null $read_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -42,21 +42,31 @@ class Notification extends Core
 {
     protected $table = 'notifications';
 
-    protected $casts = [
-        'notifiable_id' => 'int',
-    ];
+    protected $casts
+        = [
+            'notifiable_id' => 'int',
+        ];
 
-    protected array $dates = [
-        'read_at',
-    ];
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array<int, string>
+     */
+    protected $dates
+        = [
+            'read_at',
+            'created_at',
+            'updated_at',
+        ];
 
-    protected $fillable = [
-        'type',
-        'notifiable_type',
-        'notifiable_id',
-        'data',
-        'read_at',
-    ];
+    protected $fillable
+        = [
+            'type',
+            'notifiable_type',
+            'notifiable_id',
+            'data',
+            'read_at',
+        ];
 
     public static function Factory(): NotificationFactory
     {

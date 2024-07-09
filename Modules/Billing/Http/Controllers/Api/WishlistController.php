@@ -23,15 +23,15 @@ class WishlistController extends CoreController
 
     public function index(): ResourceCollection
     {
-        return WishlistResource::collection($this->wishlist_service->getAll());
+        return WishlistResource::collection($this->wishlist_service->getAllByUser());
     }
 
     /**
-     * @return mixed
+     * @param  Store  $request
+     * @return JsonResponse|string
      *
-     * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): JsonResponse|string
     {
         try {
             return $this

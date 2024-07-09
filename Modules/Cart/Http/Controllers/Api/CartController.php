@@ -83,7 +83,7 @@ class CartController extends CoreController
                     ]
                 )
             )
-            ->respond(new CartResource($this->cart_service->apiAUpdateCart($request->all())));
+            ->respond(new CartResource($this->cart_service->apiUpdateCart($request->all())));
     }
 
     /**

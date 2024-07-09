@@ -26,8 +26,8 @@ class StripeService
     }
 
     /**
-     * Saves the order amount.
-     *
+     * @param  Request  $request
+     * @return RedirectResponse
      * @throws ApiErrorException
      */
     public function stripePost(Request $request): RedirectResponse

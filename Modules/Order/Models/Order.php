@@ -23,33 +23,33 @@ use Modules\User\Models\User;
 /**
  * Class Order
  *
- * @property int $id
- * @property string|null $order_number
- * @property int|null $user_id
- * @property float $sub_total
- * @property int|null $shipping_id
- * @property float|null $coupon
- * @property float $total_amount
- * @property int $quantity
- * @property string $payment_method
- * @property string $payment_status
- * @property string $status
- * @property string $first_name
- * @property string $last_name
- * @property string $email
- * @property string $phone
- * @property string $country
- * @property string|null $post_code
- * @property string $address1
- * @property string|null $address2
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Shipping|null $shipping
- * @property User|null $user
- * @property Collection|Cart[] $carts
+ * @property int                    $id
+ * @property string|null            $order_number
+ * @property int|null               $user_id
+ * @property float                  $sub_total
+ * @property int|null               $shipping_id
+ * @property float|null             $coupon
+ * @property float                  $total_amount
+ * @property int                    $quantity
+ * @property string                 $payment_method
+ * @property string                 $payment_status
+ * @property string                 $status
+ * @property string                 $first_name
+ * @property string                 $last_name
+ * @property string                 $email
+ * @property string                 $phone
+ * @property string                 $country
+ * @property string|null            $post_code
+ * @property string                 $address1
+ * @property string|null            $address2
+ * @property Carbon|null            $created_at
+ * @property Carbon|null            $updated_at
+ * @property Shipping|null          $shipping
+ * @property User|null              $user
+ * @property Collection|Cart[]      $carts
  * @property-read Collection|Cart[] $cart_info
- * @property-read int|null $cart_info_count
- * @property-read int|null $carts_count
+ * @property-read int|null          $cart_info_count
+ * @property-read int|null          $carts_count
  *
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -87,42 +87,45 @@ class Order extends Core
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array<string, string>
+     * @var array<string>
      */
-    protected array $dates = [
-        'created_at',
-        'updated_at',
-    ];
-    
-    protected $casts = [
-        'user_id' => 'int',
-        'sub_total' => 'float',
-        'shipping_id' => 'int',
-        'coupon' => 'float',
-        'total_amount' => 'float',
-        'quantity' => 'int',
-    ];
+    protected $dates
+        = [
+            'created_at',
+            'updated_at',
+        ];
 
-    protected $fillable = [
-        'order_number',
-        'user_id',
-        'sub_total',
-        'shipping_id',
-        'coupon',
-        'total_amount',
-        'quantity',
-        'payment_method',
-        'payment_status',
-        'status',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'country',
-        'post_code',
-        'address1',
-        'address2',
-    ];
+    protected $casts
+        = [
+            'user_id' => 'int',
+            'sub_total' => 'float',
+            'shipping_id' => 'int',
+            'coupon' => 'float',
+            'total_amount' => 'float',
+            'quantity' => 'int',
+        ];
+
+    protected $fillable
+        = [
+            'order_number',
+            'user_id',
+            'sub_total',
+            'shipping_id',
+            'coupon',
+            'total_amount',
+            'quantity',
+            'payment_method',
+            'payment_status',
+            'status',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'country',
+            'post_code',
+            'address1',
+            'address2',
+        ];
 
     public static function Factory(): OrderFactory
     {

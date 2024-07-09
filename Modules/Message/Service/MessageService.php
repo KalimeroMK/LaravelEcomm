@@ -5,6 +5,7 @@ namespace Modules\Message\Service;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Service\CoreService;
+use Modules\Message\Models\Message;
 use Modules\Message\Repository\MessageRepository;
 
 class MessageService extends CoreService
@@ -21,9 +22,11 @@ class MessageService extends CoreService
      * Show details of an attribute.
      *
      * @param  int  $id  The attribute ID.
+     * @return Model|null
      */
     public function show(int $id): ?Model
     {
+        /** @var Message $message */
         $message = $this->message_repository->findById($id);
         $message->read_at = Carbon::now();
         $message->save();

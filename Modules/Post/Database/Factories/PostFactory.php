@@ -3,6 +3,7 @@
 namespace Modules\Post\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Modules\Category\Models\Category;
 use Modules\Post\Models\Post;
@@ -32,7 +33,9 @@ class PostFactory extends Factory
      */
     public function withCategories(): PostFactory
     {
-        return $this->afterCreating(function (Post $post) {
+        return $this->afterCreating(function (Model $post) {
+            $post = $post->fresh(); // Ensure the model instance is fresh
+            /** @var Post $post */
             $categories = Category::factory()->count(3)->create();
             $post->categories()->attach($categories);
         });
@@ -43,7 +46,9 @@ class PostFactory extends Factory
      */
     public function withTags(): PostFactory
     {
-        return $this->afterCreating(function (Post $post) {
+        return $this->afterCreating(function (Model $post) {
+            $post = $post->fresh(); // Ensure the model instance is fresh
+            /** @var Post $post */
             $tags = Tag::factory()->count(5)->create();
             $post->tags()->attach($tags);
         });
@@ -54,7 +59,9 @@ class PostFactory extends Factory
      */
     public function withCategoriesAndTags(): PostFactory
     {
-        return $this->afterCreating(function (Post $post) {
+        return $this->afterCreating(function (Model $post) {
+            $post = $post->fresh(); // Ensure the model instance is fresh
+            /** @var Post $post */
             $categories = Category::factory()->count(3)->create();
             $post->categories()->attach($categories);
 

@@ -19,12 +19,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Banner
  *
- * @property int $id
- * @property string $title
- * @property string $slug
+ * @property int         $id
+ * @property string      $title
+ * @property string      $slug
  * @property string|null $photo
  * @property string|null $description
- * @property string $status
+ * @property string      $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -50,12 +50,13 @@ class Banner extends Core implements HasMedia
 
     protected $table = 'banners';
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'description',
-        'status',
-    ];
+    protected $fillable
+        = [
+            'title',
+            'slug',
+            'description',
+            'status',
+        ];
 
     public static function Factory(): BannerFactory
     {
@@ -67,9 +68,14 @@ class Banner extends Core implements HasMedia
         $mediaItem = $this->getFirstMedia('banner');
 
         if ($mediaItem) {
-            return $mediaItem->first()->getUrl();
+            return $mediaItem->getUrl();
         }
 
         return 'https://via.placeholder.com/640x480.png/003311?text=et';
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('banner')->singleFile();
     }
 }

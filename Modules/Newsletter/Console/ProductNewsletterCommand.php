@@ -18,8 +18,11 @@ class ProductNewsletterCommand extends Command
     {
         $products = Product::orderBy('id', 'asc')
             ->take(10)
-            ->get();
+            ->get()
+            ->all(); // Convert the collection to an array
+
         $newsletters = Newsletter::whereIsValidated(true)->get();
+
         foreach ($newsletters as $newsletter) {
             Mail::to($newsletter->email)->send(new ProductNewsletterMail($products));
         }

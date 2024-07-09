@@ -2,9 +2,6 @@
 
 namespace Modules\Front\Http\Controllers\Api;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -52,7 +49,7 @@ class FrontController extends Controller
 
     public function productFilter(Request $request): JsonResponse
     {
-        return response()->json($this->front_service->productFilter($request), 200);
+        return response()->json($this->front_service->productFilter($request->all()), 200);
     }
 
     /**
@@ -60,7 +57,7 @@ class FrontController extends Controller
      */
     public function productSearch(Request $request)
     {
-        return response()->json($this->front_service->productSearch($request), 200);
+        return response()->json($this->front_service->productSearch($request->all()), 200);
     }
 
     /**
@@ -76,7 +73,7 @@ class FrontController extends Controller
      */
     public function productBrand(Request $request)
     {
-        return response()->json($this->front_service->productBrand($request), 200);
+        return response()->json($this->front_service->productBrand($request->all()), 200);
     }
 
     /**
@@ -133,7 +130,8 @@ class FrontController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @param  Request  $request
+     * @return JsonResponse
      */
     public function couponStore(Request $request): JsonResponse
     {

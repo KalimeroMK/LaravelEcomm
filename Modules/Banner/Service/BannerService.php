@@ -3,8 +3,12 @@
 namespace Modules\Banner\Service;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Service\CoreService;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\FileAdder;
 
 class BannerService extends CoreService
 {
@@ -20,16 +24,19 @@ class BannerService extends CoreService
      * Create a new banner with possible media files.
      *
      * @param  array<string, mixed>  $data  The data for creating the banner.
+     * @param  Request|null          $request  The request containing the files.
      * @return Model The newly created banner model.
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function create(array $data): Model
+    public function create(array $data, Request $request = null): Model
     {
         $banner = $this->banner_repository->create($data);
 
         // Handle image uploads
-        if (request()->hasFile('images')) {
+        if ($request && $request->hasFile('images')) {
             $banner->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
+                ->each(function (FileAdder $fileAdder) {
                     $fileAdder->preservingOriginal()->toMediaCollection('banner');
                 });
         }
@@ -40,21 +47,24 @@ class BannerService extends CoreService
     /**
      * Update an existing banner with new data and possibly new media files.
      *
-     * @param  int  $id  The banner ID to update.
+     * @param  int                   $id  The banner ID to update.
      * @param  array<string, mixed>  $data  The data for updating the banner.
+     * @param  Request|null          $request  The request containing the files.
      * @return Model The updated banner model.
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function update(int $id, array $data): Model
+    public function update(int $id, array $data, Request $request = null): Model
     {
         $banner = $this->banner_repository->findById($id);
 
         $banner->update($data);
 
         // Check for new image uploads and handle them
-        if (request()->hasFile('images')) {
+        if ($request && $request->hasFile('images')) {
             $banner->clearMediaCollection('banner'); // Optionally clear existing media
             $banner->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
+                ->each(function (FileAdder $fileAdder) {
                     $fileAdder->preservingOriginal()->toMediaCollection('banner');
                 });
         }

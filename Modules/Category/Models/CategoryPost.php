@@ -11,20 +11,19 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Models\Core;
-use Modules\Core\Traits\HasNewFactory;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 
 /**
  * Class CategoryProductFactory
  *
- * @property int $id
- * @property int $product_id
- * @property int $category_id
+ * @property int         $id
+ * @property int         $product_id
+ * @property int         $category_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Category $category
- * @property Product $product
+ * @property Category    $category
+ * @property Product     $product
  *
  * @method static Builder|CategoryProduct newModelQuery()
  * @method static Builder|CategoryProduct newQuery()
@@ -37,27 +36,28 @@ use Modules\Product\Models\Product;
  *
  * @mixin Eloquent
  *
- * @property int $post_id
- * @property-read Post $post
+ * @property int         $post_id
+ * @property-read Post   $post
  *
  * @method static Builder|CategoryPost wherePostId($value)
  */
 class CategoryPost extends Core
 {
-    use HasNewFactory;
 
     protected $table = 'category_post';
 
-    protected $casts = [
-        'post_id' => 'int',
-        'category_id' => 'int',
-    ];
+    protected $casts
+        = [
+            'post_id' => 'int',
+            'category_id' => 'int',
+        ];
 
-    protected $fillable = [
-        'post_id',
-        'category_id',
-    ];
-
+    protected $fillable
+        = [
+            'post_id',
+            'category_id',
+        ];
+    
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

@@ -43,7 +43,7 @@ class OrderService extends CoreService
     {
         $order_data = [
             'order_number' => 'ORD-'.strtoupper(Str::random(10)),
-            'user_id' => Auth::user()->id,
+            'user_id' => auth()->id(),
             'shipping_id' => $data['shipping'],
             'sub_total' => Helper::totalCartPrice(),
             'quantity' => Helper::cartCount(),
@@ -94,14 +94,17 @@ class OrderService extends CoreService
     /**
      * Update the specified order.
      *
+     * @param  int                   $id
      * @param  array<string, mixed>  $data
+     * @return Model
      */
     public function update(int $id, array $data): Model
     {
+        /** @var Order $order */
         $order = $this->order_repository->findById($id);
 
         if ($data['status'] == 'delivered') {
-            foreach ($order->cart as $cart) {
+            foreach ($order->carts as $cart) { // Updated to use `carts` relationship
                 $product = $cart->product;
                 $product->stock -= $cart->quantity;
                 $product->save();

@@ -73,11 +73,9 @@ class CartController extends CoreController
      */
     public function checkout(): View|Factory|RedirectResponse|Application
     {
-        $this->cart_service->checkout();
-        if (empty($this->cart_service->checkout())) {
-            request()->session()->flash('error', 'Cart is empty');
-
-            return redirect()->back();
+        if ($this->cart_service->checkout() == null) {
+            session()->flash('error', 'Cart is empty');
+            return back();
         }
 
         return view('front::pages.checkout');

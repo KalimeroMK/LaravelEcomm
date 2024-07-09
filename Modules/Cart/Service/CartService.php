@@ -3,8 +3,8 @@
 namespace Modules\Cart\Service;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
@@ -24,52 +24,56 @@ class CartService
     /**
      * Get all attributes.
      *
-     * @return object
+     * @return Collection
      */
-    public function getAll(): mixed
+    public function getAll(): Collection
     {
         return $this->cart_repository->findAll();
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     * @return Cart|Core
+     */
     public function apiAddToCart(array $data): Cart|Core
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
 
-        $cart = Cart::Create(
+        $cart = Cart::create([
+            'user_id' => Auth::id(),
+            'product_id' => $product->id,
+            'price' => (int)($product->price - ($product->price * $product->discount) / 100),
+            'quantity' => (int)$data['quantity'],
+            'amount' => (int)(($product->price - ($product->price * $product->discount) / 100) * $data['quantity']),
+        ]);
 
-            [
-                'user_id' => Auth::id(),
-                'product_id' => $product->id,
-                'price' => ($product->price - ($product->price * $product->discount) / 100),
-                'quantity' => $data['quantity'],
-                'amount' => ($product->price - ($product->price * $product->discount) / 100) * $data['quantity'],
-            ]
-        );
         Wishlist::whereUserId(Auth::id())->whereCartId(null)->update(['cart_id' => $cart->id]);
 
         return $cart;
     }
 
-    public function apiAUpdateCart($data): bool|int
+    /**
+     * @param  array<string, mixed>  $data
+     * @return bool|int
+     */
+    public function apiUpdateCart(array $data): bool|int
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
 
         return Cart::whereUserId(Auth::id())
             ->whereProductId($product->id)
-            ->update(
-
-                [
-                    'price' => ($product->price - ($product->price * $product->discount) / 100),
-                    'quantity' => $data['quantity'],
-                    'amount' => ($product->price - ($product->price * $product->discount) / 100) * $data['quantity'],
-                ]
-            );
+            ->update([
+                'price' => (int)($product->price - ($product->price * $product->discount) / 100),
+                'quantity' => (int)$data['quantity'],
+                'amount' => (int)(($product->price - ($product->price * $product->discount) / 100) * $data['quantity']),
+            ]);
     }
 
     /**
+     * @param  object  $data
      * @return RedirectResponse|void
      */
-    public function addToCart($data)
+    public function addToCart(object $data)
     {
         $already_cart = Cart::whereUserId(Auth::id())->where('order_id', null)->whereHas(
             'product',
@@ -78,8 +82,8 @@ class CartService
             }
         )->first();
         if ($already_cart) {
-            $already_cart->quantity = $already_cart->quantity + 1;
-            $already_cart->amount = $data->price + $already_cart->amount;
+            $already_cart->quantity += 1;
+            $already_cart->amount += $data->price;
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!.');
             }
@@ -88,9 +92,9 @@ class CartService
             $cart = new Cart();
             $cart->user_id = Auth::id();
             $cart->product_id = $data->id;
-            $cart->price = ($data->price - ($data->price * $data->discount) / 100);
+            $cart->price = (int)($data->price - ($data->price * $data->discount) / 100);
             $cart->quantity = 1;
-            $cart->amount = $cart->price * $cart->quantity;
+            $cart->amount = (int)($cart->price * $cart->quantity);
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!.');
             }
@@ -99,9 +103,10 @@ class CartService
     }
 
     /**
+     * @param  array<string, mixed>  $data
      * @return RedirectResponse|void
      */
-    public function singleAddToCart($data)
+    public function singleAddToCart(array $data)
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
 
@@ -111,8 +116,8 @@ class CartService
         )->first();
 
         if ($already_cart) {
-            $already_cart->quantity = $already_cart->quantity + $data['quantity'][1];
-            $already_cart->amount = ($product->price * $data['quantity'][1]) + $already_cart->amount;
+            $already_cart->quantity += (int)$data['quantity'][1];
+            $already_cart->amount += (int)($product->price * $data['quantity'][1]);
             if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!.');
             }
@@ -121,17 +126,17 @@ class CartService
             $cart = new Cart();
             $cart->user_id = Auth::id();
             $cart->product_id = $product->id;
-            $cart->price = ($product->price - ($product->price * $product->discount) / 100);
-            $cart->quantity = $data['quantity'][1];
-            $cart->amount = ($product->price * $data['quantity'][1]);
+            $cart->price = (int)($product->price - ($product->price * $product->discount) / 100);
+            $cart->quantity = (int)$data['quantity'][1];
+            $cart->amount = (int)($product->price * $data['quantity'][1]);
             $cart->save();
         }
     }
 
     /**
-     * @return Builder[]|Collection|Core[]
+     * @return Collection<int, Cart>
      */
-    public function checkout(): Collection|array
+    public function checkout(): Collection
     {
         return Cart::whereUserId(Auth::id())->whereOrderId(null)->get();
     }
@@ -147,9 +152,10 @@ class CartService
     }
 
     /**
-     * Update an existing attribute.
+     * @param  object  $data
+     * @return mixed
      */
-    public function cartUpdate($data): mixed
+    public function cartUpdate(object $data): mixed
     {
         if ($data->quantity) {
             $error = [];
@@ -160,7 +166,6 @@ class CartService
                 if ($quantities > 0 && $cart) {
                     if ($cart->product->stock < $quantities) {
                         request()->session()->flash('error', 'Out of stock');
-
                         return back();
                     }
                     $cart->quantity = ($cart->product->stock > $quantities) ? $quantities : $cart->product->stock;
@@ -168,8 +173,8 @@ class CartService
                     if ($cart->product->stock <= 0) {
                         continue;
                     }
-                    $after_price = ($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
-                    $cart->amount = $after_price * $quantities;
+                    $after_price = (int)($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
+                    $cart->amount = (int)($after_price * $quantities);
                     $cart->save();
                     session()->put('cart', $cart);
                     $success = 'Cart successfully updated!';
@@ -177,7 +182,6 @@ class CartService
                     $error[] = 'Cart Invalid!';
                 }
             }
-
             return back()->with($error)->with('success', $success);
         } else {
             return back()->with('Cart Invalid!');

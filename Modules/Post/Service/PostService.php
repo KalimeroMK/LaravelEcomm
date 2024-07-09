@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Modules\Core\Service\CoreService;
 use Modules\Post\Repository\PostRepository;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\FileAdder;
 
 class PostService extends CoreService
 {
@@ -19,10 +22,12 @@ class PostService extends CoreService
     }
 
     /**
-     * Create a new banner with possible media files.
+     * Create a new post with possible media files.
      *
-     * @param  array<string, mixed>  $data  The data for creating the banner.
-     * @return Model The newly created banner model.
+     * @param  array<string, mixed>  $data  The data for creating the post.
+     * @return Model The newly created post model.
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function create(array $data): Model
     {
@@ -34,10 +39,11 @@ class PostService extends CoreService
         if (isset($data['tags'])) {
             $post->tags()->attach($data['tags']);
         }
+
         // Handle image uploads
         if (request()->hasFile('images')) {
             $post->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
+                ->each(function (FileAdder $fileAdder) {
                     $fileAdder->preservingOriginal()->toMediaCollection('post');
                 });
         }
@@ -46,11 +52,13 @@ class PostService extends CoreService
     }
 
     /**
-     * Update an existing banner with new data and possibly new media files.
+     * Update an existing post with new data and possibly new media files.
      *
-     * @param  int  $id  The banner ID to update.
-     * @param  array<string, mixed>  $data  The data for updating the banner.
-     * @return Model The updated banner model.
+     * @param  int                   $id  The post ID to update.
+     * @param  array<string, mixed>  $data  The data for updating the post.
+     * @return Model The updated post model.
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function update(int $id, array $data): Model
     {
@@ -59,17 +67,18 @@ class PostService extends CoreService
         $post->update($data);
 
         if (isset($data['category'])) {
-            $post->categories()->attach($data['category']);
+            $post->categories()->sync($data['category']);
         }
 
         if (isset($data['tags'])) {
-            $post->tags()->attach($data['tags']);
+            $post->tags()->sync($data['tags']);
         }
+
         // Check for new image uploads and handle them
         if (request()->hasFile('images')) {
             $post->clearMediaCollection('post'); // Optionally clear existing media
             $post->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
+                ->each(function (FileAdder $fileAdder) {
                     $fileAdder->preservingOriginal()->toMediaCollection('post');
                 });
         }
