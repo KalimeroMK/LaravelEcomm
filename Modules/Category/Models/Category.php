@@ -25,17 +25,17 @@ use Modules\Product\Models\Product;
 /**
  * Class Category
  *
- * @property int                                          $id
- * @property string                                       $title
- * @property string                                       $slug
- * @property int|null                                     $status
- * @property int|null                                     $parent_id
- * @property int|null                                     $_lft
- * @property int|null                                     $_rgt
- * @property Carbon|null                                  $created_at
- * @property Carbon|null                                  $updated_at
- * @property Category|null                                $category
- * @property Collection|Category[]                        $categories
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property int|null $status
+ * @property int|null $parent_id
+ * @property int|null $_lft
+ * @property int|null $_rgt
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Category|null $category
+ * @property Collection|Category[] $categories
  * @property-read int|null                                $categories_count
  * @property-read Collection|Product[]                    $products
  * @property-read int|null                                $products_count
@@ -199,9 +199,6 @@ class Category extends Core implements Aliased, Explored, IndexSettings
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    /**
-     * @return string
-     */
     public function getParentsNames(): string
     {
         if ($this->parent) {

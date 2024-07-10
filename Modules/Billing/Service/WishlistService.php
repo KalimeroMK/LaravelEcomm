@@ -15,9 +15,6 @@ class WishlistService extends CoreService
         parent::__construct($wishlist_repository);
     }
 
-    /**
-     * @return Model
-     */
     public function getAllByUser(): Model
     {
         $colum = 'user_id';

@@ -18,6 +18,4 @@ class Store extends CoreRequest
             'status' => 'required|in:active,inactive',
         ];
     }
-
-    
 }

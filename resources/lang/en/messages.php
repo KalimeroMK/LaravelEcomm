@@ -75,5 +75,4 @@ return [
     'import' => 'Import data',
     'select' => 'Select file',
 
-
 ];

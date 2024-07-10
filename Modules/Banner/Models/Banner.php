@@ -19,12 +19,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Banner
  *
- * @property int         $id
- * @property string      $title
- * @property string      $slug
+ * @property int $id
+ * @property string $title
+ * @property string $slug
  * @property string|null $photo
  * @property string|null $description
- * @property string      $status
+ * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -44,9 +44,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Banner extends Core implements HasMedia
 {
-    use InteractsWithMedia;
     use HasFactory;
     use HasSlug;
+    use InteractsWithMedia;
 
     protected $table = 'banners';
 

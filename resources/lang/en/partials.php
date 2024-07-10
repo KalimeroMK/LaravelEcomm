@@ -75,4 +75,3 @@ return [
     'stock' => 'Stock',
 
 ];
-

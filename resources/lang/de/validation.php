@@ -76,7 +76,6 @@ return [
     'url' => 'Das :attribute Format ist ungültig.',
     'casys' => 'Alle casys Felder sind nicht vorhanden',
 
-
     /*
     |--------------------------------------------------------------------------
     | Benutzerdefinierte Validierungs-Sprachzeilen

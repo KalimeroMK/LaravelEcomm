@@ -19,13 +19,12 @@ class Google2FAAuthenticator extends Authenticator
     public function boot($request): static
     {
         parent::boot($request);
+
         return $this;
     }
 
     /**
      * Check if the user is authenticated with 2FA.
-     *
-     * @return bool
      */
     public function isAuthenticated(): bool
     {
@@ -34,8 +33,6 @@ class Google2FAAuthenticator extends Authenticator
 
     /**
      * Generate the response when the user is not authenticated with 2FA.
-     *
-     * @return Response|RedirectResponse
      */
     public function makeRequestOneTimePasswordResponse(): Response|RedirectResponse
     {
@@ -44,8 +41,6 @@ class Google2FAAuthenticator extends Authenticator
 
     /**
      * Determine if the user can pass without checking the OTP.
-     *
-     * @return bool
      */
     protected function canPassWithoutCheckingOTP(): bool
     {
@@ -54,8 +49,8 @@ class Google2FAAuthenticator extends Authenticator
         }
 
         return
-            !$this->getUser()->loginSecurity->google2fa_enable ||
-            !$this->isEnabled() ||
+            ! $this->getUser()->loginSecurity->google2fa_enable ||
+            ! $this->isEnabled() ||
             $this->noUserIsAuthenticated() ||
             $this->twoFactorAuthStillValid();
     }
@@ -63,7 +58,6 @@ class Google2FAAuthenticator extends Authenticator
     /**
      * Get the Google 2FA secret key.
      *
-     * @return string
      * @throws InvalidSecretKey
      */
     protected function getGoogle2FASecretKey(): string

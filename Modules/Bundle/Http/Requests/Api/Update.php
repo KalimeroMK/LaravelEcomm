@@ -21,5 +21,4 @@ class Update extends CoreRequest
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
-
 }

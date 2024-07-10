@@ -22,8 +22,7 @@ class ProductService extends CoreService
     /**
      * Get all products based on given data.
      *
-     * @param array<string, mixed> $data
-     * @return mixed
+     * @param  array<string, mixed>  $data
      */
     public function search(array $data): mixed
     {
@@ -33,8 +32,8 @@ class ProductService extends CoreService
     /**
      * Store a newly created product.
      *
-     * @param array<string, mixed> $data
-     * @return Product
+     * @param  array<string, mixed>  $data
+     *
      * @throws Exception
      */
     public function store(array $data): Product
@@ -43,7 +42,11 @@ class ProductService extends CoreService
 
         /** @var Product $product */
         $product = $this->product_repository->create($data);
-
+        if (request()->hasFile('images')) {
+            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('product');
+            });
+        }
         if (isset($data['attributes'])) {
             $this->syncAttributes($product, $data['attributes']);
         }
@@ -64,9 +67,8 @@ class ProductService extends CoreService
     /**
      * Update an existing product.
      *
-     * @param int $id
-     * @param array<string, mixed> $data
-     * @return Product
+     * @param  array<string, mixed>  $data
+     *
      * @throws Exception
      */
     public function update(int $id, array $data): Product
@@ -76,6 +78,11 @@ class ProductService extends CoreService
         /** @var Product $product */
         $product = $this->product_repository->update($id, $data);
 
+        if (request()->hasFile('images')) {
+            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('product');
+            });
+        }
         if (isset($data['attributes'])) {
             $this->syncAttributes($product, $data['attributes']);
         }
@@ -96,8 +103,7 @@ class ProductService extends CoreService
     /**
      * Handle the color data for the product.
      *
-     * @param array<string, mixed> $data
-     * @return void
+     * @param  array<string, mixed>  $data
      */
     private function handleColor(array &$data): void
     {
@@ -111,9 +117,8 @@ class ProductService extends CoreService
     /**
      * Sync attributes for the product.
      *
-     * @param Product $product
-     * @param array<string, mixed> $attributeData
-     * @return void
+     * @param  array<string, mixed>  $attributeData
+     *
      * @throws Exception
      */
     private function syncAttributes(Product $product, array $attributeData): void

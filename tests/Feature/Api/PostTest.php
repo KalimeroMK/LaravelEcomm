@@ -16,77 +16,69 @@ class PostTest extends TestCase
 {
     use BaseTestTrait;
     use WithoutMiddleware;
-    
+
     public string $url = '/api/v1/post/';
-    
+
     use WithFaker;
-    
+
     /**
      * test create product.
-     *
-     * @return TestResponse
      */
     public function test_create_post(): TestResponse
     {
         Storage::fake('uploads');
-        
+
         $data = [
-            'title'       => $this->faker->word,
-            'slug'        => $this->faker->slug,
-            'status'      => 'active',
-            'summary'     => $this->faker->text,
-            'category[]'  => [1, 2, 3, 4],
-            'photo'       => UploadedFile::fake()->image('file.png', 600, 600),
+            'title' => $this->faker->word,
+            'slug' => $this->faker->slug,
+            'status' => 'active',
+            'summary' => $this->faker->text,
+            'category[]' => [1, 2, 3, 4],
+            'photo' => UploadedFile::fake()->image('file.png', 600, 600),
             'description' => $this->faker->text,
-            'quote'       => $this->faker->word,
-            'tags'        => $this->faker->word,
-            'added_by'    => $this->faker->numberBetween(1, 3),
-            'created_at'  => Carbon::now(),
-            'updated_at'  => Carbon::now(),
+            'quote' => $this->faker->word,
+            'tags' => $this->faker->word,
+            'added_by' => $this->faker->numberBetween(1, 3),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
-        
+
         return $this->create($this->url, $data);
     }
-    
+
     /**
      * test find product.
-     *
-     * @return TestResponse
      */
     public function test_find_post(): TestResponse
     {
         $id = Post::firstOrFail()->id;
-        
+
         return $this->show($this->url, $id);
     }
-    
+
     /**
      * test get all products.
-     *
-     * @return TestResponse
      */
     public function test_get_all_post(): TestResponse
     {
         return $this->list($this->url);
     }
-    
+
     /**
      * test delete products.
-     *
-     * @return TestResponse
      */
     public function test_delete_post(): TestResponse
     {
         $id = Post::firstOrFail()->id;
-        
+
         return $this->destroy($this->url, $id);
     }
-    
+
     public function test_structure()
     {
         $response = $this->json('GET', '/api/v1/post/');
         $response->assertStatus(200);
-        
+
         $response->assertJsonStructure(
             [
                 'data' => [
@@ -114,7 +106,7 @@ class PostTest extends TestCase
                         'added_by',
                     ],
                 ],
-            
+
             ]
         );
     }

@@ -15,13 +15,12 @@ class AttributeTest extends TestCase
     use BaseTestTrait;
 
     public string $url = '/api/v1/attributes/';
+
     use WithFaker;
     use WithoutMiddleware;
 
     /**
      * test create product.
-     *
-     * @return TestResponse
      */
     public function test_create_attribute(): TestResponse
     {
@@ -30,8 +29,6 @@ class AttributeTest extends TestCase
 
     /**
      * test update product.
-     *
-     * @return TestResponse
      */
     public function test_update_attribute(): TestResponse
     {
@@ -46,8 +43,6 @@ class AttributeTest extends TestCase
 
     /**
      * test find product.
-     *
-     * @return TestResponse
      */
     public function test_find_attribute(): TestResponse
     {
@@ -58,8 +53,6 @@ class AttributeTest extends TestCase
 
     /**
      * test get all products.
-     *
-     * @return TestResponse
      */
     public function test_get_all_attribute(): TestResponse
     {
@@ -68,8 +61,6 @@ class AttributeTest extends TestCase
 
     /**
      * test delete products.
-     *
-     * @return TestResponse
      */
     public function test_delete_attribute(): TestResponse
     {
@@ -92,7 +83,7 @@ class AttributeTest extends TestCase
                     'type',
                     'display',
                     'filterable',
-                    'configurable'
+                    'configurable',
                 ],
             ],
         ]);

@@ -25,7 +25,6 @@ class PostCommentService
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      * @throws Exception
      */
     public function store(Request $request): void
@@ -50,9 +49,6 @@ class PostCommentService
 
     /**
      * Edit the specified resource.
-     *
-     * @param int $id
-     * @return Model
      */
     public function edit(int $id): Model
     {
@@ -62,9 +58,7 @@ class PostCommentService
     /**
      * Update the specified resource in storage.
      *
-     * @param array<string, mixed> $data
-     * @param int $id
-     * @return Model
+     * @param  array<string, mixed>  $data
      */
     public function update(array $data, int $id): Model
     {
@@ -73,9 +67,6 @@ class PostCommentService
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return void
      */
     public function destroy(int $id): void
     {
@@ -84,8 +75,6 @@ class PostCommentService
 
     /**
      * Get all resources.
-     *
-     * @return Collection
      */
     public function index(): Collection
     {

@@ -17,5 +17,4 @@ class Store extends CoreRequest
             'title' => 'string|required|unique:brands',
         ];
     }
-
 }

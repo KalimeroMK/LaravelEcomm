@@ -10,8 +10,6 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -20,12 +18,10 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot(): void
     {
-        Model::preventLazyLoading(!$this->app->isProduction());
+        Model::preventLazyLoading(! $this->app->isProduction());
 
         Schema::defaultStringLength(191);
     }

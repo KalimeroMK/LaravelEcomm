@@ -98,8 +98,6 @@ class SizeController extends CoreController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse

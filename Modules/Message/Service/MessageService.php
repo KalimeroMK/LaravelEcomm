@@ -22,7 +22,6 @@ class MessageService extends CoreService
      * Show details of an attribute.
      *
      * @param  int  $id  The attribute ID.
-     * @return Model|null
      */
     public function show(int $id): ?Model
     {

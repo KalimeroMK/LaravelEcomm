@@ -157,14 +157,12 @@ class FrontController extends Controller
     }
 
     /**
-     * @param  string  $slug
      * @return Application|Factory|View
      */
     public function blogByCategory(string $slug)
     {
         return view('front::pages.blog', $this->front_service->blogByCategory($slug));
     }
-
 
     /**
      * Display the blog posts filtered by tag.
@@ -177,10 +175,6 @@ class FrontController extends Controller
         return view('front::pages.blog', $this->front_service->blogByTag($slug));
     }
 
-    /**
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
     public function couponStore(Request $request): RedirectResponse
     {
         return $this->front_service->couponStore($request);

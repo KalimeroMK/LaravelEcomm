@@ -20,8 +20,7 @@ class SizesService extends CoreService
     /**
      * Store a new size.
      *
-     * @param array<string, mixed> $data
-     * @return Model
+     * @param  array<string, mixed>  $data
      */
     public function store(array $data): Model
     {
@@ -30,9 +29,6 @@ class SizesService extends CoreService
 
     /**
      * Edit an existing size by ID.
-     *
-     * @param int $id
-     * @return Model|null
      */
     public function edit(int $id): ?Model
     {
@@ -41,9 +37,6 @@ class SizesService extends CoreService
 
     /**
      * Show an existing size by ID.
-     *
-     * @param int $id
-     * @return Model
      */
     public function show(int $id): Model
     {
@@ -53,9 +46,7 @@ class SizesService extends CoreService
     /**
      * Update an existing size by ID.
      *
-     * @param int $id
-     * @param array<string, mixed> $data
-     * @return Model
+     * @param  array<string, mixed>  $data
      */
     public function update(int $id, array $data): Model
     {
@@ -64,9 +55,6 @@ class SizesService extends CoreService
 
     /**
      * Destroy a size by ID.
-     *
-     * @param int $id
-     * @return void
      */
     public function destroy(int $id): void
     {
@@ -75,8 +63,6 @@ class SizesService extends CoreService
 
     /**
      * Get all sizes.
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {

@@ -34,7 +34,7 @@ return [
     'start_date' => 'Anfangsdatum',
     'end_date' => 'Enddatum',
     'book_ro0m' => 'Zimmer buchen',
-    'details' => "Beginnen wir mit den Grunddetails",
+    'details' => 'Beginnen wir mit den Grunddetails',
     'select_room' => 'Zimmer auswählen',
     'role' => 'Rollen',
     'permission' => 'Berechtigung',
@@ -74,6 +74,5 @@ return [
     'exel' => 'Excel-Vorlage herunterladen',
     'import' => 'Daten importieren',
     'select' => 'Datei auswählen',
-
 
 ];

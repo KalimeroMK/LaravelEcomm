@@ -17,5 +17,4 @@ class ImportRequest extends CoreRequest
             'file' => 'required|mimes:xlsx, csv, xls',
         ];
     }
-
 }

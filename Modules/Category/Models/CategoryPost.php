@@ -17,13 +17,13 @@ use Modules\Product\Models\Product;
 /**
  * Class CategoryProductFactory
  *
- * @property int         $id
- * @property int         $product_id
- * @property int         $category_id
+ * @property int $id
+ * @property int $product_id
+ * @property int $category_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Category    $category
- * @property Product     $product
+ * @property Category $category
+ * @property Product $product
  *
  * @method static Builder|CategoryProduct newModelQuery()
  * @method static Builder|CategoryProduct newQuery()
@@ -36,14 +36,13 @@ use Modules\Product\Models\Product;
  *
  * @mixin Eloquent
  *
- * @property int         $post_id
+ * @property int $post_id
  * @property-read Post   $post
  *
  * @method static Builder|CategoryPost wherePostId($value)
  */
 class CategoryPost extends Core
 {
-
     protected $table = 'category_post';
 
     protected $casts
@@ -57,7 +56,7 @@ class CategoryPost extends Core
             'post_id',
             'category_id',
         ];
-    
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

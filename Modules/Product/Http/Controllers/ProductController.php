@@ -52,12 +52,7 @@ class ProductController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $product = $this->product_service->store($request->all());
-        if (request()->hasFile('images')) {
-            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('product');
-            });
-        }
+        $this->product_service->store($request->all());
 
         return redirect()->route('products.index');
     }
@@ -82,11 +77,6 @@ class ProductController extends CoreController
     public function update(Update $request, Product $product): RedirectResponse
     {
         $this->product_service->update($product->id, $request->all());
-        if (request()->hasFile('images')) {
-            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('product');
-            });
-        }
 
         return redirect()->route('products.index');
     }

@@ -75,6 +75,7 @@ class CartController extends CoreController
     {
         if ($this->cart_service->checkout() == null) {
             session()->flash('error', 'Cart is empty');
+
             return back();
         }
 

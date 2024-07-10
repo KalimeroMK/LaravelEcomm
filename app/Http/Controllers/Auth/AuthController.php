@@ -18,8 +18,6 @@ use Modules\User\Models\User;
 class AuthController extends CoreController
 {
     /**
-     * @param  Request  $request
-     *
      * @return JsonResponse
      */
     public function login(Request $request)
@@ -36,8 +34,6 @@ class AuthController extends CoreController
     }
 
     /**
-     * @param  AuthRequest  $request
-     *
      * @return JsonResponse
      */
     public function register(AuthRequest $request)
@@ -62,7 +58,7 @@ class AuthController extends CoreController
 
     /**
      * Obtain the user information from Social Logged in.
-     * @param $social
+     *
      * @return Application|Factory|View|RedirectResponse
      */
     public function handleProviderCallback($social)
@@ -71,6 +67,7 @@ class AuthController extends CoreController
         $user = User::where(['email' => $userSocial->getEmail()])->first();
         if ($user) {
             Auth::login($user);
+
             return redirect()->route('admin');
         } else {
             return view('auth.register', ['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);

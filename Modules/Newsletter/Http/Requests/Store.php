@@ -17,5 +17,4 @@ class Store extends CoreRequest
             'email' => 'required|email|unique:newsletters',
         ];
     }
-
 }

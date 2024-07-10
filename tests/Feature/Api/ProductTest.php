@@ -16,109 +16,99 @@ class ProductTest extends TestCase
 {
     use BaseTestTrait;
     use WithoutMiddleware;
-    
+
     public string $url = '/api/v1/product/';
-    
+
     use WithFaker;
-    
+
     /**
      * test create product.
-     *
-     * @return TestResponse
      */
     public function test_create_product(): TestResponse
     {
         Storage::fake('uploads');
-        
+
         $data = [
-            'title'        => $this->faker->unique(true)->word,
-            'color'        => $this->faker->unique(true)->word,
-            'summary'      => $this->faker->text,
-            'description'  => $this->faker->text,
+            'title' => $this->faker->unique(true)->word,
+            'color' => $this->faker->unique(true)->word,
+            'summary' => $this->faker->text,
+            'description' => $this->faker->text,
             'condition_id' => $this->faker->numberBetween(1, 2),
-            'photo'        => UploadedFile::fake()->image('file.png', 600, 600),
-            'stock'        => 100,
-            'price'        => $this->faker->numberBetween(1, 9999),
-            'discount'     => 10,
-            'is_featured'  => true,
-            'status'       => 'active',
-            'brand_id'     => $this->faker->numberBetween(1, 10),
-            'created_at'   => Carbon::now(),
-            'updated_at'   => Carbon::now(),
+            'photo' => UploadedFile::fake()->image('file.png', 600, 600),
+            'stock' => 100,
+            'price' => $this->faker->numberBetween(1, 9999),
+            'discount' => 10,
+            'is_featured' => true,
+            'status' => 'active',
+            'brand_id' => $this->faker->numberBetween(1, 10),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
-        
+
         return $this->create($this->url, $data);
     }
-    
+
     /**
      * test update product.
-     *
-     * @return TestResponse
      */
     public function test_update_product(): TestResponse
     {
         $data = [
-            'title'        => $this->faker->unique(true)->word,
-            'summary'      => $this->faker->text,
-            'description'  => $this->faker->text,
-            'color'        => $this->faker->unique(true)->word,
-            'size'         => 1,
+            'title' => $this->faker->unique(true)->word,
+            'summary' => $this->faker->text,
+            'description' => $this->faker->text,
+            'color' => $this->faker->unique(true)->word,
+            'size' => 1,
             'condition_id' => $this->faker->numberBetween(1, 2),
-            'photo'        => UploadedFile::fake()->image('file.png', 600, 600),
-            'stock'        => 100,
-            'price'        => $this->faker->numberBetween(1, 9999),
-            'discount'     => 10,
-            'is_featured'  => true,
-            'status'       => 'active',
-            'brand_id'     => $this->faker->numberBetween(1, 10),
-            'created_at'   => Carbon::now(),
-            'updated_at'   => Carbon::now(),
+            'photo' => UploadedFile::fake()->image('file.png', 600, 600),
+            'stock' => 100,
+            'price' => $this->faker->numberBetween(1, 9999),
+            'discount' => 10,
+            'is_featured' => true,
+            'status' => 'active',
+            'brand_id' => $this->faker->numberBetween(1, 10),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
-        
+
         $id = Product::firstOrFail()->id;
-        
+
         return $this->update($this->url, $data, $id);
     }
-    
+
     /**
      * test find product.
-     *
-     * @return TestResponse
      */
     public function test_find_product(): TestResponse
     {
         $id = Product::firstOrFail()->id;
-        
+
         return $this->show($this->url, $id);
     }
-    
+
     /**
      * test get all products.
-     *
-     * @return TestResponse
      */
     public function test_get_all_product(): TestResponse
     {
         return $this->list($this->url);
     }
-    
+
     /**
      * test delete products.
-     *
-     * @return TestResponse
      */
     public function test_delete_product(): TestResponse
     {
         $id = Product::firstOrFail()->id;
-        
+
         return $this->destroy($this->url, $id);
     }
-    
+
     public function test_structure()
     {
         $response = $this->json('GET', '/api/v1/product/');
         $response->assertStatus(200);
-        
+
         $response->assertJsonStructure(
             [
                 'data' => [
@@ -151,7 +141,7 @@ class ProductTest extends TestCase
                         'condition_id',
                     ],
                 ],
-            
+
             ]
         );
     }

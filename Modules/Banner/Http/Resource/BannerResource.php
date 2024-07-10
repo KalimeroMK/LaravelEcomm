@@ -12,8 +12,7 @@ class BannerResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
-     * @return array<string, mixed>  // Mixed indicates that the array can contain multiple data types
+     * @return array<string, mixed> // Mixed indicates that the array can contain multiple data types
      */
     public function toArray(Request $request): array
     {

@@ -18,7 +18,7 @@ use Spatie\Feed\Http\FeedController;
 |
 */
 
-Route::get('feed', FeedController::class)->name("feeds.main");
+Route::get('feed', FeedController::class)->name('feeds.main');
 Auth::routes();
 
 Route::post('/magic/send', 'MagicLoginConAuth\troller@sendToken')->name('magic.send');

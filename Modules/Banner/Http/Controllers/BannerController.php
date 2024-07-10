@@ -44,20 +44,12 @@ class BannerController extends CoreController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Store  $request
-     * @return RedirectResponse
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      * @throws Exception
      */
     public function store(Store $request): RedirectResponse
     {
-        $banner = $this->banner_service->create($request->validated());
-        if ($request->hasFile('images')) {
-            $banner->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
-                $fileAdder->preservingOriginal()->toMediaCollection('banner');
-            });
-        }
+        $this->banner_service->create($request->validated());
+
         return redirect()->route('banners.index');
     }
 
@@ -72,22 +64,13 @@ class BannerController extends CoreController
     }
 
     /**
-     * @param  Update  $request
-     * @param  Banner  $banner
-     * @return RedirectResponse
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
         $this->banner_service->update($banner->id, $request->validated());
-        if ($request->hasFile('images')) {
-            $banner->clearMediaCollection('banner');
-            $banner->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->preservingOriginal()->toMediaCollection('banner');
-                });
-        }
+
         return redirect()->route('banners.edit', $banner);
     }
 

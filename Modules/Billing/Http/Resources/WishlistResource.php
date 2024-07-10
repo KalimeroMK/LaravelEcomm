@@ -13,7 +13,6 @@ class WishlistResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
      * @return array<string, mixed> Array of various types depending on the property.
      */
     public function toArray(Request $request): array

@@ -19,5 +19,4 @@ class Store extends CoreRequest
             'database' => ['required', 'string'],
         ];
     }
-
 }

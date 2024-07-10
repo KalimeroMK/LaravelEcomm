@@ -25,7 +25,7 @@ class Store extends CoreRequest
             'parent_id' => [
                 'nullable',
                 'exists:categories,id',
-                Rule::notIn([$categoryId])
+                Rule::notIn([$categoryId]),
             ],
         ];
     }

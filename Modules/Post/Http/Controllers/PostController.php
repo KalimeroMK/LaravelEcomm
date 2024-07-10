@@ -123,15 +123,12 @@ class PostController extends Controller
 
     /**
      * Import posts from an uploaded Excel file.
-     *
-     * @param  ImportRequest  $request
-     * @return RedirectResponse
      */
     public function import(ImportRequest $request): RedirectResponse
     {
         // Ensure there is a file and it is not an array of files
         $file = $request->file('file');
-        if (!$file) {
+        if (! $file) {
             return back()->withErrors(['error' => 'Please upload a file.']);
         }
 
@@ -147,7 +144,6 @@ class PostController extends Controller
 
         return redirect()->back()->with('success', 'Posts imported successfully.');
     }
-
 
     /**
      * @return void

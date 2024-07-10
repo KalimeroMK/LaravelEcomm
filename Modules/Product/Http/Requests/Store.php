@@ -37,5 +37,4 @@ class Store extends CoreRequest
             'special_price' => 'nullable',
         ];
     }
-
 }

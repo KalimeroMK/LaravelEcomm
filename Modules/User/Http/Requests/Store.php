@@ -20,6 +20,4 @@ class Store extends CoreRequest
             'roles' => 'required|string|max:255',
         ];
     }
-
-
 }

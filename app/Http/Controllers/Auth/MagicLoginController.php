@@ -28,6 +28,7 @@ class MagicLoginController extends Controller
 
         // Send the magic link. Implement this in your Mail class.
         Mail::to($user->email)->send(new MagicLoginLink($user));
+
         return back()->with('magic_link_sent', 'We have emailed you a magic link!');
     }
 

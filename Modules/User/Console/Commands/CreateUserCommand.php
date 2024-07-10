@@ -10,6 +10,7 @@ use Modules\User\Models\User;
 class CreateUserCommand extends Command
 {
     protected $signature = 'user:create';
+
     protected $description = 'Create a new user and assign a role';
 
     public function handle(): void
@@ -30,6 +31,7 @@ class CreateUserCommand extends Command
             foreach ($validator->errors()->all() as $error) {
                 $this->error($error);
             }
+
             return;
         }
 

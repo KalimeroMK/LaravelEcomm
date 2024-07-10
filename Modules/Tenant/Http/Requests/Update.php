@@ -19,6 +19,4 @@ class Update extends CoreRequest
             'database' => ['nullable', 'string'],
         ];
     }
-
-
 }

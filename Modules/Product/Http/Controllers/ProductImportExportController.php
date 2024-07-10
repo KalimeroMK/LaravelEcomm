@@ -34,14 +34,12 @@ class ProductImportExportController extends Controller
 
     /**
      * Import products from an uploaded Excel file.
-     *
-     * @return RedirectResponse
      */
     public function import(): RedirectResponse
     {
         $file = request()->file('file');
 
-        if (!$file) {
+        if (! $file) {
             // Handle the case where no file is uploaded
             return back()->withErrors(['msg' => 'No file provided.']);
         }
@@ -60,5 +58,4 @@ class ProductImportExportController extends Controller
 
         return back()->with('success', 'Products imported successfully.');
     }
-
 }

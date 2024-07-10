@@ -150,10 +150,6 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
         return ProductFactory::new();
     }
 
-    /**
-     * @param string $slug
-     * @return Product|null
-     */
     public static function getProductBySlug(string $slug): ?Product
     {
         return Product::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
@@ -162,6 +158,7 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     public static function countActiveProduct(): int
     {
         $data = Product::whereStatus('active')->count();
+
         return $data ?: 0;
     }
 
@@ -201,29 +198,28 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
             'active')->orderBy('id', 'DESC');
     }
 
-    /**
-     * @param string $slug
-     * @return string
-     */
     public function incrementSlug(string $slug): string
     {
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-" . $count++;
+            $slug = "{$original}-".$count++;
         }
+
         return $slug;
     }
 
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
+
         return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
+
         return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
@@ -248,6 +244,7 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     public function getCurrentPrice(): mixed
     {
         $today = now();
+
         return $this->special_price && $today->between($this->special_price_start,
             $this->special_price_end) ? $this->special_price : null;
     }
@@ -321,13 +318,10 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
         ];
     }
 
-    /**
-     * @param string $searchTerm
-     * @return \Illuminate\Support\Collection
-     */
     public function searchBrandsByProduct(string $searchTerm): \Illuminate\Support\Collection
     {
         $productBrandIds = Product::search($searchTerm)->get()->pluck('brand_id')->unique();
+
         return Brand::whereIn('id', $productBrandIds)->get();
     }
 }

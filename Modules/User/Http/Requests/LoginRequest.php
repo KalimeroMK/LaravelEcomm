@@ -7,7 +7,9 @@ use Modules\Core\Http\Requests\CoreRequest;
 class LoginRequest extends CoreRequest
 {
     public string $name;
+
     public string $email;
+
     public string $password;
 
     /**
@@ -23,6 +25,4 @@ class LoginRequest extends CoreRequest
             'password' => 'required|string|min:8',
         ];
     }
-
-
 }

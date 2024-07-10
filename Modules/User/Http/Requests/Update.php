@@ -25,6 +25,4 @@ class Update extends FormRequest
             'roles' => 'required|string|max:255',
         ];
     }
-
-
 }

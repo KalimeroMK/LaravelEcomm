@@ -39,5 +39,4 @@ class TenantPolicy
         return $user->can('tenant-delete');
 
     }
-
 }

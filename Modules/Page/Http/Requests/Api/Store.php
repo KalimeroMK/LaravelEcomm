@@ -21,5 +21,4 @@ class Store extends CoreRequest
             'user_id' => ['required', 'exists:users'],
         ];
     }
-
 }

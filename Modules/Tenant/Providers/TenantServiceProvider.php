@@ -120,7 +120,6 @@ class TenantServiceProvider extends ServiceProvider
         return $paths;
     }
 
-
     /**
      * Gets the publishable view paths for the module.
      *
@@ -153,8 +152,10 @@ class TenantServiceProvider extends ServiceProvider
         Queue::createPayloadUsing(function () {
             if ($this->app->bound('tenant')) {
                 $tenant = $this->app->make('tenant');
+
                 return ['tenant_id' => $tenant->id];
             }
+
             return [];
         });
 

@@ -26,11 +26,6 @@ class WishlistController extends CoreController
         return WishlistResource::collection($this->wishlist_service->getAllByUser());
     }
 
-    /**
-     * @param  Store  $request
-     * @return JsonResponse|string
-     *
-     */
     public function store(Store $request): JsonResponse|string
     {
         try {

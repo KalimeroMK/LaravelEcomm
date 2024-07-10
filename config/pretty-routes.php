@@ -30,7 +30,7 @@ return [
     'hide_matching' => [
         '#^_debugbar#',
         '#^_ignition#',
-        '#^routes$#'
+        '#^routes$#',
     ],
 
 ];

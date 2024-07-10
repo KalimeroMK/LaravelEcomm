@@ -42,7 +42,7 @@ class AttributeRepository extends Repository implements SearchInterface
             }
         }
 
-        if ((bool)Arr::get($data, 'all_included') || empty($data)) {
+        if ((bool) Arr::get($data, 'all_included') || empty($data)) {
             return $query->get();
         }
 

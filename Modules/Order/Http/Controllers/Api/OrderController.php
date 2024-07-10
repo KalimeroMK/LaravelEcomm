@@ -50,7 +50,6 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param  int  $id
      * @return JsonResponse
      *
      * @throws ReflectionException
@@ -91,8 +90,8 @@ class OrderController extends CoreController
     }
 
     /**
-     * @param  int  $id
      * @return JsonResponse
+     *
      * @throws ReflectionException
      */
     public function destroy(int $id)

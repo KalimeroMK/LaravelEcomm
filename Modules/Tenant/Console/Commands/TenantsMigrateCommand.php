@@ -35,16 +35,13 @@ class TenantsMigrateCommand extends Command
             }
         } else {
             Tenant::all()->each(
-                fn($tenant) => $this->migrate($tenant)
+                fn ($tenant) => $this->migrate($tenant)
             );
         }
     }
 
     /**
      * Migrate the given tenant.
-     *
-     * @param Tenant $tenant
-     * @return void
      */
     public function migrate(Tenant $tenant): void
     {

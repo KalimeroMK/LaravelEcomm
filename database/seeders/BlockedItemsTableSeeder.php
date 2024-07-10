@@ -21,29 +21,29 @@ class BlockedItemsTableSeeder extends Seeder
          */
         $BlockedItems = [
             [
-                'type'  => 'domain',
+                'type' => 'domain',
                 'value' => 'test.com',
-                'note'  => 'Block all domains/emails @test.com',
+                'note' => 'Block all domains/emails @test.com',
             ],
             [
-                'type'  => 'domain',
+                'type' => 'domain',
                 'value' => 'test.ca',
-                'note'  => 'Block all domains/emails @test.ca',
+                'note' => 'Block all domains/emails @test.ca',
             ],
             [
-                'type'  => 'domain',
+                'type' => 'domain',
                 'value' => 'fake.com',
-                'note'  => 'Block all domains/emails @fake.com',
+                'note' => 'Block all domains/emails @fake.com',
             ],
             [
-                'type'  => 'domain',
+                'type' => 'domain',
                 'value' => 'example.com',
-                'note'  => 'Block all domains/emails @example.com',
+                'note' => 'Block all domains/emails @example.com',
             ],
             [
-                'type'  => 'domain',
+                'type' => 'domain',
                 'value' => 'mailinator.com',
-                'note'  => 'Block all domains/emails @mailinator.com',
+                'note' => 'Block all domains/emails @mailinator.com',
             ],
         ];
 
@@ -60,9 +60,9 @@ class BlockedItemsTableSeeder extends Seeder
                     ->first();
                 if ($newBlockedItem === null) {
                     $newBlockedItem = BlockedItem::create([
-                        'typeId'    => $blockType->id,
-                        'value'     => $BlockedItem['value'],
-                        'note'      => $BlockedItem['note'],
+                        'typeId' => $blockType->id,
+                        'value' => $BlockedItem['value'],
+                        'note' => $BlockedItem['note'],
                     ]);
                 }
             }

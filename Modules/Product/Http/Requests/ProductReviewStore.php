@@ -17,5 +17,4 @@ class ProductReviewStore extends CoreRequest
             'rate' => 'required|numeric|min:1',
         ];
     }
-
 }

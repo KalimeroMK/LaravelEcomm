@@ -72,10 +72,6 @@ class TagController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param int $id
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse

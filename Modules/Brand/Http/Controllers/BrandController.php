@@ -9,8 +9,6 @@ use Modules\Brand\Http\Requests\Store;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
 use Modules\Core\Http\Controllers\CoreController;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class BrandController extends CoreController
 {
@@ -34,19 +32,10 @@ class BrandController extends CoreController
         return view('brand::create', ['brand' => new Brand()]);
     }
 
-    /**
-     * @param  Store  $request
-     * @return RedirectResponse
-     */
     public function store(Store $request): RedirectResponse
     {
-        $brand = $this->brand_service->create($request->validated());
-        if ($request->hasFile('images')) {
-            $brand->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->preservingOriginal()->toMediaCollection('brand');
-                });
-        }
+        $this->brand_service->create($request->validated());
+
         return redirect()->route('brands.index')->with('status', 'Brand created successfully.');
     }
 
@@ -55,23 +44,10 @@ class BrandController extends CoreController
         return view('brand::edit', compact('brand'));
     }
 
-    /**
-     * @param  Store  $request
-     * @param  Brand  $brand
-     * @return RedirectResponse
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
     public function update(Store $request, Brand $brand): RedirectResponse
     {
         $this->brand_service->update($brand->id, $request->validated());
-        if ($request->hasFile('images')) {
-            $brand->clearMediaCollection('brand');
-            $brand->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->preservingOriginal()->toMediaCollection('brand');
-                });
-        }
+
         return redirect()->route('brands.edit', $brand)->with('status', 'Brand updated successfully.');
     }
 

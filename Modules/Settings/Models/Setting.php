@@ -18,14 +18,14 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Setting
  *
- * @property int         $id
- * @property string      $description
- * @property string      $short_des
- * @property string      $logo
- * @property string      $photo
- * @property string      $address
- * @property string      $phone
- * @property string      $email
+ * @property int $id
+ * @property string $description
+ * @property string $short_des
+ * @property string $logo
+ * @property string $photo
+ * @property string $address
+ * @property string $phone
+ * @property string $email
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -42,6 +42,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Setting wherePhoto($value)
  * @method static Builder|Setting whereShortDes($value)
  * @method static Builder|Setting whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Setting extends Core implements HasMedia

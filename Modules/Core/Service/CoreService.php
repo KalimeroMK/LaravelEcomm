@@ -17,8 +17,6 @@ abstract class CoreService
 
     /**
      * Retrieve all records.
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -27,9 +25,6 @@ abstract class CoreService
 
     /**
      * Retrieve a single entity by its ID.
-     *
-     * @param  int  $id
-     * @return Model|null
      */
     public function findById(int $id): ?Model
     {
@@ -40,7 +35,6 @@ abstract class CoreService
      * Create a new record.
      *
      * @param  array<string, mixed>  $data
-     * @return Model
      */
     public function create(array $data): Model
     {
@@ -50,9 +44,7 @@ abstract class CoreService
     /**
      * Update an existing record.
      *
-     * @param  int                   $id
      * @param  array<string, mixed>  $data
-     * @return Model
      */
     public function update(int $id, array $data): Model
     {
@@ -61,8 +53,6 @@ abstract class CoreService
 
     /**
      * Delete a record by its ID.
-     *
-     * @param  int  $id
      */
     public function delete(int $id): void
     {

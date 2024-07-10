@@ -13,10 +13,6 @@ use Modules\User\Models\User;
 
 trait Order
 {
-    /**
-     * @param  float  $amount
-     * @return void
-     */
     public function orderSave(float $amount): void
     {
         $order = new \Modules\Order\Models\Order();
@@ -26,7 +22,7 @@ trait Order
         $order_data['sub_total'] = Helper::totalCartPrice();
         $order_data['quantity'] = Helper::cartCount();
         $order_data['status'] = 'new';
-        $order_data['total_amount'] = (int)$amount;
+        $order_data['total_amount'] = (int) $amount;
         $order_data['payment_method'] = 'stripe';
         $order_data['payment_status'] = 'paid';
         $order->fill($order_data);

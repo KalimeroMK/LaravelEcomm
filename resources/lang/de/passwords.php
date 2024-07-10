@@ -15,7 +15,7 @@ return [
     */
 
     'password' => 'Passwörter müssen mindestens sechs Zeichen lang sein und mit der Bestätigung übereinstimmen.',
-    'user' => "Wir können keinen Benutzer mit dieser E-Mail-Adresse finden.",
+    'user' => 'Wir können keinen Benutzer mit dieser E-Mail-Adresse finden.',
     'token' => 'Dieses Token zum Zurücksetzen des Passworts ist ungültig.',
     'sent' => 'Wir haben Ihnen einen Link zum Zurücksetzen Ihres Passworts per E-Mail gesendet!',
     'reset' => 'Ihr Passwort wurde zurückgesetzt!',

@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class BrandTest extends TestCase
 {
-
     public string $url = '/api/v1/brand/';
 
     use BaseTestTrait;
@@ -20,15 +19,13 @@ class BrandTest extends TestCase
 
     /**
      * test create product.
-     *
-     * @return TestResponse
      */
     public function test_create_brand(): TestResponse
     {
         Storage::fake('uploads');
 
         $data = [
-            'title' => time() . 'Test title',
+            'title' => time().'Test title',
             'images' => [UploadedFile::fake()->image('updated_file.png', 600, 600)],
             'status' => 'inactive',
         ];
@@ -38,14 +35,12 @@ class BrandTest extends TestCase
 
     /**
      * test update product.
-     *
-     * @return TestResponse
      */
     public function test_update_brand(): TestResponse
     {
         $data = [
-            'title' => time() . 'Test title1',
-            'description' => time() . 'test-description',
+            'title' => time().'Test title1',
+            'description' => time().'test-description',
             'status' => 'inactive',
         ];
 
@@ -56,8 +51,6 @@ class BrandTest extends TestCase
 
     /**
      * test find product.
-     *
-     * @return TestResponse
      */
     public function test_find_brand(): TestResponse
     {
@@ -68,8 +61,6 @@ class BrandTest extends TestCase
 
     /**
      * test get all products.
-     *
-     * @return TestResponse
      */
     public function test_get_all_brand(): TestResponse
     {
@@ -78,8 +69,6 @@ class BrandTest extends TestCase
 
     /**
      * test delete products.
-     *
-     * @return TestResponse
      */
     public function test_delete_brand(): TestResponse
     {
@@ -110,5 +99,4 @@ class BrandTest extends TestCase
             ]
         );
     }
-
 }

@@ -23,7 +23,7 @@ class Store extends CoreRequest
             'phone' => 'string|required',
             'post_code' => 'string|nullable',
             'email' => 'string|required',
-            'cart' => [new CartRule()]
+            'cart' => [new CartRule()],
         ];
     }
 }

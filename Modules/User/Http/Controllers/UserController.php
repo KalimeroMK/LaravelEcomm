@@ -28,7 +28,6 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Request  $request
      * @return Application|Factory|View
      */
     public function index(Request $request)
@@ -37,10 +36,10 @@ class UserController extends Controller
         if (Auth::user()->isSuperAdmin()) {
             $users = $this->user_service->getAll();
         } else {
-            if (!is_numeric($userId)) {
-                abort(404, "User not found.");
+            if (! is_numeric($userId)) {
+                abort(404, 'User not found.');
             } else {
-                $users = $this->user_service->findById((int)$userId);
+                $users = $this->user_service->findById((int) $userId);
             }
         }
 

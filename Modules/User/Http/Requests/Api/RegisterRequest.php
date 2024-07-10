@@ -19,6 +19,4 @@ class RegisterRequest extends CoreRequest
             'password' => 'required|string|confirmed|min:8',
         ];
     }
-
-
 }

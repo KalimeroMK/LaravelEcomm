@@ -16,8 +16,6 @@ class NewOrderCreatedNotification extends Notification
 
     /**
      * Create a new notification instance.
-     *
-     * @param Order $order
      */
     public function __construct(Order $order)
     {
@@ -27,7 +25,6 @@ class NewOrderCreatedNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param object $notifiable
      * @return array<int, string>
      */
     public function via(object $notifiable): array
@@ -38,7 +35,6 @@ class NewOrderCreatedNotification extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param object $notifiable
      * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array

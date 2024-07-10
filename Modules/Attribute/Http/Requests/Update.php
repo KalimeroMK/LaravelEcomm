@@ -13,6 +13,7 @@ class Update extends CoreRequest
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
+     *
      * @throws Exception
      */
     public function rules(): array
@@ -24,7 +25,7 @@ class Update extends CoreRequest
             $attributeId = $attribute->id;
         } else {
             // Handle the error appropriately, maybe log it or throw an exception
-            throw new Exception("Expected an instance of Attribute, received ".gettype($attribute));
+            throw new Exception('Expected an instance of Attribute, received '.gettype($attribute));
         }
 
         return [

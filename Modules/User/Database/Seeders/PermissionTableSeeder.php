@@ -41,7 +41,7 @@ class PermissionTableSeeder extends Seeder
             'product',
             'order',
             'attributes',
-            'page'
+            'page',
         ];
         $operations = ['list', 'create', 'update', 'delete'];
 
@@ -104,15 +104,13 @@ class PermissionTableSeeder extends Seeder
         $user = User::factory()->create([
             'name' => $name,
             'email' => $email,
-            'password' => bcrypt('password')
+            'password' => bcrypt('password'),
         ]);
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new Exception('User creation did not return a User model instance.');
         }
 
         $user->assignRole($roleName);
     }
-
-
 }

@@ -68,9 +68,6 @@ class PostController extends CoreController
     }
 
     /**
-     * @param Update $request
-     * @param int $id
-     * @return JsonResponse|string
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse|string
@@ -90,8 +87,6 @@ class PostController extends CoreController
     }
 
     /**
-     * @param int $id
-     * @return JsonResponse|string
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse|string

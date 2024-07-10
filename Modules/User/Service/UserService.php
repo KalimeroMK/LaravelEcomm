@@ -21,8 +21,8 @@ class UserService extends CoreService
     /**
      * Updates a user.
      *
-     * @param int $id The ID of the user to update.
-     * @param array<string, mixed> $data The data to update the user with.
+     * @param  int  $id  The ID of the user to update.
+     * @param  array<string, mixed>  $data  The data to update the user with.
      * @return Model The updated user model.
      */
     public function update(int $id, array $data): Model
@@ -41,12 +41,12 @@ class UserService extends CoreService
     /**
      * Prepares input data for updating a user.
      *
-     * @param array<string, mixed> $data The data to prepare.
+     * @param  array<string, mixed>  $data  The data to prepare.
      * @return array<string, mixed> The prepared data.
      */
     private function prepareInputData(array $data): array
     {
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             return ['password' => Hash::make($data['password'])];
         }
 

@@ -35,5 +35,4 @@ class Update extends CoreRequest
             'discount' => 'nullable|numeric',
         ];
     }
-
 }

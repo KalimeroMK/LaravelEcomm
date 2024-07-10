@@ -26,8 +26,6 @@ class StripeService
     }
 
     /**
-     * @param  Request  $request
-     * @return RedirectResponse
      * @throws ApiErrorException
      */
     public function stripePost(Request $request): RedirectResponse

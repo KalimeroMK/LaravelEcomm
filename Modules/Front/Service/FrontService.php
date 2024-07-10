@@ -37,8 +37,11 @@ class FrontService
     public $model = Product::class;
 
     protected ProductRepository $productRepository;
+
     protected BrandRepository $brandRepository;
+
     private PostRepository $postRepository;
+
     private BannerRepository $bannerRepository;
 
     public function __construct(
@@ -82,7 +85,7 @@ class FrontService
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             $category = Category::whereSlug($slug)->first();
 
-            if (!$category) {
+            if (! $category) {
                 return 'Category not found';
             }
 
@@ -110,7 +113,6 @@ class FrontService
     /**
      * Search blog posts.
      *
-     * @param  Request  $request
      * @return array<string, mixed>|string
      */
     public function blogSearch(Request $request): array|string
@@ -132,9 +134,6 @@ class FrontService
 
     /**
      * Store a message.
-     *
-     * @param  Request  $request
-     * @return string
      */
     public function messageStore(Request $request): string
     {
@@ -197,7 +196,6 @@ class FrontService
         return request()->only(['category', 'brand', 'price', 'show', 'sortBy']);
     }
 
-
     /**
      * Retrieve category and brand IDs from slugs.
      *
@@ -223,7 +221,6 @@ class FrontService
         return [$categoryIds, $brandIds];
     }
 
-
     /**
      * Retrieve price range.
      *
@@ -234,7 +231,6 @@ class FrontService
     {
         return array_map('intval', explode('-', $queryParams['price'] ?? '0-'.PHP_INT_MAX));
     }
-
 
     /**
      * Retrieve sort order.
@@ -259,14 +255,9 @@ class FrontService
     /**
      * Retrieve products based on various filters.
      *
-     * @param  int[]                 $categoryIds
-     * @param  int[]                 $brandIds
-     * @param  int                   $minPrice
-     * @param  int                   $maxPrice
-     * @param  string                $sortColumn
-     * @param  string                $sortOrder
+     * @param  int[]  $categoryIds
+     * @param  int[]  $brandIds
      * @param  array<string, mixed>  $queryParams
-     * @return LengthAwarePaginator
      */
     private function retrieveProducts(
         array $categoryIds,
@@ -277,23 +268,23 @@ class FrontService
         string $sortOrder,
         array $queryParams
     ): LengthAwarePaginator {
-        $perPage = (int)($queryParams['show'] ?? 9);
+        $perPage = (int) ($queryParams['show'] ?? 9);
 
-// Generate a unique cache key
+        // Generate a unique cache key
         $cacheKey = 'products_'.json_encode(
-                compact(
-                    'categoryIds',
-                    'brandIds',
-                    'minPrice',
-                    'maxPrice',
-                    'sortColumn',
-                    'sortOrder',
-                    'perPage'
-                )
+            compact(
+                'categoryIds',
+                'brandIds',
+                'minPrice',
+                'maxPrice',
+                'sortColumn',
+                'sortOrder',
+                'perPage'
+            )
 
-            );
+        );
 
-// Cache for 24 hours (86400 seconds)
+        // Cache for 24 hours (86400 seconds)
         return Cache::remember($cacheKey, 86400, function () use (
             $categoryIds,
             $brandIds,
@@ -304,9 +295,9 @@ class FrontService
             $perPage
         ) {
             return $this->model::query()
-                ->when($categoryIds, fn($query) => $query->whereIn('cat_id', $categoryIds))
-                ->when($brandIds, fn($query) => $query->whereIn('brand_id', $brandIds))
-                ->when($minPrice || $maxPrice, fn($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
+                ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
+                ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
+                ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
                 ->orderBy($sortColumn, $sortOrder)
                 ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
                 ->paginate($perPage);
@@ -330,7 +321,6 @@ class FrontService
     /**
      * Get blog posts by tag slug.
      *
-     * @param  string  $slug
      * @return array<string, mixed>|string
      */
     public function blogByTag(string $slug): array|string
@@ -354,20 +344,18 @@ class FrontService
 
     /**
      * Store coupon and apply it to user's cart.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse|string
      */
     public function couponStore(Request $request): RedirectResponse|string
     {
         $coupon = Coupon::whereCode($request->code)->first();
-        if (!$coupon) {
+        if (! $coupon) {
             request()->session()->flash('error', 'Invalid coupon code, Please try again');
+
             return back();
         }
 
         // Cast the total price to a float to ensure the correct type is passed to the discount method
-        $total_price = (float)Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
+        $total_price = (float) Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
 
         session()->put('coupon', [
             'id' => $coupon->id,
@@ -380,7 +368,6 @@ class FrontService
         return redirect()->back();
     }
 
-
     /**
      * Filter blog posts based on selected categories and tags.
      *
@@ -392,8 +379,8 @@ class FrontService
         $category = $data['category'] ?? [];
         $tag = $data['tag'] ?? [];
 
-        $catURL = !empty($category) ? implode(',', $category) : '';
-        $tagURL = !empty($tag) ? implode(',', $tag) : '';
+        $catURL = ! empty($category) ? implode(',', $category) : '';
+        $tagURL = ! empty($tag) ? implode(',', $tag) : '';
 
         // Return an array with the filtered categories and tags.
         return [
@@ -405,7 +392,6 @@ class FrontService
     /**
      * Get blog posts by category slug.
      *
-     * @param  string  $slug
      * @return array<string, mixed>
      */
     public function blogByCategory(string $slug): array
@@ -431,15 +417,15 @@ class FrontService
     {
         $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
-// Perform search using Elasticsearch
+        // Perform search using Elasticsearch
         $searchTerm = Arr::get($data, 'search', '');
-// Use the search method from Scout to perform a full-text search
+        // Use the search method from Scout to perform a full-text search
         $products = Product::search($searchTerm)
             ->where('status', 'active')
             ->orderBy('id', 'desc')
             ->paginate(9);
 
-// you might need to adjust this to work with your Elasticsearch setup.
+        // you might need to adjust this to work with your Elasticsearch setup.
         $brands = Brand::search($searchTerm)->get();
 
         return [
@@ -473,11 +459,9 @@ class FrontService
         });
     }
 
-
     /**
      * Get product details by slug.
      *
-     * @param  string  $slug
      * @return array<string, mixed>
      */
     public function productDetail(string $slug): array
@@ -505,7 +489,6 @@ class FrontService
     /**
      * Get data for a blog post detail page.
      *
-     * @param  string  $slug
      * @return array<string, mixed>|string
      */
     public function blogDetail(string $slug): array|string
@@ -571,7 +554,6 @@ class FrontService
 
         $routeParameters = http_build_query($query);
 
-
         return redirect()->route($routeName, $routeParameters);
     }
 
@@ -599,8 +581,6 @@ class FrontService
 
     /**
      * Create a base query for products.
-     *
-     * @return Builder
      */
     private function makeBaseQuery(): Builder
     {
@@ -611,13 +591,10 @@ class FrontService
 
     /**
      * Filter query by category.
-     *
-     * @param  Builder  $query
-     * @return void
      */
     private function filterByCategory(Builder $query): void
     {
-        if (!empty($_GET['category'])) {
+        if (! empty($_GET['category'])) {
             $catSlugs = explode(',', $_GET['category']);
             $catIds = Category::whereIn('slug', $catSlugs)->pluck('id')->toArray();
             $query->whereIn('cat_id', $catIds);
@@ -626,13 +603,10 @@ class FrontService
 
     /**
      * Filter query by brand.
-     *
-     * @param  Builder  $query
-     * @return void
      */
     private function filterByBrand(Builder $query): void
     {
-        if (!empty($_GET['brand'])) {
+        if (! empty($_GET['brand'])) {
             $brandSlugs = explode(',', $_GET['brand']);
             $brandIds = Brand::whereIn('slug', $brandSlugs)->pluck('id')->toArray();
             $query->whereIn('brand_id', $brandIds);
@@ -641,13 +615,10 @@ class FrontService
 
     /**
      * Sort query by specific column.
-     *
-     * @param  Builder  $query
-     * @return void
      */
     private function sortBy(Builder $query): void
     {
-        if (!empty($_GET['sortBy'])) {
+        if (! empty($_GET['sortBy'])) {
             $sortBy = $_GET['sortBy'];
             if ($sortBy === 'title') {
                 $query->orderBy('title', 'ASC');
@@ -659,13 +630,10 @@ class FrontService
 
     /**
      * Filter query by price range.
-     *
-     * @param  Builder  $query
-     * @return void
      */
     private function filterByPriceRange(Builder $query): void
     {
-        if (!empty($_GET['price'])) {
+        if (! empty($_GET['price'])) {
             $priceRange = explode('-', $_GET['price']);
             $minPrice = $priceRange[0] ?? 0;
             $maxPrice = $priceRange[1] ?? PHP_INT_MAX;
@@ -685,13 +653,10 @@ class FrontService
 
     /**
      * Paginate query results.
-     *
-     * @param  Builder  $query
-     * @return LengthAwarePaginator
      */
     private function pagination(Builder $query): LengthAwarePaginator
     {
-        $perPage = isset($_GET['show']) ? (int)$_GET['show'] : 6;
+        $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
 
         return $query->paginate($perPage);
     }
@@ -705,7 +670,6 @@ class FrontService
     {
         return Brand::whereStatus('active')->withCount('products')->get();
     }
-
 
     /**
      * Retrieve a list of blog posts
@@ -754,7 +718,6 @@ class FrontService
     /**
      * Validate a newsletter entry by ID.
      *
-     * @param  string  $token
      * @return string Returns an error message if an exception occurs, otherwise returns nothing.
      */
     public function validation(string $token): string
@@ -767,7 +730,6 @@ class FrontService
     /**
      * Delete a newsletter entry by ID.
      *
-     * @param  string  $token
      * @return string Returns an error message if an exception occurs, otherwise returns nothing.
      */
     public function deleteNewsletter(string $token): string

@@ -9,9 +9,9 @@ class AuthRequest extends CoreRequest
     public function rules(): array
     {
         return [
-            'name'             => 'required',
-            'email'            => 'required|email|unique:users',
-            'password'         => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
             'confirm_password' => 'required|same:password',
         ];
     }

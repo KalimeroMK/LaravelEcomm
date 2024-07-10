@@ -51,5 +51,4 @@ return [
     'tenant' => 'Tenant',
     'page' => 'Страна',
 
-
 ];

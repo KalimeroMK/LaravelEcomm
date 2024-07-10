@@ -75,7 +75,6 @@ return [
     'url' => 'The :attribute format is invalid.',
     'casys' => 'All casys fields are not present',
 
-
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

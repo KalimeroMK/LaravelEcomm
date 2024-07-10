@@ -17,13 +17,12 @@ class BannerTest extends TestCase
     use BaseTestTrait;
 
     public string $url = '/api/v1/banners/';
+
     use WithFaker;
     use WithoutMiddleware;
 
     /**
      * test create product.
-     *
-     * @return TestResponse
      */
     public function test_create_banner(): TestResponse
     {
@@ -43,14 +42,12 @@ class BannerTest extends TestCase
 
     /**
      * test update product.
-     *
-     * @return TestResponse
      */
     public function test_update_banner(): TestResponse
     {
         $data = [
-            'title' => time() . 'Test title',
-            'description' => time() . 'test-description',
+            'title' => time().'Test title',
+            'description' => time().'test-description',
             'status' => 'inactive',
             'images' => [UploadedFile::fake()->image('updated_file.png', 600, 600)],
 
@@ -63,8 +60,6 @@ class BannerTest extends TestCase
 
     /**
      * test find product.
-     *
-     * @return TestResponse
      */
     public function test_find_banner(): TestResponse
     {
@@ -75,8 +70,6 @@ class BannerTest extends TestCase
 
     /**
      * test get all products.
-     *
-     * @return TestResponse
      */
     public function test_get_all_banners(): TestResponse
     {
@@ -85,8 +78,6 @@ class BannerTest extends TestCase
 
     /**
      * test delete products.
-     *
-     * @return TestResponse
      */
     public function test_delete_banner(): TestResponse
     {

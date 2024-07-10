@@ -94,9 +94,7 @@ class OrderService extends CoreService
     /**
      * Update the specified order.
      *
-     * @param  int                   $id
      * @param  array<string, mixed>  $data
-     * @return Model
      */
     public function update(int $id, array $data): Model
     {

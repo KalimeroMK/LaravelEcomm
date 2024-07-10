@@ -129,10 +129,6 @@ class FrontController extends Controller
         return response()->json($this->front_service->blogByTag($request), 200);
     }
 
-    /**
-     * @param  Request  $request
-     * @return JsonResponse
-     */
     public function couponStore(Request $request): JsonResponse
     {
         return response()->json($this->front_service->couponStore($request), 200);

@@ -22,7 +22,6 @@ return [
         ],
     ],
 
-
     /**
      * The default index settings used when creating a new index. You can override these settings
      * on a per-index basis by implementing the IndexSettings interface on your model or defining

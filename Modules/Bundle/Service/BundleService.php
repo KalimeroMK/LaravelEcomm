@@ -3,7 +3,6 @@
 namespace Modules\Bundle\Service;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Bundle\Models\Bundle;
 use Modules\Bundle\Repository\BundleRepository;
 use Modules\Core\Service\CoreService;
 use Modules\Product\Models\Product;
@@ -36,27 +35,46 @@ class BundleService extends CoreService
      * Create a new banner with possible media files.
      *
      * @param  array<string, mixed>  $data  The data for creating the banner.
-     * @return Bundle The newly created banner model.
+     * @return Model The newly created banner model.
      */
     public function create(array $data): Model
     {
         $bundle = $this->bundleRepository->create($data);
         $bundle->products()->attach($data['product']);
+
+        // Handle image uploads
+        if (request()->hasFile('images')) {
+            $bundle->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('bundle');
+                });
+        }
+
         return $bundle;
     }
 
     /**
      * Update an existing banner with new data and possibly new media files.
      *
-     * @param  int                   $id  The banner ID to update.
+     * @param  int  $id  The banner ID to update.
      * @param  array<string, mixed>  $data  The data for updating the banner.
-     * @return Bundle The newly created banner model.
+     * @return Model The updated banner model.
      */
     public function update(int $id, array $data): Model
     {
         $bundle = $this->bundleRepository->findById($id);
         $bundle->products()->sync($data['product']);
         $bundle->update($data);
+
+        // Check for new image uploads and handle them
+        if (request()->hasFile('images')) {
+            $bundle->clearMediaCollection('bundle'); // Optionally clear existing media
+            $bundle->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->preservingOriginal()->toMediaCollection('bundle');
+                });
+        }
+
         return $bundle;
     }
 }

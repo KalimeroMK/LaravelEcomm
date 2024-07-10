@@ -12,7 +12,7 @@ class Store extends CoreRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>  // 'mixed' to indicate various possible types including custom rule objects
+     * @return array<string, mixed> // 'mixed' to indicate various possible types including custom rule objects
      */
     public function rules(): array
     {

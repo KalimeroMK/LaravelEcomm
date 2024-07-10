@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int    $id
+ * @property int $id
  * @property string $name
  * @property string $domain
  * @property string $database Name of the tenant's database.
@@ -15,12 +15,11 @@ use Illuminate\Support\Facades\DB;
 class Tenant extends Model
 {
     protected $fillable = ['name', 'domain', 'database'];
+
     protected $connection = 'owner'; // Default connection for the owner database
 
     /**
      * Configure the tenant's database connection dynamically.
-     *
-     * @return self
      */
     public function configure(): self
     {
@@ -40,8 +39,6 @@ class Tenant extends Model
 
     /**
      * Activate the tenant context across the application.
-     *
-     * @return self
      */
     public function use(): self
     {

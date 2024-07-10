@@ -19,5 +19,4 @@ class Update extends CoreRequest
             'status' => 'required|in:active,inactive',
         ];
     }
-
 }
