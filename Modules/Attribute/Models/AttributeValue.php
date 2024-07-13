@@ -3,12 +3,10 @@
 namespace Modules\Attribute\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Modules\Attribute\Database\Factories\AttributeValueFactory;
 use Modules\Core\Models\Core;
-use Modules\Product\Models\Product;
 
 /**
  * Class AttributeValue
@@ -29,7 +27,6 @@ use Modules\Product\Models\Product;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Attribute $attribute
- * @property Collection|Product[] $products
  */
 class AttributeValue extends Core
 {
@@ -72,7 +69,12 @@ class AttributeValue extends Core
         return $this->belongsTo(Attribute::class);
     }
 
-    public function getValueAttribute(): string
+    public function attributable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function getValueAttribute(): ?string
     {
         if (! $this->relationLoaded('attribute')) {
             $this->load('attribute');
@@ -84,14 +86,14 @@ class AttributeValue extends Core
             Attribute::TYPE_URL => $this->url_value,
             Attribute::TYPE_HEX => $this->hex_value,
             Attribute::TYPE_TEXT => $this->text_value,
-            default => null,
+            Attribute::TYPE_DATE => $this->date_value ? $this->date_value->toDateString() : '',
+            Attribute::TYPE_TIME => $this->time_value ? $this->time_value->toTimeString() : '',
+            Attribute::TYPE_FLOAT => $this->float_value !== null ? (string) $this->float_value : '',
+            Attribute::TYPE_STRING => $this->string_value,
+            Attribute::TYPE_INTEGER => $this->integer_value !== null ? (string) $this->integer_value : '',
+            Attribute::TYPE_BOOLEAN => $this->boolean_value ? 'true' : 'false',
+            Attribute::TYPE_DECIMAL => $this->decimal_value !== null ? (string) $this->decimal_value : '',
+            default => $this->default ?? '',
         };
-    }
-
-    public function products(): BelongsToMany
-    {
-        return $this->belongsToMany(Product::class, 'product_attribute_value')
-            ->withPivot('id')
-            ->withTimestamps();
     }
 }

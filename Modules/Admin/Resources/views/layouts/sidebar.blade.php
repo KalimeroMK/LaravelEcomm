@@ -15,34 +15,9 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>@lang('sidebar.dashboard')</span></a>
     </li>
-    @can('super-admin')
-        <!-- Divider -->
-        <hr class="sidebar-divider">
+         <!-- Divider -->
+    <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            @lang('sidebar.banners')
-        </div>
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true"
-               aria-controls="collapseTwo">
-                <i class="fas fa-image"></i>
-                <span>@lang('sidebar.banners')</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">@lang('sidebar.banner_options'):</h6>
-                    <a class="collapse-item" href="{{route('banners.index')}}">@lang('sidebar.banners')</a>
-                    <a class="collapse-item" href="{{route('banners.create')}}">@lang('sidebar.add_banners')</a>
-                </div>
-            </div>
-        </li>
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-        <!-- Heading -->
-    @endcan
     <div class="sidebar-heading">
         Shop
     </div>

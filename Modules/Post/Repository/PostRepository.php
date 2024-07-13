@@ -83,7 +83,7 @@ class PostRepository extends Repository implements SearchInterface
     {
         $orderBy = Arr::get($data, 'order_by', 'id');
         $sort = Arr::get($data, 'sort', 'desc');
-        $perPage = Arr::get($data, 'per_page', (new $this->model)->getPerPage());
+        $perPage = Arr::get($data, 'per_page', (new Post())->getPerPage());
 
         return $this->eagerLoadRelations($query)->orderBy($orderBy, $sort)->paginate($perPage);
     }

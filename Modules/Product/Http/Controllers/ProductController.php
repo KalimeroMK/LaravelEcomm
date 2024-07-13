@@ -30,7 +30,7 @@ class ProductController extends CoreController
 
     public function index(Search $request): Renderable
     {
-        return view('product::index', ['products' => $this->product_service->search($request->validated())]);
+        return view('product::index', ['products' => $this->product_service->index()]);
     }
 
     public function create(): Renderable
@@ -59,6 +59,8 @@ class ProductController extends CoreController
 
     public function edit(Product $product): Renderable
     {
+        $product->load('attributes.attribute');
+
         return view('product::edit', [
             'brands' => Brand::get(),
             'categories' => Category::all(),
@@ -67,8 +69,7 @@ class ProductController extends CoreController
             'conditions' => Condition::all(),
             'tags' => Tag::get(),
             'attributes' => Attribute::all(),
-        ]
-        );
+        ]);
     }
 
     /**

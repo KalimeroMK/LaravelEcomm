@@ -28,6 +28,52 @@
                         <textarea class="form-control" id="description"
                                   name="description">{{ $product->description ??''}}</textarea>
                     </div>
+                     <!-- Add attributes dynamically -->
+                    <div class="attributes-section">
+                        <h4>Product Attributes</h4>
+                        @foreach($attributes as $attribute)
+                            <div class="form-group">
+                                <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
+                                @php
+                                    $attributeValue = $product->attributes->where('attribute_id', $attribute->id)->first();
+                                @endphp
+                                @switch($attribute->type)
+                                    @case('string')
+                                        <input type="text" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->string_value ?? '' }}">
+                                        @break
+                                    @case('text')
+                                        <textarea class="form-control" name="attributes[{{ $attribute->code }}]">{{ $attributeValue->text_value ?? '' }}</textarea>
+                                        @break
+                                    @case('date')
+                                        <input type="date" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->date_value ?? '' }}">
+                                        @break
+                                    @case('time')
+                                        <input type="time" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->time_value ?? '' }}">
+                                        @break
+                                    @case('url')
+                                        <input type="url" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->url_value ?? '' }}">
+                                        @break
+                                    @case('hex')
+                                        <input type="text" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->hex_value ?? '' }}">
+                                        @break
+                                    @case('float')
+                                        <input type="number" step="0.01" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->float_value ?? '' }}">
+                                        @break
+                                    @case('integer')
+                                        <input type="number" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->integer_value ?? '' }}">
+                                        @break
+                                    @case('boolean')
+                                        <input type="checkbox" class="form-control" name="attributes[{{ $attribute->code }}]}" value="1" {{ $attributeValue && $attributeValue->boolean_value ? 'checked' : '' }}>
+                                        @break
+                                    @case('decimal')
+                                        <input type="number" step="0.0001" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->decimal_value ?? '' }}">
+                                        @break
+                                    @default
+                                        <input type="text" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->default ?? '' }}">
+                                @endswitch
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
                 <div class="col-3">
                     <div class="form-group">
@@ -146,12 +192,13 @@
                     </div>
 
                 </div>
+                 </div>
+
                 <div class="button-container">
                     <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
                     <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
                 </div>
-            </div>
-
+           
         </form>
     </div>
     <div class="row container-fluid" style="margin-top: 2%">
@@ -169,14 +216,21 @@
         @endforeach
     </div>
 
-    @push('scripts')
-        <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-        <script>
-            CKEDITOR.replace('description', {
-                versionCheck: false,
-                filebrowserUploadUrl: "{{ route('ckeditor.image-upload', ['_token' => csrf_token() ]) }}",
-                filebrowserUploadMethod: 'form'
+    @push('styles')
+    <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+@endpush
+@push('scripts')
+    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+    <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#description').summernote({
+                placeholder: "Write short description.....",
+                tabsize: 2,
+                height: 150
             });
-        </script>
-    @endpush
+        });
+    </script>
+@endpush
+
 @endsection

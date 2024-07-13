@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('decimal_value', 7, 4)->nullable();
             $table->unsignedBigInteger('attribute_id')->index();
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
+            $table->morphs('attributable');
             $table->timestamps();
         });
     }

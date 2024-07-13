@@ -56,14 +56,16 @@
         </div>
     @endforeach
 </div>
-
 @push('scripts')
-    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+    <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
     <script>
-        CKEDITOR.replace('description', {
-            versionCheck: false,
-            filebrowserUploadUrl: "{{ route('ckeditor.image-upload', ['_token' => csrf_token() ]) }}",
-            filebrowserUploadMethod: 'form'
+        $(document).ready(function () {
+            $('#description').summernote({
+                placeholder: "Write short description.....",
+                tabsize: 2,
+                height: 150
+            });
         });
     </script>
 @endpush

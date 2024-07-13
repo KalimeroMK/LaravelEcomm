@@ -49,7 +49,7 @@ class ProductRepository extends Repository
      */
     protected function withRelations(): array
     {
-        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags', 'attributeValues.attribute'];
+        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags', 'attributes.attribute'];
     }
 
     /**
@@ -122,5 +122,10 @@ class ProductRepository extends Repository
                 ->limit(4)
                 ->get();
         });
+    }
+
+    public function findAll(): Collection
+    {
+        return $this->model::with($this->withRelations())->get();
     }
 }

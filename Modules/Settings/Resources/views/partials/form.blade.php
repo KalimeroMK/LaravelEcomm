@@ -55,3 +55,16 @@
         </div>
     </div>
 </form>
+@push('scripts')
+    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+    <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#description').summernote({
+                placeholder: "Write short description.....",
+                tabsize: 2,
+                height: 150
+            });
+        });
+    </script>
+@endpush

@@ -54,10 +54,9 @@
                                 </td>
                                 <td>{{ ucfirst($product->status) }}</td>
                                 <td>
-                                    @foreach($product->attributeValues as $attributeValue)
+                                     @foreach($product->attributes as $attributeValue)
                                         @if(!empty($attributeValue->value))
-                                            <strong>{{ $attributeValue->attribute->name }}
-                                                :</strong> {{ $attributeValue->value }}
+                                            <strong>{{ $attributeValue->attribute->name }}:</strong> {{ $attributeValue->value }}
                                             @if (!$loop->last)
                                                 ,
                                             @endif

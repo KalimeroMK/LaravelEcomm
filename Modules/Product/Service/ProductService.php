@@ -4,7 +4,6 @@ namespace Modules\Product\Service;
 
 use Exception;
 use Modules\Attribute\Models\Attribute;
-use Modules\Attribute\Models\AttributeValue;
 use Modules\Core\Service\CoreService;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
@@ -17,6 +16,16 @@ class ProductService extends CoreService
     {
         parent::__construct($product_repository);
         $this->product_repository = $product_repository;
+    }
+
+    /**
+     * Get all products based on given data.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function index(): mixed
+    {
+        return $this->product_repository->findAll();
     }
 
     /**
@@ -46,9 +55,6 @@ class ProductService extends CoreService
             $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
-        }
-        if (isset($data['attributes'])) {
-            $this->syncAttributes($product, $data['attributes']);
         }
 
         $product->categories()->attach($data['category']);
@@ -83,9 +89,6 @@ class ProductService extends CoreService
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
         }
-        if (isset($data['attributes'])) {
-            $this->syncAttributes($product, $data['attributes']);
-        }
 
         $product->categories()->sync($data['category']);
 
@@ -97,6 +100,20 @@ class ProductService extends CoreService
             $product->tags()->sync($data['tag']);
         }
 
+        // Handle attributes
+        if (isset($data['attributes'])) {
+            foreach ($data['attributes'] as $attributeCode => $attributeValue) {
+                $attribute = Attribute::where('code', $attributeCode)->first();
+                if ($attribute) {
+                    $valueColumn = $attribute->getValueColumnName();
+                    $product->attributes()->updateOrCreate(
+                        ['attribute_id' => $attribute->id],
+                        [$valueColumn => $attributeValue]
+                    );
+                }
+            }
+        }
+
         return $product;
     }
 
@@ -105,34 +122,12 @@ class ProductService extends CoreService
      *
      * @param  array<string, mixed>  $data
      */
-    private function handleColor(array &$data): void
+    private function handleColor(array $data): void
     {
         $color = $data['color'] ?? null;
         if (is_array($color)) {
             $color = preg_replace('/\s+/', '', $color);
             $data['color'] = implode(',', $color);
-        }
-    }
-
-    /**
-     * Sync attributes for the product.
-     *
-     * @param  array<string, mixed>  $attributeData
-     *
-     * @throws Exception
-     */
-    private function syncAttributes(Product $product, array $attributeData): void
-    {
-        foreach ($attributeData as $attributeId => $value) {
-            $attribute = Attribute::findOrFail($attributeId);
-            $valueColumn = $attribute->getValueColumnName();
-
-            $attributeValue = AttributeValue::firstOrCreate([
-                'attribute_id' => $attributeId,
-                $valueColumn => $value,
-            ]);
-
-            $product->attributeValues()->syncWithoutDetaching([$attributeValue->id]);
         }
     }
 }

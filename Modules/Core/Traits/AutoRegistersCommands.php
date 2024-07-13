@@ -16,12 +16,16 @@ trait AutoRegistersCommands
         $commandsDirectory = module_path($moduleName, 'Console/Commands');
         $namespace = 'Modules\\'.$moduleName.'\\Console\\Commands\\';
 
-        foreach (glob($commandsDirectory.'/*.php') as $commandFile) {
-            $commandClassName = basename($commandFile, '.php');
-            $commandClass = $namespace.$commandClassName;
+        $commandFiles = glob($commandsDirectory.'/*.php');
 
-            if (is_subclass_of($commandClass, Command::class)) {
-                $this->commands([$commandClass]);
+        if ($commandFiles !== false) {
+            foreach ($commandFiles as $commandFile) {
+                $commandClassName = basename($commandFile, '.php');
+                $commandClass = $namespace.$commandClassName;
+
+                if (is_subclass_of($commandClass, Command::class)) {
+                    $this->commands([$commandClass]);
+                }
             }
         }
     }

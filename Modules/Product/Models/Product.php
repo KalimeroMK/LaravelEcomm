@@ -324,4 +324,9 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
 
         return Brand::whereIn('id', $productBrandIds)->get();
     }
+
+    public function attributes()
+    {
+        return $this->morphMany(AttributeValue::class, 'attributable');
+    }
 }
