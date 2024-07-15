@@ -73,5 +73,7 @@ return [
     'categories' => 'Категории',
     'sku' => 'Бар код',
     'stock' => 'Залиха',
+    'product_attributes' => 'Продукт атрибути',
+    'generate_description' => 'Генерирај опис',
 
 ];

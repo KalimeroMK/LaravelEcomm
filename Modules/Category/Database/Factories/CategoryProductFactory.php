@@ -26,12 +26,7 @@ class CategoryProductFactory extends Factory
 
                 return $product->id;
             },
-            'category_id' => function () {
-                /** @var Category $category */
-                $category = Category::factory()->create();
-
-                return $category->id;
-            },
+            'category_id' => Category::inRandomOrder()->first()->id,
         ];
     }
 }

@@ -29,43 +29,43 @@ class PostFactory extends Factory
     }
 
     /**
-     * Configure the factory to create a post with categories.
+     * Configure the factory to create a post with random existing categories.
      */
     public function withCategories(): PostFactory
     {
         return $this->afterCreating(function (Model $post) {
             $post = $post->fresh(); // Ensure the model instance is fresh
             /** @var Post $post */
-            $categories = Category::factory()->count(3)->create();
+            $categories = Category::inRandomOrder()->limit(3)->pluck('id');
             $post->categories()->attach($categories);
         });
     }
 
     /**
-     * Configure the factory to create a post with tags.
+     * Configure the factory to create a post with random existing tags.
      */
     public function withTags(): PostFactory
     {
         return $this->afterCreating(function (Model $post) {
             $post = $post->fresh(); // Ensure the model instance is fresh
             /** @var Post $post */
-            $tags = Tag::factory()->count(5)->create();
+            $tags = Tag::inRandomOrder()->limit(5)->pluck('id');
             $post->tags()->attach($tags);
         });
     }
 
     /**
-     * Configure the factory to create a post with categories and tags.
+     * Configure the factory to create a post with random existing categories and tags.
      */
     public function withCategoriesAndTags(): PostFactory
     {
         return $this->afterCreating(function (Model $post) {
             $post = $post->fresh(); // Ensure the model instance is fresh
             /** @var Post $post */
-            $categories = Category::factory()->count(3)->create();
+            $categories = Category::inRandomOrder()->limit(3)->pluck('id');
             $post->categories()->attach($categories);
 
-            $tags = Tag::factory()->count(5)->create();
+            $tags = Tag::inRandomOrder()->limit(5)->pluck('id');
             $post->tags()->attach($tags);
         });
     }

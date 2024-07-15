@@ -72,5 +72,7 @@ return [
     'categories' => 'Categories',
     'sku' => 'SKU',
     'stock' => 'Stock',
+    'product_attributes' => 'Product attributes',
+    'generate_description' => 'Generate description',
 
 ];

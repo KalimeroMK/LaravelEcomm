@@ -5,12 +5,13 @@ namespace Modules\Product\Http\Controllers;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Modules\Admin\Models\Condition;
 use Modules\Attribute\Models\Attribute;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\Product\Http\Requests\Api\Search;
+use Modules\OpenAI\Service\OpenAIService;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Models\Product;
@@ -28,7 +29,7 @@ class ProductController extends CoreController
         $this->authorizeResource(Product::class, 'product');
     }
 
-    public function index(Search $request): Renderable
+    public function index(): Renderable
     {
         return view('product::index', ['products' => $this->product_service->index()]);
     }
@@ -95,5 +96,14 @@ class ProductController extends CoreController
         $model->media()->where('id', $mediaId)->first()->delete();
 
         return back()->with('success', 'Media deleted successfully.');
+    }
+
+    public function generateDescription(Request $request)
+    {
+        $title = $request->title;
+        $description = (new OpenAIService())->generateProductDescription($title);
+
+        return response()->json(['description' => $description]);
+
     }
 }

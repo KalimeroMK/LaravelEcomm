@@ -26,11 +26,18 @@
                     <div class="form-group">
                         <label for="description">@lang('partials.description')</label>
                         <textarea class="form-control" id="description"
-                                  name="description">{{ $product->description ??''}}</textarea>
+                                  name="description">{{ $product->description ?? '' }}</textarea>
+                        @if(config('openai.openai.enabled'))
+                            <button type="button" style="margin-top: 2%" id="generateDescription"
+                                    class="btn btn-info">@lang('partials.generate_description')
+                            </button>
+                        @endif
                     </div>
-                     <!-- Add attributes dynamically -->
+
+
+                    <!-- Add attributes dynamically -->
                     <div class="attributes-section">
-                        <h4>Product Attributes</h4>
+                        <h4>@lang('partials.product_atributes')</h4>
                         @foreach($attributes as $attribute)
                             <div class="form-group">
                                 <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
@@ -39,37 +46,57 @@
                                 @endphp
                                 @switch($attribute->type)
                                     @case('string')
-                                        <input type="text" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->string_value ?? '' }}">
+                                        <input type="text" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]"
+                                               value="{{ $attributeValue->string_value ?? '' }}">
                                         @break
                                     @case('text')
-                                        <textarea class="form-control" name="attributes[{{ $attribute->code }}]">{{ $attributeValue->text_value ?? '' }}</textarea>
+                                        <textarea class="form-control"
+                                                  name="attributes[{{ $attribute->code }}]">{{ $attributeValue->text_value ?? '' }}</textarea>
                                         @break
                                     @case('date')
-                                        <input type="date" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->date_value ?? '' }}">
+                                        <input type="date" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]"
+                                               value="{{ $attributeValue->date_value ?? '' }}">
                                         @break
                                     @case('time')
-                                        <input type="time" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->time_value ?? '' }}">
+                                        <input type="time" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]"
+                                               value="{{ $attributeValue->time_value ?? '' }}">
                                         @break
                                     @case('url')
-                                        <input type="url" class="form-control" name="attributes[{{ $attribute->code }}]" value="{{ $attributeValue->url_value ?? '' }}">
+                                        <input type="url" class="form-control" name="attributes[{{ $attribute->code }}]"
+                                               value="{{ $attributeValue->url_value ?? '' }}">
                                         @break
                                     @case('hex')
-                                        <input type="text" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->hex_value ?? '' }}">
+                                        <input type="text" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]}"
+                                               value="{{ $attributeValue->hex_value ?? '' }}">
                                         @break
                                     @case('float')
-                                        <input type="number" step="0.01" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->float_value ?? '' }}">
+                                        <input type="number" step="0.01" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]}"
+                                               value="{{ $attributeValue->float_value ?? '' }}">
                                         @break
                                     @case('integer')
-                                        <input type="number" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->integer_value ?? '' }}">
+                                        <input type="number" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]}"
+                                               value="{{ $attributeValue->integer_value ?? '' }}">
                                         @break
                                     @case('boolean')
-                                        <input type="checkbox" class="form-control" name="attributes[{{ $attribute->code }}]}" value="1" {{ $attributeValue && $attributeValue->boolean_value ? 'checked' : '' }}>
+                                        <input type="checkbox" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]}"
+                                               value="1" {{ $attributeValue && $attributeValue->boolean_value ? 'checked' : '' }}>
                                         @break
                                     @case('decimal')
-                                        <input type="number" step="0.0001" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->decimal_value ?? '' }}">
+                                        <input type="number" step="0.0001" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]}"
+                                               value="{{ $attributeValue->decimal_value ?? '' }}">
                                         @break
                                     @default
-                                        <input type="text" class="form-control" name="attributes[{{ $attribute->code }}]}" value="{{ $attributeValue->default ?? '' }}">
+                                        <input type="text" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]}"
+                                               value="{{ $attributeValue->default ?? '' }}">
                                 @endswitch
                             </div>
                         @endforeach
@@ -192,13 +219,13 @@
                     </div>
 
                 </div>
-                 </div>
+            </div>
 
-                <div class="button-container">
-                    <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
-                    <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
-                </div>
-           
+            <div class="button-container">
+                <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
+                <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
+            </div>
+
         </form>
     </div>
     <div class="row container-fluid" style="margin-top: 2%">
@@ -217,20 +244,48 @@
     </div>
 
     @push('styles')
-    <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
-@endpush
-@push('scripts')
-    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
-    <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
-    <script>
-        $(document).ready(function () {
-            $('#description').summernote({
-                placeholder: "Write short description.....",
-                tabsize: 2,
-                height: 150
+        <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+    @endpush
+    @push('scripts')
+        <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+        <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+        <script>
+            $(document).ready(function () {
+                $('#description').summernote({
+                    placeholder: "Write short description.....",
+                    tabsize: 2,
+                    height: 150
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+        @if(config('openai.openai.enabled'))
+            <script>
+                $(document).ready(function () {
+                    $('#generateDescription').on('click', function () {
+                        var productTitle = $('#inputTitle').val(); // Assuming the title input has an ID 'inputTitle'
+                        if (!productTitle) {
+                            alert('Please enter a title first.');
+                            return;
+                        }
+
+                        $.ajax({
+                            url: "{{ route('products.generate-description') }}",
+                            type: "POST",
+                            data: {
+                                title: productTitle,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function (response) {
+                                $('#description').summernote('code', response.description);
+                            },
+                            error: function () {
+                                alert('Error generating description. Please try again.');
+                            }
+                        });
+                    });
+                });
+            </script>
+        @endif
+    @endpush
 
 @endsection

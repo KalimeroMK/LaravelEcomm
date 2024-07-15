@@ -39,7 +39,7 @@ class ProductFactory extends Factory
         return $this->afterCreating(function (Model $model) {
             /** @var Product $product */
             $product = $model;
-            $categories = Category::factory()->count(3)->create();
+            $categories = Category::inRandomOrder()->limit(3)->pluck('id');
             $product->categories()->attach($categories);
         });
     }
@@ -52,7 +52,7 @@ class ProductFactory extends Factory
         return $this->afterCreating(function (Model $model) {
             /** @var Product $product */
             $product = $model;
-            $tags = Tag::factory()->count(5)->create();
+            $tags = Tag::inRandomOrder()->limit(5)->pluck('id');
             $product->tags()->attach($tags);
         });
     }
@@ -65,10 +65,10 @@ class ProductFactory extends Factory
         return $this->afterCreating(function (Model $model) {
             /** @var Product $product */
             $product = $model;
-            $categories = Category::factory()->count(3)->create();
+            $categories = Category::inRandomOrder()->limit(3)->pluck('id');
             $product->categories()->attach($categories);
 
-            $tags = Tag::factory()->count(5)->create();
+            $tags = Tag::inRandomOrder()->limit(5)->pluck('id');
             $product->tags()->attach($tags);
         });
     }

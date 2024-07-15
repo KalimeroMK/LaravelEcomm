@@ -9,7 +9,7 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 use Modules\Product\Http\Controllers\ProductController;
 use Modules\Product\Http\Controllers\ProductImportExportController;
@@ -27,3 +27,5 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('products-import', [ProductImportExportController::class, 'index'])->name('export-import-product.index');
 });
 Route::post('reviews/{slug}', [ProductReviewController::class, 'store'])->name('product.review.store');
+Route::post('generate-description',
+    [ProductController::class, 'generateDescription'])->name('products.generate-description');

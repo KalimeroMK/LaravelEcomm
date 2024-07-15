@@ -67,6 +67,10 @@
 
 - Redis
 
+======= OPEN AI =======
+
+- Integrate open ai for product description generation and many more...
+
 ## Screenshots :
 
 ![screencapture-e-shop-loc-admin-2020-08-15-15_47_37](https://user-images.githubusercontent.com/29488275/90719413-13b82200-e2d4-11ea-8ca0-f0e5551c4c9d.png)
@@ -144,6 +148,7 @@ To enable and configure the multi-tenant functionality in your application, foll
    OWNER_DB_DATABASE=homestead
    OWNER_DB_USERNAME=homestead
    OWNER_DB_PASSWORD=secret
+
 2. **Init Multi-Tenant database**:
 
    ```env
@@ -162,6 +167,20 @@ To enable and configure the multi-tenant functionality in your application, foll
    one using each, also it accepts --fresh and --seed options.
    ```env
    php artisan tenant:migrate
+
+### Enabling OpenAI Functionality
+
+To enable and configure the OpenAI functionality in your application, follow these steps:
+
+1. **Add OpenAI Configuration**:
+
+   Update your `.env` file to include the OpenAI configuration:
+
+   ```env
+   OPENAI_API_KEY=YOUR_API_KEY
+   ENABLE_OPENAI=true
+
+Generate description button will SHOW in product CRUD page.
 
 <p style="text-align:center">Thank You so much for your time !!!</p>
 
