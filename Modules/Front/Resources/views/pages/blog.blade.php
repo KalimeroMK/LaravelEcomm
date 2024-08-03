@@ -22,8 +22,8 @@
     <!-- End Breadcrumbs -->
     <!-- Start Blog Single -->
     <section class="blog-single shop-blog grid section">
-        <div class="container">
-            <div class="row">
+        <div class="container-fluid">
+            <div class="row" style="padding-left: 5%; padding-right: 5%">
                 <div class="col-9">
                     <div class="row">
                         @foreach($posts as $post)

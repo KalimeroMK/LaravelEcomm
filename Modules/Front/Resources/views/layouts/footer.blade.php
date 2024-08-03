@@ -27,11 +27,10 @@
                         <h4>Information</h4>
                         <ul>
                             <li><a href="{{route('front.about-us')}}">About Us</a></li>
-                            <li><a href="#">Faq</a></li>
-                            <li><a href="#">Terms & Conditions</a></li>
                             <li><a href="{{route('front.contact')}}">Contact Us</a></li>
-                            <li><a href="#">Help</a></li>
-                        </ul>
+                            @foreach($pageList as $page)
+                                <li><a href="{{ route('front.pages', $page['slug']) }}">{{ $page['title'] }}</a></li>
+                            @endforeach                        </ul>
                     </div>
                     <!-- End Single Widget -->
                 </div>

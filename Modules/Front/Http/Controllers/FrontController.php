@@ -243,4 +243,10 @@ class FrontController extends Controller
         // Redirect to the home page
         return redirect()->route('front.index');
     }
+
+    public function pages(string $slug): View
+    {
+        return view('front::pages.page', $this->front_service->pages($slug));
+    }
 }
+

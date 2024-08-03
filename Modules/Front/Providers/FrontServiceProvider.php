@@ -5,6 +5,7 @@ namespace Modules\Front\Providers;
 use Config;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Modules\Front\Http\ViewComposers\InformationViewComposer;
 use Modules\Front\Http\ViewComposers\MaxViewComposer;
 use Modules\Front\Http\ViewComposers\MenuViewComposer;
 use Modules\Front\Http\ViewComposers\SchemaOrgViewComposer;
@@ -38,6 +39,7 @@ class FrontServiceProvider extends ServiceProvider
         View::composer(['front::pages.product-grids', 'front::pages.product-lists', 'front::pages.bundles'],
             MaxViewComposer::class);
         View::composer('front::layouts.master', SchemaOrgViewComposer::class);
+        View::composer('front::layouts.footer', InformationViewComposer::class);
     }
 
     /**
