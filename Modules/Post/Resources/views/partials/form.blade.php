@@ -11,12 +11,24 @@
         <input id="inputTitle" type="text" name="title" placeholder="@lang('partials.title')" value="{{$post->title}}"
                class="form-control">
     </div>
-
     <div class="form-group">
-        <label for="quote">@lang('partials.quote')</label>
-        <textarea class="form-control" id="quote" name="quote">{{$post->quote}}</textarea>
+        <label for="cat_id">@lang('partials.categories')</label>
+        <select class="form-control js-example-basic-multiple" id="category" name="category[]"
+                multiple="multiple">
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->title }}</option>
+            @endforeach
+        </select>
     </div>
-
+    <div class="form-group">
+        <label for="cat_id">@lang('partials.tag')</label>
+        <select class="form-control js-example-basic-multiple" id="tag" name="tag[]"
+                multiple="multiple">
+            @foreach ($tags as $tag)
+                <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="form-group">
         <label for="summary">@lang('partials.summary')</label>
         <textarea class="form-control" id="summary" name="summary">{{$post->summary}}</textarea>
@@ -42,8 +54,10 @@
 
     <button type="submit" class="btn btn-primary">@lang('partials.update')</button>
 </form>
+@push('styles')
+    <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+@endpush
 @push('scripts')
-    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
     <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
     <script>
         $(document).ready(function () {

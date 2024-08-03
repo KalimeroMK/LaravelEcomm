@@ -8,7 +8,7 @@
 
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">@lang('partials.title') <span
-                class="text-danger">*</span></label>
+                    class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="title" placeholder="@lang('partials.title')"
                value="{{ $banner->title ?? null }}" class="form-control">
     </div>
@@ -20,7 +20,7 @@
 
     <div class="form-group">
         <label for="inputPhoto" class="col-form-label">@lang('partials.image') <span
-                class="text-danger">*</span></label>
+                    class="text-danger">*</span></label>
         <div class="input-group">
             <span class="btn btn-round btn-rose btn-file">
                 <span class="fileinput-new"></span>
@@ -47,7 +47,6 @@
     <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
 @endpush
 @push('scripts')
-    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
     <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
     <script>
         $(document).ready(function () {

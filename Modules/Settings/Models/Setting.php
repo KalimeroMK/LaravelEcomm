@@ -18,14 +18,14 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Setting
  *
- * @property int $id
- * @property string $description
- * @property string $short_des
- * @property string $logo
- * @property string $photo
- * @property string $address
- * @property string $phone
- * @property string $email
+ * @property int         $id
+ * @property string      $description
+ * @property string      $short_des
+ * @property string      $logo
+ * @property string      $photo
+ * @property string      $address
+ * @property string      $phone
+ * @property string      $email
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -65,6 +65,9 @@ class Setting extends Core implements HasMedia
             'fb_app_id',
             'keywords',
             'google-site-verification',
+            'longitude',
+            'latitude',
+            'google_map_api_key'
 
         ];
 

@@ -81,7 +81,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        $tags = Tag::all();
+        $tags = Tag::get();
         $users = User::all();
         $post = $this->post_service->findById($post->id);
 
@@ -128,7 +128,7 @@ class PostController extends Controller
     {
         // Ensure there is a file and it is not an array of files
         $file = $request->file('file');
-        if (! $file) {
+        if (!$file) {
             return back()->withErrors(['error' => 'Please upload a file.']);
         }
 

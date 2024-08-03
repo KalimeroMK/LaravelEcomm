@@ -56,11 +56,14 @@
                                 <td>{{$post->id}}</td>
                                 <td>{{$post->title}}</td>
                                 <td> @foreach($post->categories as $category)
-                                        {{$category->title}}
+                                        {{$category->title }},
                                     @endforeach
                                 </td>
-                                <td>{{$post->tags}}</td>
                                 <td>{{$post->description}}</td>
+                                <td> @foreach($post->tags as $tag)
+                                        {{$tag->title}},
+                                    @endforeach
+                                </td>
                                 <td>{{ $post->author->name}}</td>
                                 <td>
                                     @if($post->photo)
@@ -89,7 +92,7 @@
                                         <button class="btn btn-danger btn-sm dltBtn"
                                                 data-id="{{$post->id}}" style="height:30px; width:30px;border-radius:50%
                                         " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                class="fas fa-trash-alt"></i></button>
+                                                    class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

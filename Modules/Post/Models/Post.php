@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
@@ -30,28 +29,28 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Post
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $summary
- * @property string|null $description
- * @property string|null $quote
- * @property string|null $photo
- * @property string|null $tags
- * @property int|null $post_cat_id
- * @property int|null $post_tag_id
- * @property int|null $added_by
- * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property User|null $user
- * @property Tag|null $post_tag
- * @property Collection|PostComment[] $post_comments
- * @property-read Collection|PostComment[] $allComments
- * @property-read int|null $all_comments_count
- * @property-read User|null $author
- * @property-read Collection|PostComment[] $fpost_comments
- * @property-read int|null $fpost_comments_count
+ * @property int                                          $id
+ * @property string                                       $title
+ * @property string                                       $slug
+ * @property string                                       $summary
+ * @property string|null                                  $description
+ * @property string|null                                  $quote
+ * @property string|null                                  $photo
+ * @property string|null                                  $tags
+ * @property int|null                                     $post_cat_id
+ * @property int|null                                     $post_tag_id
+ * @property int|null                                     $added_by
+ * @property string                                       $status
+ * @property Carbon|null                                  $created_at
+ * @property Carbon|null                                  $updated_at
+ * @property User|null                                    $user
+ * @property Tag|null                                     $post_tag
+ * @property Collection|PostComment[]                     $post_comments
+ * @property-read Collection|PostComment[]                $allComments
+ * @property-read int|null                                $all_comments_count
+ * @property-read User|null                               $author
+ * @property-read Collection|PostComment[]                $fpost_comments
+ * @property-read int|null                                $fpost_comments_count
  *
  * @method static Builder|Post newModelQuery()
  * @method static Builder|Post newQuery()
@@ -73,13 +72,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Eloquent
  *
- * @property-read int|null $post_comments_count
+ * @property-read int|null                                $post_comments_count
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
- * @property-read int|null $categories_count
- * @property-read Collection|PostComment[] $comments
- * @property-read int|null $comments_count
- * @property-read string $image_url
- * @property-read int|null $post_tag_count
+ * @property-read int|null                                $categories_count
+ * @property-read Collection|PostComment[]                $comments
+ * @property-read int|null                                $comments_count
+ * @property-read string                                  $image_url
+ * @property-read int|null                                $post_tag_count
  */
 class Post extends Core implements HasMedia
 {
@@ -89,40 +88,36 @@ class Post extends Core implements HasMedia
 
     protected $table = 'posts';
 
-    protected $casts = [
-        'added_by' => 'int',
-    ];
+    protected $casts
+        = [
+            'added_by' => 'int',
+        ];
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'summary',
-        'description',
-        'quote',
-        'photo',
-        'author.name',
-        'status',
-    ];
+    protected $fillable
+        = [
+            'title',
+            'slug',
+            'summary',
+            'description',
+            'photo',
+            'author.name',
+            'status',
+        ];
 
-    public const likeRows = [
-        'title',
-        'slug',
-        'summary',
-        'description',
-        'quote',
-        'photo',
-        'added_by',
-        'status',
-    ];
+    public const likeRows
+        = [
+            'title',
+            'slug',
+            'summary',
+            'description',
+            'photo',
+            'added_by',
+            'status',
+        ];
 
     public static function Factory(): PostFactory
     {
         return PostFactory::new();
-    }
-
-    public static function getBlogByTag(string $slug): LengthAwarePaginator
-    {
-        return Post::where('tags', $slug)->paginate(8);
     }
 
     public static function getPostBySlug(string $slug): Model|Builder

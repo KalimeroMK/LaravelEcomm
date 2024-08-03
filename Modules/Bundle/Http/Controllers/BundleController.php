@@ -29,11 +29,11 @@ class BundleController extends Controller
 
     public function create(): View
     {
-        return view('bundle::create', compact([
-            'products' => Product::get(),
-            'bundle' => new Bundle(),
-        ]));
+        $products = Product::all();
+        $bundle = new Bundle();
+        return view('bundle::create', compact('products', 'bundle'));
     }
+
 
     public function store(Store $request): RedirectResponse
     {

@@ -143,11 +143,11 @@
                         <label for="status">Status</label>
                         <select name="status" class="form-control" required>
                             <option
-                                value="active" {{ (isset($product->status) && $product->status == 'active') ? 'selected' : '' }}>
+                                    value="active" {{ (isset($product->status) && $product->status == 'active') ? 'selected' : '' }}>
                                 Active
                             </option>
                             <option
-                                value="inactive" {{ (isset($product->status) && $product->status == 'inactive') ? 'selected' : '' }}>
+                                    value="inactive" {{ (isset($product->status) && $product->status == 'inactive') ? 'selected' : '' }}>
                                 Inactive
                             </option>
                         </select>
@@ -181,7 +181,7 @@
                         <select name="condition_id" class="form-control" required>
                             @foreach($conditions as $condition)
                                 <option
-                                    value="{{ $condition->id }}" {{ (isset($product->condition_id) && $product->condition_id == $condition->id) ? 'selected' : '' }}>
+                                        value="{{ $condition->id }}" {{ (isset($product->condition_id) && $product->condition_id == $condition->id) ? 'selected' : '' }}>
                                     {{ $condition->status }}
                                 </option>
                             @endforeach
@@ -204,7 +204,7 @@
                             @foreach($brands as $brand)
                                 <option value="{{$brand->id}}" @if (!empty($product->brand->id))
                                     {{($brand->id==$product->brand->id)? 'selected':'' }}
-                                    @endif>{{$brand->title}}</option>
+                                        @endif>{{$brand->title}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -247,7 +247,6 @@
         <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
     @endpush
     @push('scripts')
-        <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
         <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
         <script>
             $(document).ready(function () {
@@ -262,7 +261,7 @@
             <script>
                 $(document).ready(function () {
                     $('#generateDescription').on('click', function () {
-                        var productTitle = $('#inputTitle').val(); // Assuming the title input has an ID 'inputTitle'
+                        const productTitle = $('#inputTitle').val(); // Assuming the title input has an ID 'inputTitle'
                         if (!productTitle) {
                             alert('Please enter a title first.');
                             return;
