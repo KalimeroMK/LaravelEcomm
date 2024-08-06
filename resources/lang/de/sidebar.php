@@ -2,6 +2,7 @@
 
 return [
     'dashboard' => 'Dashboard',
+    'admin' => 'Dashboard',
     'banners' => 'Banner',
     'add_banners' => 'Banner hinzufügen',
     'shop' => 'Shop',

@@ -4,9 +4,12 @@ namespace Modules\Billing\Providers;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\Core\Traits\AutoRegistersCommands;
 
 class BillingServiceProvider extends ServiceProvider
 {
+    use AutoRegistersCommands;
+
     protected string $moduleName = 'Billing';
 
     protected string $moduleNameLower = 'billing';
@@ -22,6 +25,7 @@ class BillingServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        $this->autoRegisterCommands($this->moduleName);
     }
 
     /**

@@ -40,7 +40,7 @@ class StripeService
         $this->orderSave($this->payment->calculate($request));
         Session::flash('success', 'Payment successful!');
 
-        return redirect()->route('order.index');
+        return redirect()->route('orders.index');
     }
 
     /**

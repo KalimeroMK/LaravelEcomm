@@ -8,6 +8,8 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\Policies\AttributePolicy;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Models\Policies\BannerPolicy;
+use Modules\Billing\Models\PaymentProvider;
+use Modules\Billing\Models\Policies\PaymentProviderPolicy;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Models\Policies\BrandPolicy;
 use Modules\Bundle\Models\Bundle;
@@ -54,29 +56,31 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        Attribute::class => AttributePolicy::class,
-        Bundle::class => BundlePolicy::class,
-        Banner::class => BannerPolicy::class,
-        Brand::class => BrandPolicy::class,
-        Cart::class => CartPolicy::class,
-        Category::class => CategoryPolicy::class,
-        Coupon::class => CouponPolicy::class,
-        Message::class => MessagePolicy::class,
-        Newsletter::class => NewsletterPolicy::class,
-        Order::class => OrderPolicy::class,
-        Permission::class => PermissionPolicy::class,
-        Post::class => PostPolicy::class,
-        PostComment::class => PostCommentPolicy::class,
-        Product::class => ProductPolicy::class,
-        Role::class => RolePolicy::class,
-        Setting::class => SettingsPolicy::class,
-        Size::class => SizePolicy::class,
-        Tag::class => TagPolicy::class,
-        User::class => UserPolicy::class,
-        Tenant::class => TenantPolicy::class,
-        Page::class => PagePolicy::class,
-    ];
+    protected $policies
+        = [
+            Attribute::class => AttributePolicy::class,
+            Bundle::class => BundlePolicy::class,
+            Banner::class => BannerPolicy::class,
+            Brand::class => BrandPolicy::class,
+            Cart::class => CartPolicy::class,
+            Category::class => CategoryPolicy::class,
+            Coupon::class => CouponPolicy::class,
+            Message::class => MessagePolicy::class,
+            Newsletter::class => NewsletterPolicy::class,
+            Order::class => OrderPolicy::class,
+            Permission::class => PermissionPolicy::class,
+            Post::class => PostPolicy::class,
+            PostComment::class => PostCommentPolicy::class,
+            Product::class => ProductPolicy::class,
+            Role::class => RolePolicy::class,
+            Setting::class => SettingsPolicy::class,
+            Size::class => SizePolicy::class,
+            Tag::class => TagPolicy::class,
+            User::class => UserPolicy::class,
+            Tenant::class => TenantPolicy::class,
+            Page::class => PagePolicy::class,
+            PaymentProvider::class => PaymentProviderPolicy::class,
+        ];
 
     /**
      * Register any authentication / authorization services.

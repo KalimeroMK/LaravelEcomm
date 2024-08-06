@@ -75,7 +75,7 @@ class OrderService extends CoreService
     {
         $details = [
             'title' => 'New order created',
-            'actionURL' => route('order.show', $order->id),
+            'actionURL' => route('orders.show', $order->id),
             'fas' => 'fa-file-alt',
         ];
 

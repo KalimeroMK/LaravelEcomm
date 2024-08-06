@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Billing\Http\Controllers\PaymentProviderController;
 use Modules\Billing\Http\Controllers\PaypalController;
 use Modules\Billing\Http\Controllers\StripeController;
 use Modules\Billing\Http\Controllers\WishlistController;
@@ -28,3 +29,10 @@ Route::get('payment/success', [PaypalController::class, 'success'])->name('payme
 //Stripe
 Route::get('stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
 Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::resource('payment_provider', PaymentProviderController::class)->only(
+        'index',
+        'edit',
+        'update'
+    );
+});

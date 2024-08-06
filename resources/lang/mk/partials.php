@@ -75,5 +75,7 @@ return [
     'stock' => 'Залиха',
     'product_attributes' => 'Продукт атрибути',
     'generate_description' => 'Генерирај опис',
+    'public_key' => 'Јавен клуч',
+    'secret_key' => 'Таен клуч',
 
 ];

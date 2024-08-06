@@ -18,10 +18,13 @@ class WishlistController extends CoreController
         $this->wishlist_service = $wishlist_service;
     }
 
-    public function wishlist(Store $request): RedirectResponse
+    public function wishlist(string $slug, Store $request): RedirectResponse
     {
         if (Auth::check()) {
-            $this->wishlist_service->create($request->validated());
+            $request->merge(['slug' => $slug]); // Add the slug to the request data
+            $request->validate($request->rules());
+            $this->wishlist_service->create($request->all());
+
             request()->session()->flash('success', 'Product successfully added to wishlist');
 
             return back();

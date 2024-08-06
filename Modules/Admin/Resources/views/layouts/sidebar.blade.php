@@ -15,7 +15,7 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>@lang('sidebar.dashboard')</span></a>
     </li>
-         <!-- Divider -->
+    <!-- Divider -->
     <hr class="sidebar-divider">
 
     <div class="sidebar-heading">
@@ -263,6 +263,8 @@
                     <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>
                 @endif
                 <a class="collapse-item" href="{{route('all.notification')}}">@lang('sidebar.notifications')</a>
+                <a class="collapse-item" href="{{route('payment_provider.index')}}">@lang('sidebar.payment_provider')
+                </a>
                 <a class="collapse-item"
                    href="{{route('laravelblocker::blocker.index')}}">@lang('sidebar.blocked_ip')</a>
                 <a class="collapse-item" href="{{route('activity')}}">@lang('sidebar.activity_log')</a>

@@ -81,16 +81,10 @@
             // Initialize Google Map
             let map;
             let marker;
-            const defaultLat = 50.8503; // Latitude for central Europe (Brussels, Belgium)
-            const defaultLng = 4.3517;  // Longitude for central Europe (Brussels, Belgium)
-            const dbLat = {{ $settings->latitude ?? 'null' }};
-            const dbLng = {{ $settings->longitude ?? 'null' }};
-            const defaultLocation = {lat: defaultLat, lng: defaultLng};
-
-            // If latitude and longitude are present in settings, use them
-            const initialLat = dbLat !== null ? dbLat : defaultLat;
-            const initialLng = dbLng !== null ? dbLng : defaultLng;
-            const initialLocation = {lat: initialLat, lng: initialLng};
+           
+            const dbLat = {{ $settings->latitude ?? '50.8503' }};
+            const dbLng = {{ $settings->longitude ?? '4.3517' }};
+            const initialLocation = {lat: dbLat, lng: dbLng};
 
             function initMap() {
                 map = new google.maps.Map(document.getElementById('map'), {

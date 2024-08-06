@@ -16,20 +16,20 @@ trait Order
     public function orderSave(float $amount): void
     {
         $order = new \Modules\Order\Models\Order();
-        Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $order->id]);
         $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
         $order_data['user_id'] = Auth::id();
         $order_data['sub_total'] = Helper::totalCartPrice();
         $order_data['quantity'] = Helper::cartCount();
         $order_data['status'] = 'new';
-        $order_data['total_amount'] = (int) $amount;
+        $order_data['total_amount'] = (int)$amount;
         $order_data['payment_method'] = 'stripe';
         $order_data['payment_status'] = 'paid';
         $order->fill($order_data);
         $order->save();
+        Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $order->id]);
         $details = [
             'title' => 'New order created',
-            'actionURL' => route('order.show', $order->id),
+            'actionURL' => route('orders.show', $order->id),
             'fas' => 'fa-file-alt',
         ];
         $superAdmins = User::role('super-admin')->get();
