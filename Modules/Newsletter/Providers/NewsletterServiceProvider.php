@@ -3,9 +3,11 @@
 namespace Modules\Newsletter\Providers;
 
 use Config;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Models\Observer\NewsletterObserver;
+use Modules\Newsletter\Service\MailboxLayerService;
 
 class NewsletterServiceProvider extends ServiceProvider
 {
@@ -34,7 +36,8 @@ class NewsletterServiceProvider extends ServiceProvider
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            module_path($this->moduleName, 'Config/config.php'), $this->moduleNameLower
+            module_path($this->moduleName, 'Config/config.php'),
+            $this->moduleNameLower
         );
     }
 
@@ -76,6 +79,9 @@ class NewsletterServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->app->singleton('mailboxlayer', function ($app) {
+            return new MailboxLayerService(new Client());
+        });
     }
 
     /**

@@ -134,8 +134,9 @@ class FrontController extends Controller
         return response()->json($this->front_service->couponStore($request), 200);
     }
 
-    public function subscribe(Request $request): JsonResponse
+    public function subscribe(\Modules\Newsletter\Http\Requests\Store $request): JsonResponse
     {
+        dd($request->all());
         if (Newsletter::whereEmail($request->email) !== null) {
             return response()->json($this->front_service->newsletter($request->all()), 200);
         }
