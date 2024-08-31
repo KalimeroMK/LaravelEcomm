@@ -29,23 +29,23 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Post
  *
- * @property int                                          $id
- * @property string                                       $title
- * @property string                                       $slug
- * @property string                                       $summary
- * @property string|null                                  $description
- * @property string|null                                  $quote
- * @property string|null                                  $photo
- * @property string|null                                  $tags
- * @property int|null                                     $post_cat_id
- * @property int|null                                     $post_tag_id
- * @property int|null                                     $added_by
- * @property string                                       $status
- * @property Carbon|null                                  $created_at
- * @property Carbon|null                                  $updated_at
- * @property User|null                                    $user
- * @property Tag|null                                     $post_tag
- * @property Collection|PostComment[]                     $post_comments
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $summary
+ * @property string|null $description
+ * @property string|null $quote
+ * @property string|null $photo
+ * @property string|null $tags
+ * @property int|null $post_cat_id
+ * @property int|null $post_tag_id
+ * @property int|null $added_by
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property User|null $user
+ * @property Tag|null $post_tag
+ * @property Collection|PostComment[] $post_comments
  * @property-read Collection|PostComment[]                $allComments
  * @property-read int|null                                $all_comments_count
  * @property-read User|null                               $author

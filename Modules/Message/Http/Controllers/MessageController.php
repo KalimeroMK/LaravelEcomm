@@ -33,7 +33,7 @@ class MessageController extends CoreController
      */
     public function show(Message $message): Factory|View|Application
     {
-        return view('message::show', ['message' => $this->message_service->show($message->id)]);
+        return view('message::show', compact('message'));
     }
 
     /**

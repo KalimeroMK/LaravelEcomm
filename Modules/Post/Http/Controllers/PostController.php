@@ -68,7 +68,7 @@ class PostController extends Controller
             'categories' => Category::all(),
             'tags' => Tag::all(),
             'users' => User::all(),
-            'post' => new Post(),
+            'post' => new Post,
         ]);
     }
 
@@ -83,7 +83,6 @@ class PostController extends Controller
         $categories = Category::all();
         $tags = Tag::get();
         $users = User::all();
-        $post = $this->post_service->findById($post->id);
 
         return view('post::edit', compact('categories', 'tags', 'users', 'post'));
     }
@@ -128,7 +127,7 @@ class PostController extends Controller
     {
         // Ensure there is a file and it is not an array of files
         $file = $request->file('file');
-        if (!$file) {
+        if (! $file) {
             return back()->withErrors(['error' => 'Please upload a file.']);
         }
 
@@ -137,7 +136,7 @@ class PostController extends Controller
         }
 
         try {
-            Excel::import(new PostExport(), $file);
+            Excel::import(new PostExport, $file);
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'An error occurred during import: '.$e->getMessage()]);
         }

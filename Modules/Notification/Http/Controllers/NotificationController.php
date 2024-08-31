@@ -16,6 +16,9 @@ class NotificationController extends Controller
     public function __construct(NotificationService $notification_service)
     {
         $this->notification_service = $notification_service;
+        $this->middleware('permission:notification-list', ['only' => ['index']]);
+        $this->middleware('permission:notification-show', ['only' => ['show']]);
+        $this->middleware('permission:notification-delete', ['only' => ['destroy']]);
     }
 
     public function index(): View|Factory|Application

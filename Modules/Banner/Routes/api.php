@@ -14,5 +14,4 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Banner\Http\Controllers\Api\BannerController;
 
-Route::apiResource('banners', BannerController::class)
-    ->names('api.banner.index');
+Route::apiResource('banners', BannerController::class)->names('api.banners');

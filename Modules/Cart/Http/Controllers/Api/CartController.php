@@ -18,6 +18,11 @@ class CartController extends CoreController
     public function __construct(CartService $cart_service)
     {
         $this->cart_service = $cart_service;
+        $this->middleware('permission:cart-list', ['only' => ['index']]);
+        $this->middleware('permission:cart-show', ['only' => ['show']]);
+        $this->middleware('permission:cart-create', ['only' => ['store']]);
+        $this->middleware('permission:cart-edit', ['only' => ['update']]);
+        $this->middleware('permission:cart-delete', ['only' => ['destroy']]);
     }
 
     public function index(): ResourceCollection

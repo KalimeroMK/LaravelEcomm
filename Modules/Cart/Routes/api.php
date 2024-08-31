@@ -14,11 +14,4 @@ use Modules\Cart\Http\Controllers\Api\CartController;
 */
 
 Route::apiResource('carts', CartController::class)
-    ->names([
-        'index' => 'api.cart.index',
-        'store' => 'api.cart.store',
-        'show' => 'api.cart.show',
-        'destroy' => 'api.cart.destroy',
-        'update' => 'api.cart.update',
-        'create' => 'api.cart.create',
-    ]);
+    ->names('api.carts');

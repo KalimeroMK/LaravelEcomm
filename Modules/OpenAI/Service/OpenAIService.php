@@ -12,7 +12,7 @@ class OpenAIService
 
     public function __construct()
     {
-        $this->client = new Client();
+        $this->client = new Client;
         $this->apiKey = env('OPENAI_API_KEY');
     }
 

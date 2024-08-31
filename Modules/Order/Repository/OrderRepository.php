@@ -55,7 +55,7 @@ class OrderRepository extends Repository implements SearchInterface
 
             $query->orderBy($orderBy, $sort);
 
-            $perPage = Arr::get($data, 'per_page', (new Order())->getPerPage());
+            $perPage = Arr::get($data, 'per_page', (new Order)->getPerPage());
 
             $query->with('shipping', 'user', 'carts')->paginate($perPage);
         }

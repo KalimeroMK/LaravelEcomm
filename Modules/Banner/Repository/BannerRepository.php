@@ -45,7 +45,7 @@ class BannerRepository extends Repository implements SearchInterface
 
             $orderBy = $data['order_by'] ?? 'id';
             $sort = $data['sort'] ?? 'desc';
-            $perPage = Arr::get($data, 'per_page', (new Banner())->getPerPage());
+            $perPage = Arr::get($data, 'per_page', (new Banner)->getPerPage());
 
             return $query->orderBy($orderBy, $sort)->paginate($perPage);
         });

@@ -80,7 +80,7 @@ class NewsletterServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
         $this->app->singleton('mailboxlayer', function ($app) {
-            return new MailboxLayerService(new Client());
+            return new MailboxLayerService(new Client);
         });
     }
 

@@ -29,7 +29,7 @@ class ProductImportExportController extends Controller
      */
     public function export(): BinaryFileResponse
     {
-        return Excel::download(new Products(), 'products.xlsx');
+        return Excel::download(new Products, 'products.xlsx');
     }
 
     /**
@@ -50,7 +50,7 @@ class ProductImportExportController extends Controller
         }
 
         try {
-            Excel::import(new Products(), $file);
+            Excel::import(new Products, $file);
         } catch (Throwable $e) {
             // Handle the case where the import fails
             return back()->withErrors(['msg' => 'Failed to import products: '.$e->getMessage()]);

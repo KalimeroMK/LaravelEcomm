@@ -19,6 +19,11 @@ class PageController extends CoreController
     public function __construct(PageService $pageService)
     {
         $this->pageService = $pageService;
+        $this->middleware('permission:page-list', ['only' => ['index']]);
+        $this->middleware('permission:page-show', ['only' => ['show']]);
+        $this->middleware('permission:page-create', ['only' => ['store']]);
+        $this->middleware('permission:page-edit', ['only' => ['update']]);
+        $this->middleware('permission:page-delete', ['only' => ['destroy']]);
     }
 
     public function index(): ResourceCollection

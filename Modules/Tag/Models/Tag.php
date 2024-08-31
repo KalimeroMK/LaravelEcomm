@@ -21,12 +21,12 @@ use Modules\Tag\Database\Factories\TagFactory;
 /**
  * Class Tag
  *
- * @property int               $id
- * @property string            $title
- * @property string            $slug
- * @property string            $status
- * @property Carbon|null       $created_at
- * @property Carbon|null       $updated_at
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property Collection|Post[] $posts
  * @property-read int|null     $posts_count
  *

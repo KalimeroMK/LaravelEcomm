@@ -15,11 +15,5 @@ use Modules\Brand\Http\Controllers\Api\BrandController;
 */
 Route::apiResource('brands', BrandController::class)
     ->except('update')
-    ->names([
-        'index' => 'api.brand.index',
-        'store' => 'api.brand.store',
-        'show' => 'api.brand.show',
-        'destroy' => 'api.brand.destroy',
-        'create' => 'api.brand.create', // if you're using forms for APIs
-    ]);
-Route::post('brands/{id}', [BrandController::class, 'update'])->name('api.brand.update');
+    ->names('api.brands');
+Route::post('brands/{id}', [BrandController::class, 'update'])->name('api.brands.update');

@@ -38,7 +38,7 @@ class OrderController extends CoreController
 
     public function create(): View
     {
-        return view('order::create', ['order' => new Order()]);
+        return view('order::create', ['order' => new Order]);
     }
 
     public function store(Store $request): RedirectResponse

@@ -249,4 +249,3 @@ class FrontController extends Controller
         return view('front::pages.page', $this->front_service->pages($slug));
     }
 }
-

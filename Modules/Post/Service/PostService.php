@@ -54,7 +54,7 @@ class PostService extends CoreService
     /**
      * Update an existing post with new data and possibly new media files.
      *
-     * @param  int                   $id  The post ID to update.
+     * @param  int  $id  The post ID to update.
      * @param  array<string, mixed>  $data  The data for updating the post.
      * @return Model The updated post model.
      *

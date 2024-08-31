@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\MagicLoginController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Modules\User\Http\Controllers\Api\AuthController;
 use Spatie\Feed\Http\FeedController;
 
 /*
@@ -26,9 +26,13 @@ Route::post('/magic/send', [MagicLoginController::class, 'sendToken'])->name('ma
 Route::get('/magic/login/{token}', [MagicLoginController::class, 'login'])->name('magic.login');
 Route::get('/magic/generate', [MagicLoginController::class, 'showLoginForm'])->name('magic-login.show-login-form');
 // Socialite
-Route::get('/login/{social}', [AuthController::class, 'socialLogin'])->where('social',
-    'twitter|facebook|linkedin|google|github|bitbucket');
-Route::get('/login/{social}/callback', [AuthController::class, 'handleProviderCallback'])->where('social',
-    'twitter|facebook|linkedin|google|github|bitbucket');
+Route::get('/login/{social}', [AuthController::class, 'socialLogin'])->where(
+    'social',
+    'twitter|facebook|linkedin|google|github|bitbucket'
+);
+Route::get('/login/{social}/callback', [AuthController::class, 'handleProviderCallback'])->where(
+    'social',
+    'twitter|facebook|linkedin|google|github|bitbucket'
+);
 
 Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');

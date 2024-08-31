@@ -33,14 +33,10 @@ class BannerService extends CoreService
     public function create(array $data, ?Request $request = null): Model
     {
         $banner = $this->banner_repository->create($data);
-
-        // Handle image uploads
-        if ($request && $request->hasFile('images')) {
-            $banner->addMultipleMediaFromRequest(['images'])
-                ->each(function (FileAdder $fileAdder) {
-                    $fileAdder->preservingOriginal()->toMediaCollection('banner');
-                });
-        }
+        $banner->addMultipleMediaFromRequest(['images'])
+            ->each(function (FileAdder $fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('banner');
+            });
 
         return $banner;
     }
@@ -60,9 +56,7 @@ class BannerService extends CoreService
     {
         $banner = $this->banner_repository->findById($id);
 
-        $banner->update($data);
-
-        // Check for new image uploads and handle them
+        // Check for new e uploads and handle them
         if ($request && $request->hasFile('images')) {
             $banner->clearMediaCollection('banner'); // Optionally clear existing media
             $banner->addMultipleMediaFromRequest(['images'])
@@ -70,6 +64,7 @@ class BannerService extends CoreService
                     $fileAdder->preservingOriginal()->toMediaCollection('banner');
                 });
         }
+        $banner->update($data);
 
         return $banner;
     }

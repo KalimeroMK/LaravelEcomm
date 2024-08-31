@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 class MailboxLayerService
 {
     protected Client $client;
+
     protected string $baseUrl = 'http://apilayer.net/api';
 
     public function __construct(Client $client)
@@ -26,7 +27,7 @@ class MailboxLayerService
             'query' => [
                 'access_key' => $accessKey,
                 'email' => $email,
-            ]
+            ],
         ]);
 
         return json_decode($response->getBody(), true);

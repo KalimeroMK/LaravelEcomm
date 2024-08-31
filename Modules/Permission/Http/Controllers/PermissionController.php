@@ -10,6 +10,11 @@ use Modules\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Permission::class, 'permission');
+    }
+
     /**
      * Display a listing of the permissions.
      */
@@ -25,7 +30,7 @@ class PermissionController extends Controller
      */
     public function create(): View
     {
-        return view('permission::create', ['permission' => new Permission()]);
+        return view('permission::create', ['permission' => new Permission]);
     }
 
     /**

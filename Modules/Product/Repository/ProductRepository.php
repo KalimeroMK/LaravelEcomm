@@ -88,7 +88,7 @@ class ProductRepository extends Repository
             );
 
             return $query->with($this->withRelations())->paginate(
-                Arr::get($data, 'per_page', (new Product())->getPerPage()) // Correct usage
+                Arr::get($data, 'per_page', (new Product)->getPerPage()) // Correct usage
             );
         });
     }

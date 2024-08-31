@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Modules\User\Http\Controllers\Api;
 
 use App\Requests\AuthRequest;
 use Illuminate\Contracts\Foundation\Application;
@@ -23,9 +23,8 @@ class AuthController extends CoreController
     public function login(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $authUser = Auth::user();
-            $success['token'] = $authUser->createToken('MyAuthApp')->plainTextToken;
-            $success['name'] = $authUser->name;
+            $success['token'] = Auth::user()->createToken('MyAuthApp')->plainTextToken;
+            $success['name'] = Auth::user()->name;
 
             return $this->sendResponse($success, 'User signed in');
         } else {

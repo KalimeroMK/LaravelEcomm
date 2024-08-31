@@ -39,7 +39,7 @@ class CategoryController extends CoreController
     {
         return view('category::create', [
             'categories' => Category::getTree(),
-            'category' => new Category(),
+            'category' => new Category,
         ]);
     }
 

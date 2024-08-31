@@ -15,5 +15,4 @@ class PaymentProvider extends Core
             'secret_key',
             'status',
         ];
-
 }

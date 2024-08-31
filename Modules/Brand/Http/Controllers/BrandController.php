@@ -4,7 +4,6 @@ namespace Modules\Brand\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Modules\Brand\Http\Requests\Api\Search;
 use Modules\Brand\Http\Requests\Store;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Service\BrandService;
@@ -20,7 +19,7 @@ class BrandController extends CoreController
         $this->authorizeResource(Brand::class, 'brand');
     }
 
-    public function index(Search $request): View
+    public function index(): View
     {
         $brands = $this->brand_service->getAll();
 
@@ -29,7 +28,7 @@ class BrandController extends CoreController
 
     public function create(): View
     {
-        return view('brand::create', ['brand' => new Brand()]);
+        return view('brand::create', ['brand' => new Brand]);
     }
 
     public function store(Store $request): RedirectResponse

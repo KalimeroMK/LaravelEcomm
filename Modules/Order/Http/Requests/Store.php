@@ -30,7 +30,7 @@ class Store extends CoreRequest
             'phone' => 'numeric|required',
             'post_code' => 'string|nullable',
             'email' => 'string|required',
-            'cart' => new CartRule(), // Ensure this custom rule is properly included
+            'cart' => new CartRule, // Ensure this custom rule is properly included
         ];
     }
 }

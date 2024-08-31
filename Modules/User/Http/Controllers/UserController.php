@@ -65,7 +65,7 @@ class UserController extends Controller
     public function create()
     {
         return view('user::create', compact([
-            'user' => new User(),
+            'user' => new User,
             'roles' => Role::all(),
         ]));
     }

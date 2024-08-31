@@ -16,6 +16,7 @@ class PageController extends Controller
     public function __construct(PageService $page_service)
     {
         $this->page_service = $page_service;
+        $this->authorizeResource(Page::class, 'page');
     }
 
     public function index(): View
@@ -27,7 +28,7 @@ class PageController extends Controller
 
     public function create(): View
     {
-        return view('page::create', ['page' => new Page()]);
+        return view('page::create', ['page' => new Page]);
     }
 
     public function store(Store $request): RedirectResponse

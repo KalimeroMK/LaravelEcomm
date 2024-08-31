@@ -36,7 +36,7 @@ class PaymentProviderController extends CoreController
      */
     public function create(): View|Factory|Application
     {
-        return view('billing::create', ['paymentProvider' => new PaymentProvider()]);
+        return view('billing::create', ['paymentProvider' => new PaymentProvider]);
     }
 
     /**

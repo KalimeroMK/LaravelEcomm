@@ -19,7 +19,7 @@ class AddToCartSingle extends CoreRequest
             'slug' => 'required|exists:products',  // Single rule string
             'quantity' => [
                 'required',              // Single rule string within an array
-                new ProductStockRule(),  // Custom validation rule object
+                new ProductStockRule,  // Custom validation rule object
             ],
         ];
     }

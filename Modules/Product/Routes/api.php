@@ -15,11 +15,5 @@ use Modules\Product\Http\Controllers\Api\ProductController;
 
 Route::apiResource('products', ProductController::class)
     ->except('update')
-    ->names([
-        'index' => 'api.product.index',
-        'store' => 'api.product.store',
-        'show' => 'api.product.show',
-        'create' => 'api.product.create',
-        'destroy' => 'api.product.destroy',
-    ]);
+    ->names('api.products');
 Route::post('products/{id}', [ProductController::class, 'update'])->name('api.product.update');

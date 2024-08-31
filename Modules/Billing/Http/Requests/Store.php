@@ -17,7 +17,7 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'slug' => new WishlistRule(),  // Custom rule object clearly indicated
+            'slug' => new WishlistRule,  // Custom rule object clearly indicated
         ];
     }
 

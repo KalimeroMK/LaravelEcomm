@@ -10,7 +10,6 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Size\Http\Requests\Api\Store;
 use Modules\Size\Http\Requests\Api\Update;
 use Modules\Size\Http\Resources\SizeResource;
-use Modules\Size\Models\Size;
 use Modules\Size\Service\SizesService;
 use ReflectionException;
 
@@ -21,7 +20,11 @@ class SizeController extends CoreController
     public function __construct(SizesService $sizes_service)
     {
         $this->sizes_service = $sizes_service;
-        $this->authorizeResource(Size::class);
+        $this->middleware('permission:size-list', ['only' => ['index']]);
+        $this->middleware('permission:size-show', ['only' => ['show']]);
+        $this->middleware('permission:size-create', ['only' => ['store']]);
+        $this->middleware('permission:size-edit', ['only' => ['update']]);
+        $this->middleware('permission:size-delete', ['only' => ['destroy']]);
     }
 
     public function index(): ResourceCollection

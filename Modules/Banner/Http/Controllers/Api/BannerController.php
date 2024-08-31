@@ -5,7 +5,6 @@ namespace Modules\Banner\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Banner\Http\Requests\Api\Search;
 use Modules\Banner\Http\Requests\Api\Store;
 use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
@@ -21,9 +20,14 @@ class BannerController extends CoreController
     public function __construct(BannerService $banner_service)
     {
         $this->banner_service = $banner_service;
+        $this->middleware('permission:banner-list', ['only' => ['index']]);
+        $this->middleware('permission:banner-show', ['only' => ['show']]);
+        $this->middleware('permission:banner-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:banner-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:banner-delete', ['only' => ['destroy']]);
     }
 
-    public function index(Search $request): ResourceCollection
+    public function index(): ResourceCollection
     {
         return BannerResource::collection($this->banner_service->getAll());
     }
@@ -33,7 +37,6 @@ class BannerController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
-
         return $this
             ->setMessage(
                 __(
@@ -55,7 +58,6 @@ class BannerController extends CoreController
      */
     public function show(int $id)
     {
-
         return $this
             ->setMessage(
                 __(
@@ -77,7 +79,6 @@ class BannerController extends CoreController
      */
     public function update(Update $request, int $id)
     {
-
         return $this
             ->setMessage(
                 __(

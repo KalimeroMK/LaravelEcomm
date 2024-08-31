@@ -51,7 +51,7 @@ class AttributeRepository extends Repository implements SearchInterface
 
         $query->orderBy($orderBy, $sort);
 
-        $perPage = Arr::get($data, 'per_page', (new Attribute())->getPerPage());
+        $perPage = Arr::get($data, 'per_page', (new Attribute)->getPerPage());
 
         return $query->paginate($perPage);
     }

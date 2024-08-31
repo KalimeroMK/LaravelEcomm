@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Http\Resource\BannerResource;
-use Modules\Banner\Models\Banner;
 use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Http\Requests\Update;
 use Modules\Bundle\Http\Resource\BundleResource;
@@ -22,7 +21,11 @@ class BundleController extends CoreController
     public function __construct(BundleService $bundleService)
     {
         $this->bundleService = $bundleService;
-        $this->authorizeResource(Banner::class);
+        $this->middleware('permission:bundle-list', ['only' => ['index']]);
+        $this->middleware('permission:bundle-show', ['only' => ['show']]);
+        $this->middleware('permission:bundle-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:bundle-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:bundle-delete', ['only' => ['destroy']]);
     }
 
     public function index(): ResourceCollection

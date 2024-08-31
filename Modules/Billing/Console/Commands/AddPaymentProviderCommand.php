@@ -8,6 +8,7 @@ use Modules\Billing\Models\PaymentProvider;
 class AddPaymentProviderCommand extends Command
 {
     protected $signature = 'payment:add-payment-provider';
+
     protected $description = 'Add a new payment provider to the database';
 
     public function handle(): void

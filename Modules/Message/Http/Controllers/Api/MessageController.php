@@ -18,6 +18,11 @@ class MessageController extends CoreController
     public function __construct(MessageService $message_service)
     {
         $this->message_service = $message_service;
+        $this->middleware('permission:message-list', ['only' => ['index']]);
+        $this->middleware('permission:message-show', ['only' => ['show']]);
+        $this->middleware('permission:message-create', ['only' => ['store']]);
+        $this->middleware('permission:message-edit', ['only' => ['update']]);
+        $this->middleware('permission:message-delete', ['only' => ['destroy']]);
     }
 
     public function index(): ResourceCollection

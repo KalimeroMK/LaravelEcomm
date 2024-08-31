@@ -34,7 +34,7 @@ class TenantController extends Controller
      */
     public function create(): View|Factory|Application
     {
-        return view('tenant::create', ['tenant' => new Tenant()]);
+        return view('tenant::create', ['tenant' => new Tenant]);
     }
 
     /**

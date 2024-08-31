@@ -21,7 +21,11 @@ class ShippingController extends CoreController
     public function __construct(ShippingService $shipping_service)
     {
         $this->shipping_service = $shipping_service;
-        $this->authorizeResource(Shipping::class, 'shipping');
+        $this->middleware('permission:shipping-list', ['only' => ['index']]);
+        $this->middleware('permission:shipping-show', ['only' => ['show']]);
+        $this->middleware('permission:shipping-create', ['only' => ['store']]);
+        $this->middleware('permission:shipping-edit', ['only' => ['update']]);
+        $this->middleware('permission:shipping-delete', ['only' => ['destroy']]);
     }
 
     public function index(): ResourceCollection

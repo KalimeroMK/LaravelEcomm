@@ -15,13 +15,13 @@ trait Order
 {
     public function orderSave(float $amount): void
     {
-        $order = new \Modules\Order\Models\Order();
+        $order = new \Modules\Order\Models\Order;
         $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
         $order_data['user_id'] = Auth::id();
         $order_data['sub_total'] = Helper::totalCartPrice();
         $order_data['quantity'] = Helper::cartCount();
         $order_data['status'] = 'new';
-        $order_data['total_amount'] = (int)$amount;
+        $order_data['total_amount'] = (int) $amount;
         $order_data['payment_method'] = 'stripe';
         $order_data['payment_status'] = 'paid';
         $order->fill($order_data);

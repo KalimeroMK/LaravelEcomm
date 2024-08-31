@@ -2,14 +2,11 @@
 
 namespace Modules\Banner\Models\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Banner\Models\Banner;
 use Modules\User\Models\User;
 
 class BannerPolicy
 {
-    use HandlesAuthorization;
-
     public function viewAny(User $user): bool
     {
         return $user->can('brand-list');

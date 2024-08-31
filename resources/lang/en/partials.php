@@ -76,6 +76,6 @@ return [
     'product_attributes' => 'Product attributes',
     'generate_description' => 'Generate description',
     'public_key' => 'Public key',
-    'secret_key' => 'Secret key'
+    'secret_key' => 'Secret key',
 
 ];

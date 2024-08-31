@@ -30,10 +30,10 @@ class BundleController extends Controller
     public function create(): View
     {
         $products = Product::all();
-        $bundle = new Bundle();
+        $bundle = new Bundle;
+
         return view('bundle::create', compact('products', 'bundle'));
     }
-
 
     public function store(Store $request): RedirectResponse
     {

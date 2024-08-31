@@ -14,11 +14,4 @@ use Modules\Tag\Http\Controllers\Api\TagController;
 */
 
 Route::apiResource('tags', TagController::class)
-    ->names([
-        'index' => 'api.tag.index',
-        'store' => 'api.tag.store',
-        'show' => 'api.tag.show',
-        'destroy' => 'api.tag.destroy',
-        'update' => 'api.tag.update',
-        'create' => 'api.tag.create',
-    ]);
+    ->names('api.tags');

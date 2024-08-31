@@ -10,9 +10,10 @@ use Modules\Post\Http\Requests\Api\Search;
 use Modules\Post\Http\Requests\Api\Store;
 use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
-use Modules\Post\Models\Post;
 use Modules\Post\Service\PostService;
 use ReflectionException;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PostController extends CoreController
 {
@@ -21,7 +22,11 @@ class PostController extends CoreController
     public function __construct(PostService $post_service)
     {
         $this->post_service = $post_service;
-        $this->authorizeResource(Post::class, 'post');
+        $this->middleware('permission:post-list', ['only' => ['index']]);
+        $this->middleware('permission:post-show', ['only' => ['show']]);
+        $this->middleware('permission:post-create', ['only' => ['store']]);
+        $this->middleware('permission:post-edit', ['only' => ['update']]);
+        $this->middleware('permission:post-delete', ['only' => ['destroy']]);
     }
 
     public function index(Search $request): ResourceCollection
@@ -31,6 +36,8 @@ class PostController extends CoreController
 
     /**
      * @throws ReflectionException
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function store(Store $request): JsonResponse
     {
@@ -68,6 +75,8 @@ class PostController extends CoreController
     }
 
     /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse|string

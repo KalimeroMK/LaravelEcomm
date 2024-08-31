@@ -45,7 +45,7 @@ class CouponController extends CoreController
      */
     public function create(): View|Factory|Application
     {
-        return view('coupon::create', ['coupon' => new Coupon()]);
+        return view('coupon::create', ['coupon' => new Coupon]);
     }
 
     /**
@@ -53,7 +53,7 @@ class CouponController extends CoreController
      */
     public function edit(Coupon $coupon): View|Factory|Application
     {
-        return view('coupon::edit', ['coupon' => $this->coupon_service->findById($coupon->id)]);
+        return view('coupon::edit', compact('coupon'));
     }
 
     /**
@@ -64,7 +64,6 @@ class CouponController extends CoreController
         $this->coupon_service->update($coupon->id, $request->validated());
 
         return redirect()->route('coupon.index');
-
     }
 
     /**

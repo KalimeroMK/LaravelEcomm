@@ -21,6 +21,11 @@ class OrderController extends CoreController
     public function __construct(OrderService $order_service)
     {
         $this->order_service = $order_service;
+        $this->middleware('permission:order-list', ['only' => ['index']]);
+        $this->middleware('permission:order-show', ['only' => ['show']]);
+        $this->middleware('permission:order-create', ['only' => ['store']]);
+        $this->middleware('permission:order-edit', ['only' => ['update']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
     }
 
     public function index(Search $request): ResourceCollection

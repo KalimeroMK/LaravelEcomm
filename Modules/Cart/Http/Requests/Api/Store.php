@@ -19,7 +19,7 @@ class Store extends CoreRequest
             'slug' => 'string|required|exists:products,slug',
             'quantity' => [
                 'required',
-                new ProductStockRule(),
+                new ProductStockRule,
             ],
 
         ];

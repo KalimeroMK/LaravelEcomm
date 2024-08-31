@@ -13,6 +13,8 @@ class PermissionTableSeeder extends Seeder
 {
     /**
      * Run the database seeders.
+     *
+     * @throws Exception
      */
     public function run(): void
     {
@@ -21,29 +23,31 @@ class PermissionTableSeeder extends Seeder
 
         // Define resources and their respective CRUD operations
         $resources = [
-            'size',
-            'cart',
-            'newsletter',
-            'review',
-            'user',
-            'role',
-            'shipping',
-            'comment',
-            'casys',
-            'coupon',
-            'brand',
-            'message',
+            'attribute',
             'banner',
-            'settings',
-            'categories',
-            'tags',
+            'brand',
+            'bundle',
+            'cart',
+            'category',
+            'comment',
+            'coupon',
+            'casys',
+            'message',
+            'newsletter',
+            'order',
+            'page',
             'post',
             'product',
-            'order',
-            'attributes',
-            'page',
+            'review',
+            'role',
+            'settings',
+            'shipping',
+            'size',
+            'tag',
+            'user',
         ];
-        $operations = ['list', 'create', 'update', 'delete'];
+
+        $operations = ['list', 'show', 'create', 'update', 'delete'];
 
         // Create permissions
         foreach ($resources as $resource) {

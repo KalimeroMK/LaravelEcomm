@@ -14,11 +14,5 @@
 use Modules\Post\Http\Controllers\Api\PostController;
 
 Route::apiResource('posts', PostController::class)
-    ->names([
-        'index' => 'api.post.index',
-        'store' => 'api.post.store',
-        'show' => 'api.post.show',
-        'destroy' => 'api.post.destroy',
-        'create' => 'api.post.create',
-    ]);
-Route::post('post/{id}', [PostController::class, 'update'])->name('api.post.update');
+    ->names('api.posts');
+Route::post('posts/{id}', [PostController::class, 'update'])->name('api.post.update');

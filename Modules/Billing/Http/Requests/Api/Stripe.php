@@ -26,7 +26,7 @@ class Stripe extends CoreRequest
             'shipping' => 'string|nullable',
             'payment_method' => 'string|nullable',
             'status' => 'string|nullable',
-            'cart' => new CartExistRule(),  // Assign a key to the custom rule for clarity
+            'cart' => new CartExistRule,  // Assign a key to the custom rule for clarity
         ];
     }
 }

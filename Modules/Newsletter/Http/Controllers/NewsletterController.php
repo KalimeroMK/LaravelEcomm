@@ -27,7 +27,7 @@ class NewsletterController extends CoreController
 
     public function create(): View
     {
-        return view('newsletter::create', ['newsletter' => new Newsletter()]);
+        return view('newsletter::create', ['newsletter' => new Newsletter]);
     }
 
     public function store(Store $request): RedirectResponse

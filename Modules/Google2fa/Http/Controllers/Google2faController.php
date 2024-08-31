@@ -30,7 +30,7 @@ class Google2faController extends Controller
         $user = Auth::user();
 
         if ($user->loginSecurity()->exists()) {
-            $google2fa = (new PragmaRXGoogle2FA());
+            $google2fa = (new PragmaRXGoogle2FA);
             $google2fa_url = $google2fa->getQRCodeUrl(
                 'Kalimero-Ecomm',
                 $user->email,
@@ -38,7 +38,7 @@ class Google2faController extends Controller
             );
             $renderer = new ImageRenderer(
                 new RendererStyle(400),
-                new SvgImageBackEnd()
+                new SvgImageBackEnd
             );
 
             $writer = new Writer($renderer);
@@ -65,7 +65,7 @@ class Google2faController extends Controller
     {
         $user = Auth::user();
         // Initialise the 2FA class
-        $google2fa = (new PragmaRXGoogle2FA());
+        $google2fa = (new PragmaRXGoogle2FA);
 
         // Add the secret key to the registration data
         $login_security = Google2fa::firstOrNew(['user_id' => $user->id]);
@@ -89,7 +89,7 @@ class Google2faController extends Controller
     public function enable2fa(Request $request)
     {
         $user = Auth::user();
-        $google2fa = (new PragmaRXGoogle2FA());
+        $google2fa = (new PragmaRXGoogle2FA);
 
         $secret = $request->input('secret');
         $valid = $google2fa->verifyKey($user->loginSecurity->google2fa_secret, $secret);

@@ -23,7 +23,7 @@ class MailboxValidEmail implements ValidationRule
     {
         $result = $this->mailboxLayerService->check($value);
 
-        if (!isset($result['format_valid']) || !$result['format_valid'] || !isset($result['smtp_check']) || !$result['smtp_check']) {
+        if (! isset($result['format_valid']) || ! $result['format_valid'] || ! isset($result['smtp_check']) || ! $result['smtp_check']) {
             $fail('The email address is not valid.');
         }
     }

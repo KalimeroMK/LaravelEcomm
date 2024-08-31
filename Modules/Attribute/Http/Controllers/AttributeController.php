@@ -27,7 +27,7 @@ class AttributeController extends CoreController
 
     public function create(): Renderable
     {
-        return view('attribute::create', ['attribute' => new Attribute()]);
+        return view('attribute::create', ['attribute' => new Attribute]);
     }
 
     public function store(Store $request): RedirectResponse

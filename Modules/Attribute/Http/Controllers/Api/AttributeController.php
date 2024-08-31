@@ -23,6 +23,11 @@ class AttributeController extends Controller
     public function __construct(AttributeService $attribute_service)
     {
         $this->attribute_service = $attribute_service;
+        $this->middleware('permission:attribute-list', ['only' => ['index']]);
+        $this->middleware('permission:attribute-show', ['only' => ['show']]);
+        $this->middleware('permission:attribute-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:attribute-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:attribute-delete', ['only' => ['destroy']]);
     }
 
     public function index(SearchRequest $request): AnonymousResourceCollection

@@ -15,11 +15,4 @@ use Modules\Category\Http\Controllers\Api\CategoryController;
 */
 
 Route::apiResource('categories', CategoryController::class)
-    ->names([
-        'index' => 'api.category.index',
-        'store' => 'api.category.store',
-        'show' => 'api.category.show',
-        'destroy' => 'api.category.destroy',
-        'update' => 'api.category.update', // if you're using forms for APIs, which is unusual
-        'create' => 'api.category.create', // if you're using forms for APIs
-    ]);
+    ->names('api.categories');

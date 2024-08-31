@@ -38,7 +38,7 @@ class BannerController extends CoreController
      */
     public function create(): View|Factory|Application
     {
-        return view('banner::create', ['banner' => new Banner()]);
+        return view('banner::create', ['banner' => new Banner]);
     }
 
     /**
@@ -58,8 +58,6 @@ class BannerController extends CoreController
      */
     public function edit(Banner $banner): View|Factory|Application
     {
-        $banner = $this->banner_service->findById($banner->id);
-
         return view('banner::edit', compact('banner'));
     }
 

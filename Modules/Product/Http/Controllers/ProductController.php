@@ -39,7 +39,7 @@ class ProductController extends CoreController
         return view('product::create', [
             'brands' => Brand::get(),
             'categories' => Category::get(),
-            'product' => new Product(),
+            'product' => new Product,
             'sizes' => Size::get(),
             'conditions' => Condition::get(),
             'tags' => Tag::get(),
@@ -101,7 +101,7 @@ class ProductController extends CoreController
     public function generateDescription(Request $request)
     {
         $title = $request->title;
-        $description = (new OpenAIService())->generateProductDescription($title);
+        $description = (new OpenAIService)->generateProductDescription($title);
 
         return response()->json(['description' => $description]);
 
