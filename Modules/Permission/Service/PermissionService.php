@@ -15,4 +15,14 @@ class PermissionService extends CoreService
         $this->permission_repository = $permissionRepository;
     }
 
+    /**
+     * Get all products based on given data.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function search(array $data): mixed
+    {
+        return $this->permission_repository->search($data);
+    }
+
 }

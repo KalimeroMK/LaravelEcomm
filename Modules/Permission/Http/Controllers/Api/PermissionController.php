@@ -8,8 +8,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Traits\ApiResponses;
+use Modules\Permission\Http\Requests\Api\Search;
 use Modules\Permission\Http\Resources\PermissionResource;
 use Modules\Permission\Service\PermissionService;
+use Modules\Role\Http\Requests\Update;
 use ReflectionException;
 
 class PermissionController extends Controller
@@ -28,9 +30,9 @@ class PermissionController extends Controller
         $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
     }
 
-    public function index(): AnonymousResourceCollection
+    public function index(Search $request): AnonymousResourceCollection
     {
-        return PermissionResource::collection($this->permission_service->getAll());
+        return PermissionResource::collection($this->permission_service->search($request->validated()));
     }
 
     /**
@@ -74,7 +76,7 @@ class PermissionController extends Controller
     /**
      * @throws ReflectionException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(

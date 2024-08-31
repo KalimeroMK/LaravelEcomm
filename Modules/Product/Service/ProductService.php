@@ -3,6 +3,7 @@
 namespace Modules\Product\Service;
 
 use Exception;
+use Illuminate\Support\Collection;
 use Modules\Attribute\Models\Attribute;
 use Modules\Core\Service\CoreService;
 use Modules\Product\Models\Product;
@@ -21,9 +22,9 @@ class ProductService extends CoreService
     /**
      * Get all products based on given data.
      *
-     * @param  array<string, mixed>  $data
+     * @return Collection
      */
-    public function index(): mixed
+    public function index(): Collection
     {
         return $this->product_repository->findAll();
     }

@@ -10,3 +10,7 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+use Modules\Role\Http\Controllers\Api\RoleController;
+
+Route::apiResource('roles', RoleController::class)->names('api.roles');
