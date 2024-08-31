@@ -39,12 +39,13 @@ class PermissionTableSeeder extends Seeder
             'post',
             'product',
             'review',
-            'role',
             'settings',
             'shipping',
             'size',
             'tag',
             'user',
+            'permission',
+            'role',
         ];
 
         $operations = ['list', 'show', 'create', 'update', 'delete'];
@@ -111,7 +112,7 @@ class PermissionTableSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        if (! $user instanceof User) {
+        if (!$user instanceof User) {
             throw new Exception('User creation did not return a User model instance.');
         }
 

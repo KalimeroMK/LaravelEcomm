@@ -4,8 +4,9 @@ namespace Modules\Permission\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Modules\Permission\Http\Requests\Store;
+use Modules\Permission\Http\Requests\Update;
 use Modules\Permission\Models\Permission;
 
 class PermissionController extends Controller
@@ -36,10 +37,9 @@ class PermissionController extends Controller
     /**
      * Store a newly created permission in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
-        Permission::create(['name' => $request->input('name')]);
-
+        Permission::create($request->validated());
         return redirect()->route('permissions.index');
     }
 
@@ -54,10 +54,9 @@ class PermissionController extends Controller
     /**
      * Update the specified permission in storage.
      */
-    public function update(Request $request, Permission $permission): RedirectResponse
+    public function update(Update $request, Permission $permission): RedirectResponse
     {
-        $permission->name = $request->input('name');
-        $permission->save();
+        $permission->update($request->validated());
 
         return redirect()->route('permissions.index');
     }

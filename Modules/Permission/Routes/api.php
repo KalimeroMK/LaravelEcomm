@@ -10,3 +10,7 @@
     | is assigned the "api" middleware group. Enjoy building your API!
     |
 */
+
+use Modules\Permission\Http\Controllers\Api\PermissionController;
+
+Route::apiResource('permissions', PermissionController::class)->names('api.permission');
