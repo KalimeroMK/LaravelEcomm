@@ -28,6 +28,8 @@ class BundleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $this->load(['products', 'media']);
+
         return [
             'id' => $this->id,
             'name' => $this->name,

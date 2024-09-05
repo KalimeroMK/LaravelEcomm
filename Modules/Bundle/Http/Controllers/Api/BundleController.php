@@ -24,7 +24,7 @@ class BundleController extends CoreController
         $this->middleware('permission:bundle-list', ['only' => ['index']]);
         $this->middleware('permission:bundle-show', ['only' => ['show']]);
         $this->middleware('permission:bundle-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:bundle-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:bundle-update', ['only' => ['edit', 'update']]);
         $this->middleware('permission:bundle-delete', ['only' => ['destroy']]);
     }
 

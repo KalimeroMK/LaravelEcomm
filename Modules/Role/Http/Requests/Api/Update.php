@@ -13,5 +13,4 @@ class Update extends CoreRequest
             'guard_name' => 'nullable|string|max:255|in:web,api|default:web',
         ];
     }
-
 }

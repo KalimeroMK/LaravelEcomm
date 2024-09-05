@@ -43,7 +43,7 @@ class BundleService extends CoreService
         $bundle->products()->attach($data['product']);
 
         // Handle image uploads
-        if (request()->hasFile('images')) {
+        if (array_key_exists('images', $data)) {
             $bundle->addMultipleMediaFromRequest(['images'])
                 ->each(function ($fileAdder) {
                     $fileAdder->preservingOriginal()->toMediaCollection('bundle');
@@ -67,7 +67,7 @@ class BundleService extends CoreService
         $bundle->update($data);
 
         // Check for new image uploads and handle them
-        if (request()->hasFile('images')) {
+        if (array_key_exists('images', $data)) {
             $bundle->clearMediaCollection('bundle'); // Optionally clear existing media
             $bundle->addMultipleMediaFromRequest(['images'])
                 ->each(function ($fileAdder) {

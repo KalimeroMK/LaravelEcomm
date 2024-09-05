@@ -21,8 +21,6 @@ class ProductService extends CoreService
 
     /**
      * Get all products based on given data.
-     *
-     * @return Collection
      */
     public function index(): Collection
     {

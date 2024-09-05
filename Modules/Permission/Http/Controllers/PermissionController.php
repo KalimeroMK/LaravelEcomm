@@ -40,6 +40,7 @@ class PermissionController extends Controller
     public function store(Store $request): RedirectResponse
     {
         Permission::create($request->validated());
+
         return redirect()->route('permissions.index');
     }
 

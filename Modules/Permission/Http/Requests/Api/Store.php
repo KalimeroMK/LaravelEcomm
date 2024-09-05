@@ -13,5 +13,4 @@ class Store extends CoreRequest
             'guard_name' => 'required|string|max:255|in:web,api|default:web|unique:permissions',
         ];
     }
-
 }

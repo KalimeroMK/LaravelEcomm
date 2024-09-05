@@ -8,5 +8,4 @@ use Modules\Role\Models\Role;
 class RoleRepository extends Repository
 {
     public $model = Role::class;
-
 }

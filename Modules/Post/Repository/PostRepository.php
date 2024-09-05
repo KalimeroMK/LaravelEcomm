@@ -26,10 +26,6 @@ class PostRepository extends Repository implements SearchInterface
     {
         $query = $this->buildQuery($data);
 
-        if (Arr::get($data, 'all_included', false)) {
-            return $this->eagerLoadRelations($query)->paginate();
-        }
-
         return $this->applySortingAndPaginate($query, $data);
     }
 

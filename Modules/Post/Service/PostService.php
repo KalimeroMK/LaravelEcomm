@@ -41,12 +41,10 @@ class PostService extends CoreService
         }
 
         // Handle image uploads
-        if (request()->hasFile('images')) {
-            $post->addMultipleMediaFromRequest(['images'])
-                ->each(function (FileAdder $fileAdder) {
-                    $fileAdder->preservingOriginal()->toMediaCollection('post');
-                });
-        }
+        $post->addMultipleMediaFromRequest(['images'])
+            ->each(function (FileAdder $fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('post');
+            });
 
         return $post;
     }
@@ -63,7 +61,6 @@ class PostService extends CoreService
      */
     public function update(int $id, array $data): Model
     {
-        dd($data);
         $post = $this->post_repository->findById($id);
 
         $post->update($data);
@@ -77,7 +74,7 @@ class PostService extends CoreService
         }
 
         // Check for new image uploads and handle them
-        if (request()->hasFile('images')) {
+        if (array_key_exists('images', $data)) {
             $post->clearMediaCollection('post'); // Optionally clear existing media
             $post->addMultipleMediaFromRequest(['images'])
                 ->each(function (FileAdder $fileAdder) {

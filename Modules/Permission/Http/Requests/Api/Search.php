@@ -14,5 +14,4 @@ class Search extends CoreRequest
             'per_page' => 'nullable|integer|between:1,100',
         ];
     }
-
 }

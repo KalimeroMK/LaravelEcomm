@@ -26,7 +26,7 @@ class PermissionController extends Controller
         $this->middleware('permission:permission-list', ['only' => ['index']]);
         $this->middleware('permission:permission-show', ['only' => ['show']]);
         $this->middleware('permission:permission-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:permission-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:permission-update', ['only' => ['edit', 'update']]);
         $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
     }
 

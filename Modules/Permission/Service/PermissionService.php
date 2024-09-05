@@ -24,5 +24,4 @@ class PermissionService extends CoreService
     {
         return $this->permission_repository->search($data);
     }
-
 }

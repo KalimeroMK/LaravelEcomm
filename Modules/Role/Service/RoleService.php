@@ -14,5 +14,4 @@ class RoleService extends CoreService
         parent::__construct($roleRepository);
         $this->role_repository = $roleRepository;
     }
-
 }

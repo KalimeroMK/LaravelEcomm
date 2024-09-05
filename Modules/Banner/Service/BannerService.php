@@ -57,7 +57,7 @@ class BannerService extends CoreService
         $banner = $this->banner_repository->findById($id);
 
         // Check for new e uploads and handle them
-        if ($request && $request->hasFile('images')) {
+        if (array_key_exists('images', $data)) {
             $banner->clearMediaCollection('banner'); // Optionally clear existing media
             $banner->addMultipleMediaFromRequest(['images'])
                 ->each(function (FileAdder $fileAdder) {

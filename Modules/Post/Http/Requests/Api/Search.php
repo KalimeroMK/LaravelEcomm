@@ -20,7 +20,6 @@ class Search extends CoreRequest
             'description' => 'string|nullable',
             'status' => 'string|in:active,inactive|nullable',
             'per_page' => 'nullable|int',
-            'all_included' => 'nullable|boolean',
         ];
     }
 }

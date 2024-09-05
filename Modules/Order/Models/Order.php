@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Kalimeromk\Filterable\app\Traits\Filterable;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Models\Core;
 use Modules\Order\Database\Factories\OrderFactory;
@@ -28,28 +29,21 @@ use Modules\User\Models\User;
  * @property int|null $user_id
  * @property float $sub_total
  * @property int|null $shipping_id
- * @property float|null $coupon
  * @property float $total_amount
  * @property int $quantity
  * @property string $payment_method
  * @property string $payment_status
  * @property string $status
- * @property string $first_name
- * @property string $last_name
- * @property string $email
  * @property string $phone
- * @property string $country
  * @property string|null $post_code
- * @property string $address1
- * @property string|null $address2
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Shipping|null $shipping
  * @property User|null $user
  * @property Collection|Cart[] $carts
  * @property-read Collection|Cart[] $cart_info
- * @property-read int|null          $cart_info_count
- * @property-read int|null          $carts_count
+ * @property-read int|null $cart_info_count
+ * @property-read int|null $carts_count
  *
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -80,6 +74,7 @@ use Modules\User\Models\User;
  */
 class Order extends Core
 {
+    use Filterable;
     use HasFactory;
 
     protected $table = 'orders';
@@ -89,43 +84,48 @@ class Order extends Core
      *
      * @var array<string>
      */
-    protected $dates
-        = [
-            'created_at',
-            'updated_at',
-        ];
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
 
-    protected $casts
-        = [
-            'user_id' => 'int',
-            'sub_total' => 'float',
-            'shipping_id' => 'int',
-            'coupon' => 'float',
-            'total_amount' => 'float',
-            'quantity' => 'int',
-        ];
+    protected $casts = [
+        'user_id' => 'int',
+        'sub_total' => 'float',
+        'shipping_id' => 'int',
+        'total_amount' => 'float',
+        'quantity' => 'int',
+    ];
 
-    protected $fillable
-        = [
-            'order_number',
-            'user_id',
-            'sub_total',
-            'shipping_id',
-            'coupon',
-            'total_amount',
-            'quantity',
-            'payment_method',
-            'payment_status',
-            'status',
-            'first_name',
-            'last_name',
-            'email',
-            'phone',
-            'country',
-            'post_code',
-            'address1',
-            'address2',
-        ];
+    protected $fillable = [
+        'order_number',
+        'user_id',
+        'sub_total',
+        'shipping_id',
+        'total_amount',
+        'quantity',
+        'payment_method',
+        'payment_status',
+        'status',
+        'payer_id',
+        'transaction_reference',
+        'post_code',
+    ];
+
+    public const likeRows = [
+        'user.name',
+        'user.email',
+        'order_number',
+        'payment_method',
+        'payment_status',
+        'status',
+        'email',
+        'phone',
+        'country',
+        'post_code',
+        'total_amount',
+
+    ];
 
     public static function Factory(): OrderFactory
     {

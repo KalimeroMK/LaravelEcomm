@@ -41,9 +41,8 @@ class PermissionRepository extends Repository implements SearchInterface
             );
 
             return $query->with('roles')->paginate(
-                Arr::get($data, 'per_page', (new Permission())->getPerPage()) //
+                Arr::get($data, 'per_page', (new Permission)->getPerPage()) //
             );
         });
     }
-
 }

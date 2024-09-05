@@ -33,12 +33,10 @@ class BrandService extends CoreService
         $brand = $this->brand_repository->create($data);
 
         // Handle image uploads
-        if (request()->hasFile('images')) {
-            $brand->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->preservingOriginal()->toMediaCollection('brand');
-                });
-        }
+        $brand->addMultipleMediaFromRequest(['images'])
+            ->each(function ($fileAdder) {
+                $fileAdder->preservingOriginal()->toMediaCollection('brand');
+            });
 
         return $brand;
     }
@@ -57,7 +55,7 @@ class BrandService extends CoreService
         $brand->update($data);
 
         // Check for new image uploads and handle them
-        if (request()->hasFile('images')) {
+        if (array_key_exists('images', $data)) {
             $brand->clearMediaCollection('brand'); // Optionally clear existing media
             $brand->addMultipleMediaFromRequest(['images'])
                 ->each(function ($fileAdder) {
