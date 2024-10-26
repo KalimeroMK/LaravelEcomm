@@ -1,6 +1,6 @@
 @if ($tag->exists)
 
-    <form class="form-horizontal" method="POST" action="{{route('tag.update',$tag->id)}}"
+    <form class="form-horizontal" method="POST" action="{{route('tags.update',$tag->id)}}"
           enctype="multipart/form-data">
         @method('put')
         @csrf

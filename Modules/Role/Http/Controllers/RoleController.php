@@ -6,8 +6,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Modules\Permission\Models\Permission;
+use Modules\Role\Models\Role;
 
 class RoleController extends CoreController
 {
@@ -47,7 +47,7 @@ class RoleController extends CoreController
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permissions'));
 
-        return redirect()->route('role.index');
+        return redirect()->route('roles.index');
     }
 
     /**
@@ -69,7 +69,7 @@ class RoleController extends CoreController
         $role->syncPermissions($request->input('permissions'));
         $role->save();
 
-        return redirect()->route('role.index');
+        return redirect()->route('roles.index');
     }
 
     /**
@@ -79,6 +79,6 @@ class RoleController extends CoreController
     {
         $role->delete();
 
-        return redirect()->route('role.index');
+        return redirect()->route('roles.index');
     }
 }

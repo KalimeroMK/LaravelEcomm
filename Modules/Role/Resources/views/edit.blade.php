@@ -6,7 +6,7 @@
                 <div class="card-header card-header-primary">
                     <h4 class="card-title "> {{trans('messages.role')}}</h4>
                     <p class="card-category"><a href="{{ route('admin')}}">{{trans('messages.home')}}</a> -> <a
-                                href="{{route('role.index')}}">{{trans('messages.role')}}</a></p>
+                                href="{{route('roles.index')}}">{{trans('messages.role')}}</a></p>
                 </div>
                 <div class="card-body">
                     @include('role::partials.form')
