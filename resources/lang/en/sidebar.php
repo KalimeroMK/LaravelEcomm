@@ -51,5 +51,6 @@ return [
     'general_settings' => 'General settings',
     'tenant' => 'Tenant',
     'page' => 'Page',
+    'complaints' => 'Complaints',
 
 ];

@@ -51,5 +51,6 @@ return [
     'general_settings' => 'Општи поставки',
     'tenant' => 'Tenant',
     'page' => 'Страна',
+    'complaints' => 'Жалби',
 
 ];

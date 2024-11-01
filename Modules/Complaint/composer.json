@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/complaint",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Complaint\\": "",
+            "Modules\\Complaint\\App\\": "app/",
+            "Modules\\Complaint\\Database\\Factories\\": "database/factories/",
+            "Modules\\Complaint\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Complaint\\Tests\\": "tests/"
+        }
+    }
+}

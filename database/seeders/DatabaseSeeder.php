@@ -13,6 +13,8 @@ use Modules\Brand\Models\Brand;
 use Modules\Bundle\Models\BundleProduct;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Database\Seeders\CategoryPostSeeder;
+use Modules\Complaint\Models\Complaint;
+use Modules\Complaint\Models\ComplaintReply;
 use Modules\Coupon\Database\Seeders\CouponSeeder;
 use Modules\Message\Models\Message;
 use Modules\Newsletter\Models\Newsletter;
@@ -55,7 +57,8 @@ class DatabaseSeeder extends Seeder
         Newsletter::factory()->count(20)->create();
         Notification::factory()->count(50)->create();
         Setting::factory()->create();
-
+        Complaint::factory()->count(50)->create();
+        ComplaintReply::factory()->count(50)->create();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

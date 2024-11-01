@@ -51,5 +51,7 @@ return [
     'general_settings' => 'Allgemeine Einstellungen',
     'tenant' => 'Tenant',
     'page' => 'Seite',
+    'complaints' => 'Beschwerden',
+
 
 ];

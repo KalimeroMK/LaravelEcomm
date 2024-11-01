@@ -170,7 +170,12 @@
             <span>@lang('sidebar.orders')</span>
         </a>
     </li>
-
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('complaints.index') }}">
+            <i class="fas fa-hammer fa-chart-area"></i>
+            <span>@lang('sidebar.complaints')</span>
+        </a>
+    </li>
     <!-- Reviews -->
     <li class="nav-item">
         <a class="nav-link" href="{{route('reviews.index')}}">

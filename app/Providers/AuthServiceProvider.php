@@ -17,6 +17,8 @@ use Modules\Cart\Models\Cart;
 use Modules\Cart\Models\Policies\CartPolicy;
 use Modules\Category\Models\Category;
 use Modules\Category\Models\Policies\CategoryPolicy;
+use Modules\Complaint\Models\Complaint;
+use Modules\Complaint\Models\Polices\ComplaintPolicy;
 use Modules\Coupon\Models\Policies\CouponPolicy;
 use Modules\Message\Models\Message;
 use Modules\Message\Models\Policies\MessagePolicy;
@@ -79,6 +81,7 @@ class AuthServiceProvider extends ServiceProvider
             Tenant::class => TenantPolicy::class,
             Page::class => PagePolicy::class,
             PaymentProvider::class => PaymentProviderPolicy::class,
+            Complaint::class => ComplaintPolicy::class,
         ];
 
     /**

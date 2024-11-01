@@ -47,7 +47,8 @@ class PermissionTableSeeder extends Seeder
             'permission',
             'role',
             'payment-provider',
-            'notification'
+            'notification',
+            'complaint'
         ];
 
         $operations = ['list', 'show', 'create', 'update', 'delete'];
