@@ -12,26 +12,26 @@ class AttributePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('attributes-list');
+        return $user->can('attribute-list');
     }
 
     public function view(User $user): bool
     {
-        return $user->can('attributes-list');
+        return $user->can('attribute-list');
     }
 
     public function create(User $user): bool
     {
-        return $user->can('attributes-create');
+        return $user->can('attribute-create');
     }
 
     public function update(User $user, Attribute $attribute): bool
     {
-        return $user->can('attributes-create');
+        return $user->can('attribute-create');
     }
 
     public function delete(User $user, Attribute $attribute): bool
     {
-        return $user->can('attributes-delete');
+        return $user->can('attribute-delete');
     }
 }

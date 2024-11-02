@@ -71,6 +71,10 @@
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ route('complaints.create', $order->id) }}"
+                                       class="btn btn-primary btn-sm float-left mr-1"
+                                       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
+                                       title="edit" data-placement="bottom"><i class="fas fa-comment"></i></a>
                                     <form method="POST" action="{{route('orders.destroy',[$order->id])}}">
                                         @csrf
                                         @method('delete')
@@ -78,7 +82,7 @@
                                                 data-id="{{$order->id}}" style="height:30px; width:30px;
                                                 border-radius:50%
                                         " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                class="fas fa-trash-alt"></i></button>
+                                                    class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

@@ -12,26 +12,26 @@ class CategoryPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('categories-list');
+        return $user->can('category-list');
     }
 
     public function view(User $user): bool
     {
-        return $user->can('categories-list');
+        return $user->can('category-list');
     }
 
     public function create(User $user): bool
     {
-        return $user->can('categories-create');
+        return $user->can('category-create');
     }
 
     public function update(User $user, Category $category): bool
     {
-        return $user->can('categories-create');
+        return $user->can('category-create');
     }
 
     public function delete(User $user, Category $category): bool
     {
-        return $user->can('categories-delete');
+        return $user->can('category-delete');
     }
 }

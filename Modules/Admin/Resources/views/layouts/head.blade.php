@@ -13,7 +13,7 @@
     900,900i" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="{{asset('css/all.min.css')}}" rel="stylesheet">
+    <link href="{{asset('backend/css/all.min.css')}}" rel="stylesheet">
     <link href="{{asset('backend/css/custom.css')}}" rel="stylesheet">
     @stack('styles')
 

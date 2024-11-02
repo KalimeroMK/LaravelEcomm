@@ -8,7 +8,7 @@
                     <!-- Single Widget -->
                     <div class="single-footer about">
                         <div class="logo">
-                            <a href="index.html"><img src="{{asset('backend/img/logo2.png')}}" alt="#"></a>
+                            <a href="/"><img src="{{asset('backend/img/logo2.png')}}" alt="#"></a>
                         </div>
                         <p class="text">@foreach($settings as $data)
                                 {{$data->short_des}}
@@ -94,7 +94,7 @@
 <!-- /End Footer Area -->
 
 <!-- Jquery -->
-<script src="{{asset('js/all_front.min.js')}}"></script>
+<script src="{{asset('frontend/js/all_front.min.js')}}"></script>
 
 
 @stack('scripts')

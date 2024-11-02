@@ -10,8 +10,6 @@
         </div>
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">@lang('partials.list')</h6>
-            <a href="{{ route('complaints.create') }}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-               data-placement="bottom" title="Add Complaint"><i class="fas fa-plus"></i>@lang('partials.create')</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">

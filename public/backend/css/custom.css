@@ -2,3 +2,43 @@
     display: flex;
     justify-content: space-between;
 }
+
+.timeline {
+    padding-top: 1rem;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.timeline-date {
+    font-size: 0.9rem;
+    color: #6c757d;
+    width: 80px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-right: 0.75rem;
+}
+
+.timeline-content {
+    flex-grow: 1;
+    background-color: #f8f9fc;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.35rem;
+    padding: 0.75rem 1rem;
+}
+
+.reply-card {
+    margin: 0;
+}
+
+.reply-card h6 {
+    font-size: 0.95rem;
+}
+
+.reply-card p {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}

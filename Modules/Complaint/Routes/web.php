@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Complaint\Http\Controllers\ComplaintController;
-use Modules\Complaint\Http\Controllers\ComplaintReplyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +14,5 @@ use Modules\Complaint\Http\Controllers\ComplaintReplyController;
 |
 */
 
-Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
-Route::get('/complaints/{complaint}', [ComplaintController::class, 'edit'])->name('complaints.edit');
-Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.create');
-Route::put('/complaints/{complaint}', [ComplaintController::class, 'update'])->name('complaints.update');
-Route::post('/complaints/{complaint}/replies', [ComplaintReplyController::class, 'store'])->name(
-    'complaints.replies.store'
-);
-Route::get('/complaints/{complaint}/replies', [ComplaintReplyController::class, 'index']);
+Route::resource('complaints', ComplaintController::class)->except('destroy', 'create');
+Route::get('complaints/create/{order_id}', [ComplaintController::class, 'create'])->name('complaints.create');

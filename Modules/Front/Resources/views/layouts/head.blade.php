@@ -8,7 +8,7 @@
 @include('feed::links')
 
 <!-- StyleSheet -->
-<link rel="stylesheet" href="{{asset('css/all_front.min.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/all_front.min.css')}}">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="{{asset('frontend/css/font-awesome.css')}}">
 <!-- Themify Icons -->
