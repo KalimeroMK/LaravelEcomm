@@ -19,11 +19,16 @@
                 <!-- Form fields here -->
 
                 <div class="form-group">
-                    <label for="inputOrderID" class="col-form-label">Order ID</label>
-                    <input id="inputOrderID" type="text" name="order_id" placeholder="Enter Order ID"
-                           class="form-control"
-                           value="{{ $complaint->order_id ?? null }}" {{ $complaint->exists ? 'readonly' : '' }}>
-
+                    <label for="inputOrderID">Order ID</label>
+                    @if($complaint->exists)
+                        <input id="inputOrderID" type="text" name="order_id"
+                               value="{{ $complaint->order_id }}"
+                               class="form-control" readonly>
+                    @else
+                        <input id="inputOrderID" type="text" name="order_id"
+                               value="{{ request()->route('order_id') }}"
+                               class="form-control" placeholder="Enter Order ID" required>
+                    @endif
                 </div>
 
                 <div class="form-group">

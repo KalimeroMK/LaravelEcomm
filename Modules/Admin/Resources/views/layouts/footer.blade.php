@@ -35,7 +35,7 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="{{asset('js/all.min.js')}}"></script>
+<script src="{{asset('backend/js/all.min.js')}}"></script>
 
 <!-- Page level plugins -->
 <script>
