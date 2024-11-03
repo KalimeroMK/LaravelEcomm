@@ -9,7 +9,7 @@
             {{-- Complaint Detail Form --}}
             <form class="form-horizontal" method="POST"
                   action="{{ route($complaint->exists ? 'complaints.update' : 'complaints.store', $complaint->exists ?
-                  $brand->id :
+                  $complaint->id :
                   null) }}"
                   enctype="multipart/form-data">
                 @csrf
@@ -19,10 +19,11 @@
                 <!-- Form fields here -->
 
                 <div class="form-group">
-                    <label for="inputOrderID">Order ID</label>
-                    <input id="inputOrderID" type="text" name="order_id"
-                           value="{{ request()->query('order_id', $order_id ?? '') }}"
-                           class="form-control" placeholder="Enter Order ID" required>
+                    <label for="inputOrderID" class="col-form-label">Order ID</label>
+                    <input id="inputOrderID" type="text" name="order_id" placeholder="Enter Order ID"
+                           class="form-control"
+                           value="{{ $complaint->order_id ?? null }}" {{ $complaint->exists ? 'readonly' : '' }}>
+
                 </div>
 
                 <div class="form-group">

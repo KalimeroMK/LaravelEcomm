@@ -33,6 +33,7 @@
 - Banner manager
 - Bundles manager
 - Order management
+- Order Complete, Pending, Processing, On hold, Cancelled, Refunded, Failed
 - Category management
 - Brand management
 - Shipping Management
