@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Complaint\Http\Controllers\Api\ComplaintController;
 
 /*
     |--------------------------------------------------------------------------
@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Route;
     |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('complaint', fn (Request $request) => $request->user())->name('complaint');
-});
+Route::resource('complaints', ComplaintController::class)->except('destroy', 'create');
+Route::get('complaints/create/{order_id}', [ComplaintController::class, 'create'])->name('complaints.create');
