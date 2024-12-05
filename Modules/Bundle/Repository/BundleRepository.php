@@ -31,4 +31,5 @@ class BundleRepository extends Repository
     {
         return $this->model::with('media')->where('slug', $slug)->first();
     }
+
 }
