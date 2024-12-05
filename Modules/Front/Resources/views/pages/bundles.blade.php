@@ -11,7 +11,7 @@
                     <div class="bread-inner">
                         <ul class="bread-list">
                             <li><a href="/">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="/">Shop Grid</a></li>
+                            <li class="active"><a href="/">Bundles</a></li>
                         </ul>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="content">
                                         <h5>
-                                            <a href="{{route('front.product-detail',$product->slug)}}">{{$product->title}}</a>
+                                            <a href="{{route('front.bundle-detail',$product->slug)}}">{{$product->title}}</a>
                                         </h5>
                                         @php
                                             $org=($product->price-($product->price*$product->discount)/100);
@@ -101,7 +101,7 @@
                                 <div class="col-lg-4 col-md-6 col-12">
                                     <div class="single-product">
                                         <div class="product-img">
-                                            <a href="{{route('front.product-detail',$product->slug)}}">
+                                            <a href="{{route('front.bundle-detail',$product->slug)}}">
                                                 <img class="default-img" src="{{$product->imageUrl}}"
                                                      alt="{{$product->imageUrl}}">
                                                 <img class="hover-img" src="{{$product->imageUrl}}"
@@ -368,7 +368,7 @@
             // Your existing script content
 
             // Sorting filter handler
-            $('#sortFilter').change(function() {
+            $('#sortFilter').change(function () {
                 var sortByValue = $(this).val(); // Get the selected sort by value
                 var currentUrl = window.location.href; // Get current URL
                 var newUrl;

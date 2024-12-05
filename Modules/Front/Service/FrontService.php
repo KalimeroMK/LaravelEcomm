@@ -18,6 +18,7 @@ use Modules\Banner\Repository\BannerRepository;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Bundle\Models\Bundle;
+use Modules\Bundle\Repository\BundleRepository;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Coupon\Models\Coupon;
@@ -47,18 +48,22 @@ class FrontService
 
     private PageRepository $pageRepository;
 
+    private BundleRepository $bundleRepository;
+
     public function __construct(
         ProductRepository $productRepository,
         BrandRepository $brandRepository,
         PostRepository $postRepository,
         BannerRepository $bannerRepository,
-        PageRepository $pageRepository
+        PageRepository $pageRepository,
+        BundleRepository $bundleRepository
     ) {
         $this->productRepository = $productRepository;
         $this->brandRepository = $brandRepository;
         $this->bannerRepository = $bannerRepository;
         $this->postRepository = $postRepository;
         $this->pageRepository = $pageRepository;
+        $this->bundleRepository = $bundleRepository;
     }
 
     /**
@@ -90,7 +95,7 @@ class FrontService
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
             $category = Category::whereSlug($slug)->first();
 
-            if (! $category) {
+            if (!$category) {
                 return 'Category not found';
             }
 
@@ -260,8 +265,8 @@ class FrontService
     /**
      * Retrieve products based on various filters.
      *
-     * @param  int[]  $categoryIds
-     * @param  int[]  $brandIds
+     * @param  int[]                 $categoryIds
+     * @param  int[]                 $brandIds
      * @param  array<string, mixed>  $queryParams
      */
     private function retrieveProducts(
@@ -273,21 +278,21 @@ class FrontService
         string $sortOrder,
         array $queryParams
     ): LengthAwarePaginator {
-        $perPage = (int) ($queryParams['show'] ?? 9);
+        $perPage = (int)($queryParams['show'] ?? 9);
 
         // Generate a unique cache key
         $cacheKey = 'products_'.json_encode(
-            compact(
-                'categoryIds',
-                'brandIds',
-                'minPrice',
-                'maxPrice',
-                'sortColumn',
-                'sortOrder',
-                'perPage'
-            )
+                compact(
+                    'categoryIds',
+                    'brandIds',
+                    'minPrice',
+                    'maxPrice',
+                    'sortColumn',
+                    'sortOrder',
+                    'perPage'
+                )
 
-        );
+            );
 
         // Cache for 24 hours (86400 seconds)
         return Cache::remember($cacheKey, 86400, function () use (
@@ -300,9 +305,9 @@ class FrontService
             $perPage
         ) {
             return $this->model::query()
-                ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
-                ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
-                ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
+                ->when($categoryIds, fn($query) => $query->whereIn('cat_id', $categoryIds))
+                ->when($brandIds, fn($query) => $query->whereIn('brand_id', $brandIds))
+                ->when($minPrice || $maxPrice, fn($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
                 ->orderBy($sortColumn, $sortOrder)
                 ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
                 ->paginate($perPage);
@@ -353,14 +358,14 @@ class FrontService
     public function couponStore(Request $request): RedirectResponse|string
     {
         $coupon = Coupon::whereCode($request->code)->first();
-        if (! $coupon) {
+        if (!$coupon) {
             request()->session()->flash('error', 'Invalid coupon code, Please try again');
 
             return back();
         }
 
         // Cast the total price to a float to ensure the correct type is passed to the discount method
-        $total_price = (float) Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
+        $total_price = (float)Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
 
         session()->put('coupon', [
             'id' => $coupon->id,
@@ -384,8 +389,8 @@ class FrontService
         $category = $data['category'] ?? [];
         $tag = $data['tag'] ?? [];
 
-        $catURL = ! empty($category) ? implode(',', $category) : '';
-        $tagURL = ! empty($tag) ? implode(',', $tag) : '';
+        $catURL = !empty($category) ? implode(',', $category) : '';
+        $tagURL = !empty($tag) ? implode(',', $tag) : '';
 
         // Return an array with the filtered categories and tags.
         return [
@@ -599,7 +604,7 @@ class FrontService
      */
     private function filterByCategory(Builder $query): void
     {
-        if (! empty($_GET['category'])) {
+        if (!empty($_GET['category'])) {
             $catSlugs = explode(',', $_GET['category']);
             $catIds = Category::whereIn('slug', $catSlugs)->pluck('id')->toArray();
             $query->whereIn('cat_id', $catIds);
@@ -611,7 +616,7 @@ class FrontService
      */
     private function filterByBrand(Builder $query): void
     {
-        if (! empty($_GET['brand'])) {
+        if (!empty($_GET['brand'])) {
             $brandSlugs = explode(',', $_GET['brand']);
             $brandIds = Brand::whereIn('slug', $brandSlugs)->pluck('id')->toArray();
             $query->whereIn('brand_id', $brandIds);
@@ -623,7 +628,7 @@ class FrontService
      */
     private function sortBy(Builder $query): void
     {
-        if (! empty($_GET['sortBy'])) {
+        if (!empty($_GET['sortBy'])) {
             $sortBy = $_GET['sortBy'];
             if ($sortBy === 'title') {
                 $query->orderBy('title', 'ASC');
@@ -638,7 +643,7 @@ class FrontService
      */
     private function filterByPriceRange(Builder $query): void
     {
-        if (! empty($_GET['price'])) {
+        if (!empty($_GET['price'])) {
             $priceRange = explode('-', $_GET['price']);
             $minPrice = $priceRange[0] ?? 0;
             $maxPrice = $priceRange[1] ?? PHP_INT_MAX;
@@ -661,7 +666,7 @@ class FrontService
      */
     private function pagination(Builder $query): LengthAwarePaginator
     {
-        $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
+        $perPage = isset($_GET['show']) ? (int)$_GET['show'] : 6;
 
         return $query->paginate($perPage);
     }
@@ -760,6 +765,18 @@ class FrontService
             'products' => $products,
         ];
     }
+
+    public function bundleDetail(string $slug): array
+    {
+        $bundle = $this->bundleRepository->findBySlug($slug);
+        $related = $this->recentProducts();
+
+        return [
+            'bundle' => $bundle,
+            'related' => $related,
+        ];
+    }
+
 
     public function pages(string $slug): array
     {

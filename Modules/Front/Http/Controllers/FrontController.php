@@ -72,6 +72,11 @@ class FrontController extends Controller
         return view('front::pages.bundles', $this->front_service->productBundles());
     }
 
+    public function bundleDetail(string $slug)
+    {
+        return view('front::pages.bundle_detail', $this->front_service->bundleDetail($slug));
+    }
+
     /**
      * @return Application|Factory|View
      */

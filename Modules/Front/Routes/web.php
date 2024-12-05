@@ -34,6 +34,7 @@ Route::match(['get', 'post'], '/filter', [FrontController::class, 'productFilter
 Route::get('/product-lists', [FrontController::class, 'productLists'])->name('front.product-lists');
 Route::get('/product-grids', [FrontController::class, 'productGrids'])->name('front.product-grids');
 Route::get('/bundle', [FrontController::class, 'bundles'])->name('front.bundles');
+Route::get('/bundle/{slug}', [FrontController::class, 'bundleDetail'])->name('front.bundle-detail');
 Route::get('/page/{slug}', [FrontController::class, 'pages'])->name('front.pages');
 
 // NewsLetter

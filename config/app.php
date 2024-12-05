@@ -14,6 +14,7 @@ use Modules\Brand\Providers\BrandServiceProvider;
 use Modules\Bundle\Providers\BundleServiceProvider;
 use Modules\Cart\Providers\CartServiceProvider;
 use Modules\Category\Providers\CategoryServiceProvider;
+use Modules\Complaint\Providers\ComplaintServiceProvider;
 use Modules\Core\Providers\CoreServiceProvider;
 use Modules\Coupon\Providers\CouponServiceProvider;
 use Modules\Front\Providers\FrontServiceProvider;
@@ -75,7 +76,7 @@ return [
     |
      */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -259,6 +260,7 @@ return [
         PageServiceProvider::class,
         TenantServiceProvider::class,
         OpenAIServiceProvider::class,
+        ComplaintServiceProvider::class,
 
         /*
          * Application Service Providers...
