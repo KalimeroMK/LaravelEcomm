@@ -9,10 +9,9 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:users,id', 'in:'.auth()->id()],
-            'order_id' => ['required', 'exists:orders'],
+            'order_id' => ['required', 'exists:orders,id'],
             'status' => ['required'],
-            'description' => ['required|string'],
+            'description' => ['required'],
         ];
     }
 

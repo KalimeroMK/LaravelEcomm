@@ -2,13 +2,11 @@
 
 namespace Modules\Complaint\Service;
 
-use Illuminate\Support\Facades\Mail;
-use Modules\Complaint\Mail\ComplaintCreated;
+use Modules\Complaint\Jobs\SendComplaintEmailJob;
 use Modules\Complaint\Models\Complaint;
 use Modules\Complaint\Models\ComplaintReply;
 use Modules\Complaint\Repository\ComplaintRepository;
 use Modules\Core\Service\CoreService;
-use Modules\User\Models\User;
 
 class ComplaintService extends CoreService
 {
@@ -39,10 +37,13 @@ class ComplaintService extends CoreService
         $complaint = Complaint::create([
             'user_id' => $userId,
             'order_id' => $data['order_id'],
-            'complaint' => $data['complaint'],
+            'description' => $data['description'],
             'status' => 'open',
         ]);
-        $this->sendEmails($complaint);
+        foreach (['admin', 'user'] as $recipient) {
+            SendComplaintEmailJob::dispatch($complaint, $recipient)->onQueue('emails');
+        }
+
         return $complaint;
     }
 
@@ -54,7 +55,9 @@ class ComplaintService extends CoreService
         $complaint = Complaint::findOrFail($id);
         $complaint->status = $data['status'] ?? $complaint->status;
         $complaint->save();
-        $this->sendEmails($complaint);
+        foreach (['admin', 'user'] as $recipient) {
+            SendComplaintEmailJob::dispatch($complaint, $recipient)->onQueue('emails');
+        }
 
         ComplaintReply::create([
             'complaint_id' => $complaint->id,
@@ -63,20 +66,5 @@ class ComplaintService extends CoreService
         ]);
 
         return $complaint;
-    }
-
-    /**
-     * Send emails to the user and relevant admins.
-     */
-    public function sendEmails(Complaint $complaint): void
-    {
-        // Notify the user
-        Mail::to($complaint->user->email)->send(new ComplaintCreated($complaint, 'user'));
-
-        // Notify super-admins
-        $relevantAdmins = User::role('super-admin')->get();
-        foreach ($relevantAdmins as $admin) {
-            Mail::to($admin->email)->send(new ComplaintCreated($complaint, 'admin'));
-        }
     }
 }

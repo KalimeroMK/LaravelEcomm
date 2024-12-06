@@ -268,8 +268,6 @@
                     <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>
                 @endif
                 <a class="collapse-item" href="{{route('all.notification')}}">@lang('sidebar.notifications')</a>
-                <a class="collapse-item" href="{{route('payment_provider.index')}}">@lang('sidebar.payment_provider')
-                </a>
                 <a class="collapse-item"
                    href="{{route('laravelblocker::blocker.index')}}">@lang('sidebar.blocked_ip')</a>
                 <a class="collapse-item" href="{{route('activity')}}">@lang('sidebar.activity_log')</a>

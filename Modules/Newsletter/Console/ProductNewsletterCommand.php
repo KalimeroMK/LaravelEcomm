@@ -3,8 +3,7 @@
 namespace Modules\Newsletter\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
-use Modules\Newsletter\Mail\ProductNewsletterMail;
+use Modules\Newsletter\Jobs\ProductNewsletterJob;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Product\Models\Product;
 
@@ -12,19 +11,24 @@ class ProductNewsletterCommand extends Command
 {
     protected $signature = 'newsletter:product';
 
-    protected $description = 'Command description';
+    protected $description = 'Send newsletters with the latest products';
 
     public function handle(): void
     {
+        // Get the latest 10 products
         $products = Product::orderBy('id', 'asc')
             ->take(10)
             ->get()
-            ->all(); // Convert the collection to an array
+            ->all(); // Convert collection to an array
 
+        // Get validated newsletters
         $newsletters = Newsletter::whereIsValidated(true)->get();
 
+        // Dispatch the newsletter jobs
         foreach ($newsletters as $newsletter) {
-            Mail::to($newsletter->email)->send(new ProductNewsletterMail($products));
+            ProductNewsletterJob::dispatch($newsletter->email, $products);
         }
+
+        $this->info('Product newsletter jobs dispatched successfully.');
     }
 }

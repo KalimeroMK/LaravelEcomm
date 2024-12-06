@@ -32,8 +32,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputDescription" class="col-form-label">Description</label>
-                    <textarea id="inputDescription" name="description" placeholder="Enter Description"
+                    <label for="description">@lang('partials.description')</label>
+                    <textarea class="form-control" id="description" name="description"
+                              placeholder="Enter Description"
                               class="form-control" {{ $complaint->exists ? 'readonly' : '' }}>{{ $complaint->description ?? null }}</textarea>
                 </div>
 
@@ -46,33 +47,35 @@
                 </div>
 
                 {{-- Replies Timeline --}}
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Complaint Details</h6>
-                    </div>
-                    <div class="card-body">
-                        <!-- Complaint Detail Form (same as before) -->
+                @if($complaint->complaint_replies->isNotEmpty())
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Complaint Details</h6>
+                        </div>
+                        <div class="card-body">
+                            <!-- Complaint Detail Form (same as before) -->
 
-                        <!-- Replies Timeline -->
-                        <div class="timeline mt-4">
-                            @foreach($complaint->complaint_replies as $reply)
-                                <div class="timeline-item">
-                                    <div class="timeline-date">{{ $reply->created_at->format('d/m/Y') }}</div>
-                                    <div class="timeline-content">
-                                        <div class="reply-card">
-                                            <h6 class="mb-1 font-weight-bold {{ $reply->user->role == 'super-admin' ? 'text-primary' : 'text-secondary' }}">
-                                                {{ $reply->user->name }}
-                                            </h6>
-                                            <p class="mb-0">{{ $reply->reply_content }}</p>
+                            <!-- Replies Timeline -->
+                            <div class="timeline mt-4">
+                                @foreach($complaint->complaint_replies as $reply)
+                                    <div class="timeline-item">
+                                        <div class="timeline-date">{{ $reply->created_at->format('d/m/Y') }}</div>
+                                        <div class="timeline-content">
+                                            <div class="reply-card">
+                                                <h6 class="mb-1 font-weight-bold {{ $reply->user->role == 'super-admin' ? 'text-primary' : 'text-secondary' }}">
+                                                    {{ $reply->user->name }}
+                                                </h6>
+                                                <p class="mb-0">{{ $reply->reply_content }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
-                        </div>
+                                @endforeach
+                            </div>
 
-                        <!-- New Reply Form (same as before) -->
+                            <!-- New Reply Form (same as before) -->
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 {{-- New Reply Form --}}
                 <hr>
@@ -81,7 +84,7 @@
                 <div class="form-group">
                     <label for="newReplyContent" class="col-form-label">Reply Content</label>
                     <textarea id="newReplyContent" name="reply_content" placeholder="Enter reply content..."
-                              class="form-control" required>{{ old('reply_content') }}</textarea>
+                              class="form-control">{{ old('reply_content') }}</textarea>
                 </div>
                 <div class="d-flex justify-content-between">
                     <button type="reset" class="btn btn-warning">Reset</button>
@@ -91,3 +94,18 @@
         </div>
     </div>
 @endsection
+@push('styles')
+    <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+@endpush
+@push('scripts')
+    <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#description').summernote({
+                placeholder: "Write short description.....",
+                tabsize: 2,
+                height: 150
+            });
+        });
+    </script>
+@endpush

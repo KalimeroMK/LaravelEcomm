@@ -3,8 +3,7 @@
 namespace Modules\Newsletter\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
-use Modules\Newsletter\Mail\PostNewsletterMail;
+use Modules\Newsletter\Jobs\SendNewsletterJob;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Post\Models\Post;
 
@@ -12,19 +11,24 @@ class PostNewsletterCommand extends Command
 {
     protected $signature = 'newsletter:post';
 
-    protected $description = 'Command description';
+    protected $description = 'Send newsletters with the latest posts';
 
     public function handle(): void
     {
+        // Get the latest 10 posts
         $posts = Post::orderBy('id')
             ->take(10)
             ->get()
             ->all(); // Convert the collection to an array
 
+        // Get validated newsletters
         $newsletters = Newsletter::whereIsValidated(true)->get();
 
+        // Dispatch the newsletter jobs
         foreach ($newsletters as $newsletter) {
-            Mail::to($newsletter->email)->send(new PostNewsletterMail($posts));
+            SendNewsletterJob::dispatch($newsletter->email, $posts);
         }
+
+        $this->info('Newsletter jobs dispatched successfully.');
     }
 }

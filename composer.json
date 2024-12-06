@@ -23,6 +23,7 @@
         "lab404/laravel-impersonate": "*",
         "laravel/framework": "^11.0",
         "laravel/helpers": "*",
+        "laravel/horizon": "^5.29",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.8",
         "laravel/socialite": "^5.12",
