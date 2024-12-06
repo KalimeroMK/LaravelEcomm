@@ -198,7 +198,7 @@
                                         @if($category->childrenCategories->isNotEmpty())
                                             <ul class="sub-category">
                                                 @foreach ($category->childrenCategories as $childCategory)
-                                                    @include('front::layouts.child_category', ['child_category' => $childCategory])
+                                                    @include('front::default.layouts.child_category', ['child_category' => $childCategory])
                                                 @endforeach
                                             </ul>
                                         @endif
@@ -211,7 +211,7 @@
                         <div class="col-lg-9 col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
-                                @include('front::layouts.menu')
+                                @include('front::default.layouts.menu')
                                 <!--/ End Main Menu -->
                             </div>
                         </div>
@@ -219,7 +219,7 @@
                         <div class="col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
-                                @include('front::layouts.menu')
+                                @include('front::default.layouts.menu')
                                 <!--/ End Main Menu -->
                             </div>
                         </div>

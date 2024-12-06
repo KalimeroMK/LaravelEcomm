@@ -37,7 +37,7 @@ class FrontController extends Controller
      */
     public function aboutUs()
     {
-        return view('front::pages.about-us');
+        return view('front::page s.about-us');
     }
 
     /**
