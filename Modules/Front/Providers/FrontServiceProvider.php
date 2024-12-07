@@ -22,24 +22,33 @@ class FrontServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $theme = config('theme.active_theme', 'default');
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
-        View::composer(['front::layouts.header', 'front::layouts.footer', 'front::pages.about-us'],
+        View::composer([
+            'front::'.$theme.'.layouts.header',
+            'front::'.$theme.'.layouts.footer',
+            'front::'.$theme.'.pages.about-us'
+        ],
             SettingsViewComposer::class);
         View::composer([
-            'front::pages.product-grids',
-            'front::layouts.header',
-            'front::pages.product-lists',
-            'front::pages.bundles',
+            'front::'.$theme.'.pages.product-grids',
+            'front::'.$theme.'.layouts.header',
+            'front::'.$theme.'.pages.product-lists',
+            'front::'.$theme.'.pages.bundles',
         ],
             MenuViewComposer::class);
-        View::composer(['front::pages.product-grids', 'front::pages.product-lists', 'front::pages.bundles'],
+        View::composer([
+            'front::'.$theme.'.pages.product-grids',
+            'front::'.$theme.'.pages.product-lists',
+            'front::'.$theme.'.pages.bundles'
+        ],
             MaxViewComposer::class);
-        View::composer('front::layouts.master', SchemaOrgViewComposer::class);
-        View::composer('front::layouts.footer', InformationViewComposer::class);
+        View::composer('front::'.$theme.'.layouts.master', SchemaOrgViewComposer::class);
+        View::composer('front::'.$theme.'.layouts.footer', InformationViewComposer::class);
     }
 
     /**

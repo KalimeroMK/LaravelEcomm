@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends('front::default.layouts.master')
 
 @section('title','E-SHOP || About Us')
 
@@ -227,5 +227,5 @@
     </section>
     <!-- End Shop Services Area -->
 
-    @include('front::layouts.newsletter')
+    @include('front::default.layouts.newsletter')
 @endsection

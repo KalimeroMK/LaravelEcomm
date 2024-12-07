@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends('front::default.layouts.master')
 
 @section('content')
     <!-- Breadcrumbs -->
@@ -128,7 +128,7 @@
     <!--/ End Map Section -->
 
     <!-- Start Shop Newsletter  -->
-    @include('front::layouts.newsletter')
+    @include('front::default.layouts.newsletter')
     <!-- End Shop Newsletter -->
     <!--================Contact Success  =================-->
     <div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

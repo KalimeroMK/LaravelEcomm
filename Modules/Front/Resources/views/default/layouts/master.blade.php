@@ -18,7 +18,7 @@
         <meta property="fb:app_id" content="YourFacebookAppID"/>
         <meta name="google-site-verification" content="YourGoogleVerificationCode"/>
         <meta property="og:type" content="website"/>
-        <meta property="og:image" content="http://yourwebsite.com/assets/img/logo/logo.jpg"/>
+        <meta property="og:image" content="{{ asset("$themeAssetsPath/img/logo/logo.jpg") }}"/>
         <meta property="article:tag"
               content="e-commerce, online shopping, products, buy and sell, shopping website, online marketplace"/>
         <meta property="og:description"
@@ -31,28 +31,42 @@
     @endif
     <!-- Mobile Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/assets/img/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-57x57.png") }}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-60x60.png") }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-72x72.png") }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-76x76.png") }}">
+    <link rel="apple-touch-icon" sizes="114x114"
+          href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-114x114.png") }}">
+    <link rel="apple-touch-icon" sizes="120x120"
+          href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-120x120.png") }}">
+    <link rel="apple-touch-icon" sizes="144x144"
+          href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-144x144.png") }}">
+    <link rel="apple-touch-icon" sizes="152x152"
+          href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-152x152.png") }}">
+    <link rel="apple-touch-icon" sizes="180x180"
+          href="{{ asset("$themeAssetsPath/img/favicon/apple-icon-180x180.png") }}">
+    <link rel="icon" type="image/png" sizes="192x192"
+          href="{{ asset("$themeAssetsPath/img/favicon/android-icon-192x192.png") }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+          href="{{ asset("$themeAssetsPath/img/favicon/favicon-32x32.png") }}">
+    <link rel="icon" type="image/png" sizes="96x96"
+          href="{{ asset("$themeAssetsPath/img/favicon/favicon-96x96.png") }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+          href="{{ asset("$themeAssetsPath/img/favicon/favicon-16x16.png") }}">
+    <link rel="manifest" href="{{ asset("$themeAssetsPath/manifest.json") }}">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="{{ asset("$themeAssetsPath/img/favicon/ms-icon-144x144.png") }}">
     <meta name="theme-color" content="#ffffff">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="/assets/img/favicon.ico">
-    @include('front::layouts.head')
+    <link rel="shortcut icon" href="{{ asset("$themeAssetsPath/img/favicon.ico") }}">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset("$themeAssetsPath/css/style.css") }}">
+
+    @include('front::default.layouts.head')
     {!! $schema !!}
 </head>
 <body class="js">
@@ -66,13 +80,15 @@
     </div>
 </div>
 <!-- End Preloader -->
-@include('front::layouts.notification')
+@include('front::default.layouts.notification')
 <!-- Header -->
-@include('front::layouts.header')
+@include('front::default.layouts.header')
 <!--/ End Header -->
 @yield('content')
 
-@include('front::layouts.footer')
+@include('front::default.layouts.footer')
 
+<!-- Scripts -->
+<script src="{{ asset("$themeAssetsPath/js/script.js") }}"></script>
 </body>
 </html>

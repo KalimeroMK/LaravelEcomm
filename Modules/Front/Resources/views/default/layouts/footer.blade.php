@@ -8,13 +8,15 @@
                     <!-- Single Widget -->
                     <div class="single-footer about">
                         <div class="logo">
-                            <a href="/"><img src="{{asset('backend/img/logo2.png')}}" alt="#"></a>
+                            <a href="/"><img src="{{ asset("$themeAssetsPath/img/logo2.png") }}" alt="#"></a>
                         </div>
-                        <p class="text">@foreach($settings as $data)
+                        <p class="text">
+                            @foreach($settings as $data)
                                 {{$data->short_des}}
-                            @endforeach</p>
-                        <p class="call">Got Question? Call us 24/7<span><a
-                                        href="tel:123456789">@foreach($settings as $data)
+                            @endforeach
+                        </p>
+                        <p class="call">Got Question? Call us 24/7<span><a href="tel:123456789">
+                                        @foreach($settings as $data)
                                         {{$data->phone}}
                                     @endforeach</a></span>
                         </p>
@@ -26,11 +28,12 @@
                     <div class="single-footer links">
                         <h4>Information</h4>
                         <ul>
-                            <li><a href="{{route('front.about-us')}}">About Us</a></li>
-                            <li><a href="{{route('front.contact')}}">Contact Us</a></li>
+                            <li><a href="{{ route('front.about-us') }}">About Us</a></li>
+                            <li><a href="{{ route('front.contact') }}">Contact Us</a></li>
                             @foreach($pageList as $page)
                                 <li><a href="{{ route('front.pages', $page['slug']) }}">{{ $page['title'] }}</a></li>
-                            @endforeach                        </ul>
+                            @endforeach
+                        </ul>
                     </div>
                     <!-- End Single Widget -->
                 </div>
@@ -51,14 +54,14 @@
                 <div class="col-lg-3 col-md-6 col-12">
                     <!-- Single Widget -->
                     <div class="single-footer social">
-                        <h4>Get In Tuch</h4>
+                        <h4>Get In Touch</h4>
                         <!-- Single Widget -->
                         <div class="contact">
                             <ul>
                                 @foreach($settings as $data)
-                                    <li>{{$data->address}}</li>
-                                    <li>{{$data->email}}</li>
-                                    <li>{{$data->phone}} </li>
+                                    <li>{{ $data->address }}</li>
+                                    <li>{{ $data->email }}</li>
+                                    <li>{{ $data->phone }}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -77,13 +80,13 @@
                 <div class="row">
                     <div class="col-lg-6 col-12">
                         <div class="left">
-                            <p>Copyright © {{date('Y')}} <a href="https://github.com/KalimeroMK" target="_blank">KalimeroMK</a>
+                            <p>Copyright © {{ date('Y') }} <a href="https://github.com/KalimeroMK" target="_blank">KalimeroMK</a>
                                 - All Rights Reserved.</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-12">
                         <div class="right">
-                            <img src="{{asset('backend/img/payments.png')}}" alt="#">
+                            <img src="{{ asset("$themeAssetsPath/img/payments.png") }}" alt="#">
                         </div>
                     </div>
                 </div>
@@ -94,8 +97,7 @@
 <!-- /End Footer Area -->
 
 <!-- Jquery -->
-<script src="{{asset('frontend/js/all_front.min.js')}}"></script>
-
+<script src="{{ asset("$themeAssetsPath/js/all_front.min.js") }}"></script>
 
 @stack('scripts')
 <script>
@@ -111,7 +113,6 @@
             event.stopPropagation();
 
             $(this).siblings().toggleClass("show");
-
 
             if (!$(this).next().hasClass('show')) {
                 $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");

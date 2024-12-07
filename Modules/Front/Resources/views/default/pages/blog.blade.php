@@ -1,5 +1,5 @@
 @php use Modules\Core\Helpers\Helper; @endphp
-@extends('front::layouts.master')
+@extends('front::default.layouts.master')
 
 @section('title','E-SHOP || Blog Page')
 

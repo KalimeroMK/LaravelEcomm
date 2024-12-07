@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        @include('frontend.pages.comment', ['comments' => $comment->replies, 'depth' => $dep])
+        @include('front::default.pages.comment', ['comments' => $comment->replies, 'depth' => $dep])
 
     </div>
 @endforeach

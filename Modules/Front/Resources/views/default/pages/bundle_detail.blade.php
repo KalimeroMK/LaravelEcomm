@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends('front::default.layouts.master')
 @section('SOE')
     <title>{{$bundle->title ?? ''}} || PRODUCT DETAIL</title>
     <meta charset="utf-8">

@@ -1,5 +1,5 @@
 @php use Modules\Core\Helpers\Helper; @endphp
-@extends('front::layouts.master')
+@extends('front::default.layouts.master')
 
 @section('title','E-TECH || Blog Detail page')
 
@@ -37,8 +37,8 @@
                                     <div class="blog-meta">
                                         <span class="author"><a href="javascript:void(0);"><i class="fa
                                         fa-user"></i>By {{$post->author->name}}</a><a
-                                                href="javascript:void(0);"><i class="fa fa-calendar"></i>{{$post->created_at->format('M d, Y')}}</a><a
-                                                href="javascript:void(0);"><i class="fa fa-comments"></i>Comment ({{$post->allComments->count()}})</a></span>
+                                                    href="javascript:void(0);"><i class="fa fa-calendar"></i>{{$post->created_at->format('M d, Y')}}</a><a
+                                                    href="javascript:void(0);"><i class="fa fa-comments"></i>Comment ({{$post->allComments->count()}})</a></span>
                                     </div>
                                     <div class="sharethis-inline-reaction-buttons"></div>
                                     <div class="content">
@@ -103,9 +103,9 @@
                                                     <div class="col-12">
                                                         <div class="form-group button">
                                                             <button type="submit" class="btn"><span
-                                                                    class="comment_btn comment">Post Comment</span><span
-                                                                    class="comment_btn reply"
-                                                                    style="display: none;">Reply Comment</span>
+                                                                        class="comment_btn comment">Post Comment</span><span
+                                                                        class="comment_btn reply"
+                                                                        style="display: none;">Reply Comment</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -131,7 +131,8 @@
                                     <h3 class="comment-title">Comments ({{$post->allComments->count()}})</h3>
                                     <!-- Single Comment -->
 
-                                    @include('front::pages.comment', ['comments' => $post->comments, 'post_id' =>
+                                    @include('front::default.pages.comment', ['comments' => $post->comments,
+                                    'post_id' =>
                                     $post->id, 'depth' => 3])
                                     <!-- End Single Comment -->
                                 </div>

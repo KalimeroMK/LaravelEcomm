@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends('front::default.layouts.master')
 
 @section('content')
     <!-- Breadcrumbs -->

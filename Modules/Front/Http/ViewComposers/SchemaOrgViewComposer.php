@@ -10,7 +10,7 @@ class SchemaOrgViewComposer
     public function compose(View $view): void
     {
         $localBusiness = Schema::localBusiness()
-            ->name('EcommLaravel')
+            ->name('E-commLaravel')
             ->email('zbogoevski@gmail.com')
             ->contactPoint(Schema::contactPoint()->areaServed('Worldwide'));
         $view->with('schema', $localBusiness->toScript());
