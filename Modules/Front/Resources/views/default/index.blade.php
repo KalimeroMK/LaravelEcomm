@@ -1,4 +1,4 @@
-`@extends('front::default.layouts.master')
+@extends('front::default.layouts.master')
 @section('title','E-SHOP || HOME PAGE')
 @section('content')
     <!-- Slider Area -->

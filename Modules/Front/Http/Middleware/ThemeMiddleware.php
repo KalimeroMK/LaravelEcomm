@@ -15,7 +15,6 @@ class ThemeMiddleware
         // Get the active theme's asset path
         $themeConfig = config("theme.themes.$activeTheme", []);
         $assetsPath = $themeConfig['assets_path'] ?? 'theme/default';
-
         // Share active theme and its assets path with views
         View::share('activeTheme', $activeTheme);
         View::share('themeAssetsPath', $assetsPath);

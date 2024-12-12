@@ -17,26 +17,15 @@ return [
                 'secondary_color' => '#6c757d',
             ],
         ],
-        'theme1' => [
-            'name' => 'Modern Theme',
-            'description' => 'A modern, sleek design.',
-            'assets_path' => 'theme/theme1',
+        'ashion' => [
+            'name' => 'Ashion Theme',
+            'description' => 'The stylish Ashion theme.',
+            'assets_path' => 'theme/ashion',
             'settings' => [
-                'logo' => 'theme/theme1/images/logo.png',
-                'favicon' => 'theme/theme1/images/favicon.png',
+                'logo' => 'theme/ashion/img/logo.png',
+                'favicon' => 'theme/ashion/img/favicon.png',
                 'primary_color' => '#1e90ff',
                 'secondary_color' => '#ff6347',
-            ],
-        ],
-        'theme2' => [
-            'name' => 'Dark Theme',
-            'description' => 'A theme with dark mode styling.',
-            'assets_path' => 'theme/theme2',
-            'settings' => [
-                'logo' => 'theme/theme2/images/logo.png',
-                'favicon' => 'theme/theme2/images/favicon.png',
-                'primary_color' => '#343a40',
-                'secondary_color' => '#adb5bd',
             ],
         ],
     ],
