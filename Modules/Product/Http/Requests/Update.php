@@ -24,7 +24,16 @@ class Update extends CoreRequest
             'size.*' => 'required|exists:sizes,id',
             'color' => 'nullable',
             'stock' => 'required|numeric',
-            'category' => 'sometimes|array',
+            'category' => [
+                'required',
+                'array',
+                function ($attribute, $value, $fail) {
+                    if (empty($value)) {
+                        $fail(__('The :attribute field must have at least one category selected.',
+                            ['attribute' => $attribute]));
+                    }
+                }
+            ],
             'category.*' => 'required|exists:categories,id',
             'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',

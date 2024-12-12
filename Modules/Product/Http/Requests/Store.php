@@ -22,7 +22,16 @@ class Store extends CoreRequest
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'size' => 'required',
             'color' => 'required',
-            'category' => 'sometimes|array',
+            'category' => [
+                'required',
+                'array',
+                function ($attribute, $value, $fail) {
+                    if (empty($value)) {
+                        $fail(__('The :attribute field must have at least one category selected.',
+                            ['attribute' => $attribute]));
+                    }
+                }
+            ],
             'category.*' => 'required|exists:categories,id',
             'condition_id' => 'required|exists:conditions,id',
             'stock' => 'required|numeric',

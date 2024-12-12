@@ -4,6 +4,7 @@ namespace Modules\Core\Helpers;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
@@ -24,9 +25,11 @@ class Helper
         return 0;
     }
 
-    public static function messageList(): Collection
+    public static function messageList()
     {
-        return Message::whereNull('read_at')->orderBy('created_at', 'desc')->get();
+        return Cache::remember('unread_messages', 30, function () {
+            return Message::where('read_at', null)->orderBy('created_at', 'desc')->get();
+        });
     }
 
     public static function cartCount(string $user_id = ''): int

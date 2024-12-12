@@ -131,9 +131,12 @@ class FrontService
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($request) {
             $recentPosts = Post::where('status', 'active')->latest()->limit(3)->get();
-            $posts = Post::whereLike(Post::likeRows, $request->input('search'))
-                ->latest()
-                ->paginate(8);
+            $searchTerm = $request->input('search');
+            $posts = Post::where(function ($query) use ($searchTerm) {
+                foreach (Post::likeRows as $column) {
+                    $query->orWhere($column, 'LIKE', "%$searchTerm%");
+                }
+            })->latest()->paginate(8);
 
             return [
                 'posts' => $posts,
@@ -317,7 +320,7 @@ class FrontService
     /**
      * Retrieve brands and recent products.
      *
-     * @param  LengthAwarePaginator  $products
+     * @param $products
      * @return array<string, mixed>
      */
     private function retrieveBrandsAndRecentProducts($products): array
@@ -506,7 +509,7 @@ class FrontService
         $cacheKey = 'blogDetail_'.$slug;
 
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
-            $post = Post::with('author', 'categories')->whereSlug($slug)->FirstOrFail();
+            $post = Post::with(['author', 'categories'])->whereSlug($slug)->FirstOrFail();
             $recentPosts = Post::with('author')->whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
             $tags = Tag::whereHas('posts')->take(50)->get();
 

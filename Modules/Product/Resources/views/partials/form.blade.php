@@ -101,11 +101,15 @@
                             </div>
                         @endforeach
                     </div>
+
                 </div>
                 <div class="col-3">
                     <div class="form-group">
                         <label for="inputImage">@lang('partials.image')</label>
                         <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
+                        @if($errors->has('images'))
+                            <span class="text-danger">{{ $errors->first('images') }}</span>
+                        @endif
                     </div>
                     <div class="form-group">
                         <label for="price">@lang('partials.sku')</label>
@@ -160,8 +164,9 @@
 
                     <div class="form-group">
                         <label for="cat_id">@lang('partials.categories')</label>
+                        <input type="hidden" name="category" value="">
                         <select class="form-control js-example-basic-multiple" id="category" name="category[]"
-                                multiple="multiple">
+                                multiple="multiple" required>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->title }}</option>
                             @endforeach
