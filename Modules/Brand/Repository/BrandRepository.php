@@ -24,7 +24,7 @@ class BrandRepository extends Repository
     {
         $query = $this->model::query();
 
-        if (empty($data) || (isset($data['all_included']) && $data['all_included'])) {
+        if ($data === [] || (isset($data['all_included']) && $data['all_included'])) {
             return $query->with('products')->get();
         }
 

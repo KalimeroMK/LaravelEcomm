@@ -22,7 +22,7 @@ class NewsletterController extends CoreController
     {
         $newsletters = $this->newsletter_service->getAll();
 
-        return view('newsletter::index', compact('newsletters'));
+        return view('newsletter::index', ['newsletters' => $newsletters]);
     }
 
     public function create(): View
@@ -39,7 +39,7 @@ class NewsletterController extends CoreController
 
     public function edit(Newsletter $newsletter): View
     {
-        return view('newsletter::edit', compact('newsletter'));
+        return view('newsletter::edit', ['newsletter' => $newsletter]);
     }
 
     public function update(Store $request, Newsletter $newsletter): RedirectResponse

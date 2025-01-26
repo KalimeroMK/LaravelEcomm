@@ -36,7 +36,7 @@ class ProductFactory extends Factory
      */
     public function withCategories(): ProductFactory
     {
-        return $this->afterCreating(function (Model $model) {
+        return $this->afterCreating(function (Model $model): void {
             /** @var Product $product */
             $product = $model;
             $categories = Category::inRandomOrder()->limit(3)->pluck('id');
@@ -49,7 +49,7 @@ class ProductFactory extends Factory
      */
     public function withTags(): ProductFactory
     {
-        return $this->afterCreating(function (Model $model) {
+        return $this->afterCreating(function (Model $model): void {
             /** @var Product $product */
             $product = $model;
             $tags = Tag::inRandomOrder()->limit(5)->pluck('id');
@@ -62,7 +62,7 @@ class ProductFactory extends Factory
      */
     public function withCategoriesAndTags(): ProductFactory
     {
-        return $this->afterCreating(function (Model $model) {
+        return $this->afterCreating(function (Model $model): void {
             /** @var Product $product */
             $product = $model;
             $categories = Category::inRandomOrder()->limit(3)->pluck('id');

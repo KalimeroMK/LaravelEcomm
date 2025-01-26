@@ -17,6 +17,6 @@ use Modules\User\Http\Controllers\Api\AuthController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 // Protected routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
 });

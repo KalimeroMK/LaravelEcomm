@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Post\Http\Controllers\PostCommentController;
 use Modules\Post\Http\Controllers\PostController;
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function (): void {
     Route::resource('posts', PostController::class)->except('show');
     Route::delete('posts/{modelId}/media/{mediaId}',
         [PostController::class, 'deleteMedia'])->name('posts.delete-media');

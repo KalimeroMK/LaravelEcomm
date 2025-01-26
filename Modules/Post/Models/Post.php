@@ -169,7 +169,7 @@ class Post extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('post');
 
-        if ($mediaItem) {
+        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
             return $mediaItem->first()->getUrl();
         }
 

@@ -29,12 +29,10 @@ class Payment
             } else {
                 $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0];
             }
+        } elseif (session('coupon')) {
+            $order_data['total_amount'] = Helper::totalCartPrice() - session('coupon')['value'];
         } else {
-            if (session('coupon')) {
-                $order_data['total_amount'] = Helper::totalCartPrice() - session('coupon')['value'];
-            } else {
-                $order_data['total_amount'] = Helper::totalCartPrice();
-            }
+            $order_data['total_amount'] = Helper::totalCartPrice();
         }
 
         return $order_data['total_amount'];

@@ -24,7 +24,7 @@ class AdminController extends CoreController
         $data = $this->admin_service->index();
         $paidOrdersByMonth = $this->admin_service->OrdersByMonth();
 
-        return view('admin::index', compact('paidOrdersByMonth', 'data'));
+        return view('admin::index', ['paidOrdersByMonth' => $paidOrdersByMonth, 'data' => $data]);
     }
 
     public function messageFive(): JsonResponse

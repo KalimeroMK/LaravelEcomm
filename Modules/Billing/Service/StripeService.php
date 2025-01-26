@@ -48,6 +48,6 @@ class StripeService
      */
     public function stripe(int $id): View|Factory|Application
     {
-        return view('front::pages.stripe', compact('id'));
+        return view('front::pages.stripe', ['id' => $id]);
     }
 }

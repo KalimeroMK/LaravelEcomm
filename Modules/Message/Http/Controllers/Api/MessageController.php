@@ -50,11 +50,9 @@ class MessageController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show(int $id)
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -71,11 +69,9 @@ class MessageController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function update(Store $request, int $id)
+    public function update(Store $request, int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -92,11 +88,9 @@ class MessageController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): \Illuminate\Http\JsonResponse
     {
         $this->message_service->delete($id);
 

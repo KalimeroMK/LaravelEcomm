@@ -20,7 +20,7 @@ class BrandResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'images' => $this->getMedia('brand')->map(function ($media) {
+            'images' => $this->getMedia('brand')->map(function ($media): string {
                 return $media->getUrl();
             }),
             'status' => $this->status,

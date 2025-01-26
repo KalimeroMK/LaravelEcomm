@@ -23,7 +23,7 @@ class PermissionController extends Controller
     {
         $permissions = Permission::all();
 
-        return view('permission::index', compact('permissions'));
+        return view('permission::index', ['permissions' => $permissions]);
     }
 
     /**
@@ -49,7 +49,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission): View
     {
-        return view('permission::edit', compact('permission'));
+        return view('permission::edit', ['permission' => $permission]);
     }
 
     /**

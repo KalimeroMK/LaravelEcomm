@@ -23,7 +23,7 @@ class PageController extends Controller
     {
         $pages = $this->page_service->getAll();
 
-        return view('page::index', compact('pages'));
+        return view('page::index', ['pages' => $pages]);
     }
 
     public function create(): View
@@ -40,7 +40,7 @@ class PageController extends Controller
 
     public function edit(Page $page): View
     {
-        return view('page::edit', compact('page'));
+        return view('page::edit', ['page' => $page]);
     }
 
     public function update(Store $request, Page $page): RedirectResponse

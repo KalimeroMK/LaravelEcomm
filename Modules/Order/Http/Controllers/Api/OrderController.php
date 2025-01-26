@@ -34,11 +34,9 @@ class OrderController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -55,11 +53,9 @@ class OrderController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show(int $id)
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -95,11 +91,9 @@ class OrderController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function destroy(int $id)
+    public function destroy(int $id): \Illuminate\Http\JsonResponse
     {
         $this->order_service->delete($id);
 

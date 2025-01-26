@@ -213,14 +213,14 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     {
         $mediaItem = $this->getFirstMedia('product');
 
-        return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
 
-        return $mediaItem ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     public function condition(): BelongsTo
@@ -238,9 +238,6 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
         return $this->belongsToMany(Tag::class);
     }
 
-    /**
-     * @return HigherOrderBuilderProxy|mixed|null
-     */
     public function getCurrentPrice(): mixed
     {
         $today = now();

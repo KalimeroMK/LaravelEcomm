@@ -19,9 +19,6 @@ class ProductNewsletterJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param  string  $email
-     * @param  array   $products
      */
     public function __construct(string $email, array $products)
     {

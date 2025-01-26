@@ -66,13 +66,13 @@ class CartService
     }
 
     /**
-     * @return RedirectResponse|void
+     * @return RedirectResponse|null
      */
     public function addToCart(object $data)
     {
         $already_cart = Cart::whereUserId(Auth::id())->where('order_id', null)->whereHas(
             'product',
-            function (Builder $query) use ($data) {
+            function (Builder $query) use ($data): void {
                 $query->where('slug', $data['slug']);
             }
         )->first();
@@ -92,7 +92,7 @@ class CartService
             $cart->product_id = $data->id;
             $cart->price = (int) ($data->price - ($data->price * $data->discount) / 100);
             $cart->quantity = 1;
-            $cart->amount = (int) ($cart->price * $cart->quantity);
+            $cart->amount = $cart->price * $cart->quantity;
 
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!');
@@ -100,11 +100,12 @@ class CartService
 
             $cart->save();
         }
+        return null;
     }
 
     /**
      * @param  array<string, mixed>  $data
-     * @return RedirectResponse|void
+     * @return RedirectResponse|null
      */
     public function singleAddToCart(array $data)
     {
@@ -130,7 +131,7 @@ class CartService
             $cart->product_id = $product->id;
             $cart->price = (int) ($product->price - ($product->price * $product->discount) / 100);
             $cart->quantity = (int) $data['quantity'];
-            $cart->amount = (int) ($cart->price * (int) $data['quantity']);
+            $cart->amount = $cart->price * (int) $data['quantity'];
 
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
                 return back()->with('error', 'Stock not sufficient!');
@@ -138,6 +139,7 @@ class CartService
 
             $cart->save();
         }
+        return null;
     }
 
     /**

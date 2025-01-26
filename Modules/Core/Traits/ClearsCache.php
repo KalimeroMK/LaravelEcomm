@@ -8,11 +8,11 @@ trait ClearsCache
 {
     protected static function bootClearsCache(): void
     {
-        static::creating(function ($model) {
+        static::creating(function ($model): void {
             $model->clearCache();
         });
 
-        static::updated(function ($model) {
+        static::updated(function ($model): void {
             $model->clearCache();
         });
     }

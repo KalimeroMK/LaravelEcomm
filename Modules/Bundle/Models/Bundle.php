@@ -56,7 +56,7 @@ class Bundle extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('bundle');
 
-        if ($mediaItem) {
+        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
             return $mediaItem->first()->getUrl();
         }
 

@@ -58,7 +58,7 @@ class BannerController extends CoreController
      */
     public function edit(Banner $banner): View|Factory|Application
     {
-        return view('banner::edit', compact('banner'));
+        return view('banner::edit', ['banner' => $banner]);
     }
 
     /**

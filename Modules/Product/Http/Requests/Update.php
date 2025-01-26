@@ -27,7 +27,7 @@ class Update extends CoreRequest
             'category' => [
                 'required',
                 'array',
-                function ($attribute, $value, $fail) {
+                function ($attribute, $value, $fail): void {
                     if (empty($value)) {
                         $fail(__('The :attribute field must have at least one category selected.',
                             ['attribute' => $attribute]));

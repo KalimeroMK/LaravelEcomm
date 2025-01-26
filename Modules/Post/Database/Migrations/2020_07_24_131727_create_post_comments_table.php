@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('post_comments', function (Blueprint $table) {
+        Schema::create('post_comments', function (Blueprint $table): void {
             $table->id();
 
             $table->text('comment');

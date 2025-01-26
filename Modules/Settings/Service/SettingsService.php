@@ -41,7 +41,7 @@ class SettingsService extends CoreService
         if (request()->hasFile('images')) {
             $setting->clearMediaCollection('settings'); // Optionally clear existing media
             $setting->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
+                ->each(function ($fileAdder): void {
                     $fileAdder->preservingOriginal()->toMediaCollection('settings');
                 });
         }

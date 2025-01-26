@@ -20,15 +20,11 @@ class SendComplaintEmailJob implements ShouldQueue
 
     /**
      * Maximum attempts for the job.
-     *
-     * @var int
      */
     public int $tries = 3;
 
     /**
      * Time before retrying a failed job (in seconds).
-     *
-     * @var int
      */
     public int $backoff = 30;
 

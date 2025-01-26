@@ -20,7 +20,7 @@ class BannerResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'images' => $this->getMedia('banner')->map(function ($media) {
+            'images' => $this->getMedia('banner')->map(function ($media): string {
                 return $media->getUrl();
             }),
             'description' => $this->description,

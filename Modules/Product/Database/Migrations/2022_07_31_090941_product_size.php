@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('product_size', function (Blueprint $table) {
+        Schema::create('product_size', function (Blueprint $table): void {
             $table->id();
             $table->unsignedBigInteger('size_id')->index();
             $table->foreign('size_id')->references('id')->on('sizes')->onDelete('cascade');
@@ -19,6 +19,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('product_size', function (Blueprint $table) {});
+        Schema::table('product_size', function (Blueprint $table): void {});
     }
 };

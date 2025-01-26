@@ -35,12 +35,10 @@ class UserController extends Controller
         $userId = Auth::id(); // Get the authenticated user's ID, which can be null, int, or string
         if (Auth::user()->isSuperAdmin()) {
             $users = $this->user_service->getAll();
+        } elseif (! is_numeric($userId)) {
+            abort(404, 'User not found.');
         } else {
-            if (! is_numeric($userId)) {
-                abort(404, 'User not found.');
-            } else {
-                $users = $this->user_service->findById((int) $userId);
-            }
+            $users = $this->user_service->findById((int) $userId);
         }
 
         return view('user::index', ['users' => $users])->with(
@@ -90,7 +88,7 @@ class UserController extends Controller
         $roles = Role::all();
         $userRole = User::find($user->id)->roles->pluck('name', 'name')->all();
 
-        return view('user::edit', compact('user', 'roles', 'userRole'));
+        return view('user::edit', ['user' => $user, 'roles' => $roles, 'userRole' => $userRole]);
     }
 
     /**

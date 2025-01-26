@@ -25,7 +25,7 @@ class PostResource extends JsonResource
             'description' => $this->description,
             'quote' => $this->quote,
             'images' => $this->whenLoaded('media', function () {
-                return $this->getMedia('post')->map(function ($media) {
+                return $this->getMedia('post')->map(function ($media): array {
                     return [
                         'id' => $media->id,
                         'url' => $media->getUrl(),

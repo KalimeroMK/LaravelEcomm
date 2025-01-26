@@ -20,7 +20,7 @@ class MailboxLayerService
     /**
      * @throws GuzzleException
      */
-    public function check($email)
+    public function check($email): mixed
     {
         $accessKey = Config::get('mailboxlayer.access_key');
         $response = $this->client->get("{$this->baseUrl}/bulk_check", [

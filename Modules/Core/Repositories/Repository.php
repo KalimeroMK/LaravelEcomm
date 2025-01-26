@@ -100,11 +100,7 @@ class Repository implements RepositoryInterface
             return null;
         }
 
-        if (is_string($this->model)) {
-            $modelInstance = new $this->model;
-        } else {
-            $modelInstance = $this->model;
-        }
+        $modelInstance = is_string($this->model) ? new $this->model : $this->model;
 
         return $modelInstance->withTrashed()->find($id);
     }

@@ -40,7 +40,7 @@ class BundleResource extends JsonResource
             'products_count' => $this->whenLoaded('products_count'),
             'products' => ProductResource::collection($this->whenLoaded('products')),
             'images' => $this->whenLoaded('media', function () {
-                return $this->getMedia('bundle')->map(function ($media) {
+                return $this->getMedia('bundle')->map(function ($media): array {
                     return [
                         'id' => $media->id,
                         'url' => $media->getUrl(),

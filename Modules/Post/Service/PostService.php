@@ -42,7 +42,7 @@ class PostService extends CoreService
 
         // Handle image uploads
         $post->addMultipleMediaFromRequest(['images'])
-            ->each(function (FileAdder $fileAdder) {
+            ->each(function (FileAdder $fileAdder): void {
                 $fileAdder->preservingOriginal()->toMediaCollection('post');
             });
 
@@ -77,7 +77,7 @@ class PostService extends CoreService
         if (array_key_exists('images', $data)) {
             $post->clearMediaCollection('post'); // Optionally clear existing media
             $post->addMultipleMediaFromRequest(['images'])
-                ->each(function (FileAdder $fileAdder) {
+                ->each(function (FileAdder $fileAdder): void {
                     $fileAdder->preservingOriginal()->toMediaCollection('post');
                 });
         }

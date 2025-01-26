@@ -34,7 +34,7 @@ class BrandService extends CoreService
 
         // Handle image uploads
         $brand->addMultipleMediaFromRequest(['images'])
-            ->each(function ($fileAdder) {
+            ->each(function ($fileAdder): void {
                 $fileAdder->preservingOriginal()->toMediaCollection('brand');
             });
 
@@ -58,7 +58,7 @@ class BrandService extends CoreService
         if (array_key_exists('images', $data)) {
             $brand->clearMediaCollection('brand'); // Optionally clear existing media
             $brand->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
+                ->each(function ($fileAdder): void {
                     $fileAdder->preservingOriginal()->toMediaCollection('brand');
                 });
         }

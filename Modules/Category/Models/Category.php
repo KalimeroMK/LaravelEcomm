@@ -147,7 +147,7 @@ class Category extends Core implements Aliased, Explored, IndexSettings
     {
         $categories = self::get()->toTree();
         $allCats = [];
-        $traverse = function ($categories, $prefix = '') use (&$traverse, &$allCats) {
+        $traverse = function ($categories, string $prefix = '') use (&$traverse, &$allCats): array {
             foreach ($categories as $category) {
                 $allCats[] = ['title' => $prefix.' '.$category->title, 'id' => $category->id];
                 $traverse($category->children, $prefix.'-');

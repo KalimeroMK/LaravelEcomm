@@ -32,7 +32,7 @@ class CategoryController extends CoreController
             return redirect()->route('categories.create');
         }
 
-        return view('category::index', compact('categories'));
+        return view('category::index', ['categories' => $categories]);
     }
 
     public function create(): View

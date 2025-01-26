@@ -52,9 +52,9 @@ class TenantController extends Controller
      */
     public function edit(Tenant $tenant): View|Factory|Application
     {
-        $banner = $this->tenantService->findById($tenant->id);
+        $this->tenantService->findById($tenant->id);
 
-        return view('tenant::edit', compact('tenant'));
+        return view('tenant::edit', ['tenant' => $tenant]);
     }
 
     /**
@@ -62,7 +62,7 @@ class TenantController extends Controller
      */
     public function update(Update $request, Tenant $tenant): RedirectResponse
     {
-        $banner = $this->tenantService->update($tenant->id, $request->validated());
+        $this->tenantService->update($tenant->id, $request->validated());
 
         return redirect()->route('tenant.edit', $tenant);
     }

@@ -24,7 +24,7 @@ class BundleController extends Controller
     {
         $bundles = $this->bundleService->getAll();
 
-        return view('bundle::index', compact('bundles'));
+        return view('bundle::index', ['bundles' => $bundles]);
     }
 
     public function create(): View
@@ -32,12 +32,12 @@ class BundleController extends Controller
         $products = Product::all();
         $bundle = new Bundle;
 
-        return view('bundle::create', compact('products', 'bundle'));
+        return view('bundle::create', ['products' => $products, 'bundle' => $bundle]);
     }
 
     public function store(Store $request): RedirectResponse
     {
-        $bundle = $this->bundleService->create($request->validated());
+        $this->bundleService->create($request->validated());
 
         return redirect()->route('bundle.index')->with('status', 'Brand created successfully.');
     }

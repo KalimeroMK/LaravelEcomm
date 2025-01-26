@@ -34,11 +34,9 @@ class BundleController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -55,11 +53,9 @@ class BundleController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show(int $id)
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -76,11 +72,9 @@ class BundleController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function update(Update $request, int $id)
+    public function update(Update $request, int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(

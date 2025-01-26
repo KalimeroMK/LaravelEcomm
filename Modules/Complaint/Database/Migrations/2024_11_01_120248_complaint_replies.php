@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('complaint_replies', function (Blueprint $table) {
+        Schema::create('complaint_replies', function (Blueprint $table): void {
             $table->id();
             $table->unsignedBigInteger('complaint_id');
             $table->foreign('complaint_id')->references('id')->on('complaints')->onDelete('cascade');

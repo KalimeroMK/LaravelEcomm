@@ -24,7 +24,7 @@ class CartController extends CoreController
 
     public function addToCart(string $slug): RedirectResponse
     {
-        if (empty($slug || Product::whereSlug($slug)->first())) {
+        if (($slug || Product::whereSlug($slug)->first()) === false) {
             request()->session()->flash('error', 'Product not added to cart');
 
             return back();

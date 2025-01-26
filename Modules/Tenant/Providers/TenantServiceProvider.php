@@ -149,7 +149,7 @@ class TenantServiceProvider extends ServiceProvider
      */
     protected function configureQueue(): void
     {
-        Queue::createPayloadUsing(function () {
+        Queue::createPayloadUsing(function (): array {
             if ($this->app->bound('tenant')) {
                 $tenant = $this->app->make('tenant');
 
@@ -159,7 +159,7 @@ class TenantServiceProvider extends ServiceProvider
             return [];
         });
 
-        Event::listen(JobProcessing::class, function (JobProcessing $event) {
+        Event::listen(JobProcessing::class, function (JobProcessing $event): void {
             $tenantId = $event->job->payload()['tenant_id'] ?? null;
             if ($tenantId) {
                 $tenant = Tenant::find($tenantId);

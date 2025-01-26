@@ -21,7 +21,7 @@ class TenantCreateCommand extends Command
         $database = $this->ask('What is the tenant\'s database name?');
 
         // Validate input
-        $validator = Validator::make(compact('name', 'domain', 'database'), [
+        $validator = Validator::make(['name' => $name, 'domain' => $domain, 'database' => $database], [
             'name' => ['required', 'string', 'max:255'],
             'domain' => [
                 'required', 'string', 'max:255', 'unique:owner.tenants',

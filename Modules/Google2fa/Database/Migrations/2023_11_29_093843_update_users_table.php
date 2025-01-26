@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('login_securities', function (Blueprint $table) {
+        Schema::create('login_securities', function (Blueprint $table): void {
             $table->id();
             $table->bigInteger('user_id');
             $table->boolean('google2fa_enable')->default(false);

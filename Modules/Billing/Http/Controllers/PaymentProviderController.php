@@ -58,7 +58,7 @@ class PaymentProviderController extends CoreController
     {
         $paymentProvider = $this->paymentProviderService->findById($paymentProvider->id);
 
-        return view('billing::edit', compact('paymentProvider'));
+        return view('billing::edit', ['paymentProvider' => $paymentProvider]);
     }
 
     /**}

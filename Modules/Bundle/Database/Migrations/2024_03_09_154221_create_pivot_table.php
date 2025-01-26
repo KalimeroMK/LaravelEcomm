@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('bundle_product', function (Blueprint $table) {
+        Schema::create('bundle_product', function (Blueprint $table): void {
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('bundle_id');

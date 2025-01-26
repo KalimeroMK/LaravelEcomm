@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('payment_provider', function (Blueprint $table) {
+        Schema::create('payment_provider', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->string('public_key')->nullable();

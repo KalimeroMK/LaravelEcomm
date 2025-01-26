@@ -53,7 +53,7 @@ class CouponController extends CoreController
      */
     public function edit(Coupon $coupon): View|Factory|Application
     {
-        return view('coupon::edit', compact('coupon'));
+        return view('coupon::edit', ['coupon' => $coupon]);
     }
 
     /**

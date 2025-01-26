@@ -17,10 +17,7 @@ use Modules\User\Models\User;
 
 class AuthController extends CoreController
 {
-    /**
-     * @return JsonResponse
-     */
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $success['token'] = Auth::user()->createToken('MyAuthApp')->plainTextToken;
@@ -32,10 +29,7 @@ class AuthController extends CoreController
         }
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function register(AuthRequest $request)
+    public function register(AuthRequest $request): \Illuminate\Http\JsonResponse
     {
         $request['password'] = Hash::make($request['password']);
         $user = User::create($request->all());

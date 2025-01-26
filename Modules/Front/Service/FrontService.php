@@ -92,7 +92,7 @@ class FrontService
     {
         $cacheKey = 'productCat_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): string|array {
             $category = Category::whereSlug($slug)->first();
 
             if (!$category) {
@@ -129,10 +129,10 @@ class FrontService
     {
         $cacheKey = 'blogSearch_'.$request->input('search');
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($request) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($request): array {
             $recentPosts = Post::where('status', 'active')->latest()->limit(3)->get();
             $searchTerm = $request->input('search');
-            $posts = Post::where(function ($query) use ($searchTerm) {
+            $posts = Post::where(function ($query) use ($searchTerm): void {
                 foreach (Post::likeRows as $column) {
                     $query->orWhere($column, 'LIKE', "%$searchTerm%");
                 }
@@ -268,8 +268,8 @@ class FrontService
     /**
      * Retrieve products based on various filters.
      *
-     * @param  int[]                 $categoryIds
-     * @param  int[]                 $brandIds
+     * @param  int[]  $categoryIds
+     * @param  int[]  $brandIds
      * @param  array<string, mixed>  $queryParams
      */
     private function retrieveProducts(
@@ -285,15 +285,15 @@ class FrontService
 
         // Generate a unique cache key
         $cacheKey = 'products_'.json_encode(
-                compact(
-                    'categoryIds',
-                    'brandIds',
-                    'minPrice',
-                    'maxPrice',
-                    'sortColumn',
-                    'sortOrder',
-                    'perPage'
-                )
+                [
+                    'categoryIds' => $categoryIds,
+                    'brandIds' => $brandIds,
+                    'minPrice' => $minPrice,
+                    'maxPrice' => $maxPrice,
+                    'sortColumn' => $sortColumn,
+                    'sortOrder' => $sortOrder,
+                    'perPage' => $perPage
+                ]
 
             );
 
@@ -320,15 +320,15 @@ class FrontService
     /**
      * Retrieve brands and recent products.
      *
-     * @param $products
+     * @param  LengthAwarePaginator  $products
      * @return array<string, mixed>
      */
-    private function retrieveBrandsAndRecentProducts($products): array
+    private function retrieveBrandsAndRecentProducts(LengthAwarePaginator $products): array
     {
         $brands = Brand::where('status', 'active')->orderBy('title')->get();
         $recent_products = Product::where('status', 'active')->orderByDesc('id')->take(3)->get();
 
-        return compact('brands', 'recent_products', 'products');
+        return ['brands' => $brands, 'recent_products' => $recent_products, 'products' => $products];
     }
 
     /**
@@ -340,9 +340,9 @@ class FrontService
     {
         $cacheKey = 'blogByTag_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
             $posts = Post::with(['author', 'tags'])
-                ->whereHas('tags', function ($q) use ($slug) {
+                ->whereHas('tags', function ($q) use ($slug): void {
                     $q->where('slug', $slug);
                 })
                 ->paginate(10);
@@ -392,8 +392,8 @@ class FrontService
         $category = $data['category'] ?? [];
         $tag = $data['tag'] ?? [];
 
-        $catURL = !empty($category) ? implode(',', $category) : '';
-        $tagURL = !empty($tag) ? implode(',', $tag) : '';
+        $catURL = empty($category) ? '' : implode(',', $category);
+        $tagURL = empty($tag) ? '' : implode(',', $tag);
 
         // Return an array with the filtered categories and tags.
         return [
@@ -409,7 +409,7 @@ class FrontService
      */
     public function blogByCategory(string $slug): array
     {
-        $posts = Post::with('author')->whereHas('categories', static function ($q) use ($slug) {
+        $posts = Post::with('author')->whereHas('categories', static function ($q) use ($slug): void {
             $q->whereSlug($slug);
         })->paginate(10);
         $recantPosts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
@@ -455,7 +455,7 @@ class FrontService
      */
     public function productDeal(): array
     {
-        return Cache::remember('productDeal', 24 * 60, function () {
+        return Cache::remember('productDeal', 24 * 60, function (): array {
             $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
             $products = Product::with('categories')->where('d_deal', true)
@@ -481,11 +481,11 @@ class FrontService
     {
         $cacheKey = 'productDetail_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
             $product_detail = Product::getProductBySlug($slug);
 
             $related = Product::with('categories')
-                ->whereHas('categories', function ($q) use ($product_detail) {
+                ->whereHas('categories', function ($q) use ($product_detail): void {
                     $q->whereIn('title', $product_detail->categories->pluck('title'));
                 })
                 ->where('id', '!=', $product_detail->id)
@@ -508,7 +508,7 @@ class FrontService
     {
         $cacheKey = 'blogDetail_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
             $post = Post::with(['author', 'categories'])->whereSlug($slug)->FirstOrFail();
             $recentPosts = Post::with('author')->whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
             $tags = Tag::whereHas('posts')->take(50)->get();
@@ -529,7 +529,7 @@ class FrontService
      */
     public function productBrand(array $data): array|string
     {
-        $products = Product::whereHas('brand', function (Builder $query) use ($data) {
+        $products = Product::whereHas('brand', function (Builder $query) use ($data): void {
             $query->where('slug', $data['slug']);
         })->paginate(9);
         $brands = Brand::where('status', 'active')
@@ -691,7 +691,7 @@ class FrontService
      */
     public function blog(): array|string
     {
-        return Cache::remember('blog', 24 * 60, function () {
+        return Cache::remember('blog', 24 * 60, function (): array {
             return [
                 'posts' => Post::with(['author'])->whereStatus('active')->orderBy(
                     'id',
@@ -718,8 +718,8 @@ class FrontService
             'token' => $token = Str::random(64),
         ]);
 
-        dispatch(function () use ($data, $token) {
-            Mail::send('front::emails.news-letter', ['token' => $token], function ($message) use ($data) {
+        dispatch(function () use ($data, $token): void {
+            Mail::send('front::emails.news-letter', ['token' => $token], function ($message) use ($data): void {
                 $message->to($data['email']);
                 $message->subject('Email Verification Mail');
             });

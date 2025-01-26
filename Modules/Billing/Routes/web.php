@@ -29,7 +29,7 @@ Route::get('payment/success', [PaypalController::class, 'success'])->name('payme
 //Stripe
 Route::get('stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
 Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->group(function (): void {
     Route::resource('payment_provider', PaymentProviderController::class)->only(
         'index',
         'edit',

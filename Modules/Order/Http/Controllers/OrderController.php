@@ -81,7 +81,7 @@ class OrderController extends CoreController
         $order = Order::findOrFail($id);  // Ensure we get a single order or fail
 
         $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
-        $pdf = PDF::loadview('order::pdf', compact('order'));
+        $pdf = PDF::loadview('order::pdf', ['order' => $order]);
 
         return $pdf->download($file_name);
     }
@@ -98,7 +98,7 @@ class OrderController extends CoreController
             ->whereYear('created_at', $year)
             ->where('status', 'delivered')
             ->get()
-            ->groupBy(function ($d) {
+            ->groupBy(function ($d): string {
                 return Carbon::parse($d->created_at)->format('m');
             });
 
@@ -114,12 +114,8 @@ class OrderController extends CoreController
         $data = [];
         for ($i = 1; $i <= 12; $i++) {
             $timestamp = mktime(0, 0, 0, $i, 1);
-            if ($timestamp === false) {
-                $monthName = 'Invalid';
-            } else {
-                $monthName = date('F', $timestamp);
-            }
-            $data[$monthName] = !empty($result[$i]) ? (float)number_format($result[$i], 2, '.', '') : 0.0;
+            $monthName = $timestamp === false ? 'Invalid' : date('F', $timestamp);
+            $data[$monthName] = empty($result[$i]) ? 0.0 : (float)number_format($result[$i], 2, '.', '');
         }
 
         return $data;

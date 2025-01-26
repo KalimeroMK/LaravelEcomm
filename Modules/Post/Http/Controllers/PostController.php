@@ -52,7 +52,7 @@ class PostController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $post = $this->post_service->create($request->validated());
+        $this->post_service->create($request->validated());
 
         return redirect()->route('posts.index');
     }
@@ -84,7 +84,7 @@ class PostController extends Controller
         $tags = Tag::get();
         $users = User::all();
 
-        return view('post::edit', compact('categories', 'tags', 'users', 'post'));
+        return view('post::edit', ['categories' => $categories, 'tags' => $tags, 'users' => $users, 'post' => $post]);
     }
 
     /**
@@ -144,10 +144,7 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Posts imported successfully.');
     }
 
-    /**
-     * @return void
-     */
-    public function upload(Request $request)
+    public function upload(Request $request): void
     {
         $this->post_service->upload($request);
     }

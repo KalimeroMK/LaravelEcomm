@@ -67,7 +67,7 @@ class Banner extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('banner');
 
-        if ($mediaItem) {
+        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
             return $mediaItem->getUrl();
         }
 

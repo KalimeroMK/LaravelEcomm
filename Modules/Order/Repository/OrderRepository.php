@@ -53,7 +53,7 @@ class OrderRepository extends Repository implements SearchInterface
 
         $query->with('shipping', 'user', 'carts');
 
-        if (! Arr::get($data, 'all_included', false) && ! empty($data)) {
+        if (! Arr::get($data, 'all_included', false) && $data !== []) {
             $query->orderBy(
                 Arr::get($data, 'order_by', 'id'),
                 Arr::get($data, 'sort', 'desc')
@@ -62,7 +62,7 @@ class OrderRepository extends Repository implements SearchInterface
 
         $results = $query->paginate(Arr::get($data, 'per_page', (new Order)->getPerPage()));
 
-        $results->getCollection()->transform(fn ($item) => new OrderResource($item));
+        $results->getCollection()->transform(fn ($item): \Modules\Order\Http\Resources\OrderResource => new OrderResource($item));
 
         return $results;
     }

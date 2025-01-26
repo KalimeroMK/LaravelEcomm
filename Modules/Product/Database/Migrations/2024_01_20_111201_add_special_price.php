@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table): void {
             $table->float('special_price')->nullable();
             $table->date('special_price_start')->nullable();
             $table->date('special_price_end')->nullable();
@@ -17,7 +17,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table): void {
             $table->float('special_price')->nullable();
             $table->date('special_price_start')->nullable();
             $table->date('special_price_end')->nullable();

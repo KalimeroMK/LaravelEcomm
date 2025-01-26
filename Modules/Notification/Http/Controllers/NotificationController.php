@@ -33,7 +33,7 @@ class NotificationController extends Controller
     {
         $notification = $this->notification_service->findById($id);
 
-        return view('notification::show', compact('notification'));
+        return view('notification::show', ['notification' => $notification]);
     }
 
     public function destroy(int $id): RedirectResponse

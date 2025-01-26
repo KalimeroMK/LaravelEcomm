@@ -62,10 +62,8 @@ class AttributeServiceProvider extends ServiceProvider
 
     /**
      * Register translations.
-     *
-     * @return void
      */
-    public function registerTranslations()
+    public function registerTranslations(): void
     {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 

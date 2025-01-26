@@ -34,7 +34,7 @@ class BannerService extends CoreService
     {
         $banner = $this->banner_repository->create($data);
         $banner->addMultipleMediaFromRequest(['images'])
-            ->each(function (FileAdder $fileAdder) {
+            ->each(function (FileAdder $fileAdder): void {
                 $fileAdder->preservingOriginal()->toMediaCollection('banner');
             });
 
@@ -60,7 +60,7 @@ class BannerService extends CoreService
         if (array_key_exists('images', $data)) {
             $banner->clearMediaCollection('banner'); // Optionally clear existing media
             $banner->addMultipleMediaFromRequest(['images'])
-                ->each(function (FileAdder $fileAdder) {
+                ->each(function (FileAdder $fileAdder): void {
                     $fileAdder->preservingOriginal()->toMediaCollection('banner');
                 });
         }

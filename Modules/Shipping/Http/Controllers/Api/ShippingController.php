@@ -34,11 +34,9 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -55,11 +53,9 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show(Shipping $shipping)
+    public function show(Shipping $shipping): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -95,11 +91,9 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function destroy(Shipping $shipping)
+    public function destroy(Shipping $shipping): \Illuminate\Http\JsonResponse
     {
         $this->shipping_service->delete($shipping->id);
 

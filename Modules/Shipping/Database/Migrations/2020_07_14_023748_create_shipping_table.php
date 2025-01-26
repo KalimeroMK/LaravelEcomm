@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('shipping', function (Blueprint $table) {
+        Schema::create('shipping', function (Blueprint $table): void {
             $table->id();
             $table->string('type')->index();
             $table->decimal('price')->index();

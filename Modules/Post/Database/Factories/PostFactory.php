@@ -33,7 +33,7 @@ class PostFactory extends Factory
      */
     public function withCategories(): PostFactory
     {
-        return $this->afterCreating(function (Model $post) {
+        return $this->afterCreating(function (Model $post): void {
             $post = $post->fresh(); // Ensure the model instance is fresh
             /** @var Post $post */
             $categories = Category::inRandomOrder()->limit(3)->pluck('id');
@@ -46,7 +46,7 @@ class PostFactory extends Factory
      */
     public function withTags(): PostFactory
     {
-        return $this->afterCreating(function (Model $post) {
+        return $this->afterCreating(function (Model $post): void {
             $post = $post->fresh(); // Ensure the model instance is fresh
             /** @var Post $post */
             $tags = Tag::inRandomOrder()->limit(5)->pluck('id');
@@ -59,7 +59,7 @@ class PostFactory extends Factory
      */
     public function withCategoriesAndTags(): PostFactory
     {
-        return $this->afterCreating(function (Model $post) {
+        return $this->afterCreating(function (Model $post): void {
             $post = $post->fresh(); // Ensure the model instance is fresh
             /** @var Post $post */
             $categories = Category::inRandomOrder()->limit(3)->pluck('id');

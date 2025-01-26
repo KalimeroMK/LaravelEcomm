@@ -52,11 +52,9 @@ class BannerController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show(int $id)
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -73,11 +71,9 @@ class BannerController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function update(Update $request, int $id)
+    public function update(Update $request, int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(

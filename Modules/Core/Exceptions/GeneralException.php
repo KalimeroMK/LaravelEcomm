@@ -97,7 +97,9 @@ class GeneralException extends Exception
 
     public function render(): JsonResponse
     {
-        $this->isLog() ? $this->renderLog() : null;
+        if ($this->isLog()) {
+            $this->renderLog();
+        }
 
         return $this->prepareResponse();
     }
@@ -135,7 +137,7 @@ class GeneralException extends Exception
      */
     public function getLogMessage(): string
     {
-        return $this->exception ? $this->exception->getMessage() : '';
+        return $this->exception instanceof \Exception ? $this->exception->getMessage() : '';
     }
 
     /**
@@ -143,7 +145,7 @@ class GeneralException extends Exception
      */
     public function line(): int|string
     {
-        return $this->exception ? $this->exception->getLine() : 'none';
+        return $this->exception instanceof \Exception ? $this->exception->getLine() : 'none';
     }
 
     /**
@@ -151,7 +153,7 @@ class GeneralException extends Exception
      */
     public function file(): int|string
     {
-        return $this->exception ? $this->exception->getFile() : 'none';
+        return $this->exception instanceof \Exception ? $this->exception->getFile() : 'none';
     }
 
     /**

@@ -50,11 +50,9 @@ class CartController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show()
+    public function show(): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -71,11 +69,9 @@ class CartController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function update(Store $request)
+    public function update(Store $request): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(

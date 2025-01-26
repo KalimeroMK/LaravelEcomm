@@ -33,11 +33,9 @@ class TagController extends CoreController
     }
 
     /**
-     * @return mixed
-     *
      * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -54,11 +52,9 @@ class TagController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show(int $id)
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(

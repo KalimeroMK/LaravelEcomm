@@ -51,7 +51,7 @@ class ProductService extends CoreService
         /** @var Product $product */
         $product = $this->product_repository->create($data);
         if (request()->hasFile('images')) {
-            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder): void {
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
         }
@@ -84,7 +84,7 @@ class ProductService extends CoreService
         $product = $this->product_repository->update($id, $data);
 
         if (request()->hasFile('images')) {
-            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder) {
+            $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder): void {
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
             });
         }

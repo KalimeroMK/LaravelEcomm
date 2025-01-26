@@ -33,11 +33,9 @@ class SizeController extends CoreController
     }
 
     /**
-     * @return JsonResponse|string
-     *
      * @throws Exception
      */
-    public function store(Store $request)
+    public function store(Store $request): \Illuminate\Http\JsonResponse|string
     {
         try {
             return $this
@@ -57,10 +55,7 @@ class SizeController extends CoreController
         }
     }
 
-    /**
-     * @return JsonResponse|string
-     */
-    public function show(int $id)
+    public function show(int $id): \Illuminate\Http\JsonResponse|string
     {
         try {
             return $this

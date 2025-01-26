@@ -9,10 +9,8 @@ class CouponSeeder extends Seeder
 {
     /**
      * Run the database seeders.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $data = [
             [

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('attribute_values', function (Blueprint $table) {
+        Schema::create('attribute_values', function (Blueprint $table): void {
             $table->id();
             $table->string('default')->nullable();
             $table->text('text_value')->nullable();

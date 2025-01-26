@@ -14,6 +14,6 @@ use Modules\Tenant\Http\Controllers\TenantController;
 |
 */
 
-Route::group([], function () {
+Route::group([], function (): void {
     Route::resource('tenants', TenantController::class)->names('tenant');
 });

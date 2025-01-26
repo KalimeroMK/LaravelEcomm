@@ -14,11 +14,10 @@ class StripeController extends CoreController
     /**
      * success response method.
      *
-     * @return void
      *
      * @throws ApiErrorException
      */
-    public function stripe(StripeData $request)
+    public function stripe(StripeData $request): void
     {
         Stripe::setApiKey(config('stripe.sandbox.client_secret'));
         Charge::create([

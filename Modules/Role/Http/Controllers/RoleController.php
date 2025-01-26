@@ -26,7 +26,7 @@ class RoleController extends CoreController
     {
         $roles = Role::all();
 
-        return view('role::index', compact('roles'));
+        return view('role::index', ['roles' => $roles]);
     }
 
     /**
@@ -36,7 +36,7 @@ class RoleController extends CoreController
     {
         $permissions = Permission::all();
 
-        return view('role::create', compact('permissions'));
+        return view('role::create', ['permissions' => $permissions]);
     }
 
     /**
@@ -57,7 +57,7 @@ class RoleController extends CoreController
     {
         $permissions = Permission::all();
 
-        return view('role::edit', compact('role', 'permissions'));
+        return view('role::edit', ['role' => $role, 'permissions' => $permissions]);
     }
 
     /**

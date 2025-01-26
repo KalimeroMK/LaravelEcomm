@@ -11,7 +11,7 @@ trait HasSlug
      */
     protected static function bootHasSlug(): void
     {
-        static::creating(function ($model) {
+        static::creating(function ($model): void {
             $slug = Str::slug($model->title);
             $model->slug = $model->incrementSlug($slug);
         });

@@ -50,10 +50,7 @@ class PaypalController extends CoreController
         }
     }
 
-    /**
-     * @return string|null
-     */
-    public function success(Request $request)
+    public function success(Request $request): ?string
     {
         return $this->paypal_service->completePurchase($request);
     }
@@ -61,7 +58,7 @@ class PaypalController extends CoreController
     /**
      * @return string]
      */
-    public function error()
+    public function error(): string
     {
         return 'User cancelled the payment.';
     }

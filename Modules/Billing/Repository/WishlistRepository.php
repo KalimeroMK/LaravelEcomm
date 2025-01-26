@@ -24,7 +24,7 @@ class WishlistRepository extends Repository
      */
     public function create(array $data): Model
     {
-        $data['price'] = ($data['price'] - ($data['price'] * $data['discount']) / 100);
+        $data['price'] -= ($data['price'] * $data['discount']) / 100;
         $data['amount'] = $data['price'] * $data['quantity'];
 
         return $this->model::create($data)->fresh();

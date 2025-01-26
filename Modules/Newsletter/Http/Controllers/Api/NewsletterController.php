@@ -54,11 +54,9 @@ class NewsletterController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function show(Newsletter $newsletter)
+    public function show(Newsletter $newsletter): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -75,11 +73,9 @@ class NewsletterController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function update(Update $request, Newsletter $newsletter)
+    public function update(Update $request, Newsletter $newsletter): \Illuminate\Http\JsonResponse
     {
         return $this
             ->setMessage(
@@ -96,11 +92,9 @@ class NewsletterController extends CoreController
     }
 
     /**
-     * @return JsonResponse
-     *
      * @throws ReflectionException
      */
-    public function destroy(Newsletter $newsletter)
+    public function destroy(Newsletter $newsletter): \Illuminate\Http\JsonResponse
     {
         $this->newsletter_service->delete($newsletter->id);
 

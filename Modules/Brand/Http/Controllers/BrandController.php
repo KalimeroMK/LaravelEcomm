@@ -23,7 +23,7 @@ class BrandController extends CoreController
     {
         $brands = $this->brand_service->getAll();
 
-        return view('brand::index', compact('brands'));
+        return view('brand::index', ['brands' => $brands]);
     }
 
     public function create(): View
@@ -40,7 +40,7 @@ class BrandController extends CoreController
 
     public function edit(Brand $brand): View
     {
-        return view('brand::edit', compact('brand'));
+        return view('brand::edit', ['brand' => $brand]);
     }
 
     public function update(Store $request, Brand $brand): RedirectResponse
