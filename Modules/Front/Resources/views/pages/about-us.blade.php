@@ -69,7 +69,7 @@
                     <div class="single-team">
                         <!-- Image -->
                         <div class="image">
-                            <img src="images/team/team1.jpg" alt="#">
+                            <img src="{{ asset('backend/vendor/fontawesome-free/svgs/brands/steam.svg') }}" alt="#">
                         </div>
                         <!-- End Image -->
                         <div class="info-head">
@@ -97,7 +97,7 @@
                     <div class="single-team">
                         <!-- Image -->
                         <div class="image">
-                            <img src="images/team/team2.jpg" alt="#">
+                            <img src="{{ asset('backend/vendor/fontawesome-free/svgs/brands/teamspeak.svg') }}" alt="#">
                         </div>
                         <!-- End Image -->
                         <div class="info-head">
@@ -125,7 +125,8 @@
                     <div class="single-team">
                         <!-- Image -->
                         <div class="image">
-                            <img src="images/team/team3.jpg" alt="#">
+                            <img src="{{ asset('backend/vendor/fontawesome-free/svgs/brands/steam-square.svg') }}"
+                                 alt="#">
                         </div>
                         <!-- End Image -->
                         <div class="info-head">
@@ -153,7 +154,8 @@
                     <div class="single-team">
                         <!-- Image -->
                         <div class="image">
-                            <img src="images/team/team4.jpg" alt="#">
+                            <img src="{{ asset('backend/vendor/fontawesome-free/svgs/brands/steam-symbol.svg') }}"
+                                 alt="#">
                         </div>
                         <!-- End Image -->
                         <div class="info-head">

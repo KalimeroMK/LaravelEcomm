@@ -1,50 +1,47 @@
-FROM php:8.3-fpm
+# Stage 1: Build dependencies
+FROM php:8.3-fpm-alpine AS builder
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    libicu-dev \
-    libzip-dev \
-    nano \
-    libjpeg62-turbo-dev \
-    xdg-utils # Added for xdg-open \
+RUN apk add --no-cache \
+    git curl nano unzip bash zip nodejs npm \
+    libpng-dev libjpeg-turbo-dev freetype-dev \
+    libxml2-dev oniguruma-dev libzip-dev \
+    icu-dev g++ make autoconf libpng libjpeg freetype libzip \
+    redis  # Install Redis server (optional, if needed)
 
-#text-based browser install
-RUN apt-get install -y lynx
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-install gd pdo_mysql mbstring exif pcntl bcmath zip intl
 
-# Configure & install gd extension with jpeg support
-RUN docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install gd
+# Install Redis extension
+RUN pecl install redis && docker-php-ext-enable redis
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install intl
-
-# Clear installation sources to reduce image size
-RUN docker-php-source delete
-
-# Install Xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Get latest Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-
-# Set PHPStan Pro port and expose it
-ENV PHPSTAN_PRO_WEB_PORT=11111
-EXPOSE 11111
-
-# Create system user
-RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
+
+# Set user permissions (проверка дали `www-data` постои)
+RUN id -u www-data &>/dev/null || adduser -D -u 1000 -G www-data www-data
+
+# Stage 2: Final image (Minimal)
+FROM php:8.3-fpm-alpine
+
+# Install runtime dependencies (ова е клучно за правилно работење)
+RUN apk add --no-cache libpng libjpeg freetype libzip icu redis
+
+# Copy built dependencies from builder
+COPY --from=builder /usr/local /usr/local
+COPY --from=builder /usr/bin/composer /usr/bin/composer
+COPY --from=builder /usr/bin/node /usr/bin/node
+COPY --from=builder /usr/bin/npm /usr/bin/npm
+
+# Enable Redis PHP extension
+RUN docker-php-ext-enable redis
+
+# Set working directory
+WORKDIR /var/www
+
+# Set user
+USER www-data

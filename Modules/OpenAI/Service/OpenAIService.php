@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 
 class OpenAIService
 {
-    protected \GuzzleHttp\Client $client;
+    protected Client $client;
 
     protected $apiKey;
 
