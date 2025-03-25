@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cart\Http\Requests;
 
 use Modules\Cart\Rules\ProductStockRule;

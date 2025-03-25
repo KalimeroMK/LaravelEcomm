@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Newsletter\Http\Requests;
 
 use Modules\Core\Http\Requests\CoreRequest;

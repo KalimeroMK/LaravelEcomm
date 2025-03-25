@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Post\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -27,11 +29,11 @@ class PostPolicy
 
     public function update(User $user, Post $post): bool
     {
-        return $user->can('post-update') || $user->id == $post->added_by;
+        return $user->can('post-update') || $user->id === $post->added_by;
     }
 
     public function delete(User $user, Post $post): bool
     {
-        return $user->can('post-delete') || $user->id == $post->added_by;
+        return $user->can('post-delete') || $user->id === $post->added_by;
     }
 }

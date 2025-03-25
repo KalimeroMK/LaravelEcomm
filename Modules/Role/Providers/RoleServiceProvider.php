@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Role\Providers;
 
 use Config;
@@ -37,20 +39,6 @@ class RoleServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register config.
-     */
-    protected function registerConfig(): void
-    {
-        $this->publishes([
-            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
-        ], 'config');
-        $this->mergeConfigFrom(
-            module_path($this->moduleName, 'Config/config.php'),
-            $this->moduleNameLower
-        );
-    }
-
-    /**
      * Register views.
      */
     public function registerViews(): void
@@ -75,6 +63,28 @@ class RoleServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the service provider.
+     */
+    public function register(): void
+    {
+        $this->app->register(RouteServiceProvider::class);
+    }
+
+    /**
+     * Register config.
+     */
+    protected function registerConfig(): void
+    {
+        $this->publishes([
+            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
+        ], 'config');
+        $this->mergeConfigFrom(
+            module_path($this->moduleName, 'Config/config.php'),
+            $this->moduleNameLower
+        );
+    }
+
+    /**
      * Gets the publishable view paths for the module.
      *
      * @return array<string> Array of paths.
@@ -89,13 +99,5 @@ class RoleServiceProvider extends ServiceProvider
         }
 
         return $paths;
-    }
-
-    /**
-     * Register the service provider.
-     */
-    public function register(): void
-    {
-        $this->app->register(RouteServiceProvider::class);
     }
 }

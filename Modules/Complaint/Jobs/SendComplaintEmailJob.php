@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Complaint\Jobs;
 
 use Illuminate\Bus\Queueable;
@@ -16,6 +18,7 @@ class SendComplaintEmailJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public Complaint $complaint;
+
     public string $recipientType;
 
     /**

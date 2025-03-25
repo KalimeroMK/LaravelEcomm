@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cart\Http\Controllers;
 
 use Exception;
@@ -71,7 +73,7 @@ class CartController extends CoreController
      */
     public function checkout(): View|Factory|RedirectResponse|Application
     {
-        if ($this->cart_service->checkout() == null) {
+        if ($this->cart_service->checkout() === null) {
             session()->flash('error', 'Cart is empty');
 
             return back();

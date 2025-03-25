@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Banner\Repository;
 
 use Illuminate\Support\Arr;
@@ -10,14 +12,14 @@ use Modules\Core\Repositories\Repository;
 
 class BannerRepository extends Repository implements SearchInterface
 {
+    private const LATEST_BANNERS_LIMIT = 3;
+
     /**
      * The model instance.
      *
      * @var string
      */
     public $model = Banner::class;
-
-    private const LATEST_BANNERS_LIMIT = 3;
 
     /**
      * Search for entries based on filter criteria provided in the `$data` array.

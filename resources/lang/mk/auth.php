@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     'failed' => 'Овие акредитиви не се совпаѓаат со нашите записи.',

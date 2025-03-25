@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Reliese Model.
  */
@@ -21,9 +23,9 @@ use Modules\Size\Models\Size;
  */
 class ProductSize extends Model
 {
-    protected $table = 'product_size';
-
     public $timestamps = false;
+
+    protected $table = 'product_size';
 
     protected $casts = [
         'size_id' => 'int',

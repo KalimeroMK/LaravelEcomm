@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Tenant\Repository;
 
 use Modules\Core\Repositories\Repository;

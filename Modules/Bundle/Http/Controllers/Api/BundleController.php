@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Bundle\Http\Controllers\Api;
 
 use Exception;
@@ -36,7 +38,7 @@ class BundleController extends CoreController
     /**
      * @throws Exception
      */
-    public function store(Store $request): \Illuminate\Http\JsonResponse
+    public function store(Store $request): JsonResponse
     {
         return $this
             ->setMessage(
@@ -55,7 +57,7 @@ class BundleController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -74,7 +76,7 @@ class BundleController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, int $id): \Illuminate\Http\JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(

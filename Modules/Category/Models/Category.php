@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Category\Models;
 
 use Eloquent;
@@ -25,17 +27,17 @@ use Modules\Product\Models\Product;
 /**
  * Class Category
  *
- * @property int                                          $id
- * @property string                                       $title
- * @property string                                       $slug
- * @property int|null                                     $status
- * @property int|null                                     $parent_id
- * @property int|null                                     $_lft
- * @property int|null                                     $_rgt
- * @property Carbon|null                                  $created_at
- * @property Carbon|null                                  $updated_at
- * @property Category|null                                $category
- * @property Collection|Category[]                        $categories
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property int|null $status
+ * @property int|null $parent_id
+ * @property int|null $_lft
+ * @property int|null $_rgt
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Category|null $category
+ * @property Collection|Category[] $categories
  * @property-read int|null                                $categories_count
  * @property-read Collection|Product[]                    $products
  * @property-read int|null                                $products_count
@@ -161,7 +163,7 @@ class Category extends Core implements Aliased, Explored, IndexSettings
 
     public static function countActiveCategory(): int
     {
-        $data = Category::where('status', 'active')->count();
+        $data = self::where('status', 'active')->count();
         if ($data) {
             return $data;
         }
@@ -171,17 +173,17 @@ class Category extends Core implements Aliased, Explored, IndexSettings
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
     public function categories(): HasMany
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id');
     }
 
     public function childrenCategories(): HasMany
     {
-        return $this->hasMany(Category::class, 'parent_id')->with('categories');
+        return $this->hasMany(self::class, 'parent_id')->with('categories');
     }
 
     public function products(): BelongsToMany
@@ -196,16 +198,16 @@ class Category extends Core implements Aliased, Explored, IndexSettings
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
     public function getParentsNames(): string
     {
         if ($this->parent) {
             return $this->parent->getParentsNames();
-        } else {
-            return $this->title ?? '';
         }
+
+        return $this->title ?? '';
     }
 
     public function makeAllSearchableUsing(Builder $query): Builder
@@ -214,39 +216,39 @@ class Category extends Core implements Aliased, Explored, IndexSettings
     }
 
     /**
-     * Converts the model instance to an array format suitable for search indexing.
-     *
-     * @return array<string, mixed> Returns an array where keys are column names and values are column values.
+     * Prepare data for indexing.
      */
     public function toSearchableArray(): array
     {
-        return $this->toArray();
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'status' => $this->status,
+            'parent_id' => $this->parent_id,
+            'product_count' => $this->products()->count(),
+        ];
     }
 
     /**
-     * Defines the mapping for the search engine.
-     *
-     * @return array<string, array<string, mixed>> Returns an array of settings for each model attribute.
+     * Define the mapping for Elasticsearch.
      */
     public function mappableAs(): array
     {
         return [
             'properties' => [
-                'id' => [
-                    'type' => 'integer',
-                ],
-                'title' => [
-                    'type' => 'text',
-                    'analyzer' => 'standard',
-                ],
+                'id' => ['type' => 'integer'],
+                'title' => ['type' => 'text', 'analyzer' => 'standard'],
+                'slug' => ['type' => 'keyword'],
+                'status' => ['type' => 'integer'],
+                'parent_id' => ['type' => 'integer'],
+                'product_count' => ['type' => 'integer'],
             ],
         ];
     }
 
     /**
-     * Configuration settings for the search index.
-     *
-     * @return array<string, mixed> Returns an array where keys are configuration settings and values are the settings' values.
+     * Elasticsearch index settings configuration.
      */
     public function indexSettings(): array
     {
@@ -255,9 +257,7 @@ class Category extends Core implements Aliased, Explored, IndexSettings
             'number_of_replicas' => 0,
             'analysis' => [
                 'analyzer' => [
-                    'default' => [
-                        'type' => 'standard',
-                    ],
+                    'default' => ['type' => 'standard'],
                 ],
             ],
         ];

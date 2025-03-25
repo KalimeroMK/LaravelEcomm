@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Size\Http\Controllers\Api;
 
 use Exception;
@@ -35,7 +37,7 @@ class SizeController extends CoreController
     /**
      * @throws Exception
      */
-    public function store(Store $request): \Illuminate\Http\JsonResponse|string
+    public function store(Store $request): JsonResponse|string
     {
         try {
             return $this
@@ -55,7 +57,7 @@ class SizeController extends CoreController
         }
     }
 
-    public function show(int $id): \Illuminate\Http\JsonResponse|string
+    public function show(int $id): JsonResponse|string
     {
         try {
             return $this

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -34,7 +36,7 @@ class ProductFactory extends Factory
     /**
      * Configure the factory to create a product with categories.
      */
-    public function withCategories(): ProductFactory
+    public function withCategories(): self
     {
         return $this->afterCreating(function (Model $model): void {
             /** @var Product $product */
@@ -47,7 +49,7 @@ class ProductFactory extends Factory
     /**
      * Configure the factory to create a product with tags.
      */
-    public function withTags(): ProductFactory
+    public function withTags(): self
     {
         return $this->afterCreating(function (Model $model): void {
             /** @var Product $product */
@@ -60,7 +62,7 @@ class ProductFactory extends Factory
     /**
      * Configure the factory to create a product with categories and tags.
      */
-    public function withCategoriesAndTags(): ProductFactory
+    public function withCategoriesAndTags(): self
     {
         return $this->afterCreating(function (Model $model): void {
             /** @var Product $product */

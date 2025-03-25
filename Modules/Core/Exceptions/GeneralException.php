@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Core\Exceptions;
 
 use Exception;
@@ -137,7 +139,7 @@ class GeneralException extends Exception
      */
     public function getLogMessage(): string
     {
-        return $this->exception instanceof \Exception ? $this->exception->getMessage() : '';
+        return $this->exception instanceof Exception ? $this->exception->getMessage() : '';
     }
 
     /**
@@ -145,7 +147,7 @@ class GeneralException extends Exception
      */
     public function line(): int|string
     {
-        return $this->exception instanceof \Exception ? $this->exception->getLine() : 'none';
+        return $this->exception instanceof Exception ? $this->exception->getLine() : 'none';
     }
 
     /**
@@ -153,15 +155,7 @@ class GeneralException extends Exception
      */
     public function file(): int|string
     {
-        return $this->exception instanceof \Exception ? $this->exception->getFile() : 'none';
-    }
-
-    /**
-     * Handle an ajax response.
-     */
-    protected function prepareResponse(): JsonResponse
-    {
-        return response()->json($this->getResponse());
+        return $this->exception instanceof Exception ? $this->exception->getFile() : 'none';
     }
 
     /**
@@ -175,5 +169,13 @@ class GeneralException extends Exception
             'code' => $this->getCode(),
             'message' => $this->message(),
         ];
+    }
+
+    /**
+     * Handle an ajax response.
+     */
+    protected function prepareResponse(): JsonResponse
+    {
+        return response()->json($this->getResponse());
     }
 }

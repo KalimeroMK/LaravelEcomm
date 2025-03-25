@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Brand\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;

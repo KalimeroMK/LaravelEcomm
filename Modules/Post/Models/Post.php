@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Zoran Shefot Bogoevski.
  */
@@ -86,6 +88,17 @@ class Post extends Core implements HasMedia
     use HasSlug;
     use InteractsWithMedia;
 
+    public const likeRows
+        = [
+            'title',
+            'slug',
+            'summary',
+            'description',
+            'photo',
+            'added_by',
+            'status',
+        ];
+
     protected $table = 'posts';
 
     protected $casts
@@ -104,17 +117,6 @@ class Post extends Core implements HasMedia
             'status',
         ];
 
-    public const likeRows
-        = [
-            'title',
-            'slug',
-            'summary',
-            'description',
-            'photo',
-            'added_by',
-            'status',
-        ];
-
     public static function Factory(): PostFactory
     {
         return PostFactory::new();
@@ -122,12 +124,12 @@ class Post extends Core implements HasMedia
 
     public static function getPostBySlug(string $slug): Model|Builder
     {
-        return Post::whereSlug($slug)->with('comments')->firstOrFail();
+        return self::whereSlug($slug)->with('comments')->firstOrFail();
     }
 
     public static function countActivePost(): int
     {
-        $data = Post::where('status', 'active')->count();
+        $data = self::where('status', 'active')->count();
         if ($data) {
             return $data;
         }
@@ -169,7 +171,7 @@ class Post extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('post');
 
-        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
+        if ($mediaItem instanceof Media) {
             return $mediaItem->first()->getUrl();
         }
 

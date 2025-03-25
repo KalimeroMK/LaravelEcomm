@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Google2fa\Http\Controllers;
 
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
@@ -98,9 +100,10 @@ class Google2faController extends Controller
             $user->loginSecurity->save();
 
             return redirect()->route('2fa')->with('success', '2FA is enabled successfully.');
-        } else {
-            return redirect()->route('2fa')->with('error', 'Invalid verification Code, Please try again.');
         }
+
+        return redirect()->route('2fa')->with('error', 'Invalid verification Code, Please try again.');
+
     }
 
     /**

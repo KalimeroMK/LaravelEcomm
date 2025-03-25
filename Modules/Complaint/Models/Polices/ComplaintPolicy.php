@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Complaint\Models\Polices;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -34,5 +36,4 @@ class ComplaintPolicy
     {
         return $user->hasPermissionTo('complaint-delete');
     }
-    
 }

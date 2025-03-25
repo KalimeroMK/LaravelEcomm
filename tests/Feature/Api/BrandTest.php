@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -12,10 +14,10 @@ use Tests\TestCase;
 
 class BrandTest extends TestCase
 {
-    public string $url = '/api/v1/brand/';
-
     use BaseTestTrait;
     use WithoutMiddleware;
+
+    public string $url = '/api/v1/brand/';
 
     /**
      * test create product.

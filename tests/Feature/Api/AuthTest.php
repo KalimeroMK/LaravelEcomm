@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Api;
 
 use Modules\User\Models\User;
@@ -10,7 +12,7 @@ class AuthTest extends TestCase
     /**
      * @test
      */
-    public function testRegister()
+    public function test_register()
     {
         $response = $this->json('POST', '/api/v1/register', [
             'name' => 'Test',
@@ -27,7 +29,7 @@ class AuthTest extends TestCase
     /**
      * @test
      */
-    public function testLogin()
+    public function test_login()
     {
         User::create([
             'name' => 'Test',

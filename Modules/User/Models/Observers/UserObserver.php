@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Models\Observers;
 
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +18,7 @@ class UserObserver
 
     public function updating(User $user): void
     {
-        if ($user->isDirty('password') && !is_null($user->password)) {
+        if ($user->isDirty('password') && ! is_null($user->password)) {
             $user->password = Hash::make($user->password);
         }
     }

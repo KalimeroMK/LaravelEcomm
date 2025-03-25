@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Banner\Models\Policies;
 
 use Modules\Banner\Models\Banner;

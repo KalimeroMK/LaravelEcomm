@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Post\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -31,7 +33,7 @@ class PostFactory extends Factory
     /**
      * Configure the factory to create a post with random existing categories.
      */
-    public function withCategories(): PostFactory
+    public function withCategories(): self
     {
         return $this->afterCreating(function (Model $post): void {
             $post = $post->fresh(); // Ensure the model instance is fresh
@@ -44,7 +46,7 @@ class PostFactory extends Factory
     /**
      * Configure the factory to create a post with random existing tags.
      */
-    public function withTags(): PostFactory
+    public function withTags(): self
     {
         return $this->afterCreating(function (Model $post): void {
             $post = $post->fresh(); // Ensure the model instance is fresh
@@ -57,7 +59,7 @@ class PostFactory extends Factory
     /**
      * Configure the factory to create a post with random existing categories and tags.
      */
-    public function withCategoriesAndTags(): PostFactory
+    public function withCategoriesAndTags(): self
     {
         return $this->afterCreating(function (Model $post): void {
             $post = $post->fresh(); // Ensure the model instance is fresh

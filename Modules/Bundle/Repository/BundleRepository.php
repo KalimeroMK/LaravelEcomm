@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Bundle\Repository;
 
 use Illuminate\Database\Eloquent\Model;
@@ -31,5 +33,4 @@ class BundleRepository extends Repository
     {
         return $this->model::with('media')->where('slug', $slug)->first();
     }
-
 }

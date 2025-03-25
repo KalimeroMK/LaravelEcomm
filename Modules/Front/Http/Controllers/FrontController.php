@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Front\Http\Controllers;
 
 use Illuminate\Contracts\Foundation\Application;
@@ -113,9 +115,10 @@ class FrontController extends Controller
     {
         if (request()->is('e-shop.loc/product-grids')) {
             return view('front::pages.product-grids', $this->front_service->productBrand($request->all()));
-        } else {
-            return view('front::pages.product-lists', $this->front_service->productBrand($request->all()));
         }
+
+        return view('front::pages.product-lists', $this->front_service->productBrand($request->all()));
+
     }
 
     /**
@@ -125,9 +128,10 @@ class FrontController extends Controller
     {
         if (request()->is('e-shop.loc/product-grids')) {
             return view('front::pages.product-grids', $this->front_service->productCat($slug));
-        } else {
-            return view('front::pages.product-lists', $this->front_service->productCat($slug));
         }
+
+        return view('front::pages.product-lists', $this->front_service->productCat($slug));
+
     }
 
     /**
@@ -232,12 +236,12 @@ class FrontController extends Controller
     public function store(Request $request): RedirectResponse
     {
         // Check if the payment method is PayPal and redirect to the payment route
-        if (Arr::get($request, 'payment_method') == 'paypal') {
+        if (Arr::get($request, 'payment_method') === 'paypal') {
             return redirect()->route('payment');
         }
 
         // Check if the payment method is Stripe and redirect to the Stripe route with the user ID
-        if (Arr::get($request, 'payment_method') == 'stripe') {
+        if (Arr::get($request, 'payment_method') === 'stripe') {
             return redirect()->route('stripe', Auth::id());
         }
 

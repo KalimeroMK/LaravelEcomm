@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Banner\Http\Requests\Api;
 
 use Modules\Core\Http\Requests\Api\CoreRequest;

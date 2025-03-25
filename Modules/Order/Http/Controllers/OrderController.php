@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Order\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -81,7 +83,7 @@ class OrderController extends CoreController
         $order = Order::findOrFail($id);  // Ensure we get a single order or fail
 
         $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
-        $pdf = PDF::loadview('order::pdf', ['order' => $order]);
+        $pdf = Pdf::loadview('order::pdf', ['order' => $order]);
 
         return $pdf->download($file_name);
     }
@@ -106,7 +108,7 @@ class OrderController extends CoreController
         foreach ($items as $month => $item_collections) {
             foreach ($item_collections as $item) {
                 $amount = $item->cart_info->sum('amount');
-                $m = intval($month);
+                $m = (int) $month;
                 isset($result[$m]) ? $result[$m] += $amount : $result[$m] = $amount;
             }
         }
@@ -115,7 +117,7 @@ class OrderController extends CoreController
         for ($i = 1; $i <= 12; $i++) {
             $timestamp = mktime(0, 0, 0, $i, 1);
             $monthName = $timestamp === false ? 'Invalid' : date('F', $timestamp);
-            $data[$monthName] = empty($result[$i]) ? 0.0 : (float)number_format($result[$i], 2, '.', '');
+            $data[$monthName] = empty($result[$i]) ? 0.0 : (float) number_format($result[$i], 2, '.', '');
         }
 
         return $data;

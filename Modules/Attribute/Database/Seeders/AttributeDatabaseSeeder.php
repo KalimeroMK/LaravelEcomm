@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Attribute\Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -18,7 +20,7 @@ class AttributeDatabaseSeeder extends Seeder
 
             Attribute::create([
                 'name' => ucfirst($type), // Capitalize the first letter for the name
-                'code' => strtolower($type), // Use lowercase for the code
+                'code' => mb_strtolower($type), // Use lowercase for the code
                 'type' => $type,
                 'display' => $randomDisplay, // Use the randomly selected display type
                 'filterable' => true,

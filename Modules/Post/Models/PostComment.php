@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Zoran Shefot Bogoevski.
  */
@@ -81,7 +83,7 @@ class PostComment extends Core
 
     public static function getAllUserComments(): LengthAwarePaginator
     {
-        return PostComment::where('user_id', auth()->user()->id)->with('user_info')->paginate(10);
+        return self::where('user_id', auth()->user()->id)->with('user_info')->paginate(10);
     }
 
     public function user(): BelongsTo
@@ -101,6 +103,6 @@ class PostComment extends Core
 
     public function replies(): HasMany
     {
-        return $this->hasMany(PostComment::class, 'parent_id')->where('status', 'active');
+        return $this->hasMany(self::class, 'parent_id')->where('status', 'active');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Post\Providers;
 
 use Illuminate\Support\Facades\Config;
@@ -41,20 +43,6 @@ class PostServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register config.
-     */
-    protected function registerConfig(): void
-    {
-        $this->publishes([
-            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
-        ], 'config');
-        $this->mergeConfigFrom(
-            module_path($this->moduleName, 'Config/config.php'),
-            $this->moduleNameLower
-        );
-    }
-
-    /**
      * Register views.
      */
     public function registerViews(): void
@@ -79,6 +67,33 @@ class PostServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the service provider.
+     */
+    public function register(): void
+    {
+        $this->app->register(RouteServiceProvider::class);
+    }
+
+    /**
+     * Register config.
+     */
+    protected function registerConfig(): void
+    {
+        $this->publishes([
+            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
+        ], 'config');
+        $this->mergeConfigFrom(
+            module_path($this->moduleName, 'Config/config.php'),
+            $this->moduleNameLower
+        );
+    }
+
+    protected function registerPolicies(): void
+    {
+        Gate::policy(PostComment::class, PostCommentPolicy::class);
+    }
+
+    /**
      * Gets the publishable view paths for the module.
      *
      * @return array<string> Array of paths.
@@ -93,18 +108,5 @@ class PostServiceProvider extends ServiceProvider
         }
 
         return $paths;
-    }
-
-    /**
-     * Register the service provider.
-     */
-    public function register(): void
-    {
-        $this->app->register(RouteServiceProvider::class);
-    }
-
-    protected function registerPolicies(): void
-    {
-        Gate::policy(PostComment::class, PostCommentPolicy::class);
     }
 }

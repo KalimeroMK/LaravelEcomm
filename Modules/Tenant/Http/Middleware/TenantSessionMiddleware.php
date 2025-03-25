@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Tenant\Http\Middleware;
 
 use Closure;
@@ -19,7 +21,7 @@ class TenantSessionMiddleware
             return $next($request);
         }
 
-        if ($request->session()->get('tenant_id') != app('tenant')->id) {
+        if ($request->session()->get('tenant_id') !== app('tenant')->id) {
             abort(401);
         }
 

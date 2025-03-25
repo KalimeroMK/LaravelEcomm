@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\OpenAI\Service;
 
 use GuzzleHttp\Client;

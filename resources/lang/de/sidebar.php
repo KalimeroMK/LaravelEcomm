@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'dashboard' => 'Dashboard',
     'admin' => 'Dashboard',
@@ -52,6 +54,5 @@ return [
     'tenant' => 'Tenant',
     'page' => 'Seite',
     'complaints' => 'Beschwerden',
-
 
 ];

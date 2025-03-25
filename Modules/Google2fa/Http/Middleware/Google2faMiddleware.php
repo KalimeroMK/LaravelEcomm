@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Google2fa\Http\Middleware;
 
 use Closure;

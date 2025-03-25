@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
@@ -14,6 +16,7 @@ class WishlistRule implements Rule
         if (empty($product)) {
             return false;
         }
+
         return empty(Wishlist::whereProductId($product->id)->whereUserId(Auth()->id())->first());
     }
 

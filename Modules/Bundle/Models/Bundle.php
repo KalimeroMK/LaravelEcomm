@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Bundle\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -56,7 +58,7 @@ class Bundle extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('bundle');
 
-        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
+        if ($mediaItem instanceof Media) {
             return $mediaItem->first()->getUrl();
         }
 

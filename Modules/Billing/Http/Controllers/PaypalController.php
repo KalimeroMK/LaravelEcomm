@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Http\Controllers;
 
 use Exception;
@@ -40,10 +42,11 @@ class PaypalController extends CoreController
             if ($response->isRedirect()) {
                 // Get the redirect response object provided by Omnipay
                 return $response->getRedirectResponse();
-            } else {
-                // Returns a string message on failure
-                return $response->getMessage();
             }
+
+            // Returns a string message on failure
+            return $response->getMessage();
+
         } catch (Exception $e) {
             // Returns a string message on exception
             return $e->getMessage();

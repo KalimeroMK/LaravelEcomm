@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Reliese Model.
  */
@@ -20,11 +22,11 @@ use Modules\Tag\Models\Tag;
  */
 class ProductTag extends Model
 {
-    protected $table = 'product_tag';
-
     public $incrementing = false;
 
     public $timestamps = false;
+
+    protected $table = 'product_tag';
 
     protected $casts = [
         'product_id' => 'int',

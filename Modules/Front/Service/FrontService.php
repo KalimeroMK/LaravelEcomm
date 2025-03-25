@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Front\Service;
 
 use App\Events\MessageSent;
@@ -95,7 +97,7 @@ class FrontService
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug): string|array {
             $category = Category::whereSlug($slug)->first();
 
-            if (!$category) {
+            if (! $category) {
                 return 'Category not found';
             }
 
@@ -200,138 +202,6 @@ class FrontService
     }
 
     /**
-     * Retrieve query parameters.
-     *
-     * @return array<string, mixed>
-     */
-    private function retrieveQueryParameters(): array
-    {
-        return request()->only(['category', 'brand', 'price', 'show', 'sortBy']);
-    }
-
-    /**
-     * Retrieve category and brand IDs from slugs.
-     *
-     * @param  array<string, mixed>  $queryParams
-     * @return array{0: int[], 1: int[]}
-     */
-    private function retrieveIdsFromSlugs(array $queryParams): array
-    {
-        $categorySlugs = explode(',', $queryParams['category'] ?? '');
-        $brandSlugs = explode(',', $queryParams['brand'] ?? '');
-
-        $categoryCacheKey = 'category_ids_'.json_encode($categorySlugs);
-        $brandCacheKey = 'brand_ids_'.json_encode($brandSlugs);
-
-        $categoryIds = Cache::remember($categoryCacheKey, 86400, function () use ($categorySlugs) {
-            return Category::whereIn('slug', $categorySlugs)->pluck('id')->toArray();
-        });
-
-        $brandIds = Cache::remember($brandCacheKey, 86400, function () use ($brandSlugs) {
-            return Brand::whereIn('slug', $brandSlugs)->pluck('id')->toArray();
-        });
-
-        return [$categoryIds, $brandIds];
-    }
-
-    /**
-     * Retrieve price range.
-     *
-     * @param  array<string, mixed>  $queryParams
-     * @return array<int, int>
-     */
-    private function retrievePriceRange(array $queryParams): array
-    {
-        return array_map('intval', explode('-', $queryParams['price'] ?? '0-'.PHP_INT_MAX));
-    }
-
-    /**
-     * Retrieve sort order.
-     *
-     * @param  array<string, mixed>  $queryParams
-     * @return array<string, string>
-     */
-    private function retrieveSortOrder(array $queryParams): array
-    {
-        $sortColumn = $queryParams['sortBy'] ?? 'created_at';
-        $sortOrder = ($sortColumn === 'title') ? 'asc' : 'desc';
-        if ($sortColumn === 'price') {
-            $sortOrder = 'asc';
-        }
-
-        return [
-            'sortColumn' => $sortColumn,
-            'sortOrder' => $sortOrder,
-        ];
-    }
-
-    /**
-     * Retrieve products based on various filters.
-     *
-     * @param  int[]  $categoryIds
-     * @param  int[]  $brandIds
-     * @param  array<string, mixed>  $queryParams
-     */
-    private function retrieveProducts(
-        array $categoryIds,
-        array $brandIds,
-        int $minPrice,
-        int $maxPrice,
-        string $sortColumn,
-        string $sortOrder,
-        array $queryParams
-    ): LengthAwarePaginator {
-        $perPage = (int)($queryParams['show'] ?? 9);
-
-        // Generate a unique cache key
-        $cacheKey = 'products_'.json_encode(
-                [
-                    'categoryIds' => $categoryIds,
-                    'brandIds' => $brandIds,
-                    'minPrice' => $minPrice,
-                    'maxPrice' => $maxPrice,
-                    'sortColumn' => $sortColumn,
-                    'sortOrder' => $sortOrder,
-                    'perPage' => $perPage
-                ]
-
-            );
-
-        // Cache for 24 hours (86400 seconds)
-        return Cache::remember($cacheKey, 86400, function () use (
-            $categoryIds,
-            $brandIds,
-            $minPrice,
-            $maxPrice,
-            $sortColumn,
-            $sortOrder,
-            $perPage
-        ) {
-            return $this->model::query()
-                ->when($categoryIds, fn($query) => $query->whereIn('cat_id', $categoryIds))
-                ->when($brandIds, fn($query) => $query->whereIn('brand_id', $brandIds))
-                ->when($minPrice || $maxPrice, fn($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
-                ->orderBy($sortColumn, $sortOrder)
-                ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
-                ->paginate($perPage);
-        });
-    }
-
-    /**
-     * Retrieve brands and recent products.
-     *
-     * @param  LengthAwarePaginator  $products
-     * @return array<string, mixed>
-     */
-    private function retrieveBrandsAndRecentProducts(LengthAwarePaginator $products): array
-    {
-        $brands = Brand::where('status', 'active')->orderBy('title')->get();
-        $recent_products = Product::where('status', 'active')->orderByDesc('id')->take(3)->get();
-
-        return ['brands' => $brands, 'recent_products' => $recent_products, 'products' => $products];
-    }
-
-    /**
      * Get blog posts by tag slug.
      *
      * @return array<string, mixed>|string
@@ -361,14 +231,14 @@ class FrontService
     public function couponStore(Request $request): RedirectResponse|string
     {
         $coupon = Coupon::whereCode($request->code)->first();
-        if (!$coupon) {
+        if (! $coupon) {
             request()->session()->flash('error', 'Invalid coupon code, Please try again');
 
             return back();
         }
 
         // Cast the total price to a float to ensure the correct type is passed to the discount method
-        $total_price = (float)Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
+        $total_price = (float) Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
 
         session()->put('coupon', [
             'id' => $coupon->id,
@@ -430,16 +300,19 @@ class FrontService
     {
         $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
 
-        // Perform search using Elasticsearch
+        // Get the search term from input data
         $searchTerm = Arr::get($data, 'search', '');
-        // Use the search method from Scout to perform a full-text search
+
+        // Searching for active products with a query term, paginated
         $products = Product::search($searchTerm)
             ->where('status', 'active')
             ->orderBy('id', 'desc')
             ->paginate(9);
 
-        // you might need to adjust this to work with your Elasticsearch setup.
-        $brands = Brand::search($searchTerm)->get();
+        // Perform a search for brands, also using the Elasticsearch index
+        $brands = Brand::search($searchTerm)
+            ->where('status', 'active') // Optionally add a filter for brand status
+            ->get();
 
         return [
             'recent_products' => $recent_products,
@@ -593,98 +466,6 @@ class FrontService
     }
 
     /**
-     * Create a base query for products.
-     */
-    private function makeBaseQuery(): Builder
-    {
-        return $this->model::query()
-            ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
-            ->where('status', 'active');
-    }
-
-    /**
-     * Filter query by category.
-     */
-    private function filterByCategory(Builder $query): void
-    {
-        if (!empty($_GET['category'])) {
-            $catSlugs = explode(',', $_GET['category']);
-            $catIds = Category::whereIn('slug', $catSlugs)->pluck('id')->toArray();
-            $query->whereIn('cat_id', $catIds);
-        }
-    }
-
-    /**
-     * Filter query by brand.
-     */
-    private function filterByBrand(Builder $query): void
-    {
-        if (!empty($_GET['brand'])) {
-            $brandSlugs = explode(',', $_GET['brand']);
-            $brandIds = Brand::whereIn('slug', $brandSlugs)->pluck('id')->toArray();
-            $query->whereIn('brand_id', $brandIds);
-        }
-    }
-
-    /**
-     * Sort query by specific column.
-     */
-    private function sortBy(Builder $query): void
-    {
-        if (!empty($_GET['sortBy'])) {
-            $sortBy = $_GET['sortBy'];
-            if ($sortBy === 'title') {
-                $query->orderBy('title', 'ASC');
-            } elseif ($sortBy === 'price') {
-                $query->orderBy('price', 'ASC');
-            }
-        }
-    }
-
-    /**
-     * Filter query by price range.
-     */
-    private function filterByPriceRange(Builder $query): void
-    {
-        if (!empty($_GET['price'])) {
-            $priceRange = explode('-', $_GET['price']);
-            $minPrice = $priceRange[0] ?? 0;
-            $maxPrice = $priceRange[1] ?? PHP_INT_MAX;
-            $query->whereBetween('price', [$minPrice, $maxPrice]);
-        }
-    }
-
-    /**
-     * Get brands with product counts.
-     *
-     * @return Collection<int, Product>
-     */
-    private function recentProducts(): Collection
-    {
-        return Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-    }
-
-    /**
-     * Paginate query results.
-     */
-    private function pagination(Builder $query): LengthAwarePaginator
-    {
-        $perPage = isset($_GET['show']) ? (int)$_GET['show'] : 6;
-
-        return $query->paginate($perPage);
-    }
-
-    /**
-     * Get brands with product counts.
-     *
-     * @return Collection<int, Brand>
-     */
-    private function brandsWithProducts(): Collection
-    {
-        return Brand::whereStatus('active')->withCount('products')->get();
-    }
-
-    /**
      * Retrieve a list of blog posts
      *
      * @return array<string, mixed>|string
@@ -780,7 +561,6 @@ class FrontService
         ];
     }
 
-
     public function pages(string $slug): array
     {
         $page = $this->pageRepository->findBy('slug', $slug);
@@ -788,5 +568,228 @@ class FrontService
         return [
             'page' => $page,
         ];
+    }
+
+    /**
+     * Retrieve query parameters.
+     *
+     * @return array<string, mixed>
+     */
+    private function retrieveQueryParameters(): array
+    {
+        return request()->only(['category', 'brand', 'price', 'show', 'sortBy']);
+    }
+
+    /**
+     * Retrieve category and brand IDs from slugs.
+     *
+     * @param  array<string, mixed>  $queryParams
+     * @return array{0: int[], 1: int[]}
+     */
+    private function retrieveIdsFromSlugs(array $queryParams): array
+    {
+        $categorySlugs = explode(',', $queryParams['category'] ?? '');
+        $brandSlugs = explode(',', $queryParams['brand'] ?? '');
+
+        $categoryCacheKey = 'category_ids_'.json_encode($categorySlugs);
+        $brandCacheKey = 'brand_ids_'.json_encode($brandSlugs);
+
+        $categoryIds = Cache::remember($categoryCacheKey, 86400, function () use ($categorySlugs) {
+            return Category::whereIn('slug', $categorySlugs)->pluck('id')->toArray();
+        });
+
+        $brandIds = Cache::remember($brandCacheKey, 86400, function () use ($brandSlugs) {
+            return Brand::whereIn('slug', $brandSlugs)->pluck('id')->toArray();
+        });
+
+        return [$categoryIds, $brandIds];
+    }
+
+    /**
+     * Retrieve price range.
+     *
+     * @param  array<string, mixed>  $queryParams
+     * @return array<int, int>
+     */
+    private function retrievePriceRange(array $queryParams): array
+    {
+        return array_map('intval', explode('-', $queryParams['price'] ?? '0-'.PHP_INT_MAX));
+    }
+
+    /**
+     * Retrieve sort order.
+     *
+     * @param  array<string, mixed>  $queryParams
+     * @return array<string, string>
+     */
+    private function retrieveSortOrder(array $queryParams): array
+    {
+        $sortColumn = $queryParams['sortBy'] ?? 'created_at';
+        $sortOrder = ($sortColumn === 'title') ? 'asc' : 'desc';
+        if ($sortColumn === 'price') {
+            $sortOrder = 'asc';
+        }
+
+        return [
+            'sortColumn' => $sortColumn,
+            'sortOrder' => $sortOrder,
+        ];
+    }
+
+    /**
+     * Retrieve products based on various filters.
+     *
+     * @param  int[]  $categoryIds
+     * @param  int[]  $brandIds
+     * @param  array<string, mixed>  $queryParams
+     */
+    private function retrieveProducts(
+        array $categoryIds,
+        array $brandIds,
+        int $minPrice,
+        int $maxPrice,
+        string $sortColumn,
+        string $sortOrder,
+        array $queryParams
+    ): LengthAwarePaginator {
+        $perPage = (int) ($queryParams['show'] ?? 9);
+
+        // Generate a unique cache key
+        $cacheKey = 'products_'.json_encode(
+            [
+                'categoryIds' => $categoryIds,
+                'brandIds' => $brandIds,
+                'minPrice' => $minPrice,
+                'maxPrice' => $maxPrice,
+                'sortColumn' => $sortColumn,
+                'sortOrder' => $sortOrder,
+                'perPage' => $perPage,
+            ]
+
+        );
+
+        // Cache for 24 hours (86400 seconds)
+        return Cache::remember($cacheKey, 86400, function () use (
+            $categoryIds,
+            $brandIds,
+            $minPrice,
+            $maxPrice,
+            $sortColumn,
+            $sortOrder,
+            $perPage
+        ) {
+            return $this->model::query()
+                ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
+                ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
+                ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
+                ->orderBy($sortColumn, $sortOrder)
+                ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
+                ->paginate($perPage);
+        });
+    }
+
+    /**
+     * Retrieve brands and recent products.
+     *
+     * @return array<string, mixed>
+     */
+    private function retrieveBrandsAndRecentProducts(LengthAwarePaginator $products): array
+    {
+        $brands = Brand::where('status', 'active')->orderBy('title')->get();
+        $recent_products = Product::where('status', 'active')->orderByDesc('id')->take(3)->get();
+
+        return ['brands' => $brands, 'recent_products' => $recent_products, 'products' => $products];
+    }
+
+    /**
+     * Create a base query for products.
+     */
+    private function makeBaseQuery(): Builder
+    {
+        return $this->model::query()
+            ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
+            ->where('status', 'active');
+    }
+
+    /**
+     * Filter query by category.
+     */
+    private function filterByCategory(Builder $query): void
+    {
+        if (! empty($_GET['category'])) {
+            $catSlugs = explode(',', $_GET['category']);
+            $catIds = Category::whereIn('slug', $catSlugs)->pluck('id')->toArray();
+            $query->whereIn('cat_id', $catIds);
+        }
+    }
+
+    /**
+     * Filter query by brand.
+     */
+    private function filterByBrand(Builder $query): void
+    {
+        if (! empty($_GET['brand'])) {
+            $brandSlugs = explode(',', $_GET['brand']);
+            $brandIds = Brand::whereIn('slug', $brandSlugs)->pluck('id')->toArray();
+            $query->whereIn('brand_id', $brandIds);
+        }
+    }
+
+    /**
+     * Sort query by specific column.
+     */
+    private function sortBy(Builder $query): void
+    {
+        if (! empty($_GET['sortBy'])) {
+            $sortBy = $_GET['sortBy'];
+            if ($sortBy === 'title') {
+                $query->orderBy('title', 'ASC');
+            } elseif ($sortBy === 'price') {
+                $query->orderBy('price', 'ASC');
+            }
+        }
+    }
+
+    /**
+     * Filter query by price range.
+     */
+    private function filterByPriceRange(Builder $query): void
+    {
+        if (! empty($_GET['price'])) {
+            $priceRange = explode('-', $_GET['price']);
+            $minPrice = $priceRange[0] ?? 0;
+            $maxPrice = $priceRange[1] ?? PHP_INT_MAX;
+            $query->whereBetween('price', [$minPrice, $maxPrice]);
+        }
+    }
+
+    /**
+     * Get brands with product counts.
+     *
+     * @return Collection<int, Product>
+     */
+    private function recentProducts(): Collection
+    {
+        return Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+    }
+
+    /**
+     * Paginate query results.
+     */
+    private function pagination(Builder $query): LengthAwarePaginator
+    {
+        $perPage = isset($_GET['show']) ? (int) $_GET['show'] : 6;
+
+        return $query->paginate($perPage);
+    }
+
+    /**
+     * Get brands with product counts.
+     *
+     * @return Collection<int, Brand>
+     */
+    private function brandsWithProducts(): Collection
+    {
+        return Brand::whereStatus('active')->withCount('products')->get();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Post\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;

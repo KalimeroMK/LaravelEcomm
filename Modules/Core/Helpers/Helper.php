@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Core\Helpers;
 
 use Illuminate\Support\Collection;
@@ -16,15 +18,6 @@ use ReflectionException;
 
 class Helper
 {
-    private static function getUserId(int|string $user_id = ''): string|int
-    {
-        if (Auth::check()) {
-            return $user_id ?: Auth::id();
-        }
-
-        return 0;
-    }
-
     public static function messageList()
     {
         return Cache::remember('unread_messages', 30, function () {
@@ -111,5 +104,14 @@ class Helper
             ->orderBy('posts_count', 'desc')
             ->take(10)
             ->get();
+    }
+
+    private static function getUserId(int|string $user_id = ''): string|int
+    {
+        if (Auth::check()) {
+            return $user_id ?: Auth::id();
+        }
+
+        return 0;
     }
 }

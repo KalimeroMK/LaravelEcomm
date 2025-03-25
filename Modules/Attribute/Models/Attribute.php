@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Attribute\Models;
 
 use Carbon\Carbon;
@@ -25,52 +27,41 @@ use Modules\Core\Models\Core;
  */
 class Attribute extends Core
 {
-    protected $table = 'attributes';
+    public const TYPE_URL = 'url';
 
-    protected $fillable = [
-        'name',
-        'code',
-        'type',
-        'display',
-        'filterable',
-        'configurable',
-    ];
+    public const TYPE_HEX = 'hex';
 
-    const TYPE_URL = 'url';
+    public const TYPE_TEXT = 'text';
 
-    const TYPE_HEX = 'hex';
+    public const TYPE_DATE = 'date';
 
-    const TYPE_TEXT = 'text';
+    public const TYPE_TIME = 'time';
 
-    const TYPE_DATE = 'date';
+    public const TYPE_FLOAT = 'float';
 
-    const TYPE_TIME = 'time';
+    public const TYPE_STRING = 'string';
 
-    const TYPE_FLOAT = 'float';
+    public const TYPE_INTEGER = 'integer';
 
-    const TYPE_STRING = 'string';
+    public const TYPE_BOOLEAN = 'boolean';
 
-    const TYPE_INTEGER = 'integer';
+    public const TYPE_DECIMAL = 'decimal';
 
-    const TYPE_BOOLEAN = 'boolean';
+    public const DISPLAY_INPUT = 'input';
 
-    const TYPE_DECIMAL = 'decimal';
+    public const DISPLAY_RADIO = 'radio';
 
-    const DISPLAY_INPUT = 'input';
+    public const DISPLAY_COLOR = 'color';
 
-    const DISPLAY_RADIO = 'radio';
+    public const DISPLAY_BUTTON = 'button';
 
-    const DISPLAY_COLOR = 'color';
+    public const DISPLAY_SELECT = 'select';
 
-    const DISPLAY_BUTTON = 'button';
+    public const DISPLAY_CHECKBOX = 'checkbox';
 
-    const DISPLAY_SELECT = 'select';
+    public const DISPLAY_MULTI_SELECT = 'multiselect';
 
-    const DISPLAY_CHECKBOX = 'checkbox';
-
-    const DISPLAY_MULTI_SELECT = 'multiselect';
-
-    const TYPES = [
+    public const TYPES = [
         self::TYPE_URL,
         self::TYPE_HEX,
         self::TYPE_TEXT,
@@ -82,7 +73,7 @@ class Attribute extends Core
         self::TYPE_DECIMAL,
     ];
 
-    const DISPLAYS = [
+    public const DISPLAYS = [
         self::DISPLAY_INPUT,
         self::DISPLAY_RADIO,
         self::DISPLAY_COLOR,
@@ -90,6 +81,17 @@ class Attribute extends Core
         self::DISPLAY_SELECT,
         self::DISPLAY_CHECKBOX,
         self::DISPLAY_MULTI_SELECT,
+    ];
+
+    protected $table = 'attributes';
+
+    protected $fillable = [
+        'name',
+        'code',
+        'type',
+        'display',
+        'filterable',
+        'configurable',
     ];
 
     public static function Factory(): AttributeFactory

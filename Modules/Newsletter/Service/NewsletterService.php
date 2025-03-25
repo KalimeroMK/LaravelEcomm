@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Newsletter\Service;
 
 use Modules\Core\Service\CoreService;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Core\Service;
 
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +20,7 @@ abstract class CoreService
     /**
      * Retrieve all records.
      */
-    public function getAll(): Collection
+    final public function getAll(): Collection
     {
         return $this->repository->findAll();
     }
@@ -26,7 +28,7 @@ abstract class CoreService
     /**
      * Retrieve a single entity by its ID.
      */
-    public function findById(int $id): ?Model
+    final public function findById(int $id): ?Model
     {
         return $this->repository->findById($id);
     }
@@ -36,7 +38,7 @@ abstract class CoreService
      *
      * @param  array<string, mixed>  $data
      */
-    public function create(array $data): Model
+    final public function create(array $data): Model
     {
         return $this->repository->create($data);
     }
@@ -46,7 +48,7 @@ abstract class CoreService
      *
      * @param  array<string, mixed>  $data
      */
-    public function update(int $id, array $data): Model
+    final public function update(int $id, array $data): Model
     {
         return $this->repository->update($id, $data);
     }
@@ -54,7 +56,7 @@ abstract class CoreService
     /**
      * Delete a record by its ID.
      */
-    public function delete(int $id): void
+    final public function delete(int $id): void
     {
         $this->repository->delete($id);
     }

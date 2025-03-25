@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Category\Http\Requests\Api;
 
 use Illuminate\Validation\Rule;

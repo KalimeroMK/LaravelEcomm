@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,6 +40,6 @@ Route::get('/bundle/{slug}', [FrontController::class, 'bundleDetail'])->name('fr
 Route::get('/page/{slug}', [FrontController::class, 'pages'])->name('front.pages');
 
 // NewsLetter
-Route::post('/subscribe', [\Modules\Front\Http\Controllers\Api\FrontController::class, 'subscribe'])->name('subscribe');
+Route::post('/subscribe', [Modules\Front\Http\Controllers\Api\FrontController::class, 'subscribe'])->name('subscribe');
 Route::get('/validation/{token}', [FrontController::class, 'verifyNewsletter'])->name('validation');
 Route::get('/delete/{token}', [FrontController::class, 'deleteNewsletter'])->name('delete-newsletter');

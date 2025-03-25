@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Http\Requests\PaymentProvider;
 
 use Modules\Core\Http\Requests\CoreRequest;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Order\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -27,11 +29,11 @@ class OrderPolicy
 
     public function update(User $user, Order $order): bool
     {
-        return $user->can('order-list') && $user->id == $order->user_id;
+        return $user->can('order-list') && $user->id === $order->user_id;
     }
 
     public function delete(User $user, Order $order): bool
     {
-        return $user->can('order-delete') && $user->id == $order->user_id;
+        return $user->can('order-delete') && $user->id === $order->user_id;
     }
 }

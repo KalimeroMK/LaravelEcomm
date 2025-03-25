@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Zoran Bogoevski Model.
  */
@@ -29,7 +31,7 @@ use Modules\User\Models\User;
  */
 class Page extends Core
 {
-    use hasFactory;
+    use HasFactory;
     use HasSlug;
 
     protected $table = 'pages';

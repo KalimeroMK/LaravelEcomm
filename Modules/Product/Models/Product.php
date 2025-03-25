@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Product\Models;
 
 use Carbon\Carbon;
@@ -7,7 +9,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,6 +31,7 @@ use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Product
@@ -57,12 +59,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Collection|Cart[] $carts
  * @property Collection|ProductReview[] $product_reviews
  * @property Collection|Wishlist[] $wishlists
- * @property-read int|null $carts_count
- * @property-read int|null $product_reviews_count
- * @property-read int|null $wishlists_count
+ * @property-read int|null                                $carts_count
+ * @property-read int|null                                $product_reviews_count
+ * @property-read int|null                                $wishlists_count
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
- * @property-read int|null $categories_count
- * @property-read string $image_url
+ * @property-read int|null                                $categories_count
+ * @property-read string                                  $image_url
  * @property string|null $color
  *
  * @method static Builder|Product newModelQuery()
@@ -96,75 +98,78 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     use InteractsWithMedia;
     use Searchable;
 
+    public const likeRows
+        = [
+            'title',
+            'slug',
+            'summary',
+            'description',
+            'stock',
+            'sizes.name',
+            'condition.status',
+            'status',
+            'price',
+            'discount',
+            'brand.title',
+            'color',
+        ];
+
     protected $table = 'products';
 
-    protected $casts = [
-        'stock' => 'int',
-        'price' => 'float',
-        'discount' => 'float',
-        'is_featured' => 'bool',
-        'brand_id' => 'int',
-        'special_price_start' => 'date',
-        'special_price_end' => 'date',
-        'special_price' => 'float',
-        'condition_id' => 'int',
-    ];
+    protected $casts
+        = [
+            'stock' => 'int',
+            'price' => 'float',
+            'discount' => 'float',
+            'is_featured' => 'bool',
+            'brand_id' => 'int',
+            'special_price_start' => 'date',
+            'special_price_end' => 'date',
+            'special_price' => 'float',
+            'condition_id' => 'int',
+        ];
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'sku',
-        'summary',
-        'description',
-        'stock',
-        'condition_id',
-        'status',
-        'price',
-        'discount',
-        'is_featured',
-        'brand_id',
-        'color',
-        'special_price',
-        'special_price_start',
-        'special_price_end',
-        'condition_id',
-    ];
-
-    public const likeRows = [
-        'title',
-        'slug',
-        'summary',
-        'description',
-        'stock',
-        'sizes.name',
-        'condition.status',
-        'status',
-        'price',
-        'discount',
-        'brand.title',
-        'color',
-    ];
+    protected $fillable
+        = [
+            'title',
+            'slug',
+            'sku',
+            'summary',
+            'description',
+            'stock',
+            'condition_id',
+            'status',
+            'price',
+            'discount',
+            'is_featured',
+            'brand_id',
+            'color',
+            'special_price',
+            'special_price_start',
+            'special_price_end',
+            'condition_id',
+        ];
 
     public static function Factory(): ProductFactory
     {
         return ProductFactory::new();
     }
 
-    public static function getProductBySlug(string $slug): ?Product
+    public static function getProductBySlug(string $slug): ?self
     {
-        return Product::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
+        return self::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
     }
 
     public static function countActiveProduct(): int
     {
-        $data = Product::whereStatus('active')->count();
+        $data = self::whereStatus('active')->count();
 
         return $data ?: 0;
     }
 
     public static function getFeedItems(): \Illuminate\Support\Collection
     {
-        return Product::orderBy('created_at', 'desc')->limit(20)->get();
+        return self::orderBy('created_at', 'desc')->limit(20)->get();
     }
 
     public function brand(): BelongsTo
@@ -213,14 +218,14 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     {
         $mediaItem = $this->getFirstMedia('product');
 
-        return $mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem instanceof Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
 
-        return $mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem instanceof Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
     }
 
     public function condition(): BelongsTo
@@ -277,22 +282,34 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     {
         return [
             'properties' => [
-                'id' => ['type' => 'integer'],
-                'title' => ['type' => 'text', 'analyzer' => 'standard'],
-                'description' => ['type' => 'text', 'analyzer' => 'standard'],
-                'price' => ['type' => 'float'],
-                'color' => ['type' => 'keyword'],
-                'status' => ['type' => 'keyword'],
+                'id' => ['type' => 'integer'],  // ID of the product
+                'title' => [
+                    'type' => 'text',
+                    'analyzer' => 'standard',  // Title of the product, full-text searchable
+                ],
+                'description' => [
+                    'type' => 'text',
+                    'analyzer' => 'standard',  // Full-text searchable description
+                ],
+                'price' => ['type' => 'float'],     // Price of the product
+                'color' => ['type' => 'keyword'],   // Color of the product, exact match
+                'status' => ['type' => 'keyword'],  // Product status (active, inactive)
                 'categories' => [
-                    'type' => 'nested',
+                    'type' => 'nested',  // Categories as nested fields for better querying
                     'properties' => [
-                        'title' => ['type' => 'text', 'analyzer' => 'standard'],
+                        'title' => [
+                            'type' => 'text',
+                            'analyzer' => 'standard',  // Full-text searchable category title
+                        ],
                     ],
                 ],
                 'brands' => [
-                    'type' => 'nested',
+                    'type' => 'nested',  // Brands as nested fields for better querying
                     'properties' => [
-                        'title' => ['type' => 'text', 'analyzer' => 'standard'],
+                        'title' => [
+                            'type' => 'text',
+                            'analyzer' => 'standard',  // Full-text searchable brand title
+                        ],
                     ],
                 ],
             ],
@@ -317,7 +334,7 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
 
     public function searchBrandsByProduct(string $searchTerm): \Illuminate\Support\Collection
     {
-        $productBrandIds = Product::search($searchTerm)->get()->pluck('brand_id')->unique();
+        $productBrandIds = self::search($searchTerm)->get()->pluck('brand_id')->unique();
 
         return Brand::whereIn('id', $productBrandIds)->get();
     }

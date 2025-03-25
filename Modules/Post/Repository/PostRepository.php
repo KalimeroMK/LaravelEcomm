@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Post\Repository;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -13,9 +15,9 @@ use Modules\Post\Models\Post;
 
 class PostRepository extends Repository implements SearchInterface
 {
-    public $model = Post::class;
-
     private const LATEST_POSTS_LIMIT = 3;
+
+    public $model = Post::class;
 
     /**
      * Search posts based on given data.
@@ -27,6 +29,49 @@ class PostRepository extends Repository implements SearchInterface
         $query = $this->buildQuery($data);
 
         return $this->applySortingAndPaginate($query, $data);
+    }
+
+    /**
+     * Get active posts.
+     *
+     * @return Collection<int, Post>
+     */
+    public function getActivePosts(): Collection
+    {
+        return $this->model::where('status', 'active')
+            ->orderBy('id', 'desc')
+            ->limit(self::LATEST_POSTS_LIMIT)
+            ->get();
+    }
+
+    /**
+     * Find all posts.
+     *
+     * @return Collection<int, Post>
+     */
+    public function findAll(): Collection
+    {
+        /** @var Collection<int, Post> $posts */
+        $posts = $this->eagerLoadRelations($this->model::query())->get();
+
+        return $posts;
+    }
+
+    /**
+     * Update an existing record in the repository.
+     *
+     * @param  int  $id  The ID of the model to update.
+     * @param  array<string, mixed>  $data  The data to update in the model.
+     * @return Model The updated model instance.
+     */
+    public function update(int $id, array $data): Model
+    {
+        $item = $this->findById($id);
+        $item->categories()->sync($data['category'] ?? []);
+        $item->tags()->sync($data['tags'] ?? []);
+        $item->fill($data)->save();
+
+        return $item->fresh();
     }
 
     /**
@@ -82,48 +127,5 @@ class PostRepository extends Repository implements SearchInterface
         $perPage = Arr::get($data, 'per_page', (new Post)->getPerPage());
 
         return $this->eagerLoadRelations($query)->orderBy($orderBy, $sort)->paginate($perPage);
-    }
-
-    /**
-     * Get active posts.
-     *
-     * @return Collection<int, Post>
-     */
-    public function getActivePosts(): Collection
-    {
-        return $this->model::where('status', 'active')
-            ->orderBy('id', 'desc')
-            ->limit(self::LATEST_POSTS_LIMIT)
-            ->get();
-    }
-
-    /**
-     * Find all posts.
-     *
-     * @return Collection<int, Post>
-     */
-    public function findAll(): Collection
-    {
-        /** @var Collection<int, Post> $posts */
-        $posts = $this->eagerLoadRelations($this->model::query())->get();
-
-        return $posts;
-    }
-
-    /**
-     * Update an existing record in the repository.
-     *
-     * @param  int  $id  The ID of the model to update.
-     * @param  array<string, mixed>  $data  The data to update in the model.
-     * @return Model The updated model instance.
-     */
-    public function update(int $id, array $data): Model
-    {
-        $item = $this->findById($id);
-        $item->categories()->sync($data['category'] ?? []);
-        $item->tags()->sync($data['tags'] ?? []);
-        $item->fill($data)->save();
-
-        return $item->fresh();
     }
 }

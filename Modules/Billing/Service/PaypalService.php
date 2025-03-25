@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Service;
 
 use Illuminate\Http\Request;
@@ -36,12 +38,14 @@ class PaypalService
                 $this->orderSave(Helper::totalCartPrice());
 
                 return 'Payment is successful. Your transaction id is: '.$order_data['id'];
-            } else {
-                return $response->getMessage();
             }
-        } else {
-            return 'Transaction is declined';
+
+            return $response->getMessage();
+
         }
+
+        return 'Transaction is declined';
+
     }
 
     /**

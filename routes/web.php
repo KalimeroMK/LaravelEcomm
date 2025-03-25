@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\Auth\MagicLoginController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Auth;

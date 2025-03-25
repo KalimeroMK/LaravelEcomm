@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Category\Repository;
 
 use Modules\Category\Models\Category;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Core\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;

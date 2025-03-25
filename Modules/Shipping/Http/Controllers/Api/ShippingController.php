@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Shipping\Http\Controllers\Api;
 
 use Exception;
@@ -36,7 +38,7 @@ class ShippingController extends CoreController
     /**
      * @throws Exception
      */
-    public function store(Store $request): \Illuminate\Http\JsonResponse
+    public function store(Store $request): JsonResponse
     {
         return $this
             ->setMessage(
@@ -55,7 +57,7 @@ class ShippingController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(Shipping $shipping): \Illuminate\Http\JsonResponse
+    public function show(Shipping $shipping): JsonResponse
     {
         return $this
             ->setMessage(
@@ -93,7 +95,7 @@ class ShippingController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function destroy(Shipping $shipping): \Illuminate\Http\JsonResponse
+    public function destroy(Shipping $shipping): JsonResponse
     {
         $this->shipping_service->delete($shipping->id);
 

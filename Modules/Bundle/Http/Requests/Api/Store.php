@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Bundle\Http\Requests\Api;
 
 use Modules\Core\Http\Requests\CoreRequest;

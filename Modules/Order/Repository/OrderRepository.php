@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Order\Repository;
 
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -62,7 +64,7 @@ class OrderRepository extends Repository implements SearchInterface
 
         $results = $query->paginate(Arr::get($data, 'per_page', (new Order)->getPerPage()));
 
-        $results->getCollection()->transform(fn ($item): \Modules\Order\Http\Resources\OrderResource => new OrderResource($item));
+        $results->getCollection()->transform(fn ($item): OrderResource => new OrderResource($item));
 
         return $results;
     }

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Zoran Shefot Bogoevski.
  */
 
 namespace Modules\Brand\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +35,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Collection|Product[] $products
- * @property-read int|null $products_count
+ * @property-read int|null        $products_count
  *
  * @method static Builder|Brand newModelQuery()
  * @method static Builder|Brand newQuery()
@@ -59,33 +61,41 @@ class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
 
     protected $table = 'brands';
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'status',
-        'photo',
-    ];
+    protected $fillable
+        = [
+            'title',
+            'slug',
+            'status',
+            'photo',
+        ];
 
+    // Factory method for creating Brand instances
     public static function Factory(): BrandFactory
     {
         return BrandFactory::new();
     }
 
     /**
-     * Retrieves a Brand model with associated products based on a given slug.
+     * Retrieve a Brand model with its associated products based on the slug.
      *
      * @param  string  $slug  The slug used to find a specific brand.
      */
     public static function getProductByBrand(string $slug): Model|Builder|null
     {
-        return Brand::with('products')->where('slug', $slug)->first();
+        return self::with('products')->where('slug', $slug)->first();
     }
 
+    // Relationship to the products that belong to this brand
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
+    /**
+     * Increment the slug if it already exists.
+     *
+     * @param  string  $slug  The base slug.
+     */
     public function incrementSlug(string $slug): string
     {
         $original = $slug;
@@ -97,6 +107,7 @@ class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
         return $slug;
     }
 
+    // Make all products of the brand searchable using this model
     public function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->with('products');
@@ -105,7 +116,7 @@ class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
     /**
      * Converts the model instance to an array format suitable for search indexing.
      *
-     * @return array<string, mixed> Returns an array where keys are column names and values are column values.
+     * @return array<string, mixed>
      */
     public function toSearchableArray(): array
     {
@@ -113,9 +124,9 @@ class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
     }
 
     /**
-     * Defines the mapping for the search engine.
+     * Defines the mapping for the search engine (Elasticsearch).
      *
-     * @return array<string, array<string, mixed>> Returns an array of settings for each model attribute.
+     * @return array<string, array<string, mixed>>
      */
     public function mappableAs(): array
     {
@@ -135,7 +146,7 @@ class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
     /**
      * Configuration settings for the search index.
      *
-     * @return array<string, mixed> Returns an array where keys are configuration settings and values are the settings' values.
+     * @return array<string, mixed>
      */
     public function indexSettings(): array
     {

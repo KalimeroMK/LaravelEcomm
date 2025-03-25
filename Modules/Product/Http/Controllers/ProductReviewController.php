@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Product\Http\Controllers;
 
 use Illuminate\Contracts\Foundation\Application;
@@ -31,9 +33,10 @@ class ProductReviewController extends CoreController
     {
         if (Auth::user()->hasRole('client')) {
             return view('product::review.index', ['reviews' => $this->product_review_service->findAllByUser()]);
-        } else {
-            return view('product::review.index', ['reviews' => $this->product_review_service->index()]);
         }
+
+        return view('product::review.index', ['reviews' => $this->product_review_service->index()]);
+
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Service;
 
 use Illuminate\Contracts\Foundation\Application;

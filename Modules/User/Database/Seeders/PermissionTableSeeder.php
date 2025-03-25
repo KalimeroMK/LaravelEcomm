@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Database\Seeders;
 
 use Exception;
@@ -48,7 +50,7 @@ class PermissionTableSeeder extends Seeder
             'role',
             'payment-provider',
             'notification',
-            'complaint'
+            'complaint',
         ];
 
         $operations = ['list', 'show', 'create', 'update', 'delete'];
@@ -115,7 +117,7 @@ class PermissionTableSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new Exception('User creation did not return a User model instance.');
         }
 

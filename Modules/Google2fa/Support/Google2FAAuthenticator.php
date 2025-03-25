@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Google2fa\Support;
 
 use Illuminate\Http\RedirectResponse;
@@ -44,7 +46,7 @@ class Google2FAAuthenticator extends Authenticator
      */
     protected function canPassWithoutCheckingOTP(): bool
     {
-        if ($this->getUser()->loginSecurity == null) {
+        if ($this->getUser()->loginSecurity === null) {
             return true;
         }
 

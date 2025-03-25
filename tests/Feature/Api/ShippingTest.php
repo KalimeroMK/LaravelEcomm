@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,11 +16,10 @@ use Tests\TestCase;
 class ShippingTest extends TestCase
 {
     use BaseTestTrait;
+    use WithFaker;
     use WithoutMiddleware;
 
     public string $url = '/api/v1/shipping/';
-
-    use WithFaker;
 
     /**
      * test create product.

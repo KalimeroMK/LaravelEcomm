@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Order\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
@@ -11,9 +13,10 @@ class CartRule implements Rule
     {
         if (empty(Cart::whereUserId(Auth()->id())->whereOrderId(null)->first())) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
+
     }
 
     public function message(): string

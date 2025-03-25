@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Http\Traits;
 
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +18,7 @@ trait Order
     public function orderSave(float $amount): void
     {
         $order = new \Modules\Order\Models\Order;
-        $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
+        $order_data['order_number'] = 'ORD-'.mb_strtoupper(Str::random(10));
         $order_data['user_id'] = Auth::id();
         $order_data['sub_total'] = Helper::totalCartPrice();
         $order_data['quantity'] = Helper::cartCount();

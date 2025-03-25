@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cart\Service;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -100,6 +102,7 @@ class CartService
 
             $cart->save();
         }
+
         return null;
     }
 
@@ -139,6 +142,7 @@ class CartService
 
             $cart->save();
         }
+
         return null;
     }
 
@@ -190,9 +194,10 @@ class CartService
             }
 
             return back()->with($error)->with('success', $success);
-        } else {
-            return back()->with('Cart Invalid!');
         }
+
+        return back()->with('Cart Invalid!');
+
     }
 
     /**

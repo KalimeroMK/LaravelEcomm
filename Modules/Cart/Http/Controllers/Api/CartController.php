@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cart\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
@@ -52,7 +54,7 @@ class CartController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(): \Illuminate\Http\JsonResponse
+    public function show(): JsonResponse
     {
         return $this
             ->setMessage(
@@ -71,7 +73,7 @@ class CartController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Store $request): \Illuminate\Http\JsonResponse
+    public function update(Store $request): JsonResponse
     {
         return $this
             ->setMessage(

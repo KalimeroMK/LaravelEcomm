@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Complaint\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -12,6 +14,7 @@ class ComplaintCreated extends Mailable
     use Queueable, SerializesModels;
 
     public Complaint $complaint;
+
     public string $recipientType;
 
     public function __construct(Complaint $complaint, string $recipientType)
@@ -20,7 +23,7 @@ class ComplaintCreated extends Mailable
         $this->recipientType = $recipientType;
     }
 
-    public function build(): ComplaintCreated
+    public function build(): self
     {
         return $this
             ->subject("New Complaint Created: {$this->complaint->id}")

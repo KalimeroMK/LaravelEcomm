@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Zoran Bogoevski.
  */
@@ -24,9 +26,9 @@ use Modules\Product\Models\Product;
  */
 class BundleProduct extends Model
 {
-    protected $table = 'bundle_product';
-
     public $incrementing = false;
+
+    protected $table = 'bundle_product';
 
     protected $casts = [
         'bundle_id' => 'int',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Order\Http\Controllers\Api;
 
 use Exception;
@@ -36,7 +38,7 @@ class OrderController extends CoreController
     /**
      * @throws Exception
      */
-    public function store(Store $request): \Illuminate\Http\JsonResponse
+    public function store(Store $request): JsonResponse
     {
         return $this
             ->setMessage(
@@ -55,7 +57,7 @@ class OrderController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -93,7 +95,7 @@ class OrderController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function destroy(int $id): \Illuminate\Http\JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->order_service->delete($id);
 

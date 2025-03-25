@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,7 +21,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function (): void {
     Route::resource('posts', PostController::class)->except('show');
     Route::delete('posts/{modelId}/media/{mediaId}',
         [PostController::class, 'deleteMedia'])->name('posts.delete-media');
-    /*Excel import export*/
+    /* Excel import export */
     Route::get('post/export', [PostController::class, 'export'])->name('posts.export');
     Route::post('post/import', [PostController::class, 'import'])->name('posts.import');
     Route::post('ckeditor/upload', [PostController::class, 'upload'])->name('ckeditor.image-upload');

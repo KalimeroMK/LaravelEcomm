@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,11 +15,10 @@ use Tests\TestCase;
 class NewsletterTest extends TestCase
 {
     use BaseTestTrait;
+    use WithFaker;
     use WithoutMiddleware;
 
     public string $url = '/api/v1/newsletter/';
-
-    use WithFaker;
 
     /**
      * test create product.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Complaint\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -21,12 +23,14 @@ class ComplaintController extends Controller
     public function index()
     {
         $complaints = $this->complaintService->getComplaintsForUser(auth()->user());
+
         return view('complaint::index', ['complaints' => $complaints]);
     }
 
     public function create($order_id)
     {
         $complaint = new Complaint();
+
         return view('complaint::create', ['complaint' => $complaint, 'order_id' => $order_id]);
     }
 

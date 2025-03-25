@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Cart\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -27,11 +29,11 @@ class CartPolicy
 
     public function update(User $user, Cart $cart): bool
     {
-        return $user->can('cart-create') && $user->id == $cart->user_id;
+        return $user->can('cart-create') && $user->id === $cart->user_id;
     }
 
     public function delete(User $user, Cart $cart): bool
     {
-        return $user->can('cart-delete') && $user->id == $cart->user_id;
+        return $user->can('cart-delete') && $user->id === $cart->user_id;
     }
 }

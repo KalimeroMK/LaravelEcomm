@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Tenant\Models\Policy;
 
 use Illuminate\Auth\Access\HandlesAuthorization;

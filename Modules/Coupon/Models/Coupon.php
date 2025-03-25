@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Zoran Shefot Bogoevski.
  */
@@ -58,10 +60,11 @@ class Coupon extends Core
      */
     public function discount(float $total): float
     {
-        if ($this->type == 'fixed') {
+        if ($this->type === 'fixed') {
             // Assuming 'value' is the fixed discount amount.
             return min($this->value, $total); // Ensure discount does not exceed the total.
-        } elseif ($this->type == 'percent') {
+        }
+        if ($this->type === 'percent') {
             // Assuming 'value' is the percentage discount.
             return $total * ($this->value / 100);
         }

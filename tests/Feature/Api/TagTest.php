@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,11 +16,10 @@ use Tests\TestCase;
 class TagTest extends TestCase
 {
     use BaseTestTrait;
-
-    public string $url = '/api/v1/tag/';
-
     use WithFaker;
     use WithoutMiddleware;
+
+    public string $url = '/api/v1/tag/';
 
     /**
      * test create product.

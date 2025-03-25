@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Product\Http\Requests;
 
 use Modules\Core\Http\Requests\CoreRequest;
@@ -32,7 +34,7 @@ class Update extends CoreRequest
                         $fail(__('The :attribute field must have at least one category selected.',
                             ['attribute' => $attribute]));
                     }
-                }
+                },
             ],
             'category.*' => 'required|exists:categories,id',
             'child_cat_id' => 'nullable|exists:categories,id',

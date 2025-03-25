@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Message\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
@@ -52,7 +54,7 @@ class MessageController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -71,7 +73,7 @@ class MessageController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Store $request, int $id): \Illuminate\Http\JsonResponse
+    public function update(Store $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -90,7 +92,7 @@ class MessageController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function destroy(int $id): \Illuminate\Http\JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         $this->message_service->delete($id);
 

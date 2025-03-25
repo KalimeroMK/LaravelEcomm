@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Newsletter\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
@@ -56,7 +58,7 @@ class NewsletterController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(Newsletter $newsletter): \Illuminate\Http\JsonResponse
+    public function show(Newsletter $newsletter): JsonResponse
     {
         return $this
             ->setMessage(
@@ -75,7 +77,7 @@ class NewsletterController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, Newsletter $newsletter): \Illuminate\Http\JsonResponse
+    public function update(Update $request, Newsletter $newsletter): JsonResponse
     {
         return $this
             ->setMessage(
@@ -94,7 +96,7 @@ class NewsletterController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function destroy(Newsletter $newsletter): \Illuminate\Http\JsonResponse
+    public function destroy(Newsletter $newsletter): JsonResponse
     {
         $this->newsletter_service->delete($newsletter->id);
 

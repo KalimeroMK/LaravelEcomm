@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable()->index();
             $table->string('code')->unique()->index();
-            $table->string('type')->default(\Modules\Attribute\Models\Attribute::TYPE_STRING);
-            $table->string('display')->default(\Modules\Attribute\Models\Attribute::DISPLAY_SELECT);
+            $table->string('type')->default(Modules\Attribute\Models\Attribute::TYPE_STRING);
+            $table->string('display')->default(Modules\Attribute\Models\Attribute::DISPLAY_SELECT);
             $table->boolean('filterable')->default(0);
             $table->boolean('configurable')->default(0);
             $table->timestamps();

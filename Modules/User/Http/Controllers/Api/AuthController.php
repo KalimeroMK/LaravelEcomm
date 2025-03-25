@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Http\Controllers\Api;
 
 use App\Requests\AuthRequest;
@@ -17,19 +19,20 @@ use Modules\User\Models\User;
 
 class AuthController extends CoreController
 {
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(Request $request): JsonResponse
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $success['token'] = Auth::user()->createToken('MyAuthApp')->plainTextToken;
             $success['name'] = Auth::user()->name;
 
             return $this->sendResponse($success, 'User signed in');
-        } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
         }
+
+        return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
+
     }
 
-    public function register(AuthRequest $request): \Illuminate\Http\JsonResponse
+    public function register(AuthRequest $request): JsonResponse
     {
         $request['password'] = Hash::make($request['password']);
         $user = User::create($request->all());
@@ -62,8 +65,9 @@ class AuthController extends CoreController
             Auth::login($user);
 
             return redirect()->route('admin');
-        } else {
-            return view('auth.register', ['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);
         }
+
+        return view('auth.register', ['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);
+
     }
 }

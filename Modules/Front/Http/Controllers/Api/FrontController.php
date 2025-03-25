@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Front\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;

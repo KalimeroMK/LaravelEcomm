@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Modules\Shipping\Http\Controllers\Api\ShippingController;
 
 /*

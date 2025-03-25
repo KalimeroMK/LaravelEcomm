@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Admin\Http\Controllers;
 
 use Illuminate\Contracts\Foundation\Application;

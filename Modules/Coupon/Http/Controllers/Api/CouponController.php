@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Coupon\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
@@ -34,7 +36,7 @@ class CouponController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function store(Store $request): \Illuminate\Http\JsonResponse
+    public function store(Store $request): JsonResponse
     {
         return $this
             ->setMessage(
@@ -53,7 +55,7 @@ class CouponController extends CoreController
     /**
      * @throws ReflectionException q
      */
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -72,7 +74,7 @@ class CouponController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, int $id): \Illuminate\Http\JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(

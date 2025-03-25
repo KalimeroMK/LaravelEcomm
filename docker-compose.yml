@@ -1,7 +1,5 @@
 services:
   app:
-    ports:
-      - "11111:11111"  # Add this line to publish PHPStan Pro's port
     build:
       context: .docker
       dockerfile: Dockerfile
@@ -14,6 +12,8 @@ services:
       - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
     networks:
       - laravelapp
+    ports:
+      - "8000:8000"
   db:
     image: mariadb:latest
     container_name: e_comm_mysql
@@ -23,26 +23,30 @@ services:
       MYSQL_USER: homestead
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    ports:
-      - "3302:3306"
     volumes:
-      - ./.docker/dbdata:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
       - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - laravelapp
+    ports:
+      - "3302:3306"
   nginx:
     image: nginx:latest
     container_name: e_comm_nginx
     restart: unless-stopped
     ports:
-      - "84:80"
+      - "80:80"
     volumes:
       - ./:/var/www
       - ./.docker/nginx:/etc/nginx/conf.d
     networks:
       - laravelapp
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost/" ]
+      interval: 30s
+      retries: 3
+      start_period: 5s
+      timeout: 10s
   redis:
     image: redis:latest
     container_name: e_comm_redis
@@ -52,20 +56,33 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./.docker/redis:/data
+      - redis_data:/data
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.3
     container_name: e_comm_elasticsearch
     environment:
-      - "discovery.type=single-node"
+      - node.name=e_comm_elasticsearch
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false  # Disable HTTPS
     volumes:
-      - ./.docker/elasticsearch/data:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
     networks:
       - laravelapp
+    mem_limit: 1g
 networks:
   laravelapp:
     driver: bridge
+volumes:
+  elasticsearch_data:
+    driver: local
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local

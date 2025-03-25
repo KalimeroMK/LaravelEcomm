@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Http\Controllers\Api;
 
 use Modules\Billing\Http\Requests\Api\Stripe as StripeData;

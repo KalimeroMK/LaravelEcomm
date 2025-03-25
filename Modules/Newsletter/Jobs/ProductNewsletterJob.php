@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Newsletter\Jobs;
 
 use Illuminate\Bus\Queueable;
@@ -15,6 +17,7 @@ class ProductNewsletterJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public string $email;
+
     public array $products;
 
     /**

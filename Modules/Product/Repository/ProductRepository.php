@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Product\Repository;
 
 use Illuminate\Database\Eloquent\Model;
@@ -11,46 +13,14 @@ use Modules\Product\Models\Product;
 
 class ProductRepository extends Repository
 {
+    private const LATEST_PRODUCTS_LIMIT = 4;
+
     /**
      * The model that the repository works with.
      *
      * @var string
      */
     public $model = Product::class;
-
-    private const LATEST_PRODUCTS_LIMIT = 4;
-
-    /**
-     * Update a product by ID.
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function update(int $id, array $data): Model
-    {
-        $item = $this->findById($id);
-        $item->fill($data);
-        $item->save();
-
-        return $item->fresh();
-    }
-
-    /**
-     * Find a product by ID.
-     */
-    public function findById(int $id): ?Model
-    {
-        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
-    }
-
-    /**
-     * Get the relations to be loaded.
-     *
-     * @return array<int, string>
-     */
-    protected function withRelations(): array
-    {
-        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags', 'attributes.attribute'];
-    }
 
     /**
      * Search for products based on given data.
@@ -88,9 +58,25 @@ class ProductRepository extends Repository
             );
 
             return $query->with($this->withRelations())->paginate(
-                Arr::get($data, 'per_page', (new Product)->getPerPage()) // Correct usage
+                Arr::get($data, 'per_page', (new Product)->getPerPage())
             );
         });
+    }
+
+    /**
+     * Get all products.
+     */
+    public function findAll(): Collection
+    {
+        return $this->model::with($this->withRelations())->get();
+    }
+
+    /**
+     * Find a product by ID.
+     */
+    public function findById(int $id): ?Model
+    {
+        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
     }
 
     /**
@@ -124,8 +110,50 @@ class ProductRepository extends Repository
         });
     }
 
-    public function findAll(): Collection
+    /**
+     * Create a new product.
+     */
+    public function create(array $data): Model
     {
-        return $this->model::with($this->withRelations())->get();
+        $this->clearProductCache();
+
+        return $this->model::create($data)->fresh();
+    }
+
+    /**
+     * Update a product by ID.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function update(int $id, array $data): Model
+    {
+        $item = $this->findById($id);
+        $item->fill($data);
+        $item->save();
+
+        $this->clearProductCache();
+        Cache::store('redis')->forget("product_{$id}");
+
+        return $item->fresh();
+    }
+
+    /**
+     * Get the relations to be loaded.
+     *
+     * @return array<int, string>
+     */
+    protected function withRelations(): array
+    {
+        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags', 'attributes.attribute'];
+    }
+
+    /**
+     * Clear relevant product caches.
+     */
+    private function clearProductCache(): void
+    {
+        Cache::store('redis')->forget('latest_products');
+        Cache::store('redis')->forget('featured_products');
+        Cache::store('redis')->forget('all_products');
     }
 }

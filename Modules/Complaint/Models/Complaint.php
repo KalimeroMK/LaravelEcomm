@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Complaint\Models;
 
 use Carbon\Carbon;
@@ -15,19 +17,16 @@ use Modules\User\Models\User;
 /**
  * Class Complaint
  *
- * @property int                         $id
- * @property int                         $user_id
- * @property int                         $order_id
- * @property string                      $status
- * @property string                      $description
- * @property Carbon|null                 $created_at
- * @property Carbon|null                 $updated_at
- *
- * @property Order                       $order
- * @property User                        $user
+ * @property int $id
+ * @property int $user_id
+ * @property int $order_id
+ * @property string $status
+ * @property string $description
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Order $order
+ * @property User $user
  * @property Collection|ComplaintReply[] $complaint_replies
- *
- * @package App\Models
  */
 class Complaint extends Core
 {
@@ -38,7 +37,7 @@ class Complaint extends Core
     protected $casts
         = [
             'user_id' => 'int',
-            'order_id' => 'int'
+            'order_id' => 'int',
         ];
 
     protected $fillable
@@ -46,14 +45,13 @@ class Complaint extends Core
             'user_id',
             'order_id',
             'status',
-            'description'
+            'description',
         ];
 
     public static function Factory(): ComplaintFactory
     {
         return ComplaintFactory::new();
     }
-
 
     public function order(): BelongsTo
     {
@@ -69,5 +67,4 @@ class Complaint extends Core
     {
         return $this->hasMany(ComplaintReply::class);
     }
-
 }

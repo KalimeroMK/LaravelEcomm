@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Product\Http\Requests;
 
 use Modules\Core\Http\Requests\CoreRequest;
@@ -30,7 +32,7 @@ class Store extends CoreRequest
                         $fail(__('The :attribute field must have at least one category selected.',
                             ['attribute' => $attribute]));
                     }
-                }
+                },
             ],
             'category.*' => 'required|exists:categories,id',
             'condition_id' => 'required|exists:conditions,id',

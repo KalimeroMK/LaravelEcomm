@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Complaint\Models;
 
 use Carbon\Carbon;
@@ -12,21 +14,18 @@ use Modules\User\Models\User;
 /**
  * Class ComplaintReply
  *
- * @property int         $id
- * @property int         $complaint_id
- * @property int         $user_id
- * @property string      $reply_content
+ * @property int $id
+ * @property int $complaint_id
+ * @property int $user_id
+ * @property string $reply_content
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
- * @property Complaint   $complaint
- * @property User        $user
- *
- * @package App\Models
+ * @property Complaint $complaint
+ * @property User $user
  */
 class ComplaintReply extends Core
 {
-    use hasFactory;
+    use HasFactory;
 
     protected $table = 'complaint_replies';
 
@@ -36,15 +35,6 @@ class ComplaintReply extends Core
             'user_id',
             'reply_content',
         ];
-
-    protected function casts(): array
-    {
-        return [
-            'complaint_id' => 'integer',
-            'user_id' => 'integer',
-            'reply_content' => 'string',
-        ];
-    }
 
     public static function Factory(): ComplaintReplaiesFactory
     {
@@ -59,5 +49,14 @@ class ComplaintReply extends Core
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'complaint_id' => 'integer',
+            'user_id' => 'integer',
+            'reply_content' => 'string',
+        ];
     }
 }

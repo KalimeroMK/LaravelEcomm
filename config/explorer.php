@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Product\Models\Product;
@@ -13,13 +14,9 @@ return [
      * https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/configuration.html
      */
     'connection' => [
-        'host' => env('SCOUT_ELASTIC_HOST', 'http://localhost'),
+        'host' => env('ELASTICSEARCH_HOST', 'http://localhost'),
         'port' => '9200',
         'scheme' => 'http',
-        'auth' => [
-            'username' => env('SCOUT_ELASTIC_USERNAME', 'homestead'),
-            'password' => env('SCOUT_ELASTIC_PASSWORD', 'secret'),
-        ],
     ],
 
     /**
@@ -28,8 +25,17 @@ return [
      * them in the index configuration below.
      */
     'default_index_settings' => [
-        //'index' => [],
-        //'analysis' => [],
+        'index' => [
+            'number_of_shards' => 3,
+            'number_of_replicas' => 2,
+        ],
+        'analysis' => [
+            'analyzer' => [
+                'default' => [
+                    'type' => 'standard',
+                ],
+            ],
+        ],
     ],
 
     /**
@@ -37,7 +43,14 @@ return [
      * of the mapping possibilities can be found in the documentation of Explorer's repository.
      */
     'indexes' => [
-        Product::class,
+        Product::class => [
+            'settings' => [
+                'index' => [
+                    'number_of_shards' => 3,
+                    'number_of_replicas' => 2,
+                ],
+            ],
+        ],
         Brand::class,
         Category::class,
     ],

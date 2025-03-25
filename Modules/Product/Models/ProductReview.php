@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Reliese Model.
  */
@@ -44,16 +46,6 @@ class ProductReview extends Model
         'status',
     ];
 
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     /**
      * Get all reviews.
      *
@@ -72,5 +64,15 @@ class ProductReview extends Model
     public static function getAllUserReview(): Collection
     {
         return self::where('user_id', auth()->id())->get();
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

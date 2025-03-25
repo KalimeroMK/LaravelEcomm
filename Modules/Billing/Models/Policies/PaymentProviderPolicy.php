@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -29,5 +31,4 @@ class PaymentProviderPolicy
     {
         return $user->can('payment-provider-update');
     }
-    
 }

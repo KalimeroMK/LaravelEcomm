@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Modules\Cart\Http\Controllers\Api\CartController;
 
 /*

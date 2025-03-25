@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\Policies\AttributePolicy;
 use Modules\Banner\Models\Banner;
@@ -19,6 +22,7 @@ use Modules\Category\Models\Category;
 use Modules\Category\Models\Policies\CategoryPolicy;
 use Modules\Complaint\Models\Complaint;
 use Modules\Complaint\Models\Polices\ComplaintPolicy;
+use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Models\Policies\CouponPolicy;
 use Modules\Message\Models\Message;
 use Modules\Message\Models\Policies\MessagePolicy;
@@ -48,50 +52,47 @@ use Modules\Tenant\Models\Tenant;
 use Modules\User\Models\Policies\UserPolicy;
 use Modules\User\Models\User;
 use Spatie\Permission\Models\Permission;
-use Stripe\Coupon;
 
-class AuthServiceProvider extends ServiceProvider
+class PolicyServiceProvider extends ServiceProvider
 {
     /**
-     * The policy mappings for the application.
-     *
-     * @var array
+     * Register services.
      */
-    protected $policies
-        = [
-            Attribute::class => AttributePolicy::class,
-            Bundle::class => BundlePolicy::class,
-            Banner::class => BannerPolicy::class,
-            Brand::class => BrandPolicy::class,
-            Cart::class => CartPolicy::class,
-            Category::class => CategoryPolicy::class,
-            Coupon::class => CouponPolicy::class,
-            Message::class => MessagePolicy::class,
-            Newsletter::class => NewsletterPolicy::class,
-            Order::class => OrderPolicy::class,
-            Permission::class => PermissionPolicy::class,
-            Post::class => PostPolicy::class,
-            PostComment::class => PostCommentPolicy::class,
-            Product::class => ProductPolicy::class,
-            Role::class => RolePolicy::class,
-            Setting::class => SettingsPolicy::class,
-            Size::class => SizePolicy::class,
-            Tag::class => TagPolicy::class,
-            User::class => UserPolicy::class,
-            Tenant::class => TenantPolicy::class,
-            Page::class => PagePolicy::class,
-            PaymentProvider::class => PaymentProviderPolicy::class,
-            Complaint::class => ComplaintPolicy::class,
-        ];
+    public function register(): void
+    {
+        //
+    }
 
     /**
-     * Register any authentication / authorization services.
+     * Bootstrap services.
      */
     public function boot(): void
     {
-        $this->registerPolicies();
-        //        Gate::before(function ($user, $ability) {
-        //            return $user->hasRole('super-admin') ? true : null;
-        //        });
+        Gate::policy(Attribute::class, AttributePolicy::class);
+        Gate::policy(Banner::class, BannerPolicy::class);
+        Gate::policy(PaymentProvider::class, PaymentProviderPolicy::class);
+        Gate::policy(Brand::class, BrandPolicy::class);
+        Gate::policy(Bundle::class, BundlePolicy::class);
+        Gate::policy(Cart::class, CartPolicy::class);
+        Gate::policy(Category::class, CategoryPolicy::class);
+        Gate::policy(Complaint::class, ComplaintPolicy::class);
+        Gate::policy(Coupon::class, CouponPolicy::class);
+        Gate::policy(Message::class, MessagePolicy::class);
+        Gate::policy(Newsletter::class, NewsletterPolicy::class);
+        Gate::policy(Order::class, OrderPolicy::class);
+        Gate::policy(Page::class, PagePolicy::class);
+        Gate::policy(Permission::class, PermissionPolicy::class);
+        Gate::policy(Post::class, PostPolicy::class);
+        Gate::policy(PostComment::class, PostCommentPolicy::class);
+        Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(Setting::class, SettingsPolicy::class);
+        Gate::policy(Size::class, SizePolicy::class);
+        Gate::policy(Tag::class, TagPolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Tenant::class, TenantPolicy::class);
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('super-admin') ? true : null;
+        });
     }
 }

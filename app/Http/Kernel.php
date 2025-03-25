@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
@@ -28,7 +30,6 @@ use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
-use Modules\Front\Http\Middleware\ThemeMiddleware;
 use Modules\Google2fa\Http\Middleware\Google2faMiddleware;
 use Spatie\CookieConsent\CookieConsentMiddleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;

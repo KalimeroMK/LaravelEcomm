@@ -1,22 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Core\Traits;
 
 use Illuminate\Support\Str;
 
 trait HasSlug
 {
-    /**
-     * Boot the trait.
-     */
-    protected static function bootHasSlug(): void
-    {
-        static::creating(function ($model): void {
-            $slug = Str::slug($model->title);
-            $model->slug = $model->incrementSlug($slug);
-        });
-    }
-
     /**
      * Increment slug if it already exists.
      */
@@ -29,5 +20,16 @@ trait HasSlug
         }
 
         return $slug;
+    }
+
+    /**
+     * Boot the trait.
+     */
+    protected static function bootHasSlug(): void
+    {
+        static::creating(function ($model): void {
+            $slug = Str::slug($model->title);
+            $model->slug = $model->incrementSlug($slug);
+        });
     }
 }

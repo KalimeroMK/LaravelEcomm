@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Created by Zoran Shefot Bogoevski.
  */
@@ -77,6 +79,21 @@ class Order extends Core
     use Filterable;
     use HasFactory;
 
+    public const likeRows = [
+        'user.name',
+        'user.email',
+        'order_number',
+        'payment_method',
+        'payment_status',
+        'status',
+        'email',
+        'phone',
+        'country',
+        'post_code',
+        'total_amount',
+
+    ];
+
     protected $table = 'orders';
 
     /**
@@ -112,21 +129,6 @@ class Order extends Core
         'post_code',
     ];
 
-    public const likeRows = [
-        'user.name',
-        'user.email',
-        'order_number',
-        'payment_method',
-        'payment_status',
-        'status',
-        'email',
-        'phone',
-        'country',
-        'post_code',
-        'total_amount',
-
-    ];
-
     public static function Factory(): OrderFactory
     {
         return OrderFactory::new();
@@ -137,12 +139,12 @@ class Order extends Core
      */
     public static function getAllOrder(int $id): Model|Collection|Builder|array|null
     {
-        return Order::with('cart_info')->find($id);
+        return self::with('cart_info')->find($id);
     }
 
     public static function countActiveOrder(): int
     {
-        $data = Order::count();
+        $data = self::count();
         if ($data) {
             return $data;
         }

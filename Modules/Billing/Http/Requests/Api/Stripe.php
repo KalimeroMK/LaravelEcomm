@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Billing\Http\Requests\Api;
 
 use Modules\Billing\Rules\CartExistRule;

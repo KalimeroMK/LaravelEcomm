@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'updateSuccess' => ':resource беше успешно ажуриран',
     'storeSuccess' => ':resource беше успешно креиран',

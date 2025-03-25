@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Banner\Http\Controllers\Api;
 
 use Exception;
@@ -54,7 +56,7 @@ class BannerController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -73,7 +75,7 @@ class BannerController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, int $id): \Illuminate\Http\JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
