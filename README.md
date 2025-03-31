@@ -122,12 +122,6 @@
 * **Container ssh**: docker-compose exec app sh
 * **Run migrations**: php artisan:migrate:fresh --seed.
 
-### Enable ElasticSearch:
-
-* php artisan scout:import Modules\\Product\\Models\\Product,
-* php artisan scout:import Modules\\Brand\\Models\\Brand,
-* php artisan scout:import Modules\\Category\\Models\\Category
-
 ### Management
 
 - **User create**: `php artisan user:create`
