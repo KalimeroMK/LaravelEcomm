@@ -12,11 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use JeroenG\Explorer\Application\Aliased;
-use JeroenG\Explorer\Application\Explored;
-use JeroenG\Explorer\Application\IndexSettings;
 use Kalimeromk\Filterable\app\Traits\Filterable;
-use Laravel\Scout\Searchable;
 use Modules\Admin\Models\Condition;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
@@ -36,36 +32,36 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Product
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $summary
- * @property string|null $description
- * @property int $stock
- * @property int $d_deal
- * @property string|null $size
- * @property string $condition
- * @property string $status
- * @property float $price
- * @property float $special_price
- * @property float $discount
- * @property bool $is_featured
- * @property Carbon|null $special_price_start
- * @property Carbon|null $special_price_end
- * @property int|null $brand_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Brand|null $brand
- * @property Collection|Cart[] $carts
- * @property Collection|ProductReview[] $product_reviews
- * @property Collection|Wishlist[] $wishlists
+ * @property int                                          $id
+ * @property string                                       $title
+ * @property string                                       $slug
+ * @property string                                       $summary
+ * @property string|null                                  $description
+ * @property int                                          $stock
+ * @property int                                          $d_deal
+ * @property string|null                                  $size
+ * @property string                                       $condition
+ * @property string                                       $status
+ * @property float                                        $price
+ * @property float                                        $special_price
+ * @property float                                        $discount
+ * @property bool                                         $is_featured
+ * @property Carbon|null                                  $special_price_start
+ * @property Carbon|null                                  $special_price_end
+ * @property int|null                                     $brand_id
+ * @property Carbon|null                                  $created_at
+ * @property Carbon|null                                  $updated_at
+ * @property Brand|null                                   $brand
+ * @property Collection|Cart[]                            $carts
+ * @property Collection|ProductReview[]                   $product_reviews
+ * @property Collection|Wishlist[]                        $wishlists
  * @property-read int|null                                $carts_count
  * @property-read int|null                                $product_reviews_count
  * @property-read int|null                                $wishlists_count
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
  * @property-read int|null                                $categories_count
  * @property-read string                                  $image_url
- * @property string|null $color
+ * @property string|null                                  $color
  *
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
@@ -90,13 +86,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Eloquent
  */
-class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
+class Product extends Core implements HasMedia
 {
     use Filterable;
     use HasFactory;
     use HasSlug;
     use InteractsWithMedia;
-    use Searchable;
 
     public const likeRows
         = [
@@ -265,71 +260,6 @@ class Product extends Core implements Aliased, Explored, HasMedia, IndexSettings
     public function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->with('categories', 'brand', 'sizes', 'condition');
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toSearchableArray(): array
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function mappableAs(): array
-    {
-        return [
-            'properties' => [
-                'id' => ['type' => 'integer'],  // ID of the product
-                'title' => [
-                    'type' => 'text',
-                    'analyzer' => 'standard',  // Title of the product, full-text searchable
-                ],
-                'description' => [
-                    'type' => 'text',
-                    'analyzer' => 'standard',  // Full-text searchable description
-                ],
-                'price' => ['type' => 'float'],     // Price of the product
-                'color' => ['type' => 'keyword'],   // Color of the product, exact match
-                'status' => ['type' => 'keyword'],  // Product status (active, inactive)
-                'categories' => [
-                    'type' => 'nested',  // Categories as nested fields for better querying
-                    'properties' => [
-                        'title' => [
-                            'type' => 'text',
-                            'analyzer' => 'standard',  // Full-text searchable category title
-                        ],
-                    ],
-                ],
-                'brands' => [
-                    'type' => 'nested',  // Brands as nested fields for better querying
-                    'properties' => [
-                        'title' => [
-                            'type' => 'text',
-                            'analyzer' => 'standard',  // Full-text searchable brand title
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function indexSettings(): array
-    {
-        return [
-            'number_of_shards' => 1,
-            'number_of_replicas' => 0,
-            'analysis' => [
-                'analyzer' => [
-                    'default' => ['type' => 'standard'],
-                ],
-            ],
-        ];
     }
 
     public function searchBrandsByProduct(string $searchTerm): \Illuminate\Support\Collection

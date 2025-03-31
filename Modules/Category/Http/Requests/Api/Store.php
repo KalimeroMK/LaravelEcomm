@@ -23,7 +23,7 @@ class Store extends CoreRequest
         $categoryId = optional($this->route('category'))->id;
 
         return [
-            'title' => 'string|required|unique:categories',
+            'title' => 'string|required|unique:categories|max:50',
             'parent_id' => [
                 'nullable',
                 'exists:categories,id',

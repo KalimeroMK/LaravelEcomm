@@ -16,7 +16,7 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|required|unique:brands',
+            'title' => 'string|required|unique:brands|string|max:50',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];

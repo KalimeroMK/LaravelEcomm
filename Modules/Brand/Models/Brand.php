@@ -14,10 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use JeroenG\Explorer\Application\Aliased;
-use JeroenG\Explorer\Application\Explored;
-use JeroenG\Explorer\Application\IndexSettings;
-use Laravel\Scout\Searchable;
 use Modules\Brand\Database\Factories\BrandFactory;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
@@ -28,12 +24,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Brand
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int                  $id
+ * @property string               $title
+ * @property string               $slug
+ * @property string               $status
+ * @property Carbon|null          $created_at
+ * @property Carbon|null          $updated_at
  * @property Collection|Product[] $products
  * @property-read int|null        $products_count
  *
@@ -49,15 +45,14 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *
  * @mixin Eloquent
  *
- * @property string $photo
+ * @property string               $photo
  *
  * @method static Builder|Brand wherePhoto($value)
  */
-class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
+class Brand extends Core implements HasMedia
 {
     use HasSlug;
     use InteractsWithMedia;
-    use Searchable;
 
     protected $table = 'brands';
 
@@ -113,53 +108,4 @@ class Brand extends Core implements Aliased, Explored, HasMedia, IndexSettings
         return $query->with('products');
     }
 
-    /**
-     * Converts the model instance to an array format suitable for search indexing.
-     *
-     * @return array<string, mixed>
-     */
-    public function toSearchableArray(): array
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * Defines the mapping for the search engine (Elasticsearch).
-     *
-     * @return array<string, array<string, mixed>>
-     */
-    public function mappableAs(): array
-    {
-        return [
-            'properties' => [
-                'id' => [
-                    'type' => 'integer',
-                ],
-                'title' => [
-                    'type' => 'text',
-                    'analyzer' => 'standard',
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Configuration settings for the search index.
-     *
-     * @return array<string, mixed>
-     */
-    public function indexSettings(): array
-    {
-        return [
-            'number_of_shards' => 1,
-            'number_of_replicas' => 0,
-            'analysis' => [
-                'analyzer' => [
-                    'default' => [
-                        'type' => 'standard',
-                    ],
-                ],
-            ],
-        ];
-    }
 }

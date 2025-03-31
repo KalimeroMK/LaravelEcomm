@@ -12,12 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use JeroenG\Explorer\Application\Aliased;
-use JeroenG\Explorer\Application\Explored;
-use JeroenG\Explorer\Application\IndexSettings;
 use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
-use Laravel\Scout\Searchable;
 use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
@@ -27,17 +23,17 @@ use Modules\Product\Models\Product;
 /**
  * Class Category
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property int|null $status
- * @property int|null $parent_id
- * @property int|null $_lft
- * @property int|null $_rgt
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Category|null $category
- * @property Collection|Category[] $categories
+ * @property int                                          $id
+ * @property string                                       $title
+ * @property string                                       $slug
+ * @property int|null                                     $status
+ * @property int|null                                     $parent_id
+ * @property int|null                                     $_lft
+ * @property int|null                                     $_rgt
+ * @property Carbon|null                                  $created_at
+ * @property Carbon|null                                  $updated_at
+ * @property Category|null                                $category
+ * @property Collection|Category[]                        $categories
  * @property-read int|null                                $categories_count
  * @property-read Collection|Product[]                    $products
  * @property-read int|null                                $products_count
@@ -110,12 +106,10 @@ use Modules\Product\Models\Product;
  * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
  * @method static \Kalnoy\Nestedset\Collection|static[] all($columns = ['*'])
  */
-class Category extends Core implements Aliased, Explored, IndexSettings
+class Category extends Core
 {
     use HasSlug;
-    use NodeTrait, Searchable, SoftDeletes {
-        Searchable::usesSoftDelete insteadof NodeTrait;
-    }
+    use NodeTrait, SoftDeletes;
 
     protected $table = 'categories';
 
@@ -215,51 +209,4 @@ class Category extends Core implements Aliased, Explored, IndexSettings
         return $query->with('products');
     }
 
-    /**
-     * Prepare data for indexing.
-     */
-    public function toSearchableArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'slug' => $this->slug,
-            'status' => $this->status,
-            'parent_id' => $this->parent_id,
-            'product_count' => $this->products()->count(),
-        ];
-    }
-
-    /**
-     * Define the mapping for Elasticsearch.
-     */
-    public function mappableAs(): array
-    {
-        return [
-            'properties' => [
-                'id' => ['type' => 'integer'],
-                'title' => ['type' => 'text', 'analyzer' => 'standard'],
-                'slug' => ['type' => 'keyword'],
-                'status' => ['type' => 'integer'],
-                'parent_id' => ['type' => 'integer'],
-                'product_count' => ['type' => 'integer'],
-            ],
-        ];
-    }
-
-    /**
-     * Elasticsearch index settings configuration.
-     */
-    public function indexSettings(): array
-    {
-        return [
-            'number_of_shards' => 1,
-            'number_of_replicas' => 0,
-            'analysis' => [
-                'analyzer' => [
-                    'default' => ['type' => 'standard'],
-                ],
-            ],
-        ];
-    }
 }

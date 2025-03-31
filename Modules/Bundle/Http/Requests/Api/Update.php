@@ -16,9 +16,9 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => ['required'],
+            'name' => ['nullable|string|max:50'],
             'description' => ['nullable'],
-            'price' => ['required', 'numeric'],
+            'price' => ['nullable', 'numeric'],
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];

@@ -16,7 +16,7 @@ class Search extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|nullable',
+            'title' => 'string|nullable|max:50',
             'status' => 'string|nullable',
             'slug' => 'string|nullable',
             'per_page' => 'nullable|int',

@@ -14,7 +14,7 @@ class SearchRequest extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string',
+            'name' => 'nullable|string|max:50',
             'code' => 'nullable|unique:attributes,code|string',
             'type' => 'nullable|in:url,hex,text,date,time,float,string,integer,boolean,decimal|string',
             'display' => 'nullable|in:input,radio,color,button,select,checkbox,multiselect|string',

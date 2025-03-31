@@ -16,7 +16,6 @@
     "intervention/image": "*",
     "jeremykenedy/laravel-blocker": "dev-master",
     "jeremykenedy/laravel-logger": "*",
-    "jeroen-g/explorer": "dev-master",
     "kalimeromk/filterable": "*",
     "kalimeromk/laravel-translation-manager": "*",
     "kalnoy/nestedset": "*",
