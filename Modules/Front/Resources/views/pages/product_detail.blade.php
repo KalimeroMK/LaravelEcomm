@@ -45,8 +45,7 @@
                                 <div class="flexslider-thumbnails">
                                     <ul class="slides">
                                         <li data-thumb="" rel="adjustX:10, adjustY:">
-                                            <img src="{{$product_detail->imageUrl}}"
-                                                 alt="{{$product_detail->title}}">
+                                            <img src="{{$product_detail->imageUrl}}" alt="{{$product_detail->title}}">
                                         </li>
                                     </ul>
                                 </div>
@@ -388,9 +387,8 @@
                                 <div class="single-product">
                                     <div class="product-img">
                                         <a href="{{route('front.product-detail',$data->slug)}}">
-                                            <img class="default-img" src="{{$data->imageUrl}}"
-                                                 alt="{{$data->imageUrl}}">
-                                            <img class="hover-img" src="{{$data->imageUrl}}" alt="{{$data->imageUrl}}">
+                                            <img class="default-img" src="{{$data->imageUrl}}" alt="{{$data->title}}">
+                                            <img class="hover-img" src="{{$data->imageUrl}}" alt="{{$data->title}}">
                                             <span class="price-dec">{{$data->discount}} % Off</span>
                                             {{-- <span class="out-of-stock">Hot</span> --}}
                                         </a>

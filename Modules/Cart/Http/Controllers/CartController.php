@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Http\Requests\AddToCartSingle;
 use Modules\Cart\Service\CartService;
 use Modules\Core\Http\Controllers\CoreController;
@@ -26,15 +27,20 @@ class CartController extends CoreController
 
     public function addToCart(string $slug): RedirectResponse
     {
-        if (($slug || Product::whereSlug($slug)->first()) === false) {
-            request()->session()->flash('error', 'Product not added to cart');
+        if (Auth::check()) {
+            if (($slug || Product::whereSlug($slug)->first()) === false) {
+                request()->session()->flash('error', 'Product not added to cart');
 
-            return back();
+                return back();
+            }
+            $this->cart_service->addToCart(Product::whereSlug($slug)->first());
+            session()->flash('success', 'Product successfully added to cart');
+
+            return redirect()->back();
         }
-        $this->cart_service->addToCart(Product::whereSlug($slug)->first());
-        session()->flash('success', 'Product successfully added to cart');
+        request()->session()->flash('error', 'Pls login first');
 
-        return redirect()->back();
+        return back();
     }
 
     /**

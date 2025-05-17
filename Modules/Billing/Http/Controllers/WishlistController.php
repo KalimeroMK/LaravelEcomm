@@ -31,7 +31,7 @@ class WishlistController extends CoreController
 
             return back();
         }
-        request()->session()->flash('error', 'Pls login added to wishlist');
+        request()->session()->flash('error', 'Pls login first');
 
         return back();
     }

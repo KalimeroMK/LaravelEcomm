@@ -23,45 +23,44 @@ use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
 use Modules\Product\Database\Factories\ProductFactory;
-use Modules\Size\Models\Size;
+
 use Modules\Tag\Models\Tag;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Product
  *
- * @property int                                          $id
- * @property string                                       $title
- * @property string                                       $slug
- * @property string                                       $summary
- * @property string|null                                  $description
- * @property int                                          $stock
- * @property int                                          $d_deal
- * @property string|null                                  $size
- * @property string                                       $condition
- * @property string                                       $status
- * @property float                                        $price
- * @property float                                        $special_price
- * @property float                                        $discount
- * @property bool                                         $is_featured
- * @property Carbon|null                                  $special_price_start
- * @property Carbon|null                                  $special_price_end
- * @property int|null                                     $brand_id
- * @property Carbon|null                                  $created_at
- * @property Carbon|null                                  $updated_at
- * @property Brand|null                                   $brand
- * @property Collection|Cart[]                            $carts
- * @property Collection|ProductReview[]                   $product_reviews
- * @property Collection|Wishlist[]                        $wishlists
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $summary
+ * @property string|null $description
+ * @property int $stock
+ * @property int $d_deal
+
+ * @property string $condition
+ * @property string $status
+ * @property float $price
+ * @property float $special_price
+ * @property float $discount
+ * @property bool $is_featured
+ * @property Carbon|null $special_price_start
+ * @property Carbon|null $special_price_end
+ * @property int|null $brand_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Brand|null $brand
+ * @property Collection|Cart[] $carts
+ * @property Collection|ProductReview[] $product_reviews
+ * @property Collection|Wishlist[] $wishlists
  * @property-read int|null                                $carts_count
  * @property-read int|null                                $product_reviews_count
  * @property-read int|null                                $wishlists_count
  * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
  * @property-read int|null                                $categories_count
  * @property-read string                                  $image_url
- * @property string|null                                  $color
+
  *
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
@@ -75,14 +74,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder|Product whereIsFeatured($value)
  * @method static Builder|Product wherePhoto($value)
  * @method static Builder|Product wherePrice($value)
- * @method static Builder|Product whereSize($value)
+
  * @method static Builder|Product whereSlug($value)
  * @method static Builder|Product whereStatus($value)
  * @method static Builder|Product whereStock($value)
  * @method static Builder|Product whereSummary($value)
  * @method static Builder|Product whereTitle($value)
  * @method static Builder|Product whereUpdatedAt($value)
- * @method static Builder|Product whereColor($value)
+
  *
  * @mixin Eloquent
  */
@@ -100,7 +99,7 @@ class Product extends Core implements HasMedia
             'summary',
             'description',
             'stock',
-            'sizes.name',
+
             'condition.status',
             'status',
             'price',
@@ -212,15 +211,22 @@ class Product extends Core implements HasMedia
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
+        if ($mediaItem) {
+            return $mediaItem->getUrl();
+        }
 
-        return $mediaItem instanceof Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return 'https://placehold.co/600x400@2x.png';
     }
 
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
+        if ($mediaItem) {
+            // Replace 'thumb' with your conversion name if needed
+            return $mediaItem->getUrl('thumb');
+        }
 
-        return $mediaItem instanceof Media ? $mediaItem->first()->getUrl() : 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return 'https://placehold.co/600x400@2x.png';
     }
 
     public function condition(): BelongsTo
@@ -228,10 +234,7 @@ class Product extends Core implements HasMedia
         return $this->belongsTo(Condition::class);
     }
 
-    public function sizes(): BelongsToMany
-    {
-        return $this->belongsToMany(Size::class);
-    }
+
 
     public function tags(): BelongsToMany
     {
@@ -246,10 +249,14 @@ class Product extends Core implements HasMedia
             $this->special_price_end) ? $this->special_price : null;
     }
 
-    public function attributeValues(): BelongsToMany
+    public function attributeValues()
     {
-        return $this->belongsToMany(AttributeValue::class,
-            'product_attribute_value')->withPivot('id')->withTimestamps();
+        return $this->hasMany(\Modules\Attribute\Models\AttributeValue::class, 'product_id', 'id');
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(\Modules\Attribute\Models\Attribute::class, 'attribute_product', 'product_id', 'attribute_id');
     }
 
     public function bundles(): BelongsToMany
@@ -259,7 +266,7 @@ class Product extends Core implements HasMedia
 
     public function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->with('categories', 'brand', 'sizes', 'condition');
+        return $query->with('categories', 'brand', 'condition');
     }
 
     public function searchBrandsByProduct(string $searchTerm): \Illuminate\Support\Collection
@@ -269,8 +276,5 @@ class Product extends Core implements HasMedia
         return Brand::whereIn('id', $productBrandIds)->get();
     }
 
-    public function attributes()
-    {
-        return $this->morphMany(AttributeValue::class, 'attributable');
-    }
+
 }

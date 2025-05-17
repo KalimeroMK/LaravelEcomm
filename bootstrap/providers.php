@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Providers\AppServiceProvider;
 use App\Providers\PolicyServiceProvider;
 use Barryvdh\TranslationManager\ManagerServiceProvider;
@@ -31,7 +33,6 @@ use Modules\Product\Providers\ProductServiceProvider;
 use Modules\Role\Providers\RoleServiceProvider;
 use Modules\Settings\Providers\SettingsServiceProvider;
 use Modules\Shipping\Providers\ShippingServiceProvider;
-use Modules\Size\Providers\SizeServiceProvider;
 use Modules\Tag\Providers\TagServiceProvider;
 use Modules\Tenant\Providers\TenantServiceProvider;
 use Modules\User\Providers\UserServiceProvider;
@@ -71,7 +72,6 @@ return [
     ProductServiceProvider::class,
     RoleServiceProvider::class,
     ShippingServiceProvider::class,
-    SizeServiceProvider::class,
     SocialiteServiceProvider::class,
     SettingsServiceProvider::class,
     TagServiceProvider::class,

@@ -7,9 +7,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Modules\Admin\Database\Seeders\ConditionSeeder;
-use Modules\Admin\Database\Seeders\SizeSeeder;
-use Modules\Attribute\Database\Seeders\AttributeDatabaseSeeder;
-use Modules\Attribute\Database\Seeders\AttributeValueSeeder;
+use Modules\Attribute\Database\Seeders\AttributeSeeder;
+use Modules\Attribute\Database\Seeders\AttributeSystemSeeder;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
 use Modules\Bundle\Models\BundleProduct;
@@ -39,8 +38,8 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $this->call(PermissionTableSeeder::class);
-        $this->call(AttributeDatabaseSeeder::class);
-        $this->call(AttributeValueSeeder::class);
+        $this->call(AttributeSeeder::class);
+        $this->call(AttributeSystemSeeder::class);
         Banner::factory()->count(5)->create();
         Brand::factory()->count(5)->create();
         Cart::factory()->count(200)->create();
@@ -55,7 +54,6 @@ class DatabaseSeeder extends Seeder
         Product::factory()->count(200)->withCategoriesAndTags()->create();
         BundleProduct::factory()->count(50)->create();
         $this->call(ProductReviewSeeder::class);
-        $this->call(SizeSeeder::class);
         Newsletter::factory()->count(20)->create();
         Notification::factory()->count(50)->create();
         Setting::factory()->create();

@@ -91,7 +91,7 @@
                                 @foreach($products as $product)
                                     <div class="single-post first">
                                         <div class="image">
-                                            <img src="{{$product->ImageThumbUrl}}" alt="{{$product->title}}">
+                                            <img src="{{$product->imageThumbUrl}}" alt="{{$product->title}}">
                                         </div>
                                         <div class="content">
                                             <h5>
@@ -193,10 +193,8 @@
                                         <div class="single-product">
                                             <div class="product-img">
                                                 <a href="{{route('front.product-detail',$product->slug)}}">
-                                                    <img class="default-img" src="{{$product->imageUrl}}"
-                                                         alt="{{$product->imageUrl}}">
-                                                    <img class="hover-img" src="{{$product->imageUrl}}"
-                                                         alt="{{$product->imageUrl}}">
+                                                    <img class="default-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
+<img class="hover-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
                                                     @if($product->discount)
                                                         <span class="price-dec">{{$product->discount}} % Off</span>
                                                     @endif
@@ -271,8 +269,7 @@
                                         <div class="quickview-slider-active">
 
                                             <div class="single-slider">
-                                                <img class="default-img" src="{{$product->imageUrl}}"
-                                                     alt="{{$product->imageUrl}}">
+                                                <img class="default-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
                                             </div>
                                         </div>
                                     </div>

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Modules\Attribute\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\AttributeGroup;
 
 class AttributeFactory extends Factory
 {
@@ -15,33 +13,13 @@ class AttributeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'code' => $this->faker->unique()->slug(), // Ensure code is unique
-            'type' => $this->faker->randomElement([
-                'url',
-                'hex',
-                'text',
-                'date',
-                'time',
-                'float',
-                'string',
-                'integer',
-                'boolean',
-                'decimal',
-            ]),
-            'display' => $this->faker->randomElement([
-                'input',
-                'radio',
-                'color',
-                'button',
-                'select',
-                'checkbox',
-                'multiselect',
-            ]),
-            'filterable' => $this->faker->numberBetween(0, 1),
-            'configurable' => $this->faker->numberBetween(0, 1),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'name' => $this->faker->word(),
+            'code' => $this->faker->unique()->slug(2),
+            'type' => $this->faker->randomElement(['text', 'boolean', 'date', 'integer', 'float', 'select']),
+            'display' => $this->faker->randomElement(['input', 'select', 'checkbox', 'radio']),
+            'is_filterable' => $this->faker->boolean(),
+            'is_configurable' => $this->faker->boolean(),
+            'attribute_group_id' => AttributeGroup::factory(),
         ];
     }
 }

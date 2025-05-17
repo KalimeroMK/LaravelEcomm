@@ -118,7 +118,6 @@ class FrontController extends Controller
         }
 
         return view('front::pages.product-lists', $this->front_service->productBrand($request->all()));
-
     }
 
     /**
@@ -131,7 +130,6 @@ class FrontController extends Controller
         }
 
         return view('front::pages.product-lists', $this->front_service->productCat($slug));
-
     }
 
     /**
@@ -200,7 +198,7 @@ class FrontController extends Controller
         return redirect()->back()->with('message', 'Your email is already in our mailing list.');
     }
 
-    public function verifyNewsletter(string $token): string
+    public function verifyNewsletter(string $token): RedirectResponse
     {
         if (Newsletter::where('token', $token)->first() !== null) {
             $this->front_service->validation($token);
@@ -211,7 +209,7 @@ class FrontController extends Controller
         return redirect()->back()->with('message', 'token mismatch ');
     }
 
-    public function deleteNewsletter(string $token): string
+    public function deleteNewsletter(string $token): RedirectResponse
     {
         if (Newsletter::where('token', $token)->first() !== null) {
             $this->front_service->deleteNewsletter($token);

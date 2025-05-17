@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Modules\Attribute\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
+use Modules\Product\Models\Product;
 
 class AttributeValueFactory extends Factory
 {
@@ -15,22 +13,23 @@ class AttributeValueFactory extends Factory
 
     public function definition(): array
     {
+        $type = $this->faker->randomElement(['text', 'boolean', 'date', 'integer', 'float']);
+        $value = match ($type) {
+            'text' => $this->faker->sentence(),
+            'boolean' => $this->faker->boolean(),
+            'date' => $this->faker->date(),
+            'integer' => $this->faker->numberBetween(1, 100),
+            'float' => $this->faker->randomFloat(2, 1, 100),
+            default => null,
+        };
         return [
-            'default' => $this->faker->word(),
-            'text_value' => $this->faker->text(),
-            'date_value' => Carbon::now(),
-            'time_value' => Carbon::now(),
-            'url_value' => $this->faker->url(),
-            'hex_value' => $this->faker->word(),
-            //            'float_value'   => $this->faker->randomFloat(2),
-            'string_value' => $this->faker->word(),
-            'boolean_value' => $this->faker->boolean(),
-            'integer_value' => $this->faker->randomNumber(),
-            //            'decimal_value' => $this->faker->randomFloat(2),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-
+            'product_id' => Product::factory(),
             'attribute_id' => Attribute::factory(),
+            'text_value' => $type === 'text' ? $value : null,
+            'boolean_value' => $type === 'boolean' ? $value : null,
+            'date_value' => $type === 'date' ? $value : null,
+            'integer_value' => $type === 'integer' ? $value : null,
+            'float_value' => $type === 'float' ? $value : null,
         ];
     }
 }

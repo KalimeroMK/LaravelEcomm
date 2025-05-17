@@ -17,6 +17,7 @@ use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Banner
@@ -69,10 +70,10 @@ class Banner extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('banner');
 
-        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
+        if ($mediaItem instanceof Media) {
             return $mediaItem->getUrl();
         }
 
-        return 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return 'https://placehold.co/600x400@2x.png';
     }
 }

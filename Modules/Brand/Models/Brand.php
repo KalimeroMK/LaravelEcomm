@@ -24,12 +24,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * Class Brand
  *
- * @property int                  $id
- * @property string               $title
- * @property string               $slug
- * @property string               $status
- * @property Carbon|null          $created_at
- * @property Carbon|null          $updated_at
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property Collection|Product[] $products
  * @property-read int|null        $products_count
  *
@@ -45,7 +45,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *
  * @mixin Eloquent
  *
- * @property string               $photo
+ * @property string $photo
  *
  * @method static Builder|Brand wherePhoto($value)
  */
@@ -107,5 +107,4 @@ class Brand extends Core implements HasMedia
     {
         return $query->with('products');
     }
-
 }

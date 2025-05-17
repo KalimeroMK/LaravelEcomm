@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="image">
-                                    <img src="{{$post->ImageUrl}}" alt="{{$post->title}}">
+                                    <img src="{{$post->imageUrl}}" alt="{{$post->title}}">
                                 </div>
                                 <div class="blog-detail">
                                     <h2 class="blog-title">{{$post->title}}</h2>
@@ -168,7 +168,7 @@
                             <!-- Single Post -->
                             <div class="single-post">
                                 <div class="image">
-                                    <img src="{{$post->ImageUrl}}" alt="{{$post->title}}">
+                                    <img src="{{$post->imageUrl}}" alt="{{$post->title}}">
                                 </div>
                                 <div class="content">
                                     <h5><a href="#">{{$post->title}}</a></h5>

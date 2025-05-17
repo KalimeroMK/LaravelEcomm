@@ -209,13 +209,8 @@
                                                 <div class="single-product">
                                                     <div class="product-img">
                                                         <a href="{{route('front.product-detail',$product->slug)}}">
-                                                            @php
-                                                                $photo=explode(',',$product->photo);
-                                                            @endphp
-                                                            <img class="default-img" src="{{$photo[0]}}"
-                                                                 alt="{{$photo[0]}}">
-                                                            <img class="hover-img" src="{{$photo[0]}}"
-                                                                 alt="{{$photo[0]}}">
+                                                            <img class="default-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
+<img class="hover-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
                                                         </a>
                                                         <div class="button-head">
                                                             <div class="product-action">
@@ -293,14 +288,9 @@
                                 <!-- Product Slider -->
                                 <div class="product-gallery">
                                     <div class="quickview-slider-active">
-                                        @php
-                                            $photo=explode(',',$product->photo);
-                                        @endphp
-                                        @foreach($photo as $data)
-                                            <div class="single-slider">
-                                                <img src="{{$data}}" alt="{{$data}}">
-                                            </div>
-                                        @endforeach
+                                        <div class="single-slider">
+    <img src="{{$product->imageUrl}}" alt="{{$product->title}}">
+</div>
                                     </div>
                                 </div>
                                 <!-- End Product slider -->

@@ -29,7 +29,7 @@ class Helper
     {
         $user_id = self::getUserId($user_id);
 
-        return $user_id !== 0 ? Cart::whereUserId($user_id)->whereOrderId(null)->sum('quantity') : 0;
+        return $user_id !== 0 ? (int) Cart::whereUserId($user_id)->whereOrderId(null)->sum('quantity') : 0;
     }
 
     public static function getAllProductFromWishlist(string $user_id = ''): Collection
