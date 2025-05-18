@@ -26,7 +26,7 @@ class PostFactory extends Factory
             'status' => $this->faker->randomElement(['active', 'inactive']),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'user_id' => User::inRandomOrder()->first()->id,
+            'user_id' => User::factory()->create()->id,
         ];
     }
 

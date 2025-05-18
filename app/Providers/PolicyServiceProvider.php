@@ -43,8 +43,6 @@ use Modules\Role\Models\Polices\RolePolicy;
 use Modules\Role\Models\Role;
 use Modules\Settings\Models\Polices\SettingsPolicy;
 use Modules\Settings\Models\Setting;
-use Modules\Size\Models\Policies\SizePolicy;
-use Modules\Size\Models\Size;
 use Modules\Tag\Models\Policies\TagPolicy;
 use Modules\Tag\Models\Tag;
 use Modules\Tenant\Models\Policy\TenantPolicy;
@@ -87,7 +85,6 @@ class PolicyServiceProvider extends ServiceProvider
         Gate::policy(Product::class, ProductPolicy::class);
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Setting::class, SettingsPolicy::class);
-        Gate::policy(Size::class, SizePolicy::class);
         Gate::policy(Tag::class, TagPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Tenant::class, TenantPolicy::class);

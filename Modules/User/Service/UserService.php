@@ -21,18 +21,15 @@ class UserService extends CoreService
     }
 
     /**
-     * Updates a user.
+     * Updates a user and syncs roles.
      *
-     * @param  int  $id  The ID of the user to update.
-     * @param  array<string, mixed>  $data  The data to update the user with.
-     * @return Model The updated user model.
+     * @param  array<string, mixed>  $data
      */
-    public function update(int $id, array $data): Model
+    public function updateWithRoles(int $id, array $data): Model
     {
         $input = $this->prepareInputData($data);
         $user = $this->user_repository->findById($id);
         $this->user_repository->update($id, $input);
-
         if (method_exists($user, 'syncRoles')) {
             $user->syncRoles($data['roles'] ?? []);
         }

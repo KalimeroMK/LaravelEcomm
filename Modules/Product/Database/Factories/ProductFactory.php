@@ -7,10 +7,13 @@ namespace Modules\Product\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Product\Models\Product;
 use Modules\Tag\Models\Tag;
 
+/** @extends Factory<Product> */
 class ProductFactory extends Factory
 {
     protected $model = Product::class;
@@ -18,18 +21,23 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->unique(true)->word,
-            'sku' => $this->faker->unique(true)->word,
-            'summary' => $this->faker->text,
-            'description' => $this->faker->text,
-            'condition_id' => $this->faker->numberBetween(1, 2),
-            'stock' => 100,
-            'price' => $this->faker->numberBetween(1, 9999),
-            'discount' => 10,
-            'is_featured' => false,
-            'brand_id' => $this->faker->numberBetween(1, 10),
+            'title' => $this->faker->word(),
+            'slug' => $this->faker->slug(),
+            'summary' => $this->faker->text(),
+            'description' => $this->faker->text(),
+            'stock' => $this->faker->numberBetween(0, 100),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'price' => $this->faker->randomFloat(2, 10, 9999),
+            'discount' => $this->faker->randomFloat(2, 0, 1000),
+            'is_featured' => $this->faker->boolean(),
+            'd_deal' => $this->faker->boolean(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+            'special_price' => $this->faker->randomFloat(2, 10, 9000),
+            'special_price_start' => Carbon::now(),
+            'special_price_end' => Carbon::now()->addDays(7),
+            'sku' => 'SKU-'.mb_strtoupper(Str::random(10)),
+            'brand_id' => Brand::factory(),
         ];
     }
 

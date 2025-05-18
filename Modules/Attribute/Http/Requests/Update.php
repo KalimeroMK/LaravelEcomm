@@ -6,7 +6,6 @@ namespace Modules\Attribute\Http\Requests;
 
 use Exception;
 use Illuminate\Validation\Rule;
-use Modules\Attribute\Models\Attribute;
 use Modules\Core\Http\Requests\CoreRequest;
 
 class Update extends CoreRequest
@@ -20,15 +19,7 @@ class Update extends CoreRequest
      */
     public function rules(): array
     {
-        $attribute = $this->route('attribute');
-
-        // Ensure that the attribute is indeed an Attribute model instance
-        if ($attribute instanceof Attribute) {
-            $attributeId = $attribute->id;
-        } else {
-            // Handle the error appropriately, maybe log it or throw an exception
-            throw new Exception('Expected an instance of Attribute, received '.gettype($attribute));
-        }
+        $attributeId = $this->route('attribute');
 
         return [
             'name' => ['sometimes', 'string', Rule::unique('attributes', 'name')->ignore($attributeId)],

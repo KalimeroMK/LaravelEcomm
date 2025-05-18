@@ -38,8 +38,8 @@
                                     Password</label>
 
                                 <div class="col-md-6">
-                                    <input id="new_confirm_password" type="password" class="form-control"
-                                           name="new_confirm_password" autocomplete="current-password">
+                                    <input id="password_confirmation" type="password" class="form-control"
+                                           name="password_confirmation" autocomplete="current-password">
                                 </div>
                             </div>
 

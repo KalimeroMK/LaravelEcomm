@@ -9,6 +9,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use Modules\Brand\Models\Brand;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
 
@@ -17,15 +18,17 @@ class BrandTest extends TestCase
     use BaseTestTrait;
     use WithoutMiddleware;
 
-    public string $url = '/api/v1/brand/';
+    public string $url = '/api/v1/brands';
 
     /**
      * test create product.
      */
+    #[Test]
     public function test_create_brand(): TestResponse
     {
         Storage::fake('uploads');
 
+        $brand = Brand::factory()->create();
         $data = [
             'title' => time().'Test title',
             'images' => [UploadedFile::fake()->image('updated_file.png', 600, 600)],
@@ -38,15 +41,17 @@ class BrandTest extends TestCase
     /**
      * test update product.
      */
+    #[Test]
     public function test_update_brand(): TestResponse
     {
+        $brand = Brand::factory()->create();
         $data = [
             'title' => time().'Test title1',
             'description' => time().'test-description',
             'status' => 'inactive',
         ];
 
-        $id = Brand::firstOrFail()->id;
+        $id = $brand->id;
 
         return $this->update($this->url, $data, $id);
     }
@@ -54,9 +59,11 @@ class BrandTest extends TestCase
     /**
      * test find product.
      */
+    #[Test]
     public function test_find_brand(): TestResponse
     {
-        $id = Brand::firstOrFail()->id;
+        $brand = Brand::factory()->create();
+        $id = $brand->id;
 
         return $this->show($this->url, $id);
     }
@@ -64,24 +71,31 @@ class BrandTest extends TestCase
     /**
      * test get all products.
      */
+    #[Test]
     public function test_get_all_brand(): TestResponse
     {
+        Brand::factory()->count(3)->create();
+
         return $this->list($this->url);
     }
 
     /**
      * test delete products.
      */
+    #[Test]
     public function test_delete_brand(): TestResponse
     {
-        $id = Brand::firstOrFail()->id;
+        $brand = Brand::factory()->create();
+        $id = $brand->id;
 
         return $this->destroy($this->url, $id);
     }
 
+    #[Test]
     public function test_structure()
     {
-        $response = $this->json('GET', '/api/v1/brand/');
+        Brand::factory()->count(2)->create();
+        $response = $this->json('GET', '/api/v1/brands');
         $response->assertStatus(200);
 
         $response->assertJsonStructure(

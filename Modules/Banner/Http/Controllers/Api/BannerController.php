@@ -50,7 +50,7 @@ class BannerController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_service->create($request->validated())));
+            ->respond(new BannerResource($this->banner_service->createWithMedia($request->validated())));
     }
 
     /**
@@ -88,7 +88,7 @@ class BannerController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_service->update($id, $request->validated())));
+            ->respond(new BannerResource($this->banner_service->updateWithMedia($id, $request->validated())));
     }
 
     /**

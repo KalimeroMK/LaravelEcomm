@@ -11,7 +11,9 @@ namespace Modules\Coupon\Models;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Core\Models\Core;
+use Modules\Coupon\Database\Factories\CouponFactory;
 
 /**
  * Class Coupon
@@ -39,18 +41,27 @@ use Modules\Core\Models\Core;
  */
 class Coupon extends Core
 {
+    use HasFactory;
+
     protected $table = 'coupons';
 
-    protected $casts = [
-        'value' => 'float',
-    ];
+    protected $casts
+        = [
+            'value' => 'float',
+        ];
 
-    protected $fillable = [
-        'code',
-        'type',
-        'value',
-        'status',
-    ];
+    protected $fillable
+        = [
+            'code',
+            'type',
+            'value',
+            'status',
+        ];
+
+    public static function Factory(): CouponFactory
+    {
+        return CouponFactory::new();
+    }
 
     /**
      * Calculates the discount based on the total amount and the coupon type.

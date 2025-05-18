@@ -22,23 +22,14 @@ class CartFactory extends Factory
             'quantity' => $this->faker->randomNumber(),
             'amount' => $this->faker->randomFloat(),
             'product_id' => function () {
-                /** @var Product $product */
-                $product = Product::factory()->create();
-
-                return $product->id;
+                return Product::factory()->create()->id;
             },
             'order_id' => function () {
-                /** @var Order $order */
-                $order = Order::factory()->create();
-
-                return $order->id;
+                return Order::factory()->create()->id;
             },
             // Other definitions
             'user_id' => function () {
-                /** @var User $user */
-                $user = User::factory()->create();
-
-                return $user->id;
+                return User::factory()->create()->id;
             },
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

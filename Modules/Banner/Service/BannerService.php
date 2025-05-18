@@ -32,7 +32,7 @@ class BannerService extends CoreService
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function create(array $data, ?Request $request = null): Model
+    public function createWithMedia(array $data, ?Request $request = null): Model
     {
         $banner = $this->banner_repository->create($data);
         $banner->addMultipleMediaFromRequest(['images'])
@@ -54,7 +54,7 @@ class BannerService extends CoreService
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function update(int $id, array $data, ?Request $request = null): Model
+    public function updateWithMedia(int $id, array $data, ?Request $request = null): Model
     {
         $banner = $this->banner_repository->findById($id);
 

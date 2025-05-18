@@ -41,36 +41,60 @@ class OrderService extends CoreService
      *
      * @param  array<string, mixed>  $data
      */
-    public function store(array $data): int
+    public function store(array $data): Order
     {
         $order_data = [
-            'order_number' => 'ORD-'.mb_strtoupper(Str::random(10)),
-            'user_id' => auth()->id(),
-            'shipping_id' => $data['shipping'],
-            'sub_total' => Helper::totalCartPrice(),
-            'quantity' => Helper::cartCount(),
-            'status' => 'new',
+            'order_number' => $data['order_number'] ?? 'ORD-'.mb_strtoupper(Str::random(10)),
+            'user_id' => $data['user_id'] ?? auth()->id(),
+            'shipping_id' => $data['shipping_id'] ?? null,
+            'sub_total' => $data['sub_total'] ?? Helper::totalCartPrice(),
+            'quantity' => $data['quantity'] ?? Helper::cartCount(),
+            'status' => $data['status'] ?? 'new',
         ];
 
-        if (session('coupon')) {
+        // Prefer coupon from $data, then session, else 0
+        if (isset($data['coupon'])) {
+            $order_data['coupon'] = $data['coupon'];
+        } elseif (session('coupon')) {
             $order_data['coupon'] = session('coupon')['value'];
         }
 
         $order = new Order($order_data);
 
-        $shippingPrice = $order->shipping->price ?? 0;
+        // Prefer shipping price from $data if provided
+        $shippingPrice = $data['shipping_price'] ?? ($order->shipping->price ?? 0);
 
-        $order->total_amount = Helper::totalCartPrice() + $shippingPrice - ($order_data['coupon'] ?? 0);
+        // Prefer total_amount from $data if provided, else calculate
+        if (isset($data['total_amount'])) {
+            $order->total_amount = $data['total_amount'];
+        } else {
+            $order->total_amount = ($data['sub_total'] ?? Helper::totalCartPrice())
+                + $shippingPrice
+                - ($order_data['coupon'] ?? 0);
+        }
 
-        $order->payment_method = (request('payment_method') === 'paypal') ? 'paypal' : 'cod';
-        $order->payment_status = ($order->payment_method === 'paypal') ? 'paid' : 'unpaid';
+        // Prefer payment_method from $data, then from request, else default to 'cod'
+        if (isset($data['payment_method'])) {
+            $order->payment_method = $data['payment_method'];
+        } elseif (request()->has('payment_method')) {
+            $order->payment_method = request('payment_method') === 'paypal' ? 'paypal' : 'cod';
+        } else {
+            $order->payment_method = 'cod';
+        }
+
+        // Prefer payment_status from $data, else infer from payment_method
+        if (isset($data['payment_status'])) {
+            $order->payment_status = $data['payment_status'];
+        } else {
+            $order->payment_status = ($order->payment_method === 'paypal') ? 'paid' : 'unpaid';
+        }
 
         $order->save();
 
         $this->sendNewOrderNotification($order);
         $this->updateCartWithOrderId($order);
 
-        return $order->id;
+        return $order;
     }
 
     /**

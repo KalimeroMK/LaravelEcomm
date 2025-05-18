@@ -5,23 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Requests\Password;
 
 use App\Rules\MatchOldPassword;
+use Modules\Core\Http\Requests\Api\CoreRequest;
 
-/**
- * @property mixed new_password
- */
 class Store extends CoreRequest
 {
     public function rules(): array
     {
         return [
             'current_password' => ['required', new MatchOldPassword],
-            'new_password' => ['required'],
-            'new_confirm_password' => ['same:new_password'],
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

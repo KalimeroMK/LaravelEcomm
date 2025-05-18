@@ -14,8 +14,6 @@ use Modules\Post\Http\Requests\Api\Update;
 use Modules\Post\Http\Resources\PostResource;
 use Modules\Post\Service\PostService;
 use ReflectionException;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PostController extends CoreController
 {
@@ -38,8 +36,6 @@ class PostController extends CoreController
 
     /**
      * @throws ReflectionException
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function store(Store $request): JsonResponse
     {
@@ -77,8 +73,6 @@ class PostController extends CoreController
     }
 
     /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse|string

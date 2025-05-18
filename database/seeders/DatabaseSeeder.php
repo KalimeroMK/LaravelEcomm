@@ -6,7 +6,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Modules\Admin\Database\Seeders\ConditionSeeder;
 use Modules\Attribute\Database\Seeders\AttributeSeeder;
 use Modules\Attribute\Database\Seeders\AttributeSystemSeeder;
 use Modules\Banner\Models\Banner;
@@ -44,7 +43,6 @@ class DatabaseSeeder extends Seeder
         Brand::factory()->count(5)->create();
         Cart::factory()->count(200)->create();
         $this->call(CouponSeeder::class);
-        $this->call(ConditionSeeder::class);
         Tag::factory()->count(100)->create();
         Order::factory()->count(200)->create();
         $this->call(CategoryPostSeeder::class);

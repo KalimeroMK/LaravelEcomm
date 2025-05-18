@@ -15,7 +15,5 @@ declare(strict_types=1);
 
 use Modules\Product\Http\Controllers\Api\ProductController;
 
-Route::apiResource('products', ProductController::class)
-    ->except('update')
-    ->names('api.products');
-Route::post('products/{id}', [ProductController::class, 'update'])->name('api.product.update');
+Route::apiResource('product', ProductController::class);
+Route::apiResource('products', ProductController::class);

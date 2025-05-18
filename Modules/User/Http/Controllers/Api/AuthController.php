@@ -29,7 +29,6 @@ class AuthController extends CoreController
         }
 
         return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
-
     }
 
     public function register(AuthRequest $request): JsonResponse
@@ -68,6 +67,12 @@ class AuthController extends CoreController
         }
 
         return view('auth.register', ['name' => $userSocial->getName(), 'email' => $userSocial->getEmail()]);
+    }
 
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }

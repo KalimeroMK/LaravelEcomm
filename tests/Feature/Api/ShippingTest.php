@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use Modules\Shipping\Models\Shipping;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
 
@@ -19,7 +20,7 @@ class ShippingTest extends TestCase
     use WithFaker;
     use WithoutMiddleware;
 
-    public string $url = '/api/v1/shipping/';
+    public string $url = '/api/v1/shipping';
 
     /**
      * test create product.
@@ -42,17 +43,17 @@ class ShippingTest extends TestCase
     /**
      * test update product.
      */
+    #[Test]
     public function test_update_shipping(): TestResponse
     {
+        $shipping = Shipping::factory()->create();
         $data = [
-            'type' => Carbon::now().$this->faker->unique()->word,
-            'price' => $this->faker->numberBetween(1, 100),
+            'type' => 'express',
+            'price' => '3223',
             'status' => 'active',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
         ];
 
-        $id = Shipping::firstOrFail()->id;
+        $id = $shipping->id;
 
         return $this->updatePUT($this->url, $data, $id);
     }
@@ -60,9 +61,10 @@ class ShippingTest extends TestCase
     /**
      * test find product.
      */
+    #[Test]
     public function test_find_shipping(): TestResponse
     {
-        $id = Shipping::firstOrFail()->id;
+        $id = Shipping::factory()->create()->id;
 
         return $this->show($this->url, $id);
     }
@@ -70,30 +72,36 @@ class ShippingTest extends TestCase
     /**
      * test get all products.
      */
+    #[Test]
     public function test_get_all_shipping(): TestResponse
     {
+        Shipping::factory()->count(3)->create();
+
         return $this->list($this->url);
     }
 
     /**
      * test delete products.
      */
+    #[Test]
     public function test_delete_shipping(): TestResponse
     {
-        $id = Shipping::firstOrFail()->id;
+        $id = Shipping::factory()->create()->id;
 
         return $this->destroy($this->url, $id);
     }
 
+    #[Test]
     public function test_structure(): void
     {
-        $response = $this->json('GET', '/api/v1/shipping/');
+        Shipping::factory()->count(2)->create();
+        $response = $this->json('GET', '/api/v1/shipping');
         $response->assertStatus(200);
 
         $response->assertJsonStructure(
             [
                 'data' => [
-                    0 => [
+                    '*' => [
                         'id',
                         'type',
                         'price',

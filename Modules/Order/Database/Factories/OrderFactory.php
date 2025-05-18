@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Modules\Order\Models\Order;
 use Modules\Shipping\Models\Shipping;
+use Modules\User\Models\User;
 
+/** @extends Factory<Order> */
 class OrderFactory extends Factory
 {
     protected $model = Order::class;
@@ -16,20 +18,19 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_number' => $this->faker->unique()->numberBetween(1, 9999),
-            'sub_total' => $this->faker->numberBetween(1, 500),
-            'total_amount' => $this->faker->numberBetween(1, 500),
-            'quantity' => $this->faker->numberBetween(1, 500),
-            'created_at' => $this->faker->dateTimeBetween('-365 days', 'now'),
+            'order_number' => $this->faker->word(),
+            'sub_total' => $this->faker->randomFloat(),
+            'total_amount' => $this->faker->randomFloat(),
+            'quantity' => $this->faker->randomNumber(),
+            'payment_method' => $this->faker->randomElement(['cod', 'paypal']),
+            'payment_status' => $this->faker->randomElement(['paid', 'unpaid']),
+            'status' => $this->faker->randomElement(['new', 'process', 'delivered', 'cancel']),
+            'payer_id' => User::factory(),
+            'transaction_reference' => $this->faker->word(),
+            'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'user_id' => $this->faker->numberBetween(1, 3),
-            'shipping_id' => function () {
-                /** @var Shipping $shipping */
-                // Ensure that create() returns a single model instance
-                $shipping = Shipping::factory()->create();
-
-                return $shipping->id;
-            },
+            'user_id' => User::factory(),
+            'shipping_id' => Shipping::factory(),
         ];
     }
 }

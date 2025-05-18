@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Cart\Service;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -37,16 +38,15 @@ class CartService
     public function apiAddToCart(array $data): Cart|Core
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
-
         $cart = Cart::create([
-            'user_id' => (int) Auth::id(),
+            'user_id' => $data['user_id'],
             'product_id' => $product->id,
             'price' => (int) ($product->price - ($product->price * $product->discount) / 100),
             'quantity' => (int) $data['quantity'],
             'amount' => (int) (($product->price - ($product->price * $product->discount) / 100) * $data['quantity']),
         ]);
 
-        Wishlist::whereUserId(Auth::id())->whereCartId(null)->update(['cart_id' => $cart->id]);
+        Wishlist::whereUserId($data['user_id'])->whereCartId(null)->update(['cart_id' => $cart->id]);
 
         return $cart;
     }
@@ -54,23 +54,23 @@ class CartService
     /**
      * @param  array<string, mixed>  $data
      */
-    public function apiUpdateCart(array $data): bool|int
+    public function apiUpdateCart(array $data): Cart|Core|null
     {
         $product = Product::whereSlug($data['slug'])->firstOrFail();
-
-        return Cart::whereUserId(Auth::id())
+        $cart = Cart::whereUserId($data['user_id'])
             ->whereProductId($product->id)
-            ->update([
-                'price' => (int) ($product->price - ($product->price * $product->discount) / 100),
-                'quantity' => (int) $data['quantity'],
-                'amount' => (int) (($product->price - ($product->price * $product->discount) / 100) * $data['quantity']),
-            ]);
+            ->first();
+
+        $cart->update([
+            'price' => (int) ($product->price - ($product->price * $product->discount) / 100),
+            'quantity' => (int) $data['quantity'],
+            'amount' => (int) (($product->price - ($product->price * $product->discount) / 100) * $data['quantity']),
+        ]);
+
+        return $cart;
     }
 
-    /**
-     * @return RedirectResponse|null
-     */
-    public function addToCart(object $data)
+    public function addToCart(object $data): ?RedirectResponse
     {
         $already_cart = Cart::whereUserId(Auth::id())->where('order_id', null)->whereHas(
             'product',
@@ -197,14 +197,10 @@ class CartService
         }
 
         return back()->with('Cart Invalid!');
-
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function show(): mixed
+    public function show(int $id): ?Model
     {
-        return $this->cart_repository->show();
+        return $this->cart_repository->findById($id);
     }
 }

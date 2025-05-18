@@ -51,7 +51,7 @@ class BundleController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->bundleService->create($request->validated())));
+            ->respond(new BannerResource($this->bundleService->createWithProducts($request->validated())));
     }
 
     /**
@@ -89,7 +89,7 @@ class BundleController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->bundleService->update($id, $request->validated())));
+            ->respond(new BannerResource($this->bundleService->updateWithProducts($id, $request->validated())));
     }
 
     /**

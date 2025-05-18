@@ -25,40 +25,39 @@ class BrandService extends CoreService
      * @return Model|null
      */
     /**
-     * Create a new banner with possible media files.
+     * Create a new brand with possible media files.
      *
-     * @param  array<string, mixed>  $data  The data for creating the banner.
-     * @return Model The newly created banner model.
+     * @param  array<string, mixed>  $data  The data for creating the brand.
+     * @return Model The newly created brand model.
      */
-    public function create(array $data): Model
+    public function createWithMedia(array $data): Model
     {
         $brand = $this->brand_repository->create($data);
 
         // Handle image uploads
-        $brand->addMultipleMediaFromRequest(['images'])
-            ->each(function ($fileAdder): void {
-                $fileAdder->preservingOriginal()->toMediaCollection('brand');
-            });
+        if (array_key_exists('images', $data)) {
+            $brand->clearMediaCollection('brand');
+            $brand->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder): void {
+                    $fileAdder->preservingOriginal()->toMediaCollection('brand');
+                });
+        }
 
         return $brand;
     }
 
     /**
-     * Update an existing banner with new data and possibly new media files.
+     * Update an existing brand and handle media uploads.
      *
-     * @param  int  $id  The banner ID to update.
-     * @param  array<string, mixed>  $data  The data for updating the banner.
-     * @return Model The updated banner model.
+     * @param  array<string, mixed>  $data
      */
-    public function update(int $id, array $data): Model
+    public function updateWithMedia(int $id, array $data): Model
     {
         $brand = $this->brand_repository->findById($id);
-
         $brand->update($data);
-
-        // Check for new image uploads and handle them
+        // Handle image uploads
         if (array_key_exists('images', $data)) {
-            $brand->clearMediaCollection('brand'); // Optionally clear existing media
+            $brand->clearMediaCollection('brand');
             $brand->addMultipleMediaFromRequest(['images'])
                 ->each(function ($fileAdder): void {
                     $fileAdder->preservingOriginal()->toMediaCollection('brand');

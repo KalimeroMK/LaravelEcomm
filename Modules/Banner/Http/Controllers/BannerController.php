@@ -50,7 +50,7 @@ class BannerController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->banner_service->create($request->validated());
+        $this->banner_service->createWithMedia($request->validated());
 
         return redirect()->route('banners.index');
     }
@@ -69,7 +69,7 @@ class BannerController extends CoreController
      */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
-        $this->banner_service->update($banner->id, $request->validated());
+        $this->banner_service->updateWithMedia($banner->id, $request->validated());
 
         return redirect()->route('banners.edit', $banner);
     }

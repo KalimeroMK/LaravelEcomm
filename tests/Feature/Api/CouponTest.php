@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Testing\TestResponse;
 use Modules\Coupon\Models\Coupon;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
 
@@ -17,13 +18,15 @@ class CouponTest extends TestCase
     use WithFaker;
     use WithoutMiddleware;
 
-    public string $url = '/api/v1/coupon/';
+    public string $url = '/api/v1/coupons';
 
     /**
      * test create product.
      */
+    #[Test]
     public function test_create_coupon(): TestResponse
     {
+        $coupon = Coupon::factory()->create();
         $data = [
             'code' => $this->faker->word,
             'value' => $this->faker->randomFloat(),
@@ -37,8 +40,10 @@ class CouponTest extends TestCase
     /**
      * test update product.
      */
+    #[Test]
     public function test_update_coupon(): TestResponse
     {
+        $coupon = Coupon::factory()->create();
         $data = [
             'code' => $this->faker->word,
             'value' => $this->faker->randomFloat(),
@@ -46,7 +51,7 @@ class CouponTest extends TestCase
             'status' => 'active',
         ];
 
-        $id = Coupon::firstOrFail()->id;
+        $id = $coupon->id;
 
         return $this->updatePUT($this->url, $data, $id);
     }
@@ -54,9 +59,11 @@ class CouponTest extends TestCase
     /**
      * test find product.
      */
+    #[Test]
     public function test_find_coupon(): TestResponse
     {
-        $id = Coupon::firstOrFail()->id;
+        $coupon = Coupon::factory()->create();
+        $id = $coupon->id;
 
         return $this->show($this->url, $id);
     }
@@ -64,24 +71,31 @@ class CouponTest extends TestCase
     /**
      * test get all products.
      */
+    #[Test]
     public function test_get_all_coupon(): TestResponse
     {
+        Coupon::factory()->count(3)->create();
+
         return $this->list($this->url);
     }
 
     /**
      * test delete products.
      */
+    #[Test]
     public function test_delete_coupon(): TestResponse
     {
-        $id = Coupon::firstOrFail()->id;
+        $coupon = Coupon::factory()->create();
+        $id = $coupon->id;
 
         return $this->destroy($this->url, $id);
     }
 
+    #[Test]
     public function test_structure()
     {
-        $response = $this->json('GET', '/api/v1/coupon/');
+        Coupon::factory()->count(2)->create();
+        $response = $this->json('GET', '/api/v1/coupons');
         $response->assertStatus(200);
 
         $response->assertJsonStructure(

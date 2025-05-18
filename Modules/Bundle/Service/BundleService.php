@@ -34,12 +34,12 @@ class BundleService extends CoreService
     }
 
     /**
-     * Create a new banner with possible media files.
+     * Create a new bundle with attached products.
      *
-     * @param  array<string, mixed>  $data  The data for creating the banner.
-     * @return Model The newly created banner model.
+     * @param  array<string, mixed>  $data  The data for creating the bundle.
+     * @return Model The newly created bundle model.
      */
-    public function create(array $data): Model
+    public function createWithProducts(array $data): Model
     {
         $bundle = $this->bundleRepository->create($data);
         $bundle->products()->attach($data['product']);
@@ -56,18 +56,17 @@ class BundleService extends CoreService
     }
 
     /**
-     * Update an existing banner with new data and possibly new media files.
+     * Update an existing bundle and sync attached products.
      *
-     * @param  int  $id  The banner ID to update.
-     * @param  array<string, mixed>  $data  The data for updating the banner.
-     * @return Model The updated banner model.
+     * @param  array<string, mixed>  $data
      */
-    public function update(int $id, array $data): Model
+    public function updateWithProducts(int $id, array $data): Model
     {
         $bundle = $this->bundleRepository->findById($id);
-        $bundle->products()->sync($data['product']);
         $bundle->update($data);
-
+        if (isset($data['product'])) {
+            $bundle->products()->sync($data['product']);
+        }
         // Check for new image uploads and handle them
         if (array_key_exists('images', $data)) {
             $bundle->clearMediaCollection('bundle'); // Optionally clear existing media

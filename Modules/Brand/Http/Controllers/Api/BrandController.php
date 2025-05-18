@@ -50,7 +50,7 @@ class BrandController extends CoreController
                     ]
                 )
             )
-            ->respond(new BrandResource($this->brand_service->create($request->validated())));
+            ->respond(new BrandResource($this->brand_service->createWithMedia($request->validated())));
     }
 
     /**
@@ -88,7 +88,7 @@ class BrandController extends CoreController
                     ]
                 )
             )
-            ->respond(new BrandResource($this->brand_service->update($id, $request->validated())));
+            ->respond(new BrandResource($this->brand_service->updateWithMedia($id, $request->validated())));
     }
 
     /**

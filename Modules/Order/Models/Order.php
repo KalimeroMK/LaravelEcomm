@@ -36,16 +36,14 @@ use Modules\User\Models\User;
  * @property string $payment_method
  * @property string $payment_status
  * @property string $status
- * @property string $phone
- * @property string|null $post_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Shipping|null $shipping
  * @property User|null $user
  * @property Collection|Cart[] $carts
  * @property-read Collection|Cart[] $cart_info
- * @property-read int|null $cart_info_count
- * @property-read int|null $carts_count
+ * @property-read int|null          $cart_info_count
+ * @property-read int|null          $carts_count
  *
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
@@ -79,20 +77,21 @@ class Order extends Core
     use Filterable;
     use HasFactory;
 
-    public const likeRows = [
-        'user.name',
-        'user.email',
-        'order_number',
-        'payment_method',
-        'payment_status',
-        'status',
-        'email',
-        'phone',
-        'country',
-        'post_code',
-        'total_amount',
+    public const likeRows
+        = [
+            'user.name',
+            'user.email',
+            'order_number',
+            'payment_method',
+            'payment_status',
+            'status',
+            'email',
+            'phone',
+            'country',
+            'post_code',
+            'total_amount',
 
-    ];
+        ];
 
     protected $table = 'orders';
 
@@ -101,33 +100,36 @@ class Order extends Core
      *
      * @var array<string>
      */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-    ];
+    protected $dates
+        = [
+            'created_at',
+            'updated_at',
+        ];
 
-    protected $casts = [
-        'user_id' => 'int',
-        'sub_total' => 'float',
-        'shipping_id' => 'int',
-        'total_amount' => 'float',
-        'quantity' => 'int',
-    ];
+    protected $casts
+        = [
+            'user_id' => 'int',
+            'sub_total' => 'float',
+            'shipping_id' => 'int',
+            'total_amount' => 'float',
+            'quantity' => 'int',
+        ];
 
-    protected $fillable = [
-        'order_number',
-        'user_id',
-        'sub_total',
-        'shipping_id',
-        'total_amount',
-        'quantity',
-        'payment_method',
-        'payment_status',
-        'status',
-        'payer_id',
-        'transaction_reference',
-        'post_code',
-    ];
+    protected $fillable
+        = [
+            'order_number',
+            'user_id',
+            'sub_total',
+            'shipping_id',
+            'total_amount',
+            'quantity',
+            'payment_method',
+            'payment_status',
+            'status',
+            'payer_id',
+            'transaction_reference',
+            'post_code',
+        ];
 
     public static function Factory(): OrderFactory
     {

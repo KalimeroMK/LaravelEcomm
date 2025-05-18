@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Modules\Order\Http\Requests\Api;
+namespace Modules\Tag\Http\Requests\Api;
 
-use Illuminate\Validation\Rule;
 use Modules\Core\Http\Requests\Api\CoreRequest;
 
 class Update extends CoreRequest
 {
-    public mixed $shipping;
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -19,7 +16,7 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::in(['new', 'process', 'delivered', 'cancel'])],
+            'title' => 'string|nullable|unique:tags,title',
         ];
     }
 }

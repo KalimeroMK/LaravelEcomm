@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Testing\TestResponse;
 use Modules\Cart\Models\Cart;
 use Modules\Product\Models\Product;
+use Modules\User\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
 
@@ -17,18 +18,19 @@ class CartTest extends TestCase
     use BaseTestTrait;
     use WithoutMiddleware;
 
-    public string $url = '/api/v1/cart/';
+    public string $url = '/api/v1/carts';
 
     /**
      * test create product.
      */
+    #[Test]
     public function test_create_cart(): TestResponse
     {
-        $product = Product::firstOrFail();
+        $product = Product::factory()->create();
 
         $data = [
             'slug' => $product->slug,
-            'user_id' => Auth::id(),
+            'user_id' => User::factory()->create()->id,
             'product_id' => $product->id,
             'price' => ($product->price - ($product->price * $product->discount) / 100),
             'amount' => ($product->price - ($product->price * $product->discount) / 100) * 14,
@@ -41,14 +43,17 @@ class CartTest extends TestCase
     /**
      * test update product.
      */
+    #[Test]
     public function test_update_cart(): TestResponse
     {
+        $product = Product::factory()->create();
+        $user = User::factory()->create()->id;
+        $id = Cart::factory()->create(['product_id' => $product->id, 'user_id' => $user])->id;
         $data = [
-            'slug' => Product::firstOrFail()->slug,
+            'slug' => $product->slug,
             'quantity' => 5,
+            'user_id' => $user,
         ];
-
-        $id = Cart::firstOrFail()->id;
 
         return $this->updatePUT($this->url, $data, $id);
     }
@@ -56,9 +61,11 @@ class CartTest extends TestCase
     /**
      * test find product.
      */
+    #[Test]
     public function test_find_cart(): TestResponse
     {
-        $id = Cart::firstOrFail()->id;
+        $cart = Cart::factory()->create();
+        $id = $cart->id;
 
         return $this->show($this->url, $id);
     }
@@ -66,24 +73,33 @@ class CartTest extends TestCase
     /**
      * test get all products.
      */
+    #[Test]
     public function test_get_all_cart(): TestResponse
     {
+        $user = User::factory()->create();
+        Cart::factory()->count(3)->create(['user_id' => $user->id]);
+
         return $this->list($this->url);
     }
 
     /**
      * test delete products.
      */
+    #[Test]
     public function test_delete_cart(): TestResponse
     {
-        $id = Cart::firstOrFail()->id;
+        $cart = Cart::factory()->create();
+        $id = $cart->id;
 
         return $this->destroy($this->url, $id);
     }
 
+    #[Test]
     public function test_structure()
     {
-        $response = $this->json('GET', '/api/v1/cart/');
+        $user = User::factory()->create();
+        Cart::factory()->count(2)->create(['user_id' => $user->id]);
+        $response = $this->json('GET', '/api/v1/carts');
         $response->assertStatus(200);
 
         $response->assertJsonStructure(

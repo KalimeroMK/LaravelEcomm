@@ -16,8 +16,8 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|required|unique:tags',
-            'status' => 'required|in:active,inactive',
+            'title' => 'string|required|unique:tags,title',
+            'slug' => 'required|unique:tags,slug',
         ];
     }
 }

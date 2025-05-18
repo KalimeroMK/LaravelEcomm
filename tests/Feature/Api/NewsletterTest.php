@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Testing\TestResponse;
 use Modules\Message\Models\Message;
 use Modules\Newsletter\Models\Newsletter;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
 
@@ -18,40 +19,45 @@ class NewsletterTest extends TestCase
     use WithFaker;
     use WithoutMiddleware;
 
-    public string $url = '/api/v1/newsletter/';
+    public string $url = '/api/v1/newsletters';
 
     /**
-     * test create product.
+     * test create newsletter.
      */
+    #[Test]
     public function test_create_newsletter(): TestResponse
     {
         $data = [
             'email' => $this->faker->unique()->safeEmail,
+            'status' => 'active',
         ];
 
         return $this->create($this->url, $data);
     }
 
     /**
-     * test update product.
+     * test update newsletter.
      */
+    #[Test]
     public function test_update_newsletter(): TestResponse
     {
+        $id = Newsletter::factory()->create()->id;
         $data = [
             'email' => $this->faker->unique()->safeEmail,
+            'status' => 'inactive',
         ];
-
-        $id = Newsletter::firstOrFail()->id;
 
         return $this->updatePUT($this->url, $data, $id);
     }
 
     /**
-     * test find product.
+     * test find newsletter.
      */
+    #[Test]
     public function test_find_newsletter(): TestResponse
     {
-        $id = Newsletter::firstOrFail()->id;
+        $newsletter = Newsletter::factory()->create();
+        $id = $newsletter->id;
 
         return $this->show($this->url, $id);
     }
@@ -59,17 +65,22 @@ class NewsletterTest extends TestCase
     /**
      * test get all products.
      */
+    #[Test]
     public function test_get_all_newsletter(): TestResponse
     {
+        Newsletter::factory()->count(3)->create();
+
         return $this->list($this->url);
     }
 
     /**
      * test delete products.
      */
+    #[Test]
     public function test_delete_newsletter(): TestResponse
     {
-        $id = Newsletter::firstOrFail()->id;
+        $newsletter = Newsletter::factory()->create();
+        $id = $newsletter->id;
 
         return $this->destroy($this->url, $id);
     }
@@ -81,9 +92,11 @@ class NewsletterTest extends TestCase
         return $this->destroy($this->url, $id);
     }
 
+    #[Test]
     public function test_structure()
     {
-        $response = $this->json('GET', '/api/v1/newsletter/');
+        Newsletter::factory()->count(2)->create();
+        $response = $this->json('GET', '/api/v1/newsletters');
         $response->assertStatus(200);
 
         $response->assertJsonStructure(

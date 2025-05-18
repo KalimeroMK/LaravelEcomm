@@ -54,7 +54,7 @@ class CartController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -67,7 +67,7 @@ class CartController extends CoreController
                     ]
                 )
             )
-            ->respond(new CartResource($this->cart_service->show()));
+            ->respond(new CartResource($this->cart_service->show($id)));
     }
 
     /**

@@ -33,10 +33,9 @@ trait BaseTestTrait
     {
         $response = $this->json(
             'POST',
-            $url.$id,
+            rtrim($url, '/').'/'.$id,
             $data
         );
-
         Log::info(1, [$response->getContent()]);
 
         return $response->assertStatus(200);
@@ -46,7 +45,7 @@ trait BaseTestTrait
     {
         $response = $this->json(
             'PUT',
-            $url.$id,
+            rtrim($url, '/').'/'.$id,
             $data
         );
         Log::info(1, [$response->getContent()]);
@@ -56,7 +55,7 @@ trait BaseTestTrait
 
     public function show(string $url, int $id): TestResponse
     {
-        $response = $this->json('GET', $url.$id);
+        $response = $this->json('GET', rtrim($url, '/').'/'.$id);
         Log::info(1, [$response->getContent()]);
 
         return $response->assertStatus(200);
@@ -64,7 +63,7 @@ trait BaseTestTrait
 
     public function destroy(string $url, int $id): TestResponse
     {
-        $response = $this->json('DELETE', $url.$id);
+        $response = $this->json('DELETE', rtrim($url, '/').'/'.$id);
 
         Log::info(1, [$response->getContent()]);
 

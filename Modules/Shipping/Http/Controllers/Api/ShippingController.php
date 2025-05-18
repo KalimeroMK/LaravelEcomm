@@ -12,7 +12,6 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Shipping\Http\Requests\Api\Store;
 use Modules\Shipping\Http\Requests\Api\Update;
 use Modules\Shipping\Http\Resources\ShippingResource;
-use Modules\Shipping\Models\Shipping;
 use Modules\Shipping\Service\ShippingService;
 use ReflectionException;
 
@@ -57,7 +56,7 @@ class ShippingController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(Shipping $shipping): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -70,13 +69,13 @@ class ShippingController extends CoreController
                     ]
                 )
             )
-            ->respond(new ShippingResource($this->shipping_service->findById($shipping->id)));
+            ->respond(new ShippingResource($this->shipping_service->findById($id)));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, Shipping $shipping): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -89,15 +88,15 @@ class ShippingController extends CoreController
                     ]
                 )
             )
-            ->respond(new ShippingResource($this->shipping_service->update($shipping->id, $request->validated())));
+            ->respond(new ShippingResource($this->shipping_service->update($id, $request->validated())));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function destroy(Shipping $shipping): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->shipping_service->delete($shipping->id);
+        $this->shipping_service->delete($id);
 
         return $this
             ->setMessage(

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Attribute\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,13 +14,13 @@ class AttributeGroup extends Model
 
     protected $fillable = ['name'];
 
-    public function attributes()
-    {
-        return $this->hasMany(Attribute::class);
-    }
-
     public static function Factory(): AttributeGroupFactory
     {
         return AttributeGroupFactory::new();
+    }
+
+    public function attributes()
+    {
+        return $this->hasMany(Attribute::class);
     }
 }

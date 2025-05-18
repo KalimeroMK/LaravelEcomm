@@ -6,14 +6,11 @@ namespace Modules\Newsletter\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Banner\Http\Resource\BannerResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
-use Modules\Coupon\Http\Resource\CouponResource;
 use Modules\Newsletter\Http\Requests\Api\Store;
 use Modules\Newsletter\Http\Requests\Api\Store as Update;
 use Modules\Newsletter\Http\Resources\NewsletterResource;
-use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Service\NewsletterService;
 use ReflectionException;
 
@@ -58,7 +55,7 @@ class NewsletterController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(Newsletter $newsletter): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -71,13 +68,13 @@ class NewsletterController extends CoreController
                     ]
                 )
             )
-            ->respond(new CouponResource($this->newsletter_service->findById($newsletter->id)));
+            ->respond(new NewsletterResource($this->newsletter_service->findById($id)));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, Newsletter $newsletter): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -90,15 +87,15 @@ class NewsletterController extends CoreController
                     ]
                 )
             )
-            ->respond(new BannerResource($this->newsletter_service->update($newsletter->id, $request->validated())));
+            ->respond(new NewsletterResource($this->newsletter_service->update($id, $request->validated())));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function destroy(Newsletter $newsletter): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->newsletter_service->delete($newsletter->id);
+        $this->newsletter_service->delete($id);
 
         return $this
             ->setMessage(

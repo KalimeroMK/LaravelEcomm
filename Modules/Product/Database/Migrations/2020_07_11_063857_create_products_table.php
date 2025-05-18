@@ -17,8 +17,6 @@ return new class extends Migration
             $table->text('summary')->index();
             $table->longText('description')->nullable()->index();
             $table->integer('stock')->default(1);
-            $table->string('color')->nullable();
-            $table->unsignedBigInteger('condition_id')->index();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->float('price');
             $table->float('discount')->nullable();

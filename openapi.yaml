@@ -71,7 +71,7 @@
                 "password":
                   "type": "string"
                   "example": "password"
-                "confirm_password":
+                "password_confirmation":
                   "type": "string"
                   "example": "password"
       "responses":

@@ -35,7 +35,7 @@ class BrandController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->brand_service->create($request->validated());
+        $this->brand_service->createWithMedia($request->validated());
 
         return redirect()->route('brands.index')->with('status', 'Brand created successfully.');
     }
@@ -47,7 +47,7 @@ class BrandController extends CoreController
 
     public function update(Store $request, Brand $brand): RedirectResponse
     {
-        $this->brand_service->update($brand->id, $request->validated());
+        $this->brand_service->updateWithMedia($brand->id, $request->validated());
 
         return redirect()->route('brands.edit', $brand)->with('status', 'Brand updated successfully.');
     }

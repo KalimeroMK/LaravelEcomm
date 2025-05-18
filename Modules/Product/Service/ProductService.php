@@ -60,10 +60,6 @@ class ProductService extends CoreService
 
         $product->categories()->attach($data['category']);
 
-        if (isset($data['size'])) {
-            $product->sizes()->attach($data['size']);
-        }
-
         if (isset($data['tag'])) {
             $product->tags()->attach($data['tag']);
         }
@@ -72,13 +68,13 @@ class ProductService extends CoreService
     }
 
     /**
-     * Update an existing product.
+     * Update an existing product with relations and media.
      *
      * @param  array<string, mixed>  $data
      *
      * @throws Exception
      */
-    public function update(int $id, array $data): Product
+    public function updateWithRelationsAndMedia(int $id, array $data): Product
     {
         $this->handleColor($data);
 

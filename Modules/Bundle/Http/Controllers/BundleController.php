@@ -39,7 +39,7 @@ class BundleController extends Controller
 
     public function store(Store $request): RedirectResponse
     {
-        $this->bundleService->create($request->validated());
+        $this->bundleService->createWithProducts($request->validated());
 
         return redirect()->route('bundle.index')->with('status', 'Brand created successfully.');
     }
@@ -51,7 +51,7 @@ class BundleController extends Controller
 
     public function update(Store $request, Bundle $bundle): RedirectResponse
     {
-        $this->bundleService->update($bundle->id, $request->all());
+        $this->bundleService->updateWithProducts($bundle->id, $request->all());
 
         return redirect()->route('bundle.edit', $bundle)->with('status', 'Brand updated successfully.');
     }

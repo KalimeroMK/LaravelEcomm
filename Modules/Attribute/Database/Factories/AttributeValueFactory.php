@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Attribute\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,6 +24,7 @@ class AttributeValueFactory extends Factory
             'float' => $this->faker->randomFloat(2, 1, 100),
             default => null,
         };
+
         return [
             'product_id' => Product::factory(),
             'attribute_id' => Attribute::factory(),

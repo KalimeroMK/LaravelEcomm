@@ -6,9 +6,8 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Testing\TestResponse;
 use Modules\Attribute\Models\Attribute;
-use Modules\Banner\Models\Banner;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
 
@@ -20,57 +19,53 @@ class AttributeTest extends TestCase
 
     public string $url = '/api/v1/attributes/';
 
-    /**
-     * test create product.
-     */
-    public function test_create_attribute(): TestResponse
+    #[Test]
+    public function create_attribute(): void
     {
-        return $this->create($this->url, Attribute::factory()->make()->toArray());
+        $response = $this->create($this->url, Attribute::factory()->make()->toArray());
+        $response->assertStatus(200);
     }
 
-    /**
-     * test update product.
-     */
-    public function test_update_attribute(): TestResponse
+    #[Test]
+    public function update_attribute(): void
     {
         $data = [
             'name' => $this->faker->name(),
-            'code' => $this->faker->name(),
+            'code' => $this->faker->slug(),
         ];
         $id = Attribute::factory()->create()->id;
 
-        return $this->updatePUT($this->url, $data, $id);
+        $response = $this->updatePUT($this->url, $data, $id);
+        $response->assertStatus(200);
     }
 
-    /**
-     * test find product.
-     */
-    public function test_find_attribute(): TestResponse
+    #[Test]
+    public function find_attribute(): void
     {
-        $id = Banner::firstOrFail()->id;
+        $id = Attribute::factory()->create()->id;
 
-        return $this->show($this->url, $id);
+        $response = $this->show($this->url, $id);
+        $response->assertStatus(200);
     }
 
-    /**
-     * test get all products.
-     */
-    public function test_get_all_attribute(): TestResponse
+    #[Test]
+    public function get_all_attribute(): void
     {
-        return $this->list($this->url);
+        $response = $this->list($this->url);
+        $response->assertStatus(200);
     }
 
-    /**
-     * test delete products.
-     */
-    public function test_delete_attribute(): TestResponse
+    #[Test]
+    public function delete_attribute(): void
     {
-        $id = Banner::firstOrFail()->id;
+        $id = Attribute::factory()->create()->id;
 
-        return $this->destroy($this->url, $id);
+        $response = $this->destroy($this->url, $id);
+        $response->assertStatus(200);
     }
 
-    public function test_structure()
+    #[Test]
+    public function structure(): void
     {
         $response = $this->json('GET', '/api/v1/attributes/');
         $response->assertStatus(200);
@@ -87,6 +82,22 @@ class AttributeTest extends TestCase
                     'configurable',
                 ],
             ],
+        ]);
+    }
+
+    #[Test]
+    public function flexible_attribute_values_are_returned(): void
+    {
+        $attribute = Attribute::factory()->create([
+            'type' => 'text',
+        ]);
+
+        $response = $this->json('GET', "/api/v1/attributes/{$attribute->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'id' => $attribute->id,
+            'type' => 'text',
         ]);
     }
 }

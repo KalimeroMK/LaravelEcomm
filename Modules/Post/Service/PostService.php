@@ -23,15 +23,14 @@ class PostService extends CoreService
     }
 
     /**
-     * Create a new post with possible media files.
+     * Create a new post with categories and media.
      *
-     * @param  array<string, mixed>  $data  The data for creating the post.
-     * @return Model The newly created post model.
+     * @param  array<string, mixed>  $data
      *
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function create(array $data): Model
+    public function createWithCategoriesAndMedia(array $data): Model
     {
         $post = $this->post_repository->create($data);
         if (isset($data['category'])) {
@@ -43,41 +42,37 @@ class PostService extends CoreService
         }
 
         // Handle image uploads
-        $post->addMultipleMediaFromRequest(['images'])
-            ->each(function (FileAdder $fileAdder): void {
-                $fileAdder->preservingOriginal()->toMediaCollection('post');
-            });
+        if (isset($data['images'])) {
+            $post->clearMediaCollection('post');
+            $post->addMultipleMediaFromRequest(['images'])
+                ->each(function (FileAdder $fileAdder): void {
+                    $fileAdder->preservingOriginal()->toMediaCollection('post');
+                });
+        }
 
         return $post;
     }
 
     /**
-     * Update an existing post with new data and possibly new media files.
+     * Update an existing post with categories, tags, and media.
      *
-     * @param  int  $id  The post ID to update.
-     * @param  array<string, mixed>  $data  The data for updating the post.
-     * @return Model The updated post model.
+     * @param  array<string, mixed>  $data
      *
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function update(int $id, array $data): Model
+    public function updateWithCategoriesAndMedia(int $id, array $data): Model
     {
         $post = $this->post_repository->findById($id);
-
         $post->update($data);
-
         if (isset($data['category'])) {
             $post->categories()->sync($data['category']);
         }
-
         if (isset($data['tags'])) {
             $post->tags()->sync($data['tags']);
         }
-
-        // Check for new image uploads and handle them
-        if (array_key_exists('images', $data)) {
-            $post->clearMediaCollection('post'); // Optionally clear existing media
+        if (isset($data['images'])) {
+            $post->clearMediaCollection('post');
             $post->addMultipleMediaFromRequest(['images'])
                 ->each(function (FileAdder $fileAdder): void {
                     $fileAdder->preservingOriginal()->toMediaCollection('post');

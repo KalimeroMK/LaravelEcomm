@@ -19,7 +19,10 @@ class NotificationService extends CoreService
         $this->notification_repository = $notification_repository;
     }
 
-    public function findById(int $id): ?Model
+    /**
+     * Find notification by ID and mark it as read.
+     */
+    public function findByIdAndMarkRead(int $id): ?Model
     {
         $this->notification_repository->update($id, ['read_at' => Carbon::now()]);
 

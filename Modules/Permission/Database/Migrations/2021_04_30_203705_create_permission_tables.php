@@ -22,7 +22,7 @@ return new class extends Migration
             throw new Exception('Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
         }
 
-        Schema::create($tableNames['permissions'], function (Blueprint $table) {
+        Schema::create($tableNames['permissions'], function (Blueprint $table): void {
             $table->bigIncrements('id');
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create($tableNames['roles'], function (Blueprint $table) {
+        Schema::create($tableNames['roles'], function (Blueprint $table): void {
             $table->bigIncrements('id');
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
@@ -41,7 +41,7 @@ return new class extends Migration
         });
 
         Schema::create($tableNames['model_has_permissions'],
-            function (Blueprint $table) use ($tableNames, $columnNames) {
+            function (Blueprint $table) use ($tableNames, $columnNames): void {
                 $table->unsignedBigInteger('permission_id');
 
                 $table->string('model_type');
@@ -60,7 +60,7 @@ return new class extends Migration
                 );
             });
 
-        Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames) {
+        Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames): void {
             $table->unsignedBigInteger('role_id');
 
             $table->string('model_type');
@@ -78,7 +78,7 @@ return new class extends Migration
             );
         });
 
-        Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
+        Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames): void {
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('role_id');
 

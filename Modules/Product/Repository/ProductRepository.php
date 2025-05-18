@@ -76,7 +76,7 @@ class ProductRepository extends Repository
      */
     public function findById(int $id): ?Model
     {
-        return $this->model::with('brand', 'categories', 'carts', 'condition', 'sizes', 'tags')->find($id);
+        return $this->model::with('brand', 'categories', 'carts', 'condition', 'tags')->find($id);
     }
 
     /**
@@ -144,7 +144,7 @@ class ProductRepository extends Repository
      */
     protected function withRelations(): array
     {
-        return ['brand', 'categories', 'carts', 'condition', 'sizes', 'tags', 'attributes.attribute'];
+        return ['brand', 'categories', 'carts', 'condition', 'tags', 'attributes.attribute'];
     }
 
     /**

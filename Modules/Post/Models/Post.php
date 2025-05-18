@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Post\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -115,6 +114,7 @@ class Post extends Core implements HasMedia
             'photo',
             'author.name',
             'status',
+            'user_id',
         ];
 
     public static function Factory(): PostFactory
@@ -170,7 +170,7 @@ class Post extends Core implements HasMedia
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('post');
-        if ($mediaItem) {
+        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
             return $mediaItem->getUrl();
         }
 

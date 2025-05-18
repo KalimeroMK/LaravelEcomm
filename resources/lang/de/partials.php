@@ -68,7 +68,7 @@ return [
     'logo' => 'Logo',
     'impersonate' => 'Imitieren',
     'password' => 'Passwort',
-    'confirm_password' => 'Passwort bestätigen',
+    'password_confirmation' => 'Passwort bestätigen',
     'domain' => 'Domain',
     'database' => 'Database',
     'categories' => 'Categories',

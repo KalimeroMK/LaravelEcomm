@@ -36,7 +36,7 @@ class AttributeRepository extends Repository implements SearchInterface
             }
         }
 
-        $boolKeys = ['filterable', 'configurable'];
+        $boolKeys = ['is_filterable', 'is_configurable'];
 
         foreach ($boolKeys as $key) {
             if (Arr::has($data, $key)) {

@@ -53,7 +53,7 @@ class OrderController extends CoreController
 
     public function update(Update $request, Order $order): RedirectResponse
     {
-        $this->order_service->update($order->id, $request->all());
+        $this->order_service->updateWithDetails($order->id, $request->all());
 
         return redirect()->route('orders.index');
     }

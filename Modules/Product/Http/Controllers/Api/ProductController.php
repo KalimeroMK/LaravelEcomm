@@ -8,11 +8,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
-use Modules\Post\Http\Requests\Api\Search;
-use Modules\Post\Http\Requests\Api\Store;
-use Modules\Post\Http\Requests\Api\Update;
+use Modules\Product\Http\Requests\Api\Search;
+use Modules\Product\Http\Requests\Api\Store;
+use Modules\Product\Http\Requests\Api\Update;
 use Modules\Product\Http\Resources\ProductResource;
-use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
 use ReflectionException;
 
@@ -57,7 +56,7 @@ class ProductController extends CoreController
     /**
      * @throws ReflectionException
      */
-    public function show(Product $product): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this
             ->setMessage(
@@ -70,7 +69,7 @@ class ProductController extends CoreController
                     ]
                 )
             )
-            ->respond(new ProductResource($this->product_service->findById($product->id)));
+            ->respond(new ProductResource($this->product_service->findById($id)));
     }
 
     /**

@@ -29,7 +29,7 @@ services:
     networks:
       - laravelapp
     ports:
-      - "3302:3306"
+      - "3306:3306"
   nginx:
     image: nginx:latest
     container_name: e_comm_nginx

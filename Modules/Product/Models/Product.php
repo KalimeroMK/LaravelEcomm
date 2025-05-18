@@ -23,7 +23,6 @@ use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
 use Modules\Product\Database\Factories\ProductFactory;
-
 use Modules\Tag\Models\Tag;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -38,7 +37,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string|null $description
  * @property int $stock
  * @property int $d_deal
-
  * @property string $condition
  * @property string $status
  * @property float $price
@@ -74,14 +72,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder|Product whereIsFeatured($value)
  * @method static Builder|Product wherePhoto($value)
  * @method static Builder|Product wherePrice($value)
-
  * @method static Builder|Product whereSlug($value)
  * @method static Builder|Product whereStatus($value)
  * @method static Builder|Product whereStock($value)
  * @method static Builder|Product whereSummary($value)
  * @method static Builder|Product whereTitle($value)
  * @method static Builder|Product whereUpdatedAt($value)
-
  *
  * @mixin Eloquent
  */
@@ -211,7 +207,7 @@ class Product extends Core implements HasMedia
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-        if ($mediaItem) {
+        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
             return $mediaItem->getUrl();
         }
 
@@ -221,7 +217,7 @@ class Product extends Core implements HasMedia
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-        if ($mediaItem) {
+        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
             // Replace 'thumb' with your conversion name if needed
             return $mediaItem->getUrl('thumb');
         }
@@ -233,8 +229,6 @@ class Product extends Core implements HasMedia
     {
         return $this->belongsTo(Condition::class);
     }
-
-
 
     public function tags(): BelongsToMany
     {
@@ -251,7 +245,7 @@ class Product extends Core implements HasMedia
 
     public function attributeValues()
     {
-        return $this->hasMany(\Modules\Attribute\Models\AttributeValue::class, 'product_id', 'id');
+        return $this->hasMany(AttributeValue::class, 'product_id', 'id');
     }
 
     public function attributes()
@@ -275,6 +269,4 @@ class Product extends Core implements HasMedia
 
         return Brand::whereIn('id', $productBrandIds)->get();
     }
-
-
 }

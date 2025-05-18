@@ -6,6 +6,7 @@ namespace Modules\Tag\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Modules\Tag\Models\Tag;
 
 class TagFactory extends Factory
@@ -18,8 +19,8 @@ class TagFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->word,
-            'slug' => $this->faker->slug,
+            'title' => 'Title-'.mb_strtoupper(Str::random(10)),
+            'slug' => 'Slug-'.mb_strtoupper(Str::random(10)),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

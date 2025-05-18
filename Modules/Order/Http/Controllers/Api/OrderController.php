@@ -51,7 +51,7 @@ class OrderController extends CoreController
                     ]
                 )
             )
-            ->respond(new OrderResource($this->order_service->store($request->validated())));
+            ->respond(new OrderResource($this->order_service->store($request->all())));
     }
 
     /**

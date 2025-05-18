@@ -39,12 +39,20 @@
                     <div class="attributes-section">
                         <h4>@lang('partials.product_atributes')</h4>
                         @foreach($attributes as $attribute)
-                            <div class="form-group">
-                                <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
-                                @php
-                                    $attributeValue = $product->attributes->where('attribute_id', $attribute->id)->first();
-                                @endphp
-                                @switch($attribute->type)
+    <div class="form-group">
+        <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
+        @php
+            $attributeValue = $product->attributes->where('attribute_id', $attribute->id)->first();
+        @endphp
+        @if($attribute->code === 'condition')
+            <select name="attributes[{{ $attribute->code }}]" class="form-control">
+                <option value="">-- Select Condition --</option>
+                @foreach($attribute->options as $option)
+                    <option value="{{ $option->value }}" @if(isset($attributeValue) && $attributeValue->value == $option->value) selected @endif>{{ $option->label ?? ucfirst($option->value) }}</option>
+                @endforeach
+            </select>
+        @else
+            @switch($attribute->type)
                                     @case('string')
                                         <input type="text" class="form-control"
                                                name="attributes[{{ $attribute->code }}]"
