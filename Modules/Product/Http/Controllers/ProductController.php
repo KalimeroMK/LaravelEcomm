@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Modules\Admin\Models\Condition;
 use Modules\Attribute\Models\Attribute;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
@@ -18,7 +17,6 @@ use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Models\Product;
 use Modules\Product\Service\ProductService;
-use Modules\Size\Models\Size;
 use Modules\Tag\Models\Tag;
 
 class ProductController extends CoreController
@@ -39,14 +37,12 @@ class ProductController extends CoreController
     public function create(): Renderable
     {
         return view('product::create', [
-            'brands' => Brand::get(),
-            'categories' => Category::get(),
-            'product' => new Product,
-            'sizes' => Size::get(),
-            'conditions' => Condition::get(),
-            'tags' => Tag::get(),
-            'attributes' => Attribute::all(),
-        ]
+                'brands' => Brand::get(),
+                'categories' => Category::get(),
+                'product' => new Product,
+                'tags' => Tag::get(),
+                'attributes' => Attribute::all(),
+            ]
         );
     }
 
@@ -68,8 +64,6 @@ class ProductController extends CoreController
             'brands' => Brand::get(),
             'categories' => Category::all(),
             'product' => $product,
-            'sizes' => Size::get(),
-            'conditions' => Condition::all(),
             'tags' => Tag::get(),
             'attributes' => Attribute::all(),
         ]);
@@ -80,7 +74,8 @@ class ProductController extends CoreController
      */
     public function update(Update $request, Product $product): RedirectResponse
     {
-        $this->product_service->update($product->id, $request->all());
+        $this->product_service->updateWithRelationsAndMedia($product->id, $request->validated());
+
 
         return redirect()->route('products.index');
     }
@@ -106,6 +101,5 @@ class ProductController extends CoreController
         $description = (new OpenAIService)->generateProductDescription($title);
 
         return response()->json(['description' => $description]);
-
     }
 }

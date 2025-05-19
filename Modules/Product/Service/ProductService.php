@@ -52,6 +52,7 @@ class ProductService extends CoreService
 
         /** @var Product $product */
         $product = $this->product_repository->create($data);
+
         if (request()->hasFile('images')) {
             $product->addMultipleMediaFromRequest(['images'])->each(function ($fileAdder): void {
                 $fileAdder->preservingOriginal()->toMediaCollection('product');
@@ -63,6 +64,8 @@ class ProductService extends CoreService
         if (isset($data['tag'])) {
             $product->tags()->attach($data['tag']);
         }
+
+        $this->syncAttributes($product, $data);
 
         return $product;
     }
@@ -97,21 +100,36 @@ class ProductService extends CoreService
             $product->tags()->sync($data['tag']);
         }
 
-        // Handle attributes
-        if (isset($data['attributes'])) {
-            foreach ($data['attributes'] as $attributeCode => $attributeValue) {
-                $attribute = Attribute::where('code', $attributeCode)->first();
+        $this->syncAttributes($product, $data);
+
+        return $product;
+    }
+
+    /**
+     * Sync attribute values to the product.
+     */
+    private function syncAttributes(Product $product, array $data): void
+    {
+        if (!isset($data['attributes']) || !is_array($data['attributes'])) {
+            return;
+        }
+
+        foreach ($data['attributes'] as $code => $value) {
+            if ($value === '__custom__') {
+                $value = $data['attributes_custom'][$code] ?? null;
+            }
+
+            if ($value !== null) {
+                $attribute = Attribute::where('code', $code)->first();
                 if ($attribute) {
-                    $valueColumn = $attribute->getValueColumnName();
+                    $column = $attribute->getValueColumnName();
                     $product->attributes()->updateOrCreate(
                         ['attribute_id' => $attribute->id],
-                        [$valueColumn => $attributeValue]
+                        [$column => $value]
                     );
                 }
             }
         }
-
-        return $product;
     }
 
     /**
@@ -119,7 +137,7 @@ class ProductService extends CoreService
      *
      * @param  array<string, mixed>  $data
      */
-    private function handleColor(array $data): void
+    private function handleColor(array &$data): void
     {
         $color = $data['color'] ?? null;
         if (is_array($color)) {

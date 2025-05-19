@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label for="summary">@lang('partials.summary')</label>
                         <textarea class="form-control" id="summary"
-                                  name="summary">{{$product->summary ?? ''}}</textarea>
+                                  name="summary">{{ $product->summary ?? '' }}</textarea>
                     </div>
 
                     <div class="form-group">
@@ -29,89 +29,99 @@
                                   name="description">{{ $product->description ?? '' }}</textarea>
                         @if(config('openai.openai.enabled'))
                             <button type="button" style="margin-top: 2%" id="generateDescription"
-                                    class="btn btn-info">@lang('partials.generate_description')
-                            </button>
+                                    class="btn btn-info">@lang('partials.generate_description')</button>
                         @endif
                     </div>
 
-
-                    <!-- Add attributes dynamically -->
+                    <!-- Attributes -->
                     <div class="attributes-section">
                         <h4>@lang('partials.product_atributes')</h4>
-                        @foreach($attributes as $attribute)
-    <div class="form-group">
-        <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
-        @php
-            $attributeValue = $product->attributes->where('attribute_id', $attribute->id)->first();
-        @endphp
-        @if($attribute->code === 'condition')
-            <select name="attributes[{{ $attribute->code }}]" class="form-control">
-                <option value="">-- Select Condition --</option>
-                @foreach($attribute->options as $option)
-                    <option value="{{ $option->value }}" @if(isset($attributeValue) && $attributeValue->value == $option->value) selected @endif>{{ $option->label ?? ucfirst($option->value) }}</option>
-                @endforeach
-            </select>
-        @else
-            @switch($attribute->type)
-                                    @case('string')
-                                        <input type="text" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]"
-                                               value="{{ $attributeValue->string_value ?? '' }}">
-                                        @break
-                                    @case('text')
-                                        <textarea class="form-control"
-                                                  name="attributes[{{ $attribute->code }}]">{{ $attributeValue->text_value ?? '' }}</textarea>
-                                        @break
-                                    @case('date')
-                                        <input type="date" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]"
-                                               value="{{ $attributeValue->date_value ?? '' }}">
-                                        @break
-                                    @case('time')
-                                        <input type="time" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]"
-                                               value="{{ $attributeValue->time_value ?? '' }}">
-                                        @break
-                                    @case('url')
-                                        <input type="url" class="form-control" name="attributes[{{ $attribute->code }}]"
-                                               value="{{ $attributeValue->url_value ?? '' }}">
-                                        @break
-                                    @case('hex')
-                                        <input type="text" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]}"
-                                               value="{{ $attributeValue->hex_value ?? '' }}">
-                                        @break
-                                    @case('float')
-                                        <input type="number" step="0.01" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]}"
-                                               value="{{ $attributeValue->float_value ?? '' }}">
-                                        @break
-                                    @case('integer')
-                                        <input type="number" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]}"
-                                               value="{{ $attributeValue->integer_value ?? '' }}">
-                                        @break
-                                    @case('boolean')
-                                        <input type="checkbox" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]}"
-                                               value="1" {{ $attributeValue && $attributeValue->boolean_value ? 'checked' : '' }}>
-                                        @break
-                                    @case('decimal')
-                                        <input type="number" step="0.0001" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]}"
-                                               value="{{ $attributeValue->decimal_value ?? '' }}">
-                                        @break
-                                    @default
-                                        <input type="text" class="form-control"
-                                               name="attributes[{{ $attribute->code }}]}"
-                                               value="{{ $attributeValue->default ?? '' }}">
-                                @endswitch
+                        @foreach ($attributes as $attribute)
+                            <div class="mb-3"
+                                 x-data="{ selected: '{{ old('attributes.' . $attribute->code, $selectedValues[0] ?? '') }}' }">
+                                <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
+                                @php
+                                    $selectedValues = $product?->attributeValues
+                                        ->where('attribute_id', $attribute->id)
+                                        ->pluck($attribute->getValueColumnName())
+                                        ->filter(fn($v) => $v !== null)
+                                        ->values()
+                                        ->toArray();
+                                @endphp
+
+                                @if ($attribute->display === 'checkbox' && $attribute->options->count())
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach ($attribute->options as $option)
+                                            <div class="form-check form-check-inline">
+                                                <input
+                                                        class="form-check-input"
+                                                        type="checkbox"
+                                                        name="attributes[{{ $attribute->code }}][]"
+                                                        id="attribute_{{ $attribute->code }}_{{ $option->id }}"
+                                                        value="{{ $option->value }}"
+                                                        {{ in_array($option->value, old('attributes.' . $attribute->code, $selectedValues)) ? 'checked' : '' }}
+                                                >
+                                                <label class="form-check-label"
+                                                       for="attribute_{{ $attribute->code }}_{{ $option->id }}">
+                                                    {{ $option->value }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @elseif ($attribute->display === 'checkbox' && $attribute->options->isEmpty())
+                                    <div class="form-check">
+                                        <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                name="attributes[{{ $attribute->code }}]"
+                                                id="attribute_{{ $attribute->code }}"
+                                                value="1"
+                                                {{ old('attributes.' . $attribute->code, $selectedValues[0] ?? false) ? 'checked' : '' }}
+                                        >
+                                        <label class="form-check-label" for="attribute_{{ $attribute->code }}">
+                                            {{ $attribute->name }}
+                                        </label>
+                                    </div>
+                                @elseif ($attribute->options->count())
+                                    <select
+                                            x-model="selected"
+                                            name="attributes[{{ $attribute->code }}]"
+                                            id="attribute_{{ $attribute->code }}"
+                                            class="form-control"
+                                    >
+                                        <option value="">-- Select {{ $attribute->name }} --</option>
+                                        @foreach ($attribute->options as $option)
+                                            <option value="{{ $option->value }}"
+                                                    {{ in_array($option->value, $selectedValues) ? 'selected' : '' }}>
+                                                {{ $option->value }}
+                                            </option>
+                                        @endforeach
+                                        <option value="__custom__">Other (specify manually)</option>
+                                    </select>
+
+                                    <template x-if="selected === '__custom__'">
+                                        <input
+                                                type="text"
+                                                name="attributes_custom[{{ $attribute->code }}]"
+                                                placeholder="Enter custom {{ $attribute->name }}"
+                                                class="form-control mt-2"
+                                        />
+                                    </template>
+                                @else
+                                    <input
+                                            type="text"
+                                            name="attributes[{{ $attribute->code }}]"
+                                            id="attribute_{{ $attribute->code }}"
+                                            class="form-control"
+                                            value="{{ old('attributes.' . $attribute->code, $selectedValues[0] ?? '') }}"
+                                    />
+                                @endif
                             </div>
                         @endforeach
                     </div>
-
                 </div>
                 <div class="col-3">
+                    <!-- Other fields preserved here -->
                     <div class="form-group">
                         <label for="inputImage">@lang('partials.image')</label>
                         <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
@@ -190,26 +200,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="status">@lang('partials.conditions')</label>
-                        <select name="condition_id" class="form-control" required>
-                            @foreach($conditions as $condition)
-                                <option
-                                        value="{{ $condition->id }}" {{ (isset($product->condition_id) && $product->condition_id == $condition->id) ? 'selected' : '' }}>
-                                    {{ $condition->status }}
-                                </option>
-                            @endforeach
-                        </select>
+
                     </div>
                     <div class="form-group">
                         <label for="stock">Quantity <span class="text-danger">*</span></label>
                         <input id="quantity" type="number" name="stock" min="0" placeholder="Enter quantity"
                                value="{{ $product->stock ?? ''}}" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label for="color" class="col-form-label">Color</label>
-                        <input id="color" type="text" name="color[]" placeholder="Enter color"
-                               class="form-control">
-                    </div>
+
                     <div class="form-group">
                         <label for="brand_id">Brand</label>
                         <select name="brand_id" class="form-control">
@@ -221,15 +219,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="size">Size</label>
-                        <select class="form-control js-example-basic-multiple" id="size" name="size[]"
-                                multiple="multiple">
-                            @foreach ($sizes as $size)
-                                <option value="{{ $size->id }}">{{ $size->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+
 
                 </div>
             </div>
@@ -238,7 +228,6 @@
                 <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
                 <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
             </div>
-
         </form>
     </div>
     <div class="row container-fluid" style="margin-top: 2%">
@@ -257,10 +246,12 @@
     </div>
 
     @push('styles')
-        <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+        <link rel="stylesheet" href="{{ asset('backend/summernote/summernote.min.css') }}">
     @endpush
+
     @push('scripts')
-        <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="{{ asset('backend/summernote/summernote.min.js') }}"></script>
         <script>
             $(document).ready(function () {
                 $('#description').summernote({
@@ -268,36 +259,32 @@
                     tabsize: 2,
                     height: 150
                 });
-            });
-        </script>
-        @if(config('openai.openai.enabled'))
-            <script>
-                $(document).ready(function () {
-                    $('#generateDescription').on('click', function () {
-                        const productTitle = $('#inputTitle').val(); // Assuming the title input has an ID 'inputTitle'
-                        if (!productTitle) {
-                            alert('Please enter a title first.');
-                            return;
-                        }
 
-                        $.ajax({
-                            url: "{{ route('products.generate-description') }}",
-                            type: "POST",
-                            data: {
-                                title: productTitle,
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function (response) {
-                                $('#description').summernote('code', response.description);
-                            },
-                            error: function () {
-                                alert('Error generating description. Please try again.');
-                            }
-                        });
+                @if(config('openai.openai.enabled'))
+                $('#generateDescription').on('click', function () {
+                    const productTitle = $('#inputTitle').val();
+                    if (!productTitle) {
+                        alert('Please enter a title first.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('products.generate-description') }}",
+                        type: "POST",
+                        data: {
+                            title: productTitle,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (response) {
+                            $('#description').summernote('code', response.description);
+                        },
+                        error: function () {
+                            alert('Error generating description. Please try again.');
+                        }
                     });
                 });
-            </script>
-        @endif
+                @endif
+            });
+        </script>
     @endpush
-
 @endsection

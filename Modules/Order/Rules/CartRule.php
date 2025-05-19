@@ -11,7 +11,7 @@ class CartRule implements Rule
 {
     public function passes($attribute, $value): bool
     {
-        return !empty(Cart::whereUserId(Auth()->id())->whereOrderId(null)->first());
+        return ! empty(Cart::whereUserId(Auth()->id())->whereOrderId(null)->first());
     }
 
     public function message(): string

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\AttributeValue;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Product\Models\Product;
@@ -80,6 +82,36 @@ class ProductFactory extends Factory
 
             $tags = Tag::inRandomOrder()->limit(5)->pluck('id');
             $product->tags()->attach($tags);
+        });
+    }
+
+    /**
+     * Configure the factory to create a product with attributes and attribute values.
+     */
+    public function withAttributes(): self
+    {
+        return $this->afterCreating(function (Model $model): void {
+            /** @var Product $product */
+            $product = $model;
+            $attributes = [
+                'color' => ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White'],
+                'size' => ['Small', 'Medium', 'Large', 'Extra Large'],
+                'material' => ['Silk', 'Cotton', 'Polyester', 'Plastic'],
+                'brand' => ['Nike', 'Adidas', 'Puma'],
+            ];
+            $attributeModels = Attribute::whereIn('code', array_keys($attributes))->get();
+            foreach ($attributeModels as $attribute) {
+                $product->attributes()->attach($attribute->id);
+                $value = $attributes[$attribute->code][array_rand($attributes[$attribute->code])];
+                $column = method_exists($attribute,
+                    'getValueColumnName') ? $attribute->getValueColumnName() : 'text_value';
+                $valueData = [
+                    'product_id' => $product->id,
+                    'attribute_id' => $attribute->id,
+                    $column => $value,
+                ];
+                AttributeValue::create($valueData);
+            }
         });
     }
 }

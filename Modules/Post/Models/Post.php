@@ -170,7 +170,7 @@ class Post extends Core implements HasMedia
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('post');
-        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
+        if ($mediaItem instanceof Media) {
             return $mediaItem->getUrl();
         }
 

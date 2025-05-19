@@ -144,7 +144,7 @@ class ProductRepository extends Repository
      */
     protected function withRelations(): array
     {
-        return ['brand', 'categories', 'carts', 'condition', 'tags', 'attributes.attribute'];
+        return ['brand', 'categories', 'carts', 'condition', 'tags', 'attributeValues.attribute'];
     }
 
     /**

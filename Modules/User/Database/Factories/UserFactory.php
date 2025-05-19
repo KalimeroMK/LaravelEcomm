@@ -20,7 +20,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
+            'email' => 'email'.mb_strtoupper(Str::random(10)).'@gmail.com',
             'email_verified_at' => Carbon::now(),
             'password' => bcrypt('password'),
             'remember_token' => Str::random(10),

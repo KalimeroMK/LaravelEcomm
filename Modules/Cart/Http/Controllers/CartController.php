@@ -79,7 +79,7 @@ class CartController extends CoreController
      */
     public function checkout(): View|Factory|RedirectResponse|Application
     {
-        if (!$this->cart_service->checkout() instanceof \Illuminate\Support\Collection) {
+        if (! $this->cart_service->checkout() instanceof \Illuminate\Support\Collection) {
             session()->flash('error', 'Cart is empty');
 
             return back();

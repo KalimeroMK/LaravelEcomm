@@ -34,6 +34,7 @@
                 <h6 class="collapse-header">@lang('sidebar.attribute_options'):</h6>
                 <a class="collapse-item" href="{{route('attributes.index')}}">@lang('sidebar.attributes')</a>
                 <a class="collapse-item" href="{{route('attributes.create')}}">@lang('sidebar.add_attribute')</a>
+                <a class="collapse-item" href="{{route('attribute-groups.index')}}">@lang('sidebar.attribute_groups')</a>
             </div>
         </div>
     </li>

@@ -57,6 +57,7 @@ class AttributeValue extends Core
         'integer_value',
         'decimal_value',
         'attribute_id',
+        'product_id', // <-- Added for seeder mass-assignment
     ];
 
     protected $appends = ['value'];

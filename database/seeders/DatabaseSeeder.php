@@ -6,8 +6,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Modules\Attribute\Database\Seeders\AttributeGroupSeeder;
+use Modules\Attribute\Database\Seeders\AttributeOptionSeeder;
 use Modules\Attribute\Database\Seeders\AttributeSeeder;
-use Modules\Attribute\Database\Seeders\AttributeSystemSeeder;
+use Modules\Attribute\Database\Seeders\AttributeValueSeeder;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
 use Modules\Bundle\Models\BundleProduct;
@@ -37,8 +39,6 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $this->call(PermissionTableSeeder::class);
-        $this->call(AttributeSeeder::class);
-        $this->call(AttributeSystemSeeder::class);
         Banner::factory()->count(5)->create();
         Brand::factory()->count(5)->create();
         Cart::factory()->count(200)->create();
@@ -49,7 +49,12 @@ class DatabaseSeeder extends Seeder
         Message::factory()->count(50)->create();
         $this->call(PageSeeder::class);
         Post::factory()->count(200)->withCategoriesAndTags()->create();
-        Product::factory()->count(200)->withCategoriesAndTags()->create();
+        $this->call(AttributeGroupSeeder::class);
+        $this->call(AttributeSeeder::class);
+        $this->call(AttributeValueSeeder::class);
+        $this->call(AttributeOptionSeeder::class);
+
+        Product::factory()->count(200)->withCategoriesAndTags()->withAttributes()->create();
         BundleProduct::factory()->count(50)->create();
         $this->call(ProductReviewSeeder::class);
         Newsletter::factory()->count(20)->create();
