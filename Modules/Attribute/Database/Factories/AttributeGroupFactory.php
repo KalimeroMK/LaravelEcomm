@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Attribute\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use Modules\Attribute\Models\AttributeGroup;
 
 class AttributeGroupFactory extends Factory
@@ -14,7 +15,7 @@ class AttributeGroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
+            'name' => 'mame-'.mb_strtoupper(Str::random(10)),
         ];
     }
 }

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Modules\Attribute\Http\Controllers\Api\AttributeController;
+use Modules\Attribute\Http\Controllers\Api\AttributeGroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,4 @@ use Modules\Attribute\Http\Controllers\Api\AttributeController;
 */
 
 Route::apiResource('attributes', AttributeController::class)->names('api.attribute.index');
+Route::apiResource('attribute-groups', AttributeGroupController::class);

@@ -6,9 +6,9 @@ namespace Modules\Attribute\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Modules\Attribute\Http\Requests\Api\SearchRequest;
-use Modules\Attribute\Http\Requests\Store;
-use Modules\Attribute\Http\Requests\Update;
+use Modules\Attribute\Http\Requests\Api\Attribute\SearchRequest;
+use Modules\Attribute\Http\Requests\Attribute\Store;
+use Modules\Attribute\Http\Requests\Attribute\Update;
 use Modules\Attribute\Resource\AttributeResource;
 use Modules\Attribute\Service\AttributeService;
 use Modules\Core\Helpers\Helper;

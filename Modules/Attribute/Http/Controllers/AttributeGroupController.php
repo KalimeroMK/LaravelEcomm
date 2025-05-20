@@ -6,7 +6,9 @@ namespace Modules\Attribute\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Modules\Attribute\Http\Requests\AttributeGroupRequest;
+use Modules\Attribute\Http\Requests\Attribute\Store;
+use Modules\Attribute\Http\Requests\Attribute\Update;
+use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeGroup;
 use Modules\Core\Http\Controllers\CoreController;
 
@@ -22,12 +24,12 @@ class AttributeGroupController extends CoreController
         return view('attribute::groups.create', ['group' => new AttributeGroup]);
     }
 
-    public function store(AttributeGroupRequest $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
         $group = AttributeGroup::create($request->validated());
         // Assign attributes to this group
         if ($request->has('attributes')) {
-            \Modules\Attribute\Models\Attribute::whereIn('id', $request->attributes)
+            Attribute::whereIn('id', $request->attributes)
                 ->update(['attribute_group_id' => $group->id]);
         }
 
@@ -39,15 +41,15 @@ class AttributeGroupController extends CoreController
         return view('attribute::groups.edit', ['group' => $attribute_group]);
     }
 
-    public function update(AttributeGroupRequest $request, AttributeGroup $attribute_group): RedirectResponse
+    public function update(Update $request, AttributeGroup $attribute_group): RedirectResponse
     {
         $attribute_group->update($request->validated());
         // Unassign all attributes from this group first
-        \Modules\Attribute\Models\Attribute::where('attribute_group_id', $attribute_group->id)
+        Attribute::where('attribute_group_id', $attribute_group->id)
             ->update(['attribute_group_id' => null]);
         // Assign selected attributes
         if ($request->has('attributes')) {
-            \Modules\Attribute\Models\Attribute::whereIn('id', $request->attributes)
+            Attribute::whereIn('id', $request->attributes)
                 ->update(['attribute_group_id' => $attribute_group->id]);
         }
 

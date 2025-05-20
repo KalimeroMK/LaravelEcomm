@@ -6,25 +6,35 @@ namespace Modules\Attribute\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Modules\Attribute\Http\Requests\Store;
-use Modules\Attribute\Http\Requests\Update;
+use Modules\Attribute\Actions\CreateAttributeAction;
+use Modules\Attribute\Actions\DeleteAttributeAction;
+use Modules\Attribute\Actions\UpdateAttributeAction;
+use Modules\Attribute\DTO\AttributeDTO;
+use Modules\Attribute\Http\Requests\Attribute\Store;
+use Modules\Attribute\Http\Requests\Attribute\Update;
 use Modules\Attribute\Models\Attribute;
-use Modules\Attribute\Service\AttributeService;
 use Modules\Core\Http\Controllers\CoreController;
 
 class AttributeController extends CoreController
 {
-    protected AttributeService $attribute_service;
+    protected CreateAttributeAction $createAction;
+    protected UpdateAttributeAction $updateAction;
+    protected DeleteAttributeAction $deleteAction;
 
-    public function __construct(AttributeService $attribute_service)
-    {
-        $this->attribute_service = $attribute_service;
+    public function __construct(
+        CreateAttributeAction $createAction,
+        UpdateAttributeAction $updateAction,
+        DeleteAttributeAction $deleteAction
+    ) {
+        $this->createAction = $createAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
         $this->authorizeResource(Attribute::class, 'attribute');
     }
 
     public function index(): Renderable
     {
-        return view('attribute::index', ['attributes' => $this->attribute_service->getAll()]);
+        return view('attribute::index', ['attributes' => $this->createAction->repository->findAll()]);
     }
 
     public function create(): Renderable
@@ -34,27 +44,26 @@ class AttributeController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->attribute_service->create($request->validated());
-
+        $dto = AttributeDTO::fromRequest($request);
+        $this->createAction->execute($dto);
         return redirect()->route('attributes.index');
     }
 
     public function edit(Attribute $attribute): Renderable
     {
-        return view('attribute::edit', ['attribute' => $this->attribute_service->findById($attribute->id)]);
+        return view('attribute::edit', ['attribute' => $this->createAction->repository->findById($attribute->id)]);
     }
 
     public function update(Update $request, Attribute $attribute): RedirectResponse
     {
-        $this->attribute_service->update($attribute->id, $request->validated());
-
+        $dto = AttributeDTO::fromRequest($request)->withId($attribute->id);
+        $this->updateAction->execute($dto);
         return redirect()->route('attributes.index');
     }
 
     public function destroy(Attribute $attribute): RedirectResponse
     {
-        $this->attribute_service->delete($attribute->id);
-
+        $this->deleteAction->execute($attribute->id);
         return redirect()->route('attributes.index');
     }
 }

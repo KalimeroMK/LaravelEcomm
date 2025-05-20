@@ -22,8 +22,6 @@ class Store extends CoreRequest
             'sku' => 'string|nullable|unique:products,sku',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'size' => 'required',
-            'color' => 'required',
             'category' => [
                 'required',
                 'array',
@@ -35,7 +33,6 @@ class Store extends CoreRequest
                 },
             ],
             'category.*' => 'required|exists:categories,id',
-            'condition_id' => 'required|exists:conditions,id',
             'stock' => 'required|numeric',
             'brand_id' => 'nullable|exists:brands,id',
             'child_cat_id' => 'nullable|exists:categories,id',

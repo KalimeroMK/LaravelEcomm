@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Attribute\Http\Requests;
+namespace Modules\Attribute\Http\Requests\Attribute;
 
 use Exception;
 use Illuminate\Validation\Rule;

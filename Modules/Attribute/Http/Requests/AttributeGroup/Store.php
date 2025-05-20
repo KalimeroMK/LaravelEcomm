@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Modules\Attribute\Http\Requests;
+namespace Modules\Attribute\Http\Requests\AttributeGroup;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttributeGroupRequest extends FormRequest
+class Store extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,7 +17,9 @@ class AttributeGroupRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'description' => 'nullable|string',
+            'attributes' => 'nullable|array',
+            'attributes.*' => 'integer|exists:attributes,id',
         ];
     }
 }
