@@ -7,24 +7,36 @@ namespace Modules\Bundle\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Bundle\Actions\CreateBundleAction;
+use Modules\Bundle\Actions\DeleteBundleAction;
+use Modules\Bundle\Actions\UpdateBundleAction;
+use Modules\Bundle\DTO\BundleDTO;
 use Modules\Bundle\Http\Requests\Store;
+use Modules\Bundle\Http\Requests\Update;
 use Modules\Bundle\Models\Bundle;
-use Modules\Bundle\Service\BundleService;
 use Modules\Product\Models\Product;
+use Throwable;
 
 class BundleController extends Controller
 {
-    protected BundleService $bundleService;
+    protected CreateBundleAction $createAction;
+    protected UpdateBundleAction $updateAction;
+    protected DeleteBundleAction $deleteAction;
 
-    public function __construct(BundleService $bundleService)
-    {
-        $this->bundleService = $bundleService;
+    public function __construct(
+        CreateBundleAction $createAction,
+        UpdateBundleAction $updateAction,
+        DeleteBundleAction $deleteAction
+    ) {
+        $this->createAction = $createAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
         $this->authorizeResource(Bundle::class, 'bundle');
     }
 
     public function index(): View
     {
-        $bundles = $this->bundleService->getAll();
+        $bundles = Bundle::all();
 
         return view('bundle::index', ['bundles' => $bundles]);
     }
@@ -37,30 +49,40 @@ class BundleController extends Controller
         return view('bundle::create', ['products' => $products, 'bundle' => $bundle]);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function store(Store $request): RedirectResponse
     {
-        $this->bundleService->createWithProducts($request->validated());
+        $dto = BundleDTO::fromRequest($request);
+        $this->createAction->execute($dto);
 
-        return redirect()->route('bundle.index')->with('status', 'Brand created successfully.');
+        return redirect()->route('bundles.index')->with('status', 'Bundle created successfully.');
     }
 
     public function edit(Bundle $bundle): View
     {
-        return view('bundle::edit')->with($this->bundleService->edit($bundle->id));
+        $products = Product::all();
+
+        return view('bundle::edit', ['bundle' => $bundle, 'products' => $products]);
     }
 
-    public function update(Store $request, Bundle $bundle): RedirectResponse
+    /**
+     * @throws Throwable
+     */
+    public function update(Update $request, Bundle $bundle): RedirectResponse
     {
-        $this->bundleService->updateWithProducts($bundle->id, $request->all());
+        $dto = BundleDTO::fromRequest($request)->withId($bundle->id);
+        $this->updateAction->execute($dto);
 
-        return redirect()->route('bundle.edit', $bundle)->with('status', 'Brand updated successfully.');
+        return redirect()->route('bundles.edit', $bundle)->with('status', 'Bundle updated successfully.');
     }
 
     public function destroy(Bundle $bundle): RedirectResponse
     {
-        $this->bundleService->delete($bundle->id);
+        $this->deleteAction->execute($bundle->id);
 
-        return redirect()->route('bundle.index')->with('status', 'Brand deleted successfully.');
+        return redirect()->route('bundles.index')->with('status', 'Bundle deleted successfully.');
     }
 
     /**
@@ -75,6 +97,6 @@ class BundleController extends Controller
         $media = $model->media()->where('id', $mediaId)->firstOrFail();
         $media->delete();
 
-        return redirect()->route('bundle.index')->with('status', 'Media deleted successfully.');
+        return redirect()->route('bundles.index')->with('status', 'Media deleted successfully.');
     }
 }

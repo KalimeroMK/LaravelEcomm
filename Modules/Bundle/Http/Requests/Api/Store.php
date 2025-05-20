@@ -19,8 +19,8 @@ class Store extends CoreRequest
             'name' => ['required|string|max:50'],
             'description' => ['nullable'],
             'price' => ['required', 'numeric'],
-            'product' => 'sometimes|array',
-            'product.*' => 'required|exists:products,id',
+            'products' => 'required|array',
+            'products.*' => 'required|exists:products,id',
             'images' => 'required|array',
             'images.*' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];

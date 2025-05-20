@@ -6,6 +6,8 @@ namespace Modules\Bundle\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Bundle\Models\Bundle;
+use Modules\Bundle\Models\Observer\BundleObserver;
 
 class BundleServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,7 @@ class BundleServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        Bundle::observe(BundleObserver::class);
     }
 
     /**

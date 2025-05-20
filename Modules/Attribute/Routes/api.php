@@ -16,5 +16,5 @@ use Modules\Attribute\Http\Controllers\Api\AttributeGroupController;
 |
 */
 
-Route::apiResource('attributes', AttributeController::class)->names('api.attribute.index');
-Route::apiResource('attribute-groups', AttributeGroupController::class);
+Route::apiResource('attributes', AttributeController::class)->names('api.attribute');
+Route::apiResource('attribute-groups', AttributeGroupController::class)->names('api.attribute-group');

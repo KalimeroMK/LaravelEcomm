@@ -16,16 +16,13 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => ['nullable|string|max:50'],
+            'name' => ['nullable', 'string'],
             'description' => ['nullable'],
             'price' => ['nullable', 'numeric'],
+            'products' => 'nullable|array',
+            'products.*' => 'required|exists:products,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
-    }
-
-    public function authorize(): bool
-    {
-        return true;
     }
 }

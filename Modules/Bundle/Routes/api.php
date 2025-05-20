@@ -16,10 +16,5 @@ use Modules\Bundle\Http\Controllers\Api\BundleController;
     |
 */
 
-Route::apiResource('bundles', BundleController::class)
-    ->except('update')
-    ->names('api.bundles');
-Route::delete(
-    '/bundles/{modelId}/media/{mediaId}',
-    [BundleController::class, 'deleteMedia']
-)->name('api.bundles.delete-media');
+Route::apiResource('bundles', BundleController::class)->names('api.bundles');
+

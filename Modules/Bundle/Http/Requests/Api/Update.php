@@ -18,6 +18,8 @@ class Update extends CoreRequest
         return [
             'name' => ['nullable|string|max:50'],
             'description' => ['nullable'],
+            'products' => 'nullable|array',
+            'products.*' => 'required|exists:products,id',
             'price' => ['nullable', 'numeric'],
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',

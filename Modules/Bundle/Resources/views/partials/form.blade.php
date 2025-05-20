@@ -19,13 +19,13 @@
 
     <div class="form-group">
         <label for="inputPrice">@lang('partials.price') <span class="text-danger">*</span></label>
-        <input id="inputPrice" type="text" name="price" placeholder="Enter price" value="{{ $bundle->price ?? '' }}"
+        <input id="inputPrice" type="number" name="price" placeholder="Enter price" value="{{ $bundle->price ?? '' }}"
                class="form-control">
     </div>
 
     <div class="form-group">
         <label for="products">@lang('partials.product')</label>
-        <select class="form-control js-example-basic-multiple" id="products" name="product_id[]" multiple="multiple">
+        <select class="form-control js-example-basic-multiple" id="products" name="products[]" multiple="multiple">
             @foreach ($products as $product)
                 <option value="{{ $product->id }}">{{ $product->title }}</option>
             @endforeach
