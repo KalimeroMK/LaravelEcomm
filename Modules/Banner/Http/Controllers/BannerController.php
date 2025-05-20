@@ -9,22 +9,39 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Banner\Actions\CreateBannerAction;
+use Modules\Banner\Actions\DeleteBannerAction;
+use Modules\Banner\Actions\UpdateBannerAction;
+use Modules\Banner\DTO\BannerDTO;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
-use Modules\Banner\Service\BannerService;
+use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Http\Controllers\CoreController;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class BannerController extends CoreController
 {
-    private BannerService $banner_service;
+    private BannerRepository $banner_repository;
 
-    public function __construct(BannerService $banner_service)
-    {
+    private CreateBannerAction $createBannerAction;
+
+    private UpdateBannerAction $updateBannerAction;
+
+    private DeleteBannerAction $deleteBannerAction;
+
+    public function __construct(
+        BannerRepository $banner_repository,
+        CreateBannerAction $createBannerAction,
+        UpdateBannerAction $updateBannerAction,
+        DeleteBannerAction $deleteBannerAction
+    ) {
         $this->authorizeResource(Banner::class, 'banner');
-        $this->banner_service = $banner_service;
+        $this->banner_repository = $banner_repository;
+        $this->createBannerAction = $createBannerAction;
+        $this->updateBannerAction = $updateBannerAction;
+        $this->deleteBannerAction = $deleteBannerAction;
     }
 
     /**
@@ -32,7 +49,7 @@ class BannerController extends CoreController
      */
     public function index(): Factory|View|Application
     {
-        return view('banner::index', ['banners' => $this->banner_service->getAll()]);
+        return view('banner::index', ['banners' => $this->banner_repository->all()]);
     }
 
     /**
@@ -50,7 +67,8 @@ class BannerController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->banner_service->createWithMedia($request->validated());
+        $dto = BannerDTO::fromRequest($request);
+        $this->createBannerAction->execute($dto);
 
         return redirect()->route('banners.index');
     }
@@ -69,7 +87,17 @@ class BannerController extends CoreController
      */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
-        $this->banner_service->updateWithMedia($banner->id, $request->validated());
+        $dto = BannerDTO::fromRequest($request);
+        // Ensure DTO has the correct id for update
+        $dtoWithId = new BannerDTO(
+            $banner->id,
+            $dto->title,
+            $dto->slug,
+            $dto->description,
+            $dto->status,
+            $dto->images
+        );
+        $this->updateBannerAction->execute($dtoWithId);
 
         return redirect()->route('banners.edit', $banner);
     }
@@ -79,7 +107,7 @@ class BannerController extends CoreController
      */
     public function destroy(Banner $banner): RedirectResponse
     {
-        $this->banner_service->delete($banner->id);
+        $this->deleteBannerAction->execute($banner->id);
 
         return redirect()->route('banners.index');
     }

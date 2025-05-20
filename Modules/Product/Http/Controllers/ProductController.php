@@ -37,12 +37,12 @@ class ProductController extends CoreController
     public function create(): Renderable
     {
         return view('product::create', [
-                'brands' => Brand::get(),
-                'categories' => Category::get(),
-                'product' => new Product,
-                'tags' => Tag::get(),
-                'attributes' => Attribute::all(),
-            ]
+            'brands' => Brand::get(),
+            'categories' => Category::get(),
+            'product' => new Product,
+            'tags' => Tag::get(),
+            'attributes' => Attribute::all(),
+        ]
         );
     }
 
@@ -75,7 +75,6 @@ class ProductController extends CoreController
     public function update(Update $request, Product $product): RedirectResponse
     {
         $this->product_service->updateWithRelationsAndMedia($product->id, $request->validated());
-
 
         return redirect()->route('products.index');
     }

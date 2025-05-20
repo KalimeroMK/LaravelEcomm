@@ -110,7 +110,7 @@ class ProductService extends CoreService
      */
     private function syncAttributes(Product $product, array $data): void
     {
-        if (!isset($data['attributes']) || !is_array($data['attributes'])) {
+        if (! isset($data['attributes']) || ! is_array($data['attributes'])) {
             return;
         }
 

@@ -31,6 +31,7 @@ class BannerTest extends TestCase
 
         $data = [
             'title' => $this->faker->unique()->word,
+            'slug' => $this->faker->unique()->slug,
             'description' => $this->faker->text,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -51,7 +52,6 @@ class BannerTest extends TestCase
             'description' => time().'test-description',
             'status' => 'inactive',
             'images' => [UploadedFile::fake()->image('updated_file.png', 600, 600)],
-
         ];
 
         $id = Banner::firstOrFail()->id;

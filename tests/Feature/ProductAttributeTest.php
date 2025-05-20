@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Arr;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeOption;
 use Modules\Product\Models\Product;

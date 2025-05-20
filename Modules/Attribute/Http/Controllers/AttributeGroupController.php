@@ -30,6 +30,7 @@ class AttributeGroupController extends CoreController
             \Modules\Attribute\Models\Attribute::whereIn('id', $request->attributes)
                 ->update(['attribute_group_id' => $group->id]);
         }
+
         return redirect()->route('attribute-groups.index');
     }
 
@@ -49,12 +50,14 @@ class AttributeGroupController extends CoreController
             \Modules\Attribute\Models\Attribute::whereIn('id', $request->attributes)
                 ->update(['attribute_group_id' => $attribute_group->id]);
         }
+
         return redirect()->route('attribute-groups.index');
     }
 
     public function destroy(AttributeGroup $attribute_group): RedirectResponse
     {
         $attribute_group->delete();
+
         return redirect()->route('attribute-groups.index');
     }
 }

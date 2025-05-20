@@ -21,6 +21,7 @@ class Store extends CoreRequest
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:active,inactive',
+            'slug' => 'required|unique:banners,slug',
         ];
     }
 }

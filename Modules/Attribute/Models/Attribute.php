@@ -15,15 +15,15 @@ use Modules\Core\Models\Core;
 /**
  * Class Attribute
  *
- * @property int                         $id
- * @property string|null                 $name
- * @property string                      $code
- * @property string                      $type
- * @property string                      $display
- * @property bool                        $filterable
- * @property bool                        $configurable
- * @property Carbon|null                 $created_at
- * @property Carbon|null                 $updated_at
+ * @property int $id
+ * @property string|null $name
+ * @property string $code
+ * @property string $type
+ * @property string $display
+ * @property bool $filterable
+ * @property bool $configurable
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property Collection|AttributeValue[] $attribute_values
  */
 class Attribute extends Core
@@ -44,14 +44,23 @@ class Attribute extends Core
         ];
 
     public const TYPE_URL = 'url';
+
     public const TYPE_HEX = 'hex';
+
     public const TYPE_TEXT = 'text';
+
     public const TYPE_DATE = 'date';
+
     public const TYPE_TIME = 'time';
+
     public const TYPE_FLOAT = 'float';
+
     public const TYPE_STRING = 'string';
+
     public const TYPE_INTEGER = 'integer';
+
     public const TYPE_BOOLEAN = 'boolean';
+
     public const TYPE_DECIMAL = 'decimal';
 
     /** @var string[] */
@@ -67,11 +76,17 @@ class Attribute extends Core
         ];
 
     public const DISPLAY_INPUT = 'input';
+
     public const DISPLAY_RADIO = 'radio';
+
     public const DISPLAY_COLOR = 'color';
+
     public const DISPLAY_BUTTON = 'button';
+
     public const DISPLAY_SELECT = 'select';
+
     public const DISPLAY_CHECKBOX = 'checkbox';
+
     public const DISPLAY_MULTI_SELECT = 'multiselect';
 
     protected $table = 'attributes';
@@ -86,25 +101,21 @@ class Attribute extends Core
             'configurable',
         ];
 
-    /** @return AttributeFactory */
     public static function factory(): AttributeFactory
     {
         return AttributeFactory::new();
     }
 
-    /** @return BelongsTo */
     public function group(): BelongsTo
     {
         return $this->belongsTo(AttributeGroup::class, 'attribute_group_id');
     }
 
-    /** @return HasMany */
     public function values(): HasMany
     {
         return $this->hasMany(AttributeValue::class);
     }
 
-    /** @return HasMany */
     public function options(): HasMany
     {
         return $this->hasMany(AttributeOption::class);

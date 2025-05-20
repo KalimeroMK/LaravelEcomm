@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Banner\Repository;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Modules\Banner\Models\Banner;
@@ -20,6 +21,14 @@ class BannerRepository extends Repository implements SearchInterface
      * @var string
      */
     public $model = Banner::class;
+
+    /**
+     * Return all banners.
+     */
+    public function all(): Collection
+    {
+        return $this->model::all();
+    }
 
     /**
      * Search for entries based on filter criteria provided in the `$data` array.
