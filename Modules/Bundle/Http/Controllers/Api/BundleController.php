@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Bundle\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Bundle\Actions\CreateBundleAction;
 use Modules\Bundle\Actions\DeleteBundleAction;
 use Modules\Bundle\Actions\UpdateBundleAction;
@@ -14,24 +14,20 @@ use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Http\Requests\Update;
 use Modules\Bundle\Http\Resource\BundleResource;
 use Modules\Bundle\Models\Bundle;
-use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Bundle\Repository\BundleRepository;
+use Modules\Core\Helpers\Helper;
+use Modules\Core\Http\Controllers\CoreController;
 use ReflectionException;
 use Throwable;
 
 class BundleController extends CoreController
 {
-    private CreateBundleAction $createAction;
-    private UpdateBundleAction $updateAction;
-    private DeleteBundleAction $deleteAction;
-
     public function __construct(
-        CreateBundleAction $createAction,
-        UpdateBundleAction $updateAction,
-        DeleteBundleAction $deleteAction
+        public BundleRepository $repository,
+        private readonly CreateBundleAction $createAction,
+        private readonly UpdateBundleAction $updateAction,
+        private readonly DeleteBundleAction $deleteAction
     ) {
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
         $this->middleware('permission:bundle-list', ['only' => ['index']]);
         $this->middleware('permission:bundle-show', ['only' => ['show']]);
         $this->middleware('permission:bundle-create', ['only' => ['create', 'store']]);
@@ -39,65 +35,63 @@ class BundleController extends CoreController
         $this->middleware('permission:bundle-delete', ['only' => ['destroy']]);
     }
 
-    public function index(): ResourceCollection
+    public function index(): AnonymousResourceCollection
     {
-        return BundleResource::collection(Bundle::all());
+        return BundleResource::collection($this->repository->findAll());
     }
 
     /**
-     * @param  Store  $request
-     * @return JsonResponse
      * @throws Throwable
      */
     public function store(Store $request): JsonResponse
     {
-        $dto = BundleDTO::fromRequest($request);
-        $bundle = $this->createAction->execute($dto);
+        $bundle = $this->createAction->execute(BundleDTO::fromRequest($request));
+
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
-                'resource' => 'Bundle',
+                'resource' => Helper::getResourceName(Bundle::class),
             ]))
             ->respond(new BundleResource($bundle));
     }
 
     /**
-     * @param  int  $id
-     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function show(int $id): JsonResponse
     {
         $bundle = Bundle::findOrFail($id);
+
         return $this
             ->setMessage(__('apiResponse.ok', [
-                'resource' => 'Bundle',
+                'resource' => Helper::getResourceName(Bundle::class),
             ]))
             ->respond(new BundleResource($bundle));
     }
 
     /**
-     * @throws ReflectionException|Throwable
+     * @throws Throwable|ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        $dto = BundleDTO::fromRequest($request)->withId($id);
-        $bundle = $this->updateAction->execute($dto);
+        $bundle = $this->updateAction->execute(BundleDTO::fromRequest($request)->withId($id));
+
         return $this
             ->setMessage(__('apiResponse.updateSuccess', [
-                'resource' => 'Bundle',
+                'resource' => Helper::getResourceName(Bundle::class),
             ]))
             ->respond(new BundleResource($bundle));
     }
 
     /**
-     * @param  int  $id
-     * @return JsonResponse
+     * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
         $this->deleteAction->execute($id);
+
         return $this
             ->setMessage(__('apiResponse.deleteSuccess', [
-                'resource' => 'Bundle',
+                'resource' => Helper::getResourceName(Bundle::class),
             ]))
             ->respond(null);
     }

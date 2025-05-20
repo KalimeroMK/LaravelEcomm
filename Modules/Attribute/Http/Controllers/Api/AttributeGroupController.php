@@ -41,18 +41,26 @@ class AttributeGroupController extends CoreController
         );
     }
 
+
     /**
+     * @param  Store  $request
+     * @return JsonResponse
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
     {
         return $this
-            ->setMessage(__('apiResponse.storeSuccess', [
-                'resource' => Helper::getResourceName($this->repository->model),
-            ]))
-            ->respond(new AttributeGroupResource(
-                $this->createAction->execute(AttributeGroupDTO::fromRequest($request))
-            ));
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->repository->model
+                        ),
+                    ]
+                )
+            )
+            ->respond(new AttributeGroupResource($this->createAction->execute(AttributeGroupDTO::fromRequest($request))));
     }
 
     /**
@@ -61,29 +69,44 @@ class AttributeGroupController extends CoreController
     public function show(int $id): JsonResponse
     {
         return $this
-            ->setMessage(__('apiResponse.ok', [
-                'resource' => Helper::getResourceName($this->repository->model),
-            ]))
+            ->setMessage(
+                __(
+                    'apiResponse.ok',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->repository->model
+                        ),
+                    ]
+                )
+            )
             ->respond(new AttributeGroupResource($this->repository->findById($id)));
     }
 
     /**
+     * @param  Update  $request
+     * @param  int     $id
+     * @return JsonResponse
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse
     {
         return $this
-            ->setMessage(__('apiResponse.updateSuccess', [
-                'resource' => Helper::getResourceName($this->repository->model),
-            ]))
-            ->respond(new AttributeGroupResource(
-                $this->updateAction->execute(
-                    AttributeGroupDTO::fromRequest($request)->withId($id)
+            ->setMessage(
+                __(
+                    'apiResponse.updateSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->repository->model
+                        ),
+                    ]
                 )
-            ));
+            )
+            ->respond(new AttributeGroupResource($this->updateAction->execute(AttributeGroupDTO::fromRequest($request)->withId($id))));
     }
 
     /**
+     * @param  int  $id
+     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
@@ -91,9 +114,16 @@ class AttributeGroupController extends CoreController
         $this->deleteAction->execute($id);
 
         return $this
-            ->setMessage(__('apiResponse.deleteSuccess', [
-                'resource' => Helper::getResourceName($this->repository->model),
-            ]))
+            ->setMessage(
+                __(
+                    'apiResponse.deleteSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->repository->model
+                        ),
+                    ]
+                )
+            )
             ->respond(null);
     }
 }

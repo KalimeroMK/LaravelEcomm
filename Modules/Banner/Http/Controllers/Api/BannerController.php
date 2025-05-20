@@ -23,24 +23,24 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class BannerController extends CoreController
 {
-    private BannerRepository $banner_repository;
+    private BannerRepository $repository;
 
-    private CreateBannerAction $createBannerAction;
+    private CreateBannerAction $createAction;
 
-    private UpdateBannerAction $updateBannerAction;
+    private UpdateBannerAction $updateAction;
 
-    private DeleteBannerAction $deleteBannerAction;
+    private DeleteBannerAction $deleteAction;
 
     public function __construct(
-        BannerRepository $banner_repository,
+        BannerRepository $repository,
         CreateBannerAction $createBannerAction,
         UpdateBannerAction $updateBannerAction,
         DeleteBannerAction $deleteBannerAction
     ) {
-        $this->banner_repository = $banner_repository;
-        $this->createBannerAction = $createBannerAction;
-        $this->updateBannerAction = $updateBannerAction;
-        $this->deleteBannerAction = $deleteBannerAction;
+        $this->repository = $repository;
+        $this->createAction = $createBannerAction;
+        $this->updateAction = $updateBannerAction;
+        $this->deleteAction = $deleteBannerAction;
         $this->middleware('permission:banner-list', ['only' => ['index']]);
         $this->middleware('permission:banner-show', ['only' => ['show']]);
         $this->middleware('permission:banner-create', ['only' => ['create', 'store']]);
@@ -50,7 +50,7 @@ class BannerController extends CoreController
 
     public function index(): ResourceCollection
     {
-        return BannerResource::collection($this->banner_repository->all());
+        return BannerResource::collection($this->repository->all());
     }
 
     /**
@@ -64,13 +64,13 @@ class BannerController extends CoreController
                     'apiResponse.storeSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->banner_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )
             )
             ->respond(new BannerResource(
-                $this->createBannerAction->execute(BannerDTO::fromRequest($request))
+                $this->createAction->execute(BannerDTO::fromRequest($request))
             ));
     }
 
@@ -85,12 +85,12 @@ class BannerController extends CoreController
                     'apiResponse.ok',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->banner_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )
             )
-            ->respond(new BannerResource($this->banner_repository->findById($id)));
+            ->respond(new BannerResource($this->repository->findById($id)));
     }
 
     /**
@@ -100,15 +100,20 @@ class BannerController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        $dto = BannerDTO::fromRequest($request)->withId($id);
-
-        $banner = $this->updateBannerAction->execute($dto);
-
         return $this
-            ->setMessage(__('apiResponse.updateSuccess', [
-                'resource' => Helper::getResourceName($this->banner_repository->model),
-            ]))
-            ->respond(new BannerResource($banner));
+            ->setMessage(
+                __(
+                    'apiResponse.storeSuccess',
+                    [
+                        'resource' => Helper::getResourceName(
+                            $this->repository->model
+                        ),
+                    ]
+                )
+            )
+            ->respond(new BannerResource(
+                $this->updateAction->execute(BannerDTO::fromRequest($request))
+            ));
     }
 
 
@@ -117,7 +122,7 @@ class BannerController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->deleteBannerAction->execute($id);
+        $this->deleteAction->execute($id);
 
         return $this
             ->setMessage(
@@ -125,7 +130,7 @@ class BannerController extends CoreController
                     'apiResponse.deleteSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->banner_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )

@@ -6,35 +6,44 @@ namespace Modules\Attribute\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Modules\Attribute\Actions\CreateAttributeAction;
+use Modules\Attribute\Actions\DeleteAttributeAction;
+use Modules\Attribute\Actions\UpdateAttributeAction;
+use Modules\Attribute\DTO\AttributeDTO;
 use Modules\Attribute\Http\Requests\Api\Attribute\SearchRequest;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
+use Modules\Attribute\Repository\AttributeRepository;
 use Modules\Attribute\Resource\AttributeResource;
-use Modules\Attribute\Service\AttributeService;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\CoreController;
 use ReflectionException;
 
+
 class AttributeController extends CoreController
 {
-    public AttributeService $attribute_service;
 
-    public function __construct(AttributeService $attribute_service)
-    {
-        $this->attribute_service = $attribute_service;
-        $this->middleware('permission:attribute-list', ['only' => ['index']]);
-        $this->middleware('permission:attribute-show', ['only' => ['show']]);
-        $this->middleware('permission:attribute-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:attribute-update', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:attribute-delete', ['only' => ['destroy']]);
+    public function __construct(
+        public readonly AttributeRepository $repository,
+        private readonly CreateAttributeAction $createAction,
+        private readonly UpdateAttributeAction $updateAction,
+        private readonly DeleteAttributeAction $deleteAction
+    ) {
+        $this->middleware('permission:bundle-list', ['only' => ['index']]);
+        $this->middleware('permission:bundle-show', ['only' => ['show']]);
+        $this->middleware('permission:bundle-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:bundle-update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:bundle-delete', ['only' => ['destroy']]);
     }
 
     public function index(SearchRequest $request): AnonymousResourceCollection
     {
-        return AttributeResource::collection($this->attribute_service->search($request->validated()));
+        return AttributeResource::collection($this->repository->search($request->validated()));
     }
 
     /**
+     * @param  Store  $request
+     * @return JsonResponse
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
@@ -45,12 +54,12 @@ class AttributeController extends CoreController
                     'apiResponse.storeSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->attribute_service->attribute_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->create($request->validated())));
+            ->respond(new AttributeResource($this->createAction->execute(AttributeDTO::fromRequest($request))));
     }
 
     /**
@@ -64,15 +73,18 @@ class AttributeController extends CoreController
                     'apiResponse.ok',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->attribute_service->attribute_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->findById($id)));
+            ->respond(new AttributeResource($this->repository->findById($id)));
     }
 
     /**
+     * @param  Update  $request
+     * @param  int     $id
+     * @return JsonResponse
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse
@@ -83,20 +95,23 @@ class AttributeController extends CoreController
                     'apiResponse.updateSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->attribute_service->attribute_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->attribute_service->update($id, $request->validated())));
+            ->respond(new AttributeResource($this->updateAction->execute(AttributeDTO::fromRequest($request->validated())->withId
+            ($id))));
     }
 
     /**
+     * @param  int  $id
+     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->attribute_service->delete($id);
+        $this->deleteAction->execute($id);
 
         return $this
             ->setMessage(
@@ -104,7 +119,7 @@ class AttributeController extends CoreController
                     'apiResponse.deleteSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->attribute_service->attribute_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )
