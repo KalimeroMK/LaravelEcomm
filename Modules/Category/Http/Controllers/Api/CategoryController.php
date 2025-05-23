@@ -6,21 +6,33 @@ namespace Modules\Category\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Category\Actions\CreateCategoryAction;
+use Modules\Category\Actions\DeleteCategoryAction;
+use Modules\Category\Actions\UpdateCategoryAction;
+use Modules\Category\DTOs\CategoryDTO;
 use Modules\Category\Http\Requests\Api\Store;
 use Modules\Category\Http\Requests\Api\Update;
 use Modules\Category\Http\Resources\CategoryResource;
-use Modules\Category\Service\CategoryService;
+use Modules\Category\Models\Category;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
-use ReflectionException;
 
 class CategoryController extends CoreController
 {
-    public CategoryService $category_service;
+    private CreateCategoryAction $createAction;
 
-    public function __construct(CategoryService $category_service)
-    {
-        $this->category_service = $category_service;
+    private UpdateCategoryAction $updateAction;
+
+    private DeleteCategoryAction $deleteAction;
+
+    public function __construct(
+        CreateCategoryAction $createAction,
+        UpdateCategoryAction $updateAction,
+        DeleteCategoryAction $deleteAction
+    ) {
+        $this->createAction = $createAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
         $this->middleware('permission:category-list', ['only' => ['index']]);
         $this->middleware('permission:category-show', ['only' => ['show']]);
         $this->middleware('permission:category-create', ['only' => ['store']]);
@@ -30,7 +42,7 @@ class CategoryController extends CoreController
 
     public function index(): ResourceCollection
     {
-        return CategoryResource::collection($this->category_service->getAll());
+        return CategoryResource::collection(Category::all());
     }
 
     /**
@@ -38,18 +50,19 @@ class CategoryController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
+        $dto = CategoryDTO::fromRequest($request);
+        $category = $this->createAction->execute($dto);
+
         return $this
             ->setMessage(
                 __(
                     'apiResponse.storeSuccess',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->category_service->categoryRepository->model
-                        ),
+                        'resource' => Helper::getResourceName(Category::class),
                     ]
                 )
             )
-            ->respond(new CategoryResource($this->category_service->create($request->validated())));
+            ->respond(new CategoryResource($category));
     }
 
     /**
@@ -57,18 +70,18 @@ class CategoryController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
+        $category = Category::findOrFail($id);
+
         return $this
             ->setMessage(
                 __(
                     'apiResponse.ok',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->category_service->categoryRepository->model
-                        ),
+                        'resource' => Helper::getResourceName(Category::class),
                     ]
                 )
             )
-            ->respond(new CategoryResource($this->category_service->findById($id)));
+            ->respond(new CategoryResource($category));
     }
 
     /**
@@ -76,18 +89,19 @@ class CategoryController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
+        $dto = CategoryDTO::fromRequest($request, $id);
+        $category = $this->updateAction->execute($dto);
+
         return $this
             ->setMessage(
                 __(
                     'apiResponse.updateSuccess',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->category_service->categoryRepository->model
-                        ),
+                        'resource' => Helper::getResourceName(Category::class),
                     ]
                 )
             )
-            ->respond(new CategoryResource($this->category_service->update($id, $request->validated())));
+            ->respond(new CategoryResource($category));
     }
 
     /**
@@ -95,16 +109,14 @@ class CategoryController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->category_service->delete($id);
+        $this->deleteAction->execute($id);
 
         return $this
             ->setMessage(
                 __(
                     'apiResponse.deleteSuccess',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->category_service->categoryRepository->model
-                        ),
+                        'resource' => Helper::getResourceName(Category::class),
                     ]
                 )
             )

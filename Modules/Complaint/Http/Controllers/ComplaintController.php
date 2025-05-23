@@ -6,23 +6,35 @@ namespace Modules\Complaint\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Modules\Complaint\Actions\CreateComplaintAction;
+use Modules\Complaint\Actions\DeleteComplaintAction;
+use Modules\Complaint\Actions\UpdateComplaintAction;
+use Modules\Complaint\DTOs\ComplaintDTO;
 use Modules\Complaint\Http\Requests\Store;
 use Modules\Complaint\Http\Requests\Update;
 use Modules\Complaint\Models\Complaint;
-use Modules\Complaint\Service\ComplaintService;
 
 class ComplaintController extends Controller
 {
-    protected ComplaintService $complaintService;
+    private CreateComplaintAction $createAction;
 
-    public function __construct(ComplaintService $complaintService)
-    {
-        $this->complaintService = $complaintService;
+    private UpdateComplaintAction $updateAction;
+
+    private DeleteComplaintAction $deleteAction;
+
+    public function __construct(
+        CreateComplaintAction $createAction,
+        UpdateComplaintAction $updateAction,
+        DeleteComplaintAction $deleteAction
+    ) {
+        $this->createAction = $createAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
     }
 
     public function index()
     {
-        $complaints = $this->complaintService->getComplaintsForUser(auth()->user());
+        $complaints = Complaint::where('user_id', auth()->id())->get();
 
         return view('complaint::index', ['complaints' => $complaints]);
     }
@@ -36,17 +48,24 @@ class ComplaintController extends Controller
 
     public function store(Store $request): RedirectResponse
     {
-        $this->complaintService->createComplaint(auth()->id(), $request->all());
+        $dto = ComplaintDTO::fromRequest($request);
+        $this->createAction->execute($dto);
 
         return redirect()->route('complaints.index')->with('success', 'Complaint created successfully.');
     }
 
     public function update(Update $request, int $id)
     {
-        $data = $request->validated();
-        $data['user_id'] = auth()->id();
-        $this->complaintService->updateComplaint($id, $data);
+        $dto = ComplaintDTO::fromRequest($request, $id);
+        $this->updateAction->execute($dto);
 
         return redirect()->back()->with('success', 'Complaint updated successfully.');
+    }
+
+    public function destroy(int $id): RedirectResponse
+    {
+        $this->deleteAction->execute($id);
+
+        return redirect()->route('complaints.index')->with('success', 'Complaint deleted successfully.');
     }
 }

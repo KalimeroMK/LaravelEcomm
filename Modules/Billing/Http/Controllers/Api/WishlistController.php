@@ -7,42 +7,57 @@ namespace Modules\Billing\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Billing\Actions\Wishlist\CreateWishlistAction;
+use Modules\Billing\Actions\Wishlist\DeleteWishlistAction;
+use Modules\Billing\DTOs\WishlistDTO;
 use Modules\Billing\Http\Requests\Api\Store;
 use Modules\Billing\Http\Resources\WishlistResource;
-use Modules\Billing\Service\WishlistService;
+use Modules\Billing\Repository\WishlistRepository;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use ReflectionException;
 
 class WishlistController extends CoreController
 {
-    private WishlistService $wishlist_service;
+    private WishlistRepository $repository;
 
-    public function __construct(WishlistService $wishlist_service)
-    {
-        $this->wishlist_service = $wishlist_service;
+    private CreateWishlistAction $createAction;
+
+    private DeleteWishlistAction $deleteAction;
+
+    public function __construct(
+        WishlistRepository $repository,
+        CreateWishlistAction $createAction,
+        DeleteWishlistAction $deleteAction
+    ) {
+        $this->repository = $repository;
+        $this->createAction = $createAction;
+        $this->deleteAction = $deleteAction;
     }
 
     public function index(): ResourceCollection
     {
-        return WishlistResource::collection($this->wishlist_service->getAllByUser());
+        return WishlistResource::collection($this->repository->findBy('user_id', auth()->user()->id));
     }
 
     public function store(Store $request): JsonResponse|string
     {
         try {
+            $dto = WishlistDTO::fromRequest($request);
+            $wishlist = $this->createAction->execute($dto);
+
             return $this
                 ->setMessage(
                     __(
                         'apiResponse.storeSuccess',
                         [
                             'resource' => Helper::getResourceName(
-                                $this->wishlist_service->wishlist_repository->model
+                                $this->repository->model
                             ),
                         ]
                     )
                 )
-                ->respond(new WishlistResource($this->wishlist_service->create($request->all())));
+                ->respond(new WishlistResource($wishlist));
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
@@ -53,7 +68,7 @@ class WishlistController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->wishlist_service->delete($id);
+        $this->deleteAction->execute($id);
 
         return $this
             ->setMessage(
@@ -61,7 +76,7 @@ class WishlistController extends CoreController
                     'apiResponse.deleteSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->wishlist_service->wishlist_repository->model
+                            $this->repository->model
                         ),
                     ]
                 )

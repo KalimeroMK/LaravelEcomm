@@ -12,7 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Banner\Actions\CreateBannerAction;
 use Modules\Banner\Actions\DeleteBannerAction;
 use Modules\Banner\Actions\UpdateBannerAction;
-use Modules\Banner\DTO\BannerDTO;
+use Modules\Banner\DTOs\BannerDTO;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;

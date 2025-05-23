@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Actions;
 
-use Modules\Attribute\DTO\AttributeDTO;
+use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Repository\AttributeRepository;
 
 readonly class CreateAttributeAction
 {
-    public function __construct(public AttributeRepository $repository)
-    {
-    }
+    public function __construct(public AttributeRepository $repository) {}
 
     public function execute(AttributeDTO $dto): Attribute
     {
@@ -26,7 +24,7 @@ readonly class CreateAttributeAction
         ]);
 
         // Optionally sync options if needed
-        if (!empty($dto->options) && method_exists($attribute, 'syncOptions')) {
+        if (! empty($dto->options) && method_exists($attribute, 'syncOptions')) {
             $attribute->syncOptions($dto->options);
         }
 

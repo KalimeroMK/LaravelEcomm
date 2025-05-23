@@ -9,17 +9,22 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Modules\Billing\Service\StripeService;
+use Modules\Billing\Actions\Stripe\CreateStripeChargeAction;
+use Modules\Billing\DTOs\StripeDTO;
+use Modules\Core\Helpers\Payment;
 use Modules\Core\Http\Controllers\CoreController;
-use Stripe\Exception\ApiErrorException;
+use Session;
 
 class StripeController extends CoreController
 {
-    private StripeService $stripe_service;
+    private CreateStripeChargeAction $createAction;
 
-    public function __construct(StripeService $stripe_service)
+    private Payment $payment;
+
+    public function __construct(CreateStripeChargeAction $createAction, Payment $payment)
     {
-        $this->stripe_service = $stripe_service;
+        $this->createAction = $createAction;
+        $this->payment = $payment;
     }
 
     /**
@@ -27,17 +32,26 @@ class StripeController extends CoreController
      */
     public function stripe(int $id): View|Factory|Application
     {
-        return $this->stripe_service->stripe($id);
+        return view('front::pages.stripe', ['id' => $id]);
     }
 
     /**
      * success response method.
      *
-     *
      * @throws ApiErrorException
      */
     public function stripePost(Request $request): RedirectResponse
     {
-        return $this->stripe_service->stripePost($request);
+        $dto = new StripeDTO(
+            amount: $this->payment->calculate($request),
+            currency: 'usd',
+            source: $request->stripeToken,
+            description: 'KalimeroMK E-comm'
+        );
+        $this->createAction->execute($dto);
+        // orderSave logic here if needed
+        Session::flash('success', 'Payment successful!');
+
+        return redirect()->route('orders.index');
     }
 }

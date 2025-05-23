@@ -9,7 +9,10 @@
                                 href="{{route('roles.index')}}">{{trans('messages.role')}}</a></p>
                 </div>
                 <div class="card-body">
-                    @include('role::partials.form')
+                    @include('role::partials.form', [
+                        'role' => $role ?? [],
+                        'permissions' => $permissions ?? [],
+                    ])
                 </div>
             </div>
         </div>

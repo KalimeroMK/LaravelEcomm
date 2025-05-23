@@ -6,24 +6,24 @@ namespace Modules\Role\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Core\Traits\ApiResponses;
+use Modules\Role\Actions\DeleteRoleAction;
+use Modules\Role\Actions\GetAllRolesAction;
+use Modules\Role\Actions\StoreRoleAction;
+use Modules\Role\Actions\UpdateRoleAction;
+use Modules\Role\DTOs\RoleDTO;
 use Modules\Role\Http\Requests\Api\Store;
 use Modules\Role\Http\Requests\Api\Update;
 use Modules\Role\Http\Resources\RoleResource;
-use Modules\Role\Service\RoleService;
-use ReflectionException;
+use Modules\Role\Models\Role;
 
 class RoleController extends CoreController
 {
     use ApiResponses;
 
-    public RoleService $role_service;
-
-    public function __construct(RoleService $role_service)
+    public function __construct()
     {
-        $this->role_service = $role_service;
         $this->middleware('permission:role-list', ['only' => ['index']]);
         $this->middleware('permission:role-show', ['only' => ['show']]);
         $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
@@ -33,7 +33,9 @@ class RoleController extends CoreController
 
     public function index(): AnonymousResourceCollection
     {
-        return RoleResource::collection($this->role_service->getAll());
+        $rolesDto = (new GetAllRolesAction())->execute();
+
+        return RoleResource::collection($rolesDto->roles);
     }
 
     /**
@@ -41,18 +43,9 @@ class RoleController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->role_service->role_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new RoleResource($this->role_service->create($request->validated())));
+        $roleDto = (new StoreRoleAction())->execute($request->validated());
+
+        return $this->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Role']))->respond(new RoleResource($roleDto));
     }
 
     /**
@@ -60,18 +53,10 @@ class RoleController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.ok',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->role_service->role_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new RoleResource($this->role_service->findById($id)));
+        $role = Role::findOrFail($id);
+        $roleDto = new RoleDTO($role->load('permissions'));
+
+        return $this->setMessage(__('apiResponse.ok', ['resource' => 'Role']))->respond(new RoleResource($roleDto));
     }
 
     /**
@@ -79,18 +64,9 @@ class RoleController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.updateSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->role_service->role_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new RoleResource($this->role_service->update($id, $request->validated())));
+        $roleDto = (new UpdateRoleAction())->execute($id, $request->validated());
+
+        return $this->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Role']))->respond(new RoleResource($roleDto));
     }
 
     /**
@@ -98,19 +74,8 @@ class RoleController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->role_service->delete($id);
+        (new DeleteRoleAction())->execute($id);
 
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->role_service->role_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(null);
+        return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Role']))->respond(null);
     }
 }

@@ -23,10 +23,10 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="image">
-                            @if($profile->photo)
+                            @if($profile['photo'] ?? '')
                                 <img class="card-img-top img-fluid roundend-circle mt-4"
                                      style="border-radius:50%;height:80px;width:80px;margin:auto;"
-                                     src="{{$profile->photo}}" alt="profile picture">
+                                     src="{{$profile['photo'] ?? ''}}" alt="profile picture">
                             @else
                                 <img class="card-img-top img-fluid roundend-circle mt-4"
                                      style="border-radius:50%;height:80px;width:80px;margin:auto;"
@@ -34,22 +34,22 @@
                             @endif
                         </div>
                         <div class="card-body mt-4 ml-2">
-                            <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$profile->name}}
+                            <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$profile['name'] ?? ''}}
                                 </small></h5>
-                            <p class="card-text text-left"><small><i class="fas fa-envelope"></i> {{$profile->email}}
+                            <p class="card-text text-left"><small><i class="fas fa-envelope"></i> {{$profile['email'] ?? ''}}
                                 </small></p>
                             <p class="card-text text-left"><small class="text-muted"><i
-                                            class="fas fa-hammer"></i> {{$profile->role}}</small></p>
+                                            class="fas fa-hammer"></i> {{$profile['role'] ?? ''}}</small></p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <form class="border px-4 pt-2 pb-3" method="POST" action="{{route('profile-update',$profile->id)}}">
+                    <form class="border px-4 pt-2 pb-3" method="POST" action="{{route('profile-update',$profile['id'] ?? '')}}">
                         @csrf
                         <div class="form-group">
                             <label for="inputTitle" class="col-form-label">Name</label>
                             <input id="inputTitle" type="text" name="name" placeholder="@lang('partials.name')"
-                                   value="{{$profile->name}}" class="form-control">
+                                   value="{{$profile['name'] ?? ''}}" class="form-control">
                             @error('name')
 
                             @enderror
@@ -58,7 +58,7 @@
                         <div class="form-group">
                             <label for="inputEmail" class="col-form-label">Email</label>
                             <input id="inputEmail" disabled type="email" name="email" placeholder="Enter email"
-                                   value="{{$profile->email}}" class="form-control">
+                                   value="{{$profile['email'] ?? ''}}" class="form-control">
                             @error('email')
 
                             @enderror
@@ -73,14 +73,14 @@
                               </a>
                           </span>
                                 <input id="thumbnail" class="form-control" type="text" name="photo"
-                                       value="{{$profile->photo}}">
+                                       value="{{$profile['photo'] ?? ''}}">
                             </div>
                             @error('photo')
 
                             @enderror
                         </div>
                         <div class="col-md-12 mt-3">
-                            @if(auth()->user()->loginSecurity && auth()->user()->loginSecurity->google2fa_enable)
+                            @if(isset($profile['loginSecurity']) && $profile['loginSecurity']['google2fa_enable'] ?? false)
                                 <a class="btn btn-warning"
                                    href="{{ route('disable2fa') }}">@lang('translation.users.2fa_disable')
                                 </a>

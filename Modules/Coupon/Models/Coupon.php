@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Coupon\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,19 +22,19 @@ use Modules\Coupon\Database\Factories\CouponFactory;
  * @property string $type
  * @property float $value
  * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @method static Builder|Coupon newModelQuery()
- * @method static Builder|Coupon newQuery()
- * @method static Builder|Coupon query()
- * @method static Builder|Coupon whereCode($value)
- * @method static Builder|Coupon whereCreatedAt($value)
- * @method static Builder|Coupon whereId($value)
- * @method static Builder|Coupon whereStatus($value)
- * @method static Builder|Coupon whereType($value)
- * @method static Builder|Coupon whereUpdatedAt($value)
- * @method static Builder|Coupon whereValue($value)
+ * @method static Builder<static>|Coupon newModelQuery()
+ * @method static Builder<static>|Coupon newQuery()
+ * @method static Builder<static>|Coupon query()
+ * @method static Builder<static>|Coupon whereCode($value)
+ * @method static Builder<static>|Coupon whereCreatedAt($value)
+ * @method static Builder<static>|Coupon whereId($value)
+ * @method static Builder<static>|Coupon whereStatus($value)
+ * @method static Builder<static>|Coupon whereType($value)
+ * @method static Builder<static>|Coupon whereUpdatedAt($value)
+ * @method static Builder<static>|Coupon whereValue($value)
  *
  * @mixin Eloquent
  */

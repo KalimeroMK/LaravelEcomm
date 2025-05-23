@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Modules\Product\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Tag\Models\Tag;
@@ -17,8 +19,16 @@ use Modules\Tag\Models\Tag;
  *
  * @property int $product_id
  * @property int $tag_id
- * @property Product $product
- * @property Tag $tag
+ * @property-read Product $product
+ * @property-read Tag     $tag
+ *
+ * @method static Builder<static>|ProductTag newModelQuery()
+ * @method static Builder<static>|ProductTag newQuery()
+ * @method static Builder<static>|ProductTag query()
+ * @method static Builder<static>|ProductTag whereProductId($value)
+ * @method static Builder<static>|ProductTag whereTagId($value)
+ *
+ * @mixin Eloquent
  */
 class ProductTag extends Model
 {

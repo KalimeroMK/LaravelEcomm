@@ -76,38 +76,7 @@ class ProductRepository extends Repository
      */
     public function findById(int $id): ?Model
     {
-        return $this->model::with('brand', 'categories', 'carts', 'condition', 'tags')->find($id);
-    }
-
-    /**
-     * Get the latest products.
-     *
-     * @return Collection<int, Product>
-     */
-    public function getLatestProducts(): Collection
-    {
-        return Cache::remember('latest_products', 86400, function () {
-            return $this->model::with('categories', 'condition')
-                ->where('status', 'active')
-                ->orderBy('id', 'desc')
-                ->limit(self::LATEST_PRODUCTS_LIMIT)
-                ->get();
-        });
-    }
-
-    /**
-     * Get the featured products.
-     *
-     * @return Collection<int, Product>
-     */
-    public function getFeaturedProducts(): Collection
-    {
-        return Cache::remember('featured_products', 86400, function () {
-            return $this->model::with('categories')
-                ->orderBy('price', 'desc')
-                ->limit(4)
-                ->get();
-        });
+        return $this->model::with(['brand', 'categories', 'carts', 'tags'])->find($id);
     }
 
     /**

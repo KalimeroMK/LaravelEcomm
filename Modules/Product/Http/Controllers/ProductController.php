@@ -12,46 +12,45 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\OpenAI\Service\OpenAIService;
-use Modules\Product\Http\Requests\Store;
-use Modules\Product\Http\Requests\Update;
+use Modules\Product\Actions\DeleteProductAction;
+use Modules\Product\Actions\GetAllProductsAction;
+use Modules\Product\Actions\StoreProductAction;
+use Modules\Product\Actions\UpdateProductAction;
+use Modules\Product\DTOs\ProductDTO;
 use Modules\Product\Models\Product;
-use Modules\Product\Service\ProductService;
 use Modules\Tag\Models\Tag;
 
 class ProductController extends CoreController
 {
-    private ProductService $product_service;
-
-    public function __construct(ProductService $product_service)
+    public function __construct()
     {
-        $this->product_service = $product_service;
         $this->authorizeResource(Product::class, 'product');
     }
 
     public function index(): Renderable
     {
-        return view('product::index', ['products' => $this->product_service->index()]);
+        $productsDto = (new GetAllProductsAction())->execute();
+
+        return view('product::index', ['products' => $productsDto->products]);
     }
 
     public function create(): Renderable
     {
         return view('product::create', [
-            'brands' => Brand::get(),
-            'categories' => Category::get(),
-            'product' => new Product,
-            'tags' => Tag::get(),
-            'attributes' => Attribute::all(),
-        ]
-        );
+            'brands' => Brand::get()->toArray(),
+            'categories' => Category::get()->toArray(),
+            'product' => [],
+            'tags' => Tag::get()->toArray(),
+            'attributes' => Attribute::all()->toArray(),
+        ]);
     }
 
     /**
      * @throws Exception
      */
-    public function store(Store $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $this->product_service->store($request->all());
+        (new StoreProductAction())->execute($request->all());
 
         return redirect()->route('products.index');
     }
@@ -59,29 +58,30 @@ class ProductController extends CoreController
     public function edit(Product $product): Renderable
     {
         $product->load('attributes.attribute');
+        $productDto = new ProductDTO($product);
 
         return view('product::edit', [
-            'brands' => Brand::get(),
-            'categories' => Category::all(),
-            'product' => $product,
-            'tags' => Tag::get(),
-            'attributes' => Attribute::all(),
+            'brands' => Brand::get()->toArray(),
+            'categories' => Category::get()->toArray(),
+            'product' => (array) $productDto,
+            'tags' => Tag::get()->toArray(),
+            'attributes' => Attribute::all()->toArray(),
         ]);
     }
 
     /**
      * @throws Exception
      */
-    public function update(Update $request, Product $product): RedirectResponse
+    public function update(Request $request, Product $product): RedirectResponse
     {
-        $this->product_service->updateWithRelationsAndMedia($product->id, $request->validated());
+        (new UpdateProductAction())->execute($product->id, $request->all());
 
         return redirect()->route('products.index');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
-        $this->product_service->delete($product->id);
+        (new DeleteProductAction())->execute($product->id);
 
         return redirect()->route('products.index');
     }

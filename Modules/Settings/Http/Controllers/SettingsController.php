@@ -9,17 +9,15 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Settings\Actions\GetSettingsAction;
+use Modules\Settings\Actions\UpdateSettingsAction;
 use Modules\Settings\Http\Requests\Update;
 use Modules\Settings\Models\Setting;
-use Modules\Settings\Service\SettingsService;
 
 class SettingsController extends Controller
 {
-    private SettingsService $settings_service;
-
-    public function __construct(SettingsService $settings_service)
+    public function __construct()
     {
-        $this->settings_service = $settings_service;
         $this->authorizeResource(Setting::class, 'setting');
     }
 
@@ -28,12 +26,14 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        return view('settings::edit', ['settings' => $this->settings_service->getData()]);
+        $settingsDto = (new GetSettingsAction())->execute();
+
+        return view('settings::edit', ['settings' => $settingsDto->settings]);
     }
 
-    public function Update(Update $request, Setting $setting): RedirectResponse
+    public function update(Update $request, Setting $setting): RedirectResponse
     {
-        $this->settings_service->update($setting->id, $request->validated());
+        (new UpdateSettingsAction())->execute($setting->id, $request->validated());
 
         return redirect()->back();
     }

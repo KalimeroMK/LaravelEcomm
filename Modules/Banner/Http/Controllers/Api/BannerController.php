@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Actions\CreateBannerAction;
 use Modules\Banner\Actions\DeleteBannerAction;
 use Modules\Banner\Actions\UpdateBannerAction;
-use Modules\Banner\DTO\BannerDTO;
+use Modules\Banner\DTOs\BannerDTO;
 use Modules\Banner\Http\Requests\Api\Store;
 use Modules\Banner\Http\Requests\Api\Update;
 use Modules\Banner\Http\Resource\BannerResource;
@@ -115,7 +115,6 @@ class BannerController extends CoreController
                 $this->updateAction->execute(BannerDTO::fromRequest($request))
             ));
     }
-
 
     /**
      * @throws ReflectionException

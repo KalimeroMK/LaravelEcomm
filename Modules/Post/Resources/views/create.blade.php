@@ -1,13 +1,13 @@
 @extends('admin::layouts.master')
 
-@section('title','E-SHOP || Banner Create')
+@section('title','E-SHOP || Post Create')
 
 @section('content')
 
     <div class="card">
         <h5 class="card-header">@lang('partials.create')</h5>
         <div class="card-body">
-            @include('post::partials.form')
+            @include('post::partials.form', ['post' => $post ?? null, 'categories' => $categories ?? [], 'tags' => $tags ?? []])
         </div>
     </div>
 

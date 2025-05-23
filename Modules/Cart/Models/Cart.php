@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Cart\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,36 +24,36 @@ use Modules\User\Models\User;
  * Class Cart
  *
  * @property int $id
- * @property int $product_id
- * @property int|null $order_id
- * @property int|null $user_id
  * @property float $price
  * @property string $status
  * @property int $quantity
  * @property float $amount
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Order|null $order
- * @property Product $product
- * @property User|null $user
- * @property Collection|Wishlist[] $wishlists
+ * @property int $product_id
+ * @property int|null $order_id
+ * @property int|null $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Order|null $order
+ * @property-read Product $product
+ * @property-read User|null $user
+ * @property-read Collection<int, Wishlist> $wishlists
  * @property-read int|null $wishlists_count
  *
- * @method static Builder|Cart newModelQuery()
- * @method static Builder|Cart newQuery()
- * @method static Builder|Cart query()
- * @method static Builder|Cart whereAmount($value)
- * @method static Builder|Cart whereCreatedAt($value)
- * @method static Builder|Cart whereId($value)
- * @method static Builder|Cart whereOrderId($value)
- * @method static Builder|Cart wherePrice($value)
- * @method static Builder|Cart whereProductId($value)
- * @method static Builder|Cart whereQuantity($value)
- * @method static Builder|Cart whereStatus($value)
- * @method static Builder|Cart whereUpdatedAt($value)
- * @method static Builder|Cart whereUserId($value)
+ * @method static Builder<static>|Cart newModelQuery()
+ * @method static Builder<static>|Cart newQuery()
+ * @method static Builder<static>|Cart query()
+ * @method static Builder<static>|Cart whereAmount($value)
+ * @method static Builder<static>|Cart whereCreatedAt($value)
+ * @method static Builder<static>|Cart whereId($value)
+ * @method static Builder<static>|Cart whereOrderId($value)
+ * @method static Builder<static>|Cart wherePrice($value)
+ * @method static Builder<static>|Cart whereProductId($value)
+ * @method static Builder<static>|Cart whereQuantity($value)
+ * @method static Builder<static>|Cart whereStatus($value)
+ * @method static Builder<static>|Cart whereUpdatedAt($value)
+ * @method static Builder<static>|Cart whereUserId($value)
  *
- * @mixin Eloquent
+ * @mixin \Eloquent
  */
 class Cart extends Core
 {

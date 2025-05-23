@@ -7,25 +7,25 @@ namespace Modules\Page\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Page\Actions\CreatePageAction;
+use Modules\Page\Actions\DeletePageAction;
+use Modules\Page\Actions\GetAllPagesAction;
+use Modules\Page\Actions\UpdatePageAction;
 use Modules\Page\Http\Requests\Store;
 use Modules\Page\Models\Page;
-use Modules\Page\Service\PageService;
 
 class PageController extends Controller
 {
-    protected PageService $page_service;
-
-    public function __construct(PageService $page_service)
+    public function __construct()
     {
-        $this->page_service = $page_service;
         $this->authorizeResource(Page::class, 'page');
     }
 
     public function index(): View
     {
-        $pages = $this->page_service->getAll();
+        $pagesDto = (new GetAllPagesAction())->execute();
 
-        return view('page::index', ['pages' => $pages]);
+        return view('page::index', ['pages' => $pagesDto->pages]);
     }
 
     public function create(): View
@@ -35,7 +35,7 @@ class PageController extends Controller
 
     public function store(Store $request): RedirectResponse
     {
-        $this->page_service->create($request->validated());
+        (new CreatePageAction())->execute($request->validated());
 
         return redirect()->route('pages.index')->with('status', 'Page created successfully.');
     }
@@ -47,14 +47,14 @@ class PageController extends Controller
 
     public function update(Store $request, Page $page): RedirectResponse
     {
-        $this->page_service->update($page->id, $request->validated());
+        (new UpdatePageAction())->execute($page->id, $request->validated());
 
         return redirect()->route('pages.edit', $page)->with('status', 'Page updated successfully.');
     }
 
     public function destroy(Page $page): RedirectResponse
     {
-        $this->page_service->delete($page->id);
+        (new DeletePageAction())->execute($page->id);
 
         return redirect()->route('pages.index')->with('status', 'Page deleted successfully.');
     }

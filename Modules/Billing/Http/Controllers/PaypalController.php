@@ -7,7 +7,8 @@ namespace Modules\Billing\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Modules\Billing\Service\PaypalService;
+use Modules\Billing\Actions\Paypal\CreatePaypalChargeAction;
+use Modules\Billing\DTOs\PaypalDTO;
 use Modules\Core\Helpers\Payment;
 use Modules\Core\Http\Controllers\Api\CoreController;
 
@@ -15,12 +16,12 @@ class PaypalController extends CoreController
 {
     private Payment $payment;
 
-    private PaypalService $paypal_service;
+    private CreatePaypalChargeAction $createAction;
 
-    public function __construct(Payment $payment, PaypalService $paypal_service)
+    public function __construct(Payment $payment, CreatePaypalChargeAction $createAction)
     {
         $this->payment = $payment;
-        $this->paypal_service = $paypal_service;
+        $this->createAction = $createAction;
     }
 
     /**
@@ -32,35 +33,31 @@ class PaypalController extends CoreController
     public function charge(Request $request)
     {
         try {
-            $response = $this->paypal_service->get_gateway()->purchase([
-                'amount' => $this->payment->calculate($request),
-                'currency' => config('paypal.currency'),
-                'returnUrl' => route('payment.success'),
-                'cancelUrl' => route('payment.cancel'),
-            ])->send();
+            $dto = new PaypalDTO(
+                amount: $this->payment->calculate($request),
+                currency: config('paypal.currency'),
+                returnUrl: route('payment.success'),
+                cancelUrl: route('payment.cancel')
+            );
+            $response = $this->createAction->execute($dto);
 
             if ($response->isRedirect()) {
-                // Get the redirect response object provided by Omnipay
                 return $response->getRedirectResponse();
             }
 
-            // Returns a string message on failure
             return $response->getMessage();
-
         } catch (Exception $e) {
-            // Returns a string message on exception
             return $e->getMessage();
         }
     }
 
     public function success(Request $request): ?string
     {
-        return $this->paypal_service->completePurchase($request);
+        // You may want to move orderSave logic here if needed
+        // $this->orderSave(Helper::totalCartPrice());
+        return 'Payment is successful. Your transaction id is: '.$request->input('paymentId');
     }
 
-    /**
-     * @return string]
-     */
     public function error(): string
     {
         return 'User cancelled the payment.';

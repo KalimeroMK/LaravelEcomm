@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Post\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,35 +24,34 @@ use Modules\User\Models\User;
  * Class PostComment
  *
  * @property int $id
- * @property int|null $user_id
- * @property int|null $post_id
  * @property string $comment
  * @property string $status
  * @property string|null $replied_comment
  * @property int|null $parent_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Post|null $post
- * @property User|null $user
- * @property-read Collection|PostComment[] $replies
- * @property-read int|null $replies_count
+ * @property int|null $user_id
+ * @property int|null $post_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Post|null                    $post
+ * @property-read Collection<int, PostComment> $replies
+ * @property-read int|null                     $replies_count
+ * @property-read User|null                    $user
+ * @property-read User|null                    $user_info
  *
- * @method static Builder|PostComment newModelQuery()
- * @method static Builder|PostComment newQuery()
- * @method static Builder|PostComment query()
- * @method static Builder|PostComment whereComment($value)
- * @method static Builder|PostComment whereCreatedAt($value)
- * @method static Builder|PostComment whereId($value)
- * @method static Builder|PostComment whereParentId($value)
- * @method static Builder|PostComment wherePostId($value)
- * @method static Builder|PostComment whereRepliedComment($value)
- * @method static Builder|PostComment whereStatus($value)
- * @method static Builder|PostComment whereUpdatedAt($value)
- * @method static Builder|PostComment whereUserId($value)
+ * @method static Builder<static>|PostComment newModelQuery()
+ * @method static Builder<static>|PostComment newQuery()
+ * @method static Builder<static>|PostComment query()
+ * @method static Builder<static>|PostComment whereComment($value)
+ * @method static Builder<static>|PostComment whereCreatedAt($value)
+ * @method static Builder<static>|PostComment whereId($value)
+ * @method static Builder<static>|PostComment whereParentId($value)
+ * @method static Builder<static>|PostComment wherePostId($value)
+ * @method static Builder<static>|PostComment whereRepliedComment($value)
+ * @method static Builder<static>|PostComment whereStatus($value)
+ * @method static Builder<static>|PostComment whereUpdatedAt($value)
+ * @method static Builder<static>|PostComment whereUserId($value)
  *
  * @mixin Eloquent
- *
- * @property-read User|null $user_info
  */
 class PostComment extends Core
 {

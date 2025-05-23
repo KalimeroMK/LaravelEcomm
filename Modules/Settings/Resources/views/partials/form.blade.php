@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="POST" action="{{ route('settings.update', $settings->id) }}"
+<form class="form-horizontal" method="POST" action="{{ route('settings.update', $settings['id'] ?? null) }}"
       enctype="multipart/form-data">
     @method('put')
     @csrf
@@ -8,33 +8,33 @@
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">Short info <span class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="short_des" placeholder="Short description"
-               value="{{ $settings->short_des ?? null }}"
+               value="{{ $settings['short_des'] ?? null }}"
                class="form-control">
     </div>
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">@lang('partials.email') <span
                     class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="email" placeholder="Short description"
-               value="{{ $settings->email ?? null }}"
+               value="{{ $settings['email'] ?? null }}"
                class="form-control">
     </div>
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">@lang('partials.phone') <span
                     class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="phone" placeholder="Short description"
-               value="{{ $settings->phone ?? null }}"
+               value="{{ $settings['phone'] ?? null }}"
                class="form-control">
     </div>
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">@lang('messages.address') <span
                     class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="address" placeholder="address"
-               value="{{ $settings->address ?? null }}"
+               value="{{ $settings['address'] ?? null }}"
                class="form-control">
     </div>
     <div class="form-group">
        <textarea class="form-control" id="description"
-                 name="description">{{ $settings->description ?? null }}</textarea>
+                 name="description">{{ $settings['description'] ?? null }}</textarea>
     </div>
     <div class="form-group">
         <label for="inputImage">@lang('partials.logo')</label>
@@ -45,8 +45,8 @@
     <div class="form-group">
         <label for="map" class="col-form-label">Pin your address on the map</label>
         <div id="map" style="height: 400px; width: 100%;"></div>
-        <input type="hidden" id="latitude" name="latitude" value="{{ $settings->latitude ?? null }}">
-        <input type="hidden" id="longitude" name="longitude" value="{{ $settings->longitude ?? null }}">
+        <input type="hidden" id="latitude" name="latitude" value="{{ $settings['latitude'] ?? null }}">
+        <input type="hidden" id="longitude" name="longitude" value="{{ $settings['longitude'] ?? null }}">
     </div>
 
     <div class="button-container">
@@ -69,7 +69,7 @@
             });
         });
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ $settings->google_map_api_key ?? 'AIzaSyDhiON8B3SmouSxloPhI3AtdNl2Sovmi_8'}}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ $settings['google_map_api_key'] ?? 'AIzaSyDhiON8B3SmouSxloPhI3AtdNl2Sovmi_8'}}"></script>
     <script>
         $(document).ready(function () {
             $('#description').summernote({
@@ -82,8 +82,8 @@
             let map;
             let marker;
            
-            const dbLat = {{ $settings->latitude ?? '50.8503' }};
-            const dbLng = {{ $settings->longitude ?? '4.3517' }};
+            const dbLat = {{ $settings['latitude'] ?? '50.8503' }};
+            const dbLng = {{ $settings['longitude'] ?? '4.3517' }};
             const initialLocation = {lat: dbLat, lng: dbLng};
 
             function initMap() {

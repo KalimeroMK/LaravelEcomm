@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Models;
 
-use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Modules\Attribute\Database\Factories\AttributeValueFactory;
@@ -14,21 +16,42 @@ use Modules\Core\Models\Core;
  * Class AttributeValue
  *
  * @property int $id
- * @property string|null $default
+ * @property int $product_id
+ * @property int $attribute_id
  * @property string|null $text_value
- * @property Carbon|null $date_value
- * @property Carbon|null $time_value
- * @property string|null $url_value
- * @property string|null $hex_value
+ * @property bool|null $boolean_value
+ * @property \Illuminate\Support\Carbon|null $date_value
+ * @property int|null $integer_value
  * @property float|null $float_value
  * @property string|null $string_value
- * @property bool|null $boolean_value
- * @property int|null $integer_value
+ * @property string|null $url_value
+ * @property string|null $hex_value
  * @property float|null $decimal_value
- * @property int $attribute_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Attribute $attribute
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Model|Eloquent $attributable
+ * @property-read Attribute                                    $attribute
+ * @property-read string|null                                  $value
+ *
+ * @method static Builder<static>|AttributeValue newModelQuery()
+ * @method static Builder<static>|AttributeValue newQuery()
+ * @method static Builder<static>|AttributeValue query()
+ * @method static Builder<static>|AttributeValue whereAttributeId($value)
+ * @method static Builder<static>|AttributeValue whereBooleanValue($value)
+ * @method static Builder<static>|AttributeValue whereCreatedAt($value)
+ * @method static Builder<static>|AttributeValue whereDateValue($value)
+ * @method static Builder<static>|AttributeValue whereDecimalValue($value)
+ * @method static Builder<static>|AttributeValue whereFloatValue($value)
+ * @method static Builder<static>|AttributeValue whereHexValue($value)
+ * @method static Builder<static>|AttributeValue whereId($value)
+ * @method static Builder<static>|AttributeValue whereIntegerValue($value)
+ * @method static Builder<static>|AttributeValue whereProductId($value)
+ * @method static Builder<static>|AttributeValue whereStringValue($value)
+ * @method static Builder<static>|AttributeValue whereTextValue($value)
+ * @method static Builder<static>|AttributeValue whereUpdatedAt($value)
+ * @method static Builder<static>|AttributeValue whereUrlValue($value)
+ *
+ * @mixin Eloquent
  */
 class AttributeValue extends Core
 {

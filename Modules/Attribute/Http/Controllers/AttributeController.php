@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Attribute\Actions\CreateAttributeAction;
 use Modules\Attribute\Actions\DeleteAttributeAction;
 use Modules\Attribute\Actions\UpdateAttributeAction;
-use Modules\Attribute\DTO\AttributeDTO;
+use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
 use Modules\Attribute\Models\Attribute;
@@ -18,7 +18,9 @@ use Modules\Core\Http\Controllers\CoreController;
 class AttributeController extends CoreController
 {
     protected CreateAttributeAction $createAction;
+
     protected UpdateAttributeAction $updateAction;
+
     protected DeleteAttributeAction $deleteAction;
 
     public function __construct(
@@ -46,6 +48,7 @@ class AttributeController extends CoreController
     {
         $dto = AttributeDTO::fromRequest($request);
         $this->createAction->execute($dto);
+
         return redirect()->route('attributes.index');
     }
 
@@ -58,12 +61,14 @@ class AttributeController extends CoreController
     {
         $dto = AttributeDTO::fromRequest($request)->withId($attribute->id);
         $this->updateAction->execute($dto);
+
         return redirect()->route('attributes.index');
     }
 
     public function destroy(Attribute $attribute): RedirectResponse
     {
         $this->deleteAction->execute($attribute->id);
+
         return redirect()->route('attributes.index');
     }
 }

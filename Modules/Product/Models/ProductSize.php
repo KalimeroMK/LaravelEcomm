@@ -8,18 +8,21 @@ declare(strict_types=1);
 
 namespace Modules\Product\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\Size\Models\Size;
 
 /**
  * Class ProductSize
  *
- * @property int $id
- * @property int $size_id
- * @property int $product_id
- * @property Product $product
- * @property Size $size
+ * @property-read Product|null $product
+ *
+ * @method static Builder<static>|ProductSize newModelQuery()
+ * @method static Builder<static>|ProductSize newQuery()
+ * @method static Builder<static>|ProductSize query()
+ *
+ * @mixin Eloquent
  */
 class ProductSize extends Model
 {

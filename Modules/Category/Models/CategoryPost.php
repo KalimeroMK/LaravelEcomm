@@ -8,40 +8,27 @@ declare(strict_types=1);
 
 namespace Modules\Category\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Models\Core;
 use Modules\Post\Models\Post;
-use Modules\Product\Models\Product;
 
 /**
  * Class CategoryProductFactory
  *
- * @property int $id
- * @property int $product_id
  * @property int $category_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Category $category
- * @property Product $product
+ * @property int $post_id
+ * @property-read Category $category
+ * @property-read Post $post
  *
- * @method static Builder|CategoryProduct newModelQuery()
- * @method static Builder|CategoryProduct newQuery()
- * @method static Builder|CategoryProduct query()
- * @method static Builder|CategoryProduct whereCategoryId($value)
- * @method static Builder|CategoryProduct whereCreatedAt($value)
- * @method static Builder|CategoryProduct whereId($value)
- * @method static Builder|CategoryProduct whereProductId($value)
- * @method static Builder|CategoryProduct whereUpdatedAt($value)
+ * @method static Builder<static>|CategoryPost newModelQuery()
+ * @method static Builder<static>|CategoryPost newQuery()
+ * @method static Builder<static>|CategoryPost query()
+ * @method static Builder<static>|CategoryPost whereCategoryId($value)
+ * @method static Builder<static>|CategoryPost wherePostId($value)
  *
  * @mixin Eloquent
- *
- * @property int $post_id
- * @property-read Post   $post
- *
- * @method static Builder|CategoryPost wherePostId($value)
  */
 class CategoryPost extends Core
 {

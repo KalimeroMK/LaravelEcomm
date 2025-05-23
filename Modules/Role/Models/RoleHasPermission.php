@@ -19,14 +19,14 @@ use Modules\Permission\Models\Permission;
  *
  * @property int $permission_id
  * @property int $role_id
- * @property Permission $permission
- * @property Role $role
+ * @property-read Permission $permission
+ * @property-read Role       $role
  *
- * @method static Builder|RoleHasPermission newModelQuery()
- * @method static Builder|RoleHasPermission newQuery()
- * @method static Builder|RoleHasPermission query()
- * @method static Builder|RoleHasPermission wherePermissionId($value)
- * @method static Builder|RoleHasPermission whereRoleId($value)
+ * @method static Builder<static>|RoleHasPermission newModelQuery()
+ * @method static Builder<static>|RoleHasPermission newQuery()
+ * @method static Builder<static>|RoleHasPermission query()
+ * @method static Builder<static>|RoleHasPermission wherePermissionId($value)
+ * @method static Builder<static>|RoleHasPermission whereRoleId($value)
  *
  * @mixin Eloquent
  */

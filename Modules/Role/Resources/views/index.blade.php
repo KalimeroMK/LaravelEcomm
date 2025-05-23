@@ -28,24 +28,27 @@
                             </tr>
                             </tfoot>
                             <tbody>
-                            @foreach ($roles as $key => $role)
+                            @forelse ($roles as $role)
                                 <tr>
-                                    <td>{{ $role->name }}</td>
+                                    <td>{{ $role['name'] ?? '' }}</td>
                                     <td class="float-right">
                                         <a class="btn btn-primary"
-                                           href="{{ route('roles.edit',$role->id) }}">@lang('partials.edit')</a>
-                                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST"
+                                           href="{{ route('roles.edit', $role['id']) }}">@lang('partials.edit')</a>
+                                        <form action="{{ route('roles.destroy', $role['id']) }}" method="POST"
                                               style="display:inline">
                                             @csrf
                                             @method('delete')
                                             <button class="btn btn-danger btn-sm dltBtn"
-                                                    data-id="{{$role->id}}" style="height:30px; width:30px;border-radius:50%
-                                        " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
+                                                    data-id="{{$role['id']}}" style="height:30px; width:30px;border-radius:50%"
+                                                    data-toggle="tooltip" data-placement="bottom" title="Delete"><i
                                                         class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
                                     </td>
-                            @endforeach
+                                </tr>
+                            @empty
+                                <tr><td colspan="2" class="text-center">No roles found!</td></tr>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>

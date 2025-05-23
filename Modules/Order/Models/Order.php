@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Order\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,41 +34,37 @@ use Modules\User\Models\User;
  * @property string $payment_method
  * @property string $payment_status
  * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Shipping|null $shipping
- * @property User|null $user
- * @property Collection|Cart[] $carts
- * @property-read Collection|Cart[] $cart_info
- * @property-read int|null          $cart_info_count
- * @property-read int|null          $carts_count
+ * @property string|null $payer_id
+ * @property string|null $transaction_reference
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Collection<int, Cart> $cart_info
+ * @property-read int|null $cart_info_count
+ * @property-read Collection<int, Cart> $carts
+ * @property-read int|null $carts_count
+ * @property-read Shipping|null $shipping
+ * @property-read User|null $user
  *
- * @method static Builder|Order newModelQuery()
- * @method static Builder|Order newQuery()
- * @method static Builder|Order query()
- * @method static Builder|Order whereAddress1($value)
- * @method static Builder|Order whereAddress2($value)
- * @method static Builder|Order whereCountry($value)
- * @method static Builder|Order whereCoupon($value)
- * @method static Builder|Order whereCreatedAt($value)
- * @method static Builder|Order whereEmail($value)
- * @method static Builder|Order whereFirstName($value)
- * @method static Builder|Order whereId($value)
- * @method static Builder|Order whereLastName($value)
- * @method static Builder|Order whereOrderNumber($value)
- * @method static Builder|Order wherePaymentMethod($value)
- * @method static Builder|Order wherePaymentStatus($value)
- * @method static Builder|Order wherePhone($value)
- * @method static Builder|Order wherePostCode($value)
- * @method static Builder|Order whereQuantity($value)
- * @method static Builder|Order whereShippingId($value)
- * @method static Builder|Order whereStatus($value)
- * @method static Builder|Order whereSubTotal($value)
- * @method static Builder|Order whereTotalAmount($value)
- * @method static Builder|Order whereUpdatedAt($value)
- * @method static Builder|Order whereUserId($value)
+ * @method static Builder<static>|Order filter(array $filters = [])
+ * @method static Builder<static>|Order newModelQuery()
+ * @method static Builder<static>|Order newQuery()
+ * @method static Builder<static>|Order query()
+ * @method static Builder<static>|Order whereCreatedAt($value)
+ * @method static Builder<static>|Order whereId($value)
+ * @method static Builder<static>|Order whereOrderNumber($value)
+ * @method static Builder<static>|Order wherePayerId($value)
+ * @method static Builder<static>|Order wherePaymentMethod($value)
+ * @method static Builder<static>|Order wherePaymentStatus($value)
+ * @method static Builder<static>|Order whereQuantity($value)
+ * @method static Builder<static>|Order whereShippingId($value)
+ * @method static Builder<static>|Order whereStatus($value)
+ * @method static Builder<static>|Order whereSubTotal($value)
+ * @method static Builder<static>|Order whereTotalAmount($value)
+ * @method static Builder<static>|Order whereTransactionReference($value)
+ * @method static Builder<static>|Order whereUpdatedAt($value)
+ * @method static Builder<static>|Order whereUserId($value)
  *
- * @mixin Eloquent
+ * @mixin \Eloquent
  */
 class Order extends Core
 {

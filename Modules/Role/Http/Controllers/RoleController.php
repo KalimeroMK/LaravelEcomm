@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Permission\Models\Permission;
+use Modules\Role\Actions\DeleteRoleAction;
+use Modules\Role\Actions\GetAllRolesAction;
+use Modules\Role\Actions\StoreRoleAction;
+use Modules\Role\Actions\UpdateRoleAction;
+use Modules\Role\DTOs\RoleDTO;
 use Modules\Role\Models\Role;
 
 class RoleController extends CoreController
@@ -26,9 +31,9 @@ class RoleController extends CoreController
      */
     public function index(): View
     {
-        $roles = Role::all();
+        $rolesDto = (new GetAllRolesAction())->execute();
 
-        return view('role::index', ['roles' => $roles]);
+        return view('role::index', ['roles' => $rolesDto->roles]);
     }
 
     /**
@@ -36,7 +41,7 @@ class RoleController extends CoreController
      */
     public function create(): View
     {
-        $permissions = Permission::all();
+        $permissions = Permission::all()->toArray();
 
         return view('role::create', ['permissions' => $permissions]);
     }
@@ -46,8 +51,7 @@ class RoleController extends CoreController
      */
     public function store(Request $request): RedirectResponse
     {
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permissions'));
+        (new StoreRoleAction())->execute($request->all());
 
         return redirect()->route('roles.index');
     }
@@ -57,9 +61,13 @@ class RoleController extends CoreController
      */
     public function edit(Role $role): View
     {
-        $permissions = Permission::all();
+        $permissions = Permission::all()->toArray();
+        $roleDto = new RoleDTO($role->load('permissions'));
 
-        return view('role::edit', ['role' => $role, 'permissions' => $permissions]);
+        return view('role::edit', [
+            'role' => (array) $roleDto,
+            'permissions' => $permissions,
+        ]);
     }
 
     /**
@@ -67,9 +75,7 @@ class RoleController extends CoreController
      */
     public function update(Request $request, Role $role): RedirectResponse
     {
-        $role->name = $request->input('name');
-        $role->syncPermissions($request->input('permissions'));
-        $role->save();
+        (new UpdateRoleAction())->execute($role->id, $request->all());
 
         return redirect()->route('roles.index');
     }
@@ -79,7 +85,7 @@ class RoleController extends CoreController
      */
     public function destroy(Role $role): RedirectResponse
     {
-        $role->delete();
+        (new DeleteRoleAction())->execute($role->id);
 
         return redirect()->route('roles.index');
     }

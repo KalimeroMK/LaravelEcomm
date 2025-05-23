@@ -12,30 +12,28 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Order\Actions\FindOrdersByUserAction;
+use Modules\Order\Actions\GetAllOrdersAction;
+use Modules\Order\Actions\StoreOrderAction;
+use Modules\Order\Actions\UpdateOrderAction;
 use Modules\Order\Http\Requests\Api\Store;
 use Modules\Order\Http\Requests\Api\Update;
 use Modules\Order\Models\Order;
-use Modules\Order\Service\OrderService;
 
 class OrderController extends CoreController
 {
-    private OrderService $order_service;
-
-    public function __construct(OrderService $order_service)
-    {
-        $this->order_service = $order_service;
-    }
+    public function __construct() {}
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Contracts\View\View|Application|View
      */
     public function index()
     {
-        $orders = auth()->user()->hasRole('super-admin')
-            ? $this->order_service->getAll()
-            : $this->order_service->findByAllUser();
+        $ordersDto = auth()->user()->hasRole('super-admin')
+            ? (new GetAllOrdersAction())->execute()
+            : (new FindOrdersByUserAction())->execute(auth()->id());
 
-        return view('order::index', ['orders' => $orders]);
+        return view('order::index', ['orders' => $ordersDto->orders]);
     }
 
     public function create(): View
@@ -45,7 +43,7 @@ class OrderController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->order_service->store($request->all());
+        (new StoreOrderAction())->execute($request->all());
         session()->forget(['cart', 'coupon']);
 
         return redirect()->route('home');
@@ -53,7 +51,7 @@ class OrderController extends CoreController
 
     public function update(Update $request, Order $order): RedirectResponse
     {
-        $this->order_service->updateWithDetails($order->id, $request->all());
+        (new UpdateOrderAction())->execute($order->id, $request->all());
 
         return redirect()->route('orders.index');
     }
@@ -65,12 +63,13 @@ class OrderController extends CoreController
 
     public function edit(Order $order): View
     {
-        return view('order::edit', ['order' => $this->order_service->findById($order->id)]);
+        // For edit, just pass the Order model directly or wrap in DTO if needed
+        return view('order::edit', ['order' => $order]);
     }
 
     public function destroy(Order $order): RedirectResponse
     {
-        $this->order_service->delete($order->id);
+        $order->delete();
 
         return redirect()->back();
     }

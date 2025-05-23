@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Attribute\Actions\CreateAttributeAction;
 use Modules\Attribute\Actions\DeleteAttributeAction;
 use Modules\Attribute\Actions\UpdateAttributeAction;
-use Modules\Attribute\DTO\AttributeDTO;
+use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Http\Requests\Api\Attribute\SearchRequest;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
@@ -19,10 +19,8 @@ use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\CoreController;
 use ReflectionException;
 
-
 class AttributeController extends CoreController
 {
-
     public function __construct(
         public readonly AttributeRepository $repository,
         private readonly CreateAttributeAction $createAction,
@@ -42,8 +40,6 @@ class AttributeController extends CoreController
     }
 
     /**
-     * @param  Store  $request
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
@@ -82,9 +78,6 @@ class AttributeController extends CoreController
     }
 
     /**
-     * @param  Update  $request
-     * @param  int     $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse
@@ -100,13 +93,10 @@ class AttributeController extends CoreController
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->updateAction->execute(AttributeDTO::fromRequest($request->validated())->withId
-            ($id))));
+            ->respond(new AttributeResource($this->updateAction->execute(AttributeDTO::fromRequest($request->validated())->withId($id))));
     }
 
     /**
-     * @param  int  $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse

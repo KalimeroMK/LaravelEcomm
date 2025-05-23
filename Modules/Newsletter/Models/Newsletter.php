@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Newsletter\Models;
 
-use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Core\Models\Core;
 use Modules\Newsletter\Database\Factories\NewsletterFactory;
@@ -16,8 +17,20 @@ use Modules\Newsletter\Database\Factories\NewsletterFactory;
  * @property string $email
  * @property string|null $token
  * @property bool $is_validated
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @method static Builder<static>|Newsletter newModelQuery()
+ * @method static Builder<static>|Newsletter newQuery()
+ * @method static Builder<static>|Newsletter query()
+ * @method static Builder<static>|Newsletter whereCreatedAt($value)
+ * @method static Builder<static>|Newsletter whereEmail($value)
+ * @method static Builder<static>|Newsletter whereId($value)
+ * @method static Builder<static>|Newsletter whereIsValidated($value)
+ * @method static Builder<static>|Newsletter whereToken($value)
+ * @method static Builder<static>|Newsletter whereUpdatedAt($value)
+ *
+ * @mixin Eloquent
  */
 class Newsletter extends Core
 {

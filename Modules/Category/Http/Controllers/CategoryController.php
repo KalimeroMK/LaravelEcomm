@@ -8,20 +8,32 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Modules\Category\Actions\CreateCategoryAction;
+use Modules\Category\Actions\DeleteCategoryAction;
+use Modules\Category\Actions\UpdateCategoryAction;
+use Modules\Category\DTOs\CategoryDTO;
 use Modules\Category\Http\Requests\Store;
 use Modules\Category\Http\Requests\Update;
 use Modules\Category\Models\Category;
-use Modules\Category\Service\CategoryService;
 use Modules\Core\Http\Controllers\CoreController;
 
 class CategoryController extends CoreController
 {
-    protected CategoryService $category_service;
+    private CreateCategoryAction $createAction;
 
-    public function __construct(CategoryService $category_service)
-    {
+    private UpdateCategoryAction $updateAction;
+
+    private DeleteCategoryAction $deleteAction;
+
+    public function __construct(
+        CreateCategoryAction $createAction,
+        UpdateCategoryAction $updateAction,
+        DeleteCategoryAction $deleteAction
+    ) {
         $this->authorizeResource(Category::class, 'category');
-        $this->category_service = $category_service;
+        $this->createAction = $createAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
     }
 
     /**
@@ -29,7 +41,7 @@ class CategoryController extends CoreController
      */
     public function index()
     {
-        $categories = $this->category_service->getAll();
+        $categories = Category::all();
         if ($categories->isEmpty()) {
             return redirect()->route('categories.create');
         }
@@ -47,7 +59,8 @@ class CategoryController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->category_service->create($request->validated());
+        $dto = CategoryDTO::fromRequest($request);
+        $this->createAction->execute($dto);
 
         return redirect()->route('categories.index');
     }
@@ -55,21 +68,22 @@ class CategoryController extends CoreController
     public function edit(Category $category): View
     {
         return view('category::edit', [
-            'category' => $this->category_service->findById($category->id),
+            'category' => Category::findOrFail($category->id),
             'categories' => Category::getTree(),
         ]);
     }
 
     public function update(Update $request, Category $category): RedirectResponse
     {
-        $this->category_service->update($category->id, $request->validated());
+        $dto = CategoryDTO::fromRequest($request, $category->id);
+        $this->updateAction->execute($dto);
 
         return redirect()->route('categories.index');
     }
 
     public function destroy(Category $category): RedirectResponse
     {
-        $this->category_service->delete($category->id);
+        $this->deleteAction->execute($category->id);
 
         return redirect()->route('categories.index')->with('flash_message', 'Category successfully deleted!');
     }

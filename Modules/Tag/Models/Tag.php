@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Tag\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,20 +26,22 @@ use Modules\Tag\Database\Factories\TagFactory;
  * @property string $title
  * @property string $slug
  * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Collection|Post[] $posts
- * @property-read int|null     $posts_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Collection<int, Post> $posts
+ * @property-read int|null $posts_count
+ * @property-read Collection<int, Product> $product
+ * @property-read int|null $product_count
  *
- * @method static Builder|Tag newModelQuery()
- * @method static Builder|Tag newQuery()
- * @method static Builder|Tag query()
- * @method static Builder|Tag whereCreatedAt($value)
- * @method static Builder|Tag whereId($value)
- * @method static Builder|Tag whereSlug($value)
- * @method static Builder|Tag whereStatus($value)
- * @method static Builder|Tag whereTitle($value)
- * @method static Builder|Tag whereUpdatedAt($value)
+ * @method static Builder<static>|Tag newModelQuery()
+ * @method static Builder<static>|Tag newQuery()
+ * @method static Builder<static>|Tag query()
+ * @method static Builder<static>|Tag whereCreatedAt($value)
+ * @method static Builder<static>|Tag whereId($value)
+ * @method static Builder<static>|Tag whereSlug($value)
+ * @method static Builder<static>|Tag whereStatus($value)
+ * @method static Builder<static>|Tag whereTitle($value)
+ * @method static Builder<static>|Tag whereUpdatedAt($value)
  *
  * @mixin Eloquent
  */

@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Banner\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +16,7 @@ use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -25,23 +25,24 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property string|null $photo
  * @property string|null $description
  * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string|null $image_url
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
  *
- * @method static Builder|Banner newModelQuery()
- * @method static Builder|Banner newQuery()
- * @method static Builder|Banner query()
- * @method static Builder|Banner whereCreatedAt($value)
- * @method static Builder|Banner whereDescription($value)
- * @method static Builder|Banner whereId($value)
- * @method static Builder|Banner wherePhoto($value)
- * @method static Builder|Banner whereSlug($value)
- * @method static Builder|Banner whereStatus($value)
- * @method static Builder|Banner whereTitle($value)
- * @method static Builder|Banner whereUpdatedAt($value)
+ * @method static Builder<static>|Banner newModelQuery()
+ * @method static Builder<static>|Banner newQuery()
+ * @method static Builder<static>|Banner query()
+ * @method static Builder<static>|Banner whereCreatedAt($value)
+ * @method static Builder<static>|Banner whereDescription($value)
+ * @method static Builder<static>|Banner whereId($value)
+ * @method static Builder<static>|Banner whereSlug($value)
+ * @method static Builder<static>|Banner whereStatus($value)
+ * @method static Builder<static>|Banner whereTitle($value)
+ * @method static Builder<static>|Banner whereUpdatedAt($value)
  *
  * @mixin Eloquent
  */

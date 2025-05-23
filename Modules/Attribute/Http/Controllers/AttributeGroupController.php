@@ -6,9 +6,8 @@ namespace Modules\Attribute\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Modules\Attribute\Http\Requests\Attribute\Store;
-use Modules\Attribute\Http\Requests\Attribute\Update;
-use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Http\Requests\AttributeGroup\Store;
+use Modules\Attribute\Http\Requests\AttributeGroup\Update;
 use Modules\Attribute\Models\AttributeGroup;
 use Modules\Core\Http\Controllers\CoreController;
 
@@ -27,10 +26,9 @@ class AttributeGroupController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $group = AttributeGroup::create($request->validated());
-        // Assign attributes to this group
+        // Assign attributes to this group using pivot table
         if ($request->has('attributes')) {
-            Attribute::whereIn('id', $request->attributes)
-                ->update(['attribute_group_id' => $group->id]);
+            $group->attributes()->sync($request->attributes);
         }
 
         return redirect()->route('attribute-groups.index');
@@ -44,14 +42,8 @@ class AttributeGroupController extends CoreController
     public function update(Update $request, AttributeGroup $attribute_group): RedirectResponse
     {
         $attribute_group->update($request->validated());
-        // Unassign all attributes from this group first
-        Attribute::where('attribute_group_id', $attribute_group->id)
-            ->update(['attribute_group_id' => null]);
-        // Assign selected attributes
-        if ($request->has('attributes')) {
-            Attribute::whereIn('id', $request->attributes)
-                ->update(['attribute_group_id' => $attribute_group->id]);
-        }
+        // Sync attributes for this group via pivot table
+        $attribute_group->attributes()->sync($request->attributes ?? []);
 
         return redirect()->route('attribute-groups.index');
     }

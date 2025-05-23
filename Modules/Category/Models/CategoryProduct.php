@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Category\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,22 +18,16 @@ use Modules\Product\Models\Product;
 /**
  * Class CategoryProductFactory
  *
- * @property int $id
- * @property int $product_id
  * @property int $category_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Category $category
- * @property Product $product
+ * @property int $product_id
+ * @property-read Category $category
+ * @property-read Product $product
  *
- * @method static Builder|CategoryProduct newModelQuery()
- * @method static Builder|CategoryProduct newQuery()
- * @method static Builder|CategoryProduct query()
- * @method static Builder|CategoryProduct whereCategoryId($value)
- * @method static Builder|CategoryProduct whereCreatedAt($value)
- * @method static Builder|CategoryProduct whereId($value)
- * @method static Builder|CategoryProduct whereProductId($value)
- * @method static Builder|CategoryProduct whereUpdatedAt($value)
+ * @method static Builder<static>|CategoryProduct newModelQuery()
+ * @method static Builder<static>|CategoryProduct newQuery()
+ * @method static Builder<static>|CategoryProduct query()
+ * @method static Builder<static>|CategoryProduct whereCategoryId($value)
+ * @method static Builder<static>|CategoryProduct whereProductId($value)
  *
  * @mixin Eloquent
  */

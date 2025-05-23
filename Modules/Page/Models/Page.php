@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace Modules\Page\Models;
 
-use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Models\Core;
@@ -25,9 +26,23 @@ use Modules\User\Models\User;
  * @property string $content
  * @property bool $is_active
  * @property int $user_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property User $user
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User $user
+ *
+ * @method static Builder<static>|Page newModelQuery()
+ * @method static Builder<static>|Page newQuery()
+ * @method static Builder<static>|Page query()
+ * @method static Builder<static>|Page whereContent($value)
+ * @method static Builder<static>|Page whereCreatedAt($value)
+ * @method static Builder<static>|Page whereId($value)
+ * @method static Builder<static>|Page whereIsActive($value)
+ * @method static Builder<static>|Page whereSlug($value)
+ * @method static Builder<static>|Page whereTitle($value)
+ * @method static Builder<static>|Page whereUpdatedAt($value)
+ * @method static Builder<static>|Page whereUserId($value)
+ *
+ * @mixin Eloquent
  */
 class Page extends Core
 {

@@ -15,5 +15,4 @@ class AttributeGroupRepository extends Repository
      * @var string
      */
     public $model = AttributeGroup::class;
-
 }

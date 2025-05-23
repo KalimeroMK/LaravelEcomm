@@ -49,14 +49,15 @@
     "stripe/stripe-php": "^16.6"
   },
   "require-dev": {
+    "barryvdh/laravel-ide-helper": "^3.5",
     "fakerphp/faker": "^1.23",
+    "larastan/larastan": "^3.0",
     "laravel/pail": "^1.2.2",
     "laravel/pint": "^1.13",
     "laravel/sail": "^1.41",
     "mockery/mockery": "^1.6",
     "nunomaduro/collision": "^8.6",
     "phpunit/phpunit": "^12.1.5",
-    "larastan/larastan": "^3.0",
     "rector/rector": "^2.0.10",
     "reliese/laravel": "^1.4"
   },

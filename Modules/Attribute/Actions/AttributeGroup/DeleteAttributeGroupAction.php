@@ -13,6 +13,7 @@ readonly class DeleteAttributeGroupAction
         $group = AttributeGroup::findOrFail($id);
         // Optionally unassign attributes
         $group->attributes()->update(['attribute_group_id' => null]);
-        return (bool)$group->delete();
+
+        return (bool) $group->delete();
     }
 }

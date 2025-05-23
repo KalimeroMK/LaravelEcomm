@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Product\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kalimeromk\Filterable\app\Traits\Filterable;
-use Modules\Admin\Models\Condition;
+use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
@@ -26,6 +25,8 @@ use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Tag\Models\Tag;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Product
@@ -36,48 +37,62 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $summary
  * @property string|null $description
  * @property int $stock
- * @property int $d_deal
- * @property string $condition
  * @property string $status
  * @property float $price
- * @property float $special_price
- * @property float $discount
- * @property bool $is_featured
- * @property Carbon|null $special_price_start
- * @property Carbon|null $special_price_end
+ * @property float|null $discount
+ * @property bool|null $is_featured
+ * @property int $d_deal
  * @property int|null $brand_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Brand|null $brand
- * @property Collection|Cart[] $carts
- * @property Collection|ProductReview[] $product_reviews
- * @property Collection|Wishlist[] $wishlists
- * @property-read int|null                                $carts_count
- * @property-read int|null                                $product_reviews_count
- * @property-read int|null                                $wishlists_count
- * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
- * @property-read int|null                                $categories_count
- * @property-read string                                  $image_url
-
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property float|null $special_price
+ * @property \Illuminate\Support\Carbon|null $special_price_start
+ * @property \Illuminate\Support\Carbon|null $special_price_end
+ * @property string|null $sku
+ * @property-read Collection<int, AttributeValue> $attributeValues
+ * @property-read int|null $attribute_values_count
+ * @property-read Collection<int, Attribute> $attributes
+ * @property-read int|null $attributes_count
+ * @property-read Brand|null $brand
+ * @property-read Collection<int, Bundle>                                                              $bundles
+ * @property-read int|null                                                                             $bundles_count
+ * @property-read Collection<int, Cart>                                                                $carts
+ * @property-read int|null                                                                             $carts_count
+ * @property-read \Kalnoy\Nestedset\Collection<int, Category>                                          $categories
+ * @property-read int|null                                                                             $categories_count
+ * @property-read string|null                                                                          $image_thumb_url
+ * @property-read string|null                                                                          $image_url
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null                                                                             $media_count
+ * @property-read Collection<int, ProductReview>                                                       $product_reviews
+ * @property-read int|null                                                                             $product_reviews_count
+ * @property-read Collection<int, Tag>                                                                 $tags
+ * @property-read int|null                                                                             $tags_count
+ * @property-read Collection<int, Wishlist>                                                            $wishlists
+ * @property-read int|null                                                                             $wishlists_count
  *
- * @method static Builder|Product newModelQuery()
- * @method static Builder|Product newQuery()
- * @method static Builder|Product query()
- * @method static Builder|Product whereBrandId($value)
- * @method static Builder|Product whereCondition($value)
- * @method static Builder|Product whereCreatedAt($value)
- * @method static Builder|Product whereDescription($value)
- * @method static Builder|Product whereDiscount($value)
- * @method static Builder|Product whereId($value)
- * @method static Builder|Product whereIsFeatured($value)
- * @method static Builder|Product wherePhoto($value)
- * @method static Builder|Product wherePrice($value)
- * @method static Builder|Product whereSlug($value)
- * @method static Builder|Product whereStatus($value)
- * @method static Builder|Product whereStock($value)
- * @method static Builder|Product whereSummary($value)
- * @method static Builder|Product whereTitle($value)
- * @method static Builder|Product whereUpdatedAt($value)
+ * @method static Builder<static>|Product filter(array $filters = [])
+ * @method static Builder<static>|Product newModelQuery()
+ * @method static Builder<static>|Product newQuery()
+ * @method static Builder<static>|Product query()
+ * @method static Builder<static>|Product whereBrandId($value)
+ * @method static Builder<static>|Product whereCreatedAt($value)
+ * @method static Builder<static>|Product whereDDeal($value)
+ * @method static Builder<static>|Product whereDescription($value)
+ * @method static Builder<static>|Product whereDiscount($value)
+ * @method static Builder<static>|Product whereId($value)
+ * @method static Builder<static>|Product whereIsFeatured($value)
+ * @method static Builder<static>|Product wherePrice($value)
+ * @method static Builder<static>|Product whereSku($value)
+ * @method static Builder<static>|Product whereSlug($value)
+ * @method static Builder<static>|Product whereSpecialPrice($value)
+ * @method static Builder<static>|Product whereSpecialPriceEnd($value)
+ * @method static Builder<static>|Product whereSpecialPriceStart($value)
+ * @method static Builder<static>|Product whereStatus($value)
+ * @method static Builder<static>|Product whereStock($value)
+ * @method static Builder<static>|Product whereSummary($value)
+ * @method static Builder<static>|Product whereTitle($value)
+ * @method static Builder<static>|Product whereUpdatedAt($value)
  *
  * @mixin Eloquent
  */
@@ -95,7 +110,6 @@ class Product extends Core implements HasMedia
             'summary',
             'description',
             'stock',
-
             'condition.status',
             'status',
             'price',
@@ -207,7 +221,7 @@ class Product extends Core implements HasMedia
     public function getImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
+        if ($mediaItem instanceof Media) {
             return $mediaItem->getUrl();
         }
 
@@ -217,17 +231,12 @@ class Product extends Core implements HasMedia
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
-        if ($mediaItem instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
+        if ($mediaItem instanceof Media) {
             // Replace 'thumb' with your conversion name if needed
             return $mediaItem->getUrl('thumb');
         }
 
         return 'https://placehold.co/600x400@2x.png';
-    }
-
-    public function condition(): BelongsTo
-    {
-        return $this->belongsTo(Condition::class);
     }
 
     public function tags(): BelongsToMany
@@ -243,14 +252,14 @@ class Product extends Core implements HasMedia
             $this->special_price_end) ? $this->special_price : null;
     }
 
-    public function attributeValues()
+    public function attributeValues(): self|Builder|HasMany
     {
         return $this->hasMany(AttributeValue::class, 'product_id', 'id');
     }
 
     public function attributes()
     {
-        return $this->belongsToMany(\Modules\Attribute\Models\Attribute::class, 'attribute_product', 'product_id', 'attribute_id');
+        return $this->belongsToMany(Attribute::class, 'attribute_product', 'product_id', 'attribute_id');
     }
 
     public function bundles(): BelongsToMany

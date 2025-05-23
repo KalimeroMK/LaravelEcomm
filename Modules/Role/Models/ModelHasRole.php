@@ -19,14 +19,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $role_id
  * @property string $model_type
  * @property int $model_id
- * @property Role $role
+ * @property-read Role $role
  *
- * @method static Builder|ModelHasRole newModelQuery()
- * @method static Builder|ModelHasRole newQuery()
- * @method static Builder|ModelHasRole query()
- * @method static Builder|ModelHasRole whereModelId($value)
- * @method static Builder|ModelHasRole whereModelType($value)
- * @method static Builder|ModelHasRole whereRoleId($value)
+ * @method static Builder<static>|ModelHasRole newModelQuery()
+ * @method static Builder<static>|ModelHasRole newQuery()
+ * @method static Builder<static>|ModelHasRole query()
+ * @method static Builder<static>|ModelHasRole whereModelId($value)
+ * @method static Builder<static>|ModelHasRole whereModelType($value)
+ * @method static Builder<static>|ModelHasRole whereRoleId($value)
  *
  * @mixin Eloquent
  */

@@ -16,7 +16,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        @include('user::partials.form')
+                        @include('user::partials.form', ['user' => $user, 'roles' => $roles ?? [], 'userRole' => $userRole ?? []])
                     </div>
                 </div>
             </div>

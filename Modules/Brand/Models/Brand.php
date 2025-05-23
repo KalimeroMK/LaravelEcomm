@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Brand\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -20,6 +19,8 @@ use Modules\Core\Traits\HasSlug;
 use Modules\Product\Models\Product;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Brand
@@ -28,26 +29,24 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $title
  * @property string $slug
  * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Collection|Product[] $products
- * @property-read int|null        $products_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ * @property-read Collection<int, Product> $products
+ * @property-read int|null $products_count
  *
- * @method static Builder|Brand newModelQuery()
- * @method static Builder|Brand newQuery()
- * @method static Builder|Brand query()
- * @method static Builder|Brand whereCreatedAt($value)
- * @method static Builder|Brand whereId($value)
- * @method static Builder|Brand whereSlug($value)
- * @method static Builder|Brand whereStatus($value)
- * @method static Builder|Brand whereTitle($value)
- * @method static Builder|Brand whereUpdatedAt($value)
+ * @method static Builder<static>|Brand newModelQuery()
+ * @method static Builder<static>|Brand newQuery()
+ * @method static Builder<static>|Brand query()
+ * @method static Builder<static>|Brand whereCreatedAt($value)
+ * @method static Builder<static>|Brand whereId($value)
+ * @method static Builder<static>|Brand whereSlug($value)
+ * @method static Builder<static>|Brand whereStatus($value)
+ * @method static Builder<static>|Brand whereTitle($value)
+ * @method static Builder<static>|Brand whereUpdatedAt($value)
  *
  * @mixin Eloquent
- *
- * @property string $photo
- *
- * @method static Builder|Brand wherePhoto($value)
  */
 class Brand extends Core implements HasMedia
 {

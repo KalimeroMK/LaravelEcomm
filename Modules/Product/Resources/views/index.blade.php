@@ -10,10 +10,9 @@
                 <i class="fas fa-plus"></i> @lang('partials.create')
             </a>
         </div>
-
         <div class="card-body">
             <div class="table-responsive">
-                @if(isset($products) && $products->count())
+                @if(isset($products) && count($products))
                     <table class="table table-bordered" id="data-table">
                         <thead>
                         <tr>
@@ -35,53 +34,51 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($products as $product)
+                        @forelse($products as $product)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $loop->sku ?? 'N/A' }}</td>
-                                <td>{{ $product->title }}</td>
-                                <td>{{ $product->category->title ?? 'N/A' }}</td>
-                                <td>{{ $product->is_featured ? 'Yes' : 'No' }}</td>
-                                <td>{{ $product->price }}</td>
-                                <td>{{ $product->discount }}</td>
-                                <td>{{ $product->size->name ?? 'N/A' }}</td>
-                                <td>{{ $product->condition->status ?? 'N/A' }}</td>
-                                <td>{{ $product->brand->title ?? 'N/A' }}</td>
-                                <td>{{ $product->stock }}</td>
+                                <td>{{ $product['sku'] ?? 'N/A' }}</td>
+                                <td>{{ $product['title'] ?? '' }}</td>
+                                <td>{{ isset($product['categories']) ? implode(', ', array_column($product['categories'], 'title')) : 'N/A' }}</td>
+                                <td>{{ !empty($product['is_featured']) ? 'Yes' : 'No' }}</td>
+                                <td>{{ $product['price'] ?? '' }}</td>
+                                <td>{{ $product['discount'] ?? '' }}</td>
+                                <td>{{ $product['size']['name'] ?? 'N/A' }}</td>
+                                <td>{{ $product['condition']['status'] ?? 'N/A' }}</td>
+                                <td>{{ $product['brand']['title'] ?? 'N/A' }}</td>
+                                <td>{{ $product['stock'] ?? '' }}</td>
                                 <td>
-                                    <img src="{{ $product->photo_url }}" alt="{{ $product->title }}"
+                                    <img src="{{ $product['photo'] ?? asset('backend/img/thumbnail-default.jpg') }}" alt="{{ $product['title'] ?? '' }}"
                                          style="max-width: 80px;">
                                 </td>
-                                <td>{{ ucfirst($product->status) }}</td>
+                                <td>{{ ucfirst($product['status'] ?? '') }}</td>
                                 <td>
-                                     @foreach($product->attributes as $attributeValue)
-                                        @if(!empty($attributeValue->value))
-                                            <strong>{{ $attributeValue->attribute->name }}:</strong> {{ $attributeValue->value }}
-                                            @if (!$loop->last)
-                                                ,
+                                    @if(!empty($product['attributes']))
+                                        @foreach($product['attributes'] as $attributeValue)
+                                            @if(!empty($attributeValue['value']))
+                                                <strong>{{ $attributeValue['attribute']['name'] ?? '' }}:</strong> {{ $attributeValue['value'] }}@if(!$loop->last), @endif
                                             @endif
-                                        @endif
-                                    @endforeach
+                                        @endforeach
+                                    @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form method="POST" action="{{ route('products.destroy', $product->id) }}"
-                                          style="display: inline-block;">
+                                    <a href="{{ route('products.edit', $product['id']) }}" class="btn btn-primary btn-sm" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <form method="POST" action="{{ route('products.destroy', $product['id']) }}" style="display:inline-block;">
                                         @csrf
                                         @method('delete')
-                                        <button class="btn btn-danger btn-sm" type="submit">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="15" class="text-center">No products found!</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 @else
-                    <h6 class="text-center">@lang('partials.no_records_found')</h6>
+                    <h6 class="text-center">No products found!</h6>
                 @endif
             </div>
         </div>

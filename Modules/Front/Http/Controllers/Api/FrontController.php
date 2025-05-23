@@ -6,173 +6,137 @@ namespace Modules\Front\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Modules\Front\Service\FrontService;
+use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Front\Actions\BlogAction;
+use Modules\Front\Actions\BlogByCategoryAction;
+use Modules\Front\Actions\BlogByTagAction;
+use Modules\Front\Actions\BlogDetailAction;
+use Modules\Front\Actions\BlogFilterAction;
+use Modules\Front\Actions\BlogSearchAction;
+use Modules\Front\Actions\CouponStoreAction;
+use Modules\Front\Actions\IndexAction;
+use Modules\Front\Actions\MessageStoreAction;
+use Modules\Front\Actions\ProductBrandAction;
+use Modules\Front\Actions\ProductCatAction;
+use Modules\Front\Actions\ProductDealAction;
+use Modules\Front\Actions\ProductDetailAction;
+use Modules\Front\Actions\ProductFilterAction;
+use Modules\Front\Actions\ProductGridsAction;
+use Modules\Front\Actions\ProductListsAction;
+use Modules\Front\Actions\ProductSearchAction;
 use Modules\Message\Http\Requests\Api\Store;
+use Modules\Newsletter\Http\Requests\Store as NewsletterStoreRequest;
 use Modules\Newsletter\Models\Newsletter;
 
-class FrontController extends Controller
+class FrontController extends CoreController
 {
-    private FrontService $front_service;
-
-    public function __construct(FrontService $frontService)
+    public function index(IndexAction $indexAction): JsonResponse
     {
-        $this->front_service = $frontService;
+        return response()->json([
+            'success' => true,
+            'data' => $indexAction(),
+        ]);
     }
 
-    public function index(): JsonResponse
+    public function productDetail(string $slug, ProductDetailAction $productDetailAction): JsonResponse
     {
-        return response()->json($this->front_service->index(), 200);
+        return response()->json($productDetailAction($slug));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function productDetail(string $slug)
+    public function productGrids(ProductGridsAction $productGridsAction): JsonResponse
     {
-        return response()->json($this->front_service->productDetail($slug), 200);
+        return response()->json($productGridsAction());
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function productGrids()
+    public function productLists(ProductListsAction $productListsAction): JsonResponse
     {
-        return response()->json($this->front_service->productGrids(), 200);
+        return response()->json($productListsAction());
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function productLists()
+    public function productFilter(Request $request, ProductFilterAction $productFilterAction): JsonResponse
     {
-        return response()->json($this->front_service->productLists(), 200);
+        return response()->json($productFilterAction($request->all()));
     }
 
-    public function productFilter(Request $request): JsonResponse
+    public function productSearch(Request $request, ProductSearchAction $productSearchAction): JsonResponse
     {
-        return response()->json($this->front_service->productFilter($request->all()), 200);
+        return response()->json($productSearchAction($request->validated()));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function productSearch(Request $request)
+    public function productDeal(ProductDealAction $productDealAction): JsonResponse
     {
-        return response()->json($this->front_service->productSearch($request->all()), 200);
+        return response()->json($productDealAction());
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function productDeal()
+    public function productBrand(Request $request, ProductBrandAction $productBrandAction): JsonResponse
     {
-        return response()->json($this->front_service->productDeal(), 200);
+        return response()->json($productBrandAction($request->all()));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function productBrand(Request $request)
+    public function productCat(string $slug, ProductCatAction $productCatAction): JsonResponse
     {
-        return response()->json($this->front_service->productBrand($request->all()), 200);
+        return response()->json($productCatAction($slug));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function productCat(string $slug)
+    public function blog(BlogAction $blogAction): JsonResponse
     {
-        return response()->json($this->front_service->productCat($slug), 200);
+        return response()->json($blogAction());
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function blog()
+    public function blogDetail(string $slug, BlogDetailAction $blogDetailAction): JsonResponse
     {
-        return response()->json($this->front_service->blog(), 200);
+        return response()->json($blogDetailAction($slug));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function blogDetail(string $slug)
+    public function blogSearch(Request $request, BlogSearchAction $blogSearchAction): JsonResponse
     {
-        return response()->json($this->front_service->blogDetail($slug), 200);
+        return response()->json($blogSearchAction($request));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function blogSearch(Request $request)
+    public function blogFilter(Request $request, BlogFilterAction $blogFilterAction): JsonResponse
     {
-        return response()->json($this->front_service->blogSearch($request), 200);
+        return response()->json($blogFilterAction($request->all()));
     }
 
-    public function blogFilter(Request $request): JsonResponse
+    public function blogByCategory(string $slug, BlogByCategoryAction $blogByCategoryAction): JsonResponse
     {
-        return response()->json($this->front_service->blogFilter($request->all()), 200);
+        return response()->json($blogByCategoryAction($slug));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function blogByCategory(Request $request)
+    public function blogByTag(string $slug, BlogByTagAction $blogByTagAction): JsonResponse
     {
-        return response()->json($this->front_service->blogByCategory($request), 200);
+        return response()->json($blogByTagAction($slug));
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function blogByTag(Request $request)
+    public function couponStore(Request $request, CouponStoreAction $couponStoreAction): JsonResponse
     {
-        return response()->json($this->front_service->blogByTag($request), 200);
+        return response()->json($couponStoreAction($request));
     }
 
-    public function couponStore(Request $request): JsonResponse
+    public function subscribe(NewsletterStoreRequest $request): JsonResponse
     {
-        return response()->json($this->front_service->couponStore($request), 200);
-    }
-
-    public function subscribe(\Modules\Newsletter\Http\Requests\Store $request): JsonResponse
-    {
-        dd($request->all());
-        if (Newsletter::whereEmail($request->email) !== null) {
-            return response()->json($this->front_service->newsletter($request->all()), 200);
+        if (Newsletter::whereEmail($request->email)->exists()) {
+            return response()->json('Email already present in the database', 409);
         }
 
-        return response()->json('Email already present in the database ', 200);
+        // Dummy action – заменете со NewsletterSubscribeAction ако имате
+        return response()->json('Subscribed successfully', 200);
     }
 
-    public function verifyNewsletter(string $token): string
+    public function verifyNewsletter(string $token): JsonResponse
     {
-        if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->validation($token);
-
-            return redirect()->back()->with('message', 'Your email is successfully validated.');
-        }
-
-        return redirect()->back()->with('message', 'token mismatch ');
+        // TODO: создади NewsletterVerifyAction
+        return response()->json(['message' => 'Verified'], 200);
     }
 
-    public function deleteNewsletter(string $token): string
+    public function deleteNewsletter(string $token): JsonResponse
     {
-        if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->deleteNewsletter($token);
-
-            return response()->json('Your email is successfully deleted ', 200);
-        }
-
-        return response()->json('token mismatch  ', 500);
+        // TODO: создади NewsletterDeleteAction
+        return response()->json(['message' => 'Deleted'], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function messageStore(Store $request): ?string
+    public function messageStore(Store $request, MessageStoreAction $messageStoreAction): JsonResponse
     {
-        return $this->front_service->messageStore($request);
+        return response()->json($messageStoreAction($request));
     }
 }

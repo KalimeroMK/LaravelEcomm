@@ -22,7 +22,7 @@ class AttributeGroupTest extends TestCase
     public string $url = '/api/v1/attribute-groups/';
 
     #[Test]
-    public function create_attributeGroup(): TestResponse
+    public function create_attribute_group(): TestResponse
     {
         $data = [
             'name' => 'mame-'.mb_strtoupper(Str::random(10)),
@@ -32,7 +32,7 @@ class AttributeGroupTest extends TestCase
     }
 
     #[Test]
-    public function update_attributeGroup(): void
+    public function update_attribute_group(): void
     {
         $data = [
             'name' => 'mame-'.mb_strtoupper(Str::random(10)),
@@ -44,7 +44,7 @@ class AttributeGroupTest extends TestCase
     }
 
     #[Test]
-    public function find_attributeGroup(): void
+    public function find_attribute_group(): void
     {
         $id = AttributeGroup::factory()->create()->id;
 
@@ -53,14 +53,14 @@ class AttributeGroupTest extends TestCase
     }
 
     #[Test]
-    public function get_all_attributeGroup(): void
+    public function get_all_attribute_group(): void
     {
         $response = $this->list($this->url);
         $response->assertStatus(200);
     }
 
     #[Test]
-    public function delete_attributeGroup(): void
+    public function delete_attribute_group(): void
     {
         $id = AttributeGroup::factory()->create()->id;
 
@@ -69,7 +69,7 @@ class AttributeGroupTest extends TestCase
     }
 
     #[Test]
-    public function structureGroup(): void
+    public function structure_group(): void
     {
         $response = $this->json('GET', $this->url);
         $response->assertStatus(200);

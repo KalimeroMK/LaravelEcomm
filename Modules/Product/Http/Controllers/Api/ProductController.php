@@ -6,22 +6,22 @@ namespace Modules\Product\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Product\Actions\DeleteProductAction;
+use Modules\Product\Actions\GetAllProductsAction;
+use Modules\Product\Actions\StoreProductAction;
+use Modules\Product\Actions\UpdateProductAction;
+use Modules\Product\DTOs\ProductDTO;
 use Modules\Product\Http\Requests\Api\Search;
 use Modules\Product\Http\Requests\Api\Store;
 use Modules\Product\Http\Requests\Api\Update;
 use Modules\Product\Http\Resources\ProductResource;
-use Modules\Product\Service\ProductService;
-use ReflectionException;
+use Modules\Product\Models\Product;
 
 class ProductController extends CoreController
 {
-    private ProductService $product_service;
-
-    public function __construct(ProductService $product_service)
+    public function __construct()
     {
-        $this->product_service = $product_service;
         $this->middleware('permission:product-list', ['only' => ['index']]);
         $this->middleware('permission:product-show', ['only' => ['show']]);
         $this->middleware('permission:product-create', ['only' => ['store']]);
@@ -31,7 +31,9 @@ class ProductController extends CoreController
 
     public function index(Search $request): ResourceCollection
     {
-        return ProductResource::collection($this->product_service->search($request->validated()));
+        $productsDto = (new GetAllProductsAction())->execute();
+
+        return ProductResource::collection($productsDto->products);
     }
 
     /**
@@ -39,18 +41,9 @@ class ProductController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->product_service->product_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new ProductResource($this->product_service->create($request->validated())));
+        $productDto = (new StoreProductAction())->execute($request->validated());
+
+        return $this->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Product']))->respond(new ProductResource($productDto));
     }
 
     /**
@@ -58,18 +51,10 @@ class ProductController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.ok',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->product_service->product_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new ProductResource($this->product_service->findById($id)));
+        $product = Product::findOrFail($id);
+        $productDto = new ProductDTO($product);
+
+        return $this->setMessage(__('apiResponse.ok', ['resource' => 'Product']))->respond(new ProductResource($productDto));
     }
 
     /**
@@ -77,18 +62,9 @@ class ProductController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.updateSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->product_service->product_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new ProductResource($this->product_service->update($id, $request->validated())));
+        $productDto = (new UpdateProductAction())->execute($id, $request->validated());
+
+        return $this->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Product']))->respond(new ProductResource($productDto));
     }
 
     /**
@@ -96,19 +72,8 @@ class ProductController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->product_service->delete($id);
+        (new DeleteProductAction())->execute($id);
 
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->product_service->product_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(null);
+        return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Product']))->respond(null);
     }
 }

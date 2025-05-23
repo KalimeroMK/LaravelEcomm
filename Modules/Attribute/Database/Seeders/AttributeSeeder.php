@@ -20,25 +20,38 @@ class AttributeSeeder extends Seeder
         ];
 
         $attributes = [
-            ['name' => 'Color', 'code' => 'color', 'type' => 'text', 'display' => 'input', 'attribute_group_id' => 1],
-            ['name' => 'Size', 'code' => 'size', 'type' => 'select', 'display' => 'select', 'attribute_group_id' => 1],
-            ['name' => 'Material', 'code' => 'material', 'type' => 'text', 'display' => 'input', 'attribute_group_id' => 3],
-            ['name' => 'Brand', 'code' => 'brand', 'type' => 'text', 'display' => 'input', 'attribute_group_id' => 4],
-            ['name' => 'Weight', 'code' => 'weight', 'type' => 'float', 'display' => 'input', 'attribute_group_id' => 3],
-            ['name' => 'Length', 'code' => 'length', 'type' => 'float', 'display' => 'input', 'attribute_group_id' => 2],
-            ['name' => 'Width', 'code' => 'width', 'type' => 'float', 'display' => 'input', 'attribute_group_id' => 2],
-            ['name' => 'Height', 'code' => 'height', 'type' => 'float', 'display' => 'input', 'attribute_group_id' => 2],
-            ['name' => 'Is New', 'code' => 'is_new', 'type' => 'boolean', 'display' => 'checkbox', 'attribute_group_id' => 4],
-            ['name' => 'Release Date', 'code' => 'release_date', 'type' => 'date', 'display' => 'input', 'attribute_group_id' => 4],
+            ['name' => 'Color', 'code' => 'color', 'type' => 'text', 'display' => 'input'],
+            ['name' => 'Size', 'code' => 'size', 'type' => 'select', 'display' => 'select'],
+            ['name' => 'Material', 'code' => 'material', 'type' => 'text', 'display' => 'input'],
+            ['name' => 'Brand', 'code' => 'brand', 'type' => 'text', 'display' => 'input'],
+            ['name' => 'Weight', 'code' => 'weight', 'type' => 'float', 'display' => 'input'],
+            ['name' => 'Length', 'code' => 'length', 'type' => 'float', 'display' => 'input'],
+            ['name' => 'Width', 'code' => 'width', 'type' => 'float', 'display' => 'input'],
+            ['name' => 'Height', 'code' => 'height', 'type' => 'float', 'display' => 'input'],
+            ['name' => 'Is New', 'code' => 'is_new', 'type' => 'boolean', 'display' => 'checkbox'],
+            ['name' => 'Release Date', 'code' => 'release_date', 'type' => 'date', 'display' => 'input'],
         ];
 
+        $createdAttributes = [];
         foreach ($attributes as $attr) {
-            Attribute::firstOrCreate([
+            $groupId = null;
+            if (isset($attr['attribute_group_id'])) {
+                $groupId = $attr['attribute_group_id'];
+                unset($attr['attribute_group_id']);
+            }
+            $attribute = Attribute::firstOrCreate([
                 'code' => $attr['code'],
             ], array_merge($attr, [
                 'is_required' => false,
                 'is_filterable' => true,
             ]));
+            $createdAttributes[] = ['attribute' => $attribute, 'group_id' => $groupId];
+        }
+        // Attach attributes to groups via pivot
+        foreach ($createdAttributes as $item) {
+            if ($item['group_id'] && isset($groups[$item['group_id']])) {
+                $groups[$item['group_id']]->attributes()->syncWithoutDetaching([$item['attribute']->id]);
+            }
         }
     }
 }

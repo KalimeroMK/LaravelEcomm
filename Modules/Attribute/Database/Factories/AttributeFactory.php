@@ -6,7 +6,6 @@ namespace Modules\Attribute\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Attribute\Models\Attribute;
-use Modules\Attribute\Models\AttributeGroup;
 
 class AttributeFactory extends Factory
 {
@@ -21,7 +20,7 @@ class AttributeFactory extends Factory
             'display' => $this->faker->randomElement(['input', 'select', 'checkbox', 'radio']),
             'is_filterable' => $this->faker->boolean(),
             'is_configurable' => $this->faker->boolean(),
-            'attribute_group_id' => AttributeGroup::factory(),
+
         ];
     }
 }

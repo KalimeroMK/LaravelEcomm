@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Banner\Actions;
 
-use Modules\Banner\DTO\BannerDTO;
+use Modules\Banner\DTOs\BannerDTO;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;

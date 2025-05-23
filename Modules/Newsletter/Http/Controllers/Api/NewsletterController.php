@@ -6,21 +6,20 @@ namespace Modules\Newsletter\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Newsletter\Actions\CreateNewsletterAction;
+use Modules\Newsletter\Actions\DeleteNewsletterAction;
+use Modules\Newsletter\Actions\GetAllNewslettersAction;
+use Modules\Newsletter\Actions\GetNewsletterByIdAction;
+use Modules\Newsletter\Actions\UpdateNewsletterAction;
 use Modules\Newsletter\Http\Requests\Api\Store;
-use Modules\Newsletter\Http\Requests\Api\Store as Update;
 use Modules\Newsletter\Http\Resources\NewsletterResource;
-use Modules\Newsletter\Service\NewsletterService;
 use ReflectionException;
 
 class NewsletterController extends CoreController
 {
-    private NewsletterService $newsletter_service;
-
-    public function __construct(NewsletterService $newsletter_service)
+    public function __construct()
     {
-        $this->newsletter_service = $newsletter_service;
         $this->middleware('permission:newsletter-list', ['only' => ['index']]);
         $this->middleware('permission:newsletter-show', ['only' => ['show']]);
         $this->middleware('permission:newsletter-create', ['only' => ['store']]);
@@ -30,7 +29,9 @@ class NewsletterController extends CoreController
 
     public function index(): ResourceCollection
     {
-        return NewsletterResource::collection($this->newsletter_service->getAll());
+        $newslettersDto = (new GetAllNewslettersAction())->execute();
+
+        return NewsletterResource::collection($newslettersDto->newsletters);
     }
 
     /**
@@ -38,18 +39,9 @@ class NewsletterController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->newsletter_service->newsletter_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new NewsletterResource($this->newsletter_service->create($request->validated())));
+        $newsletterDto = (new CreateNewsletterAction())->execute($request->validated());
+
+        return $this->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Newsletter']))->respond(new NewsletterResource($newsletterDto));
     }
 
     /**
@@ -57,37 +49,19 @@ class NewsletterController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.ok',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->newsletter_service->newsletter_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new NewsletterResource($this->newsletter_service->findById($id)));
+        $newsletterDto = (new GetNewsletterByIdAction())->execute($id);
+
+        return $this->setMessage(__('apiResponse.ok', ['resource' => 'Newsletter']))->respond(new NewsletterResource($newsletterDto));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function update(Update $request, int $id): JsonResponse
+    public function update(Store $request, int $id): JsonResponse
     {
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.updateSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->newsletter_service->newsletter_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new NewsletterResource($this->newsletter_service->update($id, $request->validated())));
+        $newsletterDto = (new UpdateNewsletterAction())->execute($id, $request->validated());
+
+        return $this->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Newsletter']))->respond(new NewsletterResource($newsletterDto));
     }
 
     /**
@@ -95,19 +69,8 @@ class NewsletterController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->newsletter_service->delete($id);
+        (new DeleteNewsletterAction())->execute($id);
 
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->newsletter_service->newsletter_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(null);
+        return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Newsletter']))->respond(null);
     }
 }

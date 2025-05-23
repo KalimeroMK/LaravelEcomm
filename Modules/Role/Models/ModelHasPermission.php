@@ -20,14 +20,14 @@ use Modules\Permission\Models\Permission;
  * @property int $permission_id
  * @property string $model_type
  * @property int $model_id
- * @property Permission $permission
+ * @property-read Permission $permission
  *
- * @method static Builder|ModelHasPermission newModelQuery()
- * @method static Builder|ModelHasPermission newQuery()
- * @method static Builder|ModelHasPermission query()
- * @method static Builder|ModelHasPermission whereModelId($value)
- * @method static Builder|ModelHasPermission whereModelType($value)
- * @method static Builder|ModelHasPermission wherePermissionId($value)
+ * @method static Builder<static>|ModelHasPermission newModelQuery()
+ * @method static Builder<static>|ModelHasPermission newQuery()
+ * @method static Builder<static>|ModelHasPermission query()
+ * @method static Builder<static>|ModelHasPermission whereModelId($value)
+ * @method static Builder<static>|ModelHasPermission whereModelType($value)
+ * @method static Builder<static>|ModelHasPermission wherePermissionId($value)
  *
  * @mixin Eloquent
  */

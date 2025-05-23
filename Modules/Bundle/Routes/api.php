@@ -17,4 +17,3 @@ use Modules\Bundle\Http\Controllers\Api\BundleController;
 */
 
 Route::apiResource('bundles', BundleController::class)->names('api.bundles');
-

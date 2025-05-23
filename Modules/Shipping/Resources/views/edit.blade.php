@@ -5,37 +5,7 @@
     <div class="card">
         <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
-            <form method="post" action="{{route('shipping.update',$shipping->id)}}">
-                @csrf
-                @method('PATCH')
-                <div class="form-group">
-                    <label for="inputTitle" class="col-form-label">@lang('partials.type') <span
-                                class="text-danger">*</span></label>
-                    <input id="inputTitle" type="text" name="type" placeholder="Enter type" value="{{$shipping->type}}"
-                           class="form-control">
-
-                </div>
-                <div class="form-group">
-                    <label for="price" class="col-form-label">@lang('partials.price') <span class="text-danger">*</span></label>
-                    <input id="price" type="number" name="price" placeholder="Enter price" value="{{$shipping->price}}"
-                           class="form-control">
-
-                </div>
-                <div class="form-group">
-                    <label for="status" class="col-form-label">@lang('partials.status') <span
-                                class="text-danger">*</span></label>
-                    <select name="status" class="form-control">
-                        <option value="active" {{(($shipping->status=='active') ? 'selected' : '')}}>@lang('partials.active')
-                        </option>
-                        <option value="inactive" {{(($shipping->status=='inactive') ? 'selected' : '')}}>@lang('partials.inactive')
-                        </option>
-                    </select>
-
-                </div>
-                <div class="form-group mb-3">
-                    <button class="btn btn-success" type="submit">@lang('partials.update')</button>
-                </div>
-            </form>
+            @include('shipping::partials.form', ['shipping' => $shipping])
         </div>
     </div>
 

@@ -1,12 +1,12 @@
 @extends('admin::layouts.master')
 
-@section('title','E-SHOP || Banner Create')
+@section('title','E-SHOP || Post Edit')
 
 @section('content')
     <div class="card">
         <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
-            @include('post::partials.form')
+            @include('post::partials.form', ['post' => $post ?? null, 'categories' => $categories ?? [], 'tags' => $tags ?? []])
         </div>
     </div>
 
@@ -25,12 +25,4 @@
             $('.js-example-basic-multiple').select2();
         });
     </script>
-    <!-- select2 -->
-    <script type="text/javascript">
-        $('#category').select2().val({!! json_encode($post->categories()->allRelatedIds()) !!}).trigger('change');
-    </script>
-    <script type="text/javascript">
-        $('#tag').select2().val({!! json_encode($post->tags()->allRelatedIds()) !!}).trigger('change');
-    </script>
 @endpush
-

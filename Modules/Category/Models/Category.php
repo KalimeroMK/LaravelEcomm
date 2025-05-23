@@ -26,85 +26,85 @@ use Modules\Product\Models\Product;
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property int|null $status
+ * @property int $status
  * @property int|null $parent_id
  * @property int|null $_lft
  * @property int|null $_rgt
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Category|null $category
- * @property Collection|Category[] $categories
- * @property-read int|null                                $categories_count
- * @property-read Collection|Product[]                    $products
- * @property-read int|null                                $products_count
+ * @property Carbon|null $deleted_at
+ * @property-read \Kalnoy\Nestedset\Collection<int, Category> $categories
+ * @property-read int|null $categories_count
+ * @property-read Category|null $category
+ * @property-read \Kalnoy\Nestedset\Collection<int, Category> $children
+ * @property-read int|null $children_count
+ * @property-read \Kalnoy\Nestedset\Collection<int, Category> $childrenCategories
+ * @property-read int|null $children_categories_count
+ * @property-read Category|null $parent
+ * @property-read Collection<int, Post> $posts
+ * @property-read int|null $posts_count
+ * @property-read Collection<int, Product> $products
+ * @property-read int|null $products_count
  *
- * @method static Builder|Category newModelQuery()
- * @method static Builder|Category newQuery()
- * @method static Builder|Category query()
- * @method static Builder|Category whereCreatedAt($value)
- * @method static Builder|Category whereId($value)
- * @method static Builder|Category whereLft($value)
- * @method static Builder|Category whereParentId($value)
- * @method static Builder|Category whereRgt($value)
- * @method static Builder|Category whereSlug($value)
- * @method static Builder|Category whereStatus($value)
- * @method static Builder|Category whereTitle($value)
- * @method static Builder|Category whereUpdatedAt($value)
+ * @method static \Kalnoy\Nestedset\Collection<int, static> all($columns = ['*'])
+ * @method static QueryBuilder<static>|Category ancestorsAndSelf($id, array $columns = [])
+ * @method static QueryBuilder<static>|Category ancestorsOf($id, array $columns = [])
+ * @method static QueryBuilder<static>|Category applyNestedSetScope(?string $table = null)
+ * @method static QueryBuilder<static>|Category countErrors()
+ * @method static QueryBuilder<static>|Category d()
+ * @method static QueryBuilder<static>|Category defaultOrder(string $dir = 'asc')
+ * @method static QueryBuilder<static>|Category descendantsAndSelf($id, array $columns = [])
+ * @method static QueryBuilder<static>|Category descendantsOf($id, array $columns = [], $andSelf = false)
+ * @method static QueryBuilder<static>|Category fixSubtree($root)
+ * @method static QueryBuilder<static>|Category fixTree($root = null)
+ * @method static \Kalnoy\Nestedset\Collection<int, static> get($columns = ['*'])
+ * @method static QueryBuilder<static>|Category getNodeData($id, $required = false)
+ * @method static QueryBuilder<static>|Category getPlainNodeData($id, $required = false)
+ * @method static QueryBuilder<static>|Category getTotalErrors()
+ * @method static QueryBuilder<static>|Category hasChildren()
+ * @method static QueryBuilder<static>|Category hasParent()
+ * @method static QueryBuilder<static>|Category isBroken()
+ * @method static QueryBuilder<static>|Category leaves(array $columns = [])
+ * @method static QueryBuilder<static>|Category makeGap(int $cut, int $height)
+ * @method static QueryBuilder<static>|Category moveNode($key, $position)
+ * @method static QueryBuilder<static>|Category newModelQuery()
+ * @method static QueryBuilder<static>|Category newQuery()
+ * @method static Builder<static>|Category onlyTrashed()
+ * @method static QueryBuilder<static>|Category orWhereAncestorOf(bool $id, bool $andSelf = false)
+ * @method static QueryBuilder<static>|Category orWhereDescendantOf($id)
+ * @method static QueryBuilder<static>|Category orWhereNodeBetween($values)
+ * @method static QueryBuilder<static>|Category orWhereNotDescendantOf($id)
+ * @method static QueryBuilder<static>|Category query()
+ * @method static QueryBuilder<static>|Category rebuildSubtree($root, array $data, $delete = false)
+ * @method static QueryBuilder<static>|Category rebuildTree(array $data, $delete = false, $root = null)
+ * @method static QueryBuilder<static>|Category reversed()
+ * @method static QueryBuilder<static>|Category root(array $columns = [])
+ * @method static QueryBuilder<static>|Category whereAncestorOf($id, $andSelf = false, $boolean = 'and')
+ * @method static QueryBuilder<static>|Category whereAncestorOrSelf($id)
+ * @method static QueryBuilder<static>|Category whereCreatedAt($value)
+ * @method static QueryBuilder<static>|Category whereDeletedAt($value)
+ * @method static QueryBuilder<static>|Category whereDescendantOf($id, $boolean = 'and', $not = false, $andSelf = false)
+ * @method static QueryBuilder<static>|Category whereDescendantOrSelf(string $id, string $boolean = 'and', string $not = false)
+ * @method static QueryBuilder<static>|Category whereId($value)
+ * @method static QueryBuilder<static>|Category whereIsAfter($id, $boolean = 'and')
+ * @method static QueryBuilder<static>|Category whereIsBefore($id, $boolean = 'and')
+ * @method static QueryBuilder<static>|Category whereIsLeaf()
+ * @method static QueryBuilder<static>|Category whereIsRoot()
+ * @method static QueryBuilder<static>|Category whereLft($value)
+ * @method static QueryBuilder<static>|Category whereNodeBetween($values, $boolean = 'and', $not = false, $query = null)
+ * @method static QueryBuilder<static>|Category whereNotDescendantOf($id)
+ * @method static QueryBuilder<static>|Category whereParentId($value)
+ * @method static QueryBuilder<static>|Category whereRgt($value)
+ * @method static QueryBuilder<static>|Category whereSlug($value)
+ * @method static QueryBuilder<static>|Category whereStatus($value)
+ * @method static QueryBuilder<static>|Category whereTitle($value)
+ * @method static QueryBuilder<static>|Category whereUpdatedAt($value)
+ * @method static QueryBuilder<static>|Category withDepth(string $as = 'depth')
+ * @method static Builder<static>|Category withTrashed()
+ * @method static QueryBuilder<static>|Category withoutRoot()
+ * @method static Builder<static>|Category withoutTrashed()
  *
  * @mixin Eloquent
- *
- * @property-read \Kalnoy\Nestedset\Collection|Category[] $children
- * @property-read int|null                                $children_count
- * @property-read Category|null                           $parent
- *
- * @method static QueryBuilder|Category ancestorsAndSelf($id, array $columns = [])
- * @method static QueryBuilder|Category ancestorsOf($id, array $columns = [])
- * @method static QueryBuilder|Category applyNestedSetScope(?string $table = null)
- * @method static QueryBuilder|Category countErrors()
- * @method static QueryBuilder|Category d()
- * @method static QueryBuilder|Category defaultOrder(string $dir = 'asc')
- * @method static QueryBuilder|Category descendantsAndSelf($id, array $columns = [])
- * @method static QueryBuilder|Category descendantsOf($id, array $columns = [], $andSelf = false)
- * @method static QueryBuilder|Category fixSubtree($root)
- * @method static QueryBuilder|Category fixTree($root = null)
- * @method static QueryBuilder|Category getNodeData($id, $required = false)
- * @method static QueryBuilder|Category getPlainNodeData($id, $required = false)
- * @method static QueryBuilder|Category getTotalErrors()
- * @method static QueryBuilder|Category hasChildren()
- * @method static QueryBuilder|Category hasParent()
- * @method static QueryBuilder|Category isBroken()
- * @method static QueryBuilder|Category leaves(array $columns = [])
- * @method static QueryBuilder|Category makeGap(int $cut, int $height)
- * @method static QueryBuilder|Category moveNode($key, $position)
- * @method static QueryBuilder|Category orWhereAncestorOf(bool $id, bool $andSelf = false)
- * @method static QueryBuilder|Category orWhereDescendantOf($id)
- * @method static QueryBuilder|Category orWhereNodeBetween($values)
- * @method static QueryBuilder|Category orWhereNotDescendantOf($id)
- * @method static QueryBuilder|Category rebuildSubtree($root, array $data, $delete = false)
- * @method static QueryBuilder|Category rebuildTree(array $data, $delete = false, $root = null)
- * @method static QueryBuilder|Category reversed()
- * @method static QueryBuilder|Category root(array $columns = [])
- * @method static QueryBuilder|Category whereAncestorOf($id, $andSelf = false, $boolean = 'and')
- * @method static QueryBuilder|Category whereAncestorOrSelf($id)
- * @method static QueryBuilder|Category whereDescendantOf($id, $boolean = 'and', $not = false, $andSelf = false)
- * @method static QueryBuilder|Category whereDescendantOrSelf(string $id, string $boolean = 'and', string $not = false)
- * @method static QueryBuilder|Category whereIsAfter($id, $boolean = 'and')
- * @method static QueryBuilder|Category whereIsBefore($id, $boolean = 'and')
- * @method static QueryBuilder|Category whereIsLeaf()
- * @method static QueryBuilder|Category whereIsRoot()
- * @method static QueryBuilder|Category whereNodeBetween($values, $boolean = 'and', $not = false)
- * @method static QueryBuilder|Category whereNotDescendantOf($id)
- * @method static QueryBuilder|Category withDepth(string $as = 'depth')
- * @method static QueryBuilder|Category withoutRoot()
- *
- * @property-read \Kalnoy\Nestedset\Collection|Category[] $child_cat
- * @property-read int|null                                $child_cat_count
- * @property-read \Kalnoy\Nestedset\Collection|Category[] $childrenCategories
- * @property-read int|null                                $children_categories_count
- * @property-read Category|null                           $parent_info
- *
- * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
- * @method static \Kalnoy\Nestedset\Collection|static[] all($columns = ['*'])
  */
 class Category extends Core
 {

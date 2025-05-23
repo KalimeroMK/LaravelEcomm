@@ -11,21 +11,20 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\Factory;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\User\Actions\LoginUserAction;
+use Modules\User\Actions\RegisterUserAction;
 use Modules\User\Models\User;
 
 class AuthController extends CoreController
 {
     public function login(Request $request): JsonResponse
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $success['token'] = Auth::user()->createToken('MyAuthApp')->plainTextToken;
-            $success['name'] = Auth::user()->name;
-
-            return $this->sendResponse($success, 'User signed in');
+        $result = (new LoginUserAction())->execute($request->email, $request->password);
+        if ($result) {
+            return $this->sendResponse($result, 'User signed in');
         }
 
         return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
@@ -33,12 +32,9 @@ class AuthController extends CoreController
 
     public function register(AuthRequest $request): JsonResponse
     {
-        $request['password'] = Hash::make($request['password']);
-        $user = User::create($request->all());
-        $success['token'] = $user->createToken('MyAuthApp')->plainTextToken;
-        $success['name'] = $user->name;
+        $result = (new RegisterUserAction())->execute($request->all());
 
-        return $this->sendResponse($success, 'User created successfully.');
+        return $this->sendResponse($result, 'User created successfully.');
     }
 
     /**

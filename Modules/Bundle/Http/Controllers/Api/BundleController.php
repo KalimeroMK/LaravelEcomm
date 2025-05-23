@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Bundle\Actions\CreateBundleAction;
 use Modules\Bundle\Actions\DeleteBundleAction;
 use Modules\Bundle\Actions\UpdateBundleAction;
-use Modules\Bundle\DTO\BundleDTO;
+use Modules\Bundle\DTOs\BundleDTO;
 use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Http\Requests\Update;
 use Modules\Bundle\Http\Resource\BundleResource;

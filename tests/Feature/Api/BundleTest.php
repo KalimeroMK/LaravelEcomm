@@ -35,6 +35,7 @@ class BundleTest extends TestCase
             'products' => [$product->id],
             'images' => [UploadedFile::fake()->image('bundle.jpg')],
         ];
+
         return $this->create($this->url, $data);
     }
 

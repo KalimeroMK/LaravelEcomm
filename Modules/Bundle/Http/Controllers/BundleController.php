@@ -10,7 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Bundle\Actions\CreateBundleAction;
 use Modules\Bundle\Actions\DeleteBundleAction;
 use Modules\Bundle\Actions\UpdateBundleAction;
-use Modules\Bundle\DTO\BundleDTO;
+use Modules\Bundle\DTOs\BundleDTO;
 use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Http\Requests\Update;
 use Modules\Bundle\Models\Bundle;
@@ -20,7 +20,9 @@ use Throwable;
 class BundleController extends Controller
 {
     protected CreateBundleAction $createAction;
+
     protected UpdateBundleAction $updateAction;
+
     protected DeleteBundleAction $deleteAction;
 
     public function __construct(

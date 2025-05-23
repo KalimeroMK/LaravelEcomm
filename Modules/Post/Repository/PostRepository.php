@@ -32,19 +32,6 @@ class PostRepository extends Repository implements SearchInterface
     }
 
     /**
-     * Get active posts.
-     *
-     * @return Collection<int, Post>
-     */
-    public function getActivePosts(): Collection
-    {
-        return $this->model::where('status', 'active')
-            ->orderBy('id', 'desc')
-            ->limit(self::LATEST_POSTS_LIMIT)
-            ->get();
-    }
-
-    /**
      * Find all posts.
      *
      * @return Collection<int, Post>

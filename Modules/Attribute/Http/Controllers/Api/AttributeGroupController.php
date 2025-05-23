@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Attribute\Actions\AttributeGroup\CreateAttributeGroupAction;
 use Modules\Attribute\Actions\AttributeGroup\DeleteAttributeGroupAction;
 use Modules\Attribute\Actions\AttributeGroup\UpdateAttributeGroupAction;
-use Modules\Attribute\DTO\AttributeGroupDTO;
+use Modules\Attribute\DTOs\AttributeGroupDTO;
 use Modules\Attribute\Http\Requests\Api\AttributeGroup\Store;
 use Modules\Attribute\Http\Requests\Api\AttributeGroup\Update;
 use Modules\Attribute\Http\Resources\AttributeGroupResource;
@@ -41,10 +41,7 @@ class AttributeGroupController extends CoreController
         );
     }
 
-
     /**
-     * @param  Store  $request
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
@@ -83,9 +80,6 @@ class AttributeGroupController extends CoreController
     }
 
     /**
-     * @param  Update  $request
-     * @param  int     $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function update(Update $request, int $id): JsonResponse
@@ -105,8 +99,6 @@ class AttributeGroupController extends CoreController
     }
 
     /**
-     * @param  int  $id
-     * @return JsonResponse
      * @throws ReflectionException
      */
     public function destroy(int $id): JsonResponse

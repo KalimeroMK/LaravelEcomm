@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace Modules\Product\Models;
 
-use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Attribute\Models\AttributeValue;
@@ -16,13 +17,14 @@ use Modules\Attribute\Models\AttributeValue;
 /**
  * Class ProductAttributeValue
  *
- * @property int $id
- * @property int $product_id
- * @property int $attribute_value_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property AttributeValue $attribute_value
- * @property Product $product
+ * @property-read AttributeValue|null $attribute_value
+ * @property-read Product|null        $product
+ *
+ * @method static Builder<static>|ProductAttributeValue newModelQuery()
+ * @method static Builder<static>|ProductAttributeValue newQuery()
+ * @method static Builder<static>|ProductAttributeValue query()
+ *
+ * @mixin Eloquent
  */
 class ProductAttributeValue extends Model
 {

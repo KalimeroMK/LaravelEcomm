@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Shipping\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,20 +24,20 @@ use Modules\Shipping\Database\Factories\ShippingFactory;
  * @property string $type
  * @property float $price
  * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Collection|Order[] $orders
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Collection<int, Order> $orders
  * @property-read int|null $orders_count
  *
- * @method static Builder|Shipping newModelQuery()
- * @method static Builder|Shipping newQuery()
- * @method static Builder|Shipping query()
- * @method static Builder|Shipping whereCreatedAt($value)
- * @method static Builder|Shipping whereId($value)
- * @method static Builder|Shipping wherePrice($value)
- * @method static Builder|Shipping whereStatus($value)
- * @method static Builder|Shipping whereType($value)
- * @method static Builder|Shipping whereUpdatedAt($value)
+ * @method static Builder<static>|Shipping newModelQuery()
+ * @method static Builder<static>|Shipping newQuery()
+ * @method static Builder<static>|Shipping query()
+ * @method static Builder<static>|Shipping whereCreatedAt($value)
+ * @method static Builder<static>|Shipping whereId($value)
+ * @method static Builder<static>|Shipping wherePrice($value)
+ * @method static Builder<static>|Shipping whereStatus($value)
+ * @method static Builder<static>|Shipping whereType($value)
+ * @method static Builder<static>|Shipping whereUpdatedAt($value)
  *
  * @mixin Eloquent
  */

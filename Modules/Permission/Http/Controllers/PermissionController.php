@@ -7,6 +7,10 @@ namespace Modules\Permission\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Modules\Permission\Actions\CreatePermissionAction;
+use Modules\Permission\Actions\DeletePermissionAction;
+use Modules\Permission\Actions\GetAllPermissionsAction;
+use Modules\Permission\Actions\UpdatePermissionAction;
 use Modules\Permission\Http\Requests\Store;
 use Modules\Permission\Http\Requests\Update;
 use Modules\Permission\Models\Permission;
@@ -23,9 +27,9 @@ class PermissionController extends Controller
      */
     public function index(): View
     {
-        $permissions = Permission::all();
+        $permissionsDto = (new GetAllPermissionsAction())->execute();
 
-        return view('permission::index', ['permissions' => $permissions]);
+        return view('permission::index', ['permissions' => $permissionsDto->permissions]);
     }
 
     /**
@@ -41,7 +45,7 @@ class PermissionController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        Permission::create($request->validated());
+        (new CreatePermissionAction())->execute($request->validated());
 
         return redirect()->route('permissions.index');
     }
@@ -59,7 +63,7 @@ class PermissionController extends Controller
      */
     public function update(Update $request, Permission $permission): RedirectResponse
     {
-        $permission->update($request->validated());
+        (new UpdatePermissionAction())->execute($permission->id, $request->validated());
 
         return redirect()->route('permissions.index');
     }
@@ -69,7 +73,7 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission): RedirectResponse
     {
-        $permission->delete();
+        (new DeletePermissionAction())->execute($permission->id);
 
         return redirect()->route('permissions.index');
     }

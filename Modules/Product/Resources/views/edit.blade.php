@@ -6,10 +6,15 @@
     <div class="card">
         <h5 class="card-header">@lang('partials.edit')</h5>
         <div class="card-body">
-            @include('product::partials.form')
+            @include('product::partials.form', [
+                'product' => $product ?? [],
+                'categories' => $categories ?? [],
+                'tags' => $tags ?? [],
+                'brands' => $brands ?? [],
+                'attributes' => $attributes ?? [],
+            ])
         </div>
     </div>
-
 @endsection
 
 
@@ -27,11 +32,5 @@
         $(document).ready(function () {
             $('.js-example-basic-multiple').select2();
         });
-    </script>
-    <!-- select2 -->
-    <script type="text/javascript">
-        $('#category').select2().val({!! json_encode($product->categories()->allRelatedIds()) !!}).trigger('change');
-        $('#size').select2().val({!! json_encode($product->sizes()->allRelatedIds()) !!}).trigger('change');
-        $('#tag').select2().val({!! json_encode($product->tags()->allRelatedIds()) !!}).trigger('change');
     </script>
 @endpush

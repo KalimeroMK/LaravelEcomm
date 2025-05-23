@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Attribute\Http\Resources;
 
 use Illuminate\Http\Request;
@@ -26,7 +28,6 @@ class AttributeResource extends JsonResource
             'filterable' => $this->filterable,
             'configurable' => $this->configurable,
 
-            'attribute_group_id' => $this->attribute_group_id,
         ];
     }
 }

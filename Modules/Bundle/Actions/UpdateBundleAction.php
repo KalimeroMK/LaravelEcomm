@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Bundle\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Modules\Bundle\DTO\BundleDTO;
+use Modules\Bundle\DTOs\BundleDTO;
 use Modules\Bundle\Models\Bundle;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -30,11 +30,11 @@ readonly class UpdateBundleAction
                 'extra' => $dto->extra,
             ]);
 
-            if (!empty($dto->products)) {
+            if (! empty($dto->products)) {
                 $bundle->products()->sync($dto->products);
             }
 
-            if (!empty($dto->images)) {
+            if (! empty($dto->images)) {
                 $bundle->clearMediaCollection('bundle');
 
                 foreach ($dto->images as $image) {

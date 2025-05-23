@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\Message\Models;
 
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,23 +24,23 @@ use Modules\Message\Database\Factories\MessageFactory;
  * @property string|null $photo
  * @property string|null $phone
  * @property string $message
- * @property Carbon|null $read_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property string|null $read_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @method static Builder|Message newModelQuery()
- * @method static Builder|Message newQuery()
- * @method static Builder|Message query()
- * @method static Builder|Message whereCreatedAt($value)
- * @method static Builder|Message whereEmail($value)
- * @method static Builder|Message whereId($value)
- * @method static Builder|Message whereMessage($value)
- * @method static Builder|Message whereName($value)
- * @method static Builder|Message wherePhone($value)
- * @method static Builder|Message wherePhoto($value)
- * @method static Builder|Message whereReadAt($value)
- * @method static Builder|Message whereSubject($value)
- * @method static Builder|Message whereUpdatedAt($value)
+ * @method static Builder<static>|Message newModelQuery()
+ * @method static Builder<static>|Message newQuery()
+ * @method static Builder<static>|Message query()
+ * @method static Builder<static>|Message whereCreatedAt($value)
+ * @method static Builder<static>|Message whereEmail($value)
+ * @method static Builder<static>|Message whereId($value)
+ * @method static Builder<static>|Message whereMessage($value)
+ * @method static Builder<static>|Message whereName($value)
+ * @method static Builder<static>|Message wherePhone($value)
+ * @method static Builder<static>|Message wherePhoto($value)
+ * @method static Builder<static>|Message whereReadAt($value)
+ * @method static Builder<static>|Message whereSubject($value)
+ * @method static Builder<static>|Message whereUpdatedAt($value)
  *
  * @mixin Eloquent
  */

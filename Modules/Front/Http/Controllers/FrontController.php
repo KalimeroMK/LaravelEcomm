@@ -12,26 +12,40 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Modules\Front\Actions\BlogAction;
+use Modules\Front\Actions\BlogByCategoryAction;
+use Modules\Front\Actions\BlogByTagAction;
+use Modules\Front\Actions\BlogDetailAction;
+use Modules\Front\Actions\BlogFilterAction;
+use Modules\Front\Actions\BlogSearchAction;
+use Modules\Front\Actions\BundleDetailAction;
+use Modules\Front\Actions\CouponStoreAction;
+use Modules\Front\Actions\IndexAction;
+use Modules\Front\Actions\MessageStoreAction;
+use Modules\Front\Actions\NewsletterDeleteAction;
+use Modules\Front\Actions\NewsletterSubscribeAction;
+use Modules\Front\Actions\NewsletterVerifyAction;
+use Modules\Front\Actions\PageDetailAction;
+use Modules\Front\Actions\ProductBrandAction;
+use Modules\Front\Actions\ProductBundlesAction;
+use Modules\Front\Actions\ProductCatAction;
+use Modules\Front\Actions\ProductDealAction;
+use Modules\Front\Actions\ProductDetailAction;
+use Modules\Front\Actions\ProductFilterAction;
+use Modules\Front\Actions\ProductGridsAction;
+use Modules\Front\Actions\ProductListsAction;
+use Modules\Front\Actions\ProductSearchAction;
 use Modules\Front\Http\Requests\ProductSearchRequest;
-use Modules\Front\Service\FrontService;
 use Modules\Message\Http\Requests\Api\Store;
-use Modules\Newsletter\Models\Newsletter;
 
 class FrontController extends Controller
 {
-    private FrontService $front_service;
-
-    public function __construct(FrontService $frontService)
-    {
-        $this->front_service = $frontService;
-    }
-
     /**
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(IndexAction $indexAction)
     {
-        return view('front::index', $this->front_service->index());
+        return view('front::index', $indexAction());
     }
 
     /**
@@ -53,122 +67,116 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productDetail(string $slug)
+    public function productDetail(string $slug, ProductDetailAction $productDetailAction)
     {
-        return view('front::pages.product_detail', $this->front_service->productDetail($slug));
+        return view('front::pages.product_detail', $productDetailAction($slug));
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function productGrids()
+    public function productGrids(ProductGridsAction $productGridsAction)
     {
-        return view('front::pages.product-grids', $this->front_service->productGrids());
+        return view('front::pages.product-grids', $productGridsAction());
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function bundles()
+    public function bundles(ProductBundlesAction $productBundlesAction)
     {
-        return view('front::pages.bundles', $this->front_service->productBundles());
+        return view('front::pages.bundles', $productBundlesAction());
     }
 
-    public function bundleDetail(string $slug)
+    public function bundleDetail(string $slug, BundleDetailAction $bundleDetailAction)
     {
-        return view('front::pages.bundle_detail', $this->front_service->bundleDetail($slug));
-    }
-
-    /**
-     * @return Application|Factory|View
-     */
-    public function productLists()
-    {
-        return view('front::pages.product-lists', $this->front_service->productLists());
-    }
-
-    public function productFilter(Request $request): RedirectResponse
-    {
-        return $this->front_service->productFilter($request->all());
+        return view('front::pages.bundle_detail', $bundleDetailAction($slug));
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function productSearch(ProductSearchRequest $request)
+    public function productLists(ProductListsAction $productListsAction)
     {
-        return view('front::pages.product-grids', $this->front_service->productSearch($request->validated()));
+        return view('front::pages.product-lists', $productListsAction());
+    }
+
+    public function productFilter(Request $request, ProductFilterAction $productFilterAction): RedirectResponse
+    {
+        return $productFilterAction($request->all());
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function productDeal()
+    public function productSearch(ProductSearchRequest $request, ProductSearchAction $productSearchAction)
     {
-        return view('front::pages.product-grids', $this->front_service->productDeal());
+        return view('front::pages.product-grids', $productSearchAction($request->validated()));
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function productBrand(Request $request)
+    public function productDeal(ProductDealAction $productDealAction)
+    {
+        return view('front::pages.product-deal', $productDealAction());
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function productBrand(Request $request, ProductBrandAction $productBrandAction)
     {
         if (request()->is('e-shop.loc/product-grids')) {
-            return view('front::pages.product-grids', $this->front_service->productBrand($request->all()));
+            return view('front::pages.product-grids', $productBrandAction($request->all()));
         }
 
-        return view('front::pages.product-lists', $this->front_service->productBrand($request->all()));
+        return view('front::pages/product-lists', $productBrandAction($request->all()));
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function productCat(string $slug)
+    public function productCat(string $slug, ProductCatAction $productCatAction)
     {
-        if (request()->is('e-shop.loc/product-grids')) {
-            return view('front::pages.product-grids', $this->front_service->productCat($slug));
-        }
-
-        return view('front::pages.product-lists', $this->front_service->productCat($slug));
+        return view('front::pages.product-cat', $productCatAction($slug));
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function blog()
+    public function blog(BlogAction $blogAction)
     {
-        return view('front::pages.blog', $this->front_service->blog());
+        return view('front::pages.blog', $blogAction());
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function blogDetail(string $slug)
+    public function blogDetail(string $slug, BlogDetailAction $blogDetailAction)
     {
-        return view('front::pages.blog-detail', $this->front_service->blogDetail($slug));
+        return view('front::pages.blog-detail', $blogDetailAction($slug));
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function blogSearch(Request $request)
+    public function blogSearch(Request $request, BlogSearchAction $blogSearchAction)
     {
-        return view('front::pages.blog', $this->front_service->blogSearch($request));
+        return view('front::pages.blog', $blogSearchAction($request));
     }
 
-    public function blogFilter(Request $request): RedirectResponse
+    public function blogFilter(Request $request, BlogFilterAction $blogFilterAction): RedirectResponse
     {
-        $filterData = $this->front_service->blogFilter($request->all());
-
-        return redirect()->route('blog', http_build_query($filterData));
+        return redirect()->route('front.blog', $blogFilterAction($request->all()));
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function blogByCategory(string $slug)
+    public function blogByCategory(string $slug, BlogByCategoryAction $blogByCategoryAction)
     {
-        return view('front::pages.blog', $this->front_service->blogByCategory($slug));
+        return view('front::pages.blog', $blogByCategoryAction($slug));
     }
 
     /**
@@ -177,43 +185,37 @@ class FrontController extends Controller
      * @param  string  $slug  The tag slug to filter blog posts by.
      * @return View The view displaying the filtered blog posts.
      */
-    public function blogByTag(string $slug): View
+    public function blogByTag(string $slug, BlogByTagAction $blogByTagAction): View
     {
-        return view('front::pages.blog', $this->front_service->blogByTag($slug));
+        return view('front::pages.blog', $blogByTagAction($slug));
     }
 
-    public function couponStore(Request $request): RedirectResponse
+    public function couponStore(Request $request, CouponStoreAction $couponStoreAction): RedirectResponse
     {
-        return $this->front_service->couponStore($request);
+        return $couponStoreAction($request);
     }
 
-    public function subscribe(Request $request): RedirectResponse
+    public function subscribe(Request $request, NewsletterSubscribeAction $newsletterSubscribeAction): RedirectResponse
     {
-        if (Newsletter::whereEmail($request->email) !== null) {
-            $this->front_service->newsletter($request->all());
-
+        if ($newsletterSubscribeAction($request)) {
             return redirect()->back()->with('message', 'Your comment successfully send.');
         }
 
         return redirect()->back()->with('message', 'Your email is already in our mailing list.');
     }
 
-    public function verifyNewsletter(string $token): RedirectResponse
+    public function verifyNewsletter(string $token, NewsletterVerifyAction $newsletterVerifyAction): RedirectResponse
     {
-        if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->validation($token);
-
+        if ($newsletterVerifyAction($token)) {
             return redirect()->back()->with('message', 'Your email is successfully validated.');
         }
 
         return redirect()->back()->with('message', 'token mismatch ');
     }
 
-    public function deleteNewsletter(string $token): RedirectResponse
+    public function deleteNewsletter(string $token, NewsletterDeleteAction $newsletterDeleteAction): RedirectResponse
     {
-        if (Newsletter::where('token', $token)->first() !== null) {
-            $this->front_service->deleteNewsletter($token);
-
+        if ($newsletterDeleteAction($token)) {
             return redirect()->back()->with('message', 'Your email is successfully deleted.');
         }
 
@@ -223,9 +225,9 @@ class FrontController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function messageStore(Store $request): ?string
+    public function messageStore(Store $request, MessageStoreAction $messageStoreAction): ?string
     {
-        return $this->front_service->messageStore($request);
+        return $messageStoreAction($request);
     }
 
     /**
@@ -251,8 +253,8 @@ class FrontController extends Controller
         return redirect()->route('front.index');
     }
 
-    public function pages(string $slug): View
+    public function pages(string $slug, PageDetailAction $pageDetailAction): View
     {
-        return view('front::pages.page', $this->front_service->pages($slug));
+        return view('front::pages.page', $pageDetailAction($slug));
     }
 }

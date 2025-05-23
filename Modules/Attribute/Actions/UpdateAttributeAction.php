@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Modules\Attribute\Actions;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Attribute\DTO\AttributeDTO;
+use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Repository\AttributeRepository;
 
 readonly class UpdateAttributeAction
 {
-    public function __construct(private AttributeRepository $repository)
-    {
-    }
+    public function __construct(private AttributeRepository $repository) {}
 
     public function execute(AttributeDTO $dto): Model
     {
@@ -27,7 +25,7 @@ readonly class UpdateAttributeAction
         ]);
 
         // Optionally sync options if needed
-        if (!empty($dto->options) && method_exists($attribute, 'syncOptions')) {
+        if (! empty($dto->options) && method_exists($attribute, 'syncOptions')) {
             $attribute->syncOptions($dto->options);
         }
 

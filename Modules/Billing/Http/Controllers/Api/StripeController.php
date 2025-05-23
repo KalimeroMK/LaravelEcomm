@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace Modules\Billing\Http\Controllers\Api;
 
+use Modules\Billing\Actions\Stripe\CreateStripeChargeAction;
+use Modules\Billing\DTOs\StripeDTO;
 use Modules\Billing\Http\Requests\Api\Stripe as StripeData;
-use Modules\Core\Helpers\Payment;
 use Modules\Core\Http\Controllers\Api\CoreController;
-use Stripe\Charge;
 use Stripe\Exception\ApiErrorException;
-use Stripe\Stripe;
 
 class StripeController extends CoreController
 {
+    private CreateStripeChargeAction $createAction;
+
+    public function __construct(CreateStripeChargeAction $createAction)
+    {
+        $this->createAction = $createAction;
+    }
+
     /**
      * success response method.
      *
@@ -21,12 +27,7 @@ class StripeController extends CoreController
      */
     public function stripe(StripeData $request): void
     {
-        Stripe::setApiKey(config('stripe.sandbox.client_secret'));
-        Charge::create([
-            'amount' => Payment::calculate($request) * 100,
-            'currency' => 'usd',
-            'source' => $request->stripeToken,
-            'description' => 'KalimeroMK E-comm',
-        ]);
+        $dto = StripeDTO::fromRequest($request);
+        $this->createAction->execute($dto);
     }
 }

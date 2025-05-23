@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Bundle\Models\Observer;
 
 use Illuminate\Support\Str;

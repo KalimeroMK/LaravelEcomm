@@ -11,19 +11,22 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Modules\User\Actions\DeleteUserAction;
+use Modules\User\Actions\FindUserAction;
+use Modules\User\Actions\GetAllRolesAction;
+use Modules\User\Actions\GetAllUsersAction;
+use Modules\User\Actions\GetUserRolesAction;
+use Modules\User\Actions\ProfileUpdateAction;
+use Modules\User\Actions\StoreUserAction;
+use Modules\User\Actions\UpdateUserAction;
 use Modules\User\Http\Requests\Store;
 use Modules\User\Http\Requests\Update;
 use Modules\User\Models\User;
-use Modules\User\Service\UserService;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    private UserService $user_service;
-
-    public function __construct(UserService $user_service)
+    public function __construct()
     {
-        $this->user_service = $user_service;
         $this->authorizeResource(User::class, 'user');
     }
 
@@ -34,13 +37,15 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $userId = Auth::id(); // Get the authenticated user's ID, which can be null, int, or string
-        if (Auth::user()->isSuperAdmin()) {
-            $users = $this->user_service->getAll();
+        $userId = Auth::id();
+        if (Auth::user() && Auth::user()->isSuperAdmin()) {
+            $usersDto = (new GetAllUsersAction())->execute();
+            $users = $usersDto->users;
         } elseif (! is_numeric($userId)) {
             abort(404, 'User not found.');
         } else {
-            $users = $this->user_service->findById((int) $userId);
+            $userDto = (new FindUserAction())->execute((int) $userId);
+            $users = [$userDto->user];
         }
 
         return view('user::index', ['users' => $users])->with(
@@ -54,7 +59,7 @@ class UserController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->user_service->create($request->validated());
+        (new StoreUserAction())->execute($request->validated());
 
         return redirect()->route('users.index')->with('success', 'User created successfully');
     }
@@ -64,10 +69,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user::create', compact([
-            'user' => new User,
-            'roles' => Role::all(),
-        ]));
+        $roles = (new GetAllRolesAction())->execute();
+
+        return view('user::create', [
+            'user' => [],
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -77,7 +84,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('user::edit', ['user' => $this->user_service->findById($user->id)]);
+        $userDto = (new FindUserAction())->execute($user->id);
+
+        return view('user::edit', ['user' => $userDto->user]);
     }
 
     /**
@@ -87,10 +96,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::all();
-        $userRole = User::find($user->id)->roles->pluck('name', 'name')->all();
+        $roles = (new GetAllRolesAction())->execute();
+        $userRole = (new GetUserRolesAction())->execute($user->id);
+        $userDto = (new FindUserAction())->execute($user->id);
 
-        return view('user::edit', ['user' => $user, 'roles' => $roles, 'userRole' => $userRole]);
+        return view('user::edit', ['user' => $userDto->user, 'roles' => $roles, 'userRole' => $userRole]);
     }
 
     /**
@@ -98,7 +108,7 @@ class UserController extends Controller
      */
     public function update(Update $request, int $id): RedirectResponse
     {
-        $this->user_service->update($id, $request->validated());
+        (new UpdateUserAction())->execute($id, $request->validated());
 
         return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
@@ -108,7 +118,7 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        $this->user_service->delete($user->id);
+        (new DeleteUserAction())->execute($user->id);
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
@@ -118,7 +128,10 @@ class UserController extends Controller
      */
     public function profile()
     {
-        return view('user::profile', ['profile' => Auth()->user()]);
+        $user = Auth()->user();
+        $userDto = (new FindUserAction())->execute($user->id);
+
+        return view('user::profile', ['profile' => $userDto->user]);
     }
 
     /**
@@ -158,7 +171,7 @@ class UserController extends Controller
      */
     public function profileUpdate(Request $request, User $user)
     {
-        $status = $user->fill($request->all())->save();
+        $status = (new ProfileUpdateAction())->execute($user, $request->all());
         if ($status) {
             request()->session()->flash('success', 'Successfully updated your profile');
         } else {

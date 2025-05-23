@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Models;
 
-use Carbon\Carbon;
+use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Attribute\Database\Factories\AttributeFactory;
 use Modules\Core\Models\Core;
@@ -16,15 +16,37 @@ use Modules\Core\Models\Core;
  * Class Attribute
  *
  * @property int $id
- * @property string|null $name
+ * @property string $name
  * @property string $code
  * @property string $type
- * @property string $display
- * @property bool $filterable
- * @property bool $configurable
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Collection|AttributeValue[] $attribute_values
+ * @property string|null $display
+ * @property int $is_required
+ * @property int $is_filterable
+ * @property int $is_configurable
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Collection|AttributeGroup[] $groups
+ * @property-read Collection<int, AttributeOption> $options
+ * @property-read int|null                         $options_count
+ * @property-read Collection<int, AttributeValue>  $values
+ * @property-read int|null                         $values_count
+ *
+ * @method static Builder<static>|Attribute newModelQuery()
+ * @method static Builder<static>|Attribute newQuery()
+ * @method static Builder<static>|Attribute query()
+ * @method static Builder<static>|Attribute whereAttributeGroupId($value)
+ * @method static Builder<static>|Attribute whereCode($value)
+ * @method static Builder<static>|Attribute whereCreatedAt($value)
+ * @method static Builder<static>|Attribute whereDisplay($value)
+ * @method static Builder<static>|Attribute whereId($value)
+ * @method static Builder<static>|Attribute whereIsConfigurable($value)
+ * @method static Builder<static>|Attribute whereIsFilterable($value)
+ * @method static Builder<static>|Attribute whereIsRequired($value)
+ * @method static Builder<static>|Attribute whereName($value)
+ * @method static Builder<static>|Attribute whereType($value)
+ * @method static Builder<static>|Attribute whereUpdatedAt($value)
+ *
+ * @mixin Eloquent
  */
 class Attribute extends Core
 {
@@ -106,9 +128,9 @@ class Attribute extends Core
         return AttributeFactory::new();
     }
 
-    public function group(): BelongsTo
+    public function groups()
     {
-        return $this->belongsTo(AttributeGroup::class, 'attribute_group_id');
+        return $this->belongsToMany(AttributeGroup::class, 'attribute_attribute_group', 'attribute_id', 'attribute_group_id');
     }
 
     public function values(): HasMany

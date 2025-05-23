@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Modules\Post\Models;
 
-use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +25,7 @@ use Modules\User\Models\User;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -35,51 +36,40 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $slug
  * @property string $summary
  * @property string|null $description
- * @property string|null $quote
- * @property string|null $photo
- * @property string|null $tags
- * @property int|null $post_cat_id
- * @property int|null $post_tag_id
- * @property int|null $added_by
+ * @property int $user_id
  * @property string $status
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property User|null $user
- * @property Tag|null $post_tag
- * @property Collection|PostComment[] $post_comments
- * @property-read Collection|PostComment[]                $allComments
- * @property-read int|null                                $all_comments_count
- * @property-read User|null                               $author
- * @property-read Collection|PostComment[]                $fpost_comments
- * @property-read int|null                                $fpost_comments_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Collection<int, PostComment>                                                         $allComments
+ * @property-read int|null                                                                             $all_comments_count
+ * @property-read User                                                                                 $author
+ * @property-read \Kalnoy\Nestedset\Collection<int, Category>                                          $categories
+ * @property-read int|null                                                                             $categories_count
+ * @property-read Collection<int, PostComment>                                                         $comments
+ * @property-read int|null                                                                             $comments_count
+ * @property-read string|null                                                                          $image_url
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null                                                                             $media_count
+ * @property-read Collection<int, PostComment>                                                         $postComments
+ * @property-read int|null                                                                             $post_comments_count
+ * @property-read Collection<int, PostComment>                                                         $post_comments
+ * @property-read Collection<int, Tag>                                                                 $tags
+ * @property-read int|null                                                                             $tags_count
  *
- * @method static Builder|Post newModelQuery()
- * @method static Builder|Post newQuery()
- * @method static Builder|Post query()
- * @method static Builder|Post whereAddedBy($value)
- * @method static Builder|Post whereCreatedAt($value)
- * @method static Builder|Post whereDescription($value)
- * @method static Builder|Post whereId($value)
- * @method static Builder|Post wherePhoto($value)
- * @method static Builder|Post wherePostCatId($value)
- * @method static Builder|Post wherePostTagId($value)
- * @method static Builder|Post whereQuote($value)
- * @method static Builder|Post whereSlug($value)
- * @method static Builder|Post whereStatus($value)
- * @method static Builder|Post whereSummary($value)
- * @method static Builder|Post whereTags($value)
- * @method static Builder|Post whereTitle($value)
- * @method static Builder|Post whereUpdatedAt($value)
+ * @method static Builder<static>|Post newModelQuery()
+ * @method static Builder<static>|Post newQuery()
+ * @method static Builder<static>|Post query()
+ * @method static Builder<static>|Post whereCreatedAt($value)
+ * @method static Builder<static>|Post whereDescription($value)
+ * @method static Builder<static>|Post whereId($value)
+ * @method static Builder<static>|Post whereSlug($value)
+ * @method static Builder<static>|Post whereStatus($value)
+ * @method static Builder<static>|Post whereSummary($value)
+ * @method static Builder<static>|Post whereTitle($value)
+ * @method static Builder<static>|Post whereUpdatedAt($value)
+ * @method static Builder<static>|Post whereUserId($value)
  *
  * @mixin Eloquent
- *
- * @property-read int|null                                $post_comments_count
- * @property-read \Kalnoy\Nestedset\Collection|Category[] $categories
- * @property-read int|null                                $categories_count
- * @property-read Collection|PostComment[]                $comments
- * @property-read int|null                                $comments_count
- * @property-read string                                  $image_url
- * @property-read int|null                                $post_tag_count
  */
 class Post extends Core implements HasMedia
 {

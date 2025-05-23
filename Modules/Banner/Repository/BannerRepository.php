@@ -61,17 +61,4 @@ class BannerRepository extends Repository implements SearchInterface
             return $query->orderBy($orderBy, $sort)->paginate($perPage);
         });
     }
-
-    public function getActiveBanners(): mixed
-    {
-        $cacheKey = 'active_banners';
-
-        // Cache for 24 hours (86400 seconds)
-        return Cache::remember($cacheKey, 86400, function () {
-            return $this->model::where('status', 'active')
-                ->orderBy('id', 'desc')
-                ->limit(self::LATEST_BANNERS_LIMIT)
-                ->get();
-        });
-    }
 }

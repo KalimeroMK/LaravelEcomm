@@ -7,21 +7,21 @@ namespace Modules\Shipping\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Shipping\Actions\DeleteShippingAction;
+use Modules\Shipping\Actions\FindShippingAction;
+use Modules\Shipping\Actions\GetAllShippingsAction;
+use Modules\Shipping\Actions\StoreShippingAction;
+use Modules\Shipping\Actions\UpdateShippingAction;
 use Modules\Shipping\Http\Requests\Api\Store;
 use Modules\Shipping\Http\Requests\Api\Update;
 use Modules\Shipping\Http\Resources\ShippingResource;
-use Modules\Shipping\Service\ShippingService;
 use ReflectionException;
 
 class ShippingController extends CoreController
 {
-    private ShippingService $shipping_service;
-
-    public function __construct(ShippingService $shipping_service)
+    public function __construct()
     {
-        $this->shipping_service = $shipping_service;
         $this->middleware('permission:shipping-list', ['only' => ['index']]);
         $this->middleware('permission:shipping-show', ['only' => ['show']]);
         $this->middleware('permission:shipping-create', ['only' => ['store']]);
@@ -31,7 +31,9 @@ class ShippingController extends CoreController
 
     public function index(): ResourceCollection
     {
-        return ShippingResource::collection($this->shipping_service->getAll());
+        $shippingsDto = (new GetAllShippingsAction())->execute();
+
+        return ShippingResource::collection($shippingsDto->shippings);
     }
 
     /**
@@ -39,18 +41,11 @@ class ShippingController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
+        $shipping = (new StoreShippingAction())->execute($request->validated());
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->shipping_service->shipping_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new ShippingResource($this->shipping_service->create($request->validated())));
+            ->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Shipping']))
+            ->respond(new ShippingResource($shipping));
     }
 
     /**
@@ -58,18 +53,11 @@ class ShippingController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
+        $shippingDto = (new FindShippingAction())->execute($id);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.ok',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->shipping_service->shipping_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new ShippingResource($this->shipping_service->findById($id)));
+            ->setMessage(__('apiResponse.ok', ['resource' => 'Shipping']))
+            ->respond(new ShippingResource((object) $shippingDto->shipping));
     }
 
     /**
@@ -77,18 +65,12 @@ class ShippingController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
+        (new UpdateShippingAction())->execute($id, $request->validated());
+        $shippingDto = (new FindShippingAction())->execute($id);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.updateSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->shipping_service->shipping_repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new ShippingResource($this->shipping_service->update($id, $request->validated())));
+            ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Shipping']))
+            ->respond(new ShippingResource((object) $shippingDto->shipping));
     }
 
     /**
@@ -96,19 +78,10 @@ class ShippingController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->shipping_service->delete($id);
+        (new DeleteShippingAction())->execute($id);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->shipping_service->shipping_repository->model
-                        ),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Shipping']))
             ->respond(null);
     }
 }

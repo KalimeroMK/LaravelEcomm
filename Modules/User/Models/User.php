@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Modules\User\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,59 +40,57 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @property int $id
  * @property string $name
- * @property string|null $email
- * @property Carbon|null $email_verified_at
- * @property string|null $password
- * @property string|null $photo
- * @property string|null $provider
- * @property string|null $provider_id
- * @property string $status
+ * @property string $email
+ * @property string|null $email_verified_at
+ * @property string $password
  * @property string|null $remember_token
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Collection|Post[] $posts
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $magic_token
+ * @property string|null $token_expires_at
+ * @property-read Collection<int, Cart> $carts
  * @property-read int|null $carts_count
+ * @property-read Google2fa|null $loginSecurity
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read Collection<int, Order> $orders
  * @property-read int|null $orders_count
+ * @property-read Collection<int, Permission> $permissions
+ * @property-read int|null $permissions_count
+ * @property-read Collection<int, PostComment> $post_comments
  * @property-read int|null $post_comments_count
+ * @property-read Collection<int, Post> $posts
  * @property-read int|null $posts_count
+ * @property-read Collection<int, ProductReview> $product_reviews
  * @property-read int|null $product_reviews_count
+ * @property-read Collection<int, Role> $roles
+ * @property-read int|null $roles_count
+ * @property-read Collection<int, PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ * @property-read Collection<int, Notification> $unreadNotifications
+ * @property-read int|null $unread_notifications_count
+ * @property-read Collection<int, Wishlist> $wishlists
  * @property-read int|null $wishlists_count
  *
- * @method static Builder|User newModelQuery()
- * @method static Builder|User newQuery()
- * @method static Builder|User query()
- * @method static Builder|User whereCreatedAt($value)
- * @method static Builder|User whereEmail($value)
- * @method static Builder|User whereEmailVerifiedAt($value)
- * @method static Builder|User whereId($value)
- * @method static Builder|User whereName($value)
- * @method static Builder|User wherePassword($value)
- * @method static Builder|User wherePhoto($value)
- * @method static Builder|User whereProvider($value)
- * @method static Builder|User whereProviderId($value)
- * @method static Builder|User whereRememberToken($value)
- * @method static Builder|User whereStatus($value)
- * @method static Builder|User whereUpdatedAt($value)
+ * @method static Builder<static>|User newModelQuery()
+ * @method static Builder<static>|User newQuery()
+ * @method static Builder<static>|User permission($permissions, $without = false)
+ * @method static Builder<static>|User query()
+ * @method static Builder<static>|User role($roles, $guard = null, $without = false)
+ * @method static Builder<static>|User whereCreatedAt($value)
+ * @method static Builder<static>|User whereEmail($value)
+ * @method static Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static Builder<static>|User whereId($value)
+ * @method static Builder<static>|User whereMagicToken($value)
+ * @method static Builder<static>|User whereName($value)
+ * @method static Builder<static>|User wherePassword($value)
+ * @method static Builder<static>|User whereRememberToken($value)
+ * @method static Builder<static>|User whereTokenExpiresAt($value)
+ * @method static Builder<static>|User whereUpdatedAt($value)
+ * @method static Builder<static>|User withoutPermission($permissions)
+ * @method static Builder<static>|User withoutRole($roles, $guard = null)
  *
- * @mixin Eloquent
- *
- * @property-read Collection|Permission[] $permissions
- * @property-read int|null $permissions_count
- * @property-read Collection|Role[] $roles
- * @property-read int|null $roles_count
- *
- * @method static Builder|User permission($permissions)
- * @method static Builder|User role($roles, $guard = null)
- *
- * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
- * @property-read Collection|Cart[] $carts
- * @property-read Collection|Order[] $orders
- * @property-read Collection|PostComment[] $post_comments
- * @property-read Collection|ProductReview[] $product_reviews
- * @property-read Collection|PersonalAccessToken[] $tokens
- * @property-read int|null $tokens_count
- * @property-read Collection|Wishlist[] $wishlists
+ * @mixin \Eloquent
  */
 class User extends Authenticatable
 {

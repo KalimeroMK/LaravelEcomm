@@ -4,15 +4,17 @@
         <div class="content" style="margin-top: 7%">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title "> {{trans('messages.manage_posts')}}</h4>
+                    <h4 class="card-title "> {{trans('messages.role')}}</h4>
                     <p class="card-category"><a href="{{ route('admin')}}">{{trans('messages.home')}}</a> -> <a
-                                href="{{route('posts.index')}}">{{trans('messages.posts')}}</a></p>
+                                href="{{route('roles.index')}}">{{trans('messages.role')}}</a></p>
                 </div>
                 <div class="card-body">
-                    @include('admin::roles.partials.form')
+                    @include('role::partials.form', [
+                        'role' => $role ?? [],
+                        'permissions' => $permissions ?? [],
+                    ])
                 </div>
             </div>
         </div>
     </div>
 @endsection
-

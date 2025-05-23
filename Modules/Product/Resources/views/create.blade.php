@@ -4,10 +4,15 @@
     <div class="card">
         <h5 class="card-header">@lang('partials.create')</h5>
         <div class="card-body">
-            @include('product::partials.form')
+            @include('product::partials.form', [
+                'product' => $product ?? [],
+                'categories' => $categories ?? [],
+                'tags' => $tags ?? [],
+                'brands' => $brands ?? [],
+                'attributes' => $attributes ?? [],
+            ])
         </div>
     </div>
-
 @endsection
 
 @push('styles')
