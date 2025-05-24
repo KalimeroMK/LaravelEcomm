@@ -10,7 +10,6 @@ use Modules\Attribute\Actions\CreateAttributeAction;
 use Modules\Attribute\Actions\DeleteAttributeAction;
 use Modules\Attribute\Actions\UpdateAttributeAction;
 use Modules\Attribute\DTOs\AttributeDTO;
-use Modules\Attribute\Http\Requests\Api\Attribute\SearchRequest;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
 use Modules\Attribute\Repository\AttributeRepository;
@@ -34,9 +33,9 @@ class AttributeController extends CoreController
         $this->middleware('permission:bundle-delete', ['only' => ['destroy']]);
     }
 
-    public function index(SearchRequest $request): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
-        return AttributeResource::collection($this->repository->search($request->validated()));
+        return AttributeResource::collection($this->repository->findAll());
     }
 
     /**
@@ -93,7 +92,8 @@ class AttributeController extends CoreController
                     ]
                 )
             )
-            ->respond(new AttributeResource($this->updateAction->execute(AttributeDTO::fromRequest($request->validated())->withId($id))));
+            ->respond(new AttributeResource($this->updateAction->execute(AttributeDTO::fromArray($request->validated())
+                ->withId($id))));
     }
 
     /**

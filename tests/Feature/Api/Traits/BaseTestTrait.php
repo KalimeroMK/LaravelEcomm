@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\Traits;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Testing\TestResponse;
 
 trait BaseTestTrait
@@ -12,61 +11,54 @@ trait BaseTestTrait
     public function list(string $url): TestResponse
     {
         $response = $this->json('GET', $url);
-        Log::info(1, [$response->getContent()]);
 
         return $response->assertStatus(200);
     }
 
     public function create(string $url, array $data): TestResponse
     {
-        $response = $this->json(
-            'POST',
-            $url,
-            $data
-        );
-        Log::info(1, [$response->getContent()]);
+        $response = $this->json('POST', $url, $data);
 
-        return $response->assertStatus(200);
+        return $response
+            ->assertStatus(200)
+            ->assertJsonStructure(['data']);
     }
 
     public function update(string $url, array $data, int $id): TestResponse
     {
-        $response = $this->json(
-            'POST',
-            mb_rtrim($url, '/').'/'.$id,
-            $data
-        );
-        Log::info(1, [$response->getContent()]);
+        $uri = mb_rtrim($url, '/').'/'.$id;
+        $response = $this->json('POST', $uri, $data);
 
-        return $response->assertStatus(200);
+        return $response
+            ->assertStatus(200)
+            ->assertJsonStructure(['data']);
     }
 
     public function updatePUT(string $url, array $data, int $id): TestResponse
     {
-        $response = $this->json(
-            'PUT',
-            mb_rtrim($url, '/').'/'.$id,
-            $data
-        );
-        Log::info(1, [$response->getContent()]);
+        $uri = mb_rtrim($url, '/').'/'.$id;
+        $response = $this->json('PUT', $uri, $data);
 
-        return $response->assertStatus(200);
+        return $response
+            ->assertStatus(200)
+            ->assertJsonStructure(['data']);
     }
 
     public function show(string $url, int $id): TestResponse
     {
-        $response = $this->json('GET', mb_rtrim($url, '/').'/'.$id);
-        Log::info(1, [$response->getContent()]);
+        $uri = mb_rtrim($url, '/').'/'.$id;
+        $response = $this->json('GET', $uri);
 
-        return $response->assertStatus(200);
+        return $response
+            ->assertStatus(200)
+            ->assertJsonStructure(['data']);
     }
 
     public function destroy(string $url, int $id): TestResponse
     {
-        $response = $this->json('DELETE', mb_rtrim($url, '/').'/'.$id);
+        $uri = mb_rtrim($url, '/').'/'.$id;
+        $response = $this->json('DELETE', $uri);
 
-        Log::info(1, [$response->getContent()]);
-
-        return $response->assertStatus(200);
+        return $response->assertStatus(200); // No Content
     }
 }

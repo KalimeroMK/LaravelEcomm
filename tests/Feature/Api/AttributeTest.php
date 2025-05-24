@@ -29,10 +29,7 @@ class AttributeTest extends TestCase
     #[Test]
     public function update_attribute(): void
     {
-        $data = [
-            'name' => $this->faker->name(),
-            'code' => $this->faker->slug(),
-        ];
+        $data = Attribute::factory()->make()->toArray();
         $id = Attribute::factory()->create()->id;
 
         $response = $this->updatePUT($this->url, $data, $id);

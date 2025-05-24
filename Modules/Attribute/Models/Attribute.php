@@ -8,24 +8,26 @@ use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Modules\Attribute\Database\Factories\AttributeFactory;
 use Modules\Core\Models\Core;
 
 /**
  * Class Attribute
  *
- * @property int $id
- * @property string $name
- * @property string $code
- * @property string $type
- * @property string|null $display
- * @property int $is_required
- * @property int $is_filterable
- * @property int $is_configurable
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Collection|AttributeGroup[] $groups
+ * @property int                                   $id
+ * @property string                                $name
+ * @property string                                $code
+ * @property string                                $type
+ * @property string|null                           $display
+ * @property int                                   $is_required
+ * @property int                                   $is_filterable
+ * @property int                                   $is_configurable
+ * @property Carbon|null                           $created_at
+ * @property Carbon|null                           $updated_at
+ * @property-read Collection|AttributeGroup[]      $groups
  * @property-read Collection<int, AttributeOption> $options
  * @property-read int|null                         $options_count
  * @property-read Collection<int, AttributeValue>  $values
@@ -119,8 +121,9 @@ class Attribute extends Core
             'code',
             'type',
             'display',
-            'filterable',
-            'configurable',
+            'is_filterable',
+            'is_configurable',
+            'is_required',
         ];
 
     public static function factory(): AttributeFactory
@@ -128,9 +131,10 @@ class Attribute extends Core
         return AttributeFactory::new();
     }
 
-    public function groups()
+    public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(AttributeGroup::class, 'attribute_attribute_group', 'attribute_id', 'attribute_group_id');
+        return $this->belongsToMany(AttributeGroup::class, 'attribute_attribute_group', 'attribute_id',
+            'attribute_group_id');
     }
 
     public function values(): HasMany

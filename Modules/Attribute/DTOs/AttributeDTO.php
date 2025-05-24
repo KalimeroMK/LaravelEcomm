@@ -13,13 +13,14 @@ readonly class AttributeDTO
     public function __construct(
         public ?int $id,
         public string $name,
-        public string $code,
-        public string $type,
-        public string $display,
-        public bool $filterable = false,
-        public bool $configurable = false,
+        public ?string $code,
+        public ?string $type,
+        public ?string $display,
+        public ?bool $filterable = false,
+        public ?bool $configurable = false,
         public array $options = []
-    ) {}
+    ) {
+    }
 
     public static function fromRequest(Store|Update|Request $request): self
     {
@@ -33,11 +34,11 @@ readonly class AttributeDTO
         return new self(
             $data['id'] ?? null,
             $data['name'],
-            $data['code'],
-            $data['type'],
-            $data['display'],
-            (bool) ($data['filterable'] ?? false),
-            (bool) ($data['configurable'] ?? false),
+            $data['code'] ?? null,
+            $data['type'] ?? null,
+            $data['display'] ?? null,
+            (bool)($data['filterable'] ?? false),
+            (bool)($data['configurable'] ?? false),
             $data['options'] ?? []
         );
     }
