@@ -38,7 +38,6 @@ trait BaseTestTrait
     {
         $uri = mb_rtrim($url, '/').'/'.$id;
         $response = $this->json('PUT', $uri, $data);
-
         return $response
             ->assertStatus(200)
             ->assertJsonStructure(['data']);

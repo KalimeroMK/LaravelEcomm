@@ -112,7 +112,7 @@ class BannerController extends CoreController
                 )
             )
             ->respond(new BannerResource(
-                $this->updateAction->execute(BannerDTO::fromRequest($request))
+                $this->updateAction->execute(BannerDTO::fromArray($request->validated())->withId($id))
             ));
     }
 
