@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Modules\User\Actions;
 
 use Modules\User\DTOs\UserListDTO;
-use Modules\User\Models\User;
+use Modules\User\Repository\UserRepository;
 
-class GetAllUsersAction
+readonly class GetAllUsersAction
 {
+    public function __construct(private UserRepository $repository)
+    {
+    }
+
     public function execute(): UserListDTO
     {
-        $users = User::all();
+        $users = $this->repository->findAll();
 
         return new UserListDTO($users);
     }

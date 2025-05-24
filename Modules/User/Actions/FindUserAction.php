@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Modules\User\Actions;
 
 use Modules\User\DTOs\UserDTO;
-use Modules\User\Models\User;
+use Modules\User\Repository\UserRepository;
 
-class FindUserAction
+readonly class FindUserAction
 {
+    public function __construct(private UserRepository $repository)
+    {
+    }
+
     public function execute(int $id): UserDTO
     {
-        $user = User::findOrFail($id);
+        $user = $this->repository->findById($id);
 
-        return new UserDTO($user);
+        return UserDTO::fromArray($user->toArray());
     }
 }
