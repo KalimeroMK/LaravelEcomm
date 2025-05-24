@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Modules\Order\Actions;
 
 use Modules\Order\DTOs\OrderDTO;
-use Modules\Order\Models\Order;
+use Modules\Order\Repository\OrderRepository;
 
-class ShowOrderAction
+readonly class ShowOrderAction
 {
+    public function __construct(private OrderRepository $repository)
+    {
+    }
+
     public function execute(int $id): OrderDTO
     {
-        $order = Order::findOrFail($id);
+        $order = $this->repository->findById($id);
 
-        return new OrderDTO($order);
+        return OrderDTO::fromArray($order->toArray());
     }
 }

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Modules\Brand\Database\Factories\BrandFactory;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
@@ -25,16 +26,17 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Brand
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int                              $id
+ * @property string                           $title
+ * @property string                           $slug
+ * @property string                           $status
+ * @property string|null                      $images
+ * @property Carbon|null                      $created_at
+ * @property Carbon|null                      $updated_at
  * @property-read MediaCollection<int, Media> $media
- * @property-read int|null $media_count
- * @property-read Collection<int, Product> $products
- * @property-read int|null $products_count
+ * @property-read int|null                    $media_count
+ * @property-read Collection<int, Product>    $products
+ * @property-read int|null                    $products_count
  *
  * @method static Builder<static>|Brand newModelQuery()
  * @method static Builder<static>|Brand newQuery()

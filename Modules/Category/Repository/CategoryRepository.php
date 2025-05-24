@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Modules\Category\Repository;
 
 use Modules\Category\Models\Category;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 
-class CategoryRepository extends Repository
+class CategoryRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    /**
-     * @var string
-     */
-    public $model = Category::class;
+    public function __construct()
+    {
+        parent::__construct(Category::class);
+    }
 }

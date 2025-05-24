@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace Modules\Order\Actions;
 
 use Modules\Order\DTOs\OrderListDTO;
-use Modules\Order\Models\Order;
+use Modules\Order\Repository\OrderRepository;
 
-class SearchOrdersAction
+readonly class SearchOrdersAction
 {
+    public function __construct(private OrderRepository $repository)
+    {
+    }
+
     public function execute(array $criteria): OrderListDTO
     {
-        $orders = Order::query();
-        foreach ($criteria as $key => $value) {
-            $orders->where($key, $value);
-        }
+        $orders = $this->repository->search($criteria);
 
-        return new OrderListDTO($orders->get());
+        return new OrderListDTO($orders);
     }
 }

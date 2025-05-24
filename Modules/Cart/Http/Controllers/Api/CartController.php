@@ -88,19 +88,19 @@ class CartController extends CoreController
 
     public function update(Store $request, int $id): JsonResponse
     {
-        $dto = CartDTO::fromRequest($request)->withId($id);
-        $cart = $this->updateAction->execute($dto);
-
         return $this
             ->setMessage(
                 __(
                     'apiResponse.updateSuccess',
                     [
-                        'resource' => 'Cart',
+                        'resource' => Helper::getResourceName(
+                            $this->repository->model
+                        ),
                     ]
                 )
             )
-            ->respond(new CartResource($cart));
+            ->respond(new CartResource($this->updateAction->execute(CartDTO::fromArray($request->all())
+                ->withId($id))));
     }
 
     public function destroy(int $id): JsonResponse

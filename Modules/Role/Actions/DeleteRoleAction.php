@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Role\Actions;
 
-use Modules\Role\Models\Role;
+use Modules\Role\Repository\RoleRepository;
 
-class DeleteRoleAction
+readonly class DeleteRoleAction
 {
+    public function __construct(private RoleRepository $repository)
+    {
+    }
+
     public function execute(int $id): void
     {
-        Role::destroy($id);
+        $this->repository->destroy($id);
     }
 }

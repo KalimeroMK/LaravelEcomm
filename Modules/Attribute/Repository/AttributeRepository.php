@@ -7,26 +7,24 @@ namespace Modules\Attribute\Repository;
 use Illuminate\Support\Arr;
 use Modules\Attribute\Models\Attribute;
 use Modules\Core\Interfaces\SearchInterface;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Repositories\EloquentRepository;
 
-class AttributeRepository extends Repository implements SearchInterface
+class AttributeRepository extends EloquentRepository implements SearchInterface
 {
-    /**
-     * The model instance.
-     *
-     * @var string
-     */
-    public $model = Attribute::class;
+    public function __construct()
+    {
+        parent::__construct(Attribute::class);
+    }
 
     /**
-     * Search for entries based on filter criteria provided in the `$data` array.
+     * Search for entries based on filter criteria.
      *
-     * @param  array<string, mixed>  $data  Associative array where keys are attribute names and values are the filter criteria.
-     * @return mixed The result of the query, either a collection or a paginated response.
+     * @param  array<string, mixed>  $data
+     * @return mixed
      */
     public function search(array $data): mixed
     {
-        $query = $this->model::query();
+        $query = (new $this->modelClass)->newQuery();
 
         $filterableKeys = ['name', 'code', 'type', 'display'];
 
@@ -44,7 +42,7 @@ class AttributeRepository extends Repository implements SearchInterface
             }
         }
 
-        if ((bool) Arr::get($data, 'all_included') || $data === []) {
+        if (Arr::get($data, 'all_included') || $data === []) {
             return $query->get();
         }
 
@@ -53,7 +51,7 @@ class AttributeRepository extends Repository implements SearchInterface
 
         $query->orderBy($orderBy, $sort);
 
-        $perPage = Arr::get($data, 'per_page', (new Attribute)->getPerPage());
+        $perPage = Arr::get($data, 'per_page', (new $this->modelClass)->getPerPage());
 
         return $query->paginate($perPage);
     }

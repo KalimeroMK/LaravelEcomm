@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Modules\Permission\Actions;
 
 use Modules\Permission\DTOs\PermissionListDTO;
-use Modules\Permission\Models\Permission;
+use Modules\Permission\Repository\PermissionRepository;
 
-class GetAllPermissionsAction
+readonly class GetAllPermissionsAction
 {
+    public function __construct(private PermissionRepository $repository)
+    {
+    }
+
     public function execute(): PermissionListDTO
     {
-        $permissions = Permission::all();
+        $permissions = $this->repository->findAll();
 
         return new PermissionListDTO($permissions);
     }

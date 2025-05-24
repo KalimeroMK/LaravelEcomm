@@ -6,6 +6,7 @@ namespace Modules\Banner\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Banner\DTOs\BannerDTO;
+use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -27,6 +28,7 @@ readonly class UpdateBannerAction
     public function execute(BannerDTO $dto): Model
     {
         $banner = $this->repository->findById($dto->id);
+        /** @var Banner $banner */
 
         $banner->update([
             'title' => $dto->title,
@@ -35,10 +37,10 @@ readonly class UpdateBannerAction
             'status' => $dto->status,
         ]);
 
-        if (! empty($dto->images)) {
+        if (!empty($dto->images)) {
             $banner->clearMediaCollection('banner');
             $banner->addMultipleMediaFromRequest(['images'])
-                ->each(fn (FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('banner'));
+                ->each(fn(FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('banner'));
         }
 
         return $banner;

@@ -5,20 +5,30 @@ declare(strict_types=1);
 namespace Modules\Notification\Repository;
 
 use Illuminate\Support\Collection;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Notification\Models\Notification;
 
-class NotificationRepository extends Repository
+class NotificationRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    public $model = Notification::class;
-
-    public function findAll(): Collection
+    public function __construct()
     {
-        return $this->model::get();
+        parent::__construct(Notification::class);
     }
 
-    public function getById(int $id): mixed
+    /**
+     * Get all notifications.
+     */
+    public function findAll(): Collection
     {
-        return $this->model::find($id);
+        return (new $this->modelClass)->get();
+    }
+
+    /**
+     * Get a notification by ID.
+     */
+    public function getById(int $id): ?Notification
+    {
+        return (new $this->modelClass)->find($id);
     }
 }

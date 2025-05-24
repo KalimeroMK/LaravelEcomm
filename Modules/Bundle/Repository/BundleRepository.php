@@ -7,30 +7,38 @@ namespace Modules\Bundle\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Modules\Bundle\Models\Bundle;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
 use Modules\Core\Models\Core;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Repositories\EloquentRepository;
 
-class BundleRepository extends Repository
+class BundleRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    /**
-     * The model instance.
-     *
-     * @var string
-     */
-    public $model = Bundle::class;
+    public function __construct()
+    {
+        parent::__construct(Bundle::class);
+    }
 
+    /**
+     * Get all bundles with related products and media.
+     */
     public function findAll(): Collection
     {
-        return $this->model::with(['products', 'media'])->get();
+        return (new $this->modelClass)->with(['products', 'media'])->get();
     }
 
+    /**
+     * Get bundle by ID with media relationship.
+     */
     public function findById(int $id): ?Model
     {
-        return $this->model::with('media')->findOrFail($id);
+        return (new $this->modelClass)->with('media')->findOrFail($id);
     }
 
+    /**
+     * Get bundle by slug with media.
+     */
     public function findBySlug(string $slug): Core|Bundle
     {
-        return $this->model::with('media')->where('slug', $slug)->first();
+        return (new $this->modelClass)->with('media')->where('slug', $slug)->first();
     }
 }

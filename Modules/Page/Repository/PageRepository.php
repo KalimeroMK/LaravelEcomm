@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\Page\Repository;
 
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Page\Models\Page;
 
-class PageRepository extends Repository
+class PageRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    /**
-     * The model that the repository works with.
-     *
-     * @var string
-     */
-    public $model = Page::class;
+    public function __construct()
+    {
+        parent::__construct(Page::class);
+    }
 }

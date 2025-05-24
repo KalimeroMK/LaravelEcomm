@@ -6,12 +6,17 @@ namespace Modules\Coupon\Actions\Coupon;
 
 use Modules\Coupon\DTOs\CouponDTO;
 use Modules\Coupon\Models\Coupon;
+use Modules\Coupon\Repository\CouponRepository;
 
 readonly class CreateCouponAction
 {
+    public function __construct(private CouponRepository $repository)
+    {
+    }
+
     public function execute(CouponDTO $dto): Coupon
     {
-        return Coupon::create([
+        return $this->repository->create([
             'code' => $dto->code,
             'discount' => $dto->discount,
             'description' => $dto->description,

@@ -8,12 +8,12 @@ use Modules\Attribute\Repository\AttributeRepository;
 
 readonly class DeleteAttributeAction
 {
-    public function __construct(private AttributeRepository $repository) {}
-
-    public function execute(int $id): bool
+    public function __construct(private AttributeRepository $repository)
     {
-        $attribute = $this->repository->findById($id);
+    }
 
-        return $attribute && $attribute->delete();
+    public function execute(int $id): void
+    {
+        $this->repository->destroy($id);
     }
 }

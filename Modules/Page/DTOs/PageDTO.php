@@ -4,23 +4,37 @@ declare(strict_types=1);
 
 namespace Modules\Page\DTOs;
 
-use Modules\Page\Models\Page;
+use Illuminate\Http\Request;
 
-class PageDTO
+readonly class PageDTO
 {
-    public int $id;
+    public function __construct(
+        public int $id,
+        public string $title,
+        public string $content,
+        public string $created_at
+    ) {
+    }
 
-    public string $title;
-
-    public string $content;
-
-    public string $created_at;
-
-    public function __construct(Page $page)
+    public static function fromArray(array $data): self
     {
-        $this->id = $page->id;
-        $this->title = $page->title;
-        $this->content = $page->content;
-        $this->created_at = $page->created_at->toDateTimeString();
+        return new self(
+            $data['id'],
+            $data['title'],
+            $data['content'],
+            isset($data['created_at']) ? (string)$data['created_at'] : now()->toDateTimeString()
+        );
+    }
+
+    public static function fromRequest(Request $request, ?int $id = null): self
+    {
+        $validated = $request->validated();
+
+        return self::fromArray([
+            'id' => $id ?? ($validated['id'] ?? 0),
+            'title' => $validated['title'] ?? '',
+            'content' => $validated['content'] ?? '',
+            'created_at' => $validated['created_at'] ?? now()->toDateTimeString(),
+        ]);
     }
 }

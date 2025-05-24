@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Shipping\Actions\DeleteShippingAction;
 use Modules\Shipping\Actions\FindShippingAction;
-use Modules\Shipping\Actions\GetAllShippingsAction;
+use Modules\Shipping\Actions\GetAllShippingAction;
 use Modules\Shipping\Actions\StoreShippingAction;
 use Modules\Shipping\Actions\UpdateShippingAction;
 use Modules\Shipping\Http\Requests\Store;
@@ -27,7 +27,7 @@ class ShippingController extends CoreController
 
     public function index(): Application|Factory|View
     {
-        $shippingsDto = (new GetAllShippingsAction())->execute();
+        $shippingsDto = (new GetAllShippingAction())->execute();
 
         return view('shipping::index', ['shippings' => $shippingsDto->shippings]);
     }

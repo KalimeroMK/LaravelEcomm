@@ -6,29 +6,30 @@ namespace Modules\Billing\Repository;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Billing\Models\Wishlist;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 
-class WishlistRepository extends Repository
+class WishlistRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    /**
-     * @var string
-     */
-    public $model = Wishlist::class;
+    public function __construct()
+    {
+        parent::__construct(Wishlist::class);
+    }
 
     /**
-     * Creates a new Wishlist entry.
+     * Creates a new Wishlist entry with calculated amount and discounted price.
      *
-     * @param  array<string, mixed>  $data  Data needed for creating the wishlist entry. Expected keys:
-     *                                      - 'price' (float): The original price of the item.
-     *                                      - 'discount' (float): The discount rate on the item.
-     *                                      - 'quantity' (int): The number of items.
-     * @return Model Returns the newly created wishlist entry.
+     * @param  array<string, mixed>  $data
+     * @return Model
      */
     public function create(array $data): Model
     {
         $data['price'] -= ($data['price'] * $data['discount']) / 100;
         $data['amount'] = $data['price'] * $data['quantity'];
 
-        return $this->model::create($data)->fresh();
+        /** @var class-string<Model> $model */
+        $model = $this->modelClass;
+
+        return $model::create($data)->fresh();
     }
 }

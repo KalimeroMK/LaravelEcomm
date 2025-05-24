@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Modules\Shipping\Actions;
 
 use Modules\Shipping\DTOs\ShippingDTO;
-use Modules\Shipping\Models\Shipping;
+use Modules\Shipping\Repository\ShippingRepository;
 
-class FindShippingAction
+readonly class FindShippingAction
 {
+    public function __construct(private ShippingRepository $repository)
+    {
+    }
+
     public function execute(int $id): ShippingDTO
     {
-        $shipping = Shipping::findOrFail($id);
+        $shipping = $this->repository->findById($id);
 
-        return new ShippingDTO($shipping);
+        return ShippingDTO::fromArray($shipping->toArray());
     }
 }

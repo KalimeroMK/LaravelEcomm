@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Settings\Actions;
 
-use Modules\Settings\Models\Setting;
+use Modules\Settings\Repository\SettingsRepository;
 
-class UpdateSettingsAction
+readonly class UpdateSettingsAction
 {
+    public function __construct(private SettingsRepository $repository)
+    {
+    }
+
     public function execute(int $id, array $data): void
     {
-        $setting = Setting::findOrFail($id);
-        $setting->update($data);
+        $this->repository->update($id, $data);
     }
 }

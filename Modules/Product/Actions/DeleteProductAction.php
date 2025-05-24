@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Product\Actions;
 
-use Modules\Product\Models\Product;
+use Modules\Product\Repository\ProductRepository;
 
-class DeleteProductAction
+readonly class DeleteProductAction
 {
+    public function __construct(private ProductRepository $repository)
+    {
+    }
+
     public function execute(int $id): void
     {
-        Product::destroy($id);
+        $this->repository->destroy($id);
     }
 }

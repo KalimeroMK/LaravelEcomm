@@ -4,20 +4,34 @@ declare(strict_types=1);
 
 namespace Modules\Role\DTOs;
 
-use Modules\Role\Models\Role;
+use Illuminate\Http\Request;
 
-class RoleDTO
+readonly class RoleDTO
 {
-    public int $id;
+    public function __construct(
+        public int $id,
+        public string $name,
+        public array $permissions = []
+    ) {
+    }
 
-    public string $name;
-
-    public array $permissions;
-
-    public function __construct(Role $role)
+    public static function fromArray(array $data): self
     {
-        $this->id = $role->id;
-        $this->name = $role->name;
-        $this->permissions = $role->permissions ? $role->permissions->toArray() : [];
+        return new self(
+            $data['id'],
+            $data['name'],
+            $data['permissions'] ?? []
+        );
+    }
+
+    public static function fromRequest(Request $request, ?int $id = null): self
+    {
+        $validated = $request->validated();
+
+        return self::fromArray([
+            'id' => $id ?? ($validated['id'] ?? 0),
+            'name' => $validated['name'] ?? '',
+            'permissions' => $validated['permissions'] ?? [],
+        ]);
     }
 }

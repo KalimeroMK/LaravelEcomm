@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Order\Actions;
 
-use Modules\Order\Models\Order;
+use Modules\Order\Repository\OrderRepository;
 
-class DeleteOrderAction
+readonly class DeleteOrderAction
 {
+    public function __construct(private OrderRepository $repository)
+    {
+    }
+
     public function execute(int $id): void
     {
-        Order::destroy($id);
+        $this->repository->destroy($id);
     }
 }

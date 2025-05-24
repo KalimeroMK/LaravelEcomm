@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace Modules\Coupon\Repository;
 
 use Illuminate\Support\Collection;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Coupon\Models\Coupon;
 
-class CouponRepository extends Repository
+class CouponRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    /**
-     * @var string
-     */
-    public $model = Coupon::class;
+    public function __construct()
+    {
+        parent::__construct(Coupon::class);
+    }
 
+    /**
+     * Get all coupons.
+     */
     public function findAll(): Collection
     {
-        return $this->model::get();
+        return (new $this->modelClass)->get();
     }
 }

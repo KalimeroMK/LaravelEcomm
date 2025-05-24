@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Modules\Shipping\Actions;
 
-use Modules\Shipping\Models\Shipping;
+use Modules\Shipping\DTOs\ShippingDTO;
+use Modules\Shipping\Repository\ShippingRepository;
 
-class UpdateShippingAction
+readonly class UpdateShippingAction
 {
-    public function execute(int $id, array $data): void
+    public function __construct(private ShippingRepository $repository)
     {
-        $shipping = Shipping::findOrFail($id);
-        $shipping->update($data);
+    }
+
+    public function execute(int $id, ShippingDTO $dto): void
+    {
+        $this->repository->update($id, [
+            'type' => $dto->type,
+            'price' => $dto->price,
+            'status' => $dto->status,
+        ]);
     }
 }

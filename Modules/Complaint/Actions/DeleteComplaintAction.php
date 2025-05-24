@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Complaint\Actions;
 
-use Modules\Complaint\Models\Complaint;
+use Modules\Complaint\Repository\ComplaintRepository;
 
 readonly class DeleteComplaintAction
 {
-    public function execute(int $id): bool
+    public function __construct(private ComplaintRepository $repository)
     {
-        $complaint = Complaint::findOrFail($id);
+    }
 
-        return $complaint->delete();
+    public function execute(int $id): void
+    {
+        $this->repository->destroy($id);
     }
 }

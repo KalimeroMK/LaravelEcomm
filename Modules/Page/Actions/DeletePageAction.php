@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Page\Actions;
 
-use Modules\Page\Models\Page;
+use Modules\Page\Repository\PageRepository;
 
-class DeletePageAction
+readonly class DeletePageAction
 {
+    public function __construct(private PageRepository $repository)
+    {
+    }
+
     public function execute(int $id): void
     {
-        Page::destroy($id);
+        $this->repository->destroy($id);
     }
 }

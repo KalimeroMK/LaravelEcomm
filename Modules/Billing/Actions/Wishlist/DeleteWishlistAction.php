@@ -8,12 +8,13 @@ use Modules\Billing\Repository\WishlistRepository;
 
 readonly class DeleteWishlistAction
 {
-    public function __construct(private WishlistRepository $repository) {}
-
-    public function execute(int $id): bool
+    public function __construct(private WishlistRepository $repository)
     {
-        $wishlist = $this->repository->model::findOrFail($id);
-
-        return $wishlist->delete();
     }
+
+    public function execute(int $id): void
+    {
+        $this->repository->destroy($id);
+    }
+
 }

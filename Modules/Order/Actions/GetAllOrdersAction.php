@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Modules\Order\Actions;
 
 use Modules\Order\DTOs\OrderListDTO;
-use Modules\Order\Models\Order;
+use Modules\Order\Repository\OrderRepository;
 
-class GetAllOrdersAction
+readonly class GetAllOrdersAction
 {
+    public function __construct(private OrderRepository $repository)
+    {
+    }
+
     public function execute(): OrderListDTO
     {
-        $orders = Order::all();
+        $orders = $this->repository->findAll();
 
         return new OrderListDTO($orders);
     }

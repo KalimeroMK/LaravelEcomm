@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace Modules\Page\Actions;
 
 use Modules\Page\DTOs\PageDTO;
-use Modules\Page\Models\Page;
+use Modules\Page\Repository\PageRepository;
 
-class UpdatePageAction
+readonly class UpdatePageAction
 {
+    public function __construct(private PageRepository $repository)
+    {
+    }
+
     public function execute(int $id, array $data): PageDTO
     {
-        $page = Page::findOrFail($id);
-        $page->update($data);
+        $page = $this->repository->update($id, $data);
 
-        return new PageDTO($page);
+        return PageDTO::fromArray($page->toArray());
     }
 }

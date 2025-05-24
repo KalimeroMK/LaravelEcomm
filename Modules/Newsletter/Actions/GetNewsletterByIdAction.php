@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Modules\Newsletter\Actions;
 
-use Modules\Newsletter\DTOs\NewsletterDTO;
-use Modules\Newsletter\Models\Newsletter;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Newsletter\Repository\NewsletterRepository;
 
-class GetNewsletterByIdAction
+readonly class GetNewsletterByIdAction
 {
-    public function execute(int $id): NewsletterDTO
+    public function __construct(private NewsletterRepository $repository)
     {
-        $newsletter = Newsletter::findOrFail($id);
+    }
 
-        return new NewsletterDTO($newsletter);
+    public function execute(int $id): Model
+    {
+        return $this->repository->findById($id);
     }
 }

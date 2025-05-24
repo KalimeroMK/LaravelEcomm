@@ -9,15 +9,19 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
 use Modules\Core\Interfaces\SearchInterface;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Post\Models\Post;
 
-class PostRepository extends Repository implements SearchInterface
+class PostRepository extends EloquentRepository implements EloquentRepositoryInterface, SearchInterface
 {
     private const LATEST_POSTS_LIMIT = 3;
 
-    public $model = Post::class;
+    public function __construct()
+    {
+        parent::__construct(Post::class);
+    }
 
     /**
      * Search posts based on given data.
@@ -32,28 +36,26 @@ class PostRepository extends Repository implements SearchInterface
     }
 
     /**
-     * Find all posts.
+     * Find all posts with eager-loaded relations.
      *
      * @return Collection<int, Post>
      */
     public function findAll(): Collection
     {
-        /** @var Collection<int, Post> $posts */
-        $posts = $this->eagerLoadRelations($this->model::query())->get();
-
-        return $posts;
+        return $this->eagerLoadRelations((new $this->modelClass)->newQuery())->get();
     }
 
     /**
-     * Update an existing record in the repository.
+     * Update an existing post with relations.
      *
-     * @param  int  $id  The ID of the model to update.
-     * @param  array<string, mixed>  $data  The data to update in the model.
-     * @return Model The updated model instance.
+     * @param  int                   $id
+     * @param  array<string, mixed>  $data
+     * @return Model
      */
     public function update(int $id, array $data): Model
     {
         $item = $this->findById($id);
+
         $item->categories()->sync($data['category'] ?? []);
         $item->tags()->sync($data['tags'] ?? []);
         $item->fill($data)->save();
@@ -62,17 +64,16 @@ class PostRepository extends Repository implements SearchInterface
     }
 
     /**
-     * Build query based on search data.
+     * Build search query.
      *
      * @param  array<string, mixed>  $data
      */
     private function buildQuery(array $data): Builder
     {
-        /** @var Builder<Post> $query */
-        $query = $this->model::query();
+        $query = (new $this->modelClass)->newQuery();
 
         foreach ($this->searchableFields() as $key) {
-            if (! empty($data[$key])) {
+            if (!empty($data[$key])) {
                 $query->where($key, 'like', '%'.$data[$key].'%');
             }
         }
@@ -81,7 +82,7 @@ class PostRepository extends Repository implements SearchInterface
     }
 
     /**
-     * Get searchable fields.
+     * Define searchable fields.
      *
      * @return array<int, string>
      */
@@ -91,10 +92,10 @@ class PostRepository extends Repository implements SearchInterface
     }
 
     /**
-     * Eager load relations for the query.
+     * Apply eager loading of relationships.
      *
-     * @param  Builder<Post>  $query
-     * @return Builder<Post>
+     * @param  Builder  $query
+     * @return Builder
      */
     private function eagerLoadRelations(Builder $query): Builder
     {
@@ -102,16 +103,17 @@ class PostRepository extends Repository implements SearchInterface
     }
 
     /**
-     * Apply sorting and paginate the query results.
+     * Apply ordering and pagination.
      *
-     * @param  Builder<Post>  $query
+     * @param  Builder               $query
      * @param  array<string, mixed>  $data
+     * @return LengthAwarePaginator
      */
     private function applySortingAndPaginate(Builder $query, array $data): LengthAwarePaginator
     {
         $orderBy = Arr::get($data, 'order_by', 'id');
         $sort = Arr::get($data, 'sort', 'desc');
-        $perPage = Arr::get($data, 'per_page', (new Post)->getPerPage());
+        $perPage = Arr::get($data, 'per_page', (new $this->modelClass)->getPerPage());
 
         return $this->eagerLoadRelations($query)->orderBy($orderBy, $sort)->paginate($perPage);
     }

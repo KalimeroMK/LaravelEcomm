@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Shipping\Actions\DeleteShippingAction;
 use Modules\Shipping\Actions\FindShippingAction;
-use Modules\Shipping\Actions\GetAllShippingsAction;
+use Modules\Shipping\Actions\GetAllShippingAction;
 use Modules\Shipping\Actions\StoreShippingAction;
 use Modules\Shipping\Actions\UpdateShippingAction;
 use Modules\Shipping\Http\Requests\Api\Store;
@@ -31,7 +31,7 @@ class ShippingController extends CoreController
 
     public function index(): ResourceCollection
     {
-        $shippingsDto = (new GetAllShippingsAction())->execute();
+        $shippingsDto = (new GetAllShippingAction())->execute();
 
         return ShippingResource::collection($shippingsDto->shippings);
     }
@@ -57,7 +57,7 @@ class ShippingController extends CoreController
 
         return $this
             ->setMessage(__('apiResponse.ok', ['resource' => 'Shipping']))
-            ->respond(new ShippingResource((object) $shippingDto->shipping));
+            ->respond(new ShippingResource((object)$shippingDto->shipping));
     }
 
     /**
@@ -70,7 +70,7 @@ class ShippingController extends CoreController
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Shipping']))
-            ->respond(new ShippingResource((object) $shippingDto->shipping));
+            ->respond(new ShippingResource((object)$shippingDto->shipping));
     }
 
     /**

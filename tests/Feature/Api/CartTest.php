@@ -51,6 +51,8 @@ class CartTest extends TestCase
         $id = Cart::factory()->create(['product_id' => $product->id, 'user_id' => $user])->id;
         $data = [
             'slug' => $product->slug,
+            'product_id' => $product->id,
+            'price' => 2000,
             'quantity' => 5,
             'user_id' => $user,
         ];

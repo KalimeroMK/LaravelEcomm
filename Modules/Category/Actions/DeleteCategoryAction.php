@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Category\Actions;
 
-use Modules\Category\Models\Category;
+use Modules\Category\Repository\CategoryRepository;
 
 readonly class DeleteCategoryAction
 {
-    public function execute(int $id): bool
+    public function __construct(private CategoryRepository $repository)
     {
-        $category = Category::findOrFail($id);
+    }
 
-        return $category->delete();
+    public function execute(int $id): void
+    {
+        $this->repository->destroy($id);
     }
 }

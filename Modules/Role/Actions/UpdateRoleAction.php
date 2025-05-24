@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace Modules\Role\Actions;
 
 use Modules\Role\DTOs\RoleDTO;
-use Modules\Role\Models\Role;
+use Modules\Role\Repository\RoleRepository;
 
-class UpdateRoleAction
+readonly class UpdateRoleAction
 {
+    public function __construct(private RoleRepository $repository)
+    {
+    }
+
     public function execute(int $id, array $data): RoleDTO
     {
-        $role = Role::findOrFail($id);
-        $role->update(['name' => $data['name']]);
+        $role = $this->repository->update($id, ['name' => $data['name']]);
+
         if (isset($data['permissions'])) {
             $role->syncPermissions($data['permissions']);
         }
 
-        return new RoleDTO($role->fresh('permissions'));
+        return RoleDTO::fromArray($role->fresh('permissions')->toArray());
     }
 }

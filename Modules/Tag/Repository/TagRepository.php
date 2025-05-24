@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Modules\Tag\Repository;
 
 use Illuminate\Support\Collection;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Tag\Models\Tag;
 
-class TagRepository extends Repository
+class TagRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    public $model = Tag::class;
+    public function __construct()
+    {
+        parent::__construct(Tag::class);
+    }
 
+    /**
+     * Get all tags ordered by ID descending.
+     */
     public function findAll(): Collection
     {
-        return $this->model::orderBy('id', 'DESC')->get();
+        return (new $this->modelClass)->orderBy('id', 'desc')->get();
     }
 }

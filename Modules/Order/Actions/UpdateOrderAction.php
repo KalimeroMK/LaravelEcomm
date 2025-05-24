@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace Modules\Order\Actions;
 
 use Modules\Order\DTOs\OrderDTO;
-use Modules\Order\Models\Order;
+use Modules\Order\Repository\OrderRepository;
 
-class UpdateOrderAction
+readonly class UpdateOrderAction
 {
+    public function __construct(private OrderRepository $repository)
+    {
+    }
+
     public function execute(int $id, array $data): OrderDTO
     {
-        $order = Order::findOrFail($id);
-        $order->update($data);
+        $order = $this->repository->update($id, $data);
 
-        return new OrderDTO($order);
+        return OrderDTO::fromArray($order->toArray());
     }
 }

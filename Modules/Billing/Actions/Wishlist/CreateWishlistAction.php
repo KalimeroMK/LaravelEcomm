@@ -10,15 +10,17 @@ use Modules\Billing\Repository\WishlistRepository;
 
 readonly class CreateWishlistAction
 {
-    public function __construct(private WishlistRepository $repository) {}
+    public function __construct(private WishlistRepository $repository)
+    {
+    }
 
     public function execute(WishlistDTO $dto): Wishlist
     {
-        return $this->repository->model::create([
+        return $this->repository->create([
             'product_id' => $dto->product_id,
             'user_id' => $dto->user_id,
             'quantity' => $dto->quantity,
-            'price' => $dto->price - ($dto->price * $dto->discount) / 100,
+            'price' => $dto->price,
             'discount' => $dto->discount,
         ]);
     }

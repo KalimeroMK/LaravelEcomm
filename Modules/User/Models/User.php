@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Modules\User\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -38,39 +40,39 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * Class User
  *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string|null $email_verified_at
- * @property string $password
- * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $magic_token
- * @property string|null $token_expires_at
- * @property-read Collection<int, Cart> $carts
- * @property-read int|null $carts_count
- * @property-read Google2fa|null $loginSecurity
+ * @property int                                                            $id
+ * @property string                                                         $name
+ * @property string                                                         $email
+ * @property string|null                                                    $email_verified_at
+ * @property string                                                         $password
+ * @property string|null                                                    $remember_token
+ * @property Carbon|null                                                    $created_at
+ * @property Carbon|null                                                    $updated_at
+ * @property string|null                                                    $magic_token
+ * @property string|null                                                    $token_expires_at
+ * @property-read Collection<int, Cart>                                     $carts
+ * @property-read int|null                                                  $carts_count
+ * @property-read Google2fa|null                                            $loginSecurity
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
- * @property-read int|null $notifications_count
- * @property-read Collection<int, Order> $orders
- * @property-read int|null $orders_count
- * @property-read Collection<int, Permission> $permissions
- * @property-read int|null $permissions_count
- * @property-read Collection<int, PostComment> $post_comments
- * @property-read int|null $post_comments_count
- * @property-read Collection<int, Post> $posts
- * @property-read int|null $posts_count
- * @property-read Collection<int, ProductReview> $product_reviews
- * @property-read int|null $product_reviews_count
- * @property-read Collection<int, Role> $roles
- * @property-read int|null $roles_count
- * @property-read Collection<int, PersonalAccessToken> $tokens
- * @property-read int|null $tokens_count
- * @property-read Collection<int, Notification> $unreadNotifications
- * @property-read int|null $unread_notifications_count
- * @property-read Collection<int, Wishlist> $wishlists
- * @property-read int|null $wishlists_count
+ * @property-read int|null                                                  $notifications_count
+ * @property-read Collection<int, Order>                                    $orders
+ * @property-read int|null                                                  $orders_count
+ * @property-read Collection<int, Permission>                               $permissions
+ * @property-read int|null                                                  $permissions_count
+ * @property-read Collection<int, PostComment>                              $post_comments
+ * @property-read int|null                                                  $post_comments_count
+ * @property-read Collection<int, Post>                                     $posts
+ * @property-read int|null                                                  $posts_count
+ * @property-read Collection<int, ProductReview>                            $product_reviews
+ * @property-read int|null                                                  $product_reviews_count
+ * @property-read Collection<int, Role>                                     $roles
+ * @property-read int|null                                                  $roles_count
+ * @property-read Collection<int, PersonalAccessToken>                      $tokens
+ * @property-read int|null                                                  $tokens_count
+ * @property-read Collection<int, Notification>                             $unreadNotifications
+ * @property-read int|null                                                  $unread_notifications_count
+ * @property-read Collection<int, Wishlist>                                 $wishlists
+ * @property-read int|null                                                  $wishlists_count
  *
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -90,7 +92,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutPermission($permissions)
  * @method static Builder<static>|User withoutRole($roles, $guard = null)
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class User extends Authenticatable
 {
@@ -107,23 +109,26 @@ class User extends Authenticatable
     /**
      * @var string[]
      */
-    protected array $dates = [
-        'email_verified_at',
-    ];
+    protected array $dates
+        = [
+            'email_verified_at',
+        ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden
+        = [
+            'password',
+            'remember_token',
+        ];
 
-    protected $fillable = [
-        'name',
-        'email',
-        'email_verified_at',
-        'password',
-        'status',
-        'remember_token',
-    ];
+    protected $fillable
+        = [
+            'name',
+            'email',
+            'email_verified_at',
+            'password',
+            'status',
+            'remember_token',
+        ];
 
     public static function Factory(): UserFactory
     {

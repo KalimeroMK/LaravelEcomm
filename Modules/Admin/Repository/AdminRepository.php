@@ -7,10 +7,11 @@ namespace Modules\Admin\Repository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Order\Models\Order;
 use Modules\User\Models\User;
 
-class AdminRepository
+readonly class AdminRepository extends EloquentRepository
 {
     /**
      * @return array<string, int> Array of paths.

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Modules\Core\Models\Core;
 use Modules\Order\Models\Order;
 use Modules\Shipping\Database\Factories\ShippingFactory;
@@ -20,14 +21,14 @@ use Modules\Shipping\Database\Factories\ShippingFactory;
 /**
  * Class Shipping
  *
- * @property int $id
- * @property string $type
- * @property float $price
- * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int                         $id
+ * @property string                      $type
+ * @property float                       $price
+ * @property string                      $status
+ * @property Carbon|null                 $created_at
+ * @property Carbon|null                 $updated_at
  * @property-read Collection<int, Order> $orders
- * @property-read int|null $orders_count
+ * @property-read int|null               $orders_count
  *
  * @method static Builder<static>|Shipping newModelQuery()
  * @method static Builder<static>|Shipping newQuery()
@@ -47,15 +48,17 @@ class Shipping extends Core
 
     protected $table = 'shipping';
 
-    protected $casts = [
-        'price' => 'float',
-    ];
+    protected $casts
+        = [
+            'price' => 'float',
+        ];
 
-    protected $fillable = [
-        'type',
-        'price',
-        'status',
-    ];
+    protected $fillable
+        = [
+            'type',
+            'price',
+            'status',
+        ];
 
     public static function Factory(): ShippingFactory
     {

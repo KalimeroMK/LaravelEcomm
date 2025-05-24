@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Modules\Message\Actions;
 
 use Modules\Message\DTOs\MessageDTO;
-use Modules\Message\Models\Message;
+use Modules\Message\Repository\MessageRepository;
 
-class CreateMessageAction
+readonly class CreateMessageAction
 {
-    public function execute(array $data): MessageDTO
+    public function __construct(private MessageRepository $repository)
     {
-        $message = Message::create($data);
+    }
 
-        return new MessageDTO($message);
+    public function execute(MessageDTO $dto): MessageDTO
+    {
+        $message = $this->repository->create([
+            'content' => $dto->content,
+        ]);
+
+        return MessageDTO::fromArray($message->toArray());
     }
 }

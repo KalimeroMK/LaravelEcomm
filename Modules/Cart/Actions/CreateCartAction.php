@@ -10,11 +10,13 @@ use Modules\Cart\Repository\CartRepository;
 
 readonly class CreateCartAction
 {
-    public function __construct(private CartRepository $repository) {}
+    public function __construct(private CartRepository $repository)
+    {
+    }
 
     public function execute(CartDTO $dto): Cart
     {
-        $cart = $this->repository->model::create([
+        return $this->repository->create([
             'product_id' => $dto->product_id,
             'quantity' => $dto->quantity,
             'user_id' => $dto->user_id,
@@ -23,7 +25,5 @@ readonly class CreateCartAction
             'amount' => $dto->amount ?? ($dto->price * $dto->quantity),
             'order_id' => $dto->order_id,
         ]);
-
-        return $cart;
     }
 }

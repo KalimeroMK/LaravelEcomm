@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Modules\Newsletter\Actions;
 
 use Modules\Newsletter\DTOs\NewsletterDTO;
-use Modules\Newsletter\Models\Newsletter;
+use Modules\Newsletter\Repository\NewsletterRepository;
 
-class CreateNewsletterAction
+readonly class CreateNewsletterAction
 {
-    public function execute(array $data): NewsletterDTO
+    public function __construct(private NewsletterRepository $repository)
     {
-        $newsletter = Newsletter::create($data);
+    }
 
-        return new NewsletterDTO($newsletter);
+    public function execute(NewsletterDTO $dto): NewsletterDTO
+    {
+        $newsletter = $this->repository->create([
+            'email' => $dto->email,
+        ]);
+
+        return NewsletterDTO::fromArray($newsletter->toArray());
     }
 }

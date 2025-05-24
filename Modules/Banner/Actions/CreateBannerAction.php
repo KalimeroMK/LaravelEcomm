@@ -26,6 +26,8 @@ readonly class CreateBannerAction
      */
     public function execute(BannerDTO $dto): Banner
     {
+        /** @var Banner $banner */
+
         $banner = $this->repository->create([
             'title' => $dto->title,
             'slug' => $dto->slug,
@@ -33,9 +35,9 @@ readonly class CreateBannerAction
             'status' => $dto->status,
         ]);
 
-        if (! empty($dto->images)) {
+        if (!empty($dto->images)) {
             $banner->addMultipleMediaFromRequest(['images'])
-                ->each(fn (FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('banner'));
+                ->each(fn(FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('banner'));
         }
 
         return $banner;

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Modules\Attribute\Repository;
 
 use Modules\Attribute\Models\AttributeGroup;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 
-class AttributeGroupRepository extends Repository
+class AttributeGroupRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    /**
-     * The model instance.
-     *
-     * @var string
-     */
-    public $model = AttributeGroup::class;
+    public function __construct()
+    {
+        parent::__construct(AttributeGroup::class);
+    }
+
 }

@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Modules\Post\Repository;
 
 use Illuminate\Support\Collection;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Post\Models\PostComment;
 
-class PostCommentRepository extends Repository
+class PostCommentRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    public $model = PostComment::class;
+    public function __construct()
+    {
+        parent::__construct(PostComment::class);
+    }
 
+    /**
+     * Get all post comments with related user and post info.
+     */
     public function findAll(): Collection
     {
-        return $this->model::with('user_info', 'user', 'post')->get();
+        return (new $this->modelClass)->with('user_info', 'user', 'post')->get();
     }
 }

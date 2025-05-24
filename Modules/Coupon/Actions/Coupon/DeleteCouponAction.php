@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Coupon\Actions\Coupon;
 
-use Modules\Coupon\Models\Coupon;
+use Modules\Coupon\Repository\CouponRepository;
 
 readonly class DeleteCouponAction
 {
-    public function execute(int $id): bool
+    public function __construct(private CouponRepository $repository)
     {
-        $coupon = Coupon::findOrFail($id);
+    }
 
-        return $coupon->delete();
+    public function execute(int $id): void
+    {
+        $this->repository->destroy($id);
     }
 }

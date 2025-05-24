@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Modules\Message\Actions;
 
-use Modules\Message\DTOs\MessageListDTO;
-use Modules\Message\Models\Message;
+use Illuminate\Support\Collection;
+use Modules\Message\Repository\MessageRepository;
 
-class GetAllMessagesAction
+readonly class GetAllMessagesAction
 {
-    public function execute(): MessageListDTO
+    public function __construct(private MessageRepository $repository)
     {
-        $messages = Message::all();
+    }
 
-        return new MessageListDTO($messages);
+    public function execute(): Collection
+    {
+        return $this->repository->findAll();
     }
 }

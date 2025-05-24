@@ -4,12 +4,23 @@ declare(strict_types=1);
 
 namespace Modules\Shipping\Actions;
 
-use Modules\Shipping\Models\Shipping;
+use Modules\Shipping\DTOs\ShippingDTO;
+use Modules\Shipping\Repository\ShippingRepository;
 
-class StoreShippingAction
+readonly class StoreShippingAction
 {
-    public function execute(array $data): Shipping
+    public function __construct(private ShippingRepository $repository)
     {
-        return Shipping::create($data);
+    }
+
+    public function execute(ShippingDTO $dto): ShippingDTO
+    {
+        $shipping = $this->repository->create([
+            'type' => $dto->type,
+            'price' => $dto->price,
+            'status' => $dto->status,
+        ]);
+
+        return ShippingDTO::fromArray($shipping->toArray());
     }
 }

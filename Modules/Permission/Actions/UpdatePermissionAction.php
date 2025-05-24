@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace Modules\Permission\Actions;
 
 use Modules\Permission\DTOs\PermissionDTO;
-use Modules\Permission\Models\Permission;
+use Modules\Permission\Repository\PermissionRepository;
 
-class UpdatePermissionAction
+readonly class UpdatePermissionAction
 {
+    public function __construct(private PermissionRepository $repository)
+    {
+    }
+
     public function execute(int $id, array $data): PermissionDTO
     {
-        $permission = Permission::findOrFail($id);
-        $permission->update($data);
+        $permission = $this->repository->update($id, $data);
 
-        return new PermissionDTO($permission);
+        return PermissionDTO::fromArray($permission->toArray());
     }
 }

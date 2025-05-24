@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace Modules\Settings\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
 use Modules\Core\Models\Core;
 use Modules\Settings\Database\Factories\SettingFactory;
 use Spatie\MediaLibrary\HasMedia;
@@ -20,23 +22,23 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Setting
  *
- * @property int $id
- * @property string $description
- * @property string $short_des
- * @property string $logo
- * @property string $address
- * @property string $phone
- * @property string $email
- * @property string $site-name
- * @property string|null $keywords
- * @property string|null $google-site-verification
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $longitude
- * @property string|null $latitude
- * @property string|null $google_map_api_key
+ * @property int                              $id
+ * @property string                           $description
+ * @property string                           $short_des
+ * @property string                           $logo
+ * @property string                           $address
+ * @property string                           $phone
+ * @property string                           $email
+ * @property string                           $site-name
+ * @property string|null                      $keywords
+ * @property string|null                      $google-site-verification
+ * @property Carbon|null                      $created_at
+ * @property Carbon|null                      $updated_at
+ * @property string|null                      $longitude
+ * @property string|null                      $latitude
+ * @property string|null                      $google_map_api_key
  * @property-read MediaCollection<int, Media> $media
- * @property-read int|null $media_count
+ * @property-read int|null                    $media_count
  *
  * @method static Builder<static>|Setting newModelQuery()
  * @method static Builder<static>|Setting newQuery()
@@ -57,7 +59,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Setting whereSiteName($value)
  * @method static Builder<static>|Setting whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Setting extends Core implements HasMedia
 {

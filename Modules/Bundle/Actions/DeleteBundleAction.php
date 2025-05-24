@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Modules\Bundle\Actions;
 
-use Modules\Bundle\Models\Bundle;
+use Modules\Bundle\Repository\BundleRepository;
 
 readonly class DeleteBundleAction
 {
-    public function execute(int $id): bool
+    public function __construct(private BundleRepository $repository)
     {
-        $bundle = Bundle::findOrFail($id);
+    }
 
-        // Optionally detach products or delete related files here
-        return (bool) $bundle->delete();
+    public function execute(int $id): void
+    {
+        // Detach or cleanup logic can be handled in a listener if needed
+        $this->repository->destroy($id);
     }
 }

@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Modules\Shipping\Repository;
 
 use Illuminate\Support\Collection;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Shipping\Models\Shipping;
 
-class ShippingRepository extends Repository
+class ShippingRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    public $model = Shipping::class;
+    public function __construct()
+    {
+        parent::__construct(Shipping::class);
+    }
 
+    /**
+     * Get all shipping methods ordered by ID descending.
+     */
     public function findAll(): Collection
     {
-        return $this->model::orderBy('id', 'DESC')->get();
+        return (new $this->modelClass)->orderBy('id', 'desc')->get();
     }
 }

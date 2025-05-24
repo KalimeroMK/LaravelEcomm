@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Modules\User\Repository;
 
 use Illuminate\Support\Collection;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\User\Models\User;
 
-class UserRepository extends Repository
+class UserRepository extends EloquentRepository implements EloquentRepositoryInterface
 {
-    public $model = User::class;
+    public function __construct()
+    {
+        parent::__construct(User::class);
+    }
 
+    /**
+     * Get all users with roles, ordered by ID descending.
+     */
     public function findAll(): Collection
     {
-        return $this->model::with('roles')->orderBy('id', 'DESC')->get();
+        return (new $this->modelClass)->with('roles')->orderBy('id', 'desc')->get();
     }
 }

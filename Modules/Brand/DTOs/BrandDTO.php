@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Modules\Newsletter\DTOs;
+namespace Modules\Brand\DTOs;
 
 use Illuminate\Http\Request;
 
-readonly class NewsletterDTO
+readonly class BrandDTO
 {
     public function __construct(
         public ?int $id,
-        public ?string $email,
-        public ?string $created_at = null
+        public ?string $title,
+        public ?string $slug,
+        public ?array $images = null,
+        public ?string $status = null
     ) {
     }
 
@@ -24,9 +26,10 @@ readonly class NewsletterDTO
     {
         return new self(
             $data['id'] ?? null,
-            $data['email'] ?? null,
-            $data['created_at'] ?? null
+            $data['title'] ?? null,
+            $data['images'] ?? null,
+            $data['status'] ?? null,
+            $data['slug'] ?? null
         );
     }
-
 }

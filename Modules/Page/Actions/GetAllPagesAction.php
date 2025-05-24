@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Modules\Page\Actions;
 
 use Modules\Page\DTOs\PageListDTO;
-use Modules\Page\Models\Page;
+use Modules\Page\Repository\PageRepository;
 
-class GetAllPagesAction
+readonly class GetAllPagesAction
 {
+    public function __construct(private PageRepository $repository)
+    {
+    }
+
     public function execute(): PageListDTO
     {
-        $pages = Page::all();
+        $pages = $this->repository->findAll();
 
         return new PageListDTO($pages);
     }

@@ -8,19 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Modules\Core\Repositories\Repository;
+use Modules\Core\Interfaces\EloquentRepositoryInterface;
+use Modules\Core\Interfaces\SearchInterface;
+use Modules\Core\Repositories\EloquentRepository;
 use Modules\Product\Models\Product;
 
-class ProductRepository extends Repository
+class ProductRepository extends EloquentRepository implements EloquentRepositoryInterface, SearchInterface
 {
     private const LATEST_PRODUCTS_LIMIT = 4;
 
-    /**
-     * The model that the repository works with.
-     *
-     * @var string
-     */
-    public $model = Product::class;
+    public function __construct()
+    {
+        parent::__construct(Product::class);
+    }
 
     /**
      * Search for products based on given data.
@@ -29,10 +29,10 @@ class ProductRepository extends Repository
      */
     public function search(array $data): mixed
     {
-        $cacheKey = 'search_'.(json_encode($data));
+        $cacheKey = 'search_'.md5(json_encode($data));
 
         return Cache::store('redis')->remember($cacheKey, 86400, function () use ($data) {
-            $query = $this->model::query();
+            $query = (new $this->modelClass)->newQuery();
 
             $searchableFields = [
                 'title',
@@ -58,47 +58,47 @@ class ProductRepository extends Repository
             );
 
             return $query->with($this->withRelations())->paginate(
-                Arr::get($data, 'per_page', (new Product)->getPerPage())
+                Arr::get($data, 'per_page', (new $this->modelClass)->getPerPage())
             );
         });
     }
 
     /**
-     * Get all products.
+     * Get all products with eager-loaded relations.
      */
     public function findAll(): Collection
     {
-        return $this->model::with($this->withRelations())->get();
+        return (new $this->modelClass)->with($this->withRelations())->get();
     }
 
     /**
-     * Find a product by ID.
+     * Find a product by ID with relations.
      */
     public function findById(int $id): ?Model
     {
-        return $this->model::with(['brand', 'categories', 'carts', 'tags'])->find($id);
+        return (new $this->modelClass)->with(['brand', 'categories', 'carts', 'tags'])->find($id);
     }
 
     /**
-     * Create a new product.
+     * Create a new product and clear relevant caches.
      */
     public function create(array $data): Model
     {
         $this->clearProductCache();
 
-        return $this->model::create($data)->fresh();
+        /** @var class-string<Model> $model */
+        $model = $this->modelClass;
+
+        return $model::create($data)->fresh();
     }
 
     /**
-     * Update a product by ID.
-     *
-     * @param  array<string, mixed>  $data
+     * Update a product by ID and refresh related caches.
      */
     public function update(int $id, array $data): Model
     {
         $item = $this->findById($id);
-        $item->fill($data);
-        $item->save();
+        $item->fill($data)->save();
 
         $this->clearProductCache();
         Cache::store('redis')->forget("product_{$id}");
@@ -107,7 +107,7 @@ class ProductRepository extends Repository
     }
 
     /**
-     * Get the relations to be loaded.
+     * Relations to eager load with product.
      *
      * @return array<int, string>
      */
@@ -117,7 +117,7 @@ class ProductRepository extends Repository
     }
 
     /**
-     * Clear relevant product caches.
+     * Clear product-related Redis cache keys.
      */
     private function clearProductCache(): void
     {

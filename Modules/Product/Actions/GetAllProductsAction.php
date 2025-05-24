@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Modules\Product\Actions;
 
 use Modules\Product\DTOs\ProductListDTO;
-use Modules\Product\Models\Product;
+use Modules\Product\Repository\ProductRepository;
 
-class GetAllProductsAction
+readonly class GetAllProductsAction
 {
+    public function __construct(private ProductRepository $repository)
+    {
+    }
+
     public function execute(): ProductListDTO
     {
-        $products = Product::with(['categories', 'tags', 'brand', 'attributes.attribute', 'author'])->get();
+        $products = $this->repository->findAll();
 
         return new ProductListDTO($products);
     }

@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\Message\Actions;
 
-use Modules\Message\Models\Message;
+use Modules\Message\Repository\MessageRepository;
 
-class DeleteMessageAction
+readonly class DeleteMessageAction
 {
+    public function __construct(private MessageRepository $repository)
+    {
+    }
+
     public function execute(int $id): void
     {
-        Message::destroy($id);
+        $this->repository->destroy($id);
     }
 }

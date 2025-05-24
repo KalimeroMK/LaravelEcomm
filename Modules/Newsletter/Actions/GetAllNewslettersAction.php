@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Modules\Newsletter\Actions;
 
 use Modules\Newsletter\DTOs\NewsletterListDTO;
-use Modules\Newsletter\Models\Newsletter;
+use Modules\Newsletter\Repository\NewsletterRepository;
 
-class GetAllNewslettersAction
+readonly class GetAllNewslettersAction
 {
+    public function __construct(private NewsletterRepository $repository)
+    {
+    }
+
     public function execute(): NewsletterListDTO
     {
-        $newsletters = Newsletter::all();
+        $newsletters = $this->repository->findAll();
 
         return new NewsletterListDTO($newsletters);
     }

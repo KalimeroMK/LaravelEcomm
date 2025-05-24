@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Modules\Settings\Actions;
 
 use Modules\Settings\DTOs\SettingsDTO;
-use Modules\Settings\Models\Setting;
+use Modules\Settings\Repository\SettingsRepository;
 
-class GetSettingsAction
+readonly class GetSettingsAction
 {
+    public function __construct(private SettingsRepository $repository)
+    {
+    }
+
     public function execute(): SettingsDTO
     {
-        $settings = Setting::all();
+        $settings = $this->repository->findAll();
 
-        return new SettingsDTO($settings);
+        return SettingsDTO::fromArray($settings->first());
     }
 }
