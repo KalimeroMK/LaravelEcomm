@@ -11,10 +11,10 @@ readonly class CartDTO
 {
     public function __construct(
         public ?int $id,
-        public int $product_id,
-        public int $quantity,
-        public int $user_id,
-        public float $price,
+        public ?int $product_id,
+        public ?int $quantity,
+        public ?int $user_id,
+        public ?float $price,
         public ?string $session_id = null,
         public ?float $amount = null,
         public ?int $order_id = null
@@ -22,14 +22,17 @@ readonly class CartDTO
 
     public static function fromRequest(Store|Request $request): self
     {
-        $data = $request->validated();
+        return self::fromArray($request->validated());
+    }
 
+    public static function fromArray(array $data): self
+    {
         return new self(
             $data['id'] ?? null,
-            $data['product_id'],
-            $data['quantity'],
-            $data['user_id'],
-            $data['price'],
+            $data['product_id'] ?? null,
+            $data['quantity'] ?? null,
+            $data['user_id'] ?? null,
+            $data['price'] ?? null,
             $data['session_id'] ?? null,
             $data['amount'] ?? null,
             $data['order_id'] ?? null

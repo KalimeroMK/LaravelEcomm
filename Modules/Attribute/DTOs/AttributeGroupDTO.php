@@ -10,17 +10,20 @@ readonly class AttributeGroupDTO
 {
     public function __construct(
         public ?int $id,
-        public string $name,
+        public ?string $name,
         public ?array $attributes = []
     ) {}
 
     public static function fromRequest(Request $request): self
     {
-        $data = $request->validated();
+        return self::fromArray($request->validated());
+    }
 
+    public static function fromArray(array $data): self
+    {
         return new self(
             $data['id'] ?? null,
-            $data['name'],
+            $data['name'] ?? null,
             $data['attributes'] ?? []
         );
     }

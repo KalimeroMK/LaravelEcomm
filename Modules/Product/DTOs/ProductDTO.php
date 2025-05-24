@@ -4,47 +4,67 @@ declare(strict_types=1);
 
 namespace Modules\Product\DTOs;
 
-use Modules\Product\Models\Product;
+use Illuminate\Http\Request;
 
-class ProductDTO
+readonly class ProductDTO
 {
-    public int $id;
+    public function __construct(
+        public ?int $id,
+        public ?string $title,
+        public ?string $slug,
+        public ?string $summary,
+        public ?string $description,
+        public ?int $stock,
+        public ?string $status,
+        public ?float $price,
+        public ?float $discount = null,
+        public ?bool $is_featured = null,
+        public ?int $d_deal = null,
+        public ?int $brand_id = null,
+        public ?string $sku = null,
+        public ?float $special_price = null,
+        public ?string $special_price_start = null,
+        public ?string $special_price_end = null,
+        public ?string $created_at = null,
+        public ?string $updated_at = null,
+        public ?array $categories = null,
+        public ?array $tags = null,
+        public ?array $brand = null,
+        public ?array $attributes = null,
+        public ?array $author = null,
+    ) {}
 
-    public string $title;
-
-    public string $description;
-
-    public ?string $summary;
-
-    public ?string $photo;
-
-    public string $status;
-
-    public ?array $categories;
-
-    public ?array $tags;
-
-    public ?array $brand;
-
-    public ?array $attributes;
-
-    public ?array $author;
-
-    public string $created_at;
-
-    public function __construct(Product $product)
+    public static function fromRequest(Request $request, ?int $id = null): self
     {
-        $this->id = $product->id;
-        $this->title = $product->title;
-        $this->description = $product->description;
-        $this->summary = $product->summary;
-        $this->photo = $product->photo;
-        $this->status = $product->status;
-        $this->categories = $product->categories ? $product->categories->toArray() : [];
-        $this->tags = $product->tags ? $product->tags->toArray() : [];
-        $this->brand = $product->brand ? $product->brand->toArray() : null;
-        $this->attributes = $product->attributes ? $product->attributes->toArray() : [];
-        $this->author = $product->author ? $product->author->toArray() : null;
-        $this->created_at = $product->created_at->toDateTimeString();
+        return self::fromArray($request->validated() + ['id' => $id]);
+    }
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['id'] ?? null,
+            $data['title'] ?? null,
+            $data['slug'] ?? null,
+            $data['summary'] ?? null,
+            $data['description'] ?? null,
+            $data['stock'] ?? null,
+            $data['status'] ?? null,
+            $data['price'] ?? null,
+            $data['discount'] ?? null,
+            $data['is_featured'] ?? null,
+            $data['d_deal'] ?? null,
+            $data['brand_id'] ?? null,
+            $data['sku'] ?? null,
+            $data['special_price'] ?? null,
+            $data['special_price_start'] ?? null,
+            $data['special_price_end'] ?? null,
+            $data['created_at'] ?? null,
+            $data['updated_at'] ?? null,
+            $data['categories'] ?? null,
+            $data['tags'] ?? null,
+            $data['brand'] ?? null,
+            $data['attributes'] ?? null,
+            $data['author'] ?? null,
+        );
     }
 }

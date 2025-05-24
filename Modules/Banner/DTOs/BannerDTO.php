@@ -8,33 +8,25 @@ use Modules\Banner\Http\Requests\Api\Store as ApiStore;
 use Modules\Banner\Http\Requests\Api\Update as ApiUpdate;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
+use Illuminate\Http\Request;
 
 readonly class BannerDTO
 {
     public function __construct(
         public ?int $id,
-        public string $title,
+        public ?string $title,
         public ?string $slug,
         public ?string $description,
-        public string $status,
+        public ?string $status,
         public array $images = []
     ) {}
 
     /**
-     * Accepts Store, Update, Api\Store, or Api\Update requests.
+     * Accepts Store, Update, Api\Store, Api\Update or Request.
      */
-    public static function fromRequest(Store|Update|ApiStore|ApiUpdate $request): self
+    public static function fromRequest(Store|Update|ApiStore|ApiUpdate|Request $request): self
     {
-        $data = $request->validated();
-
-        return new self(
-            $data['id'] ?? null,
-            $data['title'] ?? null,
-            $data['slug'] ?? null,
-            $data['description'] ?? null,
-            $data['status'] ?? null,
-            $data['images'] ?? ($request->file('images', []) ?? [])
-        );
+        return self::fromArray($request->validated());
     }
 
     public static function fromArray(array $data): self
@@ -45,7 +37,7 @@ readonly class BannerDTO
             $data['slug'] ?? null,
             $data['description'] ?? null,
             $data['status'] ?? null,
-            $data['images'] ?? ($request->file('images', []) ?? [])
+            $data['images'] ?? []
         );
     }
 

@@ -20,15 +20,18 @@ readonly class BundleDTO
 
     public static function fromRequest(Request $request): self
     {
-        $data = $request->validated();
+        return self::fromArray($request->validated());
+    }
 
+    public static function fromArray(array $data): self
+    {
         return new self(
             $data['id'] ?? null,
-            $data['name'],
+            $data['name'] ?? '',
             $data['description'] ?? null,
             $data['images'] ?? null,
             $data['products'] ?? [],
-            isset($data['price']) ? (float) ($data['price']) : null,
+            $data['price'] ?? null,
             $data['extra'] ?? []
         );
     }

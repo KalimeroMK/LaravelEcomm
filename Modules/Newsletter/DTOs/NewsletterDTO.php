@@ -5,19 +5,36 @@ declare(strict_types=1);
 namespace Modules\Newsletter\DTOs;
 
 use Modules\Newsletter\Models\Newsletter;
+use Illuminate\Http\Request;
 
-class NewsletterDTO
+readonly class NewsletterDTO
 {
-    public int $id;
+    public function __construct(
+        public ?int $id,
+        public ?string $email,
+        public ?string $created_at = null
+    ) {}
 
-    public string $email;
-
-    public string $created_at;
-
-    public function __construct(Newsletter $newsletter)
+    public static function fromRequest(Request $request, ?int $id = null): self
     {
-        $this->id = $newsletter->id;
-        $this->email = $newsletter->email;
-        $this->created_at = $newsletter->created_at->toDateTimeString();
+        return self::fromArray($request->validated() + ['id' => $id]);
+    }
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['id'] ?? null,
+            $data['email'] ?? null,
+            $data['created_at'] ?? null
+        );
+    }
+
+    public static function fromModel(Newsletter $newsletter): self
+    {
+        return new self(
+            $newsletter->id,
+            $newsletter->email,
+            $newsletter->created_at->toDateTimeString()
+        );
     }
 }

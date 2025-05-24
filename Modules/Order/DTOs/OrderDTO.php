@@ -4,23 +4,40 @@ declare(strict_types=1);
 
 namespace Modules\Order\DTOs;
 
+use Illuminate\Http\Request;
 use Modules\Order\Models\Order;
 
-class OrderDTO
+readonly class OrderDTO
 {
-    public int $id;
+    public function __construct(
+        public ?int $id,
+        public ?int $user_id,
+        public ?float $total,
+        public ?string $created_at = null
+    ) {}
 
-    public int $user_id;
-
-    public float $total;
-
-    public string $created_at;
-
-    public function __construct(Order $order)
+    public static function fromRequest(Request $request, ?int $id = null): self
     {
-        $this->id = $order->id;
-        $this->user_id = $order->user_id;
-        $this->total = $order->total;
-        $this->created_at = $order->created_at->toDateTimeString();
+        return self::fromArray($request->validated() + ['id' => $id]);
+    }
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['id'] ?? null,
+            $data['user_id'] ?? null,
+            $data['total'] ?? null,
+            $data['created_at'] ?? null
+        );
+    }
+
+    public static function fromOrder(Order $order): self
+    {
+        return new self(
+            $order->id,
+            $order->user_id,
+            $order->total,
+            $order->created_at->toDateTimeString()
+        );
     }
 }

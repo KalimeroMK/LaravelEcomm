@@ -9,19 +9,24 @@ use Illuminate\Http\Request;
 readonly class PaypalDTO
 {
     public function __construct(
-        public float $amount,
-        public string $currency,
-        public string $returnUrl,
-        public string $cancelUrl
+        public ?float $amount,
+        public ?string $currency,
+        public ?string $returnUrl,
+        public ?string $cancelUrl
     ) {}
 
     public static function fromRequest(Request $request): self
     {
+        return self::fromArray($request->all());
+    }
+
+    public static function fromArray(array $data): self
+    {
         return new self(
-            (float) $request->input('amount'),
-            $request->input('currency', config('paypal.currency', 'usd')),
-            $request->input('returnUrl', route('payment.success')),
-            $request->input('cancelUrl', route('payment.cancel'))
+            isset($data['amount']) ? (float)$data['amount'] : null,
+            $data['currency'] ?? config('paypal.currency', 'usd'),
+            $data['returnUrl'] ?? route('payment.success'),
+            $data['cancelUrl'] ?? route('payment.cancel')
         );
     }
 }
