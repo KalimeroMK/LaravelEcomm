@@ -16,6 +16,7 @@ readonly class UpdateNewsletterAction
         $newsletter = $this->repository->update($dto->id, [
             'email' => $dto->email,
         ]);
+
         return NewsletterDTO::fromArray($newsletter->toArray());
     }
 }

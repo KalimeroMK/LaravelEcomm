@@ -22,9 +22,13 @@ use Modules\Product\Models\ProductReview;
 class ProductReviewController extends CoreController
 {
     private readonly GetAllProductReviewsAction $getAllProductReviewsAction;
+
     private readonly GetProductReviewsByUserAction $getProductReviewsByUserAction;
+
     private readonly StoreProductReviewAction $storeProductReviewAction;
+
     private readonly UpdateProductReviewAction $updateProductReviewAction;
+
     private readonly DeleteProductReviewAction $deleteProductReviewAction;
 
     public function __construct(
@@ -51,6 +55,7 @@ class ProductReviewController extends CoreController
         $reviews = auth()->user()->hasRole('client')
             ? $this->getProductReviewsByUserAction->execute()
             : $this->getAllProductReviewsAction->execute();
+
         return view('product::review.index', ['reviews' => $reviews]);
     }
 
@@ -61,6 +66,7 @@ class ProductReviewController extends CoreController
     {
         $dto = ProductReviewDTO::fromRequest($request);
         $this->storeProductReviewAction->execute($dto);
+
         return redirect()->back();
     }
 
@@ -72,6 +78,7 @@ class ProductReviewController extends CoreController
     public function edit(ProductReview $review)
     {
         $this->authorize('update', $review);
+
         return view('product::review.edit')->with('review', ProductReviewDTO::fromModel($review));
     }
 
@@ -83,6 +90,7 @@ class ProductReviewController extends CoreController
         $this->authorize('update', $review);
         $dto = ProductReviewDTO::fromRequest($request, $review->id);
         $this->updateProductReviewAction->execute($review->id, $dto);
+
         return redirect()->route('product::review.index');
     }
 
@@ -93,6 +101,7 @@ class ProductReviewController extends CoreController
     {
         $this->authorize('delete', $review);
         $this->deleteProductReviewAction->execute($review->id);
+
         return redirect()->route('review.index');
     }
 }

@@ -14,8 +14,7 @@ readonly class RoleDTO
         public \LaravelIdea\Helper\Modules\Role\Models\_IH_Role_C|array|_IH_Role_C|\Modules\Role\Models\Role|Role $id,
         public string $name,
         public array $permissions = []
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {

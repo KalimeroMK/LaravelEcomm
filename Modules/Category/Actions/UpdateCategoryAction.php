@@ -25,6 +25,7 @@ class UpdateCategoryAction
             'parent_id' => $dto->parent_id,
             'description' => $dto->description,
         ]);
+
         return $category;
     }
 }

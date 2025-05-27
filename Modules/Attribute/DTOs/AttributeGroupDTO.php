@@ -16,8 +16,7 @@ readonly class AttributeGroupDTO
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
         public ?int $attributes_count = null,
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Request $request): self
     {

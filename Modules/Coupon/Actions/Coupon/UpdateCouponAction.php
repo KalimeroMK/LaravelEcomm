@@ -27,6 +27,7 @@ class UpdateCouponAction
             'type' => $dto->type,
             'expires_at' => $dto->expires_at,
         ]);
+
         return $coupon;
     }
 }

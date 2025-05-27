@@ -33,6 +33,7 @@ class PageController extends CoreController
     {
         $this->authorize('viewAny', Page::class);
         $pagesDto = $this->getAllPagesAction->execute();
+
         return PageResource::collection($pagesDto->pages);
     }
 
@@ -60,6 +61,7 @@ class PageController extends CoreController
     {
         $page = $this->getAllPagesAction->repository->findById($id); // Optionally, use a ShowPageAction if available
         $this->authorize('view', $page);
+
         return $this
             ->setMessage(__('apiResponse.ok', [
                 'resource' => Helper::getResourceName(Page::class),
@@ -92,6 +94,7 @@ class PageController extends CoreController
         $page = $this->getAllPagesAction->repository->findById($id);
         $this->authorize('delete', $page);
         $this->deleteAction->execute($id);
+
         return $this
             ->setMessage(__('apiResponse.deleteSuccess', [
                 'resource' => Helper::getResourceName(Page::class),

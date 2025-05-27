@@ -27,6 +27,7 @@ class UpdateNotificationAction
             'data' => $dto->data,
             'read_at' => $dto->read_at,
         ]);
+
         return $notification;
     }
 }

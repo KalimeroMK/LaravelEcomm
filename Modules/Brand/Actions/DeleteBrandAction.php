@@ -10,8 +10,7 @@ readonly class DeleteBrandAction
 {
     public function __construct(
         private BrandRepository $repository
-    ) {
-    }
+    ) {}
 
     public function execute(int $id): bool
     {

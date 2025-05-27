@@ -19,8 +19,11 @@ use Modules\Permission\Models\Permission;
 class PermissionController extends Controller
 {
     private readonly GetAllPermissionsAction $getAllAction;
+
     private readonly CreatePermissionAction $createAction;
+
     private readonly UpdatePermissionAction $updateAction;
+
     private readonly DeletePermissionAction $deleteAction;
 
     public function __construct(
@@ -42,6 +45,7 @@ class PermissionController extends Controller
     public function index(): View
     {
         $permissionsDto = $this->getAllAction->execute();
+
         return view('permission::index', ['permissions' => $permissionsDto->permissions]);
     }
 
@@ -60,6 +64,7 @@ class PermissionController extends Controller
     {
         $dto = PermissionDTO::fromRequest($request);
         $this->createAction->execute($dto);
+
         return redirect()->route('permissions.index');
     }
 
@@ -78,6 +83,7 @@ class PermissionController extends Controller
     {
         $dto = PermissionDTO::fromRequest($request, $permission->id);
         $this->updateAction->execute($dto);
+
         return redirect()->route('permissions.index');
     }
 
@@ -87,6 +93,7 @@ class PermissionController extends Controller
     public function destroy(Permission $permission): RedirectResponse
     {
         $this->deleteAction->execute($permission->id);
+
         return redirect()->route('permissions.index');
     }
 }

@@ -101,14 +101,14 @@ class OrderController extends CoreController
             ->whereYear('created_at', $year)
             ->where('status', 'delivered')
             ->get()
-            ->groupBy(fn($d) => Carbon::parse($d->created_at)->format('m'));
+            ->groupBy(fn ($d) => Carbon::parse($d->created_at)->format('m'));
 
         $result = [];
 
         foreach ($items as $month => $orderGroup) {
             foreach ($orderGroup as $order) {
                 $amount = $order->cart_info->sum('amount');
-                $m = (int)$month;
+                $m = (int) $month;
                 $result[$m] = ($result[$m] ?? 0) + $amount;
             }
         }
@@ -117,7 +117,7 @@ class OrderController extends CoreController
         for ($i = 1; $i <= 12; $i++) {
             $timestamp = mktime(0, 0, 0, $i, 1);
             $monthName = $timestamp === false ? 'Invalid' : date('F', $timestamp);
-            $data[$monthName] = isset($result[$i]) ? (float)number_format($result[$i], 2, '.', '') : 0.0;
+            $data[$monthName] = isset($result[$i]) ? (float) number_format($result[$i], 2, '.', '') : 0.0;
         }
 
         return $data;

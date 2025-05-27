@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Modules\Post\Models\Post;
+use Throwable;
 
 class PostImport implements ToModel, WithHeadingRow
 {
     /**
-     * @param array $row
      * @return Post|null
      */
     public function model(array $row)
@@ -27,8 +27,9 @@ class PostImport implements ToModel, WithHeadingRow
                 'status' => $row['status'] ?? 'inactive',
                 'user_id' => $row['user_id'] ?? 1,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error('Failed to import post row', ['row' => $row, 'error' => $e->getMessage()]);
+
             return null;
         }
     }

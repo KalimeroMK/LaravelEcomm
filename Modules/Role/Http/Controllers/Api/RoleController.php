@@ -24,9 +24,13 @@ class RoleController extends CoreController
     use ApiResponses;
 
     private readonly GetAllRolesAction $getAllAction;
+
     private readonly StoreRoleAction $storeAction;
+
     private readonly UpdateRoleAction $updateAction;
+
     private readonly DeleteRoleAction $deleteAction;
+
     private readonly GetAllPermissionsAction $getAllPermissionsAction;
 
     public function __construct(
@@ -47,52 +51,40 @@ class RoleController extends CoreController
     {
         $this->authorize('viewAny', Role::class);
         $rolesDto = $this->getAllAction->execute();
+
         return RoleResource::collection($rolesDto->roles);
     }
 
-    /**
-     * @param  Store  $request
-     * @return JsonResponse
-     */
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Role::class);
         $roleDto = $this->storeAction->execute($request->validated());
+
         return $this->setMessage(__('apiResponse.storeSuccess',
             ['resource' => 'Role']))->respond(new RoleResource($roleDto));
     }
 
-    /**
-     * @param  int  $id
-     * @return JsonResponse
-     */
     public function show(int $id): JsonResponse
     {
         $role = $this->authorizeFromRepo(RoleRepository::class, 'view', $id);
+
         return $this->setMessage(__('apiResponse.ok', ['resource' => 'Role']))->respond(new RoleResource($role));
     }
 
-    /**
-     * @param  Update  $request
-     * @param  int     $id
-     * @return JsonResponse
-     */
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(RoleRepository::class, 'update', $id);
         $roleDto = $this->updateAction->execute($id, $request->validated());
+
         return $this->setMessage(__('apiResponse.updateSuccess',
             ['resource' => 'Role']))->respond(new RoleResource($roleDto));
     }
 
-    /**
-     * @param  int  $id
-     * @return JsonResponse
-     */
     public function destroy(int $id): JsonResponse
     {
         $this->authorizeFromRepo(RoleRepository::class, 'delete', $id);
         $this->deleteAction->execute($id);
+
         return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Role']))->respond(null);
     }
 }

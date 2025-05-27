@@ -38,14 +38,14 @@ readonly class UpdateBundleAction
                 'extra' => $dto->extra,
             ]);
 
-            if (!empty($dto->products)) {
+            if (! empty($dto->products)) {
                 $bundle->products()->sync($dto->products);
             }
 
-            if (!empty($dto->images)) {
+            if (! empty($dto->images)) {
                 $bundle->clearMediaCollection('bundle');
                 $bundle->addMultipleMediaFromRequest(['images'])
-                    ->each(fn($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('bundle'));
+                    ->each(fn ($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('bundle'));
             }
 
             return $bundle;

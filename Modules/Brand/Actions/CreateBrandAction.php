@@ -26,9 +26,9 @@ class CreateBrandAction
             'status' => $dto->status,
         ]);
 
-        if (!empty($dto->images)) {
+        if (! empty($dto->images)) {
             $brand->addMultipleMediaFromRequest(['images'])
-                ->each(fn($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('brand'));
+                ->each(fn ($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('brand'));
         }
 
         return $brand;

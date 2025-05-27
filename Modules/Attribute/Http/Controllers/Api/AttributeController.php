@@ -40,8 +40,6 @@ class AttributeController extends CoreController
     }
 
     /**
-     * @param  Store  $request
-     * @return JsonResponse
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      * @throws ReflectionException
@@ -74,9 +72,6 @@ class AttributeController extends CoreController
     }
 
     /**
-     * @param  Update  $request
-     * @param  int     $id
-     * @return JsonResponse
      * @throws ReflectionException
      * @throws FileDoesNotExist
      * @throws FileIsTooBig

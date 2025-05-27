@@ -21,9 +21,13 @@ use Modules\Shipping\Models\Shipping;
 class ShippingController extends CoreController
 {
     private GetAllShippingAction $getAllShippingAction;
+
     private StoreShippingAction $storeShippingAction;
+
     private FindShippingAction $findShippingAction;
+
     private UpdateShippingAction $updateShippingAction;
+
     private DeleteShippingAction $deleteShippingAction;
 
     public function __construct(

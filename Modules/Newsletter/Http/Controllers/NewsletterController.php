@@ -18,8 +18,11 @@ use Modules\Newsletter\Models\Newsletter;
 class NewsletterController extends CoreController
 {
     private readonly GetAllNewslettersAction $getAllAction;
+
     private readonly CreateNewsletterAction $createAction;
+
     private readonly UpdateNewsletterAction $updateAction;
+
     private readonly DeleteNewsletterAction $deleteAction;
 
     public function __construct(
@@ -38,6 +41,7 @@ class NewsletterController extends CoreController
     public function index(): View
     {
         $newslettersDto = $this->getAllAction->execute();
+
         return view('newsletter::index', ['newsletters' => $newslettersDto->newsletters]);
     }
 
@@ -50,6 +54,7 @@ class NewsletterController extends CoreController
     {
         $dto = NewsletterDTO::fromRequest($request);
         $this->createAction->execute($dto);
+
         return redirect()->route('newsletters.index')->with('status', 'Newsletter created successfully!');
     }
 
@@ -62,12 +67,14 @@ class NewsletterController extends CoreController
     {
         $dto = NewsletterDTO::fromRequest($request, $newsletter->id);
         $this->updateAction->execute($dto);
+
         return redirect()->route('newsletters.index')->with('status', 'Newsletter updated successfully!');
     }
 
     public function destroy(Newsletter $newsletter): RedirectResponse
     {
         $this->deleteAction->execute($newsletter->id);
+
         return redirect()->route('newsletters.index')->with('status', 'Newsletter deleted successfully!');
     }
 }

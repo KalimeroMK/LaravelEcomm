@@ -12,8 +12,7 @@ readonly class UpdateTagAction
 {
     public function __construct(
         private TagRepository $repository
-    ) {
-    }
+    ) {}
 
     public function execute(TagDTO $dto): Model
     {

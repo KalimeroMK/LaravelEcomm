@@ -14,6 +14,7 @@ readonly class GetAllNewslettersAction
     public function execute(): NewsletterListDTO
     {
         $newsletters = $this->repository->findAll();
+
         return new NewsletterListDTO($newsletters);
     }
 }

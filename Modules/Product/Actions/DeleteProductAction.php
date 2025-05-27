@@ -8,9 +8,7 @@ use Modules\Product\Repository\ProductRepository;
 
 readonly class DeleteProductAction
 {
-    public function __construct(private ProductRepository $repository)
-    {
-    }
+    public function __construct(private ProductRepository $repository) {}
 
     public function execute(int $id): bool
     {

@@ -24,12 +24,12 @@ readonly class AttributeDTO
         public ?Carbon $updated_at = null,
         public array $options = [],
         public ?int $options_count = null,
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Store|Update|Request $request): self
     {
         $data = $request->validated();
+
         return self::fromArray($data);
     }
 
@@ -41,9 +41,9 @@ readonly class AttributeDTO
             $data['code'] ?? null,
             $data['type'] ?? null,
             $data['display'] ?? null,
-            (bool)($data['is_required'] ?? false),
-            (bool)($data['is_filterable'] ?? false),
-            (bool)($data['is_configurable'] ?? false),
+            (bool) ($data['is_required'] ?? false),
+            (bool) ($data['is_filterable'] ?? false),
+            (bool) ($data['is_configurable'] ?? false),
             isset($data['created_at']) ? new Carbon($data['created_at']) : null,
             isset($data['updated_at']) ? new Carbon($data['updated_at']) : null,
             $data['options'] ?? [],

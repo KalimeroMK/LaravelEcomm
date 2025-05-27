@@ -17,6 +17,7 @@ readonly class UpdatePermissionAction
             'name' => $dto->name,
             'guard_name' => $dto->guard_name,
         ]);
+
         return PermissionDTO::fromArray($permission->toArray());
     }
 }

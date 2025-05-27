@@ -14,7 +14,7 @@ readonly class PageDTO
         public string $title,
         public string $slug,
         public string $content,
-        public bool $is_active = true,
+        public bool $is_active,
         public int $user_id,
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,

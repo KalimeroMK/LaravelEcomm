@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Tag\Actions;
 
-use Modules\Tag\Repository\TagRepository;
 use Illuminate\Support\Collection;
+use Modules\Tag\Repository\TagRepository;
 
 class GetAllTagsAction
 {

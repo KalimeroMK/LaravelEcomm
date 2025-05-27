@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\Post\Actions;
 
 use Illuminate\Support\Collection;
-use Modules\Category\Models\Category;
 use Modules\Category\Repository\CategoryRepository;
 
 readonly class GetAllCategoriesAction

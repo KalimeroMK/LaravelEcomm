@@ -17,6 +17,7 @@ use Modules\Settings\Models\Setting;
 class SettingsController extends Controller
 {
     private readonly GetSettingsAction $getSettingsAction;
+
     private readonly UpdateSettingsAction $updateSettingsAction;
 
     public function __construct(

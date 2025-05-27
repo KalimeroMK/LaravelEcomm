@@ -8,9 +8,7 @@ use Modules\Role\Repository\RoleRepository;
 
 readonly class DeleteRoleAction
 {
-    public function __construct(private RoleRepository $repository)
-    {
-    }
+    public function __construct(private RoleRepository $repository) {}
 
     public function execute(int $id): bool
     {

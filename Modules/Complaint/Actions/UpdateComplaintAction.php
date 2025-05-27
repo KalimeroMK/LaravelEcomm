@@ -24,6 +24,7 @@ class UpdateComplaintAction
             'description' => $dto->description,
             'status' => $dto->status,
         ]);
+
         return $complaint;
     }
 }

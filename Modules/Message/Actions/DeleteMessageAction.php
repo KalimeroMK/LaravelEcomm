@@ -8,9 +8,7 @@ use Modules\Message\Repository\MessageRepository;
 
 readonly class DeleteMessageAction
 {
-    public function __construct(private MessageRepository $repository)
-    {
-    }
+    public function __construct(private MessageRepository $repository) {}
 
     public function execute(int $id): bool
     {

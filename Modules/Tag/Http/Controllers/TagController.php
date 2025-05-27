@@ -21,9 +21,13 @@ use Modules\Tag\Models\Tag;
 class TagController extends CoreController
 {
     private CreateTagAction $createTagAction;
+
     private UpdateTagAction $updateTagAction;
+
     private DeleteTagAction $deleteTagAction;
+
     private GetAllTagsAction $getAllTagsAction;
+
     private ShowTagAction $showTagAction;
 
     public function __construct(
@@ -57,6 +61,7 @@ class TagController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $this->createTagAction->execute($request->validated());
+
         return redirect()->route('post-tag.index');
     }
 
@@ -88,6 +93,7 @@ class TagController extends CoreController
     {
         $dto = new TagDto(array_merge(['id' => $tag->id], $request->validated()));
         $this->updateTagAction->execute($dto);
+
         return redirect()->route('post-tag.index');
     }
 
@@ -97,6 +103,7 @@ class TagController extends CoreController
     public function destroy(Tag $tag): RedirectResponse
     {
         $this->deleteTagAction->execute($tag->id);
+
         return redirect()->route('post-tag.index');
     }
 }

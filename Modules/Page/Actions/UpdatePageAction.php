@@ -27,6 +27,7 @@ class UpdatePageAction
             'is_active' => $dto->is_active,
             'user_id' => $dto->user_id,
         ]);
+
         return $page;
     }
 }

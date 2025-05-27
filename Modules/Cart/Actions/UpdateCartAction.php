@@ -29,6 +29,7 @@ class UpdateCartAction
             'amount' => $dto->amount ?? ($dto->price * $dto->quantity),
             'order_id' => $dto->order_id,
         ]);
+
         return $cart;
     }
 }

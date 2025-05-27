@@ -8,9 +8,7 @@ use Modules\Bundle\Repository\BundleRepository;
 
 readonly class DeleteBundleAction
 {
-    public function __construct(private BundleRepository $repository)
-    {
-    }
+    public function __construct(private BundleRepository $repository) {}
 
     public function execute(int $id): bool
     {

@@ -16,6 +16,7 @@ use Modules\Message\Models\Message;
 class MessageController extends CoreController
 {
     private GetAllMessagesAction $getAllAction;
+
     private DeleteMessageAction $deleteAction;
 
     public function __construct(

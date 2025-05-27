@@ -11,10 +11,12 @@ use Modules\Product\Actions\ExportProductsAction;
 use Modules\Product\Actions\ImportProductsAction;
 use Modules\Product\Http\Requests\Import;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Throwable;
 
 class ProductImportExportController extends Controller
 {
     private ExportProductsAction $exportProductsAction;
+
     private ImportProductsAction $importProductsAction;
 
     public function __construct(
@@ -48,9 +50,10 @@ class ProductImportExportController extends Controller
     {
         try {
             $this->importProductsAction->execute($request->file('file'));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return back()->withErrors(['msg' => $e->getMessage()]);
         }
+
         return back()->with('success', 'Products imported successfully.');
     }
 }

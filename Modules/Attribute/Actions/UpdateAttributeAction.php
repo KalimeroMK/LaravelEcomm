@@ -38,14 +38,14 @@ readonly class UpdateAttributeAction
             'status' => $dto->status ?? null,
         ]);
 
-        if (!empty($dto->options) && method_exists($attribute, 'syncOptions')) {
+        if (! empty($dto->options) && method_exists($attribute, 'syncOptions')) {
             $attribute->syncOptions($dto->options);
         }
 
-        if (!empty($dto->images)) {
+        if (! empty($dto->images)) {
             $attribute->clearMediaCollection('attribute');
             $attribute->addMultipleMediaFromRequest(['images'])
-                ->each(fn(FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('attribute'));
+                ->each(fn (FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('attribute'));
         }
 
         return $attribute;

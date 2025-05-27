@@ -27,8 +27,7 @@ class BundleController extends CoreController
         private readonly CreateBundleAction $createAction,
         private readonly UpdateBundleAction $updateAction,
         private readonly DeleteBundleAction $deleteAction
-    ) {
-    }
+    ) {}
 
     public function index(): AnonymousResourceCollection
     {

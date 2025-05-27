@@ -25,61 +25,48 @@ class ProductController extends CoreController
         private readonly StoreProductAction $storeProductAction,
         private readonly UpdateProductAction $updateProductAction,
         private readonly DeleteProductAction $deleteProductAction
-    ) {
-    }
+    ) {}
 
     public function index(Search $request): ResourceCollection
     {
         $this->authorize('viewAny', Product::class);
         $products = $this->repository->findAll();
+
         return ProductResource::collection($products);
     }
 
-    /**
-     * @param  Store  $request
-     * @return JsonResponse
-     */
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Product::class);
         $dto = ProductDTO::fromRequest($request);
         $product = $this->storeProductAction->execute($dto);
+
         return $this->setMessage(__('apiResponse.storeSuccess',
             ['resource' => 'Product']))->respond(new ProductResource($product));
     }
 
-    /**
-     * @param  int  $id
-     * @return JsonResponse
-     */
     public function show(int $id): JsonResponse
     {
         $product = $this->authorizeFromRepo(ProductRepository::class, 'view', $id);
+
         return $this->setMessage(__('apiResponse.ok',
             ['resource' => 'Product']))->respond(new ProductResource($product));
     }
 
-    /**
-     * @param  Update  $request
-     * @param  int     $id
-     * @return JsonResponse
-     */
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(ProductRepository::class, 'update', $id);
         $dto = ProductDTO::fromRequest($request, $id);
         $product = $this->updateProductAction->execute($id, $dto);
+
         return $this->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Product']))->respond(new ProductResource($product));
     }
 
-    /**
-     * @param  int  $id
-     * @return JsonResponse
-     */
     public function destroy(int $id): JsonResponse
     {
         $this->authorizeFromRepo(ProductRepository::class, 'delete', $id);
         $this->deleteProductAction->execute($id);
+
         return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Product']))->respond(null);
     }
 }

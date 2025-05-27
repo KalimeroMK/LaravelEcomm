@@ -13,6 +13,7 @@ class UpdateProductReviewAction
     {
         $review = ProductReview::findOrFail($id);
         $review->update($dto->toArray());
+
         return $review;
     }
 }

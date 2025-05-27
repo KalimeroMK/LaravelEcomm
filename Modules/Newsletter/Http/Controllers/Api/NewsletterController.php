@@ -32,6 +32,7 @@ class NewsletterController extends CoreController
     {
         $this->authorize('viewAny', Newsletter::class);
         $newslettersDto = $this->getAllAction->execute();
+
         return NewsletterResource::collection($newslettersDto->newsletters);
     }
 

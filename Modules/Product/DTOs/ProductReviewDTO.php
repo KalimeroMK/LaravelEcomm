@@ -22,6 +22,7 @@ readonly class ProductReviewDTO
     public static function fromRequest(Request $request, ?int $id = null): self
     {
         $data = $request->validated();
+
         return new self(
             $id,
             $data['product_id'],

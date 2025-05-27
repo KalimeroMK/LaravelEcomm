@@ -24,8 +24,11 @@ use ReflectionException;
 class TagController extends CoreController
 {
     private CreateTagAction $createTagAction;
+
     private UpdateTagAction $updateTagAction;
+
     private DeleteTagAction $deleteTagAction;
+
     private GetAllTagsAction $getAllTagsAction;
 
     public function __construct(
@@ -43,6 +46,7 @@ class TagController extends CoreController
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Tag::class);
+
         return TagResource::collection($this->getAllTagsAction->execute());
     }
 
@@ -53,6 +57,7 @@ class TagController extends CoreController
     {
         $this->authorize('create', Tag::class);
         $tag = $this->createTagAction->execute($request->validated());
+
         return $this
             ->setMessage(
                 __(
@@ -71,6 +76,7 @@ class TagController extends CoreController
     public function show(int $id): JsonResponse
     {
         $tag = $this->authorizeFromRepo(TagRepository::class, 'view', $id);
+
         return $this
             ->setMessage(
                 __(
@@ -91,6 +97,7 @@ class TagController extends CoreController
         $tag = $this->authorizeFromRepo(TagRepository::class, 'update', $id);
         $dto = TagDto::fromRequest($request->validated());
         $updatedTag = $this->updateTagAction->execute($tag, $dto);
+
         return $this
             ->setMessage(
                 __(
@@ -110,6 +117,7 @@ class TagController extends CoreController
     {
         $tag = $this->authorizeFromRepo(TagRepository::class, 'delete', $id);
         $this->deleteTagAction->execute($tag->id);
+
         return $this
             ->setMessage(
                 __(

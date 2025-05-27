@@ -26,8 +26,11 @@ use Modules\Tag\Models\Tag;
 class ProductController extends CoreController
 {
     private GetAllProductsAction $getAllProductsAction;
+
     private StoreProductAction $storeProductAction;
+
     private UpdateProductAction $updateProductAction;
+
     private DeleteProductAction $deleteProductAction;
 
     public function __construct(
@@ -46,6 +49,7 @@ class ProductController extends CoreController
     public function index(): Renderable
     {
         $productsDto = $this->getAllProductsAction->execute();
+
         return view('product::index', ['products' => $productsDto->products]);
     }
 
@@ -67,6 +71,7 @@ class ProductController extends CoreController
     {
         $dto = ProductDTO::fromRequest($request);
         $this->storeProductAction->execute($dto);
+
         return redirect()->route('products.index');
     }
 
@@ -78,7 +83,7 @@ class ProductController extends CoreController
         return view('product::edit', [
             'brands' => Brand::get()->toArray(),
             'categories' => Category::get()->toArray(),
-            'product' => (array)$productDto,
+            'product' => (array) $productDto,
             'tags' => Tag::get()->toArray(),
             'attributes' => Attribute::all()->toArray(),
         ]);
@@ -91,12 +96,14 @@ class ProductController extends CoreController
     {
         $dto = ProductDTO::fromRequest($request, $product->id);
         $this->updateProductAction->execute($product->id, $dto);
+
         return redirect()->route('products.index');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
         $this->deleteProductAction->execute($product->id);
+
         return redirect()->route('products.index');
     }
 

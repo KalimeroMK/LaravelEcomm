@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\Attribute\Actions\AttributeGroup;
 
 use Modules\Attribute\DTOs\AttributeGroupDTO;
-use Modules\Attribute\Repository\AttributeGroupRepository;
 use Modules\Attribute\Models\AttributeGroup;
+use Modules\Attribute\Repository\AttributeGroupRepository;
 
 readonly class CreateAttributeGroupAction
 {
@@ -22,9 +22,10 @@ readonly class CreateAttributeGroupAction
         $group = $this->repository->create([
             'name' => $dto->name,
         ]);
-        if (!empty($dto->attributes)) {
+        if (! empty($dto->attributes)) {
             $group->attributes()->sync($dto->attributes);
         }
+
         return $group;
     }
 }

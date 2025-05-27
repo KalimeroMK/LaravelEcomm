@@ -26,12 +26,19 @@ use Modules\User\Models\User;
 class UserController extends Controller
 {
     private GetAllUsersAction $getAllUsersAction;
+
     private StoreUserAction $storeUserAction;
+
     private UpdateUserAction $updateUserAction;
+
     private DeleteUserAction $deleteUserAction;
+
     private FindUserAction $findUserAction;
+
     private GetAllRolesAction $getAllRolesAction;
+
     private GetUserRolesAction $getUserRolesAction;
+
     private ProfileUpdateAction $profileUpdateAction;
 
     public function __construct(
@@ -66,10 +73,10 @@ class UserController extends Controller
         if (Auth::user() && Auth::user()->isSuperAdmin()) {
             $usersDto = $this->getAllUsersAction->execute();
             $users = $usersDto->users;
-        } elseif (!is_numeric($userId)) {
+        } elseif (! is_numeric($userId)) {
             abort(404, 'User not found.');
         } else {
-            $userDto = $this->findUserAction->execute((int)$userId);
+            $userDto = $this->findUserAction->execute((int) $userId);
             $users = [$userDto];
         }
 

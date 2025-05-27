@@ -30,7 +30,6 @@ class CreateBundleAction
     {
         return DB::transaction(function () use ($dto) {
             /** @var Bundle $bundle */
-
             $bundle = $this->repository->create([
                 'name' => $dto->name,
                 'description' => $dto->description,
@@ -38,13 +37,13 @@ class CreateBundleAction
                 'extra' => $dto->extra,
             ]);
 
-            if (!empty($dto->products)) {
+            if (! empty($dto->products)) {
                 $bundle->products()->sync($dto->products);
             }
 
-            if (!empty($dto->images)) {
+            if (! empty($dto->images)) {
                 $bundle->addMultipleMediaFromRequest(['images'])
-                    ->each(fn($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('bundle'));
+                    ->each(fn ($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('bundle'));
             }
 
             return $bundle;

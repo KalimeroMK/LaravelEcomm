@@ -21,8 +21,11 @@ use Modules\Shipping\Repository\ShippingRepository;
 class ShippingController extends CoreController
 {
     private readonly GetAllShippingAction $getAllAction;
+
     private readonly StoreShippingAction $storeAction;
+
     private readonly UpdateShippingAction $updateAction;
+
     private readonly DeleteShippingAction $deleteAction;
 
     public function __construct(
@@ -58,10 +61,6 @@ class ShippingController extends CoreController
             ->respond(new ShippingResource($shipping));
     }
 
-    /**
-     * @param  int  $id
-     * @return JsonResponse
-     */
     public function show(int $id): JsonResponse
     {
         $shipping = $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
@@ -71,11 +70,6 @@ class ShippingController extends CoreController
             ->respond(new ShippingResource($shipping));
     }
 
-    /**
-     * @param  Update  $request
-     * @param  int     $id
-     * @return JsonResponse
-     */
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(ShippingRepository::class, 'update', $id);
@@ -87,10 +81,6 @@ class ShippingController extends CoreController
             ->respond(new ShippingResource($shipping));
     }
 
-    /**
-     * @param  int  $id
-     * @return JsonResponse
-     */
     public function destroy(int $id): JsonResponse
     {
         $this->authorizeFromRepo(ShippingRepository::class, 'delete', $id);

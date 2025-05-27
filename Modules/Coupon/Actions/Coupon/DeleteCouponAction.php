@@ -8,9 +8,7 @@ use Modules\Coupon\Repository\CouponRepository;
 
 readonly class DeleteCouponAction
 {
-    public function __construct(private CouponRepository $repository)
-    {
-    }
+    public function __construct(private CouponRepository $repository) {}
 
     public function execute(int $id): bool
     {

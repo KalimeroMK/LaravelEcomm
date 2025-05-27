@@ -8,9 +8,7 @@ use Modules\Tag\Repository\TagRepository;
 
 readonly class DeleteTagAction
 {
-    public function __construct(private TagRepository $repository)
-    {
-    }
+    public function __construct(private TagRepository $repository) {}
 
     public function execute(int $id): bool
     {

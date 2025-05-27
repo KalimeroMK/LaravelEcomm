@@ -31,12 +31,19 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class PostController extends Controller
 {
     private readonly GetAllPostsAction $getAllAction;
+
     private readonly CreatePostAction $createAction;
+
     private readonly UpdatePostAction $updateAction;
+
     private readonly DeletePostAction $deleteAction;
+
     private readonly GetAllCategoriesAction $getAllCategoriesAction;
+
     private readonly GetAllTagsAction $getAllTagsAction;
+
     private readonly GetAllUsersAction $getAllUsersAction;
+
     private readonly PostRepository $postRepository;
 
     public function __construct(
@@ -68,15 +75,12 @@ class PostController extends Controller
     public function index()
     {
         $postsDto = $this->getAllAction->execute();
+
         return view('post::index', ['posts' => $postsDto->posts]);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     *
-     * @param  Store  $request
-     * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
@@ -112,6 +116,7 @@ class PostController extends Controller
         $categories = $this->getAllCategoriesAction->execute();
         $tags = $this->getAllTagsAction->execute();
         $users = $this->getAllUsersAction->execute();
+
         return view('post::edit', ['categories' => $categories, 'tags' => $tags, 'users' => $users, 'post' => $post]);
     }
 
@@ -154,7 +159,7 @@ class PostController extends Controller
     {
         // Ensure there is a file and it is not an array of files
         $file = $request->file('file');
-        if (!$file) {
+        if (! $file) {
             return back()->withErrors(['error' => 'Please upload a file.']);
         }
 
@@ -170,7 +175,6 @@ class PostController extends Controller
 
         return redirect()->back()->with('success', 'Posts imported successfully.');
     }
-
 
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {

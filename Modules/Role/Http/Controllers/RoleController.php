@@ -19,9 +19,13 @@ use Modules\Role\Models\Role;
 class RoleController extends CoreController
 {
     private readonly GetAllRolesAction $getAllAction;
+
     private readonly StoreRoleAction $storeAction;
+
     private readonly UpdateRoleAction $updateAction;
+
     private readonly DeleteRoleAction $deleteAction;
+
     private readonly GetAllPermissionsAction $getAllPermissionsAction;
 
     /**
