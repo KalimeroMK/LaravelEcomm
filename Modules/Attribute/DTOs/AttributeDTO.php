@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Attribute\DTOs;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
 
@@ -16,16 +17,19 @@ readonly class AttributeDTO
         public ?string $code,
         public ?string $type,
         public ?string $display,
-        public ?bool $filterable = false,
-        public ?bool $configurable = false,
-        public array $options = []
+        public bool $is_required = false,
+        public bool $is_filterable = false,
+        public bool $is_configurable = false,
+        public ?Carbon $created_at = null,
+        public ?Carbon $updated_at = null,
+        public array $options = [],
+        public ?int $options_count = null,
     ) {
     }
 
     public static function fromRequest(Store|Update|Request $request): self
     {
         $data = $request->validated();
-
         return self::fromArray($data);
     }
 
@@ -37,10 +41,32 @@ readonly class AttributeDTO
             $data['code'] ?? null,
             $data['type'] ?? null,
             $data['display'] ?? null,
-            (bool)($data['filterable'] ?? false),
-            (bool)($data['configurable'] ?? false),
-            $data['options'] ?? []
+            (bool)($data['is_required'] ?? false),
+            (bool)($data['is_filterable'] ?? false),
+            (bool)($data['is_configurable'] ?? false),
+            isset($data['created_at']) ? new Carbon($data['created_at']) : null,
+            isset($data['updated_at']) ? new Carbon($data['updated_at']) : null,
+            $data['options'] ?? [],
+            $data['options_count'] ?? null,
         );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'code' => $this->code,
+            'type' => $this->type,
+            'display' => $this->display,
+            'is_required' => $this->is_required,
+            'is_filterable' => $this->is_filterable,
+            'is_configurable' => $this->is_configurable,
+            'created_at' => $this->created_at?->toDateTimeString(),
+            'updated_at' => $this->updated_at?->toDateTimeString(),
+            'options' => $this->options,
+            'options_count' => $this->options_count,
+        ];
     }
 
     public function withId(int $id): self
@@ -51,9 +77,13 @@ readonly class AttributeDTO
             $this->code,
             $this->type,
             $this->display,
-            $this->filterable,
-            $this->configurable,
-            $this->options
+            $this->is_required,
+            $this->is_filterable,
+            $this->is_configurable,
+            $this->created_at,
+            $this->updated_at,
+            $this->options,
+            $this->options_count,
         );
     }
 }

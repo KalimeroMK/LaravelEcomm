@@ -48,9 +48,7 @@ class PostRepository extends EloquentRepository implements EloquentRepositoryInt
     /**
      * Update an existing post with relations.
      *
-     * @param  int                   $id
      * @param  array<string, mixed>  $data
-     * @return Model
      */
     public function update(int $id, array $data): Model
     {
@@ -73,7 +71,7 @@ class PostRepository extends EloquentRepository implements EloquentRepositoryInt
         $query = (new $this->modelClass)->newQuery();
 
         foreach ($this->searchableFields() as $key) {
-            if (!empty($data[$key])) {
+            if (! empty($data[$key])) {
                 $query->where($key, 'like', '%'.$data[$key].'%');
             }
         }
@@ -93,9 +91,6 @@ class PostRepository extends EloquentRepository implements EloquentRepositoryInt
 
     /**
      * Apply eager loading of relationships.
-     *
-     * @param  Builder  $query
-     * @return Builder
      */
     private function eagerLoadRelations(Builder $query): Builder
     {
@@ -105,9 +100,7 @@ class PostRepository extends EloquentRepository implements EloquentRepositoryInt
     /**
      * Apply ordering and pagination.
      *
-     * @param  Builder               $query
      * @param  array<string, mixed>  $data
-     * @return LengthAwarePaginator
      */
     private function applySortingAndPaginate(Builder $query, array $data): LengthAwarePaginator
     {

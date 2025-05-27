@@ -8,10 +8,13 @@ use Modules\Category\DTOs\CategoryDTO;
 use Modules\Category\Models\Category;
 use Modules\Category\Repository\CategoryRepository;
 
-readonly class CreateCategoryAction
+class CreateCategoryAction
 {
-    public function __construct(private CategoryRepository $repository)
+    private CategoryRepository $repository;
+
+    public function __construct(CategoryRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(CategoryDTO $dto): Category

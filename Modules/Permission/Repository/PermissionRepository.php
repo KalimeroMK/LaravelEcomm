@@ -22,7 +22,6 @@ class PermissionRepository extends EloquentRepository implements EloquentReposit
      * Search for permissions based on given criteria.
      *
      * @param  array<string, mixed>  $data
-     * @return mixed
      */
     public function search(array $data): mixed
     {

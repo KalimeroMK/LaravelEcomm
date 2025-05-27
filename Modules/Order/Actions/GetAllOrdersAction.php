@@ -9,9 +9,7 @@ use Modules\Order\Repository\OrderRepository;
 
 readonly class GetAllOrdersAction
 {
-    public function __construct(private OrderRepository $repository)
-    {
-    }
+    public function __construct(private OrderRepository $repository) {}
 
     public function execute(): OrderListDTO
     {

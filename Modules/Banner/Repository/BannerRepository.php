@@ -32,7 +32,6 @@ class BannerRepository extends EloquentRepository implements SearchInterface
      * Search for entries based on filter criteria provided in the `$data` array.
      *
      * @param  array<string, mixed>  $data
-     * @return mixed
      */
     public function search(array $data): mixed
     {
@@ -42,12 +41,12 @@ class BannerRepository extends EloquentRepository implements SearchInterface
             $query = (new $this->modelClass)->newQuery();
 
             foreach (['title', 'slug', 'description', 'status'] as $field) {
-                if (!empty($data[$field])) {
+                if (! empty($data[$field])) {
                     $query->where($field, 'like', '%'.$data[$field].'%');
                 }
             }
 
-            if (!empty($data['all_included'])) {
+            if (! empty($data['all_included'])) {
                 return $query->get();
             }
 

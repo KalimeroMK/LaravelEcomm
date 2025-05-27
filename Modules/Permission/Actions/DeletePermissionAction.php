@@ -8,9 +8,7 @@ use Modules\Permission\Repository\PermissionRepository;
 
 readonly class DeletePermissionAction
 {
-    public function __construct(private PermissionRepository $repository)
-    {
-    }
+    public function __construct(private PermissionRepository $repository) {}
 
     public function execute(int $id): void
     {

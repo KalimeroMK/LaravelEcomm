@@ -21,6 +21,7 @@ readonly class ComplaintDTO
         $validated = $request->validated();
         $validated['user_id'] = $request->user()->id ?? null;
         $validated['id'] = $id;
+
         return self::fromArray($validated);
     }
 

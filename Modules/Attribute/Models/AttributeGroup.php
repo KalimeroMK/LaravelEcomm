@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Modules\Attribute\Database\Factories\AttributeGroupFactory;
 
@@ -18,7 +19,7 @@ use Modules\Attribute\Database\Factories\AttributeGroupFactory;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Attribute> $attributes
- * @property-read int|null                                                 $attributes_count
+ * @property-read int|null                   $attributes_count
  *
  * @method static Builder<static>|AttributeGroup newModelQuery()
  * @method static Builder<static>|AttributeGroup newQuery()
@@ -41,8 +42,9 @@ class AttributeGroup extends Model
         return AttributeGroupFactory::new();
     }
 
-    public function attributes()
+    public function attributes(): BelongsToMany
     {
-        return $this->belongsToMany(Attribute::class, 'attribute_attribute_group', 'attribute_group_id', 'attribute_id');
+        return $this->belongsToMany(Attribute::class, 'attribute_attribute_group', 'attribute_group_id',
+            'attribute_id');
     }
 }

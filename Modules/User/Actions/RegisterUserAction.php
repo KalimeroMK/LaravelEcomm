@@ -10,9 +10,7 @@ use Modules\User\Repository\UserRepository;
 
 readonly class RegisterUserAction
 {
-    public function __construct(private UserRepository $repository)
-    {
-    }
+    public function __construct(private UserRepository $repository) {}
 
     public function execute(UserDTO $dto): array
     {

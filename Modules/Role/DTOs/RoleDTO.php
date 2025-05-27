@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Modules\Role\DTOs;
 
 use Illuminate\Http\Request;
+use LaravelIdea\Helper\Spatie\Permission\Models\_IH_Role_C;
+use Spatie\Permission\Models\Role;
 
 readonly class RoleDTO
 {
     public function __construct(
-        public int $id,
+        public \LaravelIdea\Helper\Modules\Role\Models\_IH_Role_C|array|_IH_Role_C|\Modules\Role\Models\Role|Role $id,
         public string $name,
         public array $permissions = []
     ) {

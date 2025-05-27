@@ -16,32 +16,23 @@ use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
 use Modules\Coupon\Http\Resource\CouponResource;
 use Modules\Coupon\Models\Coupon;
+use Modules\Coupon\Repository\CouponRepository;
+use ReflectionException;
 
 class CouponController extends CoreController
 {
-    private CreateCouponAction $createAction;
-
-    private UpdateCouponAction $updateAction;
-
-    private DeleteCouponAction $deleteAction;
-
     public function __construct(
-        CreateCouponAction $createAction,
-        UpdateCouponAction $updateAction,
-        DeleteCouponAction $deleteAction
+        private readonly CreateCouponAction $createAction,
+        private readonly UpdateCouponAction $updateAction,
+        private readonly DeleteCouponAction $deleteAction
     ) {
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
-        $this->middleware('permission:coupon-list', ['only' => ['index']]);
-        $this->middleware('permission:coupon-show', ['only' => ['show']]);
-        $this->middleware('permission:coupon-create', ['only' => ['store']]);
-        $this->middleware('permission:coupon-edit', ['only' => ['update']]);
-        $this->middleware('permission:coupon-delete', ['only' => ['destroy']]);
+        // permission middleware removed — now using policies
     }
 
     public function index(): ResourceCollection
     {
+        $this->authorize('viewAny', Coupon::class);
+
         return CouponResource::collection(Coupon::all());
     }
 
@@ -50,18 +41,15 @@ class CouponController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
+        $this->authorize('create', Coupon::class);
+
         $dto = CouponDTO::fromRequest($request);
         $coupon = $this->createAction->execute($dto);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(Coupon::class),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.storeSuccess', [
+                'resource' => Helper::getResourceName(Coupon::class),
+            ]))
             ->respond(new CouponResource($coupon));
     }
 
@@ -70,17 +58,12 @@ class CouponController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $coupon = Coupon::findOrFail($id);
+        $coupon = $this->authorizeFromRepo(CouponRepository::class, 'view', $id);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.ok',
-                    [
-                        'resource' => Helper::getResourceName(Coupon::class),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.ok', [
+                'resource' => Helper::getResourceName(Coupon::class),
+            ]))
             ->respond(new CouponResource($coupon));
     }
 
@@ -89,18 +72,15 @@ class CouponController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
+        $this->authorizeFromRepo(CouponRepository::class, 'update', $id);
+
         $dto = CouponDTO::fromRequest($request, $id);
         $coupon = $this->updateAction->execute($dto);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.updateSuccess',
-                    [
-                        'resource' => Helper::getResourceName(Coupon::class),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.updateSuccess', [
+                'resource' => Helper::getResourceName(Coupon::class),
+            ]))
             ->respond(new CouponResource($coupon));
     }
 
@@ -109,17 +89,14 @@ class CouponController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
+        $this->authorizeFromRepo(CouponRepository::class, 'delete', $id);
+
         $this->deleteAction->execute($id);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(Coupon::class),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.deleteSuccess', [
+                'resource' => Helper::getResourceName(Coupon::class),
+            ]))
             ->respond(null);
     }
 }

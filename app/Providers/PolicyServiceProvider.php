@@ -7,6 +7,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\Policies\AttributeGroupPolicy;
 use Modules\Attribute\Models\Policies\AttributePolicy;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Models\Policies\BannerPolicy;
@@ -49,6 +50,7 @@ use Modules\Tenant\Models\Policy\TenantPolicy;
 use Modules\Tenant\Models\Tenant;
 use Modules\User\Models\Policies\UserPolicy;
 use Modules\User\Models\User;
+use PhpParser\Node\AttributeGroup;
 use Spatie\Permission\Models\Permission;
 
 class PolicyServiceProvider extends ServiceProvider
@@ -88,6 +90,8 @@ class PolicyServiceProvider extends ServiceProvider
         Gate::policy(Tag::class, TagPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Tenant::class, TenantPolicy::class);
+        Gate::policy(AttributeGroup::class, AttributeGroupPolicy::class);
+
         Gate::before(function ($user, $ability) {
             return $user->hasRole('super-admin') ? true : null;
         });

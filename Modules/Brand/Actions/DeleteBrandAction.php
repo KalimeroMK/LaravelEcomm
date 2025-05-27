@@ -13,7 +13,7 @@ readonly class DeleteBrandAction
     ) {
     }
 
-    public function execute(int $id): null
+    public function execute(int $id): bool
     {
         $this->repository->destroy($id);
     }

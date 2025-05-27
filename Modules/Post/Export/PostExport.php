@@ -10,9 +10,17 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Modules\Post\Models\Post;
+use Modules\Post\Repository\PostRepository;
 
-class Posts implements FromCollection, WithHeadings, WithMapping
+class PostExport implements FromCollection, WithHeadings, WithMapping
 {
+    private PostRepository $repository;
+
+    public function __construct(PostRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Get the headings for the export.
      *
@@ -42,7 +50,7 @@ class Posts implements FromCollection, WithHeadings, WithMapping
      */
     public function collection(): Collection
     {
-        return Post::all();
+        return $this->repository->findAll();
     }
 
     /**

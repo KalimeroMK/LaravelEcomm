@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Modules\Order\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Kalimeromk\Filterable\app\Traits\Filterable;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Models\Core;
@@ -36,14 +38,14 @@ use Modules\User\Models\User;
  * @property string $status
  * @property string|null $payer_id
  * @property string|null $transaction_reference
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Collection<int, Cart> $cart_info
- * @property-read int|null $cart_info_count
+ * @property-read int|null              $cart_info_count
  * @property-read Collection<int, Cart> $carts
- * @property-read int|null $carts_count
- * @property-read Shipping|null $shipping
- * @property-read User|null $user
+ * @property-read int|null              $carts_count
+ * @property-read Shipping|null         $shipping
+ * @property-read User|null             $user
  *
  * @method static Builder<static>|Order filter(array $filters = [])
  * @method static Builder<static>|Order newModelQuery()
@@ -64,7 +66,7 @@ use Modules\User\Models\User;
  * @method static Builder<static>|Order whereUpdatedAt($value)
  * @method static Builder<static>|Order whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Order extends Core
 {

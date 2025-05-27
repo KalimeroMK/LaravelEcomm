@@ -8,18 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Category\DTOs\CategoryDTO;
 use Modules\Category\Repository\CategoryRepository;
 
-readonly class UpdateCategoryAction
+class UpdateCategoryAction
 {
-    public function __construct(private CategoryRepository $repository)
+    private CategoryRepository $repository;
+
+    public function __construct(CategoryRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(CategoryDTO $dto): Model
     {
-        return $this->repository->update($dto->id, [
+        $category = $this->repository->findById($dto->id);
+        $category->update([
             'name' => $dto->name,
             'parent_id' => $dto->parent_id,
             'description' => $dto->description,
         ]);
+        return $category;
     }
 }

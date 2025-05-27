@@ -7,12 +7,20 @@ namespace Modules\Bundle\Actions;
 use Illuminate\Support\Facades\DB;
 use Modules\Bundle\DTOs\BundleDTO;
 use Modules\Bundle\Models\Bundle;
+use Modules\Bundle\Repository\BundleRepository;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Throwable;
 
 readonly class UpdateBundleAction
 {
+    private BundleRepository $repository;
+
+    public function __construct(BundleRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * @throws Throwable
      * @throws FileDoesNotExist
@@ -21,8 +29,8 @@ readonly class UpdateBundleAction
     public function execute(BundleDTO $dto): Bundle
     {
         return DB::transaction(function () use ($dto) {
-            $bundle = Bundle::findOrFail($dto->id);
-
+            $bundle = $this->repository->findById($dto->id);
+            /** @var Bundle $bundle */
             $bundle->update([
                 'name' => $dto->name,
                 'description' => $dto->description,
@@ -30,19 +38,14 @@ readonly class UpdateBundleAction
                 'extra' => $dto->extra,
             ]);
 
-            if (! empty($dto->products)) {
+            if (!empty($dto->products)) {
                 $bundle->products()->sync($dto->products);
             }
 
-            if (! empty($dto->images)) {
+            if (!empty($dto->images)) {
                 $bundle->clearMediaCollection('bundle');
-
-                foreach ($dto->images as $image) {
-                    $bundle
-                        ->addMedia($image)
-                        ->preservingOriginal()
-                        ->toMediaCollection('bundle');
-                }
+                $bundle->addMultipleMediaFromRequest(['images'])
+                    ->each(fn($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('bundle'));
             }
 
             return $bundle;

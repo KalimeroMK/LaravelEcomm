@@ -35,11 +35,6 @@ class StripeController extends CoreController
         return view('front::pages.stripe', ['id' => $id]);
     }
 
-    /**
-     * success response method.
-     *
-     * @throws ApiErrorException
-     */
     public function stripePost(Request $request): RedirectResponse
     {
         $dto = new StripeDTO(

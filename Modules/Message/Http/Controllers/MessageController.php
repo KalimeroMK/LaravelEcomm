@@ -15,12 +15,23 @@ use Modules\Message\Models\Message;
 
 class MessageController extends CoreController
 {
+    private GetAllMessagesAction $getAllAction;
+    private DeleteMessageAction $deleteAction;
+
+    public function __construct(
+        GetAllMessagesAction $getAllAction,
+        DeleteMessageAction $deleteAction,
+    ) {
+        $this->getAllAction = $getAllAction;
+        $this->deleteAction = $deleteAction;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View|Factory|Application
     {
-        $messagesDto = (new GetAllMessagesAction())->execute();
+        $messagesDto = $this->getAllAction->execute();
 
         return view('message::index', ['messages' => $messagesDto->messages]);
     }
@@ -30,6 +41,7 @@ class MessageController extends CoreController
      */
     public function show(Message $message): Factory|View|Application
     {
+        // Optionally, use a ShowMessageAction/DTO if you want to match pattern even more strictly
         return view('message::show', ['message' => $message]);
     }
 
@@ -38,7 +50,7 @@ class MessageController extends CoreController
      */
     public function destroy(Message $message): RedirectResponse
     {
-        (new DeleteMessageAction())->execute($message->id);
+        $this->deleteAction->execute($message->id);
 
         return redirect()->back();
     }

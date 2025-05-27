@@ -9,12 +9,15 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Bundle\Actions\CreateBundleAction;
 use Modules\Bundle\Actions\DeleteBundleAction;
+use Modules\Bundle\Actions\DeleteBundleMediaAction;
+use Modules\Bundle\Actions\FindBundleAction;
+use Modules\Bundle\Actions\GetAllBundlesAction;
+use Modules\Bundle\Actions\GetAllProductsAction;
 use Modules\Bundle\Actions\UpdateBundleAction;
 use Modules\Bundle\DTOs\BundleDTO;
 use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Http\Requests\Update;
 use Modules\Bundle\Models\Bundle;
-use Modules\Product\Models\Product;
 use Throwable;
 
 class BundleController extends Controller
@@ -25,27 +28,43 @@ class BundleController extends Controller
 
     protected DeleteBundleAction $deleteAction;
 
+    protected GetAllBundlesAction $getAllBundlesAction;
+
+    protected FindBundleAction $findBundleAction;
+
+    protected GetAllProductsAction $getAllProductsAction;
+
+    protected DeleteBundleMediaAction $deleteBundleMediaAction;
+
     public function __construct(
         CreateBundleAction $createAction,
         UpdateBundleAction $updateAction,
-        DeleteBundleAction $deleteAction
+        DeleteBundleAction $deleteAction,
+        GetAllBundlesAction $getAllBundlesAction,
+        FindBundleAction $findBundleAction,
+        GetAllProductsAction $getAllProductsAction,
+        DeleteBundleMediaAction $deleteBundleMediaAction
     ) {
         $this->createAction = $createAction;
         $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
+        $this->getAllBundlesAction = $getAllBundlesAction;
+        $this->findBundleAction = $findBundleAction;
+        $this->getAllProductsAction = $getAllProductsAction;
+        $this->deleteBundleMediaAction = $deleteBundleMediaAction;
         $this->authorizeResource(Bundle::class, 'bundle');
     }
 
     public function index(): View
     {
-        $bundles = Bundle::all();
+        $bundles = $this->getAllBundlesAction->execute();
 
         return view('bundle::index', ['bundles' => $bundles]);
     }
 
     public function create(): View
     {
-        $products = Product::all();
+        $products = $this->getAllProductsAction->execute();
         $bundle = new Bundle;
 
         return view('bundle::create', ['products' => $products, 'bundle' => $bundle]);
@@ -64,7 +83,7 @@ class BundleController extends Controller
 
     public function edit(Bundle $bundle): View
     {
-        $products = Product::all();
+        $products = $this->getAllProductsAction->execute();
 
         return view('bundle::edit', ['bundle' => $bundle, 'products' => $products]);
     }
@@ -95,10 +114,8 @@ class BundleController extends Controller
      */
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
-        $model = Bundle::findOrFail($modelId);
-        $media = $model->media()->where('id', $mediaId)->firstOrFail();
-        $media->delete();
+        $this->deleteBundleMediaAction->execute($modelId, $mediaId);
 
-        return redirect()->route('bundles.index')->with('status', 'Media deleted successfully.');
+        return back()->with('success', 'Media deleted successfully.');
     }
 }

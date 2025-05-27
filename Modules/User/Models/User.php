@@ -40,16 +40,16 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * Class User
  *
- * @property int                                                            $id
- * @property string                                                         $name
- * @property string                                                         $email
- * @property string|null                                                    $email_verified_at
- * @property string                                                         $password
- * @property string|null                                                    $remember_token
- * @property Carbon|null                                                    $created_at
- * @property Carbon|null                                                    $updated_at
- * @property string|null                                                    $magic_token
- * @property string|null                                                    $token_expires_at
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property string|null $magic_token
+ * @property string|null $token_expires_at
  * @property-read Collection<int, Cart>                                     $carts
  * @property-read int|null                                                  $carts_count
  * @property-read Google2fa|null                                            $loginSecurity

@@ -9,10 +9,13 @@ use Modules\Brand\DTOs\BrandDTO;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Repository\BrandRepository;
 
-readonly class UpdateBrandAction
+class UpdateBrandAction
 {
-    public function __construct(private BrandRepository $repository)
+    private BrandRepository $repository;
+
+    public function __construct(BrandRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(BrandDTO $dto): Model
@@ -21,15 +24,16 @@ readonly class UpdateBrandAction
         /** @var Brand $brand */
         $brand->update([
             'title' => $dto->title,
+            'slug' => $dto->slug ?? $brand->slug,
             'status' => $dto->status,
         ]);
-        // Handle Spatie media upload
-        if ($dto->images && is_array($dto->images)) {
+
+        if (!empty($dto->images)) {
             $brand->clearMediaCollection('brand');
-            foreach ($dto->images as $image) {
-                $brand->addMedia($image)->preservingOriginal()->toMediaCollection('brand');
-            }
+            $brand->addMultipleMediaFromRequest(['images'])
+                ->each(fn($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('brand'));
         }
+
         return $brand;
     }
 }

@@ -8,12 +8,10 @@ use Modules\Shipping\Repository\ShippingRepository;
 
 readonly class DeleteShippingAction
 {
-    public function __construct(private ShippingRepository $repository)
-    {
-    }
+    public function __construct(private ShippingRepository $repository) {}
 
-    public function execute(int $id): void
+    public function execute(int $id): bool
     {
-        $this->repository->destroy($id);
+        return $this->repository->destroy($id);
     }
 }

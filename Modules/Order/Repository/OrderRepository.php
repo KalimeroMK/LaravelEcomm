@@ -43,7 +43,6 @@ class OrderRepository extends EloquentRepository implements EloquentRepositoryIn
      * Search orders with filters and relationships.
      *
      * @param  array<string, mixed>  $data
-     * @return LengthAwarePaginator
      */
     public function search(array $data): LengthAwarePaginator
     {
@@ -69,16 +68,16 @@ class OrderRepository extends EloquentRepository implements EloquentRepositoryIn
         }
 
         if (Arr::has($data, 'name')) {
-            $query->whereHas('user', fn($q) => $q->whereLike('name', Arr::get($data, 'name')));
+            $query->whereHas('user', fn ($q) => $q->whereLike('name', Arr::get($data, 'name')));
         }
 
         if (Arr::has($data, 'email')) {
-            $query->whereHas('user', fn($q) => $q->whereLike('email', Arr::get($data, 'email')));
+            $query->whereHas('user', fn ($q) => $q->whereLike('email', Arr::get($data, 'email')));
         }
 
         $query->with('shipping', 'user', 'carts');
 
-        if (!Arr::get($data, 'all_included', false) && $data !== []) {
+        if (! Arr::get($data, 'all_included', false) && $data !== []) {
             $query->orderBy(
                 Arr::get($data, 'order_by', 'id'),
                 Arr::get($data, 'sort', 'desc')
@@ -87,7 +86,7 @@ class OrderRepository extends EloquentRepository implements EloquentRepositoryIn
 
         $results = $query->paginate(Arr::get($data, 'per_page', (new $this->modelClass)->getPerPage()));
 
-        $results->getCollection()->transform(fn($item): OrderResource => new OrderResource($item));
+        $results->getCollection()->transform(fn ($item): OrderResource => new OrderResource($item));
 
         return $results;
     }

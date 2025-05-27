@@ -9,9 +9,7 @@ use Modules\Product\Repository\ProductRepository;
 
 readonly class GetAllProductsAction
 {
-    public function __construct(private ProductRepository $repository)
-    {
-    }
+    public function __construct(private ProductRepository $repository) {}
 
     public function execute(): ProductListDTO
     {

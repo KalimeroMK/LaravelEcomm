@@ -30,10 +30,10 @@ class CouponController extends CoreController
         UpdateCouponAction $updateAction,
         DeleteCouponAction $deleteAction
     ) {
-        $this->authorizeResource(Coupon::class, 'coupon');
         $this->createAction = $createAction;
         $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
+        $this->authorizeResource(Coupon::class, 'coupon');
     }
 
     /**

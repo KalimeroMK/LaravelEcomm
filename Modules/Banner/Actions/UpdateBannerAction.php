@@ -29,7 +29,6 @@ readonly class UpdateBannerAction
     {
         $banner = $this->repository->findById($dto->id);
         /** @var Banner $banner */
-
         $banner->update([
             'title' => $dto->title,
             'slug' => $dto->slug ?? $banner->slug,
@@ -37,10 +36,10 @@ readonly class UpdateBannerAction
             'status' => $dto->status,
         ]);
 
-        if (!empty($dto->images)) {
+        if (! empty($dto->images)) {
             $banner->clearMediaCollection('banner');
             $banner->addMultipleMediaFromRequest(['images'])
-                ->each(fn(FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('banner'));
+                ->each(fn (FileAdder $fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('banner'));
         }
 
         return $banner;

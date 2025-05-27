@@ -7,10 +7,13 @@ namespace Modules\Shipping\Actions;
 use Modules\Shipping\DTOs\ShippingDTO;
 use Modules\Shipping\Repository\ShippingRepository;
 
-readonly class UpdateShippingAction
+class UpdateShippingAction
 {
-    public function __construct(private ShippingRepository $repository)
+    private ShippingRepository $repository;
+
+    public function __construct(ShippingRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(int $id, ShippingDTO $dto): void

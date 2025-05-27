@@ -14,26 +14,26 @@ class AttributePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('attribute-list');
+        return $user->can('attribute-group-list');
     }
 
-    public function view(User $user): bool
+    public function view(User $user, Attribute $attribute): bool
     {
-        return $user->can('attribute-list');
+        return $user->can('attribute-group-list');
     }
 
     public function create(User $user): bool
     {
-        return $user->can('attribute-create');
+        return $user->can('attribute-group-create');
     }
 
     public function update(User $user, Attribute $attribute): bool
     {
-        return $user->can('attribute-create');
+        return $user->can('attribute-group-update');
     }
 
     public function delete(User $user, Attribute $attribute): bool
     {
-        return $user->can('attribute-delete');
+        return $user->can('attribute-group-delete');
     }
 }

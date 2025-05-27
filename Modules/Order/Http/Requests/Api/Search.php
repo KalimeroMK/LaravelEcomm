@@ -26,6 +26,7 @@ class Search extends CoreRequest
             'email' => 'string|nullable',
             'per_page' => 'nullable|int',
             'all_included' => 'nullable|boolean',
+            'user_id' => 'nullable|exists:users',
         ];
     }
 }

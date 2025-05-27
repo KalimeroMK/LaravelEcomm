@@ -22,21 +22,21 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Setting
  *
- * @property int                              $id
- * @property string                           $description
- * @property string                           $short_des
- * @property string                           $logo
- * @property string                           $address
- * @property string                           $phone
- * @property string                           $email
- * @property string                           $site-name
- * @property string|null                      $keywords
- * @property string|null                      $google-site-verification
- * @property Carbon|null                      $created_at
- * @property Carbon|null                      $updated_at
- * @property string|null                      $longitude
- * @property string|null                      $latitude
- * @property string|null                      $google_map_api_key
+ * @property int $id
+ * @property string $description
+ * @property string $short_des
+ * @property string $logo
+ * @property string $address
+ * @property string $phone
+ * @property string $email
+ * @property string $site-name
+ * @property string|null $keywords
+ * @property string|null $google-site-verification
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property string|null $longitude
+ * @property string|null $latitude
+ * @property string|null $google_map_api_key
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null                    $media_count
  *

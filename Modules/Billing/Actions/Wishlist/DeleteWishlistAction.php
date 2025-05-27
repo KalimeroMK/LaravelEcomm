@@ -8,13 +8,10 @@ use Modules\Billing\Repository\WishlistRepository;
 
 readonly class DeleteWishlistAction
 {
-    public function __construct(private WishlistRepository $repository)
-    {
-    }
+    public function __construct(private WishlistRepository $repository) {}
 
     public function execute(int $id): void
     {
         $this->repository->destroy($id);
     }
-
 }

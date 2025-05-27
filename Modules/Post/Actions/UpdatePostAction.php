@@ -9,9 +9,7 @@ use Modules\Post\Repository\PostRepository;
 
 readonly class UpdatePostAction
 {
-    public function __construct(private PostRepository $repository)
-    {
-    }
+    public function __construct(private PostRepository $repository) {}
 
     public function execute(PostDTO $dto): PostDTO
     {
@@ -26,10 +24,10 @@ readonly class UpdatePostAction
         ]);
 
         // Sync relationships if needed
-        if (!empty($dto->categories)) {
+        if (! empty($dto->categories)) {
             $post->categories()->sync($dto->categories);
         }
-        if (!empty($dto->tags)) {
+        if (! empty($dto->tags)) {
             $post->tags()->sync($dto->tags);
         }
 

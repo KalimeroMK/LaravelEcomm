@@ -23,7 +23,7 @@ readonly class PaypalDTO
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['amount']) ? (float)$data['amount'] : null,
+            isset($data['amount']) ? (float) $data['amount'] : null,
             $data['currency'] ?? config('paypal.currency', 'usd'),
             $data['returnUrl'] ?? route('payment.success'),
             $data['cancelUrl'] ?? route('payment.cancel')

@@ -8,10 +8,13 @@ use Modules\Coupon\DTOs\CouponDTO;
 use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Repository\CouponRepository;
 
-readonly class CreateCouponAction
+class CreateCouponAction
 {
-    public function __construct(private CouponRepository $repository)
+    private CouponRepository $repository;
+
+    public function __construct(CouponRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(CouponDTO $dto): Coupon

@@ -9,14 +9,11 @@ use Modules\Newsletter\Repository\NewsletterRepository;
 
 readonly class GetAllNewslettersAction
 {
-    public function __construct(private NewsletterRepository $repository)
-    {
-    }
+    public function __construct(private NewsletterRepository $repository) {}
 
     public function execute(): NewsletterListDTO
     {
         $newsletters = $this->repository->findAll();
-
         return new NewsletterListDTO($newsletters);
     }
 }

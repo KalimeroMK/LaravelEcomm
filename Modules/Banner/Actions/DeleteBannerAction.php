@@ -15,7 +15,8 @@ readonly class DeleteBannerAction
         $this->repository = $repository;
     }
 
-    public function execute(int $id): bool
+
+    public function execute(int $id): void
     {
         $this->repository->destroy($id);
     }

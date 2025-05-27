@@ -8,9 +8,7 @@ use Modules\Newsletter\Repository\NewsletterRepository;
 
 readonly class DeleteNewsletterAction
 {
-    public function __construct(private NewsletterRepository $repository)
-    {
-    }
+    public function __construct(private NewsletterRepository $repository) {}
 
     public function execute(int $id): void
     {

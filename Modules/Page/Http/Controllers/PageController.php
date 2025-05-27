@@ -11,19 +11,24 @@ use Modules\Page\Actions\CreatePageAction;
 use Modules\Page\Actions\DeletePageAction;
 use Modules\Page\Actions\GetAllPagesAction;
 use Modules\Page\Actions\UpdatePageAction;
+use Modules\Page\DTOs\PageDTO;
 use Modules\Page\Http\Requests\Store;
 use Modules\Page\Models\Page;
 
 class PageController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly CreatePageAction $createAction,
+        private readonly UpdatePageAction $updateAction,
+        private readonly DeletePageAction $deleteAction,
+        private readonly GetAllPagesAction $getAllPagesAction
+    ) {
         $this->authorizeResource(Page::class, 'page');
     }
 
     public function index(): View
     {
-        $pagesDto = (new GetAllPagesAction())->execute();
+        $pagesDto = $this->getAllPagesAction->execute();
 
         return view('page::index', ['pages' => $pagesDto->pages]);
     }
@@ -35,7 +40,7 @@ class PageController extends Controller
 
     public function store(Store $request): RedirectResponse
     {
-        (new CreatePageAction())->execute($request->validated());
+        $this->createAction->execute($request->validated());
 
         return redirect()->route('pages.index')->with('status', 'Page created successfully.');
     }
@@ -47,14 +52,15 @@ class PageController extends Controller
 
     public function update(Store $request, Page $page): RedirectResponse
     {
-        (new UpdatePageAction())->execute($page->id, $request->validated());
+        $dto = PageDTO::fromRequest($request, $page->id);
+        $this->updateAction->execute($dto);
 
         return redirect()->route('pages.edit', $page)->with('status', 'Page updated successfully.');
     }
 
     public function destroy(Page $page): RedirectResponse
     {
-        (new DeletePageAction())->execute($page->id);
+        $this->deleteAction->execute($page->id);
 
         return redirect()->route('pages.index')->with('status', 'Page deleted successfully.');
     }

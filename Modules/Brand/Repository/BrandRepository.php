@@ -20,18 +20,17 @@ class BrandRepository extends EloquentRepository implements EloquentRepositoryIn
      * Search for entries based on filter criteria.
      *
      * @param  array<string, mixed>  $data
-     * @return mixed
      */
     public function search(array $data): mixed
     {
         $query = (new $this->modelClass)->newQuery();
 
-        if ($data === [] || !empty($data['all_included'])) {
+        if ($data === [] || ! empty($data['all_included'])) {
             return $query->with('products')->get();
         }
 
         foreach (['title', 'slug', 'status'] as $field) {
-            if (!empty($data[$field])) {
+            if (! empty($data[$field])) {
                 $query->where($field, 'like', '%'.$data[$field].'%');
             }
         }

@@ -12,25 +12,40 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\OpenAI\Service\OpenAIService;
 use Modules\Product\Actions\DeleteProductAction;
 use Modules\Product\Actions\GetAllProductsAction;
 use Modules\Product\Actions\StoreProductAction;
 use Modules\Product\Actions\UpdateProductAction;
 use Modules\Product\DTOs\ProductDTO;
+use Modules\Product\Http\Requests\Store;
+use Modules\Product\Http\Requests\Update;
 use Modules\Product\Models\Product;
 use Modules\Tag\Models\Tag;
 
 class ProductController extends CoreController
 {
-    public function __construct()
-    {
+    private GetAllProductsAction $getAllProductsAction;
+    private StoreProductAction $storeProductAction;
+    private UpdateProductAction $updateProductAction;
+    private DeleteProductAction $deleteProductAction;
+
+    public function __construct(
+        GetAllProductsAction $getAllProductsAction,
+        StoreProductAction $storeProductAction,
+        UpdateProductAction $updateProductAction,
+        DeleteProductAction $deleteProductAction
+    ) {
+        $this->getAllProductsAction = $getAllProductsAction;
+        $this->storeProductAction = $storeProductAction;
+        $this->updateProductAction = $updateProductAction;
+        $this->deleteProductAction = $deleteProductAction;
         $this->authorizeResource(Product::class, 'product');
     }
 
     public function index(): Renderable
     {
-        $productsDto = (new GetAllProductsAction())->execute();
-
+        $productsDto = $this->getAllProductsAction->execute();
         return view('product::index', ['products' => $productsDto->products]);
     }
 
@@ -48,22 +63,22 @@ class ProductController extends CoreController
     /**
      * @throws Exception
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
-        (new StoreProductAction())->execute($request->all());
-
+        $dto = ProductDTO::fromRequest($request);
+        $this->storeProductAction->execute($dto);
         return redirect()->route('products.index');
     }
 
     public function edit(Product $product): Renderable
     {
         $product->load('attributes.attribute');
-        $productDto = new ProductDTO($product);
+        $productDto = ProductDTO::fromModel($product);
 
         return view('product::edit', [
             'brands' => Brand::get()->toArray(),
             'categories' => Category::get()->toArray(),
-            'product' => (array) $productDto,
+            'product' => (array)$productDto,
             'tags' => Tag::get()->toArray(),
             'attributes' => Attribute::all()->toArray(),
         ]);
@@ -72,17 +87,16 @@ class ProductController extends CoreController
     /**
      * @throws Exception
      */
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(Update $request, Product $product): RedirectResponse
     {
-        (new UpdateProductAction())->execute($product->id, $request->all());
-
+        $dto = ProductDTO::fromRequest($request, $product->id);
+        $this->updateProductAction->execute($product->id, $dto);
         return redirect()->route('products.index');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
-        (new DeleteProductAction())->execute($product->id);
-
+        $this->deleteProductAction->execute($product->id);
         return redirect()->route('products.index');
     }
 

@@ -5,18 +5,27 @@ declare(strict_types=1);
 namespace Modules\Page\Actions;
 
 use Modules\Page\DTOs\PageDTO;
+use Modules\Page\Models\Page;
 use Modules\Page\Repository\PageRepository;
 
-readonly class CreatePageAction
+class CreatePageAction
 {
-    public function __construct(private PageRepository $repository)
+    private PageRepository $repository;
+
+    public function __construct(PageRepository $repository)
     {
+        $this->repository = $repository;
     }
 
-    public function execute(array $data): PageDTO
+    public function execute(PageDTO $dto): Page
     {
-        $page = $this->repository->create($data);
-
-        return PageDTO::fromArray($page->toArray());
+        $page = $this->repository->create([
+            'title' => $dto->title,
+            'slug' => $dto->slug,
+            'content' => $dto->content,
+            'is_active' => $dto->is_active,
+            'user_id' => $dto->user_id,
+        ]);
+        return $page;
     }
 }

@@ -10,9 +10,7 @@ use Modules\Billing\Repository\WishlistRepository;
 
 readonly class CreateWishlistAction
 {
-    public function __construct(private WishlistRepository $repository)
-    {
-    }
+    public function __construct(private WishlistRepository $repository) {}
 
     public function execute(WishlistDTO $dto): Wishlist
     {

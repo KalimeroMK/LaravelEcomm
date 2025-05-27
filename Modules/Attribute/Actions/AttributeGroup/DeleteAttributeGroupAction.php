@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Actions\AttributeGroup;
 
-use Modules\Attribute\Models\AttributeGroup;
+use Modules\Attribute\Repository\AttributeGroupRepository;
 
 readonly class DeleteAttributeGroupAction
 {
+    private AttributeGroupRepository $repository;
+
+    public function __construct(AttributeGroupRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function execute(int $id): bool
     {
-        $group = AttributeGroup::findOrFail($id);
-        // Optionally unassign attributes
-        $group->attributes()->update(['attribute_group_id' => null]);
-
-        return (bool) $group->delete();
+        $this->repository->destroy($id);
     }
 }

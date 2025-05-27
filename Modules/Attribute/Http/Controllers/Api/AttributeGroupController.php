@@ -14,6 +14,7 @@ use Modules\Attribute\DTOs\AttributeGroupDTO;
 use Modules\Attribute\Http\Requests\Api\AttributeGroup\Store;
 use Modules\Attribute\Http\Requests\Api\AttributeGroup\Update;
 use Modules\Attribute\Http\Resources\AttributeGroupResource;
+use Modules\Attribute\Models\AttributeGroup;
 use Modules\Attribute\Repository\AttributeGroupRepository;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -26,16 +27,12 @@ class AttributeGroupController extends CoreController
         private readonly CreateAttributeGroupAction $createAction,
         private readonly UpdateAttributeGroupAction $updateAction,
         private readonly DeleteAttributeGroupAction $deleteAction
-    ) {
-        $this->middleware('permission:attribute-group-list', ['only' => ['index']]);
-        $this->middleware('permission:attribute-group-show', ['only' => ['show']]);
-        $this->middleware('permission:attribute-group-create', ['only' => ['store']]);
-        $this->middleware('permission:attribute-group-update', ['only' => ['update']]);
-        $this->middleware('permission:attribute-group-delete', ['only' => ['destroy']]);
-    }
+    ) {}
 
     public function index(Request $request): AnonymousResourceCollection
     {
+        $this->authorize('viewAny', AttributeGroup::class);
+
         return AttributeGroupResource::collection(
             $this->repository->findAll()
         );
@@ -46,18 +43,15 @@ class AttributeGroupController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
+        $this->authorize('create', AttributeGroup::class);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new AttributeGroupResource($this->createAction->execute(AttributeGroupDTO::fromRequest($request))));
+            ->setMessage(__('apiResponse.storeSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new AttributeGroupResource(
+                $this->createAction->execute(AttributeGroupDTO::fromRequest($request))
+            ));
     }
 
     /**
@@ -65,18 +59,13 @@ class AttributeGroupController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
+        $attributeGroup = $this->authorizeFromRepo(AttributeGroupRepository::class, 'view', $id);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.ok',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new AttributeGroupResource($this->repository->findById($id)));
+            ->setMessage(__('apiResponse.ok', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new AttributeGroupResource($attributeGroup));
     }
 
     /**
@@ -84,18 +73,15 @@ class AttributeGroupController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
+        $this->authorizeFromRepo(AttributeGroupRepository::class, 'update', $id);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.updateSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new AttributeGroupResource($this->updateAction->execute(AttributeGroupDTO::fromRequest($request)->withId($id))));
+            ->setMessage(__('apiResponse.updateSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new AttributeGroupResource(
+                $this->updateAction->execute(AttributeGroupDTO::fromRequest($request)->withId($id))
+            ));
     }
 
     /**
@@ -103,19 +89,14 @@ class AttributeGroupController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
+        $this->authorizeFromRepo(AttributeGroupRepository::class, 'delete', $id);
+
         $this->deleteAction->execute($id);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.deleteSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
             ->respond(null);
     }
 }

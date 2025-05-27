@@ -13,8 +13,7 @@ readonly class PermissionDTO
         public string $name,
         public string $guard_name,
         public string $created_at
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -22,7 +21,7 @@ readonly class PermissionDTO
             $data['id'],
             $data['name'],
             $data['guard_name'],
-            isset($data['created_at']) ? (string)$data['created_at'] : now()->toDateTimeString()
+            isset($data['created_at']) ? (string) $data['created_at'] : now()->toDateTimeString()
         );
     }
 

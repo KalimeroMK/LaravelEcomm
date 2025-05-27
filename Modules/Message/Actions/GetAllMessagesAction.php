@@ -7,10 +7,13 @@ namespace Modules\Message\Actions;
 use Illuminate\Support\Collection;
 use Modules\Message\Repository\MessageRepository;
 
-readonly class GetAllMessagesAction
+class GetAllMessagesAction
 {
-    public function __construct(private MessageRepository $repository)
+    private MessageRepository $repository;
+
+    public function __construct(MessageRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(): Collection

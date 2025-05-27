@@ -11,17 +11,33 @@ use Modules\Newsletter\Actions\CreateNewsletterAction;
 use Modules\Newsletter\Actions\DeleteNewsletterAction;
 use Modules\Newsletter\Actions\GetAllNewslettersAction;
 use Modules\Newsletter\Actions\UpdateNewsletterAction;
+use Modules\Newsletter\DTOs\NewsletterDTO;
 use Modules\Newsletter\Http\Requests\Store;
 use Modules\Newsletter\Models\Newsletter;
 
 class NewsletterController extends CoreController
 {
-    public function __construct() {}
+    private readonly GetAllNewslettersAction $getAllAction;
+    private readonly CreateNewsletterAction $createAction;
+    private readonly UpdateNewsletterAction $updateAction;
+    private readonly DeleteNewsletterAction $deleteAction;
+
+    public function __construct(
+        GetAllNewslettersAction $getAllAction,
+        CreateNewsletterAction $createAction,
+        UpdateNewsletterAction $updateAction,
+        DeleteNewsletterAction $deleteAction
+    ) {
+        $this->getAllAction = $getAllAction;
+        $this->createAction = $createAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
+        $this->authorizeResource(Newsletter::class, 'newsletter');
+    }
 
     public function index(): View
     {
-        $newslettersDto = (new GetAllNewslettersAction())->execute();
-
+        $newslettersDto = $this->getAllAction->execute();
         return view('newsletter::index', ['newsletters' => $newslettersDto->newsletters]);
     }
 
@@ -32,8 +48,8 @@ class NewsletterController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        (new CreateNewsletterAction())->execute($request->validated());
-
+        $dto = NewsletterDTO::fromRequest($request);
+        $this->createAction->execute($dto);
         return redirect()->route('newsletters.index')->with('status', 'Newsletter created successfully!');
     }
 
@@ -44,15 +60,14 @@ class NewsletterController extends CoreController
 
     public function update(Store $request, Newsletter $newsletter): RedirectResponse
     {
-        (new UpdateNewsletterAction())->execute($newsletter->id, $request->validated());
-
+        $dto = NewsletterDTO::fromRequest($request, $newsletter->id);
+        $this->updateAction->execute($dto);
         return redirect()->route('newsletters.index')->with('status', 'Newsletter updated successfully!');
     }
 
     public function destroy(Newsletter $newsletter): RedirectResponse
     {
-        (new DeleteNewsletterAction())->execute($newsletter->id);
-
+        $this->deleteAction->execute($newsletter->id);
         return redirect()->route('newsletters.index')->with('status', 'Newsletter deleted successfully!');
     }
 }

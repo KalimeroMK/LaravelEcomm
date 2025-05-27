@@ -8,8 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\Permission\Models\Permission;
 use Modules\Role\Actions\DeleteRoleAction;
+use Modules\Role\Actions\GetAllPermissionsAction;
 use Modules\Role\Actions\GetAllRolesAction;
 use Modules\Role\Actions\StoreRoleAction;
 use Modules\Role\Actions\UpdateRoleAction;
@@ -18,11 +18,27 @@ use Modules\Role\Models\Role;
 
 class RoleController extends CoreController
 {
+    private readonly GetAllRolesAction $getAllAction;
+    private readonly StoreRoleAction $storeAction;
+    private readonly UpdateRoleAction $updateAction;
+    private readonly DeleteRoleAction $deleteAction;
+    private readonly GetAllPermissionsAction $getAllPermissionsAction;
+
     /**
      * RoleController constructor.
      */
-    public function __construct()
-    {
+    public function __construct(
+        GetAllRolesAction $getAllAction,
+        StoreRoleAction $storeAction,
+        UpdateRoleAction $updateAction,
+        DeleteRoleAction $deleteAction,
+        GetAllPermissionsAction $getAllPermissionsAction
+    ) {
+        $this->getAllAction = $getAllAction;
+        $this->storeAction = $storeAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
+        $this->getAllPermissionsAction = $getAllPermissionsAction;
         $this->authorizeResource(Role::class, 'role');
     }
 
@@ -31,7 +47,7 @@ class RoleController extends CoreController
      */
     public function index(): View
     {
-        $rolesDto = (new GetAllRolesAction())->execute();
+        $rolesDto = $this->getAllAction->execute();
 
         return view('role::index', ['roles' => $rolesDto->roles]);
     }
@@ -41,7 +57,7 @@ class RoleController extends CoreController
      */
     public function create(): View
     {
-        $permissions = Permission::all()->toArray();
+        $permissions = $this->getAllPermissionsAction->execute()->toArray();
 
         return view('role::create', ['permissions' => $permissions]);
     }
@@ -51,7 +67,7 @@ class RoleController extends CoreController
      */
     public function store(Request $request): RedirectResponse
     {
-        (new StoreRoleAction())->execute($request->all());
+        $this->storeAction->execute($request->all());
 
         return redirect()->route('roles.index');
     }
@@ -61,8 +77,8 @@ class RoleController extends CoreController
      */
     public function edit(Role $role): View
     {
-        $permissions = Permission::all()->toArray();
-        $roleDto = new RoleDTO($role->load('permissions'));
+        $permissions = $this->getAllPermissionsAction->execute()->toArray();
+        $roleDto = RoleDTO::fromArray($role->toArray());
 
         return view('role::edit', [
             'role' => (array) $roleDto,
@@ -75,7 +91,7 @@ class RoleController extends CoreController
      */
     public function update(Request $request, Role $role): RedirectResponse
     {
-        (new UpdateRoleAction())->execute($role->id, $request->all());
+        $this->updateAction->execute($role->id, $request->all());
 
         return redirect()->route('roles.index');
     }
@@ -85,7 +101,7 @@ class RoleController extends CoreController
      */
     public function destroy(Role $role): RedirectResponse
     {
-        (new DeleteRoleAction())->execute($role->id);
+        $this->deleteAction->execute($role->id);
 
         return redirect()->route('roles.index');
     }

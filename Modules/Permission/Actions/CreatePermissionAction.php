@@ -9,14 +9,15 @@ use Modules\Permission\Repository\PermissionRepository;
 
 readonly class CreatePermissionAction
 {
-    public function __construct(private PermissionRepository $repository)
-    {
-    }
+    public function __construct(private PermissionRepository $repository) {}
 
-    public function execute(array $data): PermissionDTO
+    public function execute(PermissionDTO $dto): PermissionDTO
     {
-        $permission = $this->repository->create($data);
+        $permission = $this->repository->create([
+            'name' => $dto->name,
+            'guard_name' => $dto->guard_name,
+        ]);
 
-        return new PermissionDTO($permission);
+        return PermissionDTO::fromArray($permission->toArray());
     }
 }

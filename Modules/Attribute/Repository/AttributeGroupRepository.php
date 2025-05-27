@@ -14,5 +14,4 @@ class AttributeGroupRepository extends EloquentRepository implements EloquentRep
     {
         parent::__construct(AttributeGroup::class);
     }
-
 }

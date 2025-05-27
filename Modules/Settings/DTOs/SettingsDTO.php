@@ -26,8 +26,7 @@ readonly class SettingsDTO
         public ?string $google_map_api_key = null,
         public ?string $created_at = null,
         public ?string $updated_at = null,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {

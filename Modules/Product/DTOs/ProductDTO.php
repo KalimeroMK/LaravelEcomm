@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Product\DTOs;
 
 use Illuminate\Http\Request;
+use Modules\Product\Models\Product;
 
 readonly class ProductDTO
 {
@@ -65,6 +66,35 @@ readonly class ProductDTO
             $data['brand'] ?? null,
             $data['attributes'] ?? null,
             $data['author'] ?? null,
+        );
+    }
+
+    public static function fromModel(Product $product): self
+    {
+        return new self(
+            $product->id,
+            $product->title,
+            $product->slug,
+            $product->summary,
+            $product->description,
+            $product->stock,
+            $product->status,
+            $product->price,
+            $product->discount,
+            $product->is_featured,
+            $product->d_deal,
+            $product->brand_id,
+            $product->sku,
+            $product->special_price,
+            $product->special_price_start,
+            $product->special_price_end,
+            $product->created_at,
+            $product->updated_at,
+            $product->categories?->pluck('id')->toArray(),
+            $product->tags?->pluck('id')->toArray(),
+            $product->brand ? $product->brand->toArray() : null,
+            $product->attributes ? $product->attributes->toArray() : null,
+            $product->author ? $product->author->toArray() : null
         );
     }
 }

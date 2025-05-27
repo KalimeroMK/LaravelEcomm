@@ -20,7 +20,6 @@ class AttributeRepository extends EloquentRepository implements SearchInterface
      * Search for entries based on filter criteria.
      *
      * @param  array<string, mixed>  $data
-     * @return mixed
      */
     public function search(array $data): mixed
     {

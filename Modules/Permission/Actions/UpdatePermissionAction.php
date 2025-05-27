@@ -9,14 +9,14 @@ use Modules\Permission\Repository\PermissionRepository;
 
 readonly class UpdatePermissionAction
 {
-    public function __construct(private PermissionRepository $repository)
-    {
-    }
+    public function __construct(private PermissionRepository $repository) {}
 
-    public function execute(int $id, array $data): PermissionDTO
+    public function execute(PermissionDTO $dto): PermissionDTO
     {
-        $permission = $this->repository->update($id, $data);
-
+        $permission = $this->repository->update($dto->id, [
+            'name' => $dto->name,
+            'guard_name' => $dto->guard_name,
+        ]);
         return PermissionDTO::fromArray($permission->toArray());
     }
 }

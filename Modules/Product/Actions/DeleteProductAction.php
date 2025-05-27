@@ -12,7 +12,7 @@ readonly class DeleteProductAction
     {
     }
 
-    public function execute(int $id): void
+    public function execute(int $id): bool
     {
         $this->repository->destroy($id);
     }

@@ -11,6 +11,7 @@ namespace Modules\Message\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
 use Modules\Core\Models\Core;
 use Modules\Message\Database\Factories\MessageFactory;
 
@@ -25,8 +26,8 @@ use Modules\Message\Database\Factories\MessageFactory;
  * @property string|null $phone
  * @property string $message
  * @property string|null $read_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
  * @method static Builder<static>|Message newModelQuery()
  * @method static Builder<static>|Message newQuery()
@@ -55,19 +56,21 @@ class Message extends Core
      *
      * @var string[]
      */
-    protected array $dates = [
-        'read_at',
-    ];
+    protected array $dates
+        = [
+            'read_at',
+        ];
 
-    protected $fillable = [
-        'name',
-        'subject',
-        'email',
-        'photo',
-        'phone',
-        'message',
-        'read_at',
-    ];
+    protected $fillable
+        = [
+            'name',
+            'subject',
+            'email',
+            'photo',
+            'phone',
+            'message',
+            'read_at',
+        ];
 
     public static function Factory(): MessageFactory
     {

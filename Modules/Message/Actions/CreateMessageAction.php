@@ -5,20 +5,38 @@ declare(strict_types=1);
 namespace Modules\Message\Actions;
 
 use Modules\Message\DTOs\MessageDTO;
+use Modules\Message\Models\Message;
 use Modules\Message\Repository\MessageRepository;
 
-readonly class CreateMessageAction
+class CreateMessageAction
 {
-    public function __construct(private MessageRepository $repository)
+    private MessageRepository $repository;
+
+    public function __construct(MessageRepository $repository)
     {
+        $this->repository = $repository;
     }
 
-    public function execute(MessageDTO $dto): MessageDTO
+    public function execute(MessageDTO $dto): Message
     {
+        /** @var Message $message */
         $message = $this->repository->create([
-            'content' => $dto->content,
+            'name' => $dto->name,
+            'subject' => $dto->subject,
+            'email' => $dto->email,
+            'phone' => $dto->phone,
+            'message' => $dto->message,
+            'read_at' => $dto->read_at,
         ]);
 
-        return MessageDTO::fromArray($message->toArray());
+        if (! empty($dto->photo) && is_file($dto->photo)) {
+            $message->clearMediaCollection('photo');
+
+            $message->addMedia($dto->photo)
+                ->preservingOriginal()
+                ->toMediaCollection('photo');
+        }
+
+        return $message;
     }
 }

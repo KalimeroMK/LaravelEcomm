@@ -9,9 +9,7 @@ use Modules\Newsletter\Repository\NewsletterRepository;
 
 readonly class CreateNewsletterAction
 {
-    public function __construct(private NewsletterRepository $repository)
-    {
-    }
+    public function __construct(private NewsletterRepository $repository) {}
 
     public function execute(NewsletterDTO $dto): NewsletterDTO
     {

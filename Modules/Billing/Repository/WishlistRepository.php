@@ -20,7 +20,6 @@ class WishlistRepository extends EloquentRepository implements EloquentRepositor
      * Creates a new Wishlist entry with calculated amount and discounted price.
      *
      * @param  array<string, mixed>  $data
-     * @return Model
      */
     public function create(array $data): Model
     {

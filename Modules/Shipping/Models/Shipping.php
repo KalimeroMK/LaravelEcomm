@@ -21,12 +21,12 @@ use Modules\Shipping\Database\Factories\ShippingFactory;
 /**
  * Class Shipping
  *
- * @property int                         $id
- * @property string                      $type
- * @property float                       $price
- * @property string                      $status
- * @property Carbon|null                 $created_at
- * @property Carbon|null                 $updated_at
+ * @property int $id
+ * @property string $type
+ * @property float $price
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Collection<int, Order> $orders
  * @property-read int|null               $orders_count
  *

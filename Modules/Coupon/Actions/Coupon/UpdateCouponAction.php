@@ -8,20 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Coupon\DTOs\CouponDTO;
 use Modules\Coupon\Repository\CouponRepository;
 
-readonly class UpdateCouponAction
+class UpdateCouponAction
 {
-    public function __construct(private CouponRepository $repository)
+    private CouponRepository $repository;
+
+    public function __construct(CouponRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(CouponDTO $dto): Model
     {
-        return $this->repository->update($dto->id, [
+        $coupon = $this->repository->findById($dto->id);
+        $coupon->update([
             'code' => $dto->code,
             'discount' => $dto->discount,
             'description' => $dto->description,
             'type' => $dto->type,
             'expires_at' => $dto->expires_at,
         ]);
+        return $coupon;
     }
 }

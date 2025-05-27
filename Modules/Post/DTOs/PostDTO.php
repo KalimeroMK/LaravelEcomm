@@ -19,8 +19,7 @@ readonly class PostDTO
         public int $user_id,
         public array $categories = [],
         public array $tags = []
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Request $request, ?int $id = null): self
     {

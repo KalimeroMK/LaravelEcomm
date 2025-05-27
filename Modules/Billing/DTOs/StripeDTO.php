@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 readonly class StripeDTO
 {
     public function __construct(
-        public ?int $amount,
+        public ?float $amount,
         public ?string $currency,
         public ?string $source,
         public ?string $description
@@ -23,7 +23,7 @@ readonly class StripeDTO
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['amount']) ? (int)$data['amount'] : null,
+            isset($data['amount']) ? (int) $data['amount'] : null,
             $data['currency'] ?? 'usd',
             $data['stripeToken'] ?? null,
             $data['description'] ?? 'KalimeroMK E-comm'

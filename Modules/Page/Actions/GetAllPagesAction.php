@@ -9,7 +9,7 @@ use Modules\Page\Repository\PageRepository;
 
 readonly class GetAllPagesAction
 {
-    public function __construct(private PageRepository $repository)
+    public function __construct(public PageRepository $repository)
     {
     }
 

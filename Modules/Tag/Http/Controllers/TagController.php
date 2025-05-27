@@ -9,17 +9,35 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Tag\Actions\CreateTagAction;
+use Modules\Tag\Actions\DeleteTagAction;
+use Modules\Tag\Actions\GetAllTagsAction;
+use Modules\Tag\Actions\ShowTagAction;
+use Modules\Tag\Actions\UpdateTagAction;
+use Modules\Tag\DTOs\TagDto;
 use Modules\Tag\Http\Requests\Api\Store;
 use Modules\Tag\Models\Tag;
-use Modules\Tag\Service\TagService;
 
 class TagController extends CoreController
 {
-    private TagService $tag_service;
+    private CreateTagAction $createTagAction;
+    private UpdateTagAction $updateTagAction;
+    private DeleteTagAction $deleteTagAction;
+    private GetAllTagsAction $getAllTagsAction;
+    private ShowTagAction $showTagAction;
 
-    public function __construct(TagService $tag_service)
-    {
-        $this->tag_service = $tag_service;
+    public function __construct(
+        CreateTagAction $createTagAction,
+        UpdateTagAction $updateTagAction,
+        DeleteTagAction $deleteTagAction,
+        GetAllTagsAction $getAllTagsAction,
+        ShowTagAction $showTagAction
+    ) {
+        $this->createTagAction = $createTagAction;
+        $this->updateTagAction = $updateTagAction;
+        $this->deleteTagAction = $deleteTagAction;
+        $this->getAllTagsAction = $getAllTagsAction;
+        $this->showTagAction = $showTagAction;
         $this->authorizeResource(Tag::class, 'tag');
     }
 
@@ -30,7 +48,7 @@ class TagController extends CoreController
      */
     public function index()
     {
-        return view('tag::index', ['tags' => $this->tag_service->getAll()]);
+        return view('tag::index', ['tags' => $this->getAllTagsAction->execute()]);
     }
 
     /**
@@ -38,9 +56,8 @@ class TagController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->tag_service->create($request->validated());
-
-        return redirect()->route('tags.index');
+        $this->createTagAction->execute($request->validated());
+        return redirect()->route('post-tag.index');
     }
 
     /**
@@ -61,7 +78,7 @@ class TagController extends CoreController
      */
     public function edit(Tag $tag)
     {
-        return view('tag::edit', ['tag' => $this->tag_service->findById($tag->id)]);
+        return view('tag::edit', ['tag' => $this->showTagAction->execute($tag->id)]);
     }
 
     /**
@@ -69,8 +86,8 @@ class TagController extends CoreController
      */
     public function update(Store $request, Tag $tag): RedirectResponse
     {
-        $this->tag_service->update($tag->id, $request->validated());
-
+        $dto = new TagDto(array_merge(['id' => $tag->id], $request->validated()));
+        $this->updateTagAction->execute($dto);
         return redirect()->route('post-tag.index');
     }
 
@@ -79,8 +96,7 @@ class TagController extends CoreController
      */
     public function destroy(Tag $tag): RedirectResponse
     {
-        $this->tag_service->delete($tag->id);
-
-        return redirect()->route('tags.index');
+        $this->deleteTagAction->execute($tag->id);
+        return redirect()->route('post-tag.index');
     }
 }

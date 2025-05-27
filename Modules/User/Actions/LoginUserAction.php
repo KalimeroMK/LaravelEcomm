@@ -12,7 +12,7 @@ readonly class LoginUserAction
 {
     public function execute(string $email, string $password): ?array
     {
-        if (!Auth::attempt(['email' => $email, 'password' => $password])) {
+        if (! Auth::attempt(['email' => $email, 'password' => $password])) {
             return null;
         }
 

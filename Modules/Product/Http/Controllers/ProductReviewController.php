@@ -8,20 +8,37 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Product\Actions\DeleteProductReviewAction;
+use Modules\Product\Actions\GetAllProductReviewsAction;
+use Modules\Product\Actions\GetProductReviewsByUserAction;
+use Modules\Product\Actions\StoreProductReviewAction;
+use Modules\Product\Actions\UpdateProductReviewAction;
+use Modules\Product\DTOs\ProductReviewDTO;
 use Modules\Product\Http\Requests\ProductReviewStore;
+use Modules\Product\Http\Requests\ProductReviewUpdate;
 use Modules\Product\Models\ProductReview;
-use Modules\Product\Service\ProductReviewService;
 
 class ProductReviewController extends CoreController
 {
-    private ProductReviewService $product_review_service;
+    private readonly GetAllProductReviewsAction $getAllProductReviewsAction;
+    private readonly GetProductReviewsByUserAction $getProductReviewsByUserAction;
+    private readonly StoreProductReviewAction $storeProductReviewAction;
+    private readonly UpdateProductReviewAction $updateProductReviewAction;
+    private readonly DeleteProductReviewAction $deleteProductReviewAction;
 
-    public function __construct(ProductReviewService $product_review_service)
-    {
-        $this->product_review_service = $product_review_service;
+    public function __construct(
+        GetAllProductReviewsAction $getAllProductReviewsAction,
+        GetProductReviewsByUserAction $getProductReviewsByUserAction,
+        StoreProductReviewAction $storeProductReviewAction,
+        UpdateProductReviewAction $updateProductReviewAction,
+        DeleteProductReviewAction $deleteProductReviewAction
+    ) {
+        $this->getAllProductReviewsAction = $getAllProductReviewsAction;
+        $this->getProductReviewsByUserAction = $getProductReviewsByUserAction;
+        $this->storeProductReviewAction = $storeProductReviewAction;
+        $this->updateProductReviewAction = $updateProductReviewAction;
+        $this->deleteProductReviewAction = $deleteProductReviewAction;
     }
 
     /**
@@ -31,12 +48,10 @@ class ProductReviewController extends CoreController
      */
     public function index()
     {
-        if (Auth::user()->hasRole('client')) {
-            return view('product::review.index', ['reviews' => $this->product_review_service->findAllByUser()]);
-        }
-
-        return view('product::review.index', ['reviews' => $this->product_review_service->index()]);
-
+        $reviews = auth()->user()->hasRole('client')
+            ? $this->getProductReviewsByUserAction->execute()
+            : $this->getAllProductReviewsAction->execute();
+        return view('product::review.index', ['reviews' => $reviews]);
     }
 
     /**
@@ -44,8 +59,8 @@ class ProductReviewController extends CoreController
      */
     public function store(ProductReviewStore $request): RedirectResponse
     {
-        $this->product_review_service->store($request);
-
+        $dto = ProductReviewDTO::fromRequest($request);
+        $this->storeProductReviewAction->execute($dto);
         return redirect()->back();
     }
 
@@ -57,19 +72,17 @@ class ProductReviewController extends CoreController
     public function edit(ProductReview $review)
     {
         $this->authorize('update', $review);
-
-        return view('product::review.edit')->with('review', $this->product_review_service->edit($review->id));
+        return view('product::review.edit')->with('review', ProductReviewDTO::fromModel($review));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductReview $review): RedirectResponse
+    public function update(ProductReviewUpdate $request, ProductReview $review): RedirectResponse
     {
         $this->authorize('update', $review);
-
-        $this->product_review_service->update($review->id, $request->all());
-
+        $dto = ProductReviewDTO::fromRequest($request, $review->id);
+        $this->updateProductReviewAction->execute($review->id, $dto);
         return redirect()->route('product::review.index');
     }
 
@@ -79,8 +92,7 @@ class ProductReviewController extends CoreController
     public function destroy(ProductReview $review): RedirectResponse
     {
         $this->authorize('delete', $review);
-        $this->product_review_service->destroy($review->id);
-
+        $this->deleteProductReviewAction->execute($review->id);
         return redirect()->route('review.index');
     }
 }

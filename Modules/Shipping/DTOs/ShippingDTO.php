@@ -15,8 +15,7 @@ readonly class ShippingDTO
         public ?string $status,
         public ?string $created_at = null,
         public ?string $updated_at = null,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -25,8 +24,8 @@ readonly class ShippingDTO
             $data['type'] ?? null,
             $data['price'] ?? null,
             $data['status'] ?? null,
-            isset($data['created_at']) ? (string)$data['created_at'] : null,
-            isset($data['updated_at']) ? (string)$data['updated_at'] : null,
+            isset($data['created_at']) ? (string) $data['created_at'] : null,
+            isset($data['updated_at']) ? (string) $data['updated_at'] : null,
         );
     }
 

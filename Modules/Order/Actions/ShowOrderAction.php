@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\Order\Actions;
 
-use Modules\Order\DTOs\OrderDTO;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Order\Repository\OrderRepository;
 
 readonly class ShowOrderAction
 {
-    public function __construct(private OrderRepository $repository)
-    {
-    }
+    public function __construct(private OrderRepository $repository) {}
 
-    public function execute(int $id): OrderDTO
+    public function execute(int $id): Model
     {
-        $order = $this->repository->findById($id);
-
-        return OrderDTO::fromArray($order->toArray());
+        return $this->repository->findById($id);
     }
 }

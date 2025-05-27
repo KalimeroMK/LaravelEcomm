@@ -8,17 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Complaint\DTOs\ComplaintDTO;
 use Modules\Complaint\Repository\ComplaintRepository;
 
-readonly class UpdateComplaintAction
+class UpdateComplaintAction
 {
-    public function __construct(private ComplaintRepository $repository)
+    private ComplaintRepository $repository;
+
+    public function __construct(ComplaintRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(ComplaintDTO $dto): Model
     {
-        return $this->repository->update($dto->id, [
+        $complaint = $this->repository->findById($dto->id);
+        $complaint->update([
             'description' => $dto->description,
             'status' => $dto->status,
         ]);
+        return $complaint;
     }
 }

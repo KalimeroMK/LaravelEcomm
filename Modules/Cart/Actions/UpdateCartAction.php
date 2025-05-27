@@ -8,15 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Cart\DTOs\CartDTO;
 use Modules\Cart\Repository\CartRepository;
 
-readonly class UpdateCartAction
+class UpdateCartAction
 {
-    public function __construct(private CartRepository $repository)
+    private CartRepository $repository;
+
+    public function __construct(CartRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(CartDTO $dto): Model
     {
-        return $this->repository->update($dto->id, [
+        $cart = $this->repository->findById($dto->id);
+        $cart->update([
             'product_id' => $dto->product_id,
             'quantity' => $dto->quantity,
             'user_id' => $dto->user_id,
@@ -25,5 +29,6 @@ readonly class UpdateCartAction
             'amount' => $dto->amount ?? ($dto->price * $dto->quantity),
             'order_id' => $dto->order_id,
         ]);
+        return $cart;
     }
 }

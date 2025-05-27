@@ -9,31 +9,40 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Shipping\Actions\DeleteShippingAction;
-use Modules\Shipping\Actions\FindShippingAction;
 use Modules\Shipping\Actions\GetAllShippingAction;
 use Modules\Shipping\Actions\StoreShippingAction;
 use Modules\Shipping\Actions\UpdateShippingAction;
 use Modules\Shipping\Http\Requests\Api\Store;
 use Modules\Shipping\Http\Requests\Api\Update;
 use Modules\Shipping\Http\Resources\ShippingResource;
-use ReflectionException;
+use Modules\Shipping\Models\Shipping;
+use Modules\Shipping\Repository\ShippingRepository;
 
 class ShippingController extends CoreController
 {
-    public function __construct()
-    {
-        $this->middleware('permission:shipping-list', ['only' => ['index']]);
-        $this->middleware('permission:shipping-show', ['only' => ['show']]);
-        $this->middleware('permission:shipping-create', ['only' => ['store']]);
-        $this->middleware('permission:shipping-edit', ['only' => ['update']]);
-        $this->middleware('permission:shipping-delete', ['only' => ['destroy']]);
+    private readonly GetAllShippingAction $getAllAction;
+    private readonly StoreShippingAction $storeAction;
+    private readonly UpdateShippingAction $updateAction;
+    private readonly DeleteShippingAction $deleteAction;
+
+    public function __construct(
+        GetAllShippingAction $getAllAction,
+        StoreShippingAction $storeAction,
+        UpdateShippingAction $updateAction,
+        DeleteShippingAction $deleteAction,
+    ) {
+        $this->getAllAction = $getAllAction;
+        $this->storeAction = $storeAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
     }
 
     public function index(): ResourceCollection
     {
-        $shippingsDto = (new GetAllShippingAction())->execute();
+        $this->authorize('viewAny', Shipping::class);
+        $shippingDto = $this->getAllAction->execute();
 
-        return ShippingResource::collection($shippingsDto->shippings);
+        return ShippingResource::collection($shippingDto->shippings);
     }
 
     /**
@@ -41,7 +50,8 @@ class ShippingController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
-        $shipping = (new StoreShippingAction())->execute($request->validated());
+        $this->authorize('create', Shipping::class);
+        $shipping = $this->storeAction->execute($request->validated());
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Shipping']))
@@ -49,36 +59,42 @@ class ShippingController extends CoreController
     }
 
     /**
-     * @throws ReflectionException
+     * @param  int  $id
+     * @return JsonResponse
      */
     public function show(int $id): JsonResponse
     {
-        $shippingDto = (new FindShippingAction())->execute($id);
+        $shipping = $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
 
         return $this
             ->setMessage(__('apiResponse.ok', ['resource' => 'Shipping']))
-            ->respond(new ShippingResource((object)$shippingDto->shipping));
+            ->respond(new ShippingResource($shipping));
     }
 
     /**
-     * @throws ReflectionException
+     * @param  Update  $request
+     * @param  int     $id
+     * @return JsonResponse
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        (new UpdateShippingAction())->execute($id, $request->validated());
-        $shippingDto = (new FindShippingAction())->execute($id);
+        $this->authorizeFromRepo(ShippingRepository::class, 'update', $id);
+        $this->updateAction->execute($id, $request->validated());
+        $shipping = $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Shipping']))
-            ->respond(new ShippingResource((object)$shippingDto->shipping));
+            ->respond(new ShippingResource($shipping));
     }
 
     /**
-     * @throws ReflectionException
+     * @param  int  $id
+     * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {
-        (new DeleteShippingAction())->execute($id);
+        $this->authorizeFromRepo(ShippingRepository::class, 'delete', $id);
+        $this->deleteAction->execute($id);
 
         return $this
             ->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Shipping']))

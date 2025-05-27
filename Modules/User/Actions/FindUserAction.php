@@ -9,9 +9,7 @@ use Modules\User\Repository\UserRepository;
 
 readonly class FindUserAction
 {
-    public function __construct(private UserRepository $repository)
-    {
-    }
+    public function __construct(private UserRepository $repository) {}
 
     public function execute(int $id): UserDTO
     {

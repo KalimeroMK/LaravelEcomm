@@ -16,9 +16,15 @@ use Modules\Settings\Models\Setting;
 
 class SettingsController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Setting::class, 'setting');
+    private readonly GetSettingsAction $getSettingsAction;
+    private readonly UpdateSettingsAction $updateSettingsAction;
+
+    public function __construct(
+        GetSettingsAction $getSettingsAction,
+        UpdateSettingsAction $updateSettingsAction
+    ) {
+        $this->getSettingsAction = $getSettingsAction;
+        $this->updateSettingsAction = $updateSettingsAction;
     }
 
     /**
@@ -26,14 +32,16 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        $settingsDto = (new GetSettingsAction())->execute();
+        $this->authorize('viewAny', Setting::class);
+        $settingsDto = $this->getSettingsAction->execute();
 
         return view('settings::edit', ['settings' => $settingsDto->settings]);
     }
 
     public function update(Update $request, Setting $setting): RedirectResponse
     {
-        (new UpdateSettingsAction())->execute($setting->id, $request->validated());
+        $this->authorize('update', $setting);
+        $this->updateSettingsAction->execute($setting->id, $request->validated());
 
         return redirect()->back();
     }

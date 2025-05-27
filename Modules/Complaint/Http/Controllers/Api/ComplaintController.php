@@ -14,36 +14,28 @@ use Modules\Complaint\Http\Requests\Store;
 use Modules\Complaint\Http\Requests\Update;
 use Modules\Complaint\Http\Resources\ComplaintResource;
 use Modules\Complaint\Models\Complaint;
+use Modules\Complaint\Repository\ComplaintRepository;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Http\Controllers\CoreController;
+use Modules\Core\Http\Controllers\Api\CoreController;
+use ReflectionException;
 
 class ComplaintController extends CoreController
 {
-    private CreateComplaintAction $createAction;
-
-    private UpdateComplaintAction $updateAction;
-
-    private DeleteComplaintAction $deleteAction;
-
     public function __construct(
-        CreateComplaintAction $createAction,
-        UpdateComplaintAction $updateAction,
-        DeleteComplaintAction $deleteAction
+        private readonly CreateComplaintAction $createAction,
+        private readonly UpdateComplaintAction $updateAction,
+        private readonly DeleteComplaintAction $deleteAction
     ) {
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
-
-        $this->middleware('permission:complaint-list', ['only' => ['index']]);
-        $this->middleware('permission:complaint-show', ['only' => ['show']]);
-        $this->middleware('permission:complaint-create', ['only' => ['store']]);
-        $this->middleware('permission:complaint-update', ['only' => ['update']]);
-        $this->middleware('permission:complaint-delete', ['only' => ['destroy']]);
+        // permission middleware removed, policies are used instead
     }
 
     public function index(): AnonymousResourceCollection
     {
-        return ComplaintResource::collection(Complaint::where('user_id', auth()->id())->get());
+        $this->authorize('viewAny', Complaint::class);
+
+        return ComplaintResource::collection(
+            Complaint::where('user_id', auth()->id())->get()
+        );
     }
 
     /**
@@ -51,18 +43,15 @@ class ComplaintController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
+        $this->authorize('create', Complaint::class);
+
         $dto = ComplaintDTO::fromRequest($request);
         $complaint = $this->createAction->execute($dto);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(Complaint::class),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.storeSuccess', [
+                'resource' => Helper::getResourceName(Complaint::class),
+            ]))
             ->respond(new ComplaintResource($complaint));
     }
 
@@ -71,14 +60,12 @@ class ComplaintController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $complaint = Complaint::findOrFail($id);
+        $complaint = $this->authorizeFromRepo(ComplaintRepository::class, 'view', $id);
 
         return $this
-            ->setMessage(
-                __('apiResponse.ok', [
-                    'resource' => Helper::getResourceName(Complaint::class),
-                ])
-            )
+            ->setMessage(__('apiResponse.ok', [
+                'resource' => Helper::getResourceName(Complaint::class),
+            ]))
             ->respond(new ComplaintResource($complaint));
     }
 
@@ -87,15 +74,15 @@ class ComplaintController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
+        $this->authorizeFromRepo(ComplaintRepository::class, 'update', $id);
+
         $dto = ComplaintDTO::fromRequest($request, $id);
         $complaint = $this->updateAction->execute($dto);
 
         return $this
-            ->setMessage(
-                __('apiResponse.updateSuccess', [
-                    'resource' => Helper::getResourceName(Complaint::class),
-                ])
-            )
+            ->setMessage(__('apiResponse.updateSuccess', [
+                'resource' => Helper::getResourceName(Complaint::class),
+            ]))
             ->respond(new ComplaintResource($complaint));
     }
 
@@ -104,14 +91,14 @@ class ComplaintController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
+        $this->authorizeFromRepo(ComplaintRepository::class, 'delete', $id);
+
         $this->deleteAction->execute($id);
 
         return $this
-            ->setMessage(
-                __('apiResponse.deleteSuccess', [
-                    'resource' => Helper::getResourceName(Complaint::class),
-                ])
-            )
+            ->setMessage(__('apiResponse.deleteSuccess', [
+                'resource' => Helper::getResourceName(Complaint::class),
+            ]))
             ->respond(null);
     }
 }

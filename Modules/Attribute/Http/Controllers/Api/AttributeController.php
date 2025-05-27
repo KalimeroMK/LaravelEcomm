@@ -12,11 +12,14 @@ use Modules\Attribute\Actions\UpdateAttributeAction;
 use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
+use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Repository\AttributeRepository;
 use Modules\Attribute\Resource\AttributeResource;
 use Modules\Core\Helpers\Helper;
-use Modules\Core\Http\Controllers\CoreController;
+use Modules\Core\Http\Controllers\Api\CoreController;
 use ReflectionException;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class AttributeController extends CoreController
 {
@@ -26,35 +29,34 @@ class AttributeController extends CoreController
         private readonly UpdateAttributeAction $updateAction,
         private readonly DeleteAttributeAction $deleteAction
     ) {
-        $this->middleware('permission:bundle-list', ['only' => ['index']]);
-        $this->middleware('permission:bundle-show', ['only' => ['show']]);
-        $this->middleware('permission:bundle-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:bundle-update', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:bundle-delete', ['only' => ['destroy']]);
+        // Removed permission middleware, we now use authorize() in each method
     }
 
     public function index(): AnonymousResourceCollection
     {
+        $this->authorize('viewAny', Attribute::class);
+
         return AttributeResource::collection($this->repository->findAll());
     }
 
     /**
+     * @param  Store  $request
+     * @return JsonResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
     {
+        $this->authorize('create', Attribute::class);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.storeSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new AttributeResource($this->createAction->execute(AttributeDTO::fromRequest($request))));
+            ->setMessage(__('apiResponse.storeSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new AttributeResource(
+                $this->createAction->execute(AttributeDTO::fromRequest($request))
+            ));
     }
 
     /**
@@ -62,38 +64,36 @@ class AttributeController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
+        $attribute = $this->authorizeFromRepo(AttributeRepository::class, 'view', $id);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.ok',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
-                )
-            )
-            ->respond(new AttributeResource($this->repository->findById($id)));
+            ->setMessage(__('apiResponse.ok', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new AttributeResource($attribute));
     }
 
     /**
+     * @param  Update  $request
+     * @param  int     $id
+     * @return JsonResponse
      * @throws ReflectionException
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function update(Update $request, int $id): JsonResponse
     {
+        $this->authorizeFromRepo(AttributeRepository::class, 'update', $id);
+
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.updateSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
+            ->setMessage(__('apiResponse.updateSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new AttributeResource(
+                $this->updateAction->execute(
+                    AttributeDTO::fromArray($request->validated())->withId($id)
                 )
-            )
-            ->respond(new AttributeResource($this->updateAction->execute(AttributeDTO::fromArray($request->validated())
-                ->withId($id))));
+            ));
     }
 
     /**
@@ -101,19 +101,14 @@ class AttributeController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
+        $this->authorizeFromRepo(AttributeRepository::class, 'delete', $id);
+
         $this->deleteAction->execute($id);
 
         return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->model
-                        ),
-                    ]
-                )
-            )
+            ->setMessage(__('apiResponse.deleteSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
             ->respond(null);
     }
 }

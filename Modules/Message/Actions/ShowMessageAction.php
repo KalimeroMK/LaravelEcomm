@@ -7,10 +7,13 @@ namespace Modules\Message\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Message\Repository\MessageRepository;
 
-readonly class ShowMessageAction
+class ShowMessageAction
 {
-    public function __construct(private MessageRepository $repository)
+    private MessageRepository $repository;
+
+    public function __construct(MessageRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(int $id): Model

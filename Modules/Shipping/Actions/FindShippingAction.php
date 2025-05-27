@@ -9,9 +9,7 @@ use Modules\Shipping\Repository\ShippingRepository;
 
 readonly class FindShippingAction
 {
-    public function __construct(private ShippingRepository $repository)
-    {
-    }
+    public function __construct(private ShippingRepository $repository) {}
 
     public function execute(int $id): ShippingDTO
     {

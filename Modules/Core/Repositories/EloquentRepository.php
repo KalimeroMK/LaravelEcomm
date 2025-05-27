@@ -11,9 +11,7 @@ use Modules\Core\Interfaces\EloquentRepositoryInterface;
 
 class EloquentRepository implements EloquentRepositoryInterface
 {
-    public function __construct(public string $modelClass)
-    {
-    }
+    public function __construct(public string $modelClass) {}
 
     public function findAll(): Collection
     {
@@ -60,12 +58,12 @@ class EloquentRepository implements EloquentRepositoryInterface
 
     public function restore(int $id): ?Model
     {
-        if (!$this->usesSoftDeletes()) {
+        if (! $this->usesSoftDeletes()) {
             return null;
         }
 
         $object = (new $this->modelClass)->withTrashed()->find($id);
-        if (!$object) {
+        if (! $object) {
             return null;
         }
 
@@ -76,7 +74,7 @@ class EloquentRepository implements EloquentRepositoryInterface
 
     public function findByIdWithTrashed(int $id): ?Model
     {
-        if (!$this->usesSoftDeletes()) {
+        if (! $this->usesSoftDeletes()) {
             return null;
         }
 

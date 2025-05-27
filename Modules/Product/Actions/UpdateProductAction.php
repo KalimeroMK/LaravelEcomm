@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace Modules\Product\Actions;
 
 use Modules\Product\DTOs\ProductDTO;
+use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 
-readonly class UpdateProductAction
+class UpdateProductAction
 {
-    public function __construct(private ProductRepository $repository)
+    private ProductRepository $repository;
+
+    public function __construct(ProductRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(int $id, ProductDTO $dto): ProductDTO
     {
+        /** @var Product $product */
         $product = $this->repository->update($id, [
             'title' => $dto->title,
             'slug' => $dto->slug,

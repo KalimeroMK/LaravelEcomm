@@ -4,19 +4,29 @@ declare(strict_types=1);
 
 namespace Modules\Page\Actions;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Page\DTOs\PageDTO;
 use Modules\Page\Repository\PageRepository;
 
-readonly class UpdatePageAction
+class UpdatePageAction
 {
-    public function __construct(private PageRepository $repository)
+    private PageRepository $repository;
+
+    public function __construct(PageRepository $repository)
     {
+        $this->repository = $repository;
     }
 
-    public function execute(int $id, array $data): PageDTO
+    public function execute(PageDTO $dto): Model
     {
-        $page = $this->repository->update($id, $data);
-
-        return PageDTO::fromArray($page->toArray());
+        $page = $this->repository->findById($dto->id);
+        $page->update([
+            'title' => $dto->title,
+            'slug' => $dto->slug ?? $page->slug,
+            'content' => $dto->content,
+            'is_active' => $dto->is_active,
+            'user_id' => $dto->user_id,
+        ]);
+        return $page;
     }
 }

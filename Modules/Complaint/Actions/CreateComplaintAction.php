@@ -8,10 +8,13 @@ use Modules\Complaint\DTOs\ComplaintDTO;
 use Modules\Complaint\Models\Complaint;
 use Modules\Complaint\Repository\ComplaintRepository;
 
-readonly class CreateComplaintAction
+class CreateComplaintAction
 {
-    public function __construct(private ComplaintRepository $repository)
+    private ComplaintRepository $repository;
+
+    public function __construct(ComplaintRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(ComplaintDTO $dto): Complaint

@@ -6,31 +6,32 @@ namespace Modules\Newsletter\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Newsletter\Actions\CreateNewsletterAction;
 use Modules\Newsletter\Actions\DeleteNewsletterAction;
 use Modules\Newsletter\Actions\GetAllNewslettersAction;
-use Modules\Newsletter\Actions\GetNewsletterByIdAction;
-use Modules\Newsletter\Actions\UpdateNewsletterAction;
+use Modules\Newsletter\DTOs\NewsletterDTO;
 use Modules\Newsletter\Http\Requests\Api\Store;
 use Modules\Newsletter\Http\Resources\NewsletterResource;
+use Modules\Newsletter\Models\Newsletter;
+use Modules\Newsletter\Repository\NewsletterRepository;
 use ReflectionException;
 
 class NewsletterController extends CoreController
 {
-    public function __construct()
-    {
-        $this->middleware('permission:newsletter-list', ['only' => ['index']]);
-        $this->middleware('permission:newsletter-show', ['only' => ['show']]);
-        $this->middleware('permission:newsletter-create', ['only' => ['store']]);
-        $this->middleware('permission:newsletter-edit', ['only' => ['update']]);
-        $this->middleware('permission:newsletter-delete', ['only' => ['destroy']]);
+    public function __construct(
+        private readonly GetAllNewslettersAction $getAllAction,
+        private readonly CreateNewsletterAction $createAction,
+        private readonly DeleteNewsletterAction $deleteAction
+    ) {
+        // Permissions removed — using policies instead
     }
 
     public function index(): ResourceCollection
     {
-        $newslettersDto = (new GetAllNewslettersAction())->execute();
-
+        $this->authorize('viewAny', Newsletter::class);
+        $newslettersDto = $this->getAllAction->execute();
         return NewsletterResource::collection($newslettersDto->newsletters);
     }
 
@@ -39,29 +40,14 @@ class NewsletterController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
-        $newsletterDto = (new CreateNewsletterAction())->execute($request->validated());
+        $this->authorize('create', Newsletter::class);
 
-        return $this->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Newsletter']))->respond(new NewsletterResource($newsletterDto));
-    }
+        $dto = NewsletterDTO::fromRequest($request);
+        $newsletter = $this->createAction->execute($dto);
 
-    /**
-     * @throws ReflectionException
-     */
-    public function show(int $id): JsonResponse
-    {
-        $newsletterDto = (new GetNewsletterByIdAction())->execute($id);
-
-        return $this->setMessage(__('apiResponse.ok', ['resource' => 'Newsletter']))->respond(new NewsletterResource($newsletterDto));
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    public function update(Store $request, int $id): JsonResponse
-    {
-        $newsletterDto = (new UpdateNewsletterAction())->execute($id, $request->validated());
-
-        return $this->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Newsletter']))->respond(new NewsletterResource($newsletterDto));
+        return $this
+            ->setMessage(__('apiResponse.storeSuccess', ['resource' => Helper::getResourceName(Newsletter::class)]))
+            ->respond(new NewsletterResource($newsletter));
     }
 
     /**
@@ -69,8 +55,12 @@ class NewsletterController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        (new DeleteNewsletterAction())->execute($id);
+        $this->authorizeFromRepo(NewsletterRepository::class, 'delete', $id);
 
-        return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Newsletter']))->respond(null);
+        $this->deleteAction->execute($id);
+
+        return $this
+            ->setMessage(__('apiResponse.deleteSuccess', ['resource' => Helper::getResourceName(Newsletter::class)]))
+            ->respond(null);
     }
 }

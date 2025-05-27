@@ -7,10 +7,13 @@ namespace Modules\Product\Actions;
 use Modules\Product\DTOs\ProductDTO;
 use Modules\Product\Repository\ProductRepository;
 
-readonly class StoreProductAction
+class StoreProductAction
 {
-    public function __construct(private ProductRepository $repository)
+    private ProductRepository $repository;
+
+    public function __construct(ProductRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(ProductDTO $dto): ProductDTO

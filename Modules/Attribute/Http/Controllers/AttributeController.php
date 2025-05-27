@@ -13,62 +13,78 @@ use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
 use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Repository\AttributeRepository;
 use Modules\Core\Http\Controllers\CoreController;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class AttributeController extends CoreController
 {
-    protected CreateAttributeAction $createAction;
-
-    protected UpdateAttributeAction $updateAction;
-
-    protected DeleteAttributeAction $deleteAction;
-
     public function __construct(
-        CreateAttributeAction $createAction,
-        UpdateAttributeAction $updateAction,
-        DeleteAttributeAction $deleteAction
+        private readonly AttributeRepository $repository,
+        private readonly CreateAttributeAction $createAction,
+        private readonly UpdateAttributeAction $updateAction,
+        private readonly DeleteAttributeAction $deleteAction
     ) {
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
         $this->authorizeResource(Attribute::class, 'attribute');
     }
 
     public function index(): Renderable
     {
-        return view('attribute::index', ['attributes' => $this->createAction->repository->findAll()]);
+        $this->authorize('viewAny', Attribute::class);
+
+        return view('attribute::index', [
+            'attributes' => $this->repository->findAll(),
+        ]);
     }
 
     public function create(): Renderable
     {
-        return view('attribute::create', ['attribute' => new Attribute]);
+        $this->authorize('create', Attribute::class);
+
+        return view('attribute::create', [
+            'attribute' => new Attribute(),
+        ]);
     }
 
+    /**
+     * @throws FileIsTooBig
+     * @throws FileDoesNotExist
+     */
     public function store(Store $request): RedirectResponse
     {
-        $dto = AttributeDTO::fromRequest($request);
-        $this->createAction->execute($dto);
+        $this->createAction->execute(AttributeDTO::fromRequest($request));
 
-        return redirect()->route('attributes.index');
+        return redirect()->route('attributes.index')
+            ->with('success', __('Attribute created successfully.'));
     }
 
     public function edit(Attribute $attribute): Renderable
     {
-        return view('attribute::edit', ['attribute' => $this->createAction->repository->findById($attribute->id)]);
+        return view('attribute::edit', [
+            'attribute' => $this->repository->findById($attribute->id),
+        ]);
     }
 
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function update(Update $request, Attribute $attribute): RedirectResponse
     {
-        $dto = AttributeDTO::fromRequest($request)->withId($attribute->id);
-        $this->updateAction->execute($dto);
+        $this->updateAction->execute(
+            AttributeDTO::fromArray($request->validated())->withId($attribute->id)
+        );
 
-        return redirect()->route('attributes.index');
+        return redirect()->route('attributes.index')
+            ->with('success', __('Attribute updated successfully.'));
     }
 
     public function destroy(Attribute $attribute): RedirectResponse
     {
         $this->deleteAction->execute($attribute->id);
 
-        return redirect()->route('attributes.index');
+        return redirect()->route('attributes.index')
+            ->with('success', __('Attribute deleted successfully.'));
     }
 }

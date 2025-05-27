@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\Banner\DTOs;
 
+use Illuminate\Http\Request;
 use Modules\Banner\Http\Requests\Api\Store as ApiStore;
 use Modules\Banner\Http\Requests\Api\Update as ApiUpdate;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
-use Illuminate\Http\Request;
 
 readonly class BannerDTO
 {

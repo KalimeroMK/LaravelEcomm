@@ -20,21 +20,37 @@ use Modules\Shipping\Models\Shipping;
 
 class ShippingController extends CoreController
 {
-    public function __construct()
-    {
+    private GetAllShippingAction $getAllShippingAction;
+    private StoreShippingAction $storeShippingAction;
+    private FindShippingAction $findShippingAction;
+    private UpdateShippingAction $updateShippingAction;
+    private DeleteShippingAction $deleteShippingAction;
+
+    public function __construct(
+        GetAllShippingAction $getAllShippingAction,
+        StoreShippingAction $storeShippingAction,
+        FindShippingAction $findShippingAction,
+        UpdateShippingAction $updateShippingAction,
+        DeleteShippingAction $deleteShippingAction
+    ) {
         $this->authorizeResource(Shipping::class, 'shipping');
+        $this->getAllShippingAction = $getAllShippingAction;
+        $this->storeShippingAction = $storeShippingAction;
+        $this->findShippingAction = $findShippingAction;
+        $this->updateShippingAction = $updateShippingAction;
+        $this->deleteShippingAction = $deleteShippingAction;
     }
 
     public function index(): Application|Factory|View
     {
-        $shippingsDto = (new GetAllShippingAction())->execute();
+        $shippingDto = $this->getAllShippingAction->execute();
 
-        return view('shipping::index', ['shippings' => $shippingsDto->shippings]);
+        return view('shipping::index', ['shippings' => $shippingDto->shippings]);
     }
 
     public function store(Store $request): RedirectResponse
     {
-        (new StoreShippingAction())->execute($request->validated());
+        $this->storeShippingAction->execute($request->validated());
 
         return redirect()->route('shippings.index');
     }
@@ -46,21 +62,21 @@ class ShippingController extends CoreController
 
     public function edit(Shipping $shipping): Application|Factory|View
     {
-        $shippingDto = (new FindShippingAction())->execute($shipping->id);
+        $shippingDto = $this->findShippingAction->execute($shipping->id);
 
         return view('shipping::edit')->with(['shipping' => $shippingDto->shipping]);
     }
 
     public function update(Update $request, Shipping $shipping): RedirectResponse
     {
-        (new UpdateShippingAction())->execute($shipping->id, $request->validated());
+        $this->updateShippingAction->execute($shipping->id, $request->validated());
 
         return redirect()->route('shippings.index');
     }
 
     public function destroy(Shipping $shipping): RedirectResponse
     {
-        (new DeleteShippingAction())->execute($shipping->id);
+        $this->deleteShippingAction->execute($shipping->id);
 
         return redirect()->back();
     }

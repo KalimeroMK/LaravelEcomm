@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Actions\AttributeGroup;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\DTOs\AttributeGroupDTO;
-use Modules\Attribute\Models\AttributeGroup;
+use Modules\Attribute\Repository\AttributeGroupRepository;
 
 readonly class UpdateAttributeGroupAction
 {
-    public function execute(AttributeGroupDTO $dto): AttributeGroup
+    private AttributeGroupRepository $repository;
+
+    public function __construct(AttributeGroupRepository $repository)
     {
-        $group = AttributeGroup::findOrFail($dto->id);
+        $this->repository = $repository;
+    }
+
+    public function execute(AttributeGroupDTO $dto): Model
+    {
+        $group = $this->repository->findById($dto->id);
         $group->update([
             'name' => $dto->name,
         ]);

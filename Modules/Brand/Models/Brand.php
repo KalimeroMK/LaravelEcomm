@@ -26,13 +26,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Brand
  *
- * @property int                              $id
- * @property string                           $title
- * @property string                           $slug
- * @property string                           $status
- * @property string|null                      $images
- * @property Carbon|null                      $created_at
- * @property Carbon|null                      $updated_at
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $status
+ * @property string|null $images
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null                    $media_count
  * @property-read Collection<int, Product>    $products

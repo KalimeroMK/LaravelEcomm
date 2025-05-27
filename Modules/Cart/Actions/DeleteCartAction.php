@@ -8,9 +8,7 @@ use Modules\Cart\Repository\CartRepository;
 
 readonly class DeleteCartAction
 {
-    public function __construct(private CartRepository $repository)
-    {
-    }
+    public function __construct(private CartRepository $repository) {}
 
     public function execute(int $id): bool
     {

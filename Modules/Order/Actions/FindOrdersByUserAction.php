@@ -9,9 +9,7 @@ use Modules\Order\Repository\OrderRepository;
 
 readonly class FindOrdersByUserAction
 {
-    public function __construct(private OrderRepository $repository)
-    {
-    }
+    public function __construct(private OrderRepository $repository) {}
 
     public function execute(int $userId): OrderListDTO
     {

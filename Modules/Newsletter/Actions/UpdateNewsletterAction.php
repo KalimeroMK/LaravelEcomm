@@ -9,14 +9,13 @@ use Modules\Newsletter\Repository\NewsletterRepository;
 
 readonly class UpdateNewsletterAction
 {
-    public function __construct(private NewsletterRepository $repository)
-    {
-    }
+    public function __construct(private NewsletterRepository $repository) {}
 
-    public function execute(int $id, array $data): NewsletterDTO
+    public function execute(NewsletterDTO $dto): NewsletterDTO
     {
-        $newsletter = $this->repository->update($id, $data);
-
+        $newsletter = $this->repository->update($dto->id, [
+            'email' => $dto->email,
+        ]);
         return NewsletterDTO::fromArray($newsletter->toArray());
     }
 }

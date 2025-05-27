@@ -14,36 +14,36 @@ class BundlePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['super-admin', 'user']);
+        return $user->can('bundle-list');
     }
 
     public function view(User $user, Bundle $bundle): bool
     {
-        return $user->hasAnyRole(['super-admin', 'user']);
+        return $user->can('bundle-show');
     }
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['super-admin', 'user']);
+        return $user->can('bundle-create');
     }
 
     public function update(User $user, Bundle $bundle): bool
     {
-        return $user->hasAnyRole(['super-admin', 'user']);
+        return $user->can('bundle-update');
     }
 
     public function delete(User $user, Bundle $bundle): bool
     {
-        return $user->hasAnyRole(['super-admin', 'user']);
+        return $user->can('bundle-delete');
     }
 
     public function restore(User $user, Bundle $bundle): bool
     {
-        return $user->hasAnyRole(['super-admin', 'user']);
+        return $user->can('bundle-restore');
     }
 
     public function forceDelete(User $user, Bundle $bundle): bool
     {
-        return $user->hasAnyRole(['super-admin', 'user']);
+        return $user->can('bundle-force-delete');
     }
 }

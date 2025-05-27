@@ -7,10 +7,13 @@ namespace Modules\Settings\Actions;
 use Modules\Settings\DTOs\SettingsDTO;
 use Modules\Settings\Repository\SettingsRepository;
 
-readonly class GetSettingsAction
+class GetSettingsAction
 {
-    public function __construct(private SettingsRepository $repository)
+    private SettingsRepository $repository;
+
+    public function __construct(SettingsRepository $repository)
     {
+        $this->repository = $repository;
     }
 
     public function execute(): SettingsDTO

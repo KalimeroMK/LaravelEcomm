@@ -6,52 +6,73 @@ namespace Modules\Attribute\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Modules\Attribute\Actions\AttributeGroup\CreateAttributeGroupAction;
+use Modules\Attribute\Actions\AttributeGroup\DeleteAttributeGroupAction;
+use Modules\Attribute\Actions\AttributeGroup\UpdateAttributeGroupAction;
+use Modules\Attribute\DTOs\AttributeGroupDTO;
 use Modules\Attribute\Http\Requests\AttributeGroup\Store;
 use Modules\Attribute\Http\Requests\AttributeGroup\Update;
 use Modules\Attribute\Models\AttributeGroup;
+use Modules\Attribute\Repository\AttributeGroupRepository;
 use Modules\Core\Http\Controllers\CoreController;
 
 class AttributeGroupController extends CoreController
 {
+    public function __construct(
+        private readonly AttributeGroupRepository $repository,
+        private readonly CreateAttributeGroupAction $createAction,
+        private readonly UpdateAttributeGroupAction $updateAction,
+        private readonly DeleteAttributeGroupAction $deleteAction
+    ) {
+        $this->authorizeResource(AttributeGroup::class, 'attribute_group');
+    }
+
     public function index(): Renderable
     {
-        return view('attribute::groups.index', ['groups' => AttributeGroup::all()]);
+        return view('attribute::groups.index', [
+            'groups' => $this->repository->findAll(),
+        ]);
     }
 
     public function create(): Renderable
     {
-        return view('attribute::groups.create', ['group' => new AttributeGroup]);
+        return view('attribute::groups.create', [
+            'group' => new AttributeGroup(),
+        ]);
     }
 
     public function store(Store $request): RedirectResponse
     {
-        $group = AttributeGroup::create($request->validated());
-        // Assign attributes to this group using pivot table
-        if ($request->has('attributes')) {
-            $group->attributes()->sync($request->attributes);
-        }
+        $dto = AttributeGroupDTO::fromRequest($request);
+        $group = $this->createAction->execute($dto);
 
-        return redirect()->route('attribute-groups.index');
+        return redirect()->route('attribute-groups.index')
+            ->with('success', __('Attribute group created successfully.'));
     }
 
     public function edit(AttributeGroup $attribute_group): Renderable
     {
-        return view('attribute::groups.edit', ['group' => $attribute_group]);
+        return view('attribute::groups.edit', [
+            'group' => $this->repository->findById($attribute_group->id),
+        ]);
     }
 
     public function update(Update $request, AttributeGroup $attribute_group): RedirectResponse
     {
-        $attribute_group->update($request->validated());
-        // Sync attributes for this group via pivot table
-        $attribute_group->attributes()->sync($request->attributes ?? []);
+        $dto = AttributeGroupDTO::fromRequest($request)->withId($attribute_group->id);
+        $group = $this->updateAction->execute($dto);
 
-        return redirect()->route('attribute-groups.index');
+        $group->attributes()->sync($request->attributes ?? []);
+
+        return redirect()->route('attribute-groups.index')
+            ->with('success', __('Attribute group updated successfully.'));
     }
 
     public function destroy(AttributeGroup $attribute_group): RedirectResponse
     {
-        $attribute_group->delete();
+        $this->deleteAction->execute($attribute_group->id);
 
-        return redirect()->route('attribute-groups.index');
+        return redirect()->route('attribute-groups.index')
+            ->with('success', __('Attribute group deleted successfully.'));
     }
 }

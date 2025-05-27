@@ -9,29 +9,41 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Tag\Actions\CreateTagAction;
+use Modules\Tag\Actions\DeleteTagAction;
+use Modules\Tag\Actions\GetAllTagsAction;
+use Modules\Tag\Actions\UpdateTagAction;
+use Modules\Tag\DTOs\TagDto;
 use Modules\Tag\Http\Requests\Api\Store;
 use Modules\Tag\Http\Requests\Api\Update;
 use Modules\Tag\Http\Resources\TagResource;
-use Modules\Tag\Service\TagService;
+use Modules\Tag\Models\Tag;
+use Modules\Tag\Repository\TagRepository;
 use ReflectionException;
 
 class TagController extends CoreController
 {
-    private TagService $tag_service;
+    private CreateTagAction $createTagAction;
+    private UpdateTagAction $updateTagAction;
+    private DeleteTagAction $deleteTagAction;
+    private GetAllTagsAction $getAllTagsAction;
 
-    public function __construct(TagService $tag_service)
-    {
-        $this->tag_service = $tag_service;
-        $this->middleware('permission:tag-list', ['only' => ['index']]);
-        $this->middleware('permission:tag-show', ['only' => ['show']]);
-        $this->middleware('permission:tag-create', ['only' => ['store']]);
-        $this->middleware('permission:tag-edit', ['only' => ['update']]);
-        $this->middleware('permission:tag-delete', ['only' => ['destroy']]);
+    public function __construct(
+        CreateTagAction $createTagAction,
+        UpdateTagAction $updateTagAction,
+        DeleteTagAction $deleteTagAction,
+        GetAllTagsAction $getAllTagsAction,
+    ) {
+        $this->createTagAction = $createTagAction;
+        $this->updateTagAction = $updateTagAction;
+        $this->deleteTagAction = $deleteTagAction;
+        $this->getAllTagsAction = $getAllTagsAction;
     }
 
     public function index(): ResourceCollection
     {
-        return TagResource::collection($this->tag_service->getAll());
+        $this->authorize('viewAny', Tag::class);
+        return TagResource::collection($this->getAllTagsAction->execute());
     }
 
     /**
@@ -39,18 +51,18 @@ class TagController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
+        $this->authorize('create', Tag::class);
+        $tag = $this->createTagAction->execute($request->validated());
         return $this
             ->setMessage(
                 __(
                     'apiResponse.storeSuccess',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->tag_service->tag_repository->model
-                        ),
+                        'resource' => Helper::getResourceName($tag),
                     ]
                 )
             )
-            ->respond(new TagResource($this->tag_service->create($request->validated())));
+            ->respond(new TagResource($tag));
     }
 
     /**
@@ -58,18 +70,17 @@ class TagController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
+        $tag = $this->authorizeFromRepo(TagRepository::class, 'view', $id);
         return $this
             ->setMessage(
                 __(
                     'apiResponse.ok',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->tag_service->tag_repository->model
-                        ),
+                        'resource' => Helper::getResourceName($tag),
                     ]
                 )
             )
-            ->respond(new TagResource($this->tag_service->findById($id)));
+            ->respond(new TagResource($tag));
     }
 
     /**
@@ -77,18 +88,19 @@ class TagController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
+        $tag = $this->authorizeFromRepo(TagRepository::class, 'update', $id);
+        $dto = TagDto::fromRequest($request->validated());
+        $updatedTag = $this->updateTagAction->execute($tag, $dto);
         return $this
             ->setMessage(
                 __(
                     'apiResponse.updateSuccess',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->tag_service->tag_repository->model
-                        ),
+                        'resource' => Helper::getResourceName($updatedTag),
                     ]
                 )
             )
-            ->respond(new TagResource($this->tag_service->update($id, $request->validated())));
+            ->respond(new TagResource($updatedTag));
     }
 
     /**
@@ -96,16 +108,14 @@ class TagController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->tag_service->delete($id);
-
+        $tag = $this->authorizeFromRepo(TagRepository::class, 'delete', $id);
+        $this->deleteTagAction->execute($tag->id);
         return $this
             ->setMessage(
                 __(
                     'apiResponse.deleteSuccess',
                     [
-                        'resource' => Helper::getResourceName(
-                            $this->tag_service->tag_repository->model
-                        ),
+                        'resource' => Helper::getResourceName($tag),
                     ]
                 )
             )

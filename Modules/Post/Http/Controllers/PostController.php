@@ -9,29 +9,54 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Category\Models\Category;
-use Modules\Post\Export\Posts as PostExport;
+use Modules\Post\Actions\CreatePostAction;
+use Modules\Post\Actions\DeletePostAction;
+use Modules\Post\Actions\GetAllCategoriesAction;
+use Modules\Post\Actions\GetAllPostsAction;
+use Modules\Post\Actions\GetAllTagsAction;
+use Modules\Post\Actions\GetAllUsersAction;
+use Modules\Post\Actions\UpdatePostAction;
+use Modules\Post\DTOs\PostDTO;
+use Modules\Post\Export\PostExport;
 use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
+use Modules\Post\Import\PostImport;
 use Modules\Post\Models\Post;
-use Modules\Post\Service\PostService;
-use Modules\Tag\Models\Tag;
-use Modules\User\Models\User;
+use Modules\Post\Repository\PostRepository;
 use PhpOffice\PhpSpreadsheet\Exception;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PostController extends Controller
 {
-    private PostService $post_service;
+    private readonly GetAllPostsAction $getAllAction;
+    private readonly CreatePostAction $createAction;
+    private readonly UpdatePostAction $updateAction;
+    private readonly DeletePostAction $deleteAction;
+    private readonly GetAllCategoriesAction $getAllCategoriesAction;
+    private readonly GetAllTagsAction $getAllTagsAction;
+    private readonly GetAllUsersAction $getAllUsersAction;
+    private readonly PostRepository $postRepository;
 
-    public function __construct(PostService $post_service)
-    {
-        $this->post_service = $post_service;
+    public function __construct(
+        GetAllPostsAction $getAllAction,
+        CreatePostAction $createAction,
+        UpdatePostAction $updateAction,
+        DeletePostAction $deleteAction,
+        GetAllCategoriesAction $getAllCategoriesAction,
+        GetAllTagsAction $getAllTagsAction,
+        GetAllUsersAction $getAllUsersAction,
+        PostRepository $postRepository
+    ) {
+        $this->getAllAction = $getAllAction;
+        $this->createAction = $createAction;
+        $this->updateAction = $updateAction;
+        $this->deleteAction = $deleteAction;
+        $this->getAllCategoriesAction = $getAllCategoriesAction;
+        $this->getAllTagsAction = $getAllTagsAction;
+        $this->getAllUsersAction = $getAllUsersAction;
+        $this->postRepository = $postRepository;
         $this->authorizeResource(Post::class, 'post');
     }
 
@@ -42,19 +67,21 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post::index', ['posts' => $this->post_service->getAll()]);
+        $postsDto = $this->getAllAction->execute();
+        return view('post::index', ['posts' => $postsDto->posts]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      *
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
+     * @param  Store  $request
+     * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->post_service->create($request->validated());
+        $dto = PostDTO::fromRequest($request);
+        $this->createAction->execute($dto);
 
         return redirect()->route('posts.index');
     }
@@ -67,9 +94,9 @@ class PostController extends Controller
     public function create()
     {
         return view('post::create', [
-            'categories' => Category::all(),
-            'tags' => Tag::all(),
-            'users' => User::all(),
+            'categories' => $this->getAllCategoriesAction->execute(),
+            'tags' => $this->getAllTagsAction->execute(),
+            'users' => $this->getAllUsersAction->execute(),
             'post' => new Post,
         ]);
     }
@@ -82,10 +109,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        $categories = Category::all();
-        $tags = Tag::get();
-        $users = User::all();
-
+        $categories = $this->getAllCategoriesAction->execute();
+        $tags = $this->getAllTagsAction->execute();
+        $users = $this->getAllUsersAction->execute();
         return view('post::edit', ['categories' => $categories, 'tags' => $tags, 'users' => $users, 'post' => $post]);
     }
 
@@ -94,7 +120,8 @@ class PostController extends Controller
      */
     public function update(Update $request, Post $post): RedirectResponse
     {
-        $this->post_service->update($post->id, $request->validated());
+        $dto = PostDTO::fromRequest($request, $post->id);
+        $this->updateAction->execute($dto);
 
         return redirect()->route('posts.index');
     }
@@ -104,11 +131,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post): RedirectResponse
     {
-        $this->authorize('delete', $post);
+        $this->deleteAction->execute($post->id);
 
-        $this->post_service->delete($post->id);
-
-        return redirect()->back();
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -119,7 +144,7 @@ class PostController extends Controller
      */
     public function export()
     {
-        return Excel::download(new PostExport, 'Products.xlsx');
+        return Excel::download(new PostExport($this->postRepository), 'Products.xlsx');
     }
 
     /**
@@ -129,7 +154,7 @@ class PostController extends Controller
     {
         // Ensure there is a file and it is not an array of files
         $file = $request->file('file');
-        if (! $file) {
+        if (!$file) {
             return back()->withErrors(['error' => 'Please upload a file.']);
         }
 
@@ -138,7 +163,7 @@ class PostController extends Controller
         }
 
         try {
-            Excel::import(new PostExport, $file);
+            Excel::import(new PostImport, $file);
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'An error occurred during import: '.$e->getMessage()]);
         }
@@ -146,10 +171,6 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Posts imported successfully.');
     }
 
-    public function upload(Request $request): void
-    {
-        $this->post_service->upload($request);
-    }
 
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {

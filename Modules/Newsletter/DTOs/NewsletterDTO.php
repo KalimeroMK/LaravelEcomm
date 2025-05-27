@@ -11,9 +11,9 @@ readonly class NewsletterDTO
     public function __construct(
         public ?int $id,
         public ?string $email,
+        public ?string $token = null,
         public ?string $created_at = null
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Request $request, ?int $id = null): self
     {
@@ -25,8 +25,8 @@ readonly class NewsletterDTO
         return new self(
             $data['id'] ?? null,
             $data['email'] ?? null,
+            $data['token'] ?? null,
             $data['created_at'] ?? null
         );
     }
-
 }

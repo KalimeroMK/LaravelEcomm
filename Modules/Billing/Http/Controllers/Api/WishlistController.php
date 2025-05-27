@@ -52,7 +52,7 @@ class WishlistController extends CoreController
                         'apiResponse.storeSuccess',
                         [
                             'resource' => Helper::getResourceName(
-                                $this->repository->model
+                                $this->repository->modelClass
                             ),
                         ]
                     )
@@ -76,7 +76,7 @@ class WishlistController extends CoreController
                     'apiResponse.deleteSuccess',
                     [
                         'resource' => Helper::getResourceName(
-                            $this->repository->model
+                            $this->repository->modelClass
                         ),
                     ]
                 )

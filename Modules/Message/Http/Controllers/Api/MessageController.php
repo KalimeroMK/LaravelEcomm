@@ -5,33 +5,37 @@ declare(strict_types=1);
 namespace Modules\Message\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Message\Actions\CreateMessageAction;
 use Modules\Message\Actions\DeleteMessageAction;
-use Modules\Message\Actions\GetAllMessagesAction;
-use Modules\Message\Actions\ShowMessageAction;
 use Modules\Message\Actions\UpdateMessageAction;
+use Modules\Message\DTOs\MessageDTO;
 use Modules\Message\Http\Requests\Api\Store;
+use Modules\Message\Http\Requests\Api\Update;
 use Modules\Message\Http\Resources\MessageResource;
+use Modules\Message\Models\Message;
+use Modules\Message\Repository\MessageRepository;
 use ReflectionException;
 
 class MessageController extends CoreController
 {
-    public function __construct()
-    {
-        $this->middleware('permission:message-list', ['only' => ['index']]);
-        $this->middleware('permission:message-show', ['only' => ['show']]);
-        $this->middleware('permission:message-create', ['only' => ['store']]);
-        $this->middleware('permission:message-edit', ['only' => ['update']]);
-        $this->middleware('permission:message-delete', ['only' => ['destroy']]);
+    public function __construct(
+        public readonly MessageRepository $repository,
+        private readonly CreateMessageAction $createAction,
+        private readonly UpdateMessageAction $updateAction,
+        private readonly DeleteMessageAction $deleteAction
+    ) {
+        // Clean constructor, no middleware, using policies
     }
 
-    public function index(): ResourceCollection
+    public function index(Request $request): ResourceCollection
     {
-        $messagesDto = (new GetAllMessagesAction())->execute();
+        $this->authorize('viewAny', Message::class);
 
-        return MessageResource::collection($messagesDto->messages);
+        return MessageResource::collection($this->repository->findAll());
     }
 
     /**
@@ -39,9 +43,16 @@ class MessageController extends CoreController
      */
     public function store(Store $request): JsonResponse
     {
-        $messageDto = (new CreateMessageAction())->execute($request->validated());
+        $this->authorize('create', Message::class);
 
-        return $this->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Message']))->respond(new MessageResource($messageDto));
+        $dto = MessageDTO::fromRequest($request);
+        $message = $this->createAction->execute($dto);
+
+        return $this
+            ->setMessage(__('apiResponse.storeSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new MessageResource($message));
     }
 
     /**
@@ -49,19 +60,30 @@ class MessageController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $messageDto = (new ShowMessageAction())->execute($id);
+        $message = $this->authorizeFromRepo(MessageRepository::class, 'view', $id);
 
-        return $this->setMessage(__('apiResponse.ok', ['resource' => 'Message']))->respond(new MessageResource($messageDto));
+        return $this
+            ->setMessage(__('apiResponse.ok', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new MessageResource($message));
     }
 
     /**
      * @throws ReflectionException
      */
-    public function update(Store $request, int $id): JsonResponse
+    public function update(Update $request, int $id): JsonResponse
     {
-        $messageDto = (new UpdateMessageAction())->execute($id, $request->validated());
+        $this->authorizeFromRepo(MessageRepository::class, 'update', $id);
 
-        return $this->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Message']))->respond(new MessageResource($messageDto));
+        $dto = MessageDTO::fromArray($request->validated() + ['id' => $id]);
+        $message = $this->updateAction->execute($dto);
+
+        return $this
+            ->setMessage(__('apiResponse.updateSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new MessageResource($message));
     }
 
     /**
@@ -69,8 +91,14 @@ class MessageController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        (new DeleteMessageAction())->execute($id);
+        $this->authorizeFromRepo(MessageRepository::class, 'delete', $id);
 
-        return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Message']))->respond(null);
+        $this->deleteAction->execute($id);
+
+        return $this
+            ->setMessage(__('apiResponse.deleteSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(null);
     }
 }
