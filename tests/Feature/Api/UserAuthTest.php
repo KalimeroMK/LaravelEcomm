@@ -21,7 +21,7 @@ class UserAuthTest extends TestCase
         parent::setUp();
 
         // Ensure the 'client' role exists for the web guard
-        if (! Role::where('name', 'client')->where('guard_name', 'web')->exists()) {
+        if (!Role::where('name', 'client')->where('guard_name', 'web')->exists()) {
             Role::create([
                 'name' => 'client',
                 'guard_name' => 'web',

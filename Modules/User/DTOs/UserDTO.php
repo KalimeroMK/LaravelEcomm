@@ -12,11 +12,11 @@ readonly class UserDTO
         public ?int $id,
         public ?string $name,
         public ?string $email,
-        public ?string $status = null,
         public ?string $email_verified_at = null,
         public ?string $created_at = null,
         public ?string $updated_at = null,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -24,7 +24,6 @@ readonly class UserDTO
             $data['id'] ?? null,
             $data['name'] ?? null,
             $data['email'] ?? null,
-            $data['status'] ?? null,
             $data['email_verified_at'] ?? null,
             $data['created_at'] ?? null,
             $data['updated_at'] ?? null,
@@ -39,7 +38,6 @@ readonly class UserDTO
             'id' => $id ?? ($validated['id'] ?? null),
             'name' => $validated['name'] ?? null,
             'email' => $validated['email'] ?? null,
-            'status' => $validated['status'] ?? null,
             'email_verified_at' => $validated['email_verified_at'] ?? null,
         ]);
     }

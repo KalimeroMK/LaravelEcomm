@@ -18,8 +18,8 @@ class Store extends CoreRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|string|same:confirm-password|min:8',
-            'roles' => 'required|string|max:255',
+            'password' => 'required|string|confirmed|min:8',
+            'roles' => 'nullable|string|max:255',
         ];
     }
 }

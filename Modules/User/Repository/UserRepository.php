@@ -23,4 +23,9 @@ class UserRepository extends EloquentRepository implements EloquentRepositoryInt
     {
         return (new $this->modelClass)->with('roles')->orderBy('id', 'desc')->get();
     }
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->modelClass::where('email', $email)->first();
+    }
 }

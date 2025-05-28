@@ -14,7 +14,6 @@ readonly class ProfileUpdateAction
         return $user->fill([
             'name' => $dto->name,
             'email' => $dto->email,
-            'status' => $dto->status,
         ])->save();
     }
 }
