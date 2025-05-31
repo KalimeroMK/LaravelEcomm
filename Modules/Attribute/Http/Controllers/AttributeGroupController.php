@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Modules\Attribute\Actions\AttributeGroup\CreateAttributeGroupAction;
 use Modules\Attribute\Actions\AttributeGroup\DeleteAttributeGroupAction;
 use Modules\Attribute\Actions\AttributeGroup\UpdateAttributeGroupAction;
@@ -27,14 +27,14 @@ class AttributeGroupController extends CoreController
         $this->authorizeResource(AttributeGroup::class, 'attribute_group');
     }
 
-    public function index(): Renderable
+    public function index(): View
     {
         return view('attribute::groups.index', [
             'groups' => $this->repository->findAll(),
         ]);
     }
 
-    public function create(): Renderable
+    public function create(): View
     {
         return view('attribute::groups.create', [
             'group' => new AttributeGroup(),
@@ -44,13 +44,13 @@ class AttributeGroupController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $dto = AttributeGroupDTO::fromRequest($request);
-        $group = $this->createAction->execute($dto);
+        $this->createAction->execute($dto);
 
         return redirect()->route('attribute-groups.index')
             ->with('success', __('Attribute group created successfully.'));
     }
 
-    public function edit(AttributeGroup $attribute_group): Renderable
+    public function edit(AttributeGroup $attribute_group): View
     {
         return view('attribute::groups.edit', [
             'group' => $this->repository->findById($attribute_group->id),

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Modules\Message\Http\Controllers\Api\BrandController;
+use Modules\Brand\Http\Controllers\BrandController;
 
 /*
 |--------------------------------------------------------------------------

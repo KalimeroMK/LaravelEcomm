@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\Post\Actions;
 
-use Modules\Post\DTOs\PostListDTO;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Post\Repository\PostRepository;
 
 readonly class GetAllPostsAction
 {
     public function __construct(public PostRepository $repository) {}
 
-    public function execute(): PostListDTO
+    public function execute(): Collection
     {
-        $posts = $this->repository->findAll();
-
-        return new PostListDTO($posts);
+        return $this->repository->findAll();
     }
 }

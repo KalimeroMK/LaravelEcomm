@@ -15,6 +15,10 @@ readonly class CreateNewsletterAction
     {
         $newsletter = $this->repository->create([
             'email' => $dto->email,
+            'token' => $dto->token,
+            'is_validated' => $dto->is_validated,
+            'create_at' => $dto->created_at,
+            'updated_at' => $dto->updated_at,
         ]);
 
         return NewsletterDTO::fromArray($newsletter->toArray());

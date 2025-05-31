@@ -17,6 +17,7 @@ class Store extends CoreRequest
     {
         return [
             'email' => 'required|email|unique:newsletters',
+            'is_validated' => 'sometimes',
         ];
     }
 }

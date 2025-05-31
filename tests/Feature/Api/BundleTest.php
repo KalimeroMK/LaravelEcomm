@@ -52,7 +52,7 @@ class BundleTest extends TestCase
             'products' => [$product->id],
             'images' => [UploadedFile::fake()->image('bundle_update.jpg')],
         ];
-        $response = $this->update($this->url, $data, $bundle->id);
+        $response = $this->updatePUT($this->url, $data, $bundle->id);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [

@@ -21,7 +21,7 @@ use Modules\Product\Models\Product;
  * @property int $category_id
  * @property int $product_id
  * @property-read Category $category
- * @property-read Product $product
+ * @property-read Product  $product
  *
  * @method static Builder<static>|CategoryProduct newModelQuery()
  * @method static Builder<static>|CategoryProduct newQuery()
@@ -35,15 +35,17 @@ class CategoryProduct extends Core
 {
     protected $table = 'category_product';
 
-    protected $casts = [
-        'product_id' => 'int',
-        'category_id' => 'int',
-    ];
+    protected $casts
+        = [
+            'product_id' => 'int',
+            'category_id' => 'int',
+        ];
 
-    protected $fillable = [
-        'product_id',
-        'category_id',
-    ];
+    protected $fillable
+        = [
+            'product_id',
+            'category_id',
+        ];
 
     public static function Factory(): CategoryProductFactory
     {

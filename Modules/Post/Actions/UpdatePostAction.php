@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Modules\Post\Actions;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Post\DTOs\PostDTO;
+use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
 
 readonly class UpdatePostAction
 {
     public function __construct(private PostRepository $repository) {}
 
-    public function execute(PostDTO $dto): PostDTO
+    public function execute(PostDTO $dto): Post|Model
     {
         $post = $this->repository->update($dto->id, [
             'title' => $dto->title,
             'slug' => $dto->slug,
             'summary' => $dto->summary,
             'description' => $dto->description,
-            'photo' => $dto->photo,
             'status' => $dto->status,
             'user_id' => $dto->user_id,
         ]);
@@ -31,9 +32,6 @@ readonly class UpdatePostAction
             $post->tags()->sync($dto->tags);
         }
 
-        return PostDTO::fromArray($post->toArray() + [
-            'categories' => $dto->categories,
-            'tags' => $dto->tags,
-        ]);
+        return $post;
     }
 }

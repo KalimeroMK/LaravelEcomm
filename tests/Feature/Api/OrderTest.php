@@ -7,6 +7,7 @@ namespace Tests\Feature\Api;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Testing\TestResponse;
+use Modules\Cart\Models\Cart;
 use Modules\Order\Models\Order;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
@@ -38,10 +39,7 @@ class OrderTest extends TestCase
     public function test_update_order(): TestResponse
     {
         $order = Order::factory()->create();
-        $data = [
-            'status' => 'delivered',
-        ];
-
+        $data = Order::factory()->make()->toArray();
         $id = $order->id;
 
         return $this->updatePUT($this->url, $data, $id);
@@ -85,7 +83,16 @@ class OrderTest extends TestCase
     #[Test]
     public function test_structure(): void
     {
-        Order::factory()->count(2)->create();
+        // Create orders
+        $orders = Order::factory()->count(2)->create();
+
+        // Create carts for each order
+        foreach ($orders as $order) {
+            Cart::factory()->create([
+                'order_id' => $order->id,
+                'user_id' => $order->user_id,
+            ]);
+        }
 
         $response = $this->json('GET', '/api/v1/orders');
         $response->assertStatus(200);

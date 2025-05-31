@@ -85,16 +85,26 @@ class AttributeValue extends Core
 
     protected $appends = ['value'];
 
-    public static function Factory(): AttributeValueFactory
+    public static function factory(): AttributeValueFactory
     {
         return AttributeValueFactory::new();
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     *
+     * @return BelongsTo<Attribute, AttributeValue>
+     */
     public function attribute(): BelongsTo
     {
         return $this->belongsTo(Attribute::class);
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     *
+     * @return MorphTo<Model, AttributeValue>
+     */
     public function attributable(): MorphTo
     {
         return $this->morphTo();

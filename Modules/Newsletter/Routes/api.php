@@ -16,4 +16,4 @@ use Modules\Newsletter\Http\Controllers\Api\NewsletterController;
 |
 */
 
-Route::apiResource('newsletters', NewsletterController::class)->names('api.newsletters');
+Route::apiResource('newsletters', NewsletterController::class)->names('api.newsletters')->only(['index', 'store', 'destroy']);

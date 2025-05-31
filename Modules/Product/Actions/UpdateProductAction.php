@@ -8,16 +8,13 @@ use Modules\Product\DTOs\ProductDTO;
 use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 
-class UpdateProductAction
+readonly class UpdateProductAction
 {
-    private ProductRepository $repository;
+    public function __construct(
+        private ProductRepository $repository
+    ) {}
 
-    public function __construct(ProductRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    public function execute(int $id, ProductDTO $dto): ProductDTO
+    public function execute(int $id, ProductDTO $dto): Product
     {
         /** @var Product $product */
         $product = $this->repository->update($id, [
@@ -46,12 +43,11 @@ class UpdateProductAction
             $product->tags()->sync($dto->tags);
         }
 
-        return ProductDTO::fromArray($product->fresh([
+        return $product->fresh([
             'categories',
             'tags',
             'brand',
             'attributes.attribute',
-            'author',
-        ])->toArray());
+        ]);
     }
 }

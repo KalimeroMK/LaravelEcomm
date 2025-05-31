@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Kalimeromk\Filterable\app\Traits\Filterable;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
@@ -43,33 +44,27 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property bool|null $is_featured
  * @property int $d_deal
  * @property int|null $brand_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property float|null $special_price
- * @property \Illuminate\Support\Carbon|null $special_price_start
- * @property \Illuminate\Support\Carbon|null $special_price_end
+ * @property Carbon|null $special_price_start
+ * @property Carbon|null $special_price_end
  * @property string|null $sku
- * @property-read Collection<int, AttributeValue> $attributeValues
- * @property-read int|null $attribute_values_count
- * @property-read Collection<int, Attribute> $attributes
- * @property-read int|null $attributes_count
- * @property-read Brand|null $brand
- * @property-read Collection<int, Bundle>                                                              $bundles
- * @property-read int|null                                                                             $bundles_count
- * @property-read Collection<int, Cart>                                                                $carts
- * @property-read int|null                                                                             $carts_count
- * @property-read \Kalnoy\Nestedset\Collection<int, Category>                                          $categories
- * @property-read int|null                                                                             $categories_count
- * @property-read string|null                                                                          $image_thumb_url
- * @property-read string|null                                                                          $image_url
- * @property-read MediaCollection<int, Media> $media
- * @property-read int|null                                                                             $media_count
- * @property-read Collection<int, ProductReview>                                                       $product_reviews
- * @property-read int|null                                                                             $product_reviews_count
- * @property-read Collection<int, Tag>                                                                 $tags
- * @property-read int|null                                                                             $tags_count
- * @property-read Collection<int, Wishlist>                                                            $wishlists
- * @property-read int|null                                                                             $wishlists_count
+ * @property-read Collection<int, AttributeValue>             $attributeValues
+ * @property-read int|null                                    $attribute_values_count
+ * @property-read Collection<int, Attribute>                  $attributes
+ * @property-read int|null                                    $attributes_count
+ * @property-read Brand|null                                  $brand
+ * @property-read Collection<int, Bundle>                     $bundles
+ * @property-read int|null                                    $bundles_count
+ * @property-read Collection<int, Cart>                       $carts
+ * @property-read \Kalnoy\Nestedset\Collection<int, Category> $categories
+ * @property-read MediaCollection<int, Media>                 $media
+ * @property-read int|null                                    $media_count
+ * @property-read Collection<int, ProductReview>              $product_reviews
+ * @property-read Collection<int, Tag>                        $tags
+ * @property-read int|null                                    $tags_count
+ * @property-read Collection<int, Wishlist>                   $wishlists
  *
  * @method static Builder<static>|Product filter(array $filters = [])
  * @method static Builder<static>|Product newModelQuery()
@@ -110,12 +105,10 @@ class Product extends Core implements HasMedia
             'summary',
             'description',
             'stock',
-            'condition.status',
             'status',
             'price',
             'discount',
             'brand.title',
-            'color',
         ];
 
     protected $table = 'products';
@@ -130,7 +123,6 @@ class Product extends Core implements HasMedia
             'special_price_start' => 'date',
             'special_price_end' => 'date',
             'special_price' => 'float',
-            'condition_id' => 'int',
         ];
 
     protected $fillable
@@ -141,17 +133,14 @@ class Product extends Core implements HasMedia
             'summary',
             'description',
             'stock',
-            'condition_id',
             'status',
             'price',
             'discount',
             'is_featured',
             'brand_id',
-            'color',
             'special_price',
             'special_price_start',
             'special_price_end',
-            'condition_id',
         ];
 
     public static function Factory(): ProductFactory
@@ -244,7 +233,7 @@ class Product extends Core implements HasMedia
         return $this->belongsToMany(Tag::class);
     }
 
-    public function getCurrentPrice(): mixed
+    public function getCurrentPrice(): ?float
     {
         $today = now();
 
@@ -257,7 +246,7 @@ class Product extends Core implements HasMedia
         return $this->hasMany(AttributeValue::class, 'product_id', 'id');
     }
 
-    public function attributes()
+    public function attributes(): BelongsToMany
     {
         return $this->belongsToMany(Attribute::class, 'attribute_product', 'product_id', 'attribute_id');
     }
@@ -269,7 +258,7 @@ class Product extends Core implements HasMedia
 
     public function makeAllSearchableUsing(Builder $query): Builder
     {
-        return $query->with('categories', 'brand', 'condition');
+        return $query->with('categories', 'brand', 'tags');
     }
 
     public function searchBrandsByProduct(string $searchTerm): \Illuminate\Support\Collection

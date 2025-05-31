@@ -20,8 +20,9 @@ class Update extends CoreRequest
 
         return [
             'title' => [
-                'nullable',
-                'string|max:50',
+                'sometimes',
+                'string',
+                'max:50',
                 Rule::unique('categories', 'title')->ignore($category),
             ],
             'parent_id' => [

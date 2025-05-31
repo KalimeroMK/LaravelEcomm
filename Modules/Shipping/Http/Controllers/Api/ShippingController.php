@@ -12,6 +12,7 @@ use Modules\Shipping\Actions\DeleteShippingAction;
 use Modules\Shipping\Actions\GetAllShippingAction;
 use Modules\Shipping\Actions\StoreShippingAction;
 use Modules\Shipping\Actions\UpdateShippingAction;
+use Modules\Shipping\DTOs\ShippingDTO;
 use Modules\Shipping\Http\Requests\Api\Store;
 use Modules\Shipping\Http\Requests\Api\Update;
 use Modules\Shipping\Http\Resources\ShippingResource;
@@ -43,9 +44,8 @@ class ShippingController extends CoreController
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Shipping::class);
-        $shippingDto = $this->getAllAction->execute();
 
-        return ShippingResource::collection($shippingDto->shippings);
+        return ShippingResource::collection($this->getAllAction->execute());
     }
 
     /**
@@ -54,7 +54,7 @@ class ShippingController extends CoreController
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Shipping::class);
-        $shipping = $this->storeAction->execute($request->validated());
+        $shipping = $this->storeAction->execute(ShippingDTO::fromRequest($request));
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Shipping']))
@@ -72,9 +72,9 @@ class ShippingController extends CoreController
 
     public function update(Update $request, int $id): JsonResponse
     {
-        $this->authorizeFromRepo(ShippingRepository::class, 'update', $id);
-        $this->updateAction->execute($id, $request->validated());
-        $shipping = $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
+        $existingProduct = $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
+
+        $shipping = $this->storeAction->execute(ShippingDTO::fromRequest($request, $id, $existingProduct));
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Shipping']))

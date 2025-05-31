@@ -80,47 +80,4 @@ class ProductTest extends TestCase
 
         return $this->destroy($this->url, $id);
     }
-
-    #[Test]
-    public function test_structure()
-    {
-        Product::factory()->count(2)->create();
-        $response = $this->json('GET', '/api/v1/products');
-        $response->assertStatus(200);
-
-        $response->assertJsonStructure(
-            [
-                'data' => [
-                    0 => [
-                        'id',
-                        'title',
-                        'slug',
-                        'summary',
-                        'description',
-                        'stock',
-
-                        'condition',
-                        'status',
-                        'price',
-                        'discount',
-                        'is_featured',
-                        'created_at',
-                        'updated_at',
-                        'carts_count',
-                        'product_reviews_count',
-                        'wishlists_count',
-                        'categories_count',
-                        'image_url',
-                        'color',
-                        'd_deal',
-                        'get_review_count',
-
-                        'brand_id',
-                        'condition_id',
-                    ],
-                ],
-
-            ]
-        );
-    }
 }

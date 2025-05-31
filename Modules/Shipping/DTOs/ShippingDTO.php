@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Shipping\DTOs;
 
 use Illuminate\Http\Request;
+use Modules\Shipping\Models\Shipping;
 
 readonly class ShippingDTO
 {
@@ -29,15 +30,17 @@ readonly class ShippingDTO
         );
     }
 
-    public static function fromRequest(Request $request, ?int $id = null): self
+    public static function fromRequest(Request $request, ?int $id = null, ?Shipping $shipping = null): self
     {
         $validated = $request->validated();
 
-        return self::fromArray([
-            'id' => $id ?? ($validated['id'] ?? null),
-            'type' => $validated['type'] ?? null,
-            'price' => $validated['price'] ?? null,
-            'status' => $validated['status'] ?? null,
-        ]);
+        return new self(
+            $id ?? $validated['id'] ?? $shipping?->id,
+            $validated['type'] ?? $shipping?->type,
+            $validated['price'] ?? $shipping?->price,
+            $validated['status'] ?? $shipping?->status,
+            $shipping?->created_at?->toDateTimeString(),
+            $shipping?->updated_at?->toDateTimeString(),
+        );
     }
 }

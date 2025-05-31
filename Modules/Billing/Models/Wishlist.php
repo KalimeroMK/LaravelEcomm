@@ -11,6 +11,7 @@ namespace Modules\Billing\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
@@ -26,11 +27,11 @@ use Modules\User\Models\User;
  * @property int $product_id
  * @property int|null $cart_id
  * @property int|null $user_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Cart|null $cart
- * @property-read Product $product
- * @property-read User|null $user
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Cart|null                  $cart
+ * @property-read Product                    $product
+ * @property-read User|null                  $user
  *
  * @method static Builder<static>|Wishlist newModelQuery()
  * @method static Builder<static>|Wishlist newQuery()
@@ -51,23 +52,25 @@ class Wishlist extends Core
 {
     protected $table = 'wishlists';
 
-    protected $casts = [
-        'product_id' => 'int',
-        'cart_id' => 'int',
-        'user_id' => 'int',
-        'price' => 'float',
-        'quantity' => 'int',
-        'amount' => 'float',
-    ];
+    protected $casts
+        = [
+            'product_id' => 'int',
+            'cart_id' => 'int',
+            'user_id' => 'int',
+            'price' => 'float',
+            'quantity' => 'int',
+            'amount' => 'float',
+        ];
 
-    protected $fillable = [
-        'product_id',
-        'cart_id',
-        'user_id',
-        'price',
-        'quantity',
-        'amount',
-    ];
+    protected $fillable
+        = [
+            'product_id',
+            'cart_id',
+            'user_id',
+            'price',
+            'quantity',
+            'amount',
+        ];
 
     public function cart(): BelongsTo
     {

@@ -49,6 +49,8 @@ class CouponTest extends TestCase
             'value' => $this->faker->randomFloat(),
             'type' => 'percent',
             'status' => 'active',
+            'value' => $this->faker->randomFloat(),
+
         ];
 
         $id = $coupon->id;

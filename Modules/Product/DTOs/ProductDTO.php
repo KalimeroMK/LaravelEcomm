@@ -32,12 +32,36 @@ readonly class ProductDTO
         public ?array $tags = null,
         public ?array $brand = null,
         public ?array $attributes = null,
-        public ?array $author = null,
     ) {}
 
-    public static function fromRequest(Request $request, ?int $id = null): self
+    public static function fromRequest(Request $request, ?int $id = null, ?Product $existing = null): self
     {
-        return self::fromArray($request->validated() + ['id' => $id]);
+        $data = $request->validated();
+
+        return new self(
+            $id,
+            $data['title'] ?? $existing?->title,
+            $data['slug'] ?? $existing?->slug,
+            $data['summary'] ?? $existing?->summary,
+            $data['description'] ?? $existing?->description,
+            $data['stock'] ?? $existing?->stock,
+            $data['status'] ?? $existing?->status,
+            $data['price'] ?? $existing?->price,
+            $data['discount'] ?? $existing?->discount,
+            $data['is_featured'] ?? $existing?->is_featured,
+            $data['d_deal'] ?? $existing?->d_deal,
+            $data['brand_id'] ?? $existing?->brand_id,
+            $data['sku'] ?? $existing?->sku,
+            $data['special_price'] ?? $existing?->special_price,
+            $data['special_price_start'] ?? $existing?->special_price_start?->toDateTimeString(),
+            $data['special_price_end'] ?? $existing?->special_price_end?->toDateTimeString(),
+            $data['created_at'] ?? $existing?->created_at?->toDateTimeString(),
+            $data['updated_at'] ?? $existing?->updated_at?->toDateTimeString(),
+            $data['categories'] ?? $existing?->categories?->pluck('id')->toArray(),
+            $data['tags'] ?? $existing?->tags?->pluck('id')->toArray(),
+            $existing?->brand ? $existing->brand->toArray() : null,
+            $existing?->attributes ? $existing->attributes->toArray() : null,
+        );
     }
 
     public static function fromArray(array $data): self
@@ -65,7 +89,6 @@ readonly class ProductDTO
             $data['tags'] ?? null,
             $data['brand'] ?? null,
             $data['attributes'] ?? null,
-            $data['author'] ?? null,
         );
     }
 
@@ -94,7 +117,6 @@ readonly class ProductDTO
             $product->tags?->pluck('id')->toArray(),
             $product->brand ? $product->brand->toArray() : null,
             $product->attributes ? $product->attributes->toArray() : null,
-            $product->author ? $product->author->toArray() : null
         );
     }
 }

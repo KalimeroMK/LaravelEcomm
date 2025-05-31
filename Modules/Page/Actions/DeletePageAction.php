@@ -10,8 +10,10 @@ readonly class DeletePageAction
 {
     public function __construct(private PageRepository $repository) {}
 
-    public function execute(int $id): bool
+    public function execute(int $id): JsonResponse
     {
         $this->repository->destroy($id);
+
+        return response()->json();
     }
 }

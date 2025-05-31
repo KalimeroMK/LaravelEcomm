@@ -11,8 +11,13 @@ use Modules\Core\Repositories\EloquentRepository;
 use Modules\Order\Models\Order;
 use Modules\User\Models\User;
 
-readonly class AdminRepository extends EloquentRepository
+class AdminRepository extends EloquentRepository
 {
+    public function __construct()
+    {
+        parent::__construct(User::class);
+    }
+
     /**
      * @return array<string, int> Array of paths.
      */
@@ -31,6 +36,9 @@ readonly class AdminRepository extends EloquentRepository
 
     /**
      * Get the count of paid orders for each of the last 12 months.
+     */
+    /**
+     * @return Collection<int, Order>
      */
     public function getPaidOrdersCountByMonth(): Collection
     {

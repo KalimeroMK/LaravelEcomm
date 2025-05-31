@@ -23,7 +23,6 @@ class PostImport implements ToModel, WithHeadingRow
                 'slug' => $row['slug'] ?? '',
                 'summary' => $row['summary'] ?? '',
                 'description' => $row['description'] ?? null,
-                'photo' => $row['photo'] ?? null,
                 'status' => $row['status'] ?? 'inactive',
                 'user_id' => $row['user_id'] ?? 1,
             ]);

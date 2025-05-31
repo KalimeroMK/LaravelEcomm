@@ -30,36 +30,10 @@ class NewsletterTest extends TestCase
         $data = [
             'email' => $this->faker->unique()->safeEmail,
             'status' => 'active',
+            'is_validated' => true,
         ];
 
         return $this->create($this->url, $data);
-    }
-
-    /**
-     * test update newsletter.
-     */
-    #[Test]
-    public function test_update_newsletter(): TestResponse
-    {
-        $id = Newsletter::factory()->create()->id;
-        $data = [
-            'email' => $this->faker->unique()->safeEmail,
-            'status' => 'inactive',
-        ];
-
-        return $this->updatePUT($this->url, $data, $id);
-    }
-
-    /**
-     * test find newsletter.
-     */
-    #[Test]
-    public function test_find_newsletter(): TestResponse
-    {
-        $newsletter = Newsletter::factory()->create();
-        $id = $newsletter->id;
-
-        return $this->show($this->url, $id);
     }
 
     /**
@@ -87,7 +61,8 @@ class NewsletterTest extends TestCase
 
     public function test_delete_message(): TestResponse
     {
-        $id = Message::firstOrFail()->id;
+        $message = Message::factory()->create();
+        $id = $message->id;
 
         return $this->destroy($this->url, $id);
     }

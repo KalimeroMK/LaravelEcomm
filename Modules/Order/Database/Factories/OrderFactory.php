@@ -25,12 +25,13 @@ class OrderFactory extends Factory
             'payment_method' => $this->faker->randomElement(['cod', 'paypal']),
             'payment_status' => $this->faker->randomElement(['paid', 'unpaid']),
             'status' => $this->faker->randomElement(['new', 'process', 'delivered', 'cancel']),
-            'payer_id' => User::factory(),
             'transaction_reference' => $this->faker->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'user_id' => User::factory(),
-            'shipping_id' => Shipping::factory(),
+            'payer_id' => fn () => User::factory()->create()->id,
+            'user_id' => fn () => User::factory()->create()->id,
+            'shipping_id' => fn () => Shipping::factory()->create()->id,
+
         ];
     }
 }

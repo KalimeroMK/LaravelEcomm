@@ -7,6 +7,7 @@ namespace Modules\Post\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Modules\Category\Models\Category;
 use Modules\Post\Models\Post;
 use Modules\Tag\Models\Tag;
@@ -20,7 +21,7 @@ class PostFactory extends Factory
     {
         return [
             'title' => $this->faker->word(),
-            'slug' => $this->faker->slug(),
+            'slug' => 'slug-'.mb_strtoupper(Str::random(10)),
             'summary' => $this->faker->text(),
             'description' => $this->faker->text(),
             'status' => $this->faker->randomElement(['active', 'inactive']),

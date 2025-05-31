@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Actions\CreateCartAction;
 use Modules\Cart\Actions\DeleteCartAction;
@@ -139,7 +140,7 @@ class CartController extends CoreController
     public function checkout(): View|Factory|RedirectResponse|Application
     {
         $cart = Cart::whereUserId(Auth::id())->whereOrderId(null)->get();
-        if (! $cart instanceof \Illuminate\Support\Collection || $cart->isEmpty()) {
+        if (! $cart instanceof Collection || $cart->isEmpty()) {
             session()->flash('error', 'Cart is empty');
 
             return back();

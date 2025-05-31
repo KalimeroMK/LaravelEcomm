@@ -30,7 +30,6 @@ class ProductServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         $this->registerPolicies();
         $this->autoRegisterCommands($this->moduleName);
-
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Modules\Brand\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Modules\Brand\Models\Brand;
 
 class BrandFactory extends Factory
@@ -19,6 +20,7 @@ class BrandFactory extends Factory
     {
         return [
             'title' => $this->faker->unique(true)->title,
+            'slug' => 'slug-'.mb_strtoupper(Str::random(10)),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

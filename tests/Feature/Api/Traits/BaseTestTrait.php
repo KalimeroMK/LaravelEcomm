@@ -38,6 +38,7 @@ trait BaseTestTrait
     {
         $uri = mb_rtrim($url, '/').'/'.$id;
         $response = $this->json('PUT', $uri, $data);
+        dd($response);
 
         return $response
             ->assertStatus(200)
@@ -47,6 +48,7 @@ trait BaseTestTrait
     public function show(string $url, int $id): TestResponse
     {
         $uri = mb_rtrim($url, '/').'/'.$id;
+
         $response = $this->json('GET', $uri);
 
         return $response

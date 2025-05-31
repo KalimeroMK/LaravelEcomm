@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace Modules\Product\Actions;
 
 use Modules\Product\DTOs\ProductDTO;
+use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
 
-class StoreProductAction
+readonly class StoreProductAction
 {
-    private ProductRepository $repository;
+    public function __construct(private ProductRepository $repository) {}
 
-    public function __construct(ProductRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    public function execute(ProductDTO $dto): ProductDTO
+    public function execute(ProductDTO $dto): Product
     {
         $product = $this->repository->create([
             'title' => $dto->title,
@@ -44,12 +40,11 @@ class StoreProductAction
             $product->tags()->sync($dto->tags);
         }
 
-        return ProductDTO::fromArray($product->fresh([
+        return $product->fresh([
             'categories',
             'tags',
             'brand',
             'attributes.attribute',
-            'author',
-        ])->toArray());
+        ]);
     }
 }

@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\Order\Actions;
 
-use Modules\Order\DTOs\OrderListDTO;
+use Illuminate\Support\Collection;
 use Modules\Order\Repository\OrderRepository;
 
 readonly class GetAllOrdersAction
 {
     public function __construct(private OrderRepository $repository) {}
 
-    public function execute(): OrderListDTO
+    public function execute(): Collection
     {
-        $orders = $this->repository->findAll();
-
-        return new OrderListDTO($orders);
+        return $this->repository->findAll();
     }
 }

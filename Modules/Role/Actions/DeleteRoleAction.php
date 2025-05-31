@@ -10,8 +10,10 @@ readonly class DeleteRoleAction
 {
     public function __construct(private RoleRepository $repository) {}
 
-    public function execute(int $id): bool
+    public function execute(int $id): JsonResponse
     {
         $this->repository->destroy($id);
+
+        return response()->json();
     }
 }

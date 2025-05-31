@@ -33,15 +33,18 @@ use Modules\Attribute\Database\Factories\AttributeGroupFactory;
  */
 class AttributeGroup extends Model
 {
-    use HasFactory;
+    use HasFactory; // @phpstan-use HasFactory<\Modules\Attribute\Database\Factories\AttributeGroupFactory>
 
     protected $fillable = ['name'];
 
-    public static function Factory(): AttributeGroupFactory
+    public static function factory(): AttributeGroupFactory
     {
         return AttributeGroupFactory::new();
     }
 
+    /**
+     * @return BelongsToMany<Attribute, AttributeGroup>
+     */
     public function attributes(): BelongsToMany
     {
         return $this->belongsToMany(Attribute::class, 'attribute_attribute_group', 'attribute_group_id',

@@ -24,6 +24,9 @@ class AdminService
         return $this->admin_repository->usersLastSevenDays();
     }
 
+    /**
+     * @return Collection<int, \Modules\Order\Models\Order>
+     */
     public function OrdersByMonth(): Collection
     {
         return $this->admin_repository->getPaidOrdersCountByMonth();

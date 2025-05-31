@@ -42,6 +42,11 @@ class AttributeOption extends Model
         'value',
     ];
 
+    /**
+     * @phpstan-ignore-next-line
+     *
+     * @return BelongsTo<Attribute, AttributeOption>
+     */
     public function attribute(): BelongsTo
     {
         return $this->belongsTo(Attribute::class);

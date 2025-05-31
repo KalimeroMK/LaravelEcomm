@@ -41,7 +41,6 @@ class AuthController extends CoreController
         return $this->sendError('Unauthorised.', ['error' => 'Unauthorised'], Response::HTTP_UNAUTHORIZED);
     }
 
-
     /**
      * @throws ReflectionException
      */
@@ -58,7 +57,6 @@ class AuthController extends CoreController
                 'token' => $user->createToken('MyAuthApp')->plainTextToken,
             ]);
     }
-
 
     public function socialLogin(string $social): RedirectResponse
     {
@@ -80,7 +78,7 @@ class AuthController extends CoreController
         return response()->json([
             'name' => $userSocial->getName(),
             'email' => $userSocial->getEmail(),
-            'message' => 'User not found. Please register.'
+            'message' => 'User not found. Please register.',
         ]);
     }
 

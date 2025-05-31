@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Post\DTOs;
 
 use Illuminate\Http\Request;
+use Modules\Post\Models\Post;
 
 readonly class PostDTO
 {
@@ -14,16 +15,27 @@ readonly class PostDTO
         public string $slug,
         public string $summary,
         public ?string $description,
-        public ?string $photo,
         public string $status,
         public int $user_id,
         public array $categories = [],
         public array $tags = []
     ) {}
 
-    public static function fromRequest(Request $request, ?int $id = null): self
+    public static function fromRequest(Request $request, ?int $id = null, ?Post $post = null): self
     {
-        return self::fromArray($request->validated() + ['id' => $id]);
+        $data = $request->validated();
+
+        return new self(
+            $id,
+            $data['title'] ?? $post?->title ?? '',
+            $data['slug'] ?? $post?->slug ?? '',
+            $data['summary'] ?? $post?->summary ?? '',
+            $data['description'] ?? $post?->description ?? null,
+            $data['status'] ?? $post?->status ?? '',
+            $request->input('user_id') ?? $post?->user_id ?? 0,
+            $data['categories'] ?? [],
+            $data['tags'] ?? []
+        );
     }
 
     public static function fromArray(array $data): self
@@ -34,7 +46,6 @@ readonly class PostDTO
             $data['slug'] ?? '',
             $data['summary'] ?? '',
             $data['description'] ?? null,
-            $data['photo'] ?? null,
             $data['status'] ?? '',
             $data['user_id'] ?? 0,
             $data['categories'] ?? [],

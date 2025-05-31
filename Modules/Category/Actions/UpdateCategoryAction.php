@@ -21,7 +21,7 @@ class UpdateCategoryAction
     {
         $category = $this->repository->findById($dto->id);
         $category->update([
-            'name' => $dto->name,
+            'title' => $dto->title,
             'parent_id' => $dto->parent_id,
             'description' => $dto->description,
         ]);

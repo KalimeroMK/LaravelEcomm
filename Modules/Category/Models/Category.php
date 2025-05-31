@@ -34,17 +34,17 @@ use Modules\Product\Models\Product;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read \Kalnoy\Nestedset\Collection<int, Category> $categories
- * @property-read int|null $categories_count
- * @property-read Category|null $category
+ * @property-read int|null                                    $categories_count
+ * @property-read Category|null                               $category
  * @property-read \Kalnoy\Nestedset\Collection<int, Category> $children
- * @property-read int|null $children_count
+ * @property-read int|null                                    $children_count
  * @property-read \Kalnoy\Nestedset\Collection<int, Category> $childrenCategories
- * @property-read int|null $children_categories_count
- * @property-read Category|null $parent
- * @property-read Collection<int, Post> $posts
- * @property-read int|null $posts_count
- * @property-read Collection<int, Product> $products
- * @property-read int|null $products_count
+ * @property-read int|null                                    $children_categories_count
+ * @property-read Category|null                               $parent
+ * @property-read Collection<int, Post>                       $posts
+ * @property-read int|null                                    $posts_count
+ * @property-read Collection<int, Product>                    $products
+ * @property-read int|null                                    $products_count
  *
  * @method static \Kalnoy\Nestedset\Collection<int, static> all($columns = ['*'])
  * @method static QueryBuilder<static>|Category ancestorsAndSelf($id, array $columns = [])

@@ -24,7 +24,8 @@ class CategoryController extends CoreController
     public function __construct(
         private readonly CreateCategoryAction $createAction,
         private readonly UpdateCategoryAction $updateAction,
-        private readonly DeleteCategoryAction $deleteAction
+        private readonly DeleteCategoryAction $deleteAction,
+        private readonly CategoryRepository $repository
     ) {
         // Removed permission middleware
     }
@@ -73,8 +74,8 @@ class CategoryController extends CoreController
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(CategoryRepository::class, 'update', $id);
-
-        $dto = CategoryDTO::fromRequest($request, $id);
+        $category = $this->repository->findById($id);
+        $dto = CategoryDTO::fromRequest($request, $id, $category);
         $category = $this->updateAction->execute($dto);
 
         return $this

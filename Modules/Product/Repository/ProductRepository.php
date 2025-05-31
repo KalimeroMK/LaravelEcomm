@@ -113,7 +113,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     protected function withRelations(): array
     {
-        return ['brand', 'categories', 'carts', 'condition', 'tags', 'attributeValues.attribute'];
+        return ['brand', 'categories', 'carts', 'tags', 'attributeValues.attribute'];
     }
 
     /**

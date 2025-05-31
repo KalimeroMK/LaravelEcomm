@@ -23,7 +23,6 @@ class Posts implements ToCollection, WithHeadingRow
                 'summary' => $item['summary'],
                 'description' => $item['summary'],
                 'quote' => $item['quote'],
-                'photo' => $item['photo'],
                 'tags' => $item['tags'],
                 'status' => $item['status'],
             ]);

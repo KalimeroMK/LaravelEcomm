@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\Order\Actions;
 
-use Modules\Order\DTOs\OrderListDTO;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\Order\Repository\OrderRepository;
 
 readonly class FindOrdersByUserAction
 {
     public function __construct(private OrderRepository $repository) {}
 
-    public function execute(int $userId): OrderListDTO
+    public function execute(int $userId): LengthAwarePaginator
     {
-        $orders = $this->repository->findAllByUser($userId);
-
-        return new OrderListDTO($orders);
+        return $this->repository->findAllByUser($userId);
     }
 }

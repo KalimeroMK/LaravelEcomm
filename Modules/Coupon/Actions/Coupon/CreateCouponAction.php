@@ -21,10 +21,9 @@ class CreateCouponAction
     {
         return $this->repository->create([
             'code' => $dto->code,
-            'discount' => $dto->discount,
-            'description' => $dto->description,
             'type' => $dto->type,
-            'expires_at' => $dto->expires_at,
+            'value' => $dto->value,
+            'status' => $dto->status,
         ]);
     }
 }

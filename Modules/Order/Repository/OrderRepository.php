@@ -6,7 +6,6 @@ namespace Modules\Order\Repository;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Modules\Core\Interfaces\EloquentRepositoryInterface;
 use Modules\Core\Interfaces\SearchInterface;
 use Modules\Core\Repositories\EloquentRepository;
@@ -20,12 +19,9 @@ class OrderRepository extends EloquentRepository implements EloquentRepositoryIn
         parent::__construct(Order::class);
     }
 
-    /**
-     * Get all orders with related user, carts, and shipping info.
-     */
-    public function findAll(): Collection
+    public function paginateAll(): LengthAwarePaginator
     {
-        return (new $this->modelClass)->with('user', 'carts', 'shipping')->get();
+        return (new $this->modelClass)->with('user', 'carts', 'shipping')->paginate(20);
     }
 
     /**
@@ -36,7 +32,7 @@ class OrderRepository extends EloquentRepository implements EloquentRepositoryIn
         return (new $this->modelClass)
             ->with('shipping', 'user', 'carts')
             ->where('user_id', $userId)
-            ->paginate(10);
+            ->paginate(20);
     }
 
     /**

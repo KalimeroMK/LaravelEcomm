@@ -6,10 +6,10 @@ namespace Modules\Order\DTOs;
 
 class OrderListDTO
 {
-    public array $orders;
+    public $orders;
 
     public function __construct($orders)
     {
-        $this->orders = $orders->toArray();
+        $this->orders = $orders;
     }
 }

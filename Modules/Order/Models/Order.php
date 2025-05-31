@@ -36,7 +36,7 @@ use Modules\User\Models\User;
  * @property string $payment_method
  * @property string $payment_status
  * @property string $status
- * @property string|null $payer_id
+ * @property int|null $payer_id
  * @property string|null $transaction_reference
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -96,7 +96,7 @@ class Order extends Core
      *
      * @var array<string>
      */
-    protected $dates
+    protected array $dates
         = [
             'created_at',
             'updated_at',
@@ -109,6 +109,7 @@ class Order extends Core
             'shipping_id' => 'int',
             'total_amount' => 'float',
             'quantity' => 'int',
+            'payer_id' => 'int',
         ];
 
     protected $fillable

@@ -10,9 +10,10 @@ readonly class DeleteBundleAction
 {
     public function __construct(private BundleRepository $repository) {}
 
-    public function execute(int $id): bool
+    public function execute(int $id)
     {
-        // Detach or cleanup logic can be handled in a listener if needed
         $this->repository->destroy($id);
+
+        return response()->json();
     }
 }

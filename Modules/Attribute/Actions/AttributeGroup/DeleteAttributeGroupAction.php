@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Actions\AttributeGroup;
 
+use Illuminate\Http\JsonResponse;
 use Modules\Attribute\Repository\AttributeGroupRepository;
 
 readonly class DeleteAttributeGroupAction
@@ -15,8 +16,10 @@ readonly class DeleteAttributeGroupAction
         $this->repository = $repository;
     }
 
-    public function execute(int $id): bool
+    public function execute(int $id): JsonResponse
     {
         $this->repository->destroy($id);
+
+        return response()->json();
     }
 }

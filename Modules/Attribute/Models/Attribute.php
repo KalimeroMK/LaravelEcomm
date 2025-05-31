@@ -131,17 +131,26 @@ class Attribute extends Core
         return AttributeFactory::new();
     }
 
+    /**
+     * @return BelongsToMany<AttributeGroup, Attribute>
+     */
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(AttributeGroup::class, 'attribute_attribute_group', 'attribute_id',
             'attribute_group_id');
     }
 
+    /**
+     * @return HasMany<AttributeValue, Attribute>
+     */
     public function values(): HasMany
     {
         return $this->hasMany(AttributeValue::class);
     }
 
+    /**
+     * @return HasMany<AttributeOption, Attribute>
+     */
     public function options(): HasMany
     {
         return $this->hasMany(AttributeOption::class);
@@ -149,8 +158,6 @@ class Attribute extends Core
 
     /**
      * Get the column name used to store the value depending on type.
-     *
-     * @throws Exception
      */
     public function getValueColumnName(): string
     {

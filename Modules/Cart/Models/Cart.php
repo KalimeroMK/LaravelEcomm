@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace Modules\Cart\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Database\Factories\CartFactory;
 use Modules\Core\Models\Core;
@@ -31,13 +33,13 @@ use Modules\User\Models\User;
  * @property int $product_id
  * @property int|null $order_id
  * @property int|null $user_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Order|null $order
- * @property-read Product $product
- * @property-read User|null $user
- * @property-read Collection<int, Wishlist> $wishlists
- * @property-read int|null $wishlists_count
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Order|null                 $order
+ * @property-read Product                    $product
+ * @property-read User|null                  $user
+ * @property-read Collection<int, Wishlist>  $wishlists
+ * @property-read int|null                   $wishlists_count
  *
  * @method static Builder<static>|Cart newModelQuery()
  * @method static Builder<static>|Cart newQuery()
@@ -53,7 +55,7 @@ use Modules\User\Models\User;
  * @method static Builder<static>|Cart whereUpdatedAt($value)
  * @method static Builder<static>|Cart whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Cart extends Core
 {
@@ -61,24 +63,26 @@ class Cart extends Core
 
     protected $table = 'carts';
 
-    protected $casts = [
-        'product_id' => 'int',
-        'order_id' => 'int',
-        'user_id' => 'int',
-        'price' => 'float',
-        'quantity' => 'int',
-        'amount' => 'float',
-    ];
+    protected $casts
+        = [
+            'product_id' => 'int',
+            'order_id' => 'int',
+            'user_id' => 'int',
+            'price' => 'float',
+            'quantity' => 'int',
+            'amount' => 'float',
+        ];
 
-    protected $fillable = [
-        'product_id',
-        'order_id',
-        'user_id',
-        'price',
-        'status',
-        'quantity',
-        'amount',
-    ];
+    protected $fillable
+        = [
+            'product_id',
+            'order_id',
+            'user_id',
+            'price',
+            'status',
+            'quantity',
+            'amount',
+        ];
 
     public static function Factory(): CartFactory
     {

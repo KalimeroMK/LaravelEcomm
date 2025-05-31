@@ -10,7 +10,6 @@ use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Newsletter\Actions\CreateNewsletterAction;
 use Modules\Newsletter\Actions\DeleteNewsletterAction;
-use Modules\Newsletter\Actions\GetAllNewslettersAction;
 use Modules\Newsletter\DTOs\NewsletterDTO;
 use Modules\Newsletter\Http\Requests\Api\Store;
 use Modules\Newsletter\Http\Resources\NewsletterResource;
@@ -21,19 +20,21 @@ use ReflectionException;
 class NewsletterController extends CoreController
 {
     public function __construct(
-        private readonly GetAllNewslettersAction $getAllAction,
+        private readonly NewsletterRepository $repository,
         private readonly CreateNewsletterAction $createAction,
         private readonly DeleteNewsletterAction $deleteAction
     ) {
         // Permissions removed — using policies instead
     }
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Newsletter::class);
-        $newslettersDto = $this->getAllAction->execute();
 
-        return NewsletterResource::collection($newslettersDto->newsletters);
+        return NewsletterResource::collection($this->repository->findAll());
     }
 
     /**

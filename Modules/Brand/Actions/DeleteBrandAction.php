@@ -12,8 +12,10 @@ readonly class DeleteBrandAction
         private BrandRepository $repository
     ) {}
 
-    public function execute(int $id): bool
+    public function execute(int $id): JsonResponse
     {
         $this->repository->destroy($id);
+
+        return response()->json();
     }
 }

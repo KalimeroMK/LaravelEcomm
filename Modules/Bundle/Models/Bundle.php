@@ -27,11 +27,11 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property float $price
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read string|null $image_url
+ * @property-read string|null                 $image_url
  * @property-read MediaCollection<int, Media> $media
- * @property-read int|null $media_count
- * @property-read Collection<int, Product> $products
- * @property-read int|null $products_count
+ * @property-read int|null                    $media_count
+ * @property-read Collection<int, Product>    $products
+ * @property-read int|null                    $products_count
  *
  * @method static Builder<static>|Bundle newModelQuery()
  * @method static Builder<static>|Bundle newQuery()
@@ -52,16 +52,18 @@ class Bundle extends Core implements HasMedia
 
     protected $table = 'bundles';
 
-    protected $casts = [
-        'price' => 'float',
-    ];
+    protected $casts
+        = [
+            'price' => 'float',
+        ];
 
-    protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'slug',
-    ];
+    protected $fillable
+        = [
+            'name',
+            'description',
+            'price',
+            'slug',
+        ];
 
     public static function Factory(): BundleFactory
     {

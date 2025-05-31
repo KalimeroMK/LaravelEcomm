@@ -27,7 +27,6 @@ class CartFactory extends Factory
             'order_id' => function () {
                 return Order::factory()->create()->id;
             },
-            // Other definitions
             'user_id' => function () {
                 return User::factory()->create()->id;
             },

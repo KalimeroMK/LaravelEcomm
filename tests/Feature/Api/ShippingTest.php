@@ -25,6 +25,7 @@ class ShippingTest extends TestCase
     /**
      * test create product.
      */
+    #[Test]
     public function test_create_shipping(): TestResponse
     {
         Storage::fake('uploads');

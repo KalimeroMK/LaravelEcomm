@@ -56,10 +56,14 @@ class ProductController extends CoreController
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(ProductRepository::class, 'update', $id);
-        $dto = ProductDTO::fromRequest($request, $id);
+        $existingProduct = $this->repository->findById($id);
+
+        $dto = ProductDTO::fromRequest($request, $id, $existingProduct);
         $product = $this->updateProductAction->execute($id, $dto);
 
-        return $this->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Product']))->respond(new ProductResource($product));
+        return $this->setMessage(__('apiResponse.updateSuccess', [
+            'resource' => 'Product',
+        ]))->respond(new ProductResource($product));
     }
 
     public function destroy(int $id): JsonResponse

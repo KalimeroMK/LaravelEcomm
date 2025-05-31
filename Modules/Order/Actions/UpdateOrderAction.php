@@ -32,9 +32,8 @@ class UpdateOrderAction
             'payment_method' => $dto->payment_method,
             'payment_status' => $dto->payment_status,
             'status' => $dto->status,
-            'payer_id' => $dto->payer_id,
+            'payer_id' => (int) $dto->payer_id,
             'transaction_reference' => $dto->transaction_reference,
-            'post_code' => $dto->post_code,
         ]);
 
         return $order;

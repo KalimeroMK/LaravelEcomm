@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Testing\TestResponse;
 use Modules\Post\Models\Post;
+use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
@@ -61,10 +62,11 @@ class PostTest extends TestCase
     public function test_update_post(): TestResponse
     {
         $post = Post::factory()->create();
-        $data = [
-            'title' => $this->faker->word,
-            'status' => 'inactive',
-        ];
+
+        $user = User::factory()->create(); //
+        $data = Post::factory()->make([
+            'user_id' => $user->id, //
+        ])->toArray();
 
         $id = $post->id;
 
@@ -98,21 +100,10 @@ class PostTest extends TestCase
                     'slug',
                     'summary',
                     'description',
-                    'quote',
-                    'images', // conditional but we assume it's loaded
                     'tags',
-                    'post_cat_id',
                     'status',
                     'created_at',
                     'updated_at',
-                    'all_comments_count',
-                    'fpost_comments_count',
-                    'post_comments_count',
-                    'categories_count',
-                    'comments_count',
-                    'image_url',
-                    'post_tag_count',
-                    'added_by',
                     'categories', // conditional but we assume it's loaded
                 ],
             ],

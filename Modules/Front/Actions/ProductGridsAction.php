@@ -48,15 +48,16 @@ class ProductGridsAction
             'perPage' => $perPage,
         ]);
 
-        $products = Cache::remember($cacheKey, 86400, function () use ($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder, $perPage) {
-            return Product::query()
-                ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
-                ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
-                ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
-                ->orderBy($sortColumn, $sortOrder)
-                ->with(['categories', 'brand', 'tags'])
-                ->paginate($perPage);
-        });
+        $products = Cache::remember($cacheKey, 86400,
+            function () use ($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder, $perPage) {
+                return Product::query()
+                    ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
+                    ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
+                    ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
+                    ->orderBy($sortColumn, $sortOrder)
+                    ->with(['categories', 'brand', 'tags'])
+                    ->paginate($perPage);
+            });
 
         $brands = Brand::where('status', 'active')->orderBy('title')->get();
         $recent_products = Product::where('status', 'active')->orderByDesc('id')->take(3)->get();

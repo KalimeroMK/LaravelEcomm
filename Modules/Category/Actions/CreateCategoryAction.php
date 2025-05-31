@@ -20,7 +20,7 @@ class CreateCategoryAction
     public function execute(CategoryDTO $dto): Category
     {
         return $this->repository->create([
-            'name' => $dto->name,
+            'title' => $dto->title,
             'parent_id' => $dto->parent_id,
             'description' => $dto->description,
         ]);

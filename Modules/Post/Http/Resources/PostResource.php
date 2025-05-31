@@ -25,14 +25,12 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'summary' => $this->summary,
             'description' => $this->description,
-            'quote' => $this->quote,
             'images' => $this->whenLoaded('media', function () {
                 return $this->getMedia('post')->map(function ($media): array {
                     return [
                         'id' => $media->id,
                         'url' => $media->getUrl(),
                         'name' => $media->name,
-                        'size' => $media->size,
                         'mime_type' => $media->mime_type,
                     ];
                 });
@@ -47,7 +45,6 @@ class PostResource extends JsonResource
             'post_comments_count' => $this->post_comments_count,
             'categories_count' => $this->categories_count,
             'comments_count' => $this->comments_count,
-            'image_url' => $this->image_url,
             'post_tag_count' => $this->post_tag_count,
             'added_by' => $this->added_by,
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),

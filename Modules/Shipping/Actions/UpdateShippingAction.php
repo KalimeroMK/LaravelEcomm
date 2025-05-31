@@ -7,7 +7,7 @@ namespace Modules\Shipping\Actions;
 use Modules\Shipping\DTOs\ShippingDTO;
 use Modules\Shipping\Repository\ShippingRepository;
 
-class UpdateShippingAction
+readonly class UpdateShippingAction
 {
     private ShippingRepository $repository;
 

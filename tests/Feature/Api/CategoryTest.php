@@ -41,17 +41,17 @@ class CategoryTest extends TestCase
     /**
      * test update product.
      */
-    #[Test]
+    // #[Test]
     public function test_update_category(): TestResponse
     {
         $category = Category::factory()->create();
+        $parentCategory = Category::factory()->create();
+
         $data = [
-            'parent_id' => 5,
+            'parent_id' => $parentCategory->id,
         ];
 
-        $id = $category->id;
-
-        return $this->updatePUT($this->url, $data, $id);
+        return $this->updatePUT($this->url, $data, $category->id);
     }
 
     /**

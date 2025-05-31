@@ -9,8 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Order\Actions\DeleteOrderAction;
-use Modules\Order\Actions\FindOrdersByUserAction;
-use Modules\Order\Actions\GetAllOrdersAction;
 use Modules\Order\Actions\ShowOrderAction;
 use Modules\Order\Actions\StoreOrderAction;
 use Modules\Order\Actions\UpdateOrderAction;
@@ -25,8 +23,7 @@ use Modules\Order\Repository\OrderRepository;
 class OrderController extends CoreController
 {
     public function __construct(
-        private readonly GetAllOrdersAction $getAllAction,
-        private readonly FindOrdersByUserAction $findByUserAction,
+        private readonly OrderRepository $repository,
         private readonly ShowOrderAction $showAction,
         private readonly DeleteOrderAction $deleteAction,
         private readonly StoreOrderAction $storeAction,
@@ -39,8 +36,8 @@ class OrderController extends CoreController
     {
         $this->authorize('viewAny', Order::class);
         $orders = auth()->user()->hasRole('super-admin')
-            ? $this->getAllAction->execute()->orders
-            : $this->findByUserAction->execute($request['user_id'])->orders;
+            ? $this->repository->paginateAll()
+            : $this->repository->findAllByUser($request['user_id']);
 
         return OrderResource::collection($orders);
     }
@@ -80,7 +77,9 @@ class OrderController extends CoreController
     {
         $this->authorizeFromRepo(OrderRepository::class, 'update', $id);
 
-        $dto = OrderDTO::fromRequest($request, $id);
+        $existingOrder = $this->showAction->execute($id);
+        $dto = OrderDTO::fromRequest($request, $id, $existingOrder);
+
         $order = $this->updateAction->execute($dto);
 
         return $this

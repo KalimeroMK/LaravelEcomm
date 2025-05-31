@@ -62,7 +62,6 @@ class Brand extends Core implements HasMedia
             'title',
             'slug',
             'status',
-            'photo',
         ];
 
     // Factory method for creating Brand instances

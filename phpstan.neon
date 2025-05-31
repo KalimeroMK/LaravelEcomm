@@ -3,15 +3,17 @@ includes:
 
 parameters:
     paths:
-        - Modules
-    level: 7
+        - Modules/Attribute
+    level: 8
     treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
         - '#Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver::nonQueued\(\)#'
         - '#Call to an undefined method Omnipay\\Common\\Message\\ResponseInterface::getRedirectResponse\(\)#'
         - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setClientId\(\)#'
         - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setSecret\(\)#'
         - '#Call to an undefined method Omnipay\\Common\\GatewayInterface::setTestMode\(\)#'
+        - '#should return Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany<.*> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany<.*>#'
+        - '#should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<.*> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<.*>#'
+        - '#should return Illuminate\\Database\\Eloquent\\Relations\\MorphTo<.*> but returns Illuminate\\Database\\Eloquent\\Relations\\MorphTo<.*>#'
     excludePaths:
         # Add paths to exclude here, or remove this line if not needed

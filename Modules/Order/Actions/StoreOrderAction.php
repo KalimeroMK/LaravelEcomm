@@ -32,7 +32,6 @@ class StoreOrderAction
             'status' => $dto->status,
             'payer_id' => $dto->payer_id,
             'transaction_reference' => $dto->transaction_reference,
-            'post_code' => $dto->post_code,
         ]);
 
         return $order;

@@ -11,14 +11,13 @@ readonly class BrandDTO
 {
     public function __construct(
         public ?int $id,
-        public string $title,
-        public string $slug,
-        public string $status,
+        public ?string $title,
+        public ?string $slug,
+        public ?string $status,
         public ?array $images = null,
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
         public ?int $media_count = null,
-        public ?int $products_count = null,
     ) {}
 
     public static function fromRequest(Request $request, ?int $id = null): self
@@ -30,14 +29,13 @@ readonly class BrandDTO
     {
         return new self(
             $data['id'] ?? null,
-            $data['title'],
-            $data['slug'],
-            $data['status'],
+            $data['title'] ?? null,
+            $data['slug'] ?? null,
+            $data['status'] ?? null,
             $data['images'] ?? null,
             isset($data['created_at']) ? new Carbon($data['created_at']) : null,
             isset($data['updated_at']) ? new Carbon($data['updated_at']) : null,
             $data['media_count'] ?? null,
-            $data['products_count'] ?? null,
         );
     }
 

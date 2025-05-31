@@ -22,10 +22,9 @@ class UpdateCouponAction
         $coupon = $this->repository->findById($dto->id);
         $coupon->update([
             'code' => $dto->code,
-            'discount' => $dto->discount,
-            'description' => $dto->description,
             'type' => $dto->type,
-            'expires_at' => $dto->expires_at,
+            'value' => $dto->value,
+            'status' => $dto->status,
         ]);
 
         return $coupon;

@@ -41,7 +41,6 @@ class Update extends CoreRequest
             'is_featured' => 'sometimes|in:1',
             'brand_id' => 'nullable|exists:brands,id',
             'status' => 'required|in:active,inactive',
-            'condition_id' => 'required|exists:conditions,id',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
         ];
