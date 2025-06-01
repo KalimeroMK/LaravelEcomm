@@ -7,7 +7,7 @@ namespace Modules\Cart\Http\Requests\Api;
 use Modules\Cart\Rules\ProductStockRule;
 use Modules\Core\Http\Requests\Api\CoreRequest;
 
-class Store extends CoreRequest
+class Update extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.

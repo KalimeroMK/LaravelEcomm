@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Order\DTOs;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Modules\Order\Models\Order;
 
@@ -42,7 +43,7 @@ readonly class OrderDTO
             status: $validated['status'] ?? $existing?->status,
             payer_id: isset($validated['payer_id']) ? (int) $validated['payer_id'] : $existing?->payer_id,
             transaction_reference: $validated['transaction_reference'] ?? $existing?->transaction_reference,
-            created_at: $validated['created_at'] ?? ($existing?->created_at ? $existing->created_at->format('Y-m-d H:i:s') : null),
+            created_at: $validated['created_at'] ?? ($existing?->created_at?->format('Y-m-d H:i:s')),
         );
     }
 
@@ -61,7 +62,9 @@ readonly class OrderDTO
             $data['status'] ?? null,
             isset($data['payer_id']) ? (int) $data['payer_id'] : null,
             $data['transaction_reference'] ?? null,
-            isset($data['created_at']) && $data['created_at'] instanceof \Carbon\Carbon ? $data['created_at']->format('Y-m-d H:i:s') : $data['created_at'] ?? null,
+            isset($data['created_at']) && $data['created_at'] instanceof Carbon
+                ? $data['created_at']->format('Y-m-d H:i:s')
+                : $data['created_at'] ?? null,
         );
     }
 

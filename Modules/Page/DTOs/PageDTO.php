@@ -6,6 +6,7 @@ namespace Modules\Page\DTOs;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Modules\Page\Models\Page;
 
 readonly class PageDTO
 {
@@ -20,61 +21,44 @@ readonly class PageDTO
         public ?Carbon $updated_at = null,
     ) {}
 
+    public static function fromRequest(Request $request, ?int $id = null, ?Page $existing = null): self
+    {
+        $data = $request->validated();
+
+        return new self(
+            $id,
+            $data['title'] ?? $existing?->title ?? '',
+            $data['slug'] ?? $existing?->slug ?? '',
+            $data['content'] ?? $existing?->content ?? '',
+            (bool) ($data['is_active'] ?? $existing?->is_active ?? true),
+            $data['user_id'] ?? $existing?->user_id ?? 0,
+            isset($data['created_at']) ? new Carbon($data['created_at']) : $existing?->created_at,
+            isset($data['updated_at']) ? new Carbon($data['updated_at']) : $existing?->updated_at,
+        );
+    }
+
     public static function fromArray(array $data): self
     {
         return new self(
             $data['id'] ?? null,
-            $data['title'],
-            $data['slug'],
-            $data['content'],
+            $data['title'] ?? '',
+            $data['slug'] ?? '',
+            $data['content'] ?? '',
             (bool) ($data['is_active'] ?? true),
-            $data['user_id'],
+            $data['user_id'] ?? 0,
             isset($data['created_at']) ? new Carbon($data['created_at']) : null,
             isset($data['updated_at']) ? new Carbon($data['updated_at']) : null,
         );
     }
 
-    public static function fromRequest(Request $request, ?int $id = null): self
-    {
-        $validated = $request->validated();
-
-        return self::fromArray([
-            'id' => $id ?? ($validated['id'] ?? null),
-            'title' => $validated['title'] ?? '',
-            'slug' => $validated['slug'] ?? '',
-            'content' => $validated['content'] ?? '',
-            'is_active' => $validated['is_active'] ?? true,
-            'user_id' => $validated['user_id'] ?? 0,
-            'created_at' => $validated['created_at'] ?? null,
-            'updated_at' => $validated['updated_at'] ?? null,
-        ]);
-    }
-
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
             'is_active' => $this->is_active,
             'user_id' => $this->user_id,
-            'created_at' => $this->created_at?->toDateTimeString(),
-            'updated_at' => $this->updated_at?->toDateTimeString(),
         ];
-    }
-
-    public function withId(int $id): self
-    {
-        return new self(
-            $id,
-            $this->title,
-            $this->slug,
-            $this->content,
-            $this->is_active,
-            $this->user_id,
-            $this->created_at,
-            $this->updated_at,
-        );
     }
 }

@@ -18,8 +18,6 @@ use Modules\Attribute\Resource\AttributeResource;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use ReflectionException;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class AttributeController extends CoreController
 {
@@ -28,33 +26,32 @@ class AttributeController extends CoreController
         private readonly CreateAttributeAction $createAction,
         private readonly UpdateAttributeAction $updateAction,
         private readonly DeleteAttributeAction $deleteAction
-    ) {
-        // Removed permission middleware, we now use authorize() in each method
-    }
+    ) {}
 
     public function index(): AnonymousResourceCollection
     {
         $this->authorize('viewAny', Attribute::class);
 
-        return AttributeResource::collection($this->repository->findAll());
+        return AttributeResource::collection(
+            $this->repository->findAll()
+        );
     }
 
     /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Attribute::class);
 
+        $dto = AttributeDTO::fromRequest($request);
+        $attribute = $this->createAction->execute($dto);
+
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
                 'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
-            ->respond(new AttributeResource(
-                $this->createAction->execute(AttributeDTO::fromRequest($request))
-            ));
+            ->respond(new AttributeResource($attribute));
     }
 
     /**
@@ -73,22 +70,21 @@ class AttributeController extends CoreController
 
     /**
      * @throws ReflectionException
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(AttributeRepository::class, 'update', $id);
 
+        $existing = $this->repository->findById($id);
+        $dto = AttributeDTO::fromRequest($request, $id, $existing);
+
+        $attribute = $this->updateAction->execute($dto);
+
         return $this
             ->setMessage(__('apiResponse.updateSuccess', [
                 'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
-            ->respond(new AttributeResource(
-                $this->updateAction->execute(
-                    AttributeDTO::fromArray($request->validated())->withId($id)
-                )
-            ));
+            ->respond(new AttributeResource($attribute));
     }
 
     /**

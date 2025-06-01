@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Banner\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Actions\CreateBannerAction;
@@ -18,9 +17,8 @@ use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Core\Support\Media\MediaUploader;
 use ReflectionException;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class BannerController extends CoreController
 {
@@ -29,9 +27,7 @@ class BannerController extends CoreController
         private readonly CreateBannerAction $createAction,
         private readonly UpdateBannerAction $updateAction,
         private readonly DeleteBannerAction $deleteAction
-    ) {
-        // Removed permission middleware, switched to policies
-    }
+    ) {}
 
     public function index(): ResourceCollection
     {
@@ -41,19 +37,22 @@ class BannerController extends CoreController
     }
 
     /**
-     * @throws Exception
+     * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Banner::class);
 
+        $dto = BannerDTO::fromRequest($request);
+        $banner = $this->createAction->execute($dto);
+
+        MediaUploader::uploadMultiple($banner, ['images'], 'banner');
+
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
                 'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
-            ->respond(new BannerResource(
-                $this->createAction->execute(BannerDTO::fromRequest($request))
-            ));
+            ->respond(new BannerResource($banner->fresh('media')));
     }
 
     /**
@@ -72,20 +71,22 @@ class BannerController extends CoreController
 
     /**
      * @throws ReflectionException
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(BannerRepository::class, 'update', $id);
 
+        $dto = BannerDTO::fromRequest($request, $id, $this->repository->findById($id));
+        $banner = $this->updateAction->execute($dto);
+
+        /** @var Banner $banner */
+        MediaUploader::clearAndUpload($banner, ['images'], 'banner');
+
         return $this
-            ->setMessage(__('apiResponse.storeSuccess', [
+            ->setMessage(__('apiResponse.updateSuccess', [
                 'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
-            ->respond(new BannerResource(
-                $this->updateAction->execute(BannerDTO::fromArray($request->validated())->withId($id))
-            ));
+            ->respond(new BannerResource($banner->fresh('media')));
     }
 
     /**

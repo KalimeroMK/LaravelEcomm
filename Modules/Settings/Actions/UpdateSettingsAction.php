@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Settings\Actions;
 
+use Illuminate\Http\JsonResponse;
 use Modules\Settings\Repository\SettingsRepository;
 
 class UpdateSettingsAction
@@ -15,8 +16,10 @@ class UpdateSettingsAction
         $this->repository = $repository;
     }
 
-    public function execute(int $id, array $data): void
+    public function execute(int $id, array $data): JsonResponse
     {
         $this->repository->update($id, $data);
+
+        return response()->json();
     }
 }

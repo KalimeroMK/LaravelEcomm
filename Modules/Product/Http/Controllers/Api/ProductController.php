@@ -7,6 +7,8 @@ namespace Modules\Product\Http\Controllers\Api;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Core\Support\Media\MediaUploader;
+use Modules\Core\Support\Relations\SyncRelations;
 use Modules\Product\Actions\DeleteProductAction;
 use Modules\Product\Actions\StoreProductAction;
 use Modules\Product\Actions\UpdateProductAction;
@@ -38,39 +40,53 @@ class ProductController extends CoreController
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Product::class);
+
         $dto = ProductDTO::fromRequest($request);
         $product = $this->storeProductAction->execute($dto);
 
-        return $this->setMessage(__('apiResponse.storeSuccess',
-            ['resource' => 'Product']))->respond(new ProductResource($product));
+        SyncRelations::execute($product,
+            ['categories' => $dto->categories, 'tags' => $dto->tags, 'brand' => $dto->brand_id]);
+        MediaUploader::uploadMultiple($product, ['images'], 'product');
+
+        return $this
+            ->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Product']))
+            ->respond(new ProductResource($product->fresh('media')));
     }
 
     public function show(int $id): JsonResponse
     {
         $product = $this->authorizeFromRepo(ProductRepository::class, 'view', $id);
 
-        return $this->setMessage(__('apiResponse.ok',
-            ['resource' => 'Product']))->respond(new ProductResource($product));
+        return $this
+            ->setMessage(__('apiResponse.ok', ['resource' => 'Product']))
+            ->respond(new ProductResource($product));
     }
 
     public function update(Update $request, int $id): JsonResponse
     {
-        $this->authorizeFromRepo(ProductRepository::class, 'update', $id);
-        $existingProduct = $this->repository->findById($id);
+        $product = $this->authorizeFromRepo(ProductRepository::class, 'update', $id);
 
-        $dto = ProductDTO::fromRequest($request, $id, $existingProduct);
+        $dto = ProductDTO::fromRequest($request, $id, $product);
         $product = $this->updateProductAction->execute($id, $dto);
 
-        return $this->setMessage(__('apiResponse.updateSuccess', [
-            'resource' => 'Product',
-        ]))->respond(new ProductResource($product));
+        SyncRelations::execute($product,
+            ['categories' => $dto->categories, 'tags' => $dto->tags, 'brand' => $dto->brand_id]);
+        /** @var Product $product */
+        MediaUploader::clearAndUpload($product, ['images'], 'post');
+
+        return $this
+            ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Product']))
+            ->respond(new ProductResource($product->fresh('media')));
     }
 
     public function destroy(int $id): JsonResponse
     {
         $this->authorizeFromRepo(ProductRepository::class, 'delete', $id);
+
         $this->deleteProductAction->execute($id);
 
-        return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Product']))->respond(null);
+        return $this
+            ->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Product']))
+            ->respond(null);
     }
 }

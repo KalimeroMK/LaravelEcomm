@@ -8,7 +8,7 @@ use Modules\Complaint\DTOs\ComplaintDTO;
 use Modules\Complaint\Models\Complaint;
 use Modules\Complaint\Repository\ComplaintRepository;
 
-class CreateComplaintAction
+readonly class CreateComplaintAction
 {
     private ComplaintRepository $repository;
 

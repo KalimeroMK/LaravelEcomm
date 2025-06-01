@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use Modules\Brand\Models\Brand;
 use PHPUnit\Framework\Attributes\Test;
@@ -26,14 +24,7 @@ class BrandTest extends TestCase
     #[Test]
     public function test_create_brand(): TestResponse
     {
-        Storage::fake('uploads');
-
-        $brand = Brand::factory()->create();
-        $data = [
-            'title' => time().'Test title',
-            'images' => [UploadedFile::fake()->image('updated_file.png', 600, 600)],
-            'status' => 'inactive',
-        ];
+        $data = Brand::factory()->create();
 
         return $this->create($this->url, $data);
     }
@@ -47,7 +38,6 @@ class BrandTest extends TestCase
         $brand = Brand::factory()->create();
         $data = [
             'title' => time().'Test title1',
-            'description' => time().'test-description',
             'status' => 'inactive',
         ];
 
@@ -105,7 +95,6 @@ class BrandTest extends TestCase
                         'id',
                         'title',
                         'slug',
-                        'images',
                         'status',
                         'created_at',
                         'updated_at',

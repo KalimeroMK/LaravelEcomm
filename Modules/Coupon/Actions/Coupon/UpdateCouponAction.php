@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Coupon\DTOs\CouponDTO;
 use Modules\Coupon\Repository\CouponRepository;
 
-class UpdateCouponAction
+readonly class UpdateCouponAction
 {
     private CouponRepository $repository;
 

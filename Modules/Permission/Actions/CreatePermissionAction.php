@@ -13,11 +13,9 @@ readonly class CreatePermissionAction
 
     public function execute(PermissionDTO $dto): PermissionDTO
     {
-        $permission = $this->repository->create([
+        return $this->repository->create([
             'name' => $dto->name,
             'guard_name' => $dto->guard_name,
         ]);
-
-        return PermissionDTO::fromArray($permission->toArray());
     }
 }

@@ -23,13 +23,8 @@ class NewsletterController extends CoreController
         private readonly NewsletterRepository $repository,
         private readonly CreateNewsletterAction $createAction,
         private readonly DeleteNewsletterAction $deleteAction
-    ) {
-        // Permissions removed — using policies instead
-    }
+    ) {}
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Newsletter::class);
@@ -48,7 +43,9 @@ class NewsletterController extends CoreController
         $newsletter = $this->createAction->execute($dto);
 
         return $this
-            ->setMessage(__('apiResponse.storeSuccess', ['resource' => Helper::getResourceName(Newsletter::class)]))
+            ->setMessage(__('apiResponse.storeSuccess', [
+                'resource' => Helper::getResourceName(Newsletter::class),
+            ]))
             ->respond(new NewsletterResource($newsletter));
     }
 
@@ -62,7 +59,9 @@ class NewsletterController extends CoreController
         $this->deleteAction->execute($id);
 
         return $this
-            ->setMessage(__('apiResponse.deleteSuccess', ['resource' => Helper::getResourceName(Newsletter::class)]))
+            ->setMessage(__('apiResponse.deleteSuccess', [
+                'resource' => Helper::getResourceName(Newsletter::class),
+            ]))
             ->respond(null);
     }
 }

@@ -18,7 +18,7 @@ readonly class PostDTO
         public string $status,
         public int $user_id,
         public array $categories = [],
-        public array $tags = []
+        public array $tags = [],
     ) {}
 
     public static function fromRequest(Request $request, ?int $id = null, ?Post $post = null): self
@@ -26,30 +26,45 @@ readonly class PostDTO
         $data = $request->validated();
 
         return new self(
-            $id,
-            $data['title'] ?? $post?->title ?? '',
-            $data['slug'] ?? $post?->slug ?? '',
-            $data['summary'] ?? $post?->summary ?? '',
-            $data['description'] ?? $post?->description ?? null,
-            $data['status'] ?? $post?->status ?? '',
-            $request->input('user_id') ?? $post?->user_id ?? 0,
-            $data['categories'] ?? [],
-            $data['tags'] ?? []
+            id: $id,
+            title: $data['title'] ?? $post?->title ?? '',
+            slug: $data['slug'] ?? $post?->slug ?? '',
+            summary: $data['summary'] ?? $post?->summary ?? '',
+            description: $data['description'] ?? $post?->description,
+            status: $data['status'] ?? $post?->status ?? '',
+            user_id: $request->input('user_id') ?? $post?->user_id ?? 0,
+            categories: array_filter((array) ($data['categories'] ?? [])),
+            tags: array_filter((array) ($data['tags'] ?? [])),
         );
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['id'] ?? null,
-            $data['title'] ?? '',
-            $data['slug'] ?? '',
-            $data['summary'] ?? '',
-            $data['description'] ?? null,
-            $data['status'] ?? '',
-            $data['user_id'] ?? 0,
-            $data['categories'] ?? [],
-            $data['tags'] ?? []
+            id: $data['id'] ?? null,
+            title: $data['title'] ?? '',
+            slug: $data['slug'] ?? '',
+            summary: $data['summary'] ?? '',
+            description: $data['description'] ?? null,
+            status: $data['status'] ?? '',
+            user_id: $data['user_id'] ?? 0,
+            categories: array_filter((array) ($data['categories'] ?? [])),
+            tags: array_filter((array) ($data['tags'] ?? [])),
+        );
+    }
+
+    public static function fromModel(Post $post): self
+    {
+        return new self(
+            id: $post->id,
+            title: $post->title,
+            slug: $post->slug,
+            summary: $post->summary,
+            description: $post->description,
+            status: $post->status,
+            user_id: $post->user_id,
+            categories: $post->categories()->pluck('id')->toArray(),
+            tags: $post->tags()->pluck('id')->toArray(),
         );
     }
 }

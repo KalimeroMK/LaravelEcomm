@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Bundle\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Bundle\Actions\CreateBundleAction;
 use Modules\Bundle\Actions\DeleteBundleAction;
 use Modules\Bundle\Actions\UpdateBundleAction;
@@ -17,19 +17,20 @@ use Modules\Bundle\Models\Bundle;
 use Modules\Bundle\Repository\BundleRepository;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Core\Support\Media\MediaUploader;
+use Modules\Core\Support\Relations\SyncRelations;
 use ReflectionException;
-use Throwable;
 
 class BundleController extends CoreController
 {
     public function __construct(
-        public BundleRepository $repository,
+        private readonly BundleRepository $repository,
         private readonly CreateBundleAction $createAction,
         private readonly UpdateBundleAction $updateAction,
         private readonly DeleteBundleAction $deleteAction
     ) {}
 
-    public function index(): AnonymousResourceCollection
+    public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Bundle::class);
 
@@ -37,19 +38,23 @@ class BundleController extends CoreController
     }
 
     /**
-     * @throws Throwable
+     * @throws ReflectionException
      */
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Bundle::class);
 
-        $bundle = $this->createAction->execute(BundleDTO::fromRequest($request));
+        $dto = BundleDTO::fromRequest($request);
+        $bundle = $this->createAction->execute($dto);
+
+        SyncRelations::execute($bundle, ['products' => $dto->products]);
+        MediaUploader::uploadMultiple($bundle, ['images'], 'bundle');
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
-                'resource' => Helper::getResourceName(Bundle::class),
+                'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
-            ->respond(new BundleResource($bundle));
+            ->respond(new BundleResource($bundle->fresh(['media', 'products'])));
     }
 
     /**
@@ -61,23 +66,7 @@ class BundleController extends CoreController
 
         return $this
             ->setMessage(__('apiResponse.ok', [
-                'resource' => Helper::getResourceName(Bundle::class),
-            ]))
-            ->respond(new BundleResource($bundle));
-    }
-
-    /**
-     * @throws Throwable|ReflectionException
-     */
-    public function update(Update $request, int $id): JsonResponse
-    {
-        $this->authorizeFromRepo(BundleRepository::class, 'update', $id);
-
-        $bundle = $this->updateAction->execute(BundleDTO::fromRequest($request)->withId($id));
-
-        return $this
-            ->setMessage(__('apiResponse.updateSuccess', [
-                'resource' => Helper::getResourceName(Bundle::class),
+                'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
             ->respond(new BundleResource($bundle));
     }
@@ -85,15 +74,36 @@ class BundleController extends CoreController
     /**
      * @throws ReflectionException
      */
+    public function update(Update $request, int $id): JsonResponse
+    {
+        $this->authorizeFromRepo(BundleRepository::class, 'update', $id);
+
+        $dto = BundleDTO::fromRequest($request, $id, $this->repository->findById($id));
+        $bundle = $this->updateAction->execute($dto);
+
+        SyncRelations::execute($bundle, ['products' => $dto->products]);
+        /** @var Bundle $bundle */
+        MediaUploader::clearAndUpload($bundle, ['images'], 'bundle');
+
+        return $this
+            ->setMessage(__('apiResponse.updateSuccess', [
+                'resource' => Helper::getResourceName($this->repository->modelClass),
+            ]))
+            ->respond(new BundleResource($bundle->fresh(['media', 'products'])));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
     public function destroy(int $id): JsonResponse
     {
-        $this->authorize('delete', Bundle::class);
+        $this->authorizeFromRepo(BundleRepository::class, 'delete', $id);
 
         $this->deleteAction->execute($id);
 
         return $this
             ->setMessage(__('apiResponse.deleteSuccess', [
-                'resource' => Helper::getResourceName(Bundle::class),
+                'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
             ->respond(null);
     }

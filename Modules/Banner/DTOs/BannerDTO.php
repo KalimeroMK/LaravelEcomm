@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Modules\Banner\DTOs;
 
 use Illuminate\Http\Request;
-use Modules\Banner\Http\Requests\Api\Store as ApiStore;
-use Modules\Banner\Http\Requests\Api\Update as ApiUpdate;
-use Modules\Banner\Http\Requests\Store;
-use Modules\Banner\Http\Requests\Update;
+use Modules\Banner\Models\Banner;
 
 readonly class BannerDTO
 {
@@ -18,15 +15,19 @@ readonly class BannerDTO
         public ?string $slug,
         public ?string $description,
         public ?string $status,
-        public array $images = []
     ) {}
 
-    /**
-     * Accepts Store, Update, Api\Store, Api\Update or Request.
-     */
-    public static function fromRequest(Store|Update|ApiStore|ApiUpdate|Request $request): self
+    public static function fromRequest(Request $request, ?int $id = null, ?Banner $existing = null): self
     {
-        return self::fromArray($request->validated());
+        $data = $request->validated();
+
+        return new self(
+            $id,
+            $data['title'] ?? $existing?->title,
+            $data['slug'] ?? $existing?->slug,
+            $data['description'] ?? $existing?->description,
+            $data['status'] ?? $existing?->status,
+        );
     }
 
     public static function fromArray(array $data): self
@@ -37,31 +38,6 @@ readonly class BannerDTO
             $data['slug'] ?? null,
             $data['description'] ?? null,
             $data['status'] ?? null,
-            $data['images'] ?? []
-        );
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'slug' => $this->slug,
-            'description' => $this->description,
-            'status' => $this->status,
-            'images' => $this->images,
-        ];
-    }
-
-    public function withId(int $id): self
-    {
-        return new self(
-            $id,
-            $this->title,
-            $this->slug,
-            $this->description,
-            $this->status,
-            $this->images
         );
     }
 }

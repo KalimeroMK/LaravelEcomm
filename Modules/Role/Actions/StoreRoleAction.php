@@ -8,23 +8,14 @@ use Modules\Role\DTOs\RoleDTO;
 use Modules\Role\Models\Role;
 use Modules\Role\Repository\RoleRepository;
 
-class StoreRoleAction
+readonly class StoreRoleAction
 {
-    private RoleRepository $repository;
+    public function __construct(private RoleRepository $repository) {}
 
-    public function __construct(RoleRepository $repository)
+    public function execute(RoleDTO $dto): Role
     {
-        $this->repository = $repository;
-    }
-
-    public function execute(array $data): RoleDTO
-    {
-        $role = $this->repository->create(['name' => $data['name']]);
-        /** @var Role $role */
-        if (isset($data['permissions'])) {
-            $role->syncPermissions($data['permissions']);
-        }
-
-        return RoleDTO::fromArray($role->fresh('permissions')->toArray());
+        return $this->repository->create([
+            'name' => $dto->name,
+        ]);
     }
 }

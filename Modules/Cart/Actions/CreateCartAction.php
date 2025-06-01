@@ -8,14 +8,9 @@ use Modules\Cart\DTOs\CartDTO;
 use Modules\Cart\Models\Cart;
 use Modules\Cart\Repository\CartRepository;
 
-class CreateCartAction
+readonly class CreateCartAction
 {
-    private CartRepository $repository;
-
-    public function __construct(CartRepository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(private CartRepository $repository) {}
 
     public function execute(CartDTO $dto): Cart
     {

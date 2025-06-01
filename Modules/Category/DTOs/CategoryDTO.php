@@ -37,13 +37,4 @@ readonly class CategoryDTO
             $data['description'] ?? null
         );
     }
-
-    public function toArray(): array
-    {
-        return array_filter([
-            'title' => $this->title,
-            'parent_id' => $this->parent_id,
-            'description' => $this->description,
-        ], fn ($v) => $v !== null);
-    }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Cart\DTOs;
 
 use Illuminate\Http\Request;
-use Modules\Cart\Http\Requests\Api\Store;
+use Modules\Cart\Models\Cart;
 
 readonly class CartDTO
 {
@@ -15,14 +15,25 @@ readonly class CartDTO
         public ?int $quantity,
         public ?int $user_id,
         public ?float $price,
-        public ?string $session_id = null,
-        public ?float $amount = null,
-        public ?int $order_id = null
+        public ?string $session_id,
+        public ?float $amount,
+        public ?int $order_id
     ) {}
 
-    public static function fromRequest(Store|Request $request): self
+    public static function fromRequest(Request $request, ?int $id = null, ?Cart $existing = null): self
     {
-        return self::fromArray($request->validated());
+        $data = $request->validated();
+
+        return new self(
+            $id,
+            $data['product_id'] ?? $existing?->product_id,
+            $data['quantity'] ?? $existing?->quantity,
+            $data['user_id'] ?? $existing?->user_id,
+            $data['price'] ?? $existing?->price,
+            $data['session_id'] ?? $existing?->session_id,
+            $data['amount'] ?? $existing?->amount,
+            $data['order_id'] ?? $existing?->order_id,
+        );
     }
 
     public static function fromArray(array $data): self
@@ -36,20 +47,6 @@ readonly class CartDTO
             $data['session_id'] ?? null,
             $data['amount'] ?? null,
             $data['order_id'] ?? null
-        );
-    }
-
-    public function withId(int $id): self
-    {
-        return new self(
-            $id,
-            $this->product_id,
-            $this->quantity,
-            $this->user_id,
-            $this->price,
-            $this->session_id,
-            $this->amount,
-            $this->order_id
         );
     }
 }

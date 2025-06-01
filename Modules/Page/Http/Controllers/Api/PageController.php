@@ -23,18 +23,18 @@ use ReflectionException;
 class PageController extends CoreController
 {
     public function __construct(
+        private readonly PageRepository $repository,
         private readonly GetAllPagesAction $getAllPagesAction,
-        private readonly DeletePageAction $deleteAction,
         private readonly CreatePageAction $createAction,
-        private readonly UpdatePageAction $updateAction
+        private readonly UpdatePageAction $updateAction,
+        private readonly DeletePageAction $deleteAction
     ) {}
 
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Page::class);
-        $pagesDto = $this->getAllPagesAction->execute();
 
-        return PageResource::collection($pagesDto->pages);
+        return PageResource::collection($this->repository->all());
     }
 
     /**
@@ -59,8 +59,7 @@ class PageController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $page = $this->getAllPagesAction->repository->findById($id); // Optionally, use a ShowPageAction if available
-        $this->authorize('view', $page);
+        $page = $this->authorizeFromRepo(PageRepository::class, 'view', $id);
 
         return $this
             ->setMessage(__('apiResponse.ok', [
@@ -76,7 +75,7 @@ class PageController extends CoreController
     {
         $this->authorizeFromRepo(PageRepository::class, 'update', $id);
 
-        $dto = PageDTO::fromArray($request->validated() + ['id' => $id]);
+        $dto = PageDTO::fromRequest($request, $id, $this->repository->findById($id));
         $page = $this->updateAction->execute($dto);
 
         return $this
@@ -91,8 +90,8 @@ class PageController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $page = $this->getAllPagesAction->repository->findById($id);
-        $this->authorize('delete', $page);
+        $this->authorizeFromRepo(PageRepository::class, 'delete', $id);
+
         $this->deleteAction->execute($id);
 
         return $this

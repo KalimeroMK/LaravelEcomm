@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 use Modules\Core\Models\Core;
 use Modules\Message\Database\Factories\MessageFactory;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Class Message
@@ -45,9 +47,10 @@ use Modules\Message\Database\Factories\MessageFactory;
  *
  * @mixin Eloquent
  */
-class Message extends Core
+class Message extends Core implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $table = 'messages';
 

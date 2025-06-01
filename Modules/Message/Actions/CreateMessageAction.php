@@ -8,19 +8,13 @@ use Modules\Message\DTOs\MessageDTO;
 use Modules\Message\Models\Message;
 use Modules\Message\Repository\MessageRepository;
 
-class CreateMessageAction
+readonly class CreateMessageAction
 {
-    private MessageRepository $repository;
-
-    public function __construct(MessageRepository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(private MessageRepository $repository) {}
 
     public function execute(MessageDTO $dto): Message
     {
-        /** @var Message $message */
-        $message = $this->repository->create([
+        return $this->repository->create([
             'name' => $dto->name,
             'subject' => $dto->subject,
             'email' => $dto->email,
@@ -28,15 +22,5 @@ class CreateMessageAction
             'message' => $dto->message,
             'read_at' => $dto->read_at,
         ]);
-
-        if (! empty($dto->photo) && is_file($dto->photo)) {
-            $message->clearMediaCollection('photo');
-
-            $message->addMedia($dto->photo)
-                ->preservingOriginal()
-                ->toMediaCollection('photo');
-        }
-
-        return $message;
     }
 }

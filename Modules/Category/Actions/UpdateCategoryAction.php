@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Category\DTOs\CategoryDTO;
 use Modules\Category\Repository\CategoryRepository;
 
-class UpdateCategoryAction
+readonly class UpdateCategoryAction
 {
     private CategoryRepository $repository;
 

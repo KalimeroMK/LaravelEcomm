@@ -22,19 +22,17 @@ use ReflectionException;
 class CategoryController extends CoreController
 {
     public function __construct(
+        private readonly CategoryRepository $repository,
         private readonly CreateCategoryAction $createAction,
         private readonly UpdateCategoryAction $updateAction,
-        private readonly DeleteCategoryAction $deleteAction,
-        private readonly CategoryRepository $repository
-    ) {
-        // Removed permission middleware
-    }
+        private readonly DeleteCategoryAction $deleteAction
+    ) {}
 
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Category::class);
 
-        return CategoryResource::collection(Category::all());
+        return CategoryResource::collection($this->repository->all());
     }
 
     /**
@@ -74,8 +72,8 @@ class CategoryController extends CoreController
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(CategoryRepository::class, 'update', $id);
-        $category = $this->repository->findById($id);
-        $dto = CategoryDTO::fromRequest($request, $id, $category);
+
+        $dto = CategoryDTO::fromRequest($request, $id, $this->repository->findById($id));
         $category = $this->updateAction->execute($dto);
 
         return $this

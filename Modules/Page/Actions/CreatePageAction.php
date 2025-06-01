@@ -8,7 +8,7 @@ use Modules\Page\DTOs\PageDTO;
 use Modules\Page\Models\Page;
 use Modules\Page\Repository\PageRepository;
 
-class CreatePageAction
+readonly class CreatePageAction
 {
     private PageRepository $repository;
 
@@ -19,14 +19,12 @@ class CreatePageAction
 
     public function execute(PageDTO $dto): Page
     {
-        $page = $this->repository->create([
+        return $this->repository->create([
             'title' => $dto->title,
             'slug' => $dto->slug,
             'content' => $dto->content,
             'is_active' => $dto->is_active,
             'user_id' => $dto->user_id,
         ]);
-
-        return $page;
     }
 }

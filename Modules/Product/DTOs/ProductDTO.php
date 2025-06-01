@@ -30,93 +30,95 @@ readonly class ProductDTO
         public ?string $updated_at = null,
         public ?array $categories = null,
         public ?array $tags = null,
-        public ?array $brand = null,
-        public ?array $attributes = null,
     ) {}
 
     public static function fromRequest(Request $request, ?int $id = null, ?Product $existing = null): self
     {
         $data = $request->validated();
 
+        $specialPrice = $data['special_price'] ?? $existing?->special_price;
+        if (is_array($specialPrice)) {
+            $specialPrice = $specialPrice['amount'] ?? null;
+        }
+
         return new self(
-            $id,
-            $data['title'] ?? $existing?->title,
-            $data['slug'] ?? $existing?->slug,
-            $data['summary'] ?? $existing?->summary,
-            $data['description'] ?? $existing?->description,
-            $data['stock'] ?? $existing?->stock,
-            $data['status'] ?? $existing?->status,
-            $data['price'] ?? $existing?->price,
-            $data['discount'] ?? $existing?->discount,
-            $data['is_featured'] ?? $existing?->is_featured,
-            $data['d_deal'] ?? $existing?->d_deal,
-            $data['brand_id'] ?? $existing?->brand_id,
-            $data['sku'] ?? $existing?->sku,
-            $data['special_price'] ?? $existing?->special_price,
-            $data['special_price_start'] ?? $existing?->special_price_start?->toDateTimeString(),
-            $data['special_price_end'] ?? $existing?->special_price_end?->toDateTimeString(),
-            $data['created_at'] ?? $existing?->created_at?->toDateTimeString(),
-            $data['updated_at'] ?? $existing?->updated_at?->toDateTimeString(),
-            $data['categories'] ?? $existing?->categories?->pluck('id')->toArray(),
-            $data['tags'] ?? $existing?->tags?->pluck('id')->toArray(),
-            $existing?->brand ? $existing->brand->toArray() : null,
-            $existing?->attributes ? $existing->attributes->toArray() : null,
+            id: $id,
+            title: $data['title'] ?? $existing?->title,
+            slug: $data['slug'] ?? $existing?->slug,
+            summary: $data['summary'] ?? $existing?->summary,
+            description: $data['description'] ?? $existing?->description,
+            stock: $data['stock'] ?? $existing?->stock,
+            status: $data['status'] ?? $existing?->status,
+            price: $data['price'] ?? $existing?->price,
+            discount: $data['discount'] ?? $existing?->discount,
+            is_featured: $data['is_featured'] ?? $existing?->is_featured,
+            d_deal: $data['d_deal'] ?? $existing?->d_deal,
+            brand_id: $data['brand_id'] ?? $existing?->brand_id,
+            sku: $data['sku'] ?? $existing?->sku,
+            special_price: $specialPrice,
+            special_price_start: $data['special_price_start'] ?? $existing?->special_price_start?->toDateTimeString(),
+            special_price_end: $data['special_price_end'] ?? $existing?->special_price_end?->toDateTimeString(),
+            created_at: $data['created_at'] ?? $existing?->created_at?->toDateTimeString(),
+            updated_at: $data['updated_at'] ?? $existing?->updated_at?->toDateTimeString(),
+            categories: $data['categories'] ?? [],
+            tags: $data['tags'] ?? [],
         );
     }
 
     public static function fromArray(array $data): self
     {
+        $specialPrice = $data['special_price'] ?? null;
+        if (is_array($specialPrice)) {
+            $specialPrice = $specialPrice['amount'] ?? null;
+        }
+
         return new self(
-            $data['id'] ?? null,
-            $data['title'] ?? null,
-            $data['slug'] ?? null,
-            $data['summary'] ?? null,
-            $data['description'] ?? null,
-            $data['stock'] ?? null,
-            $data['status'] ?? null,
-            $data['price'] ?? null,
-            $data['discount'] ?? null,
-            $data['is_featured'] ?? null,
-            $data['d_deal'] ?? null,
-            $data['brand_id'] ?? null,
-            $data['sku'] ?? null,
-            $data['special_price'] ?? null,
-            $data['special_price_start'] ?? null,
-            $data['special_price_end'] ?? null,
-            $data['created_at'] ?? null,
-            $data['updated_at'] ?? null,
-            $data['categories'] ?? null,
-            $data['tags'] ?? null,
-            $data['brand'] ?? null,
-            $data['attributes'] ?? null,
+            id: $data['id'] ?? null,
+            title: $data['title'] ?? null,
+            slug: $data['slug'] ?? null,
+            summary: $data['summary'] ?? null,
+            description: $data['description'] ?? null,
+            stock: $data['stock'] ?? null,
+            status: $data['status'] ?? null,
+            price: $data['price'] ?? null,
+            discount: $data['discount'] ?? null,
+            is_featured: $data['is_featured'] ?? null,
+            d_deal: $data['d_deal'] ?? null,
+            brand_id: $data['brand_id'] ?? null,
+            sku: $data['sku'] ?? null,
+            special_price: $specialPrice,
+            special_price_start: $data['special_price_start'] ?? null,
+            special_price_end: $data['special_price_end'] ?? null,
+            created_at: $data['created_at'] ?? null,
+            updated_at: $data['updated_at'] ?? null,
+            categories: $data['categories'] ?? [],
+            tags: $data['tags'] ?? [],
         );
     }
 
     public static function fromModel(Product $product): self
     {
         return new self(
-            $product->id,
-            $product->title,
-            $product->slug,
-            $product->summary,
-            $product->description,
-            $product->stock,
-            $product->status,
-            $product->price,
-            $product->discount,
-            $product->is_featured,
-            $product->d_deal,
-            $product->brand_id,
-            $product->sku,
-            $product->special_price,
-            $product->special_price_start,
-            $product->special_price_end,
-            $product->created_at,
-            $product->updated_at,
-            $product->categories?->pluck('id')->toArray(),
-            $product->tags?->pluck('id')->toArray(),
-            $product->brand ? $product->brand->toArray() : null,
-            $product->attributes ? $product->attributes->toArray() : null,
+            id: $product->id,
+            title: $product->title,
+            slug: $product->slug,
+            summary: $product->summary,
+            description: $product->description,
+            stock: $product->stock,
+            status: $product->status,
+            price: $product->price,
+            discount: $product->discount,
+            is_featured: $product->is_featured,
+            d_deal: $product->d_deal,
+            brand_id: $product->brand_id,
+            sku: $product->sku,
+            special_price: $product->special_price,
+            special_price_start: $product->special_price_start?->toDateTimeString(),
+            special_price_end: $product->special_price_end?->toDateTimeString(),
+            created_at: $product->created_at?->toDateTimeString(),
+            updated_at: $product->updated_at?->toDateTimeString(),
+            categories: $product->categories()->pluck('id')->toArray(),
+            tags: $product->tags()->pluck('id')->toArray(),
         );
     }
 }

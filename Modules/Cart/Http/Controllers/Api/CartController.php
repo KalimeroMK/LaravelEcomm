@@ -11,6 +11,7 @@ use Modules\Cart\Actions\DeleteCartAction;
 use Modules\Cart\Actions\UpdateCartAction;
 use Modules\Cart\DTOs\CartDTO;
 use Modules\Cart\Http\Requests\Api\Store;
+use Modules\Cart\Http\Requests\Api\Update;
 use Modules\Cart\Http\Resources\CartResource;
 use Modules\Cart\Models\Cart;
 use Modules\Cart\Repository\CartRepository;
@@ -20,26 +21,12 @@ use ReflectionException;
 
 class CartController extends CoreController
 {
-    public readonly CartRepository $repository;
-
-    private readonly CreateCartAction $createAction;
-
-    private readonly UpdateCartAction $updateAction;
-
-    private readonly DeleteCartAction $deleteAction;
-
     public function __construct(
-        CartRepository $repository,
-        CreateCartAction $createAction,
-        UpdateCartAction $updateAction,
-        DeleteCartAction $deleteAction
-    ) {
-        $this->repository = $repository;
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
-        // Removed permission middleware
-    }
+        private readonly CartRepository $repository,
+        private readonly CreateCartAction $createAction,
+        private readonly UpdateCartAction $updateAction,
+        private readonly DeleteCartAction $deleteAction
+    ) {}
 
     public function index(): ResourceCollection
     {
@@ -55,13 +42,14 @@ class CartController extends CoreController
     {
         $this->authorize('create', Cart::class);
 
+        $dto = CartDTO::fromRequest($request);
+        $cart = $this->createAction->execute($dto);
+
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
                 'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
-            ->respond(new CartResource(
-                $this->createAction->execute(CartDTO::fromArray($request->all()))
-            ));
+            ->respond(new CartResource($cart));
     }
 
     public function show(int $id): JsonResponse
@@ -75,17 +63,21 @@ class CartController extends CoreController
             ->respond(new CartResource($cart));
     }
 
-    public function update(Store $request, int $id): JsonResponse
+    /**
+     * @throws ReflectionException
+     */
+    public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(CartRepository::class, 'update', $id);
+
+        $dto = CartDTO::fromRequest($request, $id, $this->repository->findById($id));
+        $cart = $this->updateAction->execute($dto);
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', [
                 'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
-            ->respond(new CartResource(
-                $this->updateAction->execute(CartDTO::fromArray($request->all())->withId($id))
-            ));
+            ->respond(new CartResource($cart));
     }
 
     public function destroy(int $id): JsonResponse

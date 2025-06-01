@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Newsletter\DTOs;
 
 use Illuminate\Http\Request;
+use Modules\Newsletter\Models\Newsletter;
 
 readonly class NewsletterDTO
 {
@@ -15,12 +16,20 @@ readonly class NewsletterDTO
         public ?bool $is_validated,
         public ?string $created_at,
         public ?string $updated_at
-
     ) {}
 
-    public static function fromRequest(Request $request, ?int $id = null): self
+    public static function fromRequest(Request $request, ?int $id = null, ?Newsletter $existing = null): self
     {
-        return self::fromArray($request->validated() + ['id' => $id]);
+        $data = $request->validated();
+
+        return new self(
+            $id,
+            $data['email'] ?? $existing?->email,
+            $data['token'] ?? $existing?->token,
+            $data['is_validated'] ?? $existing?->is_validated,
+            $data['created_at'] ?? $existing?->created_at?->toDateTimeString(),
+            $data['updated_at'] ?? $existing?->updated_at?->toDateTimeString()
+        );
     }
 
     public static function fromArray(array $data): self
@@ -32,7 +41,6 @@ readonly class NewsletterDTO
             $data['is_validated'] ?? null,
             $data['created_at'] ?? null,
             $data['updated_at'] ?? null
-
         );
     }
 }

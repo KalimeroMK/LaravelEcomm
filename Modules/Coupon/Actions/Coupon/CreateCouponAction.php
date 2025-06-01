@@ -8,7 +8,7 @@ use Modules\Coupon\DTOs\CouponDTO;
 use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Repository\CouponRepository;
 
-class CreateCouponAction
+readonly class CreateCouponAction
 {
     private CouponRepository $repository;
 

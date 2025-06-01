@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Order\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -25,16 +24,15 @@ class OrderController extends CoreController
     public function __construct(
         private readonly OrderRepository $repository,
         private readonly ShowOrderAction $showAction,
-        private readonly DeleteOrderAction $deleteAction,
         private readonly StoreOrderAction $storeAction,
-        private readonly UpdateOrderAction $updateAction
-    ) {
-        // Permissions removed – policy-based authorization
-    }
+        private readonly UpdateOrderAction $updateAction,
+        private readonly DeleteOrderAction $deleteAction
+    ) {}
 
     public function index(Search $request): ResourceCollection
     {
         $this->authorize('viewAny', Order::class);
+
         $orders = auth()->user()->hasRole('super-admin')
             ? $this->repository->paginateAll()
             : $this->repository->findAllByUser($request['user_id']);
@@ -42,9 +40,6 @@ class OrderController extends CoreController
         return OrderResource::collection($orders);
     }
 
-    /**
-     * @throws Exception
-     */
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Order::class);
@@ -57,9 +52,6 @@ class OrderController extends CoreController
             ->respond(new OrderResource($order));
     }
 
-    /**
-     * @throws Exception
-     */
     public function show(int $id): JsonResponse
     {
         $order = $this->showAction->execute($id);
@@ -70,14 +62,10 @@ class OrderController extends CoreController
             ->respond(new OrderResource($order));
     }
 
-    /**
-     * @throws Exception
-     */
     public function update(Update $request, int $id): JsonResponse
     {
-        $this->authorizeFromRepo(OrderRepository::class, 'update', $id);
+        $existingOrder = $this->authorizeFromRepo(OrderRepository::class, 'update', $id);
 
-        $existingOrder = $this->showAction->execute($id);
         $dto = OrderDTO::fromRequest($request, $id, $existingOrder);
 
         $order = $this->updateAction->execute($dto);
@@ -87,9 +75,6 @@ class OrderController extends CoreController
             ->respond(new OrderResource($order));
     }
 
-    /**
-     * @throws Exception
-     */
     public function destroy(int $id): JsonResponse
     {
         $order = $this->showAction->execute($id);

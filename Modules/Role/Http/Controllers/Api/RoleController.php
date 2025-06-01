@@ -7,12 +7,14 @@ namespace Modules\Role\Http\Controllers\Api;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Core\Support\Relations\SyncRelations;
 use Modules\Core\Traits\ApiResponses;
 use Modules\Role\Actions\DeleteRoleAction;
 use Modules\Role\Actions\GetAllPermissionsAction;
 use Modules\Role\Actions\GetAllRolesAction;
 use Modules\Role\Actions\StoreRoleAction;
 use Modules\Role\Actions\UpdateRoleAction;
+use Modules\Role\DTOs\RoleDTO;
 use Modules\Role\Http\Requests\Api\Store;
 use Modules\Role\Http\Requests\Api\Update;
 use Modules\Role\Http\Resources\RoleResource;
@@ -58,10 +60,16 @@ class RoleController extends CoreController
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Role::class);
-        $roleDto = $this->storeAction->execute($request->validated());
 
-        return $this->setMessage(__('apiResponse.storeSuccess',
-            ['resource' => 'Role']))->respond(new RoleResource($roleDto));
+        $dto = RoleDTO::fromRequest($request);
+        $role = $this->storeAction->execute($dto);
+
+        SyncRelations::execute($role,
+            ['categories' => $dto->permissions]);
+
+        return $this
+            ->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Role']))
+            ->respond(new RoleResource($role->fresh('permissions')));
     }
 
     public function show(int $id): JsonResponse
@@ -74,10 +82,16 @@ class RoleController extends CoreController
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(RoleRepository::class, 'update', $id);
-        $roleDto = $this->updateAction->execute($id, $request->validated());
 
-        return $this->setMessage(__('apiResponse.updateSuccess',
-            ['resource' => 'Role']))->respond(new RoleResource($roleDto));
+        $dto = RoleDTO::fromRequest($request, $id);
+        $role = $this->updateAction->execute($id, $dto);
+
+        SyncRelations::execute($role,
+            ['categories' => $dto->permissions]);
+
+        return $this
+            ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Role']))
+            ->respond(new RoleResource($role->fresh('permissions')));
     }
 
     public function destroy(int $id): JsonResponse

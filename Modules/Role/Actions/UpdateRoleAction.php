@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace Modules\Role\Actions;
 
+use Illuminate\Database\Eloquent\Model;
 use Modules\Role\DTOs\RoleDTO;
-use Modules\Role\Models\Role;
 use Modules\Role\Repository\RoleRepository;
 
-class UpdateRoleAction
+readonly class UpdateRoleAction
 {
-    private RoleRepository $repository;
+    public function __construct(private RoleRepository $repository) {}
 
-    public function __construct(RoleRepository $repository)
+    public function execute(int $id, RoleDTO $dto): Model
     {
-        $this->repository = $repository;
-    }
-
-    public function execute(int $id, array $data): RoleDTO
-    {
-        $role = $this->repository->update($id, ['name' => $data['name']]);
-        /** @var Role $role */
-        if (isset($data['permissions'])) {
-            $role->syncPermissions($data['permissions']);
-        }
-
-        return RoleDTO::fromArray($role->fresh('permissions')->toArray());
+        return $this->repository->update($id, [
+            'name' => $dto->name,
+        ]);
     }
 }

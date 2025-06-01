@@ -8,29 +8,16 @@ use Modules\Brand\DTOs\BrandDTO;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Repository\BrandRepository;
 
-class CreateBrandAction
+readonly class CreateBrandAction
 {
-    private BrandRepository $repository;
-
-    public function __construct(BrandRepository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(private BrandRepository $repository) {}
 
     public function execute(BrandDTO $dto): Brand
     {
-        /** @var Brand $brand */
-        $brand = $this->repository->create([
+        return $this->repository->create([
             'title' => $dto->title,
             'slug' => $dto->slug,
             'status' => $dto->status,
         ]);
-
-        if (! empty($dto->images)) {
-            $brand->addMultipleMediaFromRequest(['images'])
-                ->each(fn ($fileAdder) => $fileAdder->preservingOriginal()->toMediaCollection('brand'));
-        }
-
-        return $brand;
     }
 }

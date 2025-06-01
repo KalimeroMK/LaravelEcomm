@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Complaint\DTOs\ComplaintDTO;
 use Modules\Complaint\Repository\ComplaintRepository;
 
-class UpdateComplaintAction
+readonly class UpdateComplaintAction
 {
     private ComplaintRepository $repository;
 

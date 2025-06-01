@@ -21,26 +21,26 @@ readonly class ShippingDTO
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['id'] ?? null,
-            $data['type'] ?? null,
-            $data['price'] ?? null,
-            $data['status'] ?? null,
-            isset($data['created_at']) ? (string) $data['created_at'] : null,
-            isset($data['updated_at']) ? (string) $data['updated_at'] : null,
+            id: $data['id'] ?? null,
+            type: $data['type'] ?? null,
+            price: isset($data['price']) ? (float) $data['price'] : null,
+            status: $data['status'] ?? null,
+            created_at: isset($data['created_at']) ? (string) $data['created_at'] : null,
+            updated_at: isset($data['updated_at']) ? (string) $data['updated_at'] : null,
         );
     }
 
     public static function fromRequest(Request $request, ?int $id = null, ?Shipping $shipping = null): self
     {
-        $validated = $request->validated();
+        $data = $request->validated();
 
         return new self(
-            $id ?? $validated['id'] ?? $shipping?->id,
-            $validated['type'] ?? $shipping?->type,
-            $validated['price'] ?? $shipping?->price,
-            $validated['status'] ?? $shipping?->status,
-            $shipping?->created_at?->toDateTimeString(),
-            $shipping?->updated_at?->toDateTimeString(),
+            id: $id ?? $data['id'] ?? $shipping?->id,
+            type: $data['type'] ?? $shipping?->type,
+            price: isset($data['price']) ? (float) $data['price'] : $shipping?->price,
+            status: $data['status'] ?? $shipping?->status,
+            created_at: $shipping?->created_at?->toDateTimeString(),
+            updated_at: $shipping?->updated_at?->toDateTimeString(),
         );
     }
 }

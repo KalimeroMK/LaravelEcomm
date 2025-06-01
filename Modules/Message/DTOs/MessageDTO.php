@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Message\DTOs;
 
 use Illuminate\Http\Request;
+use Modules\Message\Models\Message;
 
 readonly class MessageDTO
 {
@@ -13,15 +14,24 @@ readonly class MessageDTO
         public ?string $name,
         public ?string $subject,
         public ?string $email,
-        public ?string $photo,
         public ?string $phone,
         public ?string $message,
         public ?string $read_at,
     ) {}
 
-    public static function fromRequest(Request $request, ?int $id = null): self
+    public static function fromRequest(Request $request, ?int $id = null, ?Message $existing = null): self
     {
-        return self::fromArray($request->validated() + ['id' => $id]);
+        $data = $request->validated();
+
+        return new self(
+            $id,
+            $data['name'] ?? $existing?->name,
+            $data['subject'] ?? $existing?->subject,
+            $data['email'] ?? $existing?->email,
+            $data['phone'] ?? $existing?->phone,
+            $data['message'] ?? $existing?->message,
+            $data['read_at'] ?? $existing?->read_at,
+        );
     }
 
     public static function fromArray(array $data): self
@@ -31,24 +41,9 @@ readonly class MessageDTO
             $data['name'] ?? null,
             $data['subject'] ?? null,
             $data['email'] ?? null,
-            $data['photo'] ?? null,
             $data['phone'] ?? null,
             $data['message'] ?? null,
             $data['read_at'] ?? null,
-        );
-    }
-
-    public function withId(int $id): self
-    {
-        return new self(
-            $id,
-            $this->name,
-            $this->subject,
-            $this->email,
-            $this->photo,
-            $this->phone,
-            $this->message,
-            $this->read_at,
         );
     }
 }

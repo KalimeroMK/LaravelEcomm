@@ -14,7 +14,7 @@ readonly class StoreProductAction
 
     public function execute(ProductDTO $dto): Product
     {
-        $product = $this->repository->create([
+        return $this->repository->create([
             'title' => $dto->title,
             'slug' => $dto->slug,
             'summary' => $dto->summary,
@@ -30,21 +30,6 @@ readonly class StoreProductAction
             'special_price' => $dto->special_price,
             'special_price_start' => $dto->special_price_start,
             'special_price_end' => $dto->special_price_end,
-        ]);
-
-        if ($dto->categories) {
-            $product->categories()->sync($dto->categories);
-        }
-
-        if ($dto->tags) {
-            $product->tags()->sync($dto->tags);
-        }
-
-        return $product->fresh([
-            'categories',
-            'tags',
-            'brand',
-            'attributes.attribute',
         ]);
     }
 }

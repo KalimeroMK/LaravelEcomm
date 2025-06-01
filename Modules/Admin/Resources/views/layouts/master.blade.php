@@ -16,11 +16,6 @@
         <div id="content">
             <!-- Topbar -->
             @include('admin::layouts.header')
-            @if($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            @endif
 
             <!-- End of Topbar -->
 

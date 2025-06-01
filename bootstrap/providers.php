@@ -23,7 +23,6 @@ use Modules\Front\Providers\FrontServiceProvider;
 use Modules\Google2fa\Providers\Google2faServiceProvider;
 use Modules\Message\Providers\MessageServiceProvider;
 use Modules\Newsletter\Providers\NewsletterServiceProvider;
-use Modules\Notification\Providers\NotificationServiceProvider;
 use Modules\OpenAI\Providers\OpenAIServiceProvider;
 use Modules\Order\Providers\OrderServiceProvider;
 use Modules\Page\Providers\PageServiceProvider;
@@ -63,7 +62,6 @@ return [
     ManagerServiceProvider::class,
     MessageServiceProvider::class,
     NewsletterServiceProvider::class,
-    NotificationServiceProvider::class,
     OpenAIServiceProvider::class,
     OrderServiceProvider::class,
     PageServiceProvider::class,

@@ -8,7 +8,7 @@ use Modules\Category\DTOs\CategoryDTO;
 use Modules\Category\Models\Category;
 use Modules\Category\Repository\CategoryRepository;
 
-class CreateCategoryAction
+readonly class CreateCategoryAction
 {
     private CategoryRepository $repository;
 

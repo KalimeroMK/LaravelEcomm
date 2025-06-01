@@ -37,25 +37,19 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $slug
  * @property string $summary
  * @property string|null $description
- * @property int $user_id
  * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, PostComment>                $allComments
- * @property-read int|null                                    $all_comments_count
  * @property-read User                                        $author
  * @property-read \Kalnoy\Nestedset\Collection<int, Category> $categories
  * @property-read int|null                                    $categories_count
  * @property-read Collection<int, PostComment>                $comments
  * @property-read int|null                                    $comments_count
- * @property-read string|null                                 $image_url
  * @property-read MediaCollection<int, Media>                 $media
  * @property-read int|null                                    $media_count
- * @property-read Collection<int, PostComment>                $postComments
- * @property-read int|null                                    $post_comments_count
  * @property-read Collection<int, PostComment>                $post_comments
  * @property-read Collection<int, Tag>                        $tags
- * @property-read int|null                                    $tags_count
  *
  * @method static Builder<static>|Post newModelQuery()
  * @method static Builder<static>|Post newQuery()

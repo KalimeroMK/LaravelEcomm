@@ -18,6 +18,7 @@ use Modules\Brand\Models\Brand;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Core\Support\Media\MediaUploader;
 use ReflectionException;
 
 class BrandController extends CoreController
@@ -47,6 +48,7 @@ class BrandController extends CoreController
 
         $dto = BrandDTO::fromRequest($request);
         $brand = $this->createAction->execute($dto);
+        MediaUploader::uploadMultiple($brand, ['images'], 'brand');
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
@@ -78,6 +80,10 @@ class BrandController extends CoreController
 
         $dto = BrandDTO::fromArray($request->validated() + ['id' => $id]);
         $brand = $this->updateAction->execute($dto);
+        /**
+         * @var Brand $brand
+         */
+        MediaUploader::clearAndUpload($brand, ['images'], 'brand');
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', [

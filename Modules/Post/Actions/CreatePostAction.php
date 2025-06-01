@@ -14,7 +14,7 @@ readonly class CreatePostAction
 
     public function execute(PostDTO $dto): Post
     {
-        $post = $this->repository->create([
+        return $this->repository->create([
             'title' => $dto->title,
             'slug' => $dto->slug,
             'summary' => $dto->summary,
@@ -22,15 +22,5 @@ readonly class CreatePostAction
             'status' => $dto->status,
             'user_id' => $dto->user_id,
         ]);
-
-        // Sync relationships if needed
-        if (! empty($dto->categories)) {
-            $post->categories()->sync($dto->categories);
-        }
-        if (! empty($dto->tags)) {
-            $post->tags()->sync($dto->tags);
-        }
-
-        return $post;
     }
 }
