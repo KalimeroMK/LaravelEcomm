@@ -43,8 +43,7 @@ class CouponController extends CoreController
     {
         $this->authorize('create', Coupon::class);
 
-        $dto = CouponDTO::fromRequest($request);
-        $coupon = $this->createAction->execute($dto);
+        $coupon = $this->createAction->execute(CouponDTO::fromRequest($request));
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [

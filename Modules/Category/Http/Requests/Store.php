@@ -19,10 +19,10 @@ class Store extends CoreRequest
         $category = optional($this->route('category'))->id;
 
         return [
-            'title' => 'string|required|unique:categories,title|max:50',
-            'status' => 'boolean|required',
+            'title' => 'string|required|unique:categories,title',
+            'statues' => 'sometimes|in:active,inactive',
             'parent_id' => [
-                'nullable',
+                'sometimes',
                 'exists:categories,id',
                 Rule::notIn([$category]), // Prevents setting the category itself as its parent.
             ],

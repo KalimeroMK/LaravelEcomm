@@ -21,10 +21,17 @@
     <div class="form-group">
         <label for="inputPhoto" class="col-form-label">@lang('partials.image') <span
                     class="text-danger">*</span></label>
+        @if(isset($banner) && $banner->exists && method_exists($banner, 'getMedia') && $banner->getMedia('banner')->count())
+            <div class="mb-2">
+                @foreach($banner->getMedia('banner') as $media)
+                    <img src="{{ $media->getUrl() }}" alt="Banner Image" style="max-height: 100px;">
+                @endforeach
+            </div>
+        @endif
         <div class="input-group">
             <span class="btn btn-round btn-rose btn-file">
                 <span class="fileinput-new"></span>
-                <input type="hidden" value="" name="images"><input type="file" name="images[]">
+                <input type="hidden" value="" name="banner"><input type="file" name="banner[]">
             </span>
         </div>
     </div>

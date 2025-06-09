@@ -21,11 +21,11 @@ class Update extends CoreRequest
         return [
             'title' => [
                 'nullable',
-                'string|max:50',
+                'string',
                 Rule::unique('categories', 'title')->ignore($category), // Specify the key and rule correctly.
             ],
             'parent_id' => [
-                'nullable',
+                'sometimes',
                 'exists:categories,id',
                 Rule::notIn([$category]), // This rule is set correctly.
             ],

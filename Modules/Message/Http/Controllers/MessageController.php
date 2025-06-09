@@ -42,7 +42,6 @@ class MessageController extends CoreController
      */
     public function show(Message $message): Factory|View|Application
     {
-        // Optionally, use a ShowMessageAction/DTO if you want to match pattern even more strictly
         return view('message::show', ['message' => $message]);
     }
 

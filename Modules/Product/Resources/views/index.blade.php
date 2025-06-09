@@ -56,9 +56,18 @@
                                     @if(!empty($product['attributes']))
                                         @foreach($product['attributes'] as $attributeValue)
                                             @if(!empty($attributeValue['value']))
-                                                <strong>{{ $attributeValue['attribute']['name'] ?? '' }}:</strong> {{ $attributeValue['value'] }}@if(!$loop->last), @endif
+                                                <strong>{{ $attributeValue['attribute']['name'] ?? $attributeValue['attribute']['label'] ?? '' }}:</strong> {{ $attributeValue['value'] }}@if(!$loop->last), @endif
                                             @endif
                                         @endforeach
+                                    @else
+                                        {{-- Eloquent style: fallback for $product->attributeValues --}}
+                                        @if(isset($product->attributeValues) && $product->attributeValues->count())
+                                            @foreach($product->attributeValues as $attrVal)
+                                                <strong>{{ $attrVal->attribute->name ?? $attrVal->attribute->label ?? '' }}:</strong> {{ $attrVal->value }}@if(!$loop->last), @endif
+                                            @endforeach
+                                        @else
+                                            N/A
+                                        @endif
                                     @endif
                                 </td>
                                 <td>

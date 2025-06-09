@@ -34,7 +34,8 @@
                 <h6 class="collapse-header">@lang('sidebar.attribute_options'):</h6>
                 <a class="collapse-item" href="{{route('attributes.index')}}">@lang('sidebar.attributes')</a>
                 <a class="collapse-item" href="{{route('attributes.create')}}">@lang('sidebar.add_attribute')</a>
-                <a class="collapse-item" href="{{route('attribute-groups.index')}}">@lang('sidebar.attribute_groups')</a>
+                <a class="collapse-item"
+                   href="{{route('attribute_groups.index')}}">@lang('sidebar.attribute_groups')</a>
             </div>
         </div>
     </li>
@@ -268,7 +269,6 @@
                 @if (config('tenant.multi_tenant.enabled'))
                     <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>
                 @endif
-                <a class="collapse-item" href="{{route('all.notification')}}">@lang('sidebar.notifications')</a>
                 <a class="collapse-item"
                    href="{{route('laravelblocker::blocker.index')}}">@lang('sidebar.blocked_ip')</a>
                 <a class="collapse-item" href="{{route('activity')}}">@lang('sidebar.activity_log')</a>

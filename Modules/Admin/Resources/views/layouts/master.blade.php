@@ -18,7 +18,7 @@
             @include('admin::layouts.header')
 
             <!-- End of Topbar -->
-
+            @include('core::notification')
             <!-- Begin Page Content -->
             @yield('content')
 

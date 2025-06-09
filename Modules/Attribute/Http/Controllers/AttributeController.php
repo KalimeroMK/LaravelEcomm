@@ -15,8 +15,6 @@ use Modules\Attribute\Http\Requests\Attribute\Update;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Repository\AttributeRepository;
 use Modules\Core\Http\Controllers\CoreController;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class AttributeController extends CoreController
 {
@@ -48,8 +46,8 @@ class AttributeController extends CoreController
     }
 
     /**
-     * @throws FileIsTooBig
-     * @throws FileDoesNotExist
+     * @param  Store  $request
+     * @return RedirectResponse
      */
     public function store(Store $request): RedirectResponse
     {
@@ -67,13 +65,14 @@ class AttributeController extends CoreController
     }
 
     /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
+     * @param  Update     $request
+     * @param  Attribute  $attribute
+     * @return RedirectResponse
      */
     public function update(Update $request, Attribute $attribute): RedirectResponse
     {
         $this->updateAction->execute(
-            AttributeDTO::fromArray($request->validated())->withId($attribute->id)
+            AttributeDTO::fromRequest($request, $attribute->id, $attribute)
         );
 
         return redirect()->route('attributes.index')

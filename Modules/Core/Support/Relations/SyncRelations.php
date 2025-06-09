@@ -15,12 +15,11 @@ class SyncRelations
         $hasChanges = false;
 
         foreach ($relations as $relation => $value) {
-            if (! method_exists($model, $relation)) {
+            if (!method_exists($model, $relation)) {
                 continue;
             }
 
             $relationInstance = $model->{$relation}();
-
             // BelongsToMany: sync()
             if ($relationInstance instanceof BelongsToMany && is_array($value)) {
                 $relationInstance->sync($value);

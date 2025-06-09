@@ -9,16 +9,16 @@ use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Newsletter\Actions\CreateNewsletterAction;
 use Modules\Newsletter\Actions\DeleteNewsletterAction;
-use Modules\Newsletter\Actions\GetAllNewslettersAction;
 use Modules\Newsletter\Actions\UpdateNewsletterAction;
 use Modules\Newsletter\DTOs\NewsletterDTO;
 use Modules\Newsletter\Http\Requests\Store;
 use Modules\Newsletter\Models\Newsletter;
+use Modules\Newsletter\Repository\NewsletterRepository;
 
 class NewsletterController extends CoreController
 {
-    private readonly GetAllNewslettersAction $getAllAction;
 
+    private readonly NewsletterRepository $repository;
     private readonly CreateNewsletterAction $createAction;
 
     private readonly UpdateNewsletterAction $updateAction;
@@ -26,21 +26,21 @@ class NewsletterController extends CoreController
     private readonly DeleteNewsletterAction $deleteAction;
 
     public function __construct(
-        GetAllNewslettersAction $getAllAction,
         CreateNewsletterAction $createAction,
         UpdateNewsletterAction $updateAction,
-        DeleteNewsletterAction $deleteAction
+        DeleteNewsletterAction $deleteAction,
+        NewsletterRepository $repository
     ) {
-        $this->getAllAction = $getAllAction;
         $this->createAction = $createAction;
         $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
+        $this->repository = $repository;
         $this->authorizeResource(Newsletter::class, 'newsletter');
     }
 
     public function index(): View
     {
-        $newslettersDto = $this->getAllAction->execute();
+        $newslettersDto = $this->repository->findAll();
 
         return view('newsletter::index', ['newsletters' => $newslettersDto->newsletters]);
     }

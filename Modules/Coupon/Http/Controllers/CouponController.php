@@ -49,9 +49,7 @@ class CouponController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $dto = CouponDTO::fromRequest($request);
-        $this->createAction->execute($dto);
-
+        $this->createAction->execute(CouponDTO::fromRequest($request));
         return redirect()->route('coupons.index');
     }
 
@@ -76,9 +74,7 @@ class CouponController extends CoreController
      */
     public function update(Update $request, Coupon $coupon): RedirectResponse
     {
-        $dto = CouponDTO::fromRequest($request, $coupon->id);
-        $this->updateAction->execute($dto);
-
+        $this->updateAction->execute(CouponDTO::fromRequest($request, $coupon->id));
         return redirect()->route('coupon.index');
     }
 

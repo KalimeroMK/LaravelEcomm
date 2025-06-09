@@ -18,6 +18,8 @@ use Modules\Bundle\DTOs\BundleDTO;
 use Modules\Bundle\Http\Requests\Store;
 use Modules\Bundle\Http\Requests\Update;
 use Modules\Bundle\Models\Bundle;
+use Modules\Core\Support\Media\MediaUploader;
+use Modules\Core\Support\Relations\SyncRelations;
 use Throwable;
 
 class BundleController extends Controller
@@ -76,7 +78,9 @@ class BundleController extends Controller
     public function store(Store $request): RedirectResponse
     {
         $dto = BundleDTO::fromRequest($request);
-        $this->createAction->execute($dto);
+        $bundle = $this->createAction->execute($dto);
+        SyncRelations::execute($bundle, ['products' => $dto->products]);
+        MediaUploader::uploadMultiple($bundle, ['images'], 'bundle');
 
         return redirect()->route('bundles.index')->with('status', 'Bundle created successfully.');
     }
@@ -94,10 +98,14 @@ class BundleController extends Controller
     public function update(Update $request, Bundle $bundle): RedirectResponse
     {
         $dto = BundleDTO::fromRequest($request)->withId($bundle->id);
-        $this->updateAction->execute($dto);
+        $bundle = $this->updateAction->execute($dto);
+        SyncRelations::execute($bundle, ['products' => $dto->products]);
+        /** @var Bundle $bundle */
+        MediaUploader::clearAndUpload($bundle, ['images'], 'bundle');
 
         return redirect()->route('bundles.edit', $bundle)->with('status', 'Bundle updated successfully.');
     }
+
 
     public function destroy(Bundle $bundle): RedirectResponse
     {

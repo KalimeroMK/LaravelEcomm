@@ -54,5 +54,6 @@ return [
     'tenant' => 'Tenant',
     'page' => 'Страна',
     'complaints' => 'Жалби',
+    'attribute_groups' => 'Групи за атрибути',
 
 ];

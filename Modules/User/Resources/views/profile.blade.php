@@ -7,7 +7,7 @@
     <div class="card shadow mb-4">
         <div class="row">
             <div class="col-md-12">
-                @include('notification::notification')
+
 
             </div>
         </div>
@@ -34,9 +34,11 @@
                             @endif
                         </div>
                         <div class="card-body mt-4 ml-2">
-                            <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$profile['name'] ?? ''}}
+                            <h5 class="card-title text-left"><small><i
+                                            class="fas fa-user"></i> {{$profile['name'] ?? ''}}
                                 </small></h5>
-                            <p class="card-text text-left"><small><i class="fas fa-envelope"></i> {{$profile['email'] ?? ''}}
+                            <p class="card-text text-left"><small><i
+                                            class="fas fa-envelope"></i> {{$profile['email'] ?? ''}}
                                 </small></p>
                             <p class="card-text text-left"><small class="text-muted"><i
                                             class="fas fa-hammer"></i> {{$profile['role'] ?? ''}}</small></p>
@@ -44,7 +46,8 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <form class="border px-4 pt-2 pb-3" method="POST" action="{{route('profile-update',$profile['id'] ?? '')}}">
+                    <form class="border px-4 pt-2 pb-3" method="POST"
+                          action="{{route('profile-update',$profile['id'] ?? '')}}">
                         @csrf
                         <div class="form-group">
                             <label for="inputTitle" class="col-form-label">Name</label>

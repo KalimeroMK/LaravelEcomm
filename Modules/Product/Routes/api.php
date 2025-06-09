@@ -13,7 +13,7 @@ declare(strict_types=1);
 |
 */
 
-use Modules\Product\Http\Controllers\Api\ProductController;
+use App\Controllers\Api\ProductController;
 
 Route::apiResource('product', ProductController::class);
 Route::apiResource('products', ProductController::class);

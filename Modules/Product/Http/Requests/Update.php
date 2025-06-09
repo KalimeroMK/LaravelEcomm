@@ -22,21 +22,13 @@ class Update extends CoreRequest
             'description' => 'string|nullable',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'size' => 'sometimes|array',
-            'size.*' => 'required|exists:sizes,id',
-            'color' => 'nullable',
             'stock' => 'required|numeric',
-            'category' => [
-                'required',
-                'array',
-                function ($attribute, $value, $fail): void {
-                    if (empty($value)) {
-                        $fail(__('The :attribute field must have at least one category selected.',
-                            ['attribute' => $attribute]));
-                    }
-                },
-            ],
+            'category' => 'required|array',
             'category.*' => 'required|exists:categories,id',
+            'tag' => 'required|array',
+            'tag.*' => 'required|exists:tags,id',
+            'attributes' => 'sometimes|array',
+            'attributes.*' => 'sometimes:', // or more specific rules
             'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',
             'brand_id' => 'nullable|exists:brands,id',

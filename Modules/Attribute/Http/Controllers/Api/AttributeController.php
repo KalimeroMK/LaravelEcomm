@@ -26,7 +26,8 @@ class AttributeController extends CoreController
         private readonly CreateAttributeAction $createAction,
         private readonly UpdateAttributeAction $updateAction,
         private readonly DeleteAttributeAction $deleteAction
-    ) {}
+    ) {
+    }
 
     public function index(): AnonymousResourceCollection
     {
@@ -43,9 +44,7 @@ class AttributeController extends CoreController
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Attribute::class);
-
-        $dto = AttributeDTO::fromRequest($request);
-        $attribute = $this->createAction->execute($dto);
+        $attribute = $this->createAction->execute(AttributeDTO::fromRequest($request));
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [

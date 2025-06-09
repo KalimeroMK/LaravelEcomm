@@ -18,7 +18,6 @@ abstract class TestCase extends BaseTestCase
         Role::findOrCreate('super-admin');
         $user = User::factory()->create();
         $user->assignRole('super-admin');
-
         $this->actingAs($user);
     }
 }

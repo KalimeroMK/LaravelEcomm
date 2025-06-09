@@ -3,11 +3,7 @@
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="row">
-            <div class="col-md-12">
-                @include('notification::notification')
-            </div>
-        </div>
+
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">@lang('partials.list')</h6>
             <a href="{{route('pages.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
@@ -59,7 +55,7 @@
                                         <button class="btn btn-danger btn-sm dltBtn"
                                                 data-id="{{$page->id}}" style="height:30px; width:30px;border-radius:50%
                                         " data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                class="fas fa-trash-alt"></i></button>
+                                                    class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

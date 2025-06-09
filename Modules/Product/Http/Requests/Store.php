@@ -22,17 +22,12 @@ class Store extends CoreRequest
             'sku' => 'string|nullable|unique:products,sku',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category' => [
-                'required',
-                'array',
-                function ($attribute, $value, $fail): void {
-                    if (empty($value)) {
-                        $fail(__('The :attribute field must have at least one category selected.',
-                            ['attribute' => $attribute]));
-                    }
-                },
-            ],
+            'category' => 'required|array',
             'category.*' => 'required|exists:categories,id',
+            'tag' => 'required|array',
+            'tag.*' => 'required|exists:tags,id',
+            'attributes' => 'sometimes|array',
+            'attributes.*' => 'sometimes', // or more specific rules
             'stock' => 'required|numeric',
             'brand_id' => 'nullable|exists:brands,id',
             'child_cat_id' => 'nullable|exists:categories,id',

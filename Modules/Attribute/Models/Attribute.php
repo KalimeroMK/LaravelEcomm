@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\Attribute\Models;
 
 use Eloquent;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,16 +16,16 @@ use Modules\Core\Models\Core;
 /**
  * Class Attribute
  *
- * @property int $id
- * @property string $name
- * @property string $code
- * @property string $type
- * @property string|null $display
- * @property int $is_required
- * @property int $is_filterable
- * @property int $is_configurable
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int                                   $id
+ * @property string                                $name
+ * @property string                                $code
+ * @property string                                $type
+ * @property string|null                           $display
+ * @property int                                   $is_required
+ * @property int                                   $is_filterable
+ * @property int                                   $is_configurable
+ * @property Carbon|null                           $created_at
+ * @property Carbon|null                           $updated_at
  * @property-read Collection|AttributeGroup[]      $groups
  * @property-read Collection<int, AttributeOption> $options
  * @property-read int|null                         $options_count
@@ -141,6 +140,15 @@ class Attribute extends Core
     }
 
     /**
+     * @return BelongsToMany<AttributeSet, Attribute>
+     */
+    public function sets(): BelongsToMany
+    {
+        return $this->belongsToMany(AttributeSet::class, 'attribute_attribute_set', 'attribute_id',
+            'attribute_set_id');
+    }
+
+    /**
      * @return HasMany<AttributeValue, Attribute>
      */
     public function values(): HasMany
@@ -159,19 +167,21 @@ class Attribute extends Core
     /**
      * Get the column name used to store the value depending on type.
      */
-    public function getValueColumnName(): string
+    public function getValueColumnName(): ?string
     {
         return match ($this->type) {
-            self::TYPE_URL => 'url_value',
-            self::TYPE_HEX => 'hex_value',
-            self::TYPE_DATE => 'date_value',
-            self::TYPE_TIME => 'time_value',
-            self::TYPE_FLOAT => 'float_value',
-            self::TYPE_STRING => 'string_value',
-            self::TYPE_INTEGER => 'integer_value',
-            self::TYPE_BOOLEAN => 'boolean_value',
-            self::TYPE_DECIMAL => 'decimal_value',
-            default => 'text_value', // fallback instead of exception
+            'text' => 'text_value',
+            'boolean' => 'boolean_value',
+            'date' => 'date_value',
+            'integer' => 'integer_value',
+            'float' => 'float_value',
+            'string' => 'string_value',
+            'url' => 'url_value',
+            'hex' => 'hex_value',
+            'decimal' => 'decimal_value',
+            default => null,
         };
     }
+
+
 }

@@ -32,28 +32,26 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Product
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $summary
- * @property string|null $description
- * @property int $stock
- * @property string $status
- * @property float $price
- * @property float|null $discount
- * @property bool|null $is_featured
- * @property int $d_deal
- * @property int|null $brand_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property float|null $special_price
- * @property Carbon|null $special_price_start
- * @property Carbon|null $special_price_end
- * @property string|null $sku
+ * @property int                                              $id
+ * @property string                                           $title
+ * @property string                                           $slug
+ * @property string                                           $summary
+ * @property string|null                                      $description
+ * @property int                                              $stock
+ * @property string                                           $status
+ * @property float                                            $price
+ * @property float|null                                       $discount
+ * @property bool|null                                        $is_featured
+ * @property int                                              $d_deal
+ * @property int|null                                         $brand_id
+ * @property Carbon|null                                      $created_at
+ * @property Carbon|null                                      $updated_at
+ * @property float|null                                       $special_price
+ * @property Carbon|null                                      $special_price_start
+ * @property Carbon|null                                      $special_price_end
+ * @property string|null                                      $sku
  * @property-read Collection<int, AttributeValue>             $attributeValues
  * @property-read int|null                                    $attribute_values_count
- * @property-read Collection<int, Attribute>                  $attributes
- * @property-read int|null                                    $attributes_count
  * @property-read Brand|null                                  $brand
  * @property-read Collection<int, Bundle>                     $bundles
  * @property-read int|null                                    $bundles_count
@@ -170,6 +168,7 @@ class Product extends Core implements HasMedia
         return $this->belongsTo(Brand::class);
     }
 
+
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
@@ -194,17 +193,6 @@ class Product extends Core implements HasMedia
     {
         return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where('status',
             'active')->orderBy('id', 'DESC');
-    }
-
-    public function incrementSlug(string $slug): string
-    {
-        $original = $slug;
-        $count = 2;
-        while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
-        }
-
-        return $slug;
     }
 
     public function getImageUrlAttribute(): ?string
@@ -246,11 +234,6 @@ class Product extends Core implements HasMedia
         return $this->hasMany(AttributeValue::class, 'product_id', 'id');
     }
 
-    public function attributes(): BelongsToMany
-    {
-        return $this->belongsToMany(Attribute::class, 'attribute_product', 'product_id', 'attribute_id');
-    }
-
     public function bundles(): BelongsToMany
     {
         return $this->belongsToMany(Bundle::class)->withTimestamps();
@@ -267,4 +250,5 @@ class Product extends Core implements HasMedia
 
         return Brand::whereIn('id', $productBrandIds)->get();
     }
+
 }

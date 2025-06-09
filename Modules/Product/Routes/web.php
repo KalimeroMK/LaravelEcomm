@@ -13,9 +13,9 @@ declare(strict_types=1);
 |
  */
 
-use Modules\Product\Http\Controllers\ProductController;
-use Modules\Product\Http\Controllers\ProductImportExportController;
-use Modules\Product\Http\Controllers\ProductReviewController;
+use App\Controllers\ProductController;
+use App\Controllers\ProductImportExportController;
+use App\Controllers\ProductReviewController;
 
 Route::prefix('admin')->middleware(['auth'])->group(function (): void {
     Route::resource('products', ProductController::class)->except('show');

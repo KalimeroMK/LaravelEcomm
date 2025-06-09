@@ -14,6 +14,7 @@ use Modules\Brand\Http\Requests\Store;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Core\Support\Media\MediaUploader;
 
 class BrandController extends CoreController
 {
@@ -42,8 +43,11 @@ class BrandController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $dto = BrandDTO::fromRequest($request);
-        $this->createAction->execute($dto);
+        $this->createAction->execute(BrandDTO::fromRequest($request));
+        /**
+         * @var Brand $brand
+         */
+        MediaUploader::uploadMultiple($brand, ['images'], 'brand');
 
         return redirect()->route('brands.index')
             ->with('success', __('Brand created successfully.'));
@@ -58,8 +62,9 @@ class BrandController extends CoreController
 
     public function update(Store $request, Brand $brand): RedirectResponse
     {
-        $dto = BrandDTO::fromRequest($request)->withId($brand->id);
+        $dto = BrandDTO::fromRequest($request, $brand->id, $brand);
         $this->updateAction->execute($dto);
+        MediaUploader::uploadMultiple($brand, ['images'], 'brand');
 
         return redirect()->route('brands.edit', $brand)
             ->with('success', __('Brand updated successfully.'));

@@ -5,7 +5,7 @@
     <div class="card shadow mb-4">
         <div class="row">
             <div class="col-md-12">
-                @include('notification::notification')
+
 
             </div>
         </div>
@@ -58,7 +58,8 @@
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
-                                                data-id="{{ $shipping['id'] }}" style="height:30px; width:30px;border-radius:50%"
+                                                data-id="{{ $shipping['id'] }}"
+                                                style="height:30px; width:30px;border-radius:50%"
                                                 data-toggle="tooltip" title="delete" data-placement="bottom">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>

@@ -40,6 +40,8 @@ class AttributeOption extends Model
     protected $fillable = [
         'attribute_id',
         'value',
+        'label',
+        'sort_order',
     ];
 
     /**

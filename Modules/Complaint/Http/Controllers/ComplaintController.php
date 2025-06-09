@@ -54,17 +54,17 @@ class ComplaintController extends Controller
         return redirect()->route('complaints.index')->with('success', 'Complaint created successfully.');
     }
 
-    public function update(Update $request, int $id)
+    public function update(Update $request, Complaint $complaint): RedirectResponse
     {
-        $dto = ComplaintDTO::fromRequest($request, $id);
+        $dto = ComplaintDTO::fromRequest($request, $complaint->id);
         $this->updateAction->execute($dto);
 
         return redirect()->back()->with('success', 'Complaint updated successfully.');
     }
 
-    public function destroy(int $id): RedirectResponse
+    public function destroy(Complaint $complaint): RedirectResponse
     {
-        $this->deleteAction->execute($id);
+        $this->deleteAction->execute($complaint->id);
 
         return redirect()->route('complaints.index')->with('success', 'Complaint deleted successfully.');
     }

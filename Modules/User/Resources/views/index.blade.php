@@ -5,7 +5,7 @@
     <div class="card shadow mb-4">
         <div class="row">
             <div class="col-md-12">
-                @include('notification::notification')
+
 
             </div>
         </div>
@@ -47,11 +47,14 @@
                                 <td>{{ $user['status'] ?? '' }}</td>
                                 <td>{{ $user['created_at'] ?? '' }}</td>
                                 <td>
-                                    <a href="{{ route('users.edit', $user['id']) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-                                    <form action="{{ route('users.destroy', $user['id']) }}" method="POST" style="display:inline-block;">
+                                    <a href="{{ route('users.edit', $user['id']) }}" class="btn btn-primary btn-sm"><i
+                                                class="fas fa-edit"></i></a>
+                                    <form action="{{ route('users.destroy', $user['id']) }}" method="POST"
+                                          style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                 </td>
                             </tr>

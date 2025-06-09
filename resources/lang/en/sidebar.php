@@ -54,5 +54,6 @@ return [
     'tenant' => 'Tenant',
     'page' => 'Page',
     'complaints' => 'Complaints',
+    'attribute_groups' => 'Attribute groups',
 
 ];

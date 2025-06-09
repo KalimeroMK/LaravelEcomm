@@ -18,8 +18,7 @@ use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Http\Controllers\CoreController;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Modules\Core\Support\Media\MediaUploader;
 
 class BannerController extends CoreController
 {
@@ -51,7 +50,8 @@ class BannerController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->createAction->execute(BannerDTO::fromRequest($request));
+        $banner = $this->createAction->execute(BannerDTO::fromRequest($request));
+        MediaUploader::uploadMultiple($banner, ['images'], 'banner');
 
         return redirect()->route('banners.index')
             ->with('success', __('Banner created successfully.'));
@@ -65,15 +65,14 @@ class BannerController extends CoreController
     }
 
     /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
+     * @param  Update  $request
+     * @param  Banner  $banner
+     * @return RedirectResponse
      */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
-        $this->authorize('update', $banner);
-
-        $dto = BannerDTO::fromRequest($request)->withId($banner->id);
-        $this->updateAction->execute($dto);
+        $this->updateAction->execute(BannerDTO::fromRequest($request, $banner->id, $banner));
+        MediaUploader::clearAndUpload($banner, ['images'], 'banner');
 
         return redirect()->route('banners.edit', $banner)
             ->with('success', __('Banner updated successfully.'));

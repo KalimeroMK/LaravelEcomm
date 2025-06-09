@@ -59,8 +59,7 @@ class CategoryController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $dto = CategoryDTO::fromRequest($request);
-        $this->createAction->execute($dto);
+        $this->createAction->execute(CategoryDTO::fromRequest($request));
 
         return redirect()->route('categories.index');
     }
@@ -75,14 +74,14 @@ class CategoryController extends CoreController
 
     public function update(Update $request, Category $category): RedirectResponse
     {
-        $dto = CategoryDTO::fromRequest($request, $category->id);
-        $this->updateAction->execute($dto);
+        $this->updateAction->execute(CategoryDTO::fromRequest($request, $category->id));
 
         return redirect()->route('categories.index');
     }
 
     public function destroy(Category $category): RedirectResponse
     {
+        $this->deleteAction->execute($category->id);
         return redirect()->route('categories.index')->with('flash_message', 'Category successfully deleted!');
     }
 }

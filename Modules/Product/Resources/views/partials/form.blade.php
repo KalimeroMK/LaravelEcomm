@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Collection; @endphp
 @extends('admin::layouts.master')
 @section('title','Product Edit')
 @section('content')
@@ -35,57 +36,61 @@
 
                     <!-- Attributes -->
                     <div class="attributes-section">
-                        <h4>@lang('partials.product_atributes')</h4>
-                        @foreach ($attributes as $attribute)
-                            <div class="mb-3">
-                                <label for="attribute_{{ $attribute['code'] }}">{{ $attribute['name'] }}</label>
-                                @php
-                                    $selectedValues = isset($product['attributes'])
-                                        ? array_column(
-                                            array_filter($product['attributes'], function($attrVal) use ($attribute) {
-                                                return isset($attrVal['attribute']['id']) && $attrVal['attribute']['id'] == $attribute['id'];
-                                            }), 'value')
-                                        : [];
-                                @endphp
-                                @if (($attribute['display'] ?? '') === 'checkbox' && !empty($attribute['options']))
-                                    <div class="d-flex flex-wrap gap-2">
-                                        @foreach ($attribute['options'] as $option)
-                                            <div class="form-check form-check-inline">
-                                                <input
-                                                        class="form-check-input"
-                                                        type="checkbox"
-                                                        name="attributes[{{ $attribute['code'] }}][]"
-                                                        id="attribute_{{ $attribute['code'] }}_{{ $option['id'] }}"
-                                                        value="{{ $option['value'] }}"
-                                                        {{ in_array($option['value'], $selectedValues ?? []) ? 'checked' : '' }}
-                                                >
-                                                <label class="form-check-label" for="attribute_{{ $attribute['code'] }}_{{ $option['id'] }}">{{ $option['label'] }}</label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @elseif (!empty($attribute['options']))
-                                    <select
-                                            name="attributes[{{ $attribute['code'] }}]"
-                                            id="attribute_{{ $attribute['code'] }}"
-                                            class="form-control">
-                                        @foreach ($attribute['options'] as $option)
-                                            <option value="{{ $option['value'] }}" {{ (isset($selectedValues[0]) && $selectedValues[0] == $option['value']) ? 'selected' : '' }}>{{ $option['label'] }}</option>
-                                        @endforeach
-                                    </select>
-                                @else
-                                    <input type="text" class="form-control" name="attributes[{{ $attribute['code'] }}]" value="{{ $selectedValues[0] ?? '' }}">
-                                @endif
-                            </div>
-                        @endforeach
+                        <h4>@lang('attributes')</h4>
+                        <div id="attributes-container">
+                            @php
+                                // Build a map of attribute code => value for pre-filling
+                                $attributeValuesMap = [];
+                                if (isset($product) && isset($product->attributeValues)) {
+                                    foreach ($product->attributeValues as $av) {
+                                        $attributeValuesMap[$av->attribute->code] = $av->value;
+                                    }
+                                }
+                            @endphp
+                            @foreach($attributes as $attribute)
+                                <div class="mb-3">
+                                    <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
+                                    @php
+                                        $value = $attributeValuesMap[$attribute->code] ?? '';
+                                        $isCustom = ($value && (!isset($attribute->options) || !collect($attribute->options)->pluck('value')->contains($value)));
+                                    @endphp
+                                    @if (!empty($attribute->options) && count($attribute->options))
+                                        <select name="attributes[{{ $attribute->code }}]"
+                                                id="attribute_{{ $attribute->code }}"
+                                                class="form-control attribute-select"
+                                                data-attribute="{{ $attribute->code }}">
+                                            <option value="">-- Select --</option>
+                                            @foreach ($attribute->options as $option)
+                                                <option value="{{ $option->value }}" {{ $value == $option->value ? 'selected' : '' }}>{{ $option->label ?? $option->value }}</option>
+                                            @endforeach
+                                            <option value="custom" {{ $isCustom ? 'selected' : '' }}>Custom</option>
+                                        </select>
+                                        <input type="text"
+                                               name="attributes_custom[{{ $attribute->code }}]"
+                                               class="form-control custom-attribute-input mt-2"
+                                               id="custom-input-{{ $attribute->code }}"
+                                               value="{{ $isCustom ? $value : '' }}"
+                                               style="display: {{ $isCustom ? 'block' : 'none' }};"
+                                               placeholder="Enter custom value">
+                                    @else
+                                        <input type="text" class="form-control"
+                                               name="attributes[{{ $attribute->code }}]"
+                                               value="{{ $value }}">
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 <div class="col-3">
                     <!-- Other fields preserved here -->
                     <div class="form-group">
-                        <label for="inputImage">@lang('partials.image')</label>
-                        <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
-                        @if($errors->has('images'))
-                            <span class="text-danger">{{ $errors->first('images') }}</span>
+                        <label for="image">@lang('partials.image')</label>
+                        <input type="file" name="image" id="image" class="form-control">
+                        @if(isset($product) && $product->hasMedia('image'))
+                            <div class="mt-2">
+                                <img src="{{ $product->getFirstMediaUrl('image', 'thumb') }}" alt="Product Image" style="max-width: 150px; max-height: 150px;">
+                            </div>
                         @endif
                     </div>
                     <div class="form-group">
@@ -149,11 +154,19 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="category">@lang('sidebar.category')</label>
-                        <select name="category_id" class="form-control">
-                            <option value="">@lang('partials.select')</option>
+                        <label for="category_id">@lang('partials.categories')</label>
+                        <select name="category[]" id="category_id" class="form-control js-example-basic-multiple"
+                                multiple="multiple">
                             @foreach($categories as $category)
-                                <option value="{{ $category['id'] }}" {{ (isset($product['categories']) && in_array($category['id'], array_column($product['categories'], 'id'))) ? 'selected' : '' }}>{{ $category['title'] }}</option>
+                                @php
+                                    $selected = false;
+                                    if (isset($product['categories']) && $product['categories'] instanceof Collection) {
+                                        $selected = $product['categories']->pluck('id')->all();
+                                    } elseif (isset($product['categories']) && is_array($product['categories'])) {
+                                        $selected = collect($product['categories'])->pluck('id')->all();
+                                    }
+                                @endphp
+                                <option value="{{ $category['id'] }}" {{ in_array($category['id'], $selected) ? 'selected' : '' }}>{{ $category['title'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -161,7 +174,15 @@
                         <label for="tag">@lang('partials.tags')</label>
                         <select name="tag[]" class="form-control js-example-basic-multiple" multiple="multiple">
                             @foreach($tags as $tag)
-                                <option value="{{ $tag['id'] }}" {{ (isset($product['tags']) && in_array($tag['id'], array_column($product['tags'], 'id'))) ? 'selected' : '' }}>{{ $tag['title'] }}</option>
+                                @php
+                                    $selected = false;
+                                    if (isset($product['tags']) && $product['tags'] instanceof Collection) {
+                                        $selected = $product['tags']->pluck('id')->all();
+                                    } elseif (isset($product['tags']) && is_array($product['tags'])) {
+                                        $selected = collect($product['tags'])->pluck('id')->all();
+                                    }
+                                @endphp
+                                <option value="{{ $tag['id'] }}" {{ in_array($tag['id'], $selected) ? 'selected' : '' }}>{{ $tag['title'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -233,6 +254,24 @@
                 });
                 @endif
             });
+        </script>
+        <script>
+            // Handle custom attribute inputs
+            function setupAttributeSelects() {
+                document.querySelectorAll('.attribute-select').forEach(function (select) {
+                    select.addEventListener('change', function () {
+                        var attrCode = this.getAttribute('data-attribute');
+                        var customInput = document.getElementById('custom-input-' + attrCode);
+                        if (this.value === 'custom') {
+                            customInput.style.display = 'block';
+                        } else {
+                            customInput.style.display = 'none';
+                            customInput.value = '';
+                        }
+                    });
+                });
+            }
+            setupAttributeSelects();
         </script>
     @endpush
 @endsection

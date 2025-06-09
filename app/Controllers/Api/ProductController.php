@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Product\Http\Controllers\Api;
+namespace App\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -27,7 +27,8 @@ class ProductController extends CoreController
         private readonly StoreProductAction $storeProductAction,
         private readonly UpdateProductAction $updateProductAction,
         private readonly DeleteProductAction $deleteProductAction
-    ) {}
+    ) {
+    }
 
     public function index(Search $request): ResourceCollection
     {

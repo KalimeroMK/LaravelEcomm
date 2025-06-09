@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Product\Http\Controllers;
+namespace App\Controllers;
 
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -12,10 +12,13 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Core\Support\Media\MediaUploader;
+use Modules\Core\Support\Relations\SyncRelations;
 use Modules\OpenAI\Service\OpenAIService;
 use Modules\Product\Actions\DeleteProductAction;
 use Modules\Product\Actions\GetAllProductsAction;
 use Modules\Product\Actions\StoreProductAction;
+use Modules\Product\Actions\SyncProductAttributesAction;
 use Modules\Product\Actions\UpdateProductAction;
 use Modules\Product\DTOs\ProductDTO;
 use Modules\Product\Http\Requests\Store;
@@ -55,12 +58,13 @@ class ProductController extends CoreController
 
     public function create(): Renderable
     {
+        $attributes = Attribute::with('options')->get();
         return view('product::create', [
             'brands' => Brand::get()->toArray(),
             'categories' => Category::get()->toArray(),
             'product' => [],
             'tags' => Tag::get()->toArray(),
-            'attributes' => Attribute::all()->toArray(),
+            'attributes' => $attributes,
         ]);
     }
 
@@ -70,24 +74,29 @@ class ProductController extends CoreController
     public function store(Store $request): RedirectResponse
     {
         $dto = ProductDTO::fromRequest($request);
-        $this->storeProductAction->execute($dto);
+        $product = $this->storeProductAction->execute($dto);
+        SyncRelations::execute($product, [
+            'categories' => $dto->categories,
+            'tags' => $dto->tags,
+            'brand' => $dto->brand_id,
+            'attributes' => $dto->attributes ?? [],
+        ]);
+        MediaUploader::uploadMultiple($product, ['images'], 'product');
+        SyncProductAttributesAction::execute($product, $dto->attributes ?? []);
 
         return redirect()->route('products.index');
     }
 
     public function edit(Product $product): Renderable
     {
-        $product->load('attributes.attribute');
-        $productDto = ProductDTO::fromModel($product);
-
-        return view('product::edit', [
-            'brands' => Brand::get()->toArray(),
-            'categories' => Category::get()->toArray(),
-            'product' => (array) $productDto,
-            'tags' => Tag::get()->toArray(),
-            'attributes' => Attribute::all()->toArray(),
-        ]);
+        $attributes = Attribute::with('options')->get();
+        $brands = Brand::get();
+        $categories = Category::get();
+        $tags = Tag::get();
+        $product->load(['attributeValues.attribute']);
+        return view('product::edit', compact('brands', 'categories', 'product', 'tags', 'attributes'));
     }
+
 
     /**
      * @throws Exception
@@ -96,7 +105,14 @@ class ProductController extends CoreController
     {
         $dto = ProductDTO::fromRequest($request, $product->id);
         $this->updateProductAction->execute($product->id, $dto);
-
+        SyncRelations::execute($product, [
+            'categories' => $dto->categories,
+            'tags' => $dto->tags,
+            'brand' => $dto->brand_id,
+        ]);
+        // Save product attribute values
+        SyncProductAttributesAction::execute($product, $dto->attributes ?? []);
+        MediaUploader::clearAndUpload($product, ['images'], 'product');
         return redirect()->route('products.index');
     }
 

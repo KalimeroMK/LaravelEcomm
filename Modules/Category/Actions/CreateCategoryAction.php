@@ -22,7 +22,6 @@ readonly class CreateCategoryAction
         return $this->repository->create([
             'title' => $dto->title,
             'parent_id' => $dto->parent_id,
-            'description' => $dto->description,
         ]);
     }
 }

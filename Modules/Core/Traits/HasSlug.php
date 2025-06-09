@@ -16,7 +16,8 @@ trait HasSlug
         $original = $slug;
         $count = 2;
         while (static::whereSlug($slug)->exists()) {
-            $slug = "{$original}-".$count++;
+            $slug = "{$original}-{$count}";
+            $count++;
         }
 
         return $slug;
@@ -28,8 +29,17 @@ trait HasSlug
     protected static function bootHasSlug(): void
     {
         static::creating(function ($model): void {
-            $slug = Str::slug($model->title);
-            $model->slug = $model->incrementSlug($slug);
+            if (empty($model->slug) && !empty($model->title)) {
+                $slug = Str::slug($model->title);
+                $model->slug = $model->incrementSlug($slug);
+            }
+        });
+
+        static::updating(function ($model): void {
+            if (empty($model->slug) && !empty($model->title)) {
+                $slug = Str::slug($model->title);
+                $model->slug = $model->incrementSlug($slug);
+            }
         });
     }
 }

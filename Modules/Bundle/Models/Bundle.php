@@ -12,7 +12,6 @@ use Illuminate\Support\Carbon;
 use Modules\Bundle\Database\Factories\BundleFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
-use Spatie\Image\Drivers\ImageDriver;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -20,13 +19,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * @property int $id
- * @property string $name
- * @property string $description
- * @property string $slug
- * @property float $price
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int                              $id
+ * @property string                           $name
+ * @property string                           $description
+ * @property string                           $slug
+ * @property float                            $price
+ * @property Carbon|null                      $created_at
+ * @property Carbon|null                      $updated_at
  * @property-read string|null                 $image_url
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null                    $media_count
@@ -72,15 +71,9 @@ class Bundle extends Core implements HasMedia
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class)
-            ->withTimestamps();
+        return $this->belongsToMany(Product::class)->withTimestamps();
     }
 
-    /**
-     * @mixin ImageDriver
-     *
-     * @method $this nonQueued()
-     */
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')
@@ -92,10 +85,13 @@ class Bundle extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('bundle');
 
-        if ($mediaItem instanceof Media) {
-            return $mediaItem->first()->getUrl();
-        }
+        return $mediaItem?->getUrl() ?? 'https://via.placeholder.com/640x480.png/003311?text=et';
+    }
 
-        return 'https://via.placeholder.com/640x480.png/003311?text=et';
+    public function getPreviewImageUrlAttribute(): ?string
+    {
+        $mediaItem = $this->getFirstMedia('bundle');
+
+        return $mediaItem?->getUrl('preview') ?? 'https://via.placeholder.com/300x300.png?text=preview';
     }
 }

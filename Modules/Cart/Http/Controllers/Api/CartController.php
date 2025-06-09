@@ -26,7 +26,8 @@ class CartController extends CoreController
         private readonly CreateCartAction $createAction,
         private readonly UpdateCartAction $updateAction,
         private readonly DeleteCartAction $deleteAction
-    ) {}
+    ) {
+    }
 
     public function index(): ResourceCollection
     {
@@ -41,9 +42,7 @@ class CartController extends CoreController
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Cart::class);
-
-        $dto = CartDTO::fromRequest($request);
-        $cart = $this->createAction->execute($dto);
+        $cart = $this->createAction->execute(CartDTO::fromRequest($request));
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
@@ -69,9 +68,7 @@ class CartController extends CoreController
     public function update(Update $request, int $id): JsonResponse
     {
         $this->authorizeFromRepo(CartRepository::class, 'update', $id);
-
-        $dto = CartDTO::fromRequest($request, $id, $this->repository->findById($id));
-        $cart = $this->updateAction->execute($dto);
+        $cart = $this->updateAction->execute(CartDTO::fromRequest($request, $id, $this->repository->findById($id)));
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', [
