@@ -113,7 +113,7 @@ class ProductController extends CoreController
         ]);
         // Save product attribute values
         SyncProductAttributesAction::execute($product, $dto->attributes ?? []);
-        MediaUploader::clearAndUpload($product, ['images'], 'product');
+        MediaUploader::uploadMultiple($product, ['images'], 'product');
 
         return redirect()->route('products.index');
     }

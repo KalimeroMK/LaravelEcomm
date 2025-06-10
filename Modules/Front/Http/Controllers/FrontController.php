@@ -131,7 +131,7 @@ class FrontController extends Controller
             return view('front::pages.product-grids', $productBrandAction($request->all()));
         }
 
-        return view('front::pages/product-lists', $productBrandAction($request->all()));
+        return view('front::pages.product-lists', $productBrandAction($request->all()));
     }
 
     /**
@@ -139,7 +139,7 @@ class FrontController extends Controller
      */
     public function productCat(string $slug, ProductCatAction $productCatAction)
     {
-        return view('front::pages.product-cat', $productCatAction($slug));
+        return view('front::pages.product-lists', $productCatAction($slug));
     }
 
     /**

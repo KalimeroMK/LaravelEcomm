@@ -203,7 +203,7 @@
                                 @foreach($products as $product)
                                     {{-- {{$product}} --}}
                                     <!-- Start Single List -->
-                                    <div class="col-12">
+                                    <div class="col-lg-12 col-md-6 col-12 product-list-item" data-product-id="{{ $product->id }}">
                                         <div class="row">
                                             <div class="col-lg-4 col-md-6 col-sm-6">
                                                 <div class="single-product">
@@ -447,5 +447,39 @@
             }
         })
     </script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productIds = Array.from(document.querySelectorAll('.product-list-item'))
+                .map(el => el.dataset.productId);
+            if (productIds.length > 0) {
+                fetch('/api/tracking/product-impressions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        product_ids: productIds
+                    })
+                });
+            }
+        });
+        document.querySelectorAll('.product-list-item a').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                const productId = this.closest('.product-list-item').dataset.productId;
+                fetch('/api/tracking/product-click', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        product_id: productId
+                    })
+                });
+            });
+        });
+    </script>
 @endpush

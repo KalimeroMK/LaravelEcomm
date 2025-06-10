@@ -133,6 +133,13 @@
         </div>
     </li>
 
+    {{-- Product Stats --}}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('product-stats.index') }}">
+            <i class="fas fa-chart-bar"></i>
+            <span>Product Stats</span>
+        </a>
+    </li>
     {{-- Shipping --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#shippingCollapse"

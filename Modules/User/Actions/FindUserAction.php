@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Modules\User\Actions;
 
-use Modules\User\DTOs\UserDTO;
+use Illuminate\Database\Eloquent\Model;
 use Modules\User\Repository\UserRepository;
 
 readonly class FindUserAction
 {
-    public function __construct(private UserRepository $repository) {}
-
-    public function execute(int $id): UserDTO
+    public function __construct(private UserRepository $repository)
     {
-        $user = $this->repository->findById($id);
+    }
 
-        return UserDTO::fromArray($user->toArray());
+    public function execute(int $id): Model
+    {
+        return $this->repository->findById($id);
     }
 }

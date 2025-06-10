@@ -31,8 +31,7 @@
         <label for="roles">Role</label>
         <select class="form-control" name="roles[]" multiple>
             @foreach ($roles as $role)
-                <option
-                    value="{{ $role->id }}" {{ $user->roles->contains($role->id) ? 'selected' : '' }}>{{ $role->name }}</option>
+                <option value="{{ $role['id'] }}" {{ in_array($role['id'], $userRole) ? 'selected' : '' }}>{{ $role['name'] }}</option>
             @endforeach
         </select>
     </div>

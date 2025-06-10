@@ -22,6 +22,8 @@ use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
 use Modules\Product\Database\Factories\ProductFactory;
+use Modules\ProductStats\Models\ProductClick;
+use Modules\ProductStats\Models\ProductImpression;
 use Modules\Tag\Models\Tag;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -31,24 +33,24 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Product
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $summary
- * @property string|null $description
- * @property int $stock
- * @property string $status
- * @property float $price
- * @property float|null $discount
- * @property bool|null $is_featured
- * @property int $d_deal
- * @property int|null $brand_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property float|null $special_price
- * @property Carbon|null $special_price_start
- * @property Carbon|null $special_price_end
- * @property string|null $sku
+ * @property int                                              $id
+ * @property string                                           $title
+ * @property string                                           $slug
+ * @property string                                           $summary
+ * @property string|null                                      $description
+ * @property int                                              $stock
+ * @property string                                           $status
+ * @property float                                            $price
+ * @property float|null                                       $discount
+ * @property bool|null                                        $is_featured
+ * @property int                                              $d_deal
+ * @property int|null                                         $brand_id
+ * @property Carbon|null                                      $created_at
+ * @property Carbon|null                                      $updated_at
+ * @property float|null                                       $special_price
+ * @property Carbon|null                                      $special_price_start
+ * @property Carbon|null                                      $special_price_end
+ * @property string|null                                      $sku
  * @property-read Collection<int, AttributeValue>             $attributeValues
  * @property-read int|null                                    $attribute_values_count
  * @property-read Brand|null                                  $brand
@@ -247,5 +249,15 @@ class Product extends Core implements HasMedia
         $productBrandIds = self::search($searchTerm)->get()->pluck('brand_id')->unique();
 
         return Brand::whereIn('id', $productBrandIds)->get();
+    }
+
+    public function impressions(): Product|HasMany
+    {
+        return $this->hasMany(ProductImpression::class, 'product_id');
+    }
+
+    public function clicks(): Product|HasMany
+    {
+        return $this->hasMany(ProductClick::class, 'product_id');
     }
 }
