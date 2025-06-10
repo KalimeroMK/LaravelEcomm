@@ -14,11 +14,19 @@ readonly class CreateBannerAction
 
     public function execute(BannerDTO $dto): Banner
     {
-        return $this->repository->create([
+        $banner = $this->repository->create([
             'title' => $dto->title,
             'slug' => $dto->slug,
             'description' => $dto->description,
             'status' => $dto->status,
+            'active_from' => $dto->active_from,
+            'active_to' => $dto->active_to,
+            'max_clicks' => $dto->max_clicks,
+            'max_impressions' => $dto->max_impressions,
         ]);
+        if (!empty($dto->categories)) {
+            $banner->categories()->sync($dto->categories);
+        }
+        return $banner;
     }
 }

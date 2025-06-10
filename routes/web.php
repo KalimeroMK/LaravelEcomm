@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\MagicLoginController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Modules\Front\Http\Controllers\FrontController;
 use Modules\User\Http\Controllers\Api\AuthController;
 use Spatie\Feed\Http\FeedController;
 
@@ -41,3 +42,7 @@ Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang
 
 // Attribute Group CRUD
 Route::resource('attribute-groups', Modules\Attribute\Http\Controllers\AttributeGroupController::class);
+
+// Banner frontend display and impression tracking
+Route::get('banners', [FrontController::class, 'banners'])->name('front.banners');
+Route::post('banner/impression/{id}', [FrontController::class, 'bannerImpression'])->name('banner.impression');

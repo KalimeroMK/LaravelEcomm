@@ -45,15 +45,14 @@
                                 <td>{{$banner->title}}</td>
                                 <td>{{$banner->slug}}</td>
                                 <td>
-                                    <img src="{{$banner->ImageUrl}}" class="img-fluid zoom" style="max-width:80px"
+                                    <img src="{{$banner->image_url}}" class="img-fluid zoom" style="max-width:80px"
                                          alt="{{$banner->title}}">
-
                                 </td>
                                 <td>
-                                    @if($banner->status=='active')
-                                        <span class="badge badge-success">{{$banner->status}}</span>
+                                    @if($banner->isActive())
+                                        <span class="badge badge-success">active</span>
                                     @else
-                                        <span class="badge badge-warning">{{$banner->status}}</span>
+                                        <span class="badge badge-warning">inactive</span>
                                     @endif
                                 </td>
                                 <td>
@@ -81,6 +80,3 @@
         </div>
     </div>
 @endsection
-
-
-

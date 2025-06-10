@@ -1,4 +1,4 @@
-# E-commerce website in  Laravel 11
+# E-commerce website in  Laravel 12
 
 ### Demo page:https://e-comm.mk
 

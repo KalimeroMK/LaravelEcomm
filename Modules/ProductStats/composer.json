@@ -1,30 +1,27 @@
 {
-    "name": "nwidart/productstats",
-    "description": "",
-    "authors": [
-        {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [],
-            "aliases": {
-
-            }
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Modules\\ProductStats\\": "app/",
-            "Modules\\ProductStats\\Database\\Factories\\": "database/factories/",
-            "Modules\\ProductStats\\Database\\Seeders\\": "database/seeders/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Modules\\ProductStats\\Tests\\": "tests/"
-        }
+  "name": "nwidart/productstats",
+  "description": "",
+  "authors": [
+    {
+      "name": "Nicolas Widart",
+      "email": "n.widart@gmail.com"
     }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [],
+      "aliases": {
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\ProductStats\\": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Modules\\ProductStats\\Tests\\": "tests/"
+    }
+  }
 }

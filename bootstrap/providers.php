@@ -29,6 +29,7 @@ use Modules\Page\Providers\PageServiceProvider;
 use Modules\Permission\Providers\PermissionServiceProvider;
 use Modules\Post\Providers\PostServiceProvider;
 use Modules\Product\Providers\ProductServiceProvider;
+use Modules\ProductStats\Providers\ProductStatsServiceProvider;
 use Modules\Role\Providers\RoleServiceProvider;
 use Modules\Settings\Providers\SettingsServiceProvider;
 use Modules\Shipping\Providers\ShippingServiceProvider;
@@ -75,5 +76,6 @@ return [
     TagServiceProvider::class,
     TenantServiceProvider::class,
     UserServiceProvider::class,
+    ProductStatsServiceProvider::class,
 
 ];

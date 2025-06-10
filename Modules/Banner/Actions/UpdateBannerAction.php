@@ -21,8 +21,14 @@ readonly class UpdateBannerAction
             'slug' => $dto->slug ?? $banner->slug,
             'description' => $dto->description,
             'status' => $dto->status,
+            'active_from' => $dto->active_from,
+            'active_to' => $dto->active_to,
+            'max_clicks' => $dto->max_clicks,
+            'max_impressions' => $dto->max_impressions,
         ]);
-
+        if (!empty($dto->categories)) {
+            $banner->categories()->sync($dto->categories);
+        }
         return $banner;
     }
 }

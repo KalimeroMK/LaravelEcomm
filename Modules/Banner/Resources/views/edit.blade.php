@@ -1,6 +1,6 @@
 @extends('admin::layouts.master')
 
-@section('title','E-SHOP || Banner Create')
+@section('title','E-SHOP || Banner Edit')
 
 @section('content')
     <div class="card">
@@ -11,4 +11,3 @@
     </div>
 
 @endsection
-

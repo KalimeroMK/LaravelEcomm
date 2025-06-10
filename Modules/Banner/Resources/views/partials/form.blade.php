@@ -19,6 +19,31 @@
     </div>
 
     <div class="form-group">
+        <label for="active_from">Active From</label>
+        <input type="date" class="form-control" id="active_from" name="active_from" value="{{ old('active_from', optional($banner->active_from)->format('Y-m-d')) }}">
+    </div>
+    <div class="form-group">
+        <label for="active_to">Active To</label>
+        <input type="date" class="form-control" id="active_to" name="active_to" value="{{ old('active_to', optional($banner->active_to)->format('Y-m-d')) }}">
+    </div>
+    <div class="form-group">
+        <label for="max_clicks">Max Clicks</label>
+        <input type="number" class="form-control" id="max_clicks" name="max_clicks" value="{{ old('max_clicks', $banner->max_clicks) }}" min="0">
+    </div>
+    <div class="form-group">
+        <label for="max_impressions">Max Impressions</label>
+        <input type="number" class="form-control" id="max_impressions" name="max_impressions" value="{{ old('max_impressions', $banner->max_impressions) }}" min="0">
+    </div>
+    <div class="form-group">
+        <label for="categories">Categories</label>
+        <select name="categories[]" id="categories" class="form-control" multiple>
+            @foreach(Modules\Category\Models\Category::all() as $cat)
+                <option value="{{ $cat->id }}" @if(isset($banner) && $banner->categories && $banner->categories->contains($cat->id)) selected @endif>{{ $cat->title }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="form-group">
         <label for="inputPhoto" class="col-form-label">@lang('partials.image') <span
                     class="text-danger">*</span></label>
         @if(isset($banner) && $banner->exists && method_exists($banner, 'getMedia') && $banner->getMedia('banner')->count())

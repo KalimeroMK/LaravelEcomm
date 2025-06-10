@@ -16,11 +16,17 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|required|max:50|unique:banners',
-            'description' => 'string|nullable',
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status' => 'required|in:active,inactive',
+            'status' => ['required', 'in:active,inactive'],
+            'active_from' => ['nullable', 'date'],
+            'active_to' => ['nullable', 'date', 'after_or_equal:active_from'],
+            'max_clicks' => ['nullable', 'integer', 'min:0'],
+            'max_impressions' => ['nullable', 'integer', 'min:0'],
+            'categories' => ['nullable', 'array'],
+            'categories.*' => ['integer', 'exists:categories,id'],
         ];
     }
 

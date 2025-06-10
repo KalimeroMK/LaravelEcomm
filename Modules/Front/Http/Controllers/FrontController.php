@@ -7,11 +7,13 @@ namespace Modules\Front\Http\Controllers;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Modules\Banner\Models\Banner;
 use Modules\Front\Actions\BlogAction;
 use Modules\Front\Actions\BlogByCategoryAction;
 use Modules\Front\Actions\BlogByTagAction;
@@ -45,7 +47,9 @@ class FrontController extends Controller
      */
     public function index(IndexAction $indexAction)
     {
-        return view('front::index', $indexAction());
+        $featured_products = $indexAction();
+        $banners = Banner::with('categories')->get()->filter(fn($b) => $b->isActive());
+        return view('front::index', compact('featured_products', 'banners'));
     }
 
     /**
@@ -256,5 +260,31 @@ class FrontController extends Controller
     public function pages(string $slug, PageDetailAction $pageDetailAction): View
     {
         return view('front::pages.page', $pageDetailAction($slug));
+    }
+
+    /**
+     * Show banners on frontend (filtered by active status and optionally by category).
+     */
+    public function banners(Request $request): View
+    {
+        $categoryId = $request->query('category');
+        $query = Banner::with('categories');
+        if ($categoryId) {
+            $query->whereHas('categories', function ($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId);
+            });
+        }
+        $banners = $query->get()->filter(fn($b) => $b->isActive());
+        return view('front::banner', compact('banners'));
+    }
+
+    /**
+     * Track banner impression (AJAX).
+     */
+    public function bannerImpression($id): JsonResponse
+    {
+        $banner = Banner::findOrFail($id);
+        $banner->incrementImpression();
+        return response()->json(['success' => true]);
     }
 }

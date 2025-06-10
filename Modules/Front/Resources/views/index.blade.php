@@ -1,4 +1,4 @@
-`@extends('front::layouts.master')
+@extends('front::layouts.master')
 @section('title','E-SHOP || HOME PAGE')
 @section('content')
     <!-- Slider Area -->
@@ -28,6 +28,8 @@
         </div>
         <!--/ End Single Slider -->
     </section>
+    {{-- Banners section --}}
+    @include('front::banner')
     @if(isset($banners))
         <section id="Gslider" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
