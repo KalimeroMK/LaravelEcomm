@@ -17,7 +17,6 @@ use Modules\Attribute\Http\Controllers\AttributeSetController;
 |
 */
 
-
 Route::resource('attributes', AttributeController::class)->except('shows');
 Route::resource('attribute_groups', AttributeGroupController::class);
 Route::resource('attribute-sets', AttributeSetController::class);

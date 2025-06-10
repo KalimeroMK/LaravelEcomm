@@ -13,8 +13,7 @@ readonly class CategoryDTO
         public ?int $id,
         public ?string $title,
         public ?int $parent_id,
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Request $request, ?int $id = null, ?Category $existing = null): self
     {
@@ -23,7 +22,7 @@ readonly class CategoryDTO
         return new self(
             id: $id,
             title: $validated['title'] ?? $existing?->title,
-            parent_id: isset($validated['parent_id']) ? (int)$validated['parent_id'] : $existing?->parent_id,
+            parent_id: isset($validated['parent_id']) ? (int) $validated['parent_id'] : $existing?->parent_id,
         );
     }
 
@@ -32,7 +31,7 @@ readonly class CategoryDTO
         return new self(
             $data['id'] ?? null,
             $data['title'] ?? null,
-            isset($data['parent_id']) ? (int)$data['parent_id'] : null,
+            isset($data['parent_id']) ? (int) $data['parent_id'] : null,
         );
     }
 }

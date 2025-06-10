@@ -35,6 +35,9 @@ class Update extends CoreRequest
             'status' => 'required|in:active,inactive',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
+            'special_price' => 'nullable|numeric',
+            'special_price_start' => 'nullable|date',
+            'special_price_end' => 'nullable|date|after:special_price_start',
         ];
     }
 }

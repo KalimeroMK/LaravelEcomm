@@ -17,12 +17,12 @@ use Modules\Product\Models\Product;
 /**
  * Class AttributeValue
  *
- * @property int                 $id
- * @property int                 $product_id
- * @property int                 $attribute_id
- * @property string|null         $value
- * @property Carbon|null         $created_at
- * @property Carbon|null         $updated_at
+ * @property int $id
+ * @property int $product_id
+ * @property int $attribute_id
+ * @property string|null $value
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Model|Eloquent $attributable
  * @property-read Attribute      $attribute
  * @property-read Product        $product
@@ -47,7 +47,15 @@ class AttributeValue extends Core
         = [
             'product_id',
             'attribute_id',
-            'value',
+            'text_value',
+            'boolean_value',
+            'date_value',
+            'integer_value',
+            'float_value',
+            'string_value',
+            'url_value',
+            'hex_value',
+            'decimal_value',
         ];
 
     public static function factory(): AttributeValueFactory
@@ -75,7 +83,7 @@ class AttributeValue extends Core
         return $this->belongsTo(Product::class);
     }
 
-    public function values(): HasMany|AttributeValue
+    public function values(): HasMany|self
     {
         return $this->hasMany(AttributeOption::class);
     }

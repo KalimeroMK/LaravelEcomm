@@ -15,7 +15,7 @@ class SyncRelations
         $hasChanges = false;
 
         foreach ($relations as $relation => $value) {
-            if (!method_exists($model, $relation)) {
+            if (! method_exists($model, $relation)) {
                 continue;
             }
 

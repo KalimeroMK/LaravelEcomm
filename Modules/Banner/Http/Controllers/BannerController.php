@@ -64,11 +64,6 @@ class BannerController extends CoreController
         ]);
     }
 
-    /**
-     * @param  Update  $request
-     * @param  Banner  $banner
-     * @return RedirectResponse
-     */
     public function update(Update $request, Banner $banner): RedirectResponse
     {
         $this->updateAction->execute(BannerDTO::fromRequest($request, $banner->id, $banner));

@@ -82,6 +82,7 @@ class CategoryController extends CoreController
     public function destroy(Category $category): RedirectResponse
     {
         $this->deleteAction->execute($category->id);
+
         return redirect()->route('categories.index')->with('flash_message', 'Category successfully deleted!');
     }
 }

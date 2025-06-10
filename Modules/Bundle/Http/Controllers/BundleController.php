@@ -106,7 +106,6 @@ class BundleController extends Controller
         return redirect()->route('bundles.edit', $bundle)->with('status', 'Bundle updated successfully.');
     }
 
-
     public function destroy(Bundle $bundle): RedirectResponse
     {
         $this->deleteAction->execute($bundle->id);

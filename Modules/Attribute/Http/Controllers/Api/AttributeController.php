@@ -26,8 +26,7 @@ class AttributeController extends CoreController
         private readonly CreateAttributeAction $createAction,
         private readonly UpdateAttributeAction $updateAction,
         private readonly DeleteAttributeAction $deleteAction
-    ) {
-    }
+    ) {}
 
     public function index(): AnonymousResourceCollection
     {

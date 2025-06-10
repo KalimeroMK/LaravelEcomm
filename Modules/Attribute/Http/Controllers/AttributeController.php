@@ -45,10 +45,6 @@ class AttributeController extends CoreController
         ]);
     }
 
-    /**
-     * @param  Store  $request
-     * @return RedirectResponse
-     */
     public function store(Store $request): RedirectResponse
     {
         $this->createAction->execute(AttributeDTO::fromRequest($request));
@@ -64,11 +60,6 @@ class AttributeController extends CoreController
         ]);
     }
 
-    /**
-     * @param  Update     $request
-     * @param  Attribute  $attribute
-     * @return RedirectResponse
-     */
     public function update(Update $request, Attribute $attribute): RedirectResponse
     {
         $this->updateAction->execute(

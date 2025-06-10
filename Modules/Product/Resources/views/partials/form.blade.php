@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Collection; @endphp
+@php use Illuminate\Support\Carbon;use Illuminate\Support\Collection; @endphp
 @extends('admin::layouts.master')
 @section('title','Product Edit')
 @section('content')
@@ -15,19 +15,19 @@
                     <div class="form-group">
                         <label for="inputTitle">@lang('partials.title')</label>
                         <input id="inputTitle" type="text" name="title" placeholder="@lang('partials.title')"
-                               value="{{ $product['title'] ?? '' }}" class="form-control">
+                               value="{{ old('title', $product['title'] ?? '') }}" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label for="summary">@lang('partials.summary')</label>
                         <textarea class="form-control" id="summary"
-                                  name="summary">{{ $product['summary'] ?? '' }}</textarea>
+                                  name="summary">{{ old('summary', $product['summary'] ?? '') }}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="description">@lang('partials.description')</label>
                         <textarea class="form-control" id="description"
-                                  name="description">{{ $product['description'] ?? '' }}</textarea>
+                                  name="description">{{ old('description', $product['description'] ?? '') }}</textarea>
                         @if(config('openai.openai.enabled'))
                             <button type="button" style="margin-top: 2%" id="generateDescription"
                                     class="btn btn-info">@lang('partials.generate_description')</button>
@@ -39,21 +39,30 @@
                         <h4>@lang('attributes')</h4>
                         <div id="attributes-container">
                             @php
-                                // Build a map of attribute code => value for pre-filling
                                 $attributeValuesMap = [];
                                 if (isset($product) && isset($product->attributeValues)) {
                                     foreach ($product->attributeValues as $av) {
-                                        $attributeValuesMap[$av->attribute->code] = $av->value;
+                                        $attributeValuesMap[$av->attribute->code] =
+                                            $av->text_value ??
+                                            $av->string_value ??
+                                            $av->integer_value ??
+                                            $av->float_value ??
+                                            $av->decimal_value ??
+                                            $av->boolean_value ??
+                                            $av->date_value ??
+                                            $av->url_value ??
+                                            $av->hex_value ??
+                                            null;
                                     }
                                 }
                             @endphp
                             @foreach($attributes as $attribute)
+                                @php
+                                    $value = old('attributes.' . $attribute->code, $attributeValuesMap[$attribute->code] ?? '');
+                                    $isCustom = ($value && (!isset($attribute->options) || !collect($attribute->options)->pluck('value')->contains($value)));
+                                @endphp
                                 <div class="mb-3">
                                     <label for="attribute_{{ $attribute->code }}">{{ $attribute->name }}</label>
-                                    @php
-                                        $value = $attributeValuesMap[$attribute->code] ?? '';
-                                        $isCustom = ($value && (!isset($attribute->options) || !collect($attribute->options)->pluck('value')->contains($value)));
-                                    @endphp
                                     @if (!empty($attribute->options) && count($attribute->options))
                                         <select name="attributes[{{ $attribute->code }}]"
                                                 id="attribute_{{ $attribute->code }}"
@@ -83,57 +92,55 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <!-- Other fields preserved here -->
                     <div class="form-group">
-                        <label for="image">@lang('partials.image')</label>
-                        <input type="file" name="image" id="image" class="form-control">
-                        @if(isset($product) && $product->hasMedia('image'))
+                        <label for="images">@lang('partials.image')</label>
+                        <input type="file" name="images[]" id="image" class="form-control">
+                        @if(isset($product) && $product->hasMedia('images'))
                             <div class="mt-2">
-                                <img src="{{ $product->getFirstMediaUrl('image', 'thumb') }}" alt="Product Image" style="max-width: 150px; max-height: 150px;">
+                                <img src="{{ $product->getFirstMediaUrl('images', 'thumb') }}" alt="Product Image"
+                                     style="max-width: 150px; max-height: 150px;">
                             </div>
                         @endif
                     </div>
+
                     <div class="form-group">
-                        <label for="price">@lang('partials.sku')</label>
-                        <input id="price" type="number" name="sku" placeholder="Enter SKU"
-                               value="{{ $product['sku'] ?? '' }}"
-                               class="form-control">
+                        <label for="sku">@lang('partials.sku')</label>
+                        <input id="sku" name="sku" placeholder="Enter SKU"
+                               value="{{ old('sku', $product['sku'] ?? '') }}" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label for="price">@lang('partials.price')</label>
                         <input id="price" type="number" name="price" placeholder="Enter price"
-                               value="{{ $product['price'] ?? '' }}"
-                               class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="stock">@lang('partials.special_price') <span class="text-danger">*</span></label>
-                        <input id="quantity" type="number" name="special_price" min="0"
-                               placeholder="@lang('partials.special_price')"
-                               value="{{ $product['special_price'] ?? ''}}" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="stock">@lang('partials.start_date') <span class="text-danger">*</span></label>
-                        <input id="quantity" type="date" name="special_price_start"
-                               placeholder="@lang('partials.start_date')"
-                               value="{{ $product['special_price_start'] ?? ''}}" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="stock">@lang('partials.end_date') <span class="text-danger">*</span></label>
-                        <input id="quantity" type="date" name="special_price_end"
-                               placeholder="@lang('partials.end_date')"
-                               value="{{ $product['special_price_end'] ?? ''}}" class="form-control">
+                               value="{{ old('price', $product['price'] ?? '') }}" class="form-control">
                     </div>
 
                     <div class="form-group">
+                        <label for="special_price">@lang('partials.special_price')</label>
+                        <input id="special_price" type="number" name="special_price"
+                               value="{{ old('special_price', $product['special_price'] ?? '') }}" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="special_price_end">@lang('partials.start_date')</label>
+                        <input type="date" name="special_price_start" id="special_price_start"
+                               value="{{ old('special_price_start') ?? (isset($product['special_price_start']) ? Carbon::parse($product['special_price_start'])->format('Y-m-d') : '') }}"
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="special_price_end">@lang('partials.end_date')</label>
+                        <input type="date" name="special_price_end" id="special_price_end"
+                               value="{{ old('special_price_end') ?? (isset($product['special_price_end']) ? Carbon::parse($product['special_price_end'])->format('Y-m-d') : '') }}"
+                               class="form-control">
+                    </div>
+                    <div class="form-group">
                         <label for="status">Status</label>
                         <select name="status" class="form-control" required>
-                            <option
-                                    value="active" {{ (isset($product['status']) && $product['status'] == 'active') ? 'selected' : '' }}>
+                            <option value="active" {{ old('status', $product['status'] ?? '') == 'active' ? 'selected' : '' }}>
                                 Active
                             </option>
-                            <option
-                                    value="inactive" {{ (isset($product['status']) && $product['status'] == 'inactive') ? 'selected' : '' }}>
+                            <option value="inactive" {{ old('status', $product['status'] ?? '') == 'inactive' ? 'selected' : '' }}>
                                 Inactive
                             </option>
                         </select>
@@ -141,65 +148,61 @@
 
                     <div class="form-group">
                         <label for="is_featured">@lang('partials.is_featured')</label><br>
-                        <input type="checkbox" name='is_featured' id='is_featured' value='1' checked> Yes
+                        <input type="checkbox" name="is_featured" id="is_featured" value="1"
+                                {{ old('is_featured', $product['is_featured'] ?? false) ? 'checked' : '' }}> Yes
                     </div>
 
                     <div class="form-group">
-                        <label for="brand">@lang('sidebar.brands')</label>
+                        <label for="brand_id">@lang('sidebar.brands')</label>
                         <select name="brand_id" class="form-control">
                             <option value="">@lang('partials.select')</option>
                             @foreach($brands as $brand)
-                                <option value="{{ $brand['id'] }}" {{ (isset($product['brand']['id']) && $product['brand']['id'] == $brand['id']) ? 'selected' : '' }}>{{ $brand['title'] }}</option>
+                                <option value="{{ $brand['id'] }}" {{ old('brand_id', $product['brand']['id'] ?? '') == $brand['id'] ? 'selected' : '' }}>{{ $brand['title'] }}</option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="category_id">@lang('partials.categories')</label>
                         <select name="category[]" id="category_id" class="form-control js-example-basic-multiple"
                                 multiple="multiple">
+                            @php
+                                $selectedCategories = old('category', isset($product['categories']) ? collect($product['categories'])->pluck('id')->all() : []);
+                            @endphp
                             @foreach($categories as $category)
-                                @php
-                                    $selected = false;
-                                    if (isset($product['categories']) && $product['categories'] instanceof Collection) {
-                                        $selected = $product['categories']->pluck('id')->all();
-                                    } elseif (isset($product['categories']) && is_array($product['categories'])) {
-                                        $selected = collect($product['categories'])->pluck('id')->all();
-                                    }
-                                @endphp
-                                <option value="{{ $category['id'] }}" {{ in_array($category['id'], $selected) ? 'selected' : '' }}>{{ $category['title'] }}</option>
+                                <option value="{{ $category['id'] }}" {{ in_array($category['id'], $selectedCategories) ? 'selected' : '' }}>{{ $category['title'] }}</option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="tag">@lang('partials.tags')</label>
                         <select name="tag[]" class="form-control js-example-basic-multiple" multiple="multiple">
+                            @php
+                                $selectedTags = old('tag', isset($product['tags']) ? collect($product['tags'])->pluck('id')->all() : []);
+                            @endphp
                             @foreach($tags as $tag)
-                                @php
-                                    $selected = false;
-                                    if (isset($product['tags']) && $product['tags'] instanceof Collection) {
-                                        $selected = $product['tags']->pluck('id')->all();
-                                    } elseif (isset($product['tags']) && is_array($product['tags'])) {
-                                        $selected = collect($product['tags'])->pluck('id')->all();
-                                    }
-                                @endphp
-                                <option value="{{ $tag['id'] }}" {{ in_array($tag['id'], $selected) ? 'selected' : '' }}>{{ $tag['title'] }}</option>
+                                <option value="{{ $tag['id'] }}" {{ in_array($tag['id'], $selectedTags) ? 'selected' : '' }}>{{ $tag['title'] }}</option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <label for="stock">Quantity <span class="text-danger">*</span></label>
-                        <input id="quantity" type="number" name="stock" min="0" placeholder="Enter quantity"
-                               value="{{ $product['stock'] ?? ''}}" class="form-control">
+                        <label for="stock">Quantity</label>
+                        <input id="stock" type="number" name="stock" min="0" placeholder="Enter quantity"
+                               value="{{ old('stock', $product['stock'] ?? '') }}" class="form-control">
                     </div>
                 </div>
             </div>
+
             <div class="button-container">
                 <button type="reset" class="btn btn-warning">@lang('partials.reset')</button>
                 <button class="btn btn-success" type="submit">@lang('partials.submit')</button>
             </div>
         </form>
     </div>
-    <div class="row container-fluid" style="margin-top: 2%">
+
+    <div class="row container-fluid mt-4">
         @foreach($product->getMedia('product') as $media)
             <div class="col-md-3">
                 <img src="{{ $media->getUrl() }}" alt="Image" class="img-fluid" style="max-height: 300px">
@@ -254,9 +257,7 @@
                 });
                 @endif
             });
-        </script>
-        <script>
-            // Handle custom attribute inputs
+
             function setupAttributeSelects() {
                 document.querySelectorAll('.attribute-select').forEach(function (select) {
                     select.addEventListener('change', function () {
@@ -271,6 +272,7 @@
                     });
                 });
             }
+
             setupAttributeSelects();
         </script>
     @endpush

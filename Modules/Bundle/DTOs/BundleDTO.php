@@ -19,8 +19,7 @@ readonly class BundleDTO
         public ?array $products = [],
         public ?array $images = [],
         public ?string $extra = null,
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Store|Update|Request $request, ?int $id = null, ?Bundle $bundle = null): self
     {
@@ -33,7 +32,7 @@ readonly class BundleDTO
             id: $data['id'] ?? null,
             name: $data['name'] ?? null,
             description: $data['description'] ?? null,
-            price: isset($data['price']) ? (float)$data['price'] : null,
+            price: isset($data['price']) ? (float) $data['price'] : null,
             products: $data['products'] ?? [],
             images: $data['images'] ?? [],
             extra: $data['extra'] ?? null,

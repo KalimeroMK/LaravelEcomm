@@ -17,8 +17,8 @@ use Modules\Newsletter\Repository\NewsletterRepository;
 
 class NewsletterController extends CoreController
 {
-
     private readonly NewsletterRepository $repository;
+
     private readonly CreateNewsletterAction $createAction;
 
     private readonly UpdateNewsletterAction $updateAction;

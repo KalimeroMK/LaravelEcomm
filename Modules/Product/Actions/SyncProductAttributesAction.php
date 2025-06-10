@@ -19,7 +19,9 @@ readonly class SyncProductAttributesAction
 
         foreach ($attributes as $code => $data) {
             $attribute = Attribute::where('code', $code)->first();
-            if (!$attribute) continue;
+            if (! $attribute) {
+                continue;
+            }
 
             // Prefer option, then custom value
             $finalValue = $data['option'] ?? $data['value'] ?? null;
@@ -27,8 +29,9 @@ readonly class SyncProductAttributesAction
                 continue;
             }
 
-            // Determine column based on attribute type
-            $column = match ($attribute->type) {
+            // Determine column and cast value based on attribute type
+            $type = $attribute->type;
+            $column = match ($type) {
                 'date' => 'date_value',
                 'float' => 'float_value',
                 'boolean' => 'boolean_value',
@@ -41,9 +44,18 @@ readonly class SyncProductAttributesAction
                 default => 'text_value',
             };
 
+            // Cast value according to type
+            $castedValue = match ($type) {
+                'integer' => (int) $finalValue,
+                'float', 'decimal' => (float) $finalValue,
+                'boolean' => filter_var($finalValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                'date' => $finalValue ? date('Y-m-d', strtotime($finalValue)) : null,
+                default => (string) $finalValue,
+            };
+
             $product->attributeValues()->create([
                 'attribute_id' => $attribute->id,
-                $column => $finalValue,
+                $column => $castedValue,
             ]);
         }
     }

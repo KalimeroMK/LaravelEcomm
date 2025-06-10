@@ -19,13 +19,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * @property int                              $id
- * @property string                           $name
- * @property string                           $description
- * @property string                           $slug
- * @property float                            $price
- * @property Carbon|null                      $created_at
- * @property Carbon|null                      $updated_at
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property string $slug
+ * @property float $price
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read string|null                 $image_url
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null                    $media_count

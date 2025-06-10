@@ -18,8 +18,7 @@ readonly class CouponDTO
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
 
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Request $request, ?int $id = null): self
     {
@@ -32,7 +31,7 @@ readonly class CouponDTO
             $data['id'] ?? null,
             $data['code'] ?? null,
             $data['type'] ?? null,
-            isset($data['value']) ? (float)$data['value'] : null,
+            isset($data['value']) ? (float) $data['value'] : null,
             $data['status'] ?? null,
             isset($data['created_at']) ? Carbon::parse($data['created_at']) : null,
             isset($data['updated_at']) ? Carbon::parse($data['updated_at']) : null,

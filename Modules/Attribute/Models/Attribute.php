@@ -16,16 +16,16 @@ use Modules\Core\Models\Core;
 /**
  * Class Attribute
  *
- * @property int                                   $id
- * @property string                                $name
- * @property string                                $code
- * @property string                                $type
- * @property string|null                           $display
- * @property int                                   $is_required
- * @property int                                   $is_filterable
- * @property int                                   $is_configurable
- * @property Carbon|null                           $created_at
- * @property Carbon|null                           $updated_at
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @property string $type
+ * @property string|null $display
+ * @property int $is_required
+ * @property int $is_filterable
+ * @property int $is_configurable
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Collection|AttributeGroup[]      $groups
  * @property-read Collection<int, AttributeOption> $options
  * @property-read int|null                         $options_count
@@ -182,6 +182,4 @@ class Attribute extends Core
             default => null,
         };
     }
-
-
 }

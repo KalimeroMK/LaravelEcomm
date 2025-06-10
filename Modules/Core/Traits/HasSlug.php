@@ -29,14 +29,14 @@ trait HasSlug
     protected static function bootHasSlug(): void
     {
         static::creating(function ($model): void {
-            if (empty($model->slug) && !empty($model->title)) {
+            if (empty($model->slug) && ! empty($model->title)) {
                 $slug = Str::slug($model->title);
                 $model->slug = $model->incrementSlug($slug);
             }
         });
 
         static::updating(function ($model): void {
-            if (empty($model->slug) && !empty($model->title)) {
+            if (empty($model->slug) && ! empty($model->title)) {
                 $slug = Str::slug($model->title);
                 $model->slug = $model->incrementSlug($slug);
             }

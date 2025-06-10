@@ -26,8 +26,7 @@ class CartController extends CoreController
         private readonly CreateCartAction $createAction,
         private readonly UpdateCartAction $updateAction,
         private readonly DeleteCartAction $deleteAction
-    ) {
-    }
+    ) {}
 
     public function index(): ResourceCollection
     {

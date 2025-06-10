@@ -32,8 +32,7 @@ readonly class ProductDTO
         public ?array $categories = null,
         public ?array $tags = null,
         public ?array $attributes = null,
-    ) {
-    }
+    ) {}
 
     public static function fromRequest(Request $request, ?int $id = null, ?Product $existing = null): self
     {
@@ -46,18 +45,18 @@ readonly class ProductDTO
 
         $normalizedAttributes = [];
 
+        // Fix: Always normalize attributes to ['value' => ...] for SyncProductAttributesAction
         foreach ($data['attributes'] ?? [] as $key => $optionValue) {
-            if (!isset($data['attributes_custom'][$key]) && $optionValue !== 'custom') {
-                $normalizedAttributes[$key] = ['value' => $optionValue];
-                continue;
+            // Check if there is a custom value for this attribute
+            if (isset($data['attributes_custom'][$key]) && $optionValue === 'custom') {
+                $normalizedAttributes[$key] = [
+                    'value' => $data['attributes_custom'][$key],
+                ];
+            } else {
+                $normalizedAttributes[$key] = [
+                    'value' => $optionValue,
+                ];
             }
-
-            $normalizedAttributes[$key] = [
-                'option' => $optionValue !== 'custom' ? $optionValue : null,
-                'value' => $optionValue === 'custom'
-                    ? ($data['attributes_custom'][$key] ?? null)
-                    : $optionValue,
-            ];
         }
 
         return new self(
@@ -66,16 +65,16 @@ readonly class ProductDTO
             slug: $data['slug'] ?? $existing?->slug,
             summary: $data['summary'] ?? $existing?->summary,
             description: $data['description'] ?? $existing?->description,
-            stock: isset($data['stock']) ? (int)$data['stock'] : $existing?->stock,
+            stock: isset($data['stock']) ? (int) $data['stock'] : $existing?->stock,
             status: $data['status'] ?? $existing?->status,
-            price: isset($data['price']) ? (float)$data['price'] : $existing?->price,
-            discount: isset($data['discount']) ? (float)$data['discount'] : $existing?->discount,
-            is_featured: isset($data['is_featured']) ? (bool)$data['is_featured'] : $existing?->is_featured,
-            d_deal: isset($data['d_deal']) ? (int)$data['d_deal'] : $existing?->d_deal,
-            brand_id: isset($data['brand_id']) ? (int)$data['brand_id'] : $existing?->brand_id,
-            attribute_set_id: isset($data['attribute_set_id']) ? (int)$data['attribute_set_id'] : $existing?->attribute_set_id,
+            price: isset($data['price']) ? (float) $data['price'] : $existing?->price,
+            discount: isset($data['discount']) ? (float) $data['discount'] : $existing?->discount,
+            is_featured: isset($data['is_featured']) ? (bool) $data['is_featured'] : $existing?->is_featured,
+            d_deal: isset($data['d_deal']) ? (int) $data['d_deal'] : $existing?->d_deal,
+            brand_id: isset($data['brand_id']) ? (int) $data['brand_id'] : $existing?->brand_id,
+            attribute_set_id: isset($data['attribute_set_id']) ? (int) $data['attribute_set_id'] : $existing?->attribute_set_id,
             sku: $data['sku'] ?? $existing?->sku,
-            special_price: isset($specialPrice) ? (float)$specialPrice : null,
+            special_price: isset($specialPrice) ? (float) $specialPrice : null,
             special_price_start: $data['special_price_start'] ?? $existing?->special_price_start?->toDateTimeString(),
             special_price_end: $data['special_price_end'] ?? $existing?->special_price_end?->toDateTimeString(),
             created_at: $data['created_at'] ?? $existing?->created_at?->toDateTimeString(),
@@ -94,21 +93,21 @@ readonly class ProductDTO
         }
 
         return new self(
-            id: isset($data['id']) ? (int)$data['id'] : null,
+            id: isset($data['id']) ? (int) $data['id'] : null,
             title: $data['title'] ?? null,
             slug: $data['slug'] ?? null,
             summary: $data['summary'] ?? null,
             description: $data['description'] ?? null,
-            stock: isset($data['stock']) ? (int)$data['stock'] : null,
+            stock: isset($data['stock']) ? (int) $data['stock'] : null,
             status: $data['status'] ?? null,
-            price: isset($data['price']) ? (float)$data['price'] : null,
-            discount: isset($data['discount']) ? (float)$data['discount'] : null,
-            is_featured: isset($data['is_featured']) ? (bool)$data['is_featured'] : null,
-            d_deal: isset($data['d_deal']) ? (int)$data['d_deal'] : null,
-            brand_id: isset($data['brand_id']) ? (int)$data['brand_id'] : null,
-            attribute_set_id: isset($data['attribute_set_id']) ? (int)$data['attribute_set_id'] : null,
+            price: isset($data['price']) ? (float) $data['price'] : null,
+            discount: isset($data['discount']) ? (float) $data['discount'] : null,
+            is_featured: isset($data['is_featured']) ? (bool) $data['is_featured'] : null,
+            d_deal: isset($data['d_deal']) ? (int) $data['d_deal'] : null,
+            brand_id: isset($data['brand_id']) ? (int) $data['brand_id'] : null,
+            attribute_set_id: isset($data['attribute_set_id']) ? (int) $data['attribute_set_id'] : null,
             sku: $data['sku'] ?? null,
-            special_price: isset($specialPrice) ? (float)$specialPrice : null,
+            special_price: isset($specialPrice) ? (float) $specialPrice : null,
             special_price_start: $data['special_price_start'] ?? null,
             special_price_end: $data['special_price_end'] ?? null,
             created_at: $data['created_at'] ?? null,

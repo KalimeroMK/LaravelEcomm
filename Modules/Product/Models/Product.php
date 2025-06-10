@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Kalimeromk\Filterable\app\Traits\Filterable;
-use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
@@ -32,24 +31,24 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Product
  *
- * @property int                                              $id
- * @property string                                           $title
- * @property string                                           $slug
- * @property string                                           $summary
- * @property string|null                                      $description
- * @property int                                              $stock
- * @property string                                           $status
- * @property float                                            $price
- * @property float|null                                       $discount
- * @property bool|null                                        $is_featured
- * @property int                                              $d_deal
- * @property int|null                                         $brand_id
- * @property Carbon|null                                      $created_at
- * @property Carbon|null                                      $updated_at
- * @property float|null                                       $special_price
- * @property Carbon|null                                      $special_price_start
- * @property Carbon|null                                      $special_price_end
- * @property string|null                                      $sku
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $summary
+ * @property string|null $description
+ * @property int $stock
+ * @property string $status
+ * @property float $price
+ * @property float|null $discount
+ * @property bool|null $is_featured
+ * @property int $d_deal
+ * @property int|null $brand_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property float|null $special_price
+ * @property Carbon|null $special_price_start
+ * @property Carbon|null $special_price_end
+ * @property string|null $sku
  * @property-read Collection<int, AttributeValue>             $attributeValues
  * @property-read int|null                                    $attribute_values_count
  * @property-read Brand|null                                  $brand
@@ -168,7 +167,6 @@ class Product extends Core implements HasMedia
         return $this->belongsTo(Brand::class);
     }
 
-
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
@@ -250,5 +248,4 @@ class Product extends Core implements HasMedia
 
         return Brand::whereIn('id', $productBrandIds)->get();
     }
-
 }

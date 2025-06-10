@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers;
+namespace Modules\Product\Http\Controllers;
 
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -59,6 +59,7 @@ class ProductController extends CoreController
     public function create(): Renderable
     {
         $attributes = Attribute::with('options')->get();
+
         return view('product::create', [
             'brands' => Brand::get()->toArray(),
             'categories' => Category::get()->toArray(),
@@ -94,9 +95,9 @@ class ProductController extends CoreController
         $categories = Category::get();
         $tags = Tag::get();
         $product->load(['attributeValues.attribute']);
+
         return view('product::edit', compact('brands', 'categories', 'product', 'tags', 'attributes'));
     }
-
 
     /**
      * @throws Exception
@@ -113,6 +114,7 @@ class ProductController extends CoreController
         // Save product attribute values
         SyncProductAttributesAction::execute($product, $dto->attributes ?? []);
         MediaUploader::clearAndUpload($product, ['images'], 'product');
+
         return redirect()->route('products.index');
     }
 
