@@ -29,8 +29,11 @@
 
 - Admin roles, permission
 - Product manager
+- Product attributes
+- Product reviews
+- Product clicks and impressions
 - Media manager using unisharp laravel file manager
-- Banner manager
+- Banner manager based click and impression
 - Bundles manager
 - Order management
 - Order Complete, Pending, Processing, On hold, Cancelled, Refunded, Failed
