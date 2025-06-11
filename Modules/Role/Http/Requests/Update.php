@@ -11,7 +11,7 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string|max:255|unique:permissions',
+            'name' => 'required|string|max:50',
             'guard_name' => 'nullable|string|max:255|in:web,api|default:web',
         ];
     }

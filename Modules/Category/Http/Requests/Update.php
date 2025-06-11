@@ -19,16 +19,8 @@ class Update extends CoreRequest
         $category = optional($this->route('category'))->id;
 
         return [
-            'title' => [
-                'nullable',
-                'string',
-                Rule::unique('categories', 'title')->ignore($category), // Specify the key and rule correctly.
-            ],
-            'parent_id' => [
-                'sometimes',
-                'exists:categories,id',
-                Rule::notIn([$category]), // This rule is set correctly.
-            ],
+            'title' => 'required|string|unique:categories,title|max:50',
+            'parent_id' => 'sometimes|exists:categories,id|not_in:'.$category,
         ];
     }
 }

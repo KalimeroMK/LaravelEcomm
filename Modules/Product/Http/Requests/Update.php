@@ -16,28 +16,28 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|required',
-            'summary' => 'string|required',
-            'sku' => 'string|nullable|unique:products,sku',
-            'description' => 'string|nullable',
+            'title' => 'required|string|unique:products,title|max:50',
+            'summary' => 'required|string',
+            'description' => 'nullable|string',
+            'sku' => 'nullable|string|unique:products,sku',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'stock' => 'required|numeric',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category' => 'required|array',
             'category.*' => 'required|exists:categories,id',
             'tag' => 'required|array',
             'tag.*' => 'required|exists:tags,id',
             'attributes' => 'sometimes|array',
-            'attributes.*' => 'sometimes:', // or more specific rules
+            'attributes.*' => 'sometimes',
+            'stock' => 'required|numeric',
+            'brand_id' => 'nullable|exists:brands,id',
             'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',
-            'brand_id' => 'nullable|exists:brands,id',
             'status' => 'required|in:active,inactive',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
-            'special_price' => 'nullable|numeric',
             'special_price_start' => 'nullable|date',
             'special_price_end' => 'nullable|date|after:special_price_start',
+            'special_price' => 'nullable',
         ];
     }
 }

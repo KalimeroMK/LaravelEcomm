@@ -49,7 +49,10 @@ class FrontController extends Controller
     {
         $featured_products = $indexAction();
         $banners = Banner::with('categories')->get()->filter(fn($b) => $b->isActive());
-        return view('front::index', compact('featured_products', 'banners'));
+        return view('front::index', [
+            'featured_products' => $featured_products,
+            'banners' => $banners,
+        ]);
     }
 
     /**
@@ -57,7 +60,7 @@ class FrontController extends Controller
      */
     public function aboutUs()
     {
-        return view('front::pages.about-us');
+        return view('front::pages.about-us', []);
     }
 
     /**
@@ -65,7 +68,7 @@ class FrontController extends Controller
      */
     public function contact()
     {
-        return view('front::pages.contact');
+        return view('front::pages.contact', []);
     }
 
     /**
@@ -275,7 +278,7 @@ class FrontController extends Controller
             });
         }
         $banners = $query->get()->filter(fn($b) => $b->isActive());
-        return view('front::banner', compact('banners'));
+        return view('front::banner', ['banners' => $banners]);
     }
 
     /**

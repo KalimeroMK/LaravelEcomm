@@ -16,10 +16,10 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|required',
-            'summary' => 'string|required',
-            'description' => 'string|nullable',
-            'sku' => 'string|nullable|unique:products,sku',
+            'title' => 'required|string|unique:products,title|max:50',
+            'summary' => 'required|string',
+            'description' => 'nullable|string',
+            'sku' => 'nullable|string|unique:products,sku',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category' => 'required|array',
@@ -27,7 +27,7 @@ class Store extends CoreRequest
             'tag' => 'required|array',
             'tag.*' => 'required|exists:tags,id',
             'attributes' => 'sometimes|array',
-            'attributes.*' => 'sometimes', // or more specific rules
+            'attributes.*' => 'sometimes',
             'stock' => 'required|numeric',
             'brand_id' => 'nullable|exists:brands,id',
             'child_cat_id' => 'nullable|exists:categories,id',

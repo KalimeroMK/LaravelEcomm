@@ -16,9 +16,10 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => ['nullable', 'string'],
-            'description' => ['nullable'],
-            'price' => ['nullable', 'numeric'],
+            'title' => 'required|string|unique:bundles,title|max:50',
+            'name' => 'nullable|string',
+            'description' => 'nullable',
+            'price' => 'nullable|numeric',
             'products' => 'nullable|array',
             'products.*' => 'required|exists:products,id',
             'images' => 'nullable|array',

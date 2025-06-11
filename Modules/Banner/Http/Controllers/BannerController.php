@@ -17,6 +17,7 @@ use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
+use Modules\Category\Models\Category;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Core\Support\Media\MediaUploader;
 
@@ -42,6 +43,7 @@ class BannerController extends CoreController
     {
         return view('banner::create', [
             'banner' => new Banner(),
+            'categories' => Category::all(),
         ]);
     }
 
@@ -61,6 +63,7 @@ class BannerController extends CoreController
     {
         return view('banner::edit', [
             'banner' => $banner,
+            'categories' => Category::all(),
         ]);
     }
 

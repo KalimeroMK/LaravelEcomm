@@ -11,10 +11,10 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => ['required'],
-            'public_key' => ['nullable'],
-            'secret_key' => ['nullable'],
-            'status' => ['boolean'],
+            'name' => 'required|string|max:50',
+            'public_key' => 'nullable',
+            'secret_key' => 'nullable',
+            'status' => 'boolean',
         ];
     }
 

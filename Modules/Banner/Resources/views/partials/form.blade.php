@@ -36,9 +36,9 @@
     </div>
     <div class="form-group">
         <label for="categories">Categories</label>
-        <select name="categories[]" id="categories" class="form-control" multiple>
-            @foreach(Modules\Category\Models\Category::all() as $cat)
-                <option value="{{ $cat->id }}" @if(isset($banner) && $banner->categories && $banner->categories->contains($cat->id)) selected @endif>{{ $cat->title }}</option>
+        <select name="categories[]" id="categories" class="form-control select2" multiple required>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" {{ (isset($banner) && $banner->categories->contains($category->id)) ? 'selected' : '' }}>{{ $category->title }}</option>
             @endforeach
         </select>
     </div>
@@ -77,15 +77,21 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 @push('scripts')
     <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#description').summernote({
                 placeholder: "Write short description.....",
                 tabsize: 2,
                 height: 150
+            });
+            $('#categories').select2({
+                placeholder: 'Select categories',
+                allowClear: true
             });
         });
     </script>

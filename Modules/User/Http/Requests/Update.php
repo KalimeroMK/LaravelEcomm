@@ -16,15 +16,12 @@ class Update extends FormRequest
      */
     public function rules(): array
     {
-        /** @var User $user */
-        $user = $this->route('user');
-        $userId = $user instanceof User ? $user->id : null;
-
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$userId,
-            'password' => 'nullable|same:confirm-password',
-            'roles' => 'required|string|max:255',
+            'name' => 'sometimes|required|string|max:50',
+            'email' => 'sometimes|required|email|unique:users,email',
+            'password' => 'nullable|string|min:8',
+            'roles' => 'sometimes|required|string|max:255',
+            'confirm-password' => 'sometimes|required|string|min:8',
         ];
     }
 }

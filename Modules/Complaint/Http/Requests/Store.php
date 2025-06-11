@@ -11,9 +11,9 @@ class Store extends FormRequest
     public function rules(): array
     {
         return [
-            'order_id' => ['required', 'exists:orders,id'],
-            'status' => ['required'],
-            'description' => ['required'],
+            'order_id' => 'required|exists:orders,id',
+            'status' => 'required',
+            'description' => 'required',
         ];
     }
 

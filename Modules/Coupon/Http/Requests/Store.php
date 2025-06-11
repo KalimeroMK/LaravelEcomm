@@ -16,7 +16,7 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'code' => 'string|required|unique:coupons',
+            'code' => 'required|string|unique:coupons,code|max:50',
             'type' => 'required|in:fixed,percent',
             'value' => 'required|numeric',
             'status' => 'required|in:active,inactive',

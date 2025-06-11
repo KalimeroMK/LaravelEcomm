@@ -11,7 +11,7 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:permissions',
+            'name' => 'required|string|max:50',
             'guard_name' => 'required|string|max:255|in:web,api|default:web|unique:permissions',
         ];
     }
