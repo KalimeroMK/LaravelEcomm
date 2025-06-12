@@ -49,7 +49,7 @@ class ShippingController extends CoreController
     {
         $shippingDto = $this->getAllShippingAction->execute();
 
-        return view('shipping::index', ['shippings' => $shippingDto->shippings]);
+        return view('shipping::index', ['shippings' => $shippingDto]);
     }
 
     public function store(Store $request): RedirectResponse
@@ -68,7 +68,7 @@ class ShippingController extends CoreController
     {
         $shippingDto = $this->findShippingAction->execute($shipping->id);
 
-        return view('shipping::edit')->with(['shipping' => $shippingDto->shipping]);
+        return view('shipping::edit')->with(['shipping' => $shippingDto]);
     }
 
     public function update(Update $request, Shipping $shipping): RedirectResponse

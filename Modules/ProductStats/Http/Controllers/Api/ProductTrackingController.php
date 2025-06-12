@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\ProductStats\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -27,6 +29,7 @@ class ProductTrackingController extends Controller
             $impressions[] = $impression;
             event(new ProductImpressionRecorded($impression));
         }
+
         return response()->json(['success' => true, 'count' => count($impressions)]);
     }
 
@@ -41,6 +44,7 @@ class ProductTrackingController extends Controller
             'ip_address' => $ip,
         ]);
         event(new ProductClicked($click));
+
         return response()->json(['success' => true]);
     }
 }

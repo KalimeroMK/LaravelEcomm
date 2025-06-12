@@ -37,8 +37,8 @@ class OrderController extends CoreController
     public function index(): View|Factory|Application
     {
         $orders = auth()->user()->hasRole('super-admin')
-            ? $this->getAllAction->execute()->orders
-            : $this->findByUserAction->execute(auth()->id())->orders;
+            ? $this->getAllAction->execute()
+            : $this->findByUserAction->execute(auth()->id());
 
         return view('order::index', ['orders' => $orders]);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\ProductStats\Http\Controllers\Api\ProductTrackingController;
 use Modules\ProductStats\Http\Controllers\ProductStatsController;

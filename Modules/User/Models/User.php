@@ -26,12 +26,13 @@ use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Traits\ClearsCache;
 use Modules\Google2fa\Models\Google2fa;
-use Modules\Notification\Models\Notification;
 use Modules\Order\Models\Order;
 use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
 use Modules\Product\Models\ProductReview;
 use Modules\User\Database\Factories\UserFactory;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasPermissions;
@@ -69,7 +70,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null                                                  $roles_count
  * @property-read Collection<int, PersonalAccessToken>                      $tokens
  * @property-read int|null                                                  $tokens_count
- * @property-read Collection<int, Notification>                             $unreadNotifications
  * @property-read int|null                                                  $unread_notifications_count
  * @property-read Collection<int, Wishlist>                                 $wishlists
  * @property-read int|null                                                  $wishlists_count
@@ -94,7 +94,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use ClearsCache;
     use HasApiTokens;
@@ -102,6 +102,7 @@ class User extends Authenticatable
     use HasPermissions;
     use HasRoles;
     use Impersonate;
+    use InteractsWithMedia;
     use Notifiable;
 
     protected $table = 'users';

@@ -16,7 +16,6 @@ class ProductStatsRepository
      * Get filtered product stats.
      *
      * @param  array  $filters  ['from' => ?, 'to' => ?, 'category_id' => ?, 'order_by' => ?, 'sort' => ?]
-     * @return Collection
      */
     public function getProductStats(array $filters = []): Collection
     {
@@ -25,17 +24,17 @@ class ProductStatsRepository
 
         $query = Product::with(['media', 'categories']);
 
-        if (!empty($filters['category_id'])) {
+        if (! empty($filters['category_id'])) {
             $query->whereHas('categories', function ($q) use ($filters) {
                 $q->where('categories.id', $filters['category_id']);
             });
         }
 
-        if (!empty($filters['from'])) {
+        if (! empty($filters['from'])) {
             $query->whereDate('products.created_at', '>=', $filters['from']);
         }
 
-        if (!empty($filters['to'])) {
+        if (! empty($filters['to'])) {
             $query->whereDate('products.created_at', '<=', $filters['to']);
         }
 

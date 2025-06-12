@@ -16,6 +16,8 @@ class ProductReviewStore extends CoreRequest
     public function rules(): array
     {
         return [
+            'review' => 'required|string',
+            'product_id' => 'required|exists:products,id',
             'rate' => 'required|numeric|min:1',
         ];
     }

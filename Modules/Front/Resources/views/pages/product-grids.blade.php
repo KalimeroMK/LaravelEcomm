@@ -198,20 +198,24 @@
                                                     @if($product->discount)
                                                         <span class="price-dec">{{$product->discount}} % Off</span>
                                                     @endif
+                                                    {{-- Display product condition --}}
+                                                    @if($product->condition)
+                                                        <span class="badge badge-info">{{ $product->condition }}</span>
+                                                    @endif
                                                 </a>
                                                 <div class="button-head">
                                                     <div class="product-action">
-                                                        <a data-toggle="modal" data-target="#{{$product->id}}"
-                                                           title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist"
-                                                           href="{{route('add-to-wishlist',$product->slug)}}"
-                                                           class="wishlist" data-id="{{$product->id}}"><i
-                                                                    class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+                                                        <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                        <form method="POST" action="{{ route('products.compare.add', $product->id) }}" style="display:inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-outline-primary btn-xs p-1" style="font-size:12px;line-height:1.1;" title="Add to Compare">
+                                                                <i class="fa fa-balance-scale"></i>
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                     <div class="product-action-2">
-                                                        <a title="Add to cart"
-                                                           href="{{route('add-to-cart',$product->slug)}}">Add to
-                                                            cart</a>
+                                                        <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Add to cart</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -317,13 +321,17 @@
                                         <div class="quickview-peragraph">
                                             <p>{!! html_entity_decode($product->summary) !!}</p>
                                         </div>
-                                        @if($product->size)
+                                        @php
+                                            $sizes = collect($product->attributeValues ?? [])
+                                                ->filter(fn($val) => optional($val->attribute)->code === 'size')
+                                                ->pluck('value')
+                                                ->first();
+                                            $sizes = $sizes ? explode(',', $sizes) : [];
+                                        @endphp
+                                        @if(!empty($sizes))
                                             <div class="size">
                                                 <h4>Size</h4>
                                                 <ul>
-                                                    @php
-                                                        $sizes=explode(',',$product->size);
-                                                    @endphp
                                                     @foreach($sizes as $size)
                                                         <li><a href="#" class="one">{{$size}}</a></li>
                                                     @endforeach
@@ -336,7 +344,11 @@
                                                     <h5 class="title">Size</h5>
                                                     <select>
                                                         @php
-                                                            $sizes=explode(',',$product->size);
+                                                            $sizes = collect($product->attributeValues ?? [])
+                                                                ->filter(fn($val) => optional($val->attribute)->code === 'size')
+                                                                ->pluck('value')
+                                                                ->first();
+                                                            $sizes = $sizes ? explode(',', $sizes) : [];
                                                         @endphp
                                                         @foreach($sizes as $size)
                                                             <option>{{$size}}</option>

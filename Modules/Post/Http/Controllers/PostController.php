@@ -10,6 +10,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Core\Support\Media\MediaUploader;
+use Modules\Core\Support\Relations\SyncRelations;
 use Modules\Post\Actions\CreatePostAction;
 use Modules\Post\Actions\DeletePostAction;
 use Modules\Post\Actions\GetAllCategoriesAction;
@@ -76,7 +78,7 @@ class PostController extends Controller
     {
         $postsDto = $this->getAllAction->execute();
 
-        return view('post::index', ['posts' => $postsDto->posts]);
+        return view('post::index', ['posts' => $postsDto]);
     }
 
     /**
@@ -85,7 +87,13 @@ class PostController extends Controller
     public function store(Store $request): RedirectResponse
     {
         $dto = PostDTO::fromRequest($request);
-        $this->createAction->execute($dto);
+        $post = $this->createAction->execute($dto);
+
+        SyncRelations::execute($post, [
+            'categories' => $dto->categories,
+            'tags' => $dto->tags,
+        ]);
+        MediaUploader::uploadMultiple($post, ['images'], 'post');
 
         return redirect()->route('posts.index');
     }
@@ -127,6 +135,11 @@ class PostController extends Controller
     {
         $dto = PostDTO::fromRequest($request, $post->id);
         $this->updateAction->execute($dto);
+        SyncRelations::execute($post, [
+            'categories' => $dto->categories,
+            'tags' => $dto->tags,
+        ]);
+        MediaUploader::uploadMultiple($post, ['images'], 'post');
 
         return redirect()->route('posts.index');
     }

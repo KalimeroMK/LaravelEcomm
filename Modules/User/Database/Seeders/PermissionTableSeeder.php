@@ -51,6 +51,7 @@ class PermissionTableSeeder extends Seeder
             'shipping',
             'tag',
             'user',
+            'product-stats',
         ];
 
         $operations = ['list', 'show', 'create', 'update', 'delete'];

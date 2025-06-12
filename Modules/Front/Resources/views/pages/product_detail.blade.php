@@ -41,12 +41,26 @@
                         <div class="col-lg-6 col-12">
                             <!-- Product Slider -->
                             <div class="product-gallery">
-                                <!-- Images slider -->
                                 <div class="flexslider-thumbnails">
                                     <ul class="slides">
-                                        <li data-thumb="" rel="adjustX:10, adjustY:">
-                                            <img src="{{$product_detail->imageUrl}}" alt="{{$product_detail->title}}">
-                                        </li>
+                                        @php
+                                            $mediaItems = $product_detail->getMedia('product');
+                                        @endphp
+                                        @if($mediaItems->count())
+                                            @foreach($mediaItems as $media)
+                                                <li data-thumb="{{ $media->getUrl('thumb') }}"
+                                                    rel="adjustX:10, adjustY:">
+                                                    <img src="{{ $media->getUrl() }}"
+                                                         alt="{{ $product_detail->title }}">
+                                                </li>
+                                            @endforeach
+                                        @else
+                                            <li data-thumb="https://placehold.co/600x400@2x.png"
+                                                rel="adjustX:10, adjustY:">
+                                                <img src="https://placehold.co/600x400@2x.png"
+                                                     alt="{{ $product_detail->title }}">
+                                            </li>
+                                        @endif
                                     </ul>
                                 </div>
                                 <!-- End Images slider -->
@@ -59,10 +73,10 @@
                                 <div class="short">
                                     <h4>{{$product_detail->title}}</h4>
                                     <div class="rating-main">
+                                        @php
+                                            $rate=ceil($product_detail->getReview->avg('rate'))
+                                        @endphp
                                         <ul class="rating">
-                                            @php
-                                                $rate=ceil($product_detail->getReview->avg('rate'))
-                                            @endphp
                                             @for($i=1; $i<=5; $i++)
                                                 @if($rate>=$i)
                                                     <li><i class="fa fa-star"></i></li>
@@ -75,46 +89,70 @@
                                             Review</a>
                                     </div>
                                     @php
-                                        $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
+                                        $price = $product_detail->price;
+                                        $discount = $product_detail->discount ?? 0;
+                                        $specialPrice = $product_detail->special_price ?? null;
+                                        $finalPrice = $specialPrice ? $specialPrice : ($price - (($price * $discount) / 100));
                                     @endphp
-                                    <p class="price"><span class="discount">${{number_format($after_discount,2)}}</span><s>${{number_format($product_detail->price,2)}}</s>
+                                    <p class="price">
+                                        <span class="discount">${{ number_format($finalPrice, 2) }}</span>
+                                        @if($finalPrice < $price)
+                                            <s>${{ number_format($price, 2) }}</s>
+                                        @endif
                                     </p>
                                     <p class="description">{!!($product_detail->summary)!!}</p>
                                 </div>
                                 <!--/ End Description -->
-                                <!-- Color -->
-                                <div class="color">
-                                    <h4>Available Options <span>Color</span></h4>
-                                    <ul>
-                                        @php
-                                            $colors = explode(',', $product_detail->color);
-                                        @endphp
-
-                                        @foreach($colors as $color)
-                                            <li>
-                                                <a href="#" class="{{ strtolower(trim($color)) }}">
-                                                    <i class="ti-check"></i>
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                <!--/ End Color -->
-                                <!-- Size -->
-                                @if($product_detail->size)
-                                    <div class="size mt-4">
-                                        <h4>Size</h4>
-                                        <ul>
-                                            @php
-                                                $sizes=explode(',',$product_detail->size);
-                                            @endphp
-                                            @foreach($sizes as $size)
-                                                <li><a href="#" class="one">{{$size}}</a></li>
+                                <!-- Product Attributes -->
+                                @php
+                                    // Support both Eloquent object and array structure (for future-proofing)
+                                    $attributes = [];
+                                    if(isset($product_detail->attributes) && is_array($product_detail->attributes) && count($product_detail->attributes)) {
+                                        $attributes = $product_detail->attributes;
+                                    } elseif(!empty($product_detail->attributeValues)) {
+                                        foreach($product_detail->attributeValues as $attrVal) {
+                                            $attr = is_object($attrVal->attribute) ? $attrVal->attribute : null;
+                                            if(!$attr) continue;
+                                            $value = $attrVal->text_value
+                                                ?? $attrVal->string_value
+                                                ?? $attrVal->integer_value
+                                                ?? $attrVal->float_value
+                                                ?? $attrVal->boolean_value
+                                                ?? $attrVal->date_value
+                                                ?? $attrVal->decimal_value
+                                                ?? $attrVal->url_value
+                                                ?? $attrVal->hex_value
+                                                ?? null;
+                                            $attributes[] = [
+                                                'attribute' => [
+                                                    'name' => $attr->name,
+                                                    'label' => $attr->display,
+                                                    'type' => $attr->type,
+                                                ],
+                                                'value' => $value,
+                                            ];
+                                        }
+                                    }
+                                @endphp
+                                @if(count($attributes))
+                                    <div class="product-attributes mt-4">
+                                        <h4>Product Attributes</h4>
+                                        <ul class="list-group">
+                                            @foreach($attributes as $attributeValue)
+                                                @php
+                                                    $attr = $attributeValue['attribute'] ?? null;
+                                                    $value = $attributeValue['value'] ?? null;
+                                                @endphp
+                                                @if($attr && $value)
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <span>{{ ucfirst($attr['name'] ?? $attr['label'] ?? '') }}</span>
+                                                        <span class="badge badge-primary badge-pill">{{ $value }}</span>
+                                                    </li>
+                                                @endif
                                             @endforeach
                                         </ul>
                                     </div>
                                 @endif
-                                <!--/ End Size -->
                                 <!-- Product Buy -->
                                 <div class="product-buy">
                                     <form action="{{route('single-add-to-cart')}}" method="POST">
@@ -170,13 +208,17 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="product-info">
+                                @php
+                                    $reviews = $product_detail->getReview;
+                                    $reviewCount = $reviews->count();
+                                @endphp
                                 <div class="nav-main">
                                     <!-- Tab Nav -->
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab"
                                                                 href="#description" role="tab">Description</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reviews"
-                                                                role="tab">Reviews</a></li>
+                                                                role="tab">Reviews ({{ $reviewCount }})</a></li>
                                     </ul>
                                     <!--/ End Tab Nav -->
                                 </div>
@@ -214,6 +256,8 @@
                                                                 <form class="form" method="post"
                                                                       action="{{route('product.review.store',$product_detail->slug)}}">
                                                                     @csrf
+                                                                    <input type="hidden" name="product_id"
+                                                                           value="{{$product_detail->id}}">
                                                                     <div class="row">
                                                                         <div class="col-lg-12 col-12">
                                                                             <div class="rating_box">
@@ -301,6 +345,48 @@
                                                         </div>
                                                     </div>
 
+                                                    <!-- Product Reviews Summary -->
+                                                    @php
+                                                        $averageRating = $reviewCount ? round($reviews->avg('rate'), 1) : 0;
+                                                    @endphp
+                                                    <div class="product-review-summary mb-4">
+                                                        <h4>Customer Reviews</h4>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <div class="star-rating" style="font-size:1.5em; color:#FFD700;">
+                                                                @for($i = 1; $i <= 5; $i++)
+                                                                    @if($i <= floor($averageRating))
+                                                                        <i class="fa fa-star"></i>
+                                                                    @elseif($i - $averageRating < 1)
+                                                                        <i class="fa fa-star-half-o"></i>
+                                                                    @else
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    @endif
+                                                                @endfor
+                                                            </div>
+                                                            <span class="ml-2">{{ $averageRating }} / 5 ({{ $reviewCount }} review{{ $reviewCount != 1 ? 's' : '' }})</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- List of Reviews -->
+                                                    <div class="review-list mt-4">
+                                                        @forelse($reviews as $review)
+                                                            <div class="single-review mb-3 p-3 border rounded">
+                                                                <div class="d-flex align-items-center mb-1">
+                                                                    <strong>{{ $review->user->name ?? 'Anonymous' }}</strong>
+                                                                    <span class="ml-2 text-warning">
+                                                                        @for($i = 1; $i <= 5; $i++)
+                                                                            <i class="fa{{ $i <= $review->rate ? ' fa-star' : ' fa-star-o' }}"></i>
+                                                                        @endfor
+                                                                    </span>
+                                                                    <span class="ml-3 text-muted" style="font-size:0.9em;">{{ $review->created_at ? $review->created_at->format('Y-m-d') : '' }}</span>
+                                                                </div>
+                                                                <div>{{ $review->review }}</div>
+                                                            </div>
+                                                        @empty
+                                                            <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+                                                        @endforelse
+                                                    </div>
+
                                                     <div class="ratting-main">
                                                         <div class="avg-ratting">
                                                             {{-- @php
@@ -317,13 +403,11 @@
                                                             <!-- Single Rating -->
                                                             <div class="single-rating">
                                                                 <div class="rating-author">
-                                                                    @if($data->user['photo'])
-                                                                        <img src="{{$data->user['photo']}}"
-                                                                             alt="{{$data->user['photo']}}">
-                                                                    @else
-                                                                        <img src="{{asset('backend/img/avatar.png')}}"
-                                                                             alt="Profile.jpg">
-                                                                    @endif
+                                                                    @php
+                                                                        $userPhoto = $data->user?->getFirstMediaUrl('photo') ?: asset('backend/img/avatar.png');
+                                                                    @endphp
+                                                                    <img src="{{ $userPhoto }}"
+                                                                         alt="{{ $data->user?->name }}">
                                                                 </div>
                                                                 <div class="rating-des">
                                                                     <h6>{{$data->user['name']}}</h6>
@@ -407,12 +491,15 @@
                                     <div class="product-content">
                                         <h3><a href="{{route('front.product-detail',$data->slug)
                                         }}">{{$data->title}}</a></h3>
+                                        @php
+                                            $price = $data->price;
+                                            $discount = $data->discount ?? 0;
+                                            $specialPrice = $data->special_price ?? null;
+                                            $finalPrice = $specialPrice ? $specialPrice : ($price - (($price * $discount) / 100));
+                                        @endphp
                                         <div class="product-price">
-                                            @php
-                                                $after_discount=($data->price-(($data->discount*$data->price)/100));
-                                            @endphp
-                                            <span class="old">${{number_format($data->price,2)}}</span>
-                                            <span>${{number_format($after_discount,2)}}</span>
+                                            <span class="old">${{ number_format($price, 2) }}</span>
+                                            <span>${{ number_format($finalPrice, 2) }}</span>
                                         </div>
 
                                     </div>
@@ -510,8 +597,8 @@
                                     <!-- Input Order -->
                                     <div class="input-group">
                                         <div class="button minus">
-                                            <button type="button" class="btn btn-primary btn-number" disabled="disabled"
-                                                    data-type="minus" data-field="quantity[1]">
+                                            <button type="button" class="btn btn-primary btn-number"
+                                                    disabled="disabled" data-type="minus" data-field="quantity[1]">
                                                 <i class="ti-minus"></i>
                                             </button>
                                         </div>
@@ -597,6 +684,43 @@
             content: "\F005";
         }
 
+        .product-attributes.mt-4 {
+            margin-top: 2rem;
+        }
+
+        .product-attributes .list-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            border: none;
+            padding: 0;
+            background: none;
+        }
+
+        .product-attributes .list-group-item {
+            border: none;
+            background: #f4f4f4;
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #222;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .product-attributes .badge-primary {
+            background: #eee;
+            color: #333;
+            font-size: 0.95em;
+            border-radius: 12px;
+            padding: 0.25em 0.85em;
+            font-weight: 600;
+            margin-left: 0.75em;
+            box-shadow: none;
+        }
     </style>
 @endpush
 @push('scripts')

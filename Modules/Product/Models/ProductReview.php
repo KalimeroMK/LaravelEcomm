@@ -12,6 +12,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Modules\User\Models\User;
 
@@ -24,10 +25,10 @@ use Modules\User\Models\User;
  * @property string $status
  * @property int|null $user_id
  * @property int|null $product_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Product|null               $product
- * @property-read User|null                  $user
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Product|null $product
+ * @property-read User|null    $user
  *
  * @method static Builder<static>|ProductReview newModelQuery()
  * @method static Builder<static>|ProductReview newQuery()

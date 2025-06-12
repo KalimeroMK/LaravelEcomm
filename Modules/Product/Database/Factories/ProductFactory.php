@@ -39,7 +39,7 @@ class ProductFactory extends Factory
             'special_price_start' => Carbon::now(),
             'special_price_end' => Carbon::now()->addDays(7),
             'sku' => 'SKU-'.mb_strtoupper(Str::random(10)),
-            'brand_id' => Brand::factory(),
+            'brand_id' => Brand::inRandomOrder()->first()->id,
         ];
     }
 
@@ -101,16 +101,17 @@ class ProductFactory extends Factory
             ];
             $attributeModels = Attribute::whereIn('code', array_keys($attributes))->get();
             foreach ($attributeModels as $attribute) {
-                $product->attributes()->attach($attribute->id);
                 $value = $attributes[$attribute->code][array_rand($attributes[$attribute->code])];
                 $column = method_exists($attribute,
                     'getValueColumnName') ? $attribute->getValueColumnName() : 'text_value';
-                $valueData = [
-                    'product_id' => $product->id,
-                    'attribute_id' => $attribute->id,
-                    $column => $value,
-                ];
-                AttributeValue::create($valueData);
+                if ($column) {
+                    $valueData = [
+                        'product_id' => $product->id,
+                        'attribute_id' => $attribute->id,
+                        $column => $value,
+                    ];
+                    AttributeValue::create($valueData);
+                }
             }
         });
     }

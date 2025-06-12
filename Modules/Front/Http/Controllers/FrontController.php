@@ -47,12 +47,7 @@ class FrontController extends Controller
      */
     public function index(IndexAction $indexAction)
     {
-        $featured_products = $indexAction();
-        $banners = Banner::with('categories')->get()->filter(fn($b) => $b->isActive());
-        return view('front::index', [
-            'featured_products' => $featured_products,
-            'banners' => $banners,
-        ]);
+        return view('front::index', $indexAction());
     }
 
     /**
@@ -277,7 +272,8 @@ class FrontController extends Controller
                 $q->where('categories.id', $categoryId);
             });
         }
-        $banners = $query->get()->filter(fn($b) => $b->isActive());
+        $banners = $query->get()->filter(fn ($b) => $b->isActive());
+
         return view('front::banner', ['banners' => $banners]);
     }
 
@@ -288,6 +284,7 @@ class FrontController extends Controller
     {
         $banner = Banner::findOrFail($id);
         $banner->incrementImpression();
+
         return response()->json(['success' => true]);
     }
 }

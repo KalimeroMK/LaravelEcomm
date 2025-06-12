@@ -12,7 +12,7 @@ class ProductStatsListDTO
     public LengthAwarePaginator $stats;
 
     /**
-     * @param LengthAwarePaginator<ProductStatsDTO> $stats
+     * @param  LengthAwarePaginator<ProductStatsDTO>  $stats
      */
     public function __construct(LengthAwarePaginator $stats)
     {

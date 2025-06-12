@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Category\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Modules\Core\Http\Requests\CoreRequest;
 
 class Update extends CoreRequest

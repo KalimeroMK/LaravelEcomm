@@ -28,8 +28,6 @@
         </div>
         <!--/ End Single Slider -->
     </section>
-    {{-- Banners section --}}
-    @include('front::banner')
     @if(isset($banners))
         <section id="Gslider" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -41,7 +39,7 @@
             <div class="carousel-inner" role="listbox">
                 @foreach($banners as $key=>$banner)
                     <div class="carousel-item {{(($key==0)? 'active' : '')}}">
-                        <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
+                        <img class="first-slide" src="{{$banner->image_url}}" alt="First slide">
                         <div class="carousel-caption d-none d-md-block text-left">
                             <h1 class="wow fadeInDown">{{$banner->title}}</h1>
                             <p>{!! html_entity_decode($banner->description) !!}</p>
@@ -121,6 +119,12 @@
                                             <a title="Wishlist"
                                                href="{{route('add-to-wishlist',$product->slug)}}"><i
                                                         class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                            <form method="POST" action="{{ route('products.compare.add', $product->id) }}" style="display:inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-outline-primary btn-sm" title="Add to Compare">
+                                                    <i class="fa fa-balance-scale"></i> <span>Compare</span>
+                                                </button>
+                                            </form>
                                         </div>
                                         <div class="product-action-2">
                                             <a href="{{route('add-to-cart',$product->slug)}}">Add to cart</a>
@@ -137,6 +141,10 @@
                                         @endphp
                                         <span>${{number_format($after_discount,2)}}</span>
                                     </div>
+                                    {{-- Display product condition --}}
+                                    @if($product->condition)
+                                        <span class="badge badge-info">{{ $product->condition }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <!-- End Single Product -->

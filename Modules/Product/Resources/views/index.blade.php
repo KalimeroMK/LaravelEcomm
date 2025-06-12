@@ -23,8 +23,7 @@
                             <th>@lang('partials.is_featured')</th>
                             <th>@lang('partials.price')</th>
                             <th>@lang('messages.discount')</th>
-                            <th>@lang('partials.size')</th>
-                            <th>@lang('partials.conditions')</th>
+                            <th>@lang('partials.tags')</th>
                             <th>@lang('sidebar.brands')</th>
                             <th>@lang('partials.quantity')</th>
                             <th>@lang('partials.image')</th>
@@ -43,45 +42,56 @@
                                 <td>{{ !empty($product['is_featured']) ? 'Yes' : 'No' }}</td>
                                 <td>{{ $product['price'] ?? '' }}</td>
                                 <td>{{ $product['discount'] ?? '' }}</td>
-                                <td>{{ $product['size']['name'] ?? 'N/A' }}</td>
-                                <td>{{ $product['condition']['status'] ?? 'N/A' }}</td>
+                                <td>
+                                    @if(isset($product['tags']) && is_array($product['tags']))
+                                        {{ implode(', ', array_column($product['tags'], 'title')) }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
                                 <td>{{ $product['brand']['title'] ?? 'N/A' }}</td>
                                 <td>{{ $product['stock'] ?? '' }}</td>
                                 <td>
-                                    <img src="{{ $product['photo'] ?? asset('backend/img/thumbnail-default.jpg') }}" alt="{{ $product['title'] ?? '' }}"
+                                    <img src="{{ $product['photo'] ?? asset('backend/img/thumbnail-default.jpg') }}"
+                                         alt="{{ $product['title'] ?? '' }}"
                                          style="max-width: 80px;">
                                 </td>
                                 <td>{{ ucfirst($product['status'] ?? '') }}</td>
                                 <td>
                                     @if(!empty($product['attributes']))
-                                        @foreach($product['attributes'] as $attributeValue)
-                                            @if(!empty($attributeValue['value']))
-                                                <strong>{{ $attributeValue['attribute']['name'] ?? $attributeValue['attribute']['label'] ?? '' }}:</strong> {{ $attributeValue['value'] }}@if(!$loop->last), @endif
-                                            @endif
-                                        @endforeach
-                                    @else
-                                        {{-- Eloquent style: fallback for $product->attributeValues --}}
-                                        @if(isset($product->attributeValues) && $product->attributeValues->count())
-                                            @foreach($product->attributeValues as $attrVal)
-                                                <strong>{{ $attrVal->attribute->name ?? $attrVal->attribute->label ?? '' }}:</strong> {{ $attrVal->value }}@if(!$loop->last), @endif
+                                        <ul class="list-unstyled mb-0">
+                                            @foreach($product['attributes'] as $attributeValue)
+                                                @php
+                                                    $attr = $attributeValue['attribute'] ?? null;
+                                                    $column = $attr['type'] ?? 'text';
+                                                    $value = $attributeValue['value'] ?? null;
+                                                @endphp
+                                                @if($attr && $value)
+                                                    <li>
+                                                        <strong>{{ $attr['name'] ?? $attr['label'] ?? '' }}:</strong> {{ $value }}
+                                                    </li>
+                                                @endif
                                             @endforeach
-                                        @else
-                                            N/A
-                                        @endif
+                                        </ul>
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('products.edit', $product['id']) }}" class="btn btn-primary btn-sm" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{ route('products.destroy', $product['id']) }}" style="display:inline-block;">
+                                    <a href="{{ route('products.edit', $product['id']) }}"
+                                       class="btn btn-sm btn-primary" data-toggle="tooltip" title="Edit"><i
+                                                class="fas fa-edit"></i></a>
+                                    <form action="{{ route('products.destroy', $product['id']) }}" method="POST"
+                                          style="display:inline-block;">
                                         @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger delete-confirm"
+                                                data-toggle="tooltip" title="Delete"><i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="15" class="text-center">No products found!</td>
+                                <td colspan="13">No products found!</td>
                             </tr>
                         @endforelse
                         </tbody>

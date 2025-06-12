@@ -25,13 +25,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Banner
  *
- * @property int                              $id
- * @property string                           $title
- * @property string                           $slug
- * @property string|null                      $description
- * @property string                           $status
- * @property Carbon|null                      $created_at
- * @property Carbon|null                      $updated_at
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string|null $description
+ * @property string $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read string|null                 $image_url
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null                    $media_count
@@ -129,6 +129,7 @@ class Banner extends Core implements HasMedia
         if ($this->max_impressions !== null && $this->current_impressions >= $this->max_impressions) {
             return false;
         }
+
         return true;
     }
 

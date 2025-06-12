@@ -30,8 +30,15 @@
                                     <li><i class="ti-user"></i> <a href="{{route('user')}}"
                                                                    target="_blank">Dashboard</a></li>
                                 @endif
-                                <li><i class="ti-power-off"></i> <a href="{{route('logout')}}">Logout</a></li>
-
+                                <li>
+                                    <i class="ti-power-off"></i>
+                                    <a href="#"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                          style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
                             @else
                                 <li><i class="ti-power-off"></i><a href="{{route('login')}}">Login /</a> <a
                                             href="{{route('register')}}">Register</a></li>
@@ -99,6 +106,7 @@
                             @endif
                             <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o"></i> <span
                                         class="total-count">{{Modules\Core\Helpers\Helper::wishlistCount()}}</span></a>
+
                             <!-- Shopping Item -->
                             @auth
                                 <div class="shopping-item">
@@ -133,6 +141,7 @@
                                     </div>
                                 </div>
                             @endauth
+
                             <!--/ End Shopping Item -->
                         </div>
                         <div class="sinlge-bar shopping">
@@ -173,6 +182,39 @@
                                 </div>
                             @endauth
                             <!--/ End Shopping Item -->
+                            <div class="compare-bar" style="position: relative; display: inline-block;">
+                                <a href="{{ route('products.compare.show') }}" class="single-icon ml-2 compare-icon"
+                                   title="Compare">
+                                    <i class="fa fa-balance-scale"></i>
+                                    @php $compareCount = count(session('compare.products', [])); @endphp
+                                    @if($compareCount > 0)
+                                        <span class="total-count">{{$compareCount}}</span>
+                                    @endif
+                                </a>
+                                <div class="shopping-item compare-dropdown"
+                                     style="display: none; position: absolute; right: 0; top: 100%; z-index: 100; min-width: 220px;">
+                                    <div class="dropdown-cart-header">
+                                        <span>{{ $compareCount }} Items</span>
+                                        <a href="{{ route('products.compare.show') }}">View Comparison</a>
+                                    </div>
+                                    <div class="bottom">
+                                        <a href="{{ route('products.compare.show') }}" class="btn animate">Go to
+                                            Comparison</a>
+                                    </div>
+                                </div>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var compareBar = document.querySelector('.compare-bar');
+                                        var dropdown = compareBar.querySelector('.compare-dropdown');
+                                        compareBar.addEventListener('mouseenter', function () {
+                                            dropdown.style.display = 'block';
+                                        });
+                                        compareBar.addEventListener('mouseleave', function () {
+                                            dropdown.style.display = 'none';
+                                        });
+                                    });
+                                </script>
+                            </div>
                         </div>
                     </div>
                 </div>

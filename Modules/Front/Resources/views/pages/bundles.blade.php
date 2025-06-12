@@ -33,18 +33,18 @@
                             @foreach($products as $product)
                                 <div class="single-post first">
                                     <div class="image">
-                                        <img src="{{$product->ImageThumbUrl}}" alt="{{$product->title}}">
+                                        <img src="{{$product->preview_image_url ?? $product->image_url}}" alt="{{$product->name}}">
                                     </div>
                                     <div class="content">
                                         <h5>
-                                            <a href="{{route('front.bundle-detail',$product->slug)}}">{{$product->title}}</a>
+                                            <a href="{{route('front.bundle-detail',$product->slug)}}">{{$product->name}}</a>
                                         </h5>
                                         @php
-                                            $org=($product->price-($product->price*$product->discount)/100);
+                                            $org = $product->price;
                                         @endphp
                                         <p class="price">
-                                            <del class="text-muted">${{number_format($product->price,2)}}</del>
-                                            ${{number_format($org,2)}}  </p>
+                                            ${{number_format($org,2)}}  
+                                        </p>
 
                                     </div>
                                 </div>
@@ -65,8 +65,8 @@
                                         <label>Sort By :</label>
                                         <select class='sortBy' name='sortBy' id='sortFilter'>
                                             <option value="">Default</option>
-                                            <option value="title"
-                                                    @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='title') selected @endif>
+                                            <option value="name"
+                                                    @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='name') selected @endif>
                                                 Name
                                             </option>
                                             <option value="price"
@@ -102,13 +102,10 @@
                                     <div class="single-product">
                                         <div class="product-img">
                                             <a href="{{route('front.bundle-detail',$product->slug)}}">
-                                                <img class="default-img" src="{{$product->imageUrl}}"
-                                                     alt="{{$product->imageUrl}}">
-                                                <img class="hover-img" src="{{$product->imageUrl}}"
-                                                     alt="{{$product->imageUrl}}">
-                                                @if($product->discount)
-                                                    <span class="price-dec">{{$product->discount}} % Off</span>
-                                                @endif
+                                                <img class="default-img" src="{{$product->preview_image_url ?? $product->image_url}}"
+                                                     alt="{{$product->name}}">
+                                                <img class="hover-img" src="{{$product->preview_image_url ?? $product->image_url}}"
+                                                     alt="{{$product->name}}">
                                             </a>
                                             <div class="button-head">
                                                 <div class="product-action">
@@ -128,14 +125,9 @@
                                         </div>
                                         <div class="product-content">
                                             <h3>
-                                                <a href="{{route('front.product-detail',$product->slug)}}">{{$product->title}}</a>
+                                                <a href="{{route('front.product-detail',$product->slug)}}">{{$product->name}}</a>
                                             </h3>
-                                            @php
-                                                $after_discount=($product->price-($product->price*$product->discount)/100);
-                                            @endphp
-                                            <span>${{number_format($after_discount,2)}}</span>
-                                            <del style="padding-left:4%;">
-                                                ${{number_format($product->price,2)}}</del>
+                                            <span>${{number_format($product->price,2)}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -178,8 +170,8 @@
                                         <div class="quickview-slider-active">
 
                                             <div class="single-slider">
-                                                <img class="default-img" src="{{$product->imageUrl}}"
-                                                     alt="{{$product->imageUrl}}">
+                                                <img class="default-img" src="{{$product->preview_image_url ?? $product->image_url}}"
+                                                     alt="{{$product->name}}">
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +179,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                     <div class="quickview-content">
-                                        <h2>{{$product->title}}</h2>
+                                        <h2>{{$product->name}}</h2>
                                         <div class="quickview-ratting-review">
                                             <div class="quickview-ratting-wrap">
                                                 <div class="quickview-ratting">
@@ -211,31 +203,24 @@
                                                 <a href="#"> ({{$rate_count}} customer review)</a>
                                             </div>
                                             <div class="quickview-stock">
-                                                @if($product->stock >0)
-                                                    <span><i class="fa fa-check-circle-o"></i> {{$product->stock}} in stock</span>
-                                                @else
-                                                    <span><i class="fa fa-times-circle-o text-danger"></i> {{$product->stock}} out stock</span>
-                                                @endif
+                                                <span><i class="fa fa-info-circle"></i> Bundle</span>
                                             </div>
                                         </div>
-                                        @php
-                                            $after_discount=($product->price-($product->price*$product->discount)/100);
-                                        @endphp
                                         <h3><small>
-                                                <del class="text-muted">${{number_format($product->price,2)}}</del>
-                                            </small> ${{number_format($after_discount,2)}}  </h3>
+                                            </small> ${{number_format($product->price,2)}}  </h3>
                                         <div class="quickview-peragraph">
-                                            <p>{!! html_entity_decode($product->summary) !!}</p>
+                                            <p>{{ $product->description ?? '' }}</p>
                                         </div>
-                                        @if($product->size)
-                                            <div class="size">
-                                                <h4>Size</h4>
-                                                <ul>
-                                                    @php
-                                                        $sizes=explode(',',$product->size);
-                                                    @endphp
-                                                    @foreach($sizes as $size)
-                                                        <li><a href="#" class="one">{{$size}}</a></li>
+                                        {{-- Attribute display for bundles (size, color, condition, etc.) --}}
+                                        @php
+                                            $attributes = collect($product->attributeValues ?? [])
+                                                ->filter(fn($val) => !empty($val->attribute));
+                                        @endphp
+                                        @if($attributes->count())
+                                            <div class="bundle-attributes">
+                                                <ul class="list-unstyled mb-0">
+                                                    @foreach($attributes as $attrVal)
+                                                        <li><strong>{{ $attrVal->attribute->name }}:</strong> {{ $attrVal->value ?? '-' }}</li>
                                                     @endforeach
                                                 </ul>
                                             </div>
@@ -245,13 +230,10 @@
                                                 <div class="col-lg-6 col-12">
                                                     <h5 class="title">Size</h5>
                                                     <select>
-                                                        @php
-                                                            $sizes=explode(',',$product->size);
-                                                            // dd($sizes);
-                                                        @endphp
-                                                        @foreach($sizes as $size)
-                                                            <option>{{$size}}</option>
-                                                        @endforeach
+                                                        <option selected="selected">orange</option>
+                                                        <option>purple</option>
+                                                        <option>black</option>
+                                                        <option>pink</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6 col-12">

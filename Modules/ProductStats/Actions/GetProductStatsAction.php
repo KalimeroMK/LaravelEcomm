@@ -1,7 +1,8 @@
 <?php
 
-namespace Modules\ProductStats\Actions;
+declare(strict_types=1);
 
+namespace Modules\ProductStats\Actions;
 
 use Modules\ProductStats\Models\ProductClick;
 use Modules\ProductStats\Models\ProductImpression;
@@ -15,6 +16,7 @@ class GetProductStatsAction
         $impressions = ProductImpression::where('product_id', $productId)
             ->count();
         $ctr = $impressions > 0 ? round($clicks / $impressions, 4) : 0;
+
         return [
             'clicks' => $clicks,
             'impressions' => $impressions,

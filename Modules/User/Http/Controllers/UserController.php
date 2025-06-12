@@ -73,10 +73,10 @@ class UserController extends Controller
         if (Auth::user() && Auth::user()->isSuperAdmin()) {
             $usersDto = $this->getAllUsersAction->execute();
             $users = $usersDto->users;
-        } elseif (!is_numeric($userId)) {
+        } elseif (! is_numeric($userId)) {
             abort(404, 'User not found.');
         } else {
-            $userDto = $this->findUserAction->execute((int)$userId);
+            $userDto = $this->findUserAction->execute((int) $userId);
             $users = [$userDto];
         }
 
@@ -131,6 +131,7 @@ class UserController extends Controller
         $roles = $this->getAllRolesAction->execute();
         $userRole = $this->getUserRolesAction->execute($user->id);
         $user = $this->findUserAction->execute($user->id);
+
         return view('user::edit', ['user' => $user, 'roles' => $roles, 'userRole' => $userRole]);
     }
 

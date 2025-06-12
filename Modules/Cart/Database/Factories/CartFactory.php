@@ -22,13 +22,13 @@ class CartFactory extends Factory
             'quantity' => $this->faker->randomNumber(),
             'amount' => $this->faker->randomFloat(),
             'product_id' => function () {
-                return Product::factory()->create()->id;
+                return Product::inRandomOrder()->first()->id;
             },
             'order_id' => function () {
                 return Order::factory()->create()->id;
             },
             'user_id' => function () {
-                return User::factory()->create()->id;
+                return User::inRandomOrder()->first()->id;
             },
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

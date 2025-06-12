@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\User\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Modules\User\Models\User;
 
 class Update extends FormRequest
 {
@@ -22,6 +21,7 @@ class Update extends FormRequest
             'password' => 'nullable|string|min:8',
             'roles' => 'sometimes|required|string|max:255',
             'confirm-password' => 'sometimes|required|string|min:8',
+            'photo' => 'nullable|image|max:2048',
         ];
     }
 }

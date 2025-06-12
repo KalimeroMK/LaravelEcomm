@@ -30,8 +30,8 @@
                     <tr>
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->order_number }}</td>
-                        <td>{{ $order->first_name }} {{ $order->last_name }}</td>
-                        <td>{{ $order->email }}</td>
+                        <td>{{ $order->user->name }} </td>
+                        <td>{{ $order->user->email }}</td>
                         <td>{{ $order->quantity }}</td>
                         <td>
                             @foreach($order->shipping ?? [] as $data)
@@ -98,10 +98,6 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Coupon</td>
-                                            <td>: ${{ number_format($order->coupon, 2) }}</td>
-                                        </tr>
-                                        <tr>
                                             <td>Total Amount</td>
                                             <td>: ${{ number_format($order->total_amount, 2) }}</td>
                                         </tr>
@@ -124,28 +120,28 @@
                                     <table class="table">
                                         <tr>
                                             <td>Full Name</td>
-                                            <td>: {{ $order->first_name }} {{ $order->last_name }}</td>
+                                            <td>: {{  $order->user->name }}</td>
                                         </tr>
                                         <tr>
                                             <td>@lang('partials.email')</td>
-                                            <td>: {{ $order->email }}</td>
+                                            <td>: {{  $order->user->email }}</td>
                                         </tr>
-                                        <tr>
-                                            <td>@lang('partials.Phone')</td>
-                                            <td>: {{ $order->phone }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('messages.address')</td>
-                                            <td>: {{ $order->address1 }}, {{ $order->address2 }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('messages.country')</td>
-                                            <td>: {{ $order->country }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('partials.code')</td>
-                                            <td>: {{ $order->post_code }}</td>
-                                        </tr>
+                                        {{--                                        <tr>--}}
+                                        {{--                                            <td>@lang('partials.Phone')</td>--}}
+                                        {{--                                            <td>: {{  $order->user->ph }}</td>--}}
+                                        {{--                                        </tr>--}}
+                                        {{--                                        <tr>--}}
+                                        {{--                                            <td>@lang('messages.address')</td>--}}
+                                        {{--                                            <td>: {{ $order->address1 }}, {{ $order->address2 }}</td>--}}
+                                        {{--                                        </tr>--}}
+                                        {{--                                        <tr>--}}
+                                        {{--                                            <td>@lang('messages.country')</td>--}}
+                                        {{--                                            <td>: {{ $order->country }}</td>--}}
+                                        {{--                                        </tr>--}}
+                                        {{--                                        <tr>--}}
+                                        {{--                                            <td>@lang('partials.code')</td>--}}
+                                        {{--                                            <td>: {{ $order->post_code }}</td>--}}
+                                        {{--                                        </tr>--}}
                                     </table>
                                 </div>
                             </div>

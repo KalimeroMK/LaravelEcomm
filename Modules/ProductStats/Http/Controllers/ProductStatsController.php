@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\ProductStats\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -21,6 +23,7 @@ class ProductStatsController extends Controller
         $repo = new ProductStatsRepository();
         $statsListDto = $repo->getProductStats($filters);
         $categories = Category::all();
+
         return view('productstats::admin.index', [
             'statsListDto' => $statsListDto,
             'categories' => $categories,
@@ -49,6 +52,7 @@ class ProductStatsController extends Controller
         $clicks = $clicksQuery->orderByDesc('created_at')->limit(30)->get();
         $statsAction = new GetProductStatsAction();
         $stats = $statsAction->execute($product->id, $from, $to);
+
         return view('productstats::admin.detail', compact('product', 'impressions', 'clicks', 'stats'));
     }
 }

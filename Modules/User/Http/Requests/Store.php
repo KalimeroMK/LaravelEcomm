@@ -20,6 +20,7 @@ class Store extends CoreRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
             'roles' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|max:2048',
         ];
     }
 }

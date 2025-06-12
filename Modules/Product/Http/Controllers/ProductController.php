@@ -52,8 +52,12 @@ class ProductController extends CoreController
     public function index(): Renderable
     {
         $productsDto = $this->getAllProductsAction->execute();
+        $hotProducts = Product::where('is_featured', true)->get();
 
-        return view('product::index', ['products' => $productsDto->products]);
+        return view('product::index', [
+            'products' => $productsDto->products,
+            'hot_products' => $hotProducts,
+        ]);
     }
 
     public function create(): Renderable

@@ -35,14 +35,7 @@ class IndexAction
             ->orderBy('id', 'desc')
             ->limit(3)
             ->get();
-
-        // Banners
-        $banners = Cache::remember('active_banners', 86400, function () {
-            return Banner::where('status', 'active')
-                ->orderBy('id', 'desc')
-                ->limit(3)
-                ->get();
-        });
+        $banners = Banner::with('categories')->get()->filter(fn ($b) => $b->isActive());
 
         return [
             'featured_products' => $featured_products,

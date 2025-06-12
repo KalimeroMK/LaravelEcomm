@@ -23,10 +23,11 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="image">
-                            @if($profile['photo'] ?? '')
+                            @php $user = Auth()->user(); @endphp
+                            @if($user && $user->getFirstMediaUrl('photo'))
                                 <img class="card-img-top img-fluid roundend-circle mt-4"
                                      style="border-radius:50%;height:80px;width:80px;margin:auto;"
-                                     src="{{$profile['photo'] ?? ''}}" alt="profile picture">
+                                     src="{{$user->getFirstMediaUrl('photo')}}" alt="profile picture">
                             @else
                                 <img class="card-img-top img-fluid roundend-circle mt-4"
                                      style="border-radius:50%;height:80px;width:80px;margin:auto;"

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\ProductStats\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
@@ -9,7 +11,5 @@ class ProductClicked
 {
     use Dispatchable;
 
-    public function __construct(public ProductClick $click)
-    {
-    }
+    public function __construct(public ProductClick $click) {}
 }

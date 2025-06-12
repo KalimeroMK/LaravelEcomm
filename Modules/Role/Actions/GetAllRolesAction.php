@@ -9,9 +9,7 @@ use Modules\Role\Repository\RoleRepository;
 
 readonly class GetAllRolesAction
 {
-    public function __construct(private RoleRepository $repository)
-    {
-    }
+    public function __construct(private RoleRepository $repository) {}
 
     public function execute(): Collection
     {

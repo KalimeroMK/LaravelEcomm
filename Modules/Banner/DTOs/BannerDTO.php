@@ -20,9 +20,7 @@ readonly class BannerDTO
         public ?int $max_clicks = null,
         public ?int $max_impressions = null,
         public array $categories = [],
-    ) {
-    }
-
+    ) {}
 
     public static function fromRequest(Request $request, ?int $id = null, ?Banner $existing = null): self
     {

@@ -42,7 +42,7 @@ class NewsletterController extends CoreController
     {
         $newslettersDto = $this->repository->findAll();
 
-        return view('newsletter::index', ['newsletters' => $newslettersDto->newsletters]);
+        return view('newsletter::index', ['newsletters' => $newslettersDto]);
     }
 
     public function create(): View

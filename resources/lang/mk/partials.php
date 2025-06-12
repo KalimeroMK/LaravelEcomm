@@ -79,5 +79,6 @@ return [
     'generate_description' => 'Генерирај опис',
     'public_key' => 'Јавен клуч',
     'secret_key' => 'Таен клуч',
+    'tags' => 'Ознаки',
 
 ];

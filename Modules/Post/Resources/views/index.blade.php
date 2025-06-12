@@ -53,11 +53,11 @@
                                 <td>{{ $post['id'] ?? '' }}</td>
                                 <td>{{ $post['title'] ?? '' }}</td>
                                 <td>
-                                    {{ isset($post['categories']) ? implode(', ', array_column($post['categories'], 'title')) : '' }}
+                                    {{ isset($post['categories']) ? (is_array($post['categories']) ? implode(', ', array_column($post['categories'], 'title')) : $post['categories']->pluck('title')->implode(', ')) : '' }}
                                 </td>
                                 <td>{{ $post['description'] ?? '' }}</td>
                                 <td>
-                                    {{ isset($post['tags']) ? implode(', ', array_column($post['tags'], 'title')) : '' }}
+                                    {{ isset($post['tags']) ? (is_array($post['tags']) ? implode(', ', array_column($post['tags'], 'title')) : $post['tags']->pluck('title')->implode(', ')) : '' }}
                                 </td>
                                 <td>{{ $post['author']['name'] ?? '' }}</td>
                                 <td>

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Kalimeromk\Filterable\app\Traits\Filterable;
+use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
@@ -33,24 +34,24 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Product
  *
- * @property int                                              $id
- * @property string                                           $title
- * @property string                                           $slug
- * @property string                                           $summary
- * @property string|null                                      $description
- * @property int                                              $stock
- * @property string                                           $status
- * @property float                                            $price
- * @property float|null                                       $discount
- * @property bool|null                                        $is_featured
- * @property int                                              $d_deal
- * @property int|null                                         $brand_id
- * @property Carbon|null                                      $created_at
- * @property Carbon|null                                      $updated_at
- * @property float|null                                       $special_price
- * @property Carbon|null                                      $special_price_start
- * @property Carbon|null                                      $special_price_end
- * @property string|null                                      $sku
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $summary
+ * @property string|null $description
+ * @property int $stock
+ * @property string $status
+ * @property float $price
+ * @property float|null $discount
+ * @property bool|null $is_featured
+ * @property int $d_deal
+ * @property int|null $brand_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property float|null $special_price
+ * @property Carbon|null $special_price_start
+ * @property Carbon|null $special_price_end
+ * @property string|null $sku
  * @property-read Collection<int, AttributeValue>             $attributeValues
  * @property-read int|null                                    $attribute_values_count
  * @property-read Brand|null                                  $brand
@@ -97,18 +98,17 @@ class Product extends Core implements HasMedia
     use HasSlug;
     use InteractsWithMedia;
 
-    public const likeRows
-        = [
-            'title',
-            'slug',
-            'summary',
-            'description',
-            'stock',
-            'status',
-            'price',
-            'discount',
-            'brand.title',
-        ];
+    public const likeRows = [
+        'title',
+        'slug',
+        'summary',
+        'description',
+        'stock',
+        'status',
+        'price',
+        'discount',
+        'brand.title',
+    ];
 
     protected $table = 'products';
 
@@ -149,7 +149,9 @@ class Product extends Core implements HasMedia
 
     public static function getProductBySlug(string $slug): ?self
     {
-        return self::with(['getReview', 'categories'])->whereSlug($slug)->firstOrFail();
+        return self::with(['getReview', 'categories', 'attributeValues.attribute'])
+            ->whereSlug($slug)
+            ->firstOrFail();
     }
 
     public static function countActiveProduct(): int
@@ -251,13 +253,34 @@ class Product extends Core implements HasMedia
         return Brand::whereIn('id', $productBrandIds)->get();
     }
 
-    public function impressions(): Product|HasMany
+    public function impressions(): self|HasMany
     {
         return $this->hasMany(ProductImpression::class, 'product_id');
     }
 
-    public function clicks(): Product|HasMany
+    public function clicks(): self|HasMany
     {
         return $this->hasMany(ProductClick::class, 'product_id');
+    }
+
+    /**
+     * Get the product's condition attribute value.
+     */
+    public function getConditionAttribute(): ?string
+    {
+        // Find the Attribute model with code 'condition'
+        $conditionAttribute = Attribute::where('code', 'condition')->first();
+        if (! $conditionAttribute) {
+            return null;
+        }
+        // Find the related AttributeValue for this product and the condition attribute
+        $conditionValue = $this->attributeValues()->where('attribute_id', $conditionAttribute->id)->first();
+        if (! $conditionValue) {
+            return null;
+        }
+        // Get the value depending on the attribute type
+        $column = $conditionAttribute->getValueColumnName();
+
+        return $conditionValue->$column ?? null;
     }
 }

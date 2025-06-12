@@ -13,7 +13,7 @@ class ProductListsAction
     public function __invoke(): array
     {
         $query = Product::query()
-            ->with(['categories', 'brand', 'condition', 'tags', 'sizes'])
+            ->with(['categories', 'brand', 'tags'])
             ->where('status', 'active');
 
         // Filter by category

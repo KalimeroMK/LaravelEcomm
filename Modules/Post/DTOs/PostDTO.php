@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Post\DTOs;
 
+use Auth;
 use Illuminate\Http\Request;
 use Modules\Post\Models\Post;
 
@@ -32,7 +33,7 @@ readonly class PostDTO
             summary: $data['summary'] ?? $post?->summary ?? '',
             description: $data['description'] ?? $post?->description,
             status: $data['status'] ?? $post?->status ?? '',
-            user_id: $request->input('user_id') ?? $post?->user_id ?? 0,
+            user_id: Auth::id() ?? $post?->user_id ?? 1,
             categories: array_filter((array) ($data['categories'] ?? [])),
             tags: array_filter((array) ($data['tags'] ?? [])),
         );
@@ -47,7 +48,7 @@ readonly class PostDTO
             summary: $data['summary'] ?? '',
             description: $data['description'] ?? null,
             status: $data['status'] ?? '',
-            user_id: $data['user_id'] ?? 0,
+            user_id: $data['user_id'] ?? 1,
             categories: array_filter((array) ($data['categories'] ?? [])),
             tags: array_filter((array) ($data['tags'] ?? [])),
         );

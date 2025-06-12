@@ -114,16 +114,15 @@ class Attribute extends Core
 
     protected $table = 'attributes';
 
-    protected $fillable
-        = [
-            'name',
-            'code',
-            'type',
-            'display',
-            'is_filterable',
-            'is_configurable',
-            'is_required',
-        ];
+    protected $fillable = [
+        'name',
+        'code',
+        'type',
+        'display',
+        'is_filterable',
+        'is_configurable',
+        'is_required',
+    ];
 
     public static function factory(): AttributeFactory
     {
@@ -137,15 +136,6 @@ class Attribute extends Core
     {
         return $this->belongsToMany(AttributeGroup::class, 'attribute_attribute_group', 'attribute_id',
             'attribute_group_id');
-    }
-
-    /**
-     * @return BelongsToMany<AttributeSet, Attribute>
-     */
-    public function sets(): BelongsToMany
-    {
-        return $this->belongsToMany(AttributeSet::class, 'attribute_attribute_set', 'attribute_id',
-            'attribute_set_id');
     }
 
     /**

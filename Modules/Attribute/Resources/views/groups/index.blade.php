@@ -4,7 +4,8 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary float-left">@lang('partials.list')</h6>
-            <a href="{{route('attribute-groups.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+            <a href="{{route('attribute-groups.create')}}" class="btn btn-primary btn-sm float-right"
+               data-toggle="tooltip"
                data-placement="bottom" title="Add Group"><i class="fas fa-plus"></i>@lang('partials.create')</a>
         </div>
         <div class="card-body">
@@ -15,7 +16,6 @@
                         <tr>
                             <th>@lang('partials.s_n')</th>
                             <th>@lang('partials.name')</th>
-                            <th>@lang('partials.description')</th>
                             <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
@@ -23,7 +23,6 @@
                         <tr>
                             <th>@lang('partials.s_n')</th>
                             <th>@lang('partials.name')</th>
-                            <th>@lang('partials.description')</th>
                             <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
@@ -32,19 +31,20 @@
                             <tr>
                                 <td>{{$group->id}}</td>
                                 <td>{{$group->name}}</td>
-                                <td>{{$group->description}}</td>
                                 <td>
                                     <a href="{{route('attribute-groups.edit',$group->id)}}"
                                        class="btn btn-primary btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{route('attribute-groups.destroy',$group->id)}}" style="display:inline;">
+                                    <form method="POST" action="{{route('attribute-groups.destroy',$group->id)}}"
+                                          style="display:inline;">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger btn-sm dltBtn"
-                                                data-id="{{$group->id}}" style="height:30px; width:30px;border-radius:50%"
+                                                data-id="{{$group->id}}"
+                                                style="height:30px; width:30px;border-radius:50%"
                                                 data-toggle="tooltip" data-placement="bottom" title="Delete"><i
-                                                class="fas fa-trash-alt"></i></button>
+                                                    class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

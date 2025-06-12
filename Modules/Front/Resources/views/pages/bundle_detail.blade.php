@@ -1,6 +1,6 @@
 @extends('front::layouts.master')
 @section('SOE')
-    <title>{{$bundle->title ?? ''}} || PRODUCT DETAIL</title>
+    <title>{{$bundle->name ?? ''}} || PRODUCT DETAIL</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name='copyright' content=''>
@@ -10,8 +10,8 @@
     <meta name="description" content="{{$bundle->description ??''}}">
     <meta property="og:url" content="{{route('front.bundle-detail',$bundle->slug ??'')}}">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="{{$bundle->title ?? ''}}">
-    <meta property="og:image" content="{{$bundle->imageUrl ?? ''}}">
+    <meta property="og:title" content="{{$bundle->name ?? ''}}">
+    <meta property="og:image" content="{{$bundle->image_url ?? ''}}">
     <meta property="og:description" content="{{$bundle->description ?? ''}}">
 @endsection
 @section('content')
@@ -45,8 +45,8 @@
                                 <div class="flexslider-thumbnails">
                                     <ul class="slides">
                                         <li data-thumb="" rel="adjustX:10, adjustY:">
-                                            <img src="{{$bundle->imageUrl}}"
-                                                 alt="{{$bundle->title}}">
+                                            <img src="{{$bundle->image_url}}"
+                                                 alt="{{$bundle->name}}">
                                         </li>
                                     </ul>
                                 </div>
@@ -207,6 +207,19 @@
                                         ad impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui
                                         nemo ipsum numquam.</p>
                                 </div>
+                                @php
+                                    $attributes = collect($data->attributeValues ?? [])
+                                        ->filter(fn($val) => !empty($val->attribute));
+                                @endphp
+                                @if($attributes->count())
+                                    <div class="product-attributes">
+                                        <ul class="list-unstyled mb-0">
+                                            @foreach($attributes as $attrVal)
+                                                <li><strong>{{ $attrVal->attribute->name }}:</strong> {{ $attrVal->value ?? '-' }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <div class="size">
                                     <div class="row">
                                         <div class="col-lg-6 col-12">

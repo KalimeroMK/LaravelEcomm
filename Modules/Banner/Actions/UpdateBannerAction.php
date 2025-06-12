@@ -26,9 +26,10 @@ readonly class UpdateBannerAction
             'max_clicks' => $dto->max_clicks,
             'max_impressions' => $dto->max_impressions,
         ]);
-        if (!empty($dto->categories)) {
+        if (! empty($dto->categories)) {
             $banner->categories()->sync($dto->categories);
         }
+
         return $banner;
     }
 }

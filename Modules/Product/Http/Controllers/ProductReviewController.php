@@ -79,7 +79,8 @@ class ProductReviewController extends CoreController
     {
         $this->authorize('update', $review);
 
-        return view('product::review.edit')->with('review', ProductReviewDTO::fromModel($review));
+        // Pass the Eloquent model, not the DTO, so the view can access $review->user->name
+        return view('product::review.edit')->with('review', $review);
     }
 
     /**
