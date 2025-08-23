@@ -18,7 +18,6 @@ readonly class BundleDTO
         public ?float $price,
         public ?array $products = [],
         public ?array $images = [],
-        public ?string $extra = null,
     ) {}
 
     public static function fromRequest(Store|Update|Request $request, ?int $id = null, ?Bundle $bundle = null): self
@@ -35,7 +34,6 @@ readonly class BundleDTO
             price: isset($data['price']) ? (float) $data['price'] : null,
             products: $data['products'] ?? [],
             images: $data['images'] ?? [],
-            extra: $data['extra'] ?? null,
         );
     }
 
@@ -48,7 +46,6 @@ readonly class BundleDTO
             $this->price,
             $this->products,
             $this->images,
-            $this->extra,
         );
     }
 
@@ -61,7 +58,6 @@ readonly class BundleDTO
             'price' => $this->price,
             'products' => $this->products,
             'images' => $this->images,
-            'extra' => $this->extra,
         ];
     }
 }

@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         Newsletter::factory()->count(20)->create();
         Setting::factory()->create();
         Complaint::factory()->count(50)->create();
-        ComplaintReply::factory()->count(50)->create();
+        \Modules\Complaint\Database\Factories\ComplaintReplaiesFactory::new()->count(50)->create();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

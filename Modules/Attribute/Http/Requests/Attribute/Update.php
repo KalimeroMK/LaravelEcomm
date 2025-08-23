@@ -24,8 +24,8 @@ class Update extends CoreRequest
         return [
             'name' => ['sometimes', 'string', Rule::unique('attributes', 'name')->ignore($attributeId)],
             'code' => ['sometimes', 'string', Rule::unique('attributes', 'code')->ignore($attributeId)],
-            'display' => ['required', 'in:input,radio,color,button,select,checkbox,multiselect'],
-            'type' => ['required', Rule::in(['text', 'boolean', 'date', 'integer', 'float', 'select'])],
+            'display' => ['sometimes', 'in:input,radio,color,button,select,checkbox,multiselect'],
+            'type' => ['sometimes', Rule::in(['url', 'hex', 'text', 'date', 'time', 'float', 'integer', 'boolean', 'decimal', 'string', 'select'])],
             'filterable' => ['sometimes', 'boolean'],
             'configurable' => ['sometimes', 'boolean'],
         ];

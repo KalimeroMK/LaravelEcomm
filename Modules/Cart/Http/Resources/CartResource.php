@@ -29,11 +29,16 @@ class CartResource extends JsonResource
             'amount' => $this->amount,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
-            'wishlists_count' => $this->wishlists_count,
+            'wishlists_count' => $this->when(
+                $this->relationLoaded('wishlists'),
+                fn() => $this->wishlists->count(),
+                0
+            ),
 
             'product_id' => $this->product_id,
             'order_id' => $this->order_id,
             'user_id' => $this->user_id,
+            'session_id' => $this->session_id,
 
             'order' => new OrderResource($this->whenLoaded('order')),
             'product' => new ProductResource($this->whenLoaded('product')),

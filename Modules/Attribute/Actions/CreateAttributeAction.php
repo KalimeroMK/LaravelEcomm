@@ -22,7 +22,6 @@ readonly class CreateAttributeAction
             'is_filterable' => $dto->is_filterable,
             'is_configurable' => $dto->is_configurable,
             'is_required' => $dto->is_required,
-            'status' => $dto->status,
         ]);
     }
 }

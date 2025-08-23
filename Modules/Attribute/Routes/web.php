@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Modules\Attribute\Http\Controllers\AttributeController;
 use Modules\Attribute\Http\Controllers\AttributeGroupController;
-use Modules\Attribute\Http\Controllers\AttributeSetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +18,3 @@ use Modules\Attribute\Http\Controllers\AttributeSetController;
 
 Route::resource('attributes', AttributeController::class)->except('shows');
 Route::resource('attribute_groups', AttributeGroupController::class);
-Route::resource('attribute-sets', AttributeSetController::class);
-Route::get('attribute-sets/{id}/attributes', [AttributeSetController::class, 'getAttributes']);

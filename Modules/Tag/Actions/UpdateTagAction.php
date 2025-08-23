@@ -14,10 +14,8 @@ readonly class UpdateTagAction
         private TagRepository $repository
     ) {}
 
-    public function execute(TagDTO $dto): Model
+    public function execute(Model $tag, TagDTO $dto): Model
     {
-        $tag = $this->repository->findById($dto->id);
-
         $tag->update([
             'title' => $dto->title,
             'slug' => $dto->slug,

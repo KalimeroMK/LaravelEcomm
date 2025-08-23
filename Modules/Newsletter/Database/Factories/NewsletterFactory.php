@@ -17,8 +17,6 @@ class NewsletterFactory extends Factory
         return [
             'email' => $this->faker->unique()->safeEmail(),
             'is_validated' => 1,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
         ];
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\Brand\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Modules\Brand\Models\Brand;
 
@@ -19,10 +18,9 @@ class BrandFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->unique(true)->title,
+            'title' => $this->faker->unique()->company,
             'slug' => 'slug-'.mb_strtoupper(Str::random(10)),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
         ];
     }
 }

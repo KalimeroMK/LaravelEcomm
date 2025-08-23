@@ -24,7 +24,11 @@ class BrandTest extends TestCase
     #[Test]
     public function test_create_brand(): TestResponse
     {
-        $data = Brand::factory()->create();
+        $data = [
+            'title' => 'Test Brand '.time(),
+            'status' => 'active',
+            'images' => [\Illuminate\Http\UploadedFile::fake()->image('brand.jpg')],
+        ];
 
         return $this->create($this->url, $data);
     }
@@ -39,6 +43,7 @@ class BrandTest extends TestCase
         $data = [
             'title' => time().'Test title1',
             'status' => 'inactive',
+            'images' => [\Illuminate\Http\UploadedFile::fake()->image('brand_update.jpg')],
         ];
 
         $id = $brand->id;

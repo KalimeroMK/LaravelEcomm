@@ -53,7 +53,6 @@ class MessageTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
             'message' => $this->faker->sentence,
-            'read_at' => $this->faker->time,
         ];
 
         $id = $message->id;

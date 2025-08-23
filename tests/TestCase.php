@@ -16,6 +16,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         Role::findOrCreate('super-admin');
+        Role::findOrCreate('client');
         $user = User::factory()->create();
         $user->assignRole('super-admin');
         $this->actingAs($user);

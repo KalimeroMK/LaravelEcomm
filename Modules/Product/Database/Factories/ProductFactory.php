@@ -32,14 +32,14 @@ class ProductFactory extends Factory
             'price' => $this->faker->randomFloat(2, 10, 9999),
             'discount' => $this->faker->randomFloat(2, 0, 1000),
             'is_featured' => $this->faker->boolean(),
-            'd_deal' => $this->faker->boolean(),
+            'd_deal' => $this->faker->numberBetween(0, 1),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'special_price' => $this->faker->randomFloat(2, 10, 9000),
             'special_price_start' => Carbon::now(),
             'special_price_end' => Carbon::now()->addDays(7),
-            'sku' => 'SKU-'.mb_strtoupper(Str::random(10)),
-            'brand_id' => Brand::inRandomOrder()->first()->id,
+            'sku' => 'SKU-' . mb_strtoupper(Str::random(10)),
+            'brand_id' => Brand::inRandomOrder()->first()?->id ?? Brand::factory()->create()->id,
         ];
     }
 
@@ -102,8 +102,10 @@ class ProductFactory extends Factory
             $attributeModels = Attribute::whereIn('code', array_keys($attributes))->get();
             foreach ($attributeModels as $attribute) {
                 $value = $attributes[$attribute->code][array_rand($attributes[$attribute->code])];
-                $column = method_exists($attribute,
-                    'getValueColumnName') ? $attribute->getValueColumnName() : 'text_value';
+                $column = method_exists(
+                    $attribute,
+                    'getValueColumnName'
+                ) ? $attribute->getValueColumnName() : 'text_value';
                 if ($column) {
                     $valueData = [
                         'product_id' => $product->id,

@@ -22,7 +22,11 @@ class TagTest extends TestCase
     #[Test]
     public function test_create_tag()
     {
-        $data = Tag::factory()->make()->toArray();
+        $data = [
+            'title' => $this->faker->unique()->word(),
+            'slug' => $this->faker->slug(),
+            'status' => 'active',
+        ];
 
         return $this->create($this->url, $data);
     }

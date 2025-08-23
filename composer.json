@@ -8,7 +8,7 @@
   ],
   "license": "MIT",
   "require": {
-    "php": "^8.2",
+    "php": "^8.4",
     "bacon/bacon-qr-code": "*",
     "barryvdh/laravel-dompdf": "*",
     "darkaonline/l5-swagger": "*",
@@ -22,7 +22,7 @@
     "lab404/laravel-impersonate": "*",
     "laravel/framework": "^12.0",
     "laravel/helpers": "*",
-    "laravel/horizon": "*",
+    "laravel/horizon": "^5.33",
     "laravel/sanctum": "*",
     "laravel/socialite": "*",
     "laravel/telescope": "*",
@@ -56,8 +56,8 @@
     "laravel/pint": "^1.13",
     "laravel/sail": "^1.41",
     "mockery/mockery": "^1.6",
-    "nunomaduro/collision": "^8.6",
-    "phpunit/phpunit": "^12.1.5",
+    "nunomaduro/collision": "^8.0",
+    "phpunit/phpunit": "^12.0",
     "rector/rector": "^2.0.10",
     "reliese/laravel": "^1.4"
   },
@@ -77,7 +77,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "Tests\\": "tests/",
+      "Modules\\": "Modules/"
     }
   },
   "files": [

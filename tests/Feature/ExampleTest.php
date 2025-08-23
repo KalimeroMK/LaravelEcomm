@@ -15,6 +15,7 @@ class ExampleTest extends TestCase
      */
     public function test_basic_test()
     {
+        // The root route '/' exists and returns 200
         $response = $this->get('/');
 
         $response->assertStatus(200);

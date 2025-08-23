@@ -27,7 +27,19 @@ class ProductTest extends TestCase
     #[Test]
     public function test_create_product(): TestResponse
     {
-        $data = Product::factory()->make()->toArray();
+        $data = [
+            'title' => $this->faker->word(),
+            'slug' => $this->faker->slug(),
+            'summary' => $this->faker->text(),
+            'description' => $this->faker->text(),
+            'stock' => $this->faker->numberBetween(0, 100),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'price' => $this->faker->randomFloat(2, 10, 9999),
+            'discount' => $this->faker->randomFloat(2, 0, 1000),
+            'is_featured' => $this->faker->boolean(),
+            'd_deal' => $this->faker->numberBetween(0, 1),
+            'sku' => 'SKU-' . mb_strtoupper(Str::random(10)),
+        ];
 
         return $this->create($this->url, $data);
     }
@@ -41,7 +53,7 @@ class ProductTest extends TestCase
         $id = Product::factory()->create()->id;
         $data = [
             'title' => $this->faker->word,
-            'sku' => 'SKU-'.mb_strtoupper(Str::random(10)),
+            'sku' => 'SKU-' . mb_strtoupper(Str::random(10)),
         ];
 
         return $this->updatePUT($this->url, $data, $id);

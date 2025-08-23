@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Testing\TestResponse;
 use Modules\Cart\Models\Cart;
@@ -16,9 +17,23 @@ use Tests\TestCase;
 class CartTest extends TestCase
 {
     use BaseTestTrait;
+    use RefreshDatabase;
     use WithoutMiddleware;
 
     public string $url = '/api/v1/carts';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Create a super-admin user and authenticate
+        $this->user = User::factory()->create();
+        $this->user->assignRole('super-admin');
+        $this->actingAs($this->user);
+    }
+
+    /** @var User */
+    private $user;
 
     /**
      * test create product.
@@ -27,13 +42,10 @@ class CartTest extends TestCase
     public function test_create_cart(): TestResponse
     {
         $product = Product::factory()->create();
+        $user = User::factory()->create();
 
         $data = [
             'slug' => $product->slug,
-            'user_id' => User::factory()->create()->id,
-            'product_id' => $product->id,
-            'price' => ($product->price - ($product->price * $product->discount) / 100),
-            'amount' => ($product->price - ($product->price * $product->discount) / 100) * 14,
             'quantity' => 5,
         ];
 
@@ -47,14 +59,12 @@ class CartTest extends TestCase
     public function test_update_cart(): TestResponse
     {
         $product = Product::factory()->create();
-        $user = User::factory()->create()->id;
-        $id = Cart::factory()->create(['product_id' => $product->id, 'user_id' => $user])->id;
+        $user = User::factory()->create();
+        $id = Cart::factory()->create(['product_id' => $product->id, 'user_id' => $user->id])->id;
+
         $data = [
             'slug' => $product->slug,
-            'product_id' => $product->id,
-            'price' => 2000,
             'quantity' => 5,
-            'user_id' => $user,
         ];
 
         return $this->updatePUT($this->url, $data, $id);
@@ -119,6 +129,7 @@ class CartTest extends TestCase
                         'product_id',
                         'order_id',
                         'user_id',
+                        'session_id',
                     ],
                 ],
 

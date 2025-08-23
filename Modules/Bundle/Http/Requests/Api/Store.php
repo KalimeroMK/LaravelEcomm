@@ -16,7 +16,7 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => ['required|string|max:50'],
+            'name' => ['required', 'string', 'max:50'],
             'description' => ['nullable'],
             'price' => ['required', 'numeric'],
             'products' => 'required|array',

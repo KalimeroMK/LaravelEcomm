@@ -20,7 +20,7 @@ class Store extends CoreRequest
             'quantity' => ['required', 'integer'],
             'payment_method' => ['required'],
             'payment_status' => ['required'],
-            'status' => ['required', Rule::in(['new', 'process', 'delivered', 'cancel'])],
+            'status' => ['required', Rule::in(['pending', 'processing', 'shipped', 'delivered', 'cancelled'])],
             'payer_id' => ['nullable'],
             'transaction_reference' => ['nullable'],
 

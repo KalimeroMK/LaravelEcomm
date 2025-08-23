@@ -27,8 +27,16 @@ class OrderResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'cart_info_count' => $this->cart_info_count,
-            'carts_count' => $this->carts_count,
+            'cart_info_count' => $this->when(
+                $this->relationLoaded('carts'),
+                fn() => $this->carts->count(),
+                0
+            ),
+            'carts_count' => $this->when(
+                $this->relationLoaded('carts'),
+                fn() => $this->carts->count(),
+                0
+            ),
             'user' => UserResource::make($this->whenLoaded('user')),
             'shipping' => new ShippingResource($this->whenLoaded('shipping')),
             'carts' => CartResource::collection($this->whenLoaded('carts')),

@@ -22,7 +22,7 @@ readonly class ProductDTO
         public ?bool $is_featured = null,
         public ?int $d_deal = null,
         public ?int $brand_id = null,
-        public ?int $attribute_set_id = null,
+
         public ?string $sku = null,
         public ?float $special_price = null,
         public ?string $special_price_start = null,
@@ -72,7 +72,7 @@ readonly class ProductDTO
             is_featured: isset($data['is_featured']) ? (bool) $data['is_featured'] : $existing?->is_featured,
             d_deal: isset($data['d_deal']) ? (int) $data['d_deal'] : $existing?->d_deal,
             brand_id: isset($data['brand_id']) ? (int) $data['brand_id'] : $existing?->brand_id,
-            attribute_set_id: isset($data['attribute_set_id']) ? (int) $data['attribute_set_id'] : $existing?->attribute_set_id,
+
             sku: $data['sku'] ?? $existing?->sku,
             special_price: isset($specialPrice) ? (float) $specialPrice : null,
             special_price_start: $data['special_price_start'] ?? $existing?->special_price_start?->toDateTimeString(),
@@ -105,7 +105,7 @@ readonly class ProductDTO
             is_featured: isset($data['is_featured']) ? (bool) $data['is_featured'] : null,
             d_deal: isset($data['d_deal']) ? (int) $data['d_deal'] : null,
             brand_id: isset($data['brand_id']) ? (int) $data['brand_id'] : null,
-            attribute_set_id: isset($data['attribute_set_id']) ? (int) $data['attribute_set_id'] : null,
+
             sku: $data['sku'] ?? null,
             special_price: isset($specialPrice) ? (float) $specialPrice : null,
             special_price_start: $data['special_price_start'] ?? null,

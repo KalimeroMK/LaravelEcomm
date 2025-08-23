@@ -10,10 +10,28 @@ services:
       - ./:/var/www
       - ./.docker/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./.docker/php/conf.d/performance.ini:/usr/local/etc/php/conf.d/performance.ini
     networks:
       - laravelapp
     ports:
       - "8000:8000"
+    healthcheck:
+      test: ["CMD", "php", "artisan", "--version"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      - PHP_OPCACHE_ENABLE=1
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=128
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=4000
+      - PHP_OPCACHE_REVALIDATE_FREQ=2
+
   db:
     image: mariadb:latest
     container_name: e_comm_mysql
@@ -23,45 +41,89 @@ services:
       MYSQL_USER: homestead
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
+      MYSQL_INNODB_BUFFER_POOL_SIZE: 256M
+      MYSQL_INNODB_LOG_FILE_SIZE: 64M
+      MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT: 2
+      MYSQL_QUERY_CACHE_SIZE: 32M
+      MYSQL_QUERY_CACHE_TYPE: 1
+      MARIADB_AUTO_UPGRADE: 1
     volumes:
       - mysql_data:/var/lib/mysql
       - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./.docker/mysql/init:/docker-entrypoint-initdb.d
     networks:
       - laravelapp
     ports:
-      - "3306:3306"
+      - "3311:3306"
+
+
   nginx:
-    image: nginx:latest
+    image: nginx:alpine
     container_name: e_comm_nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "90:80"
     volumes:
       - ./:/var/www
-      - ./.docker/nginx:/etc/nginx/conf.d
     networks:
       - laravelapp
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost/" ]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
       retries: 3
       start_period: 5s
       timeout: 10s
+    depends_on:
+      app:
+        condition: service_healthy
+
   redis:
-    image: redis:latest
+    image: redis:alpine
     container_name: e_comm_redis
     restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     networks:
       - laravelapp
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      retries: 3
+      start_period: 5s
+      timeout: 10s
+
+  elasticsearch:
+    image: elasticsearch:8.11.0
+    container_name: e_comm_elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - laravelapp
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      retries: 3
+      start_period: 60s
+      timeout: 10s
+
 networks:
   laravelapp:
     driver: bridge
+
 volumes:
   mysql_data:
     driver: local
   redis_data:
+    driver: local
+  elasticsearch_data:
     driver: local

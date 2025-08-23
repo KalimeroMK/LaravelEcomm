@@ -10,10 +10,8 @@ readonly class DeleteTagAction
 {
     public function __construct(private TagRepository $repository) {}
 
-    public function execute(int $id): JsonResponse
+    public function execute(int $id): void
     {
         $this->repository->destroy($id);
-
-        return response()->json();
     }
 }

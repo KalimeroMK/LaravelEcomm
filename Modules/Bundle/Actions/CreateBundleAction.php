@@ -18,7 +18,6 @@ readonly class CreateBundleAction
             'name' => $dto->name,
             'description' => $dto->description,
             'price' => $dto->price,
-            'extra' => $dto->extra,
         ]);
     }
 }

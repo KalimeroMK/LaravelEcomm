@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Testing\TestResponse;
 use Modules\Cart\Models\Cart;
 use Modules\Order\Models\Order;
+use Modules\Shipping\Models\Shipping;
+use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
 use Tests\TestCase;
@@ -27,7 +29,12 @@ class OrderTest extends TestCase
     #[Test]
     public function test_create_order(): TestResponse
     {
-        $data = Order::factory()->make()->toArray();
+        $data = Order::factory()->make([
+            'user_id' => User::factory()->create()->id,
+            'shipping_id' => Shipping::factory()->create()->id,
+            'status' => 'pending',
+            'payment_status' => 'pending'
+        ])->toArray();
 
         return $this->create($this->url, $data);
     }
@@ -39,7 +46,12 @@ class OrderTest extends TestCase
     public function test_update_order(): TestResponse
     {
         $order = Order::factory()->create();
-        $data = Order::factory()->make()->toArray();
+        $data = Order::factory()->make([
+            'user_id' => $order->user_id,
+            'shipping_id' => $order->shipping_id,
+            'status' => 'pending',
+            'payment_status' => 'pending'
+        ])->toArray();
         $id = $order->id;
 
         return $this->updatePUT($this->url, $data, $id);
@@ -116,7 +128,6 @@ class OrderTest extends TestCase
                         'id',
                         'name',
                         'email',
-                        'photo',
                         'status',
                     ],
                     'shipping' => [

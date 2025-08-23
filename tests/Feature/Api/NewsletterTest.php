@@ -64,7 +64,7 @@ class NewsletterTest extends TestCase
         $message = Message::factory()->create();
         $id = $message->id;
 
-        return $this->destroy($this->url, $id);
+        return $this->destroy('/api/v1/messages', $id);
     }
 
     #[Test]

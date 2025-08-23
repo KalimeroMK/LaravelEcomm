@@ -6,6 +6,7 @@ namespace Modules\Cart\DTOs;
 
 use Illuminate\Http\Request;
 use Modules\Cart\Models\Cart;
+use Modules\Product\Models\Product;
 
 readonly class CartDTO
 {
@@ -24,14 +25,35 @@ readonly class CartDTO
     {
         $data = $request->validated();
 
+        // Get product_id from slug if slug is provided
+        $product_id = $data['product_id'] ?? null;
+        if (isset($data['slug']) && !$product_id) {
+            $product = Product::where('slug', $data['slug'])->first();
+            $product_id = $product?->id;
+        }
+
+        // Auto-calculate price and amount from product if not provided
+        $price = $data['price'] ?? $existing?->price;
+        $quantity = $data['quantity'] ?? $existing?->quantity ?? 1;
+        $amount = $data['amount'] ?? $existing?->amount;
+
+        if (!$price && $product_id) {
+            $product = Product::find($product_id);
+            $price = $product?->price;
+        }
+
+        if (!$amount && $price && $quantity) {
+            $amount = $price * $quantity;
+        }
+
         return new self(
             $id,
-            $data['product_id'] ?? $existing?->product_id,
-            $data['quantity'] ?? $existing?->quantity,
-            $data['user_id'] ?? $existing?->user_id,
-            $data['price'] ?? $existing?->price,
-            $data['session_id'] ?? $existing?->session_id,
-            $data['amount'] ?? $existing?->amount,
+            $product_id ?? $existing?->product_id,
+            $quantity,
+            $data['user_id'] ?? $existing?->user_id ?? auth()->id(),
+            $price,
+            $data['session_id'] ?? $existing?->session_id ?? session()->getId(),
+            $amount,
             $data['order_id'] ?? $existing?->order_id,
         );
     }

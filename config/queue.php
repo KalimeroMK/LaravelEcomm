@@ -59,7 +59,7 @@ return [
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'prefix' => env('SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
-            'queue' => env('SQS_QUEUE', 'default'),
+            'queue' => env('SQS_QUEUE', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
             'suffix' => env('SQS_SUFFIX'),
             'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
             'after_commit' => false,
@@ -97,18 +97,31 @@ return [
     | Failed Queue Jobs
     |--------------------------------------------------------------------------
     |
-    | These options configure the behavior of failed queue job logging so you
+    | These options configure the behavior of failed job logging so you
     | can control how and where failed jobs are stored. Laravel ships with
     | support for storing failed jobs in a simple file or in a database.
-    |
-    | Supported drivers: "database-uuids", "dynamodb", "file", "null"
     |
     */
 
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
+        'driver' => env('QUEUE_FAILED_DRIVER', 'database'),
         'database' => env('DB_CONNECTION', 'sqlite'),
         'table' => 'failed_jobs',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Queue Priority Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Define queue priorities for different types of jobs
+    |
+    */
+
+    'priorities' => [
+        'high' => ['emails', 'notifications', 'payments'],
+        'default' => ['default', 'general'],
+        'low' => ['optimization', 'cleanup', 'reports'],
     ],
 
 ];

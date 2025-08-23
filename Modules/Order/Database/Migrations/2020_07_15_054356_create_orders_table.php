@@ -21,8 +21,8 @@ return new class extends Migration
             $table->float('total_amount');
             $table->integer('quantity');
             $table->enum('payment_method', ['cod', 'paypal', 'stripe'])->default('cod');
-            $table->enum('payment_status', ['paid', 'unpaid'])->default('paid');
-            $table->enum('status', ['new', 'process', 'delivered', 'cancel'])->default('new');
+            $table->enum('payment_status', ['pending', 'paid', 'unpaid'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
             $table->string('payer_id')->nullable();
             $table->string('transaction_reference')->nullable();
             $table->timestamps();

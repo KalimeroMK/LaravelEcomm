@@ -36,17 +36,49 @@ class PostResource extends JsonResource
                 });
             }),
             'tags' => $this->tags,
-            'post_cat_id' => $this->post_cat_id,
+            'post_cat_id' => $this->when(
+                $this->relationLoaded('categories') && $this->categories->isNotEmpty(),
+                fn() => $this->categories->first()->id ?? null,
+                null
+            ),
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'all_comments_count' => $this->all_comments_count,
-            'fpost_comments_count' => $this->fpost_comments_count,
-            'post_comments_count' => $this->post_comments_count,
-            'categories_count' => $this->categories_count,
-            'comments_count' => $this->comments_count,
-            'post_tag_count' => $this->post_tag_count,
-            'added_by' => $this->added_by,
+            'all_comments_count' => $this->when(
+                $this->relationLoaded('comments'),
+                fn() => $this->comments->count(),
+                0
+            ),
+            'fpost_comments_count' => $this->when(
+                $this->relationLoaded('comments'),
+                fn() => $this->comments->where('type', 'fpost')->count(),
+                0
+            ),
+            'post_comments_count' => $this->when(
+                $this->relationLoaded('comments'),
+                fn() => $this->comments->where('type', 'post')->count(),
+                0
+            ),
+            'categories_count' => $this->when(
+                $this->relationLoaded('categories'),
+                fn() => $this->categories->count(),
+                0
+            ),
+            'comments_count' => $this->when(
+                $this->relationLoaded('comments'),
+                fn() => $this->comments->count(),
+                0
+            ),
+            'post_tag_count' => $this->when(
+                $this->relationLoaded('tags'),
+                fn() => $this->tags->count(),
+                0
+            ),
+            'added_by' => $this->when(
+                $this->relationLoaded('user'),
+                fn() => $this->user->name ?? null,
+                null
+            ),
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
         ];
     }

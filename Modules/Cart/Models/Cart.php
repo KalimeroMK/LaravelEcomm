@@ -71,6 +71,7 @@ class Cart extends Core
             'price' => 'float',
             'quantity' => 'int',
             'amount' => 'float',
+            'session_id' => 'string',
         ];
 
     protected $fillable
@@ -82,6 +83,7 @@ class Cart extends Core
             'status',
             'quantity',
             'amount',
+            'session_id',
         ];
 
     public static function Factory(): CartFactory

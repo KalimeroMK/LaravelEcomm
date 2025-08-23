@@ -44,8 +44,10 @@ class PostController extends CoreController
 
         $dto = PostDTO::fromRequest($request);
         $post = $this->createAction->execute($dto);
-        SyncRelations::execute($post,
-            ['categories' => $dto->categories, 'tags' => $dto->tags, 'author' => $dto->author]);
+        SyncRelations::execute(
+            $post,
+            ['categories' => $dto->categories, 'tags' => $dto->tags]
+        );
         MediaUploader::uploadMultiple($post, ['images'], 'post');
 
         return $this
@@ -68,8 +70,10 @@ class PostController extends CoreController
         $existingPost = $this->authorizeFromRepo(PostRepository::class, 'update', $id);
         $dto = PostDTO::fromRequest($request, $id, $existingPost);
         $post = $this->updateAction->execute($dto);
-        SyncRelations::execute($post,
-            ['categories' => $dto->categories, 'tags' => $dto->tags, 'author' => $dto->author]);
+        SyncRelations::execute(
+            $post,
+            ['categories' => $dto->categories, 'tags' => $dto->tags]
+        );
         /** @var Post $post */
         MediaUploader::clearAndUpload($post, ['images'], 'post');
 

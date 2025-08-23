@@ -18,21 +18,20 @@ class CartFactory extends Factory
     public function definition(): array
     {
         return [
-            'price' => $this->faker->randomFloat(),
-            'quantity' => $this->faker->randomNumber(),
-            'amount' => $this->faker->randomFloat(),
+            'price' => $this->faker->randomFloat(2, 10, 1000),
+            'quantity' => $this->faker->numberBetween(1, 10),
+            'amount' => $this->faker->randomFloat(2, 10, 1000),
             'product_id' => function () {
-                return Product::inRandomOrder()->first()->id;
+                return Product::factory()->create()->id;
             },
-            'order_id' => function () {
-                return Order::factory()->create()->id;
-            },
+            'order_id' => null, // Don't create order for every cart
             'user_id' => function () {
-                return User::inRandomOrder()->first()->id;
+                return User::factory()->create()->id;
             },
+            'session_id' => $this->faker->uuid(),
+            'status' => 'new',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
         ];
     }
 }

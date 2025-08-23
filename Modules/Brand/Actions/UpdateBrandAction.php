@@ -19,7 +19,7 @@ readonly class UpdateBrandAction
         $brand->update([
             'title' => $dto->title,
             'slug' => $dto->slug ?? $brand->slug,
-            'status' => $dto->status,
+            'status' => $dto->status ?? $brand->status,
         ]);
 
         return $brand;

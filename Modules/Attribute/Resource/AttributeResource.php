@@ -24,11 +24,10 @@ class AttributeResource extends JsonResource
             'code' => $this->code,
             'type' => $this->type,
             'display' => $this->display,
-            'filterable' => $this->filterable,
-            'configurable' => $this->configurable,
+            'filterable' => $this->is_filterable,
+            'configurable' => $this->is_configurable,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
-            'values_count' => $this->when($this->values_count !== null, $this->values_count),
         ];
     }
 }

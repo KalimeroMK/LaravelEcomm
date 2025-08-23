@@ -18,7 +18,6 @@ readonly class AttributeDTO
         public bool $is_required = false,
         public bool $is_filterable = false,
         public bool $is_configurable = false,
-        public ?string $status = null,
         public ?string $created_at = null,
         public ?string $updated_at = null,
     ) {}
@@ -34,9 +33,8 @@ readonly class AttributeDTO
             $data['type'] ?? $existing?->type,
             $data['display'] ?? $existing?->display,
             (bool) ($data['is_required'] ?? $existing?->is_required ?? false),
-            (bool) ($data['is_filterable'] ?? $existing?->is_filterable ?? false),
-            (bool) ($data['is_configurable'] ?? $existing?->is_configurable ?? false),
-            $data['status'] ?? $existing?->status,
+            (bool) ($data['filterable'] ?? $data['is_filterable'] ?? $existing?->is_filterable ?? false),
+            (bool) ($data['configurable'] ?? $data['is_configurable'] ?? $existing?->is_configurable ?? false),
             $existing?->created_at?->toDateTimeString(),
             $existing?->updated_at?->toDateTimeString(),
         );
@@ -53,7 +51,6 @@ readonly class AttributeDTO
             $attribute->is_required,
             $attribute->is_filterable,
             $attribute->is_configurable,
-            $attribute->status,
             $attribute->created_at?->toDateTimeString(),
             $attribute->updated_at?->toDateTimeString(),
         );

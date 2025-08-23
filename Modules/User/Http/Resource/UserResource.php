@@ -17,8 +17,11 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'photo' => $this->photo,
-            'status' => $this->status,
+            'photo' => $this->when(
+                $this->relationLoaded('media') || isset($this->photo),
+                $this->photo ?? null
+            ),
+            'status' => $this->status ?? 'active',
         ];
     }
 }

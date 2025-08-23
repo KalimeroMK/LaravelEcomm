@@ -20,7 +20,6 @@ readonly class UpdateBundleAction
             'name' => $dto->name,
             'description' => $dto->description,
             'price' => $dto->price,
-            'extra' => $dto->extra,
         ]);
 
         return $bundle;

@@ -7,6 +7,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\AttributeGroup;
 use Modules\Attribute\Models\Policies\AttributeGroupPolicy;
 use Modules\Attribute\Models\Policies\AttributePolicy;
 use Modules\Banner\Models\Banner;
@@ -50,7 +51,6 @@ use Modules\Tenant\Models\Policy\TenantPolicy;
 use Modules\Tenant\Models\Tenant;
 use Modules\User\Models\Policies\UserPolicy;
 use Modules\User\Models\User;
-use PhpParser\Node\AttributeGroup;
 use Spatie\Permission\Models\Permission;
 
 class PolicyServiceProvider extends ServiceProvider

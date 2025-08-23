@@ -32,7 +32,7 @@ class CategoryController extends CoreController
     {
         $this->authorize('viewAny', Category::class);
 
-        return CategoryResource::collection($this->repository->all());
+        return CategoryResource::collection($this->repository->findAll());
     }
 
     /**

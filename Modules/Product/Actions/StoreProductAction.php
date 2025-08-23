@@ -26,7 +26,7 @@ readonly class StoreProductAction
             'is_featured' => $dto->is_featured,
             'd_deal' => $dto->d_deal,
             'brand_id' => $dto->brand_id,
-            'attribute_set_id' => $dto->attribute_set_id,
+
             'sku' => $dto->sku,
             'special_price' => $dto->special_price,
             'special_price_start' => $dto->special_price_start,

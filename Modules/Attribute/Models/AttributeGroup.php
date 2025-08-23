@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Modules\Attribute\Database\Factories\AttributeGroupFactory;
 
@@ -45,10 +45,10 @@ class AttributeGroup extends Model
     }
 
     /**
-     * @return HasMany<Attribute, AttributeGroup>
+     * @return BelongsToMany<Attribute, AttributeGroup>
      */
-    public function attributes(): HasMany
+    public function attributes(): BelongsToMany
     {
-        return $this->hasMany(Attribute::class);
+        return $this->belongsToMany(Attribute::class, 'attribute_attribute_group', 'attribute_group_id', 'attribute_id');
     }
 }

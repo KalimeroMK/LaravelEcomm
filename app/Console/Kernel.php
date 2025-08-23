@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         ProductNewsletterCommand::class,
         PostNewsletterCommand::class,
         StockNotifyCommand::class,
+        \App\Console\Commands\RunEcommerceTests::class,
 
     ];
 
@@ -35,6 +36,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('newsletter:post')->weekly();
         $schedule->command('stock:notify')->daily()->onQueue('default');
 
+        // Front Module Performance Optimization
+        $schedule->command('front:optimize --force')
+            ->everyFifteenMinutes()
+            ->withoutOverlapping()
+            ->onQueue('optimization')
+            ->runInBackground();
     }
 
     /**
@@ -42,7 +49,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

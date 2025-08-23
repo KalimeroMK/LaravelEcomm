@@ -21,8 +21,8 @@ class ComplaintFactory extends Factory
             'description' => $this->faker->text(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'user_id' => User::inRandomOrder()->first(),
-            'order_id' => Order::inRandomOrder()->first(),
+            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory()->create()->id,
+            'order_id' => Order::inRandomOrder()->first()?->id ?? Order::factory()->create()->id,
         ];
     }
 }

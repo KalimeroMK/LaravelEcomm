@@ -1,9 +1,9 @@
 # Stage 1: Build dependencies
-FROM php:8.3-fpm-alpine AS builder
+FROM php:8.4-fpm-alpine AS builder
 
 # Install system dependencies
 RUN apk add --no-cache \
-    git curl nano unzip bash zip nodejs npm \
+    git curl nano unzip bash zip \
     libpng-dev libjpeg-turbo-dev freetype-dev \
     libxml2-dev oniguruma-dev libzip-dev \
     icu-dev g++ make autoconf libpng libjpeg freetype libzip \
@@ -26,7 +26,7 @@ WORKDIR /var/www
 RUN id -u www-data &>/dev/null || adduser -D -u 1000 -G www-data www-data
 
 # Stage 2: Final image (Minimal)
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 # Install runtime dependencies (ова е клучно за правилно работење)
 RUN apk add --no-cache libpng libjpeg freetype libzip icu redis
@@ -34,8 +34,6 @@ RUN apk add --no-cache libpng libjpeg freetype libzip icu redis
 # Copy built dependencies from builder
 COPY --from=builder /usr/local /usr/local
 COPY --from=builder /usr/bin/composer /usr/bin/composer
-COPY --from=builder /usr/bin/node /usr/bin/node
-COPY --from=builder /usr/bin/npm /usr/bin/npm
 
 # Enable Redis PHP extension
 RUN docker-php-ext-enable redis

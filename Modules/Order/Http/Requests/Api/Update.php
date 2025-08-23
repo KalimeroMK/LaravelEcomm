@@ -19,7 +19,7 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::in(['new', 'process', 'delivered', 'cancel'])],
+            'status' => ['required', Rule::in(['pending', 'processing', 'shipped', 'delivered', 'cancelled'])],
         ];
     }
 }

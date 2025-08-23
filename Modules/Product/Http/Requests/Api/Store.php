@@ -17,6 +17,7 @@ class Store extends CoreRequest
     {
         return [
             'title' => 'string|required',
+            'slug' => 'nullable|string|unique:products,slug',
             'summary' => 'string|required',
             'description' => 'string|nullable',
             'sku' => 'nullable|string|unique:products,sku',
@@ -27,9 +28,13 @@ class Store extends CoreRequest
             'stock' => 'required|numeric',
             'brand_id' => 'nullable|exists:brands,id',
             'is_featured' => 'sometimes|boolean',
+            'd_deal' => 'nullable|numeric',
             'status' => 'required|in:active,inactive',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
+            'special_price' => 'nullable|numeric',
+            'special_price_start' => 'nullable|date',
+            'special_price_end' => 'nullable|date',
         ];
     }
 }
