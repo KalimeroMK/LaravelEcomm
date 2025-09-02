@@ -39,6 +39,13 @@ Route::get('/bundle', [FrontController::class, 'bundles'])->name('front.bundles'
 Route::get('/bundle/{slug}', [FrontController::class, 'bundleDetail'])->name('front.bundle-detail');
 Route::get('/page/{slug}', [FrontController::class, 'pages'])->name('front.pages');
 
+// Advanced Search and Recommendations Routes
+Route::get('/advanced-search', [FrontController::class, 'advancedSearch'])->name('front.advanced-search');
+Route::get('/search-suggestions', [FrontController::class, 'searchSuggestions'])->name('front.search-suggestions');
+Route::get('/recommendations', [FrontController::class, 'recommendations'])->name('front.recommendations');
+Route::get('/related-products/{slug}', [FrontController::class, 'relatedProducts'])->name('front.related-products');
+Route::get('/enhanced-wishlist', [FrontController::class, 'enhancedWishlist'])->name('front.enhanced-wishlist');
+
 // NewsLetter
 Route::post('/subscribe', [Modules\Front\Http\Controllers\Api\FrontController::class, 'subscribe'])->name('subscribe');
 Route::get('/validation/{token}', [FrontController::class, 'verifyNewsletter'])->name('validation');

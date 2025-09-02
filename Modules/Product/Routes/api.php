@@ -13,7 +13,21 @@ declare(strict_types=1);
 |
 */
 
+use Illuminate\Support\Facades\Route;
 use Modules\Product\Http\Controllers\Api\ProductController;
+use Modules\Product\Http\Controllers\Api\AdvancedSearchController;
 
 Route::apiResource('product', ProductController::class);
 Route::apiResource('products', ProductController::class);
+
+// Advanced Search and Recommendations Routes
+Route::prefix('search')->group(function () {
+    Route::post('/', [AdvancedSearchController::class, 'search'])->name('search.advanced');
+    Route::get('/suggestions', [AdvancedSearchController::class, 'suggestions'])->name('search.suggestions');
+    Route::get('/filters', [AdvancedSearchController::class, 'filters'])->name('search.filters');
+});
+
+Route::prefix('recommendations')->group(function () {
+    Route::get('/', [AdvancedSearchController::class, 'recommendations'])->name('recommendations.index');
+    Route::get('/related/{productId}', [AdvancedSearchController::class, 'relatedProducts'])->name('recommendations.related');
+});

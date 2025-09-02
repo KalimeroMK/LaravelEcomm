@@ -1,0 +1,267 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\Product\Services;
+
+use Illuminate\Support\Collection;
+use Modules\Product\Models\Product;
+use Modules\ProductStats\Models\ProductClick;
+use Modules\ProductStats\Models\ProductImpression;
+use Modules\User\Models\User;
+use OpenAI\Laravel\Facades\OpenAI;
+
+class RecommendationService
+{
+    /**
+     * Get AI-powered product recommendations for a user
+     */
+    public function getAIRecommendations(User $user, int $limit = 10): Collection
+    {
+        // Get user's browsing and purchase history
+        $userBehavior = $this->analyzeUserBehavior($user);
+
+        // Generate AI recommendations
+        $recommendations = $this->generateAIRecommendations($userBehavior);
+
+        // Get recommended products
+        return $this->getRecommendedProducts($recommendations, $limit);
+    }
+
+    /**
+     * Get collaborative filtering recommendations
+     */
+    public function getCollaborativeRecommendations(User $user, int $limit = 10): Collection
+    {
+        // Find users with similar behavior
+        $similarUsers = $this->findSimilarUsers($user);
+
+        // Get products liked by similar users
+        $recommendedProductIds = $this->getProductsFromSimilarUsers($similarUsers, $user);
+
+        return Product::whereIn('id', $recommendedProductIds)
+            ->where('status', 'active')
+            ->where('stock', '>', 0)
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get content-based recommendations
+     */
+    public function getContentBasedRecommendations(Product $product, int $limit = 10): Collection
+    {
+        return Product::where('id', '!=', $product->id)
+            ->where('status', 'active')
+            ->where('stock', '>', 0)
+            ->where(function ($query) use ($product) {
+                $query->where('brand_id', $product->brand_id)
+                    ->orWhereHas('categories', function ($q) use ($product) {
+                        $q->whereIn('id', $product->categories->pluck('id'));
+                    })
+                    ->orWhereHas('tags', function ($q) use ($product) {
+                        $q->whereIn('id', $product->tags->pluck('id'));
+                    });
+            })
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get trending products
+     */
+    public function getTrendingProducts(int $limit = 10): Collection
+    {
+        $trendingProductIds = ProductClick::selectRaw('product_id, COUNT(*) as click_count')
+            ->where('created_at', '>=', now()->subDays(7))
+            ->groupBy('product_id')
+            ->orderByDesc('click_count')
+            ->limit($limit)
+            ->pluck('product_id');
+
+        return Product::whereIn('id', $trendingProductIds)
+            ->where('status', 'active')
+            ->where('stock', '>', 0)
+            ->get();
+    }
+
+    /**
+     * Analyze user behavior for AI recommendations
+     */
+    protected function analyzeUserBehavior(User $user): array
+    {
+        $clicks = ProductClick::where('user_id', $user->id)
+            ->with('product')
+            ->get();
+
+        $impressions = ProductImpression::where('user_id', $user->id)
+            ->with('product')
+            ->get();
+
+        $cartItems = $user->carts()->with('product')->get();
+        $wishlistItems = $user->wishlists()->with('product')->get();
+
+        return [
+            'viewed_categories' => $clicks->pluck('product.category_id')->filter()->countBy()->toArray(),
+            'viewed_brands' => $clicks->pluck('product.brand_id')->filter()->countBy()->toArray(),
+            'price_range' => [
+                'min' => $clicks->pluck('product.price')->min(),
+                'max' => $clicks->pluck('product.price')->max(),
+                'avg' => $clicks->pluck('product.price')->avg(),
+            ],
+            'interaction_patterns' => [
+                'clicks' => $clicks->count(),
+                'impressions' => $impressions->count(),
+                'cart_adds' => $cartItems->count(),
+                'wishlist_adds' => $wishlistItems->count(),
+            ]
+        ];
+    }
+
+    /**
+     * Generate AI recommendations using OpenAI
+     */
+    protected function generateAIRecommendations(array $userBehavior): array
+    {
+        try {
+            $prompt = $this->buildRecommendationPrompt($userBehavior);
+
+            $response = OpenAI::chat()->create([
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => 'You are an e-commerce product recommendation expert. Analyze user behavior and suggest product categories and attributes.'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $prompt
+                    ]
+                ],
+                'max_tokens' => 500,
+                'temperature' => 0.7,
+            ]);
+
+            $content = $response->choices[0]->message->content;
+
+            // Parse AI response and extract recommendations
+            return $this->parseAIRecommendations($content);
+        } catch (\Exception $e) {
+            // Fallback to rule-based recommendations
+            return $this->getFallbackRecommendations($userBehavior);
+        }
+    }
+
+    /**
+     * Build prompt for AI recommendations
+     */
+    protected function buildRecommendationPrompt(array $userBehavior): string
+    {
+        $categories = implode(', ', array_keys($userBehavior['viewed_categories']));
+        $brands = implode(', ', array_keys($userBehavior['viewed_brands']));
+        $priceRange = $userBehavior['price_range'];
+
+        return "Based on this user behavior:
+        - Viewed categories: {$categories}
+        - Viewed brands: {$brands}
+        - Price range: \${$priceRange['min']} - \${$priceRange['max']} (avg: \${$priceRange['avg']})
+        - Interaction patterns: {$userBehavior['interaction_patterns']['clicks']} clicks, {$userBehavior['interaction_patterns']['cart_adds']} cart additions
+        
+        Suggest 5 product categories and 3 price ranges that would interest this user. Format as JSON with 'categories' and 'price_ranges' arrays.";
+    }
+
+    /**
+     * Parse AI recommendations from response
+     */
+    protected function parseAIRecommendations(string $content): array
+    {
+        try {
+            // Try to extract JSON from the response
+            if (preg_match('/\{.*\}/s', $content, $matches)) {
+                $json = json_decode($matches[0], true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    return $json;
+                }
+            }
+        } catch (\Exception $e) {
+            // Continue to fallback
+        }
+
+        return $this->getFallbackRecommendations([]);
+    }
+
+    /**
+     * Get fallback recommendations when AI fails
+     */
+    protected function getFallbackRecommendations(array $userBehavior): array
+    {
+        return [
+            'categories' => array_keys($userBehavior['viewed_categories'] ?? []),
+            'price_ranges' => [
+                ['min' => 0, 'max' => 50],
+                ['min' => 50, 'max' => 200],
+                ['min' => 200, 'max' => 1000],
+            ]
+        ];
+    }
+
+    /**
+     * Get recommended products based on AI suggestions
+     */
+    protected function getRecommendedProducts(array $recommendations, int $limit): Collection
+    {
+        $query = Product::where('status', 'active')
+            ->where('stock', '>', 0);
+
+        if (!empty($recommendations['categories'])) {
+            $query->whereHas('categories', function ($q) use ($recommendations) {
+                $q->whereIn('id', $recommendations['categories']);
+            });
+        }
+
+        if (!empty($recommendations['price_ranges'])) {
+            $priceConditions = [];
+            foreach ($recommendations['price_ranges'] as $range) {
+                $priceConditions[] = function ($q) use ($range) {
+                    $q->whereBetween('price', [$range['min'], $range['max']]);
+                };
+            }
+            $query->where(function ($q) use ($priceConditions) {
+                foreach ($priceConditions as $condition) {
+                    $q->orWhere($condition);
+                }
+            });
+        }
+
+        return $query->limit($limit)->get();
+    }
+
+    /**
+     * Find users with similar behavior
+     */
+    protected function findSimilarUsers(User $user): Collection
+    {
+        $userCategories = $user->carts()->with('product.category')->get()
+            ->pluck('product.category_id')->filter()->unique();
+
+        return User::whereHas('carts.product.category', function ($query) use ($userCategories) {
+            $query->whereIn('id', $userCategories);
+        })->where('id', '!=', $user->id)
+            ->limit(10)
+            ->get();
+    }
+
+    /**
+     * Get products from similar users
+     */
+    protected function getProductsFromSimilarUsers(Collection $similarUsers, User $currentUser): array
+    {
+        $excludeProductIds = $currentUser->carts()->pluck('product_id')->toArray();
+
+        return $similarUsers->flatMap(function ($user) use ($excludeProductIds) {
+            return $user->carts()
+                ->whereNotIn('product_id', $excludeProductIds)
+                ->pluck('product_id');
+        })->unique()->take(20)->toArray();
+    }
+}

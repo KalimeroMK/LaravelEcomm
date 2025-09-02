@@ -4,83 +4,320 @@ declare(strict_types=1);
 
 namespace Modules\Billing\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Modules\Billing\Actions\Wishlist\CreateWishlistAction;
-use Modules\Billing\Actions\Wishlist\DeleteWishlistAction;
-use Modules\Billing\DTOs\WishlistDTO;
-use Modules\Billing\Http\Requests\Api\Store;
-use Modules\Billing\Http\Resources\WishlistResource;
-use Modules\Billing\Repository\WishlistRepository;
-use Modules\Core\Helpers\Helper;
-use Modules\Core\Http\Controllers\Api\CoreController;
-use ReflectionException;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Modules\Billing\Services\WishlistService;
+use Modules\Product\Models\Product;
 
-class WishlistController extends CoreController
+class WishlistController extends Controller
 {
-    private WishlistRepository $repository;
+    protected WishlistService $wishlistService;
 
-    private CreateWishlistAction $createAction;
-
-    private DeleteWishlistAction $deleteAction;
-
-    public function __construct(
-        WishlistRepository $repository,
-        CreateWishlistAction $createAction,
-        DeleteWishlistAction $deleteAction
-    ) {
-        $this->repository = $repository;
-        $this->createAction = $createAction;
-        $this->deleteAction = $deleteAction;
-    }
-
-    public function index(): ResourceCollection
+    public function __construct(WishlistService $wishlistService)
     {
-        return WishlistResource::collection($this->repository->findBy('user_id', auth()->user()->id));
-    }
-
-    public function store(Store $request): JsonResponse|string
-    {
-        try {
-            $dto = WishlistDTO::fromRequest($request);
-            $wishlist = $this->createAction->execute($dto);
-
-            return $this
-                ->setMessage(
-                    __(
-                        'apiResponse.storeSuccess',
-                        [
-                            'resource' => Helper::getResourceName(
-                                $this->repository->modelClass
-                            ),
-                        ]
-                    )
-                )
-                ->respond(new WishlistResource($wishlist));
-        } catch (Exception $exception) {
-            return $exception->getMessage();
-        }
+        $this->wishlistService = $wishlistService;
+        $this->middleware('auth:sanctum');
     }
 
     /**
-     * @throws ReflectionException
+     * Get user's wishlist
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+        $withPriceAlerts = $request->boolean('with_price_alerts', false);
+
+        if ($withPriceAlerts) {
+            $wishlist = $this->wishlistService->getWishlistWithPriceAlerts($user);
+        } else {
+            $wishlist = $this->wishlistService->getUserWishlist($user);
+        }
+
+        $stats = $this->wishlistService->getWishlistStats($user);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'wishlist' => $wishlist,
+                'statistics' => $stats,
+                'count' => $wishlist->count()
+            ]
+        ]);
+    }
+
+    /**
+     * Add product to wishlist
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+            'quantity' => 'nullable|integer|min:1|max:100'
+        ]);
+
+        $user = Auth::user();
+        $product = Product::findOrFail($request->input('product_id'));
+        $quantity = $request->input('quantity', 1);
+
+        // Check if product is already in wishlist
+        if ($this->wishlistService->isInWishlist($user, $product->id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product is already in your wishlist'
+            ], 400);
+        }
+
+        $wishlistItem = $this->wishlistService->addToWishlist($user, $product, $quantity);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product added to wishlist successfully',
+            'data' => $wishlistItem->load('product')
+        ], 201);
+    }
+
+    /**
+     * Update wishlist item quantity
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1|max:100'
+        ]);
+
+        $user = Auth::user();
+        $quantity = $request->input('quantity');
+
+        $wishlistItem = $this->wishlistService->updateQuantity($user, $id, $quantity);
+
+        if (!$wishlistItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Wishlist item not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Wishlist item updated successfully',
+            'data' => $wishlistItem->load('product')
+        ]);
+    }
+
+    /**
+     * Remove product from wishlist
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->deleteAction->execute($id);
+        $user = Auth::user();
+        $product = Product::findOrFail($id);
 
-        return $this
-            ->setMessage(
-                __(
-                    'apiResponse.deleteSuccess',
-                    [
-                        'resource' => Helper::getResourceName(
-                            $this->repository->modelClass
-                        ),
-                    ]
-                )
-            )
-            ->respond(null);
+        $removed = $this->wishlistService->removeFromWishlist($user, $product->id);
+
+        if (!$removed) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found in wishlist'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product removed from wishlist successfully'
+        ]);
+    }
+
+    /**
+     * Move wishlist item to cart
+     */
+    public function moveToCart(int $id): JsonResponse
+    {
+        $user = Auth::user();
+        $product = Product::findOrFail($id);
+
+        $moved = $this->wishlistService->moveToCart($user, $product->id);
+
+        if (!$moved) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to move product to cart'
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product moved to cart successfully'
+        ]);
+    }
+
+    /**
+     * Get wishlist recommendations
+     */
+    public function recommendations(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+        $limit = min($request->input('limit', 5), 20);
+
+        $recommendations = $this->wishlistService->getWishlistRecommendations($user, $limit);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'recommendations' => $recommendations,
+                'count' => $recommendations->count()
+            ]
+        ]);
+    }
+
+    /**
+     * Check if product is in wishlist
+     */
+    public function check(int $id): JsonResponse
+    {
+        $user = Auth::user();
+        $product = Product::findOrFail($id);
+
+        $isInWishlist = $this->wishlistService->isInWishlist($user, $product->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'is_in_wishlist' => $isInWishlist,
+                'product_id' => $product->id
+            ]
+        ]);
+    }
+
+    /**
+     * Get wishlist count
+     */
+    public function count(): JsonResponse
+    {
+        $user = Auth::user();
+        $count = $this->wishlistService->getWishlistCount($user);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'count' => $count
+            ]
+        ]);
+    }
+
+    /**
+     * Bulk operations
+     */
+    public function bulkOperations(Request $request): JsonResponse
+    {
+        $request->validate([
+            'action' => 'required|string|in:add_to_cart,remove',
+            'product_ids' => 'required|array|min:1',
+            'product_ids.*' => 'integer|exists:products,id'
+        ]);
+
+        $user = Auth::user();
+        $action = $request->input('action');
+        $productIds = $request->input('product_ids');
+
+        $results = match ($action) {
+            'add_to_cart' => $this->wishlistService->bulkAddToCart($user, $productIds),
+            'remove' => ['removed_count' => $this->wishlistService->bulkRemove($user, $productIds)],
+            default => []
+        };
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Bulk operation completed successfully',
+            'data' => $results
+        ]);
+    }
+
+    /**
+     * Share wishlist
+     */
+    public function share(Request $request): JsonResponse
+    {
+        $request->validate([
+            'recipient_email' => 'required|email|exists:users,email'
+        ]);
+
+        $user = Auth::user();
+        $recipient = \Modules\User\Models\User::where('email', $request->input('recipient_email'))->first();
+
+        if (!$recipient) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Recipient user not found'
+            ], 404);
+        }
+
+        if ($recipient->id === $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot share wishlist with yourself'
+            ], 400);
+        }
+
+        $shared = $this->wishlistService->shareWishlist($user, $recipient);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Wishlist shared successfully',
+            'data' => [
+                'recipient' => [
+                    'id' => $recipient->id,
+                    'name' => $recipient->name,
+                    'email' => $recipient->email
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Get public wishlist
+     */
+    public function publicWishlist(string $username): JsonResponse
+    {
+        $wishlist = $this->wishlistService->getPublicWishlist($username);
+
+        if (!$wishlist) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Public wishlist not found or not accessible'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'wishlist' => $wishlist,
+                'owner' => $username,
+                'count' => $wishlist->count()
+            ]
+        ]);
+    }
+
+    /**
+     * Get wishlist with price alerts
+     */
+    public function priceAlerts(): JsonResponse
+    {
+        $user = Auth::user();
+        $wishlistWithAlerts = $this->wishlistService->getWishlistWithPriceAlerts($user);
+
+        $priceDrops = $wishlistWithAlerts->where('price_drop', true);
+        $noPriceDrops = $wishlistWithAlerts->where('price_drop', false);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'price_drops' => $priceDrops,
+                'no_price_changes' => $noPriceDrops,
+                'total_price_drops' => $priceDrops->count(),
+                'total_items' => $wishlistWithAlerts->count()
+            ]
+        ]);
     }
 }
