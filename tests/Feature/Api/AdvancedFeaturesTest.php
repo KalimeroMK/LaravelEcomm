@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Testing\TestResponse;
 use Modules\Product\Models\Product;
+use Modules\Product\Services\ElasticsearchService;
+use Modules\Product\Services\RecommendationService;
 use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\BaseTestTrait;
@@ -22,6 +24,23 @@ class AdvancedFeaturesTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Mock ElasticsearchService to avoid Elasticsearch dependency
+        $this->mock(ElasticsearchService::class, function ($mock) {
+            $mock->shouldReceive('search')->andReturn(collect([]));
+            $mock->shouldReceive('index')->andReturn(true);
+            $mock->shouldReceive('delete')->andReturn(true);
+            $mock->shouldReceive('createIndex')->andReturn(true);
+        });
+
+        // Mock RecommendationService
+        $this->mock(RecommendationService::class, function ($mock) {
+            $mock->shouldReceive('getRecommendations')->andReturn([]);
+            $mock->shouldReceive('getRelatedProducts')->andReturn([]);
+            $mock->shouldReceive('getAIRecommendations')->andReturn(collect([]));
+            $mock->shouldReceive('getCollaborativeRecommendations')->andReturn(collect([]));
+            $mock->shouldReceive('getContentBasedRecommendations')->andReturn(collect([]));
+        });
 
         // Create a super-admin user and authenticate
         $this->user = User::factory()->create();
@@ -198,9 +217,9 @@ class AdvancedFeaturesTest extends TestCase
     #[Test]
     public function test_public_wishlist(): TestResponse
     {
-        $user = User::factory()->create(['username' => 'testuser']);
+        $user = User::factory()->create();
 
-        return $this->get("/api/v1/wishlist/public/{$user->username}");
+        return $this->get("/api/v1/wishlist/public/{$user->id}");
     }
 
     /**

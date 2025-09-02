@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Modules\Billing\Models\Wishlist;
 use Modules\Cart\Database\Factories\CartFactory;
+use Modules\Cart\Services\AbandonedCartService;
 use Modules\Core\Models\Core;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;
@@ -64,27 +65,27 @@ class Cart extends Core
     protected $table = 'carts';
 
     protected $casts
-        = [
-            'product_id' => 'int',
-            'order_id' => 'int',
-            'user_id' => 'int',
-            'price' => 'float',
-            'quantity' => 'int',
-            'amount' => 'float',
-            'session_id' => 'string',
-        ];
+    = [
+        'product_id' => 'int',
+        'order_id' => 'int',
+        'user_id' => 'int',
+        'price' => 'float',
+        'quantity' => 'int',
+        'amount' => 'float',
+        'session_id' => 'string',
+    ];
 
     protected $fillable
-        = [
-            'product_id',
-            'order_id',
-            'user_id',
-            'price',
-            'status',
-            'quantity',
-            'amount',
-            'session_id',
-        ];
+    = [
+        'product_id',
+        'order_id',
+        'user_id',
+        'price',
+        'status',
+        'quantity',
+        'amount',
+        'session_id',
+    ];
 
     public static function Factory(): CartFactory
     {
@@ -109,5 +110,45 @@ class Cart extends Core
     public function wishlists(): HasMany
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * Boot method to add model events
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Track abandoned cart when cart is created
+        static::created(function (Cart $cart) {
+            if ($cart->user_id || $cart->session_id) {
+                app(AbandonedCartService::class)->trackAbandonedCart(
+                    $cart->user,
+                    $cart->session_id,
+                    $cart->user?->email
+                );
+            }
+        });
+
+        // Update abandoned cart when cart is updated
+        static::updated(function (Cart $cart) {
+            if ($cart->user_id || $cart->session_id) {
+                app(AbandonedCartService::class)->trackAbandonedCart(
+                    $cart->user,
+                    $cart->session_id,
+                    $cart->user?->email
+                );
+            }
+        });
+
+        // Mark as converted when cart is associated with an order
+        static::updated(function (Cart $cart) {
+            if ($cart->order_id && $cart->wasChanged('order_id')) {
+                app(AbandonedCartService::class)->markAsConverted(
+                    $cart->user,
+                    $cart->session_id
+                );
+            }
+        });
     }
 }

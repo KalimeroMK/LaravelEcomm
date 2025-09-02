@@ -104,7 +104,7 @@
                             <!-- Start Single Product -->
                             <div class="single-product">
                                 <div class="product-img">
-                                    <a href="{{route('product-detail',$product->slug)}}">
+                                    <a href="{{route('front.product-detail',$product->slug)}}">
                                         <img class="default-img" src="{{ $product->imageUrl }}"
                                              alt="{{$product->imageUrl}}">
                                         <img class="hover-img" src="{{$product->imageUrl}}"
@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
                                 <div class="product-content">
-                                    <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a>
+                                    <h3><a href="{{route('front.product-detail',$product->slug)}}">{{$product->title}}</a>
                                     </h3>
                                     <div class="product-price">
                                         <span class="old">${{number_format($product->price,2)}}</span>
@@ -336,32 +336,7 @@
                                                 <div class="quickview-peragraph">
                                                     <p>{!! html_entity_decode($product->summary) !!}</p>
                                                 </div>
-                                                @if($product->size)
-                                                    <div class="size">
-                                                        <div class="row">
-                                                            <div class="col-lg-6 col-12">
-                                                                <h5 class="title">Size</h5>
-                                                                <select>
-                                                                    @php
-                                                                        $sizes=explode(',',$product->size);
-                                                                    @endphp
-                                                                    @foreach($sizes as $size)
-                                                                        <option>{{$size}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-lg-6 col-12">
-                                                                <h5 class="title">Color</h5>
-                                                                <select>
-                                                                    <option selected="selected">orange</option>
-                                                                    <option>purple</option>
-                                                                    <option>black</option>
-                                                                    <option>pink</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                {{-- Size and color selection removed as size attribute doesn't exist in Product model --}}
                                                 <form action="{{route('single-add-to-cart')}}" method="POST"
                                                       class="mt-4">
                                                     @csrf

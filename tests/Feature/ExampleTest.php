@@ -18,6 +18,11 @@ class ExampleTest extends TestCase
         // The root route '/' exists and returns 200
         $response = $this->get('/');
 
+        if ($response->status() !== 200) {
+            dump('Response status: ' . $response->status());
+            dump('Response content: ' . $response->content());
+        }
+
         $response->assertStatus(200);
     }
 }

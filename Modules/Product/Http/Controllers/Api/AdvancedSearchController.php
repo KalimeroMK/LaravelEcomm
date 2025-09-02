@@ -135,7 +135,7 @@ class AdvancedSearchController extends Controller
         }
 
         $type = $request->input('type', 'ai');
-        $limit = min($request->input('limit', 10), 50);
+        $limit = min((int) $request->input('limit', 10), 50);
 
         $recommendations = match ($type) {
             'ai' => $this->recommendationService->getAIRecommendations($user, $limit),

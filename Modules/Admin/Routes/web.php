@@ -17,4 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\AdminController;
 
 Route::get('/', [AdminController::class, 'index'])->name('admin');
+Route::get('/analytics', function () {
+    return view('admin::analytics-dashboard');
+})->name('admin.analytics');
 Route::get('/messages/five', [AdminController::class, 'messageFive'])->name('messages.five');

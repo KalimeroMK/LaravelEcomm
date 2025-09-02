@@ -26,14 +26,20 @@ class PostNewsletterMail extends Mailable implements ShouldQueue
      */
     private array $posts;
 
+    public ?int $analyticsId = null;
+
+    public string $email;
+
     /**
      * Create a new message instance.
      *
      * @param  array<int, Post>  $posts
      */
-    public function __construct(array $posts)
+    public function __construct(array $posts, ?int $analyticsId = null, string $email = '')
     {
         $this->posts = $posts;
+        $this->analyticsId = $analyticsId;
+        $this->email = $email;
     }
 
     /**
@@ -43,7 +49,12 @@ class PostNewsletterMail extends Mailable implements ShouldQueue
      */
     public function build(): self
     {
-        return $this->markdown('newsletter::emails.post-newsletter')
-            ->with('posts', $this->posts);
+        return $this->view('newsletter::emails.enhanced-newsletter')
+            ->with([
+                'posts' => $this->posts,
+                'products' => [], // Can be passed from the job
+                'analyticsId' => $this->analyticsId ?? null,
+                'recipientEmail' => $this->email,
+            ]);
     }
 }
