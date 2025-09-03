@@ -228,7 +228,7 @@
                 <h6 class="collapse-header">Email Marketing Options:</h6>
                 <a class="collapse-item" href="{{route('newsletters.index')}}">Newsletters</a>
                 <a class="collapse-item" href="{{route('newsletters.create')}}">Create Campaign</a>
-                <a class="collapse-item" href="/api/v1/newsletter/analytics">Email Analytics</a>
+                <a class="collapse-item" href="{{route('admin.email-campaigns.analytics')}}">Email Analytics</a>
                 <a class="collapse-item" href="/api/v1/newsletter/campaigns">Campaigns</a>
             </div>
         </div>

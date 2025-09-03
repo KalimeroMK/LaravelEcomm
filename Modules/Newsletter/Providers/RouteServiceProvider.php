@@ -49,8 +49,8 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['web'])
             ->prefix('admin')
             ->group(function () {
-                Route::get('email-campaigns/analytics', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analytics']);
-                Route::get('email-campaigns/analytics/api', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analyticsApi']);
+                Route::get('email-campaigns/analytics', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analytics'])->name('admin.email-campaigns.analytics');
+                Route::get('email-campaigns/analytics/api', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analyticsApi'])->name('admin.email-campaigns.analytics.api');
             });
     }
 
