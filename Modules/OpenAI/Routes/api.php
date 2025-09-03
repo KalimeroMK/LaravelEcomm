@@ -16,6 +16,6 @@ use Illuminate\Support\Facades\Route;
     |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function (): void {
+Route::middleware(['auth:sanctum'])->name('api.')->group(function (): void {
     Route::get('openai', fn (Request $request) => $request->user())->name('openai');
 });

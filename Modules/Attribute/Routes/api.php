@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Route;
 use Modules\Attribute\Http\Controllers\Api\AttributeController;
 use Modules\Attribute\Http\Controllers\Api\AttributeGroupController;
 
@@ -16,5 +17,6 @@ use Modules\Attribute\Http\Controllers\Api\AttributeGroupController;
 |
 */
 
+// API Routes
 Route::apiResource('attributes', AttributeController::class)->names('api.attribute');
 Route::apiResource('attribute-groups', AttributeGroupController::class)->names('api.attribute-group');

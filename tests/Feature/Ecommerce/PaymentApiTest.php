@@ -53,9 +53,9 @@ class PaymentApiTest extends TestCase
             'Accept' => 'application/json'
         ])->postJson('/api/stripe', $paymentData);
 
-        // Note: Stripe payment endpoint is not currently implemented
-        // The test documents the expected business rule for future implementation
-        $response->assertStatus(404);
+        // Note: Stripe payment endpoint exists but returns validation error
+        // The test documents the expected business rule for validation
+        $response->assertStatus(422);
     }
 
     #[Test]

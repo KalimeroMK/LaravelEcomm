@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Route;
 use Modules\Cart\Http\Controllers\Api\CartController;
 
 /*
@@ -15,5 +16,6 @@ use Modules\Cart\Http\Controllers\Api\CartController;
 |
 */
 
-Route::apiResource('carts', CartController::class)
-    ->names('api.carts');
+// API Routes
+    Route::apiResource('carts', CartController::class)
+        ->names('api.carts');

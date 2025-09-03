@@ -13,6 +13,8 @@ declare(strict_types=1);
     |
 */
 
+use Illuminate\Support\Facades\Route;
 use Modules\Permission\Http\Controllers\Api\PermissionController;
 
-Route::apiResource('permissions', PermissionController::class)->names('api.permission');
+// API Routes
+    Route::apiResource('permissions', PermissionController::class)->names('api.permission');

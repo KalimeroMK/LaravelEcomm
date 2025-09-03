@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Route;
 use Modules\Tag\Http\Controllers\Api\TagController;
 
 /*
@@ -15,5 +16,6 @@ use Modules\Tag\Http\Controllers\Api\TagController;
 |
 */
 
-Route::apiResource('tag', TagController::class);
-Route::apiResource('tags', TagController::class);
+// API Routes
+    Route::apiResource('tag', TagController::class);
+    Route::apiResource('tags', TagController::class);

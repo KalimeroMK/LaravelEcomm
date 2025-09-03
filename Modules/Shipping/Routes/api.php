@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Route;
 use Modules\Shipping\Http\Controllers\Api\ShippingController;
 
 /*
@@ -15,12 +16,13 @@ use Modules\Shipping\Http\Controllers\Api\ShippingController;
 |
 */
 
-Route::apiResource('shipping', ShippingController::class)->names(
-    [
-        'index' => 'api.shipping.index',
-        'store' => 'api.shipping.store',
-        'show' => 'api.shipping.show',
-        'update' => 'api.shipping.update',
-        'destroy' => 'api.shipping.destroy',
-    ]
-);
+// API Routes
+    Route::apiResource('shipping', ShippingController::class)->names(
+        [
+            'index' => 'api.shipping.index',
+            'store' => 'api.shipping.store',
+            'show' => 'api.shipping.show',
+            'update' => 'api.shipping.update',
+            'destroy' => 'api.shipping.destroy',
+        ]
+    );

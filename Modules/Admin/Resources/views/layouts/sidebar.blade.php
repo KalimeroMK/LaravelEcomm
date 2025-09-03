@@ -155,11 +155,11 @@
             </div>
         </div>
     </li>
-    {{-- Nwesletter --}}
+    {{-- Newsletter --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#newsletterCollapse"
            aria-expanded="true" aria-controls="newsletterCollapse">
-            <i class="fas fa-truck"></i>
+            <i class="fas fa-envelope"></i>
             <span>@lang('sidebar.newsletters')</span>
         </a>
         <div id="newsletterCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -167,6 +167,10 @@
                 <h6 class="collapse-header">@lang('sidebar.newsletters_options'):</h6>
                 <a class="collapse-item" href="{{route('newsletters.index')}}">@lang('sidebar.newsletters')</a>
                 <a class="collapse-item" href="{{route('newsletters.create')}}">@lang('sidebar.add_newsletter')</a>
+                <a class="collapse-item" href="{{route('admin.email-templates.index')}}">Email Templates</a>
+                <a class="collapse-item" href="{{route('admin.email-templates.create')}}">Create Template</a>
+                <a class="collapse-item" href="{{route('admin.email-campaigns.index')}}">Email Campaigns</a>
+                <a class="collapse-item" href="{{route('admin.email-campaigns.create')}}">Create Campaign</a>
             </div>
         </div>
     </li>

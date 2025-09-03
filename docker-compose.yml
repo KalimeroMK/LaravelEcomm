@@ -11,6 +11,8 @@ services:
       - ./.docker/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - ./.docker/php/conf.d/performance.ini:/usr/local/etc/php/conf.d/performance.ini
+      - ./.docker/php/conf.d/memory.ini:/usr/local/etc/php/conf.d/memory.ini
+
     networks:
       - laravelapp
     ports:
@@ -65,6 +67,7 @@ services:
       - "90:80"
     volumes:
       - ./:/var/www
+      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - laravelapp
     healthcheck:

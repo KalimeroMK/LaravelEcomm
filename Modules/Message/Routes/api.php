@@ -16,4 +16,5 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use Modules\Message\Http\Controllers\Api\MessageController;
 
-Route::apiResource('messages', MessageController::class)->names('api.messages');
+// API Routes
+    Route::apiResource('messages', MessageController::class)->names('api.messages');

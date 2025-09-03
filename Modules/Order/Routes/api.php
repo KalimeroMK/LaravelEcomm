@@ -16,4 +16,5 @@ use Modules\Order\Http\Controllers\Api\OrderController;
 |
 */
 
-Route::apiResource('orders', OrderController::class)->names('api.orders');
+// API Routes
+    Route::apiResource('orders', OrderController::class)->names('api.orders');

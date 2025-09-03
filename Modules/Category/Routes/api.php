@@ -16,5 +16,6 @@ use Modules\Category\Http\Controllers\Api\CategoryController;
 |
 */
 
-Route::apiResource('categories', CategoryController::class)
-    ->names('api.categories');
+// API Routes
+    Route::apiResource('categories', CategoryController::class)
+        ->names('api.categories');

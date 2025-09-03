@@ -13,6 +13,8 @@ declare(strict_types=1);
 |
 */
 
+use Illuminate\Support\Facades\Route;
 use Modules\Role\Http\Controllers\Api\RoleController;
 
-Route::apiResource('roles', RoleController::class)->names('api.roles');
+// API Routes
+    Route::apiResource('roles', RoleController::class)->names('api.roles');

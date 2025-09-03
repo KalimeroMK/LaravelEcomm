@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Modules\Product\Services;
 
-use Elasticsearch\Client;
+// use Elasticsearch\Client;
 use Illuminate\Support\Collection;
 use Modules\Product\Models\Product;
 
 class ElasticsearchService
 {
-    protected Client $elasticsearch;
+    // protected Client $elasticsearch;
     protected string $index = 'products';
 
-    public function __construct(Client $elasticsearch)
+    public function __construct()
     {
-        $this->elasticsearch = $elasticsearch;
+        // $this->elasticsearch = $elasticsearch;
     }
 
     /**
