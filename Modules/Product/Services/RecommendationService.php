@@ -52,21 +52,46 @@ class RecommendationService
      */
     public function getContentBasedRecommendations(Product $product, int $limit = 10): Collection
     {
-        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+        $query = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
             ->where('id', '!=', $product->id)
             ->where('status', 'active')
-            ->where('stock', '>', 0)
-            ->where(function ($query) use ($product) {
-                $query->where('brand_id', $product->brand_id)
-                    ->orWhereHas('categories', function ($q) use ($product) {
-                        $q->whereIn('id', $product->categories->pluck('id'));
-                    })
-                    ->orWhereHas('tags', function ($q) use ($product) {
-                        $q->whereIn('id', $product->tags->pluck('id'));
+            ->where('stock', '>', 0);
+
+        // Try to find similar products
+        if ($product->brand_id || $product->categories->isNotEmpty() || $product->tags->isNotEmpty()) {
+            $query->where(function ($q) use ($product) {
+                if ($product->brand_id) {
+                    $q->where('brand_id', $product->brand_id);
+                }
+                
+                if ($product->categories->isNotEmpty()) {
+                    $q->orWhereHas('categories', function ($categoryQuery) use ($product) {
+                        $categoryQuery->whereIn('categories.id', $product->categories->pluck('id'));
                     });
-            })
-            ->limit($limit)
-            ->get();
+                }
+                
+                if ($product->tags->isNotEmpty()) {
+                    $q->orWhereHas('tags', function ($tagQuery) use ($product) {
+                        $tagQuery->whereIn('tags.id', $product->tags->pluck('id'));
+                    });
+                }
+            });
+        }
+
+        $results = $query->limit($limit)->get();
+
+        // If no related products found, return random products
+        if ($results->isEmpty()) {
+            $results = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+                ->where('id', '!=', $product->id)
+                ->where('status', 'active')
+                ->where('stock', '>', 0)
+                ->inRandomOrder()
+                ->limit($limit)
+                ->get();
+        }
+
+        return $results;
     }
 
     /**
@@ -104,13 +129,18 @@ class RecommendationService
         $cartItems = $user->carts()->with('product')->get();
         $wishlistItems = $user->wishlists()->with('product')->get();
 
+        // Get categories from products (many-to-many relationship)
+        $viewedCategories = $clicks->flatMap(function ($click) {
+            return $click->product ? $click->product->categories->pluck('id') : [];
+        })->countBy()->toArray();
+
         return [
-            'viewed_categories' => $clicks->pluck('product.category_id')->filter()->countBy()->toArray(),
+            'viewed_categories' => $viewedCategories,
             'viewed_brands' => $clicks->pluck('product.brand_id')->filter()->countBy()->toArray(),
             'price_range' => [
-                'min' => $clicks->pluck('product.price')->min(),
-                'max' => $clicks->pluck('product.price')->max(),
-                'avg' => $clicks->pluck('product.price')->avg(),
+                'min' => $clicks->pluck('product.price')->filter()->min() ?: 0,
+                'max' => $clicks->pluck('product.price')->filter()->max() ?: 100,
+                'avg' => $clicks->pluck('product.price')->filter()->avg() ?: 50,
             ],
             'interaction_patterns' => [
                 'clicks' => $clicks->count(),
@@ -245,11 +275,18 @@ class RecommendationService
      */
     protected function findSimilarUsers(User $user): Collection
     {
-        $userCategories = $user->carts()->with('product.category')->get()
-            ->pluck('product.category_id')->filter()->unique();
+        // Get categories from user's cart products (many-to-many relationship)
+        $userCategories = $user->carts()->with('product.categories')->get()
+            ->flatMap(function ($cart) {
+                return $cart->product ? $cart->product->categories->pluck('id') : [];
+            })->unique();
 
-        return User::whereHas('carts.product.category', function ($query) use ($userCategories) {
-            $query->whereIn('id', $userCategories);
+        if ($userCategories->isEmpty()) {
+            return collect();
+        }
+
+        return User::whereHas('carts.product.categories', function ($query) use ($userCategories) {
+            $query->whereIn('categories.id', $userCategories);
         })->where('id', '!=', $user->id)
             ->limit(10)
             ->get();

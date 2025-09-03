@@ -148,15 +148,8 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            $('#data-table').DataTable({
-                "pageLength": 25,
-                "order": [[ 0, "asc" ]],
-                "columnDefs": [
-                    { "orderable": false, "targets": -1 }
-                ]
-            });
-        });
+        // DataTables is already initialized in admin footer
+        // No need to initialize again here
     </script>
 @endpush
 

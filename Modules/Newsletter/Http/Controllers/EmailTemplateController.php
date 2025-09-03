@@ -14,7 +14,7 @@ class EmailTemplateController extends CoreController
 {
     public function index(): View
     {
-        $templates = EmailTemplate::orderBy('template_type')
+        $templates = \Modules\Newsletter\Models\EmailTemplate::orderBy('template_type')
             ->orderBy('name')
             ->paginate(15);
 
@@ -144,6 +144,22 @@ class EmailTemplateController extends CoreController
         return redirect()
             ->route('admin.email-templates.index')
             ->with('success', "Template {$status} successfully!");
+    }
+
+    public function usage(EmailTemplate $emailTemplate): View
+    {
+        // Get usage statistics
+        $usageStats = [
+            'total_campaigns' => 0, // This would come from a campaigns table
+            'total_sent' => $emailTemplate->emailAnalytics()->count(),
+            'total_opened' => $emailTemplate->emailAnalytics()->whereNotNull('opened_at')->count(),
+            'total_clicked' => $emailTemplate->emailAnalytics()->whereNotNull('clicked_at')->count(),
+        ];
+
+        // Get recent campaigns (placeholder - would need campaigns table)
+        $recentCampaigns = collect([]);
+
+        return view('newsletter::email-templates.usage', compact('emailTemplate', 'usageStats', 'recentCampaigns'));
     }
 }
 

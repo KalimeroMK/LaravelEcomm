@@ -49,7 +49,7 @@ class ElasticsearchService
             ]
         ];
 
-        $this->elasticsearch->index($params);
+        // $this->elasticsearch->index($params); // Commented out for now as Elasticsearch is not configured
     }
 
     /**
@@ -118,13 +118,50 @@ class ElasticsearchService
             ];
         }
 
-        $response = $this->elasticsearch->search($searchParams);
+        // For now, fallback to database search since Elasticsearch is not configured
+        $productQuery = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+            ->where('status', 'active')
+            ->where('stock', '>', 0);
 
-        $productIds = collect($response['hits']['hits'])->pluck('_id');
+        // Add basic text search
+        if (!empty($query)) {
+            $productQuery->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('summary', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%");
+            });
+        }
 
-        return Product::whereIn('id', $productIds)
-            ->orderByRaw("FIELD(id, " . $productIds->implode(',') . ")")
-            ->get();
+        // Add filters
+        if (!empty($filters['price_min'])) {
+            $productQuery->where('price', '>=', $filters['price_min']);
+        }
+
+        if (!empty($filters['price_max'])) {
+            $productQuery->where('price', '<=', $filters['price_max']);
+        }
+
+        if (!empty($filters['brand'])) {
+            $productQuery->whereHas('brand', function ($q) use ($filters) {
+                $q->where('name', $filters['brand']);
+            });
+        }
+
+        if (!empty($filters['categories'])) {
+            $productQuery->whereHas('categories', function ($q) use ($filters) {
+                $q->whereIn('id', $filters['categories']);
+            });
+        }
+
+        if (!empty($filters['status'])) {
+            $productQuery->where('status', $filters['status']);
+        }
+
+        if (!empty($filters['in_stock'])) {
+            $productQuery->where('stock', '>', 0);
+        }
+
+        return $productQuery->limit(50)->get();
     }
 
     /**
@@ -168,7 +205,7 @@ class ElasticsearchService
         ];
 
         try {
-            $this->elasticsearch->indices()->create($params);
+            // $this->elasticsearch->indices()->create($params); // Commented out for now as Elasticsearch is not configured
         } catch (\Exception $e) {
             // Index might already exist
         }
@@ -180,10 +217,10 @@ class ElasticsearchService
     public function deleteProduct(int $productId): void
     {
         try {
-            $this->elasticsearch->delete([
-                'index' => $this->index,
-                'id' => $productId
-            ]);
+            // $this->elasticsearch->delete([
+            //     'index' => $this->index,
+            //     'id' => $productId
+            // ]); // Commented out for now as Elasticsearch is not configured
         } catch (\Exception $e) {
             // Product might not exist in index
         }
@@ -195,7 +232,7 @@ class ElasticsearchService
     public function deleteIndex(): void
     {
         try {
-            $this->elasticsearch->indices()->delete(['index' => $this->index]);
+            // $this->elasticsearch->indices()->delete(['index' => $this->index]); // Commented out for now as Elasticsearch is not configured
         } catch (\Exception $e) {
             // Index might not exist
         }

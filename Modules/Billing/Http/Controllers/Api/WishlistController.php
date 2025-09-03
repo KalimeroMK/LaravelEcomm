@@ -158,7 +158,7 @@ class WishlistController extends Controller
     public function recommendations(Request $request): JsonResponse
     {
         $user = Auth::user();
-        $limit = min($request->input('limit', 5), 20);
+        $limit = min((int) $request->input('limit', 5), 20);
 
         $recommendations = $this->wishlistService->getWishlistRecommendations($user, $limit);
 
@@ -184,7 +184,7 @@ class WishlistController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'is_in_wishlist' => $isInWishlist,
+                'in_wishlist' => $isInWishlist,
                 'product_id' => $product->id
             ]
         ]);
@@ -313,8 +313,10 @@ class WishlistController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'price_drops' => $priceDrops,
-                'no_price_changes' => $noPriceDrops,
+                'alerts' => [
+                    'price_drops' => $priceDrops,
+                    'no_price_changes' => $noPriceDrops
+                ],
                 'total_price_drops' => $priceDrops->count(),
                 'total_items' => $wishlistWithAlerts->count()
             ]

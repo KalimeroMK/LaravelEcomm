@@ -76,6 +76,9 @@ class ProductServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+        
+        $this->app->singleton(\Modules\Product\Services\RecommendationService::class);
+        $this->app->singleton(\Modules\Product\Services\ElasticsearchService::class);
     }
 
     /**

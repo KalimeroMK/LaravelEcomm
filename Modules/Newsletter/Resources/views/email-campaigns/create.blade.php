@@ -14,11 +14,21 @@
                             <select name="template_id" id="template_id" class="form-control" required>
                                 <option value="">Select Template</option>
                                 @foreach($templates as $template)
-                                    <option value="{{ $template->id }}" data-subject="{{ $template->subject }}">
-                                        {{ $template->name }} ({{ $template->template_type }})
+                                    <option value="{{ $template->id }}" 
+                                            data-subject="{{ $template->subject }}"
+                                            data-type="{{ $template->template_type }}"
+                                            {{ $template->is_default ? 'selected' : '' }}>
+                                        {{ $template->name }} 
+                                        @if($template->is_default)
+                                            <span class="badge badge-warning">Default</span>
+                                        @endif
+                                        ({{ ucfirst($template->template_type) }})
                                     </option>
                                 @endforeach
                             </select>
+                            <small class="form-text text-muted">
+                                Select the email template to use for this campaign. Default templates are pre-selected.
+                            </small>
                             @error('template_id')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

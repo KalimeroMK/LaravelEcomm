@@ -164,14 +164,14 @@ class AdvancedSearchController extends Controller
         ]);
 
         $product = \Modules\Product\Models\Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->findOrFail($productId);
-        $limit = min($request->input('limit', 10), 20);
+        $limit = min((int) $request->input('limit', 10), 20);
 
         $relatedProducts = $this->recommendationService->getContentBasedRecommendations($product, $limit);
 
         return response()->json([
             'success' => true,
             'data' => [
-                'related_products' => $relatedProducts,
+                'products' => $relatedProducts,
                 'base_product' => [
                     'id' => $product->id,
                     'title' => $product->title,
@@ -190,7 +190,9 @@ class AdvancedSearchController extends Controller
             'price_asc' => $products->sortBy('price'),
             'price_desc' => $products->sortByDesc('price'),
             'newest' => $products->sortByDesc('created_at'),
-            'popular' => $products->sortByDesc('views_count'),
+            'popular' => $products->sortByDesc(function ($product) {
+                return $product->clicks()->count();
+            }),
             default => $products // relevance - already sorted by Elasticsearch
         };
     }
@@ -208,14 +210,14 @@ class AdvancedSearchController extends Controller
             ->toArray();
 
         // Get category suggestions
-        $categorySuggestions = \Modules\Category\Models\Category::where('name', 'like', "%{$query}%")
-            ->pluck('name')
+        $categorySuggestions = \Modules\Category\Models\Category::where('title', 'like', "%{$query}%")
+            ->pluck('title')
             ->take(3)
             ->toArray();
 
         // Get brand suggestions
-        $brandSuggestions = \Modules\Brand\Models\Brand::where('name', 'like', "%{$query}%")
-            ->pluck('name')
+        $brandSuggestions = \Modules\Brand\Models\Brand::where('title', 'like', "%{$query}%")
+            ->pluck('title')
             ->take(3)
             ->toArray();
 
@@ -265,7 +267,7 @@ class AdvancedSearchController extends Controller
 
         // Get available brands
         $brands = $baseQuery->join('brands', 'products.brand_id', '=', 'brands.id')
-            ->select('brands.id', 'brands.name')
+            ->select('brands.id', 'brands.title as name')
             ->distinct()
             ->get();
 

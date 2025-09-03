@@ -93,8 +93,16 @@ class AdvancedFeaturesTest extends TestCase
         Product::factory()->create(['title' => 'Office Laptop']);
 
         $response = $this->get('/api/v1/search/suggestions?query=laptop');
-        $response->assertStatus(500); // Endpoint returns server error
-        $this->assertTrue(true); // Basic assertion to avoid risky test warning
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'success',
+            'data' => [
+                'popular_terms',
+                'categories',
+                'brands',
+                'suggested_query'
+            ]
+        ]);
     }
 
     /**
@@ -154,7 +162,7 @@ class AdvancedFeaturesTest extends TestCase
         ];
 
         $response = $this->post('/api/v1/wishlist', $data);
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $response->assertJsonStructure([
             'success',
             'message'
@@ -277,7 +285,7 @@ class AdvancedFeaturesTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->get("/api/v1/wishlist/public/{$user->id}");
+        $response = $this->get("/api/v1/wishlist/public/{$user->name}");
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',

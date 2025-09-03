@@ -18,7 +18,9 @@ class EmailCampaignController extends CoreController
 {
     public function __construct(
         private readonly NewsletterService $newsletterService
-    ) {}
+    ) {
+        // Constructor with dependency injection
+    }
 
     public function index(): View
     {

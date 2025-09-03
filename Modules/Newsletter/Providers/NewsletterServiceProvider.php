@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Newsletter\Models\Observer\NewsletterObserver;
 use Modules\Newsletter\Service\MailboxLayerService;
+use Modules\Newsletter\Services\NewsletterService;
 
 class NewsletterServiceProvider extends ServiceProvider
 {
@@ -69,6 +70,9 @@ class NewsletterServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
         $this->app->singleton('mailboxlayer', function ($app): MailboxLayerService {
             return new MailboxLayerService(new Client);
+        });
+        $this->app->singleton(NewsletterService::class, function ($app): NewsletterService {
+            return new NewsletterService();
         });
     }
 

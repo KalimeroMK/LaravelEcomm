@@ -20,6 +20,7 @@ use Modules\Complaint\Models\Complaint;
 use Modules\Complaint\Models\ComplaintReply;
 use Modules\Coupon\Database\Seeders\CouponSeeder;
 use Modules\Message\Models\Message;
+use Modules\Newsletter\Database\Seeders\EmailTemplateSeeder;
 use Modules\Newsletter\Models\Newsletter;
 use Modules\Page\Database\Seeders\PageSeeder;
 use Modules\Post\Models\Post;
@@ -54,6 +55,7 @@ class DatabaseSeeder extends Seeder
         Cart::factory()->count(200)->create();
         BundleProduct::factory()->count(50)->create();
         $this->call(ProductReviewSeeder::class);
+        $this->call(EmailTemplateSeeder::class);
         Newsletter::factory()->count(20)->create();
         Setting::factory()->create();
         Complaint::factory()->count(50)->create();

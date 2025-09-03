@@ -73,7 +73,7 @@ class EmailTemplate extends Core
 
     public function emailAnalytics(): HasMany
     {
-        return $this->hasMany(EmailAnalytics::class, 'template_id');
+        return $this->hasMany(EmailAnalytics::class, 'email_type', 'template_type');
     }
 
     /**
