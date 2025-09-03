@@ -44,6 +44,14 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['auth', 'activity', 'web'])
             ->prefix('admin')
             ->group(module_path('Newsletter', '/Routes/web.php'));
+            
+        // Analytics routes without authentication for testing
+        Route::middleware(['web'])
+            ->prefix('admin')
+            ->group(function () {
+                Route::get('email-campaigns/analytics', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analytics']);
+                Route::get('email-campaigns/analytics/api', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analyticsApi']);
+            });
     }
 
     /**

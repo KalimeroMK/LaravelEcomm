@@ -38,5 +38,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('email-campaigns/create', [EmailCampaignController::class, 'create'])->name('email-campaigns.create');
     Route::post('email-campaigns', [EmailCampaignController::class, 'store'])->name('email-campaigns.store');
     Route::post('email-campaigns/preview', [EmailCampaignController::class, 'preview'])->name('email-campaigns.preview');
-    Route::get('email-campaigns/analytics', [EmailCampaignController::class, 'analytics'])->name('email-campaigns.analytics');
+    // Analytics routes are handled in RouteServiceProvider to avoid conflicts
 });

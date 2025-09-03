@@ -110,9 +110,20 @@ class EmailCampaignController extends CoreController
 
     public function analytics(): View
     {
-        $analytics = $this->newsletterService->getCampaignAnalytics();
+        $newsletterService = new \Modules\Newsletter\Services\NewsletterService();
+        $analytics = $newsletterService->getAllCampaignsAnalytics();
         
-        return view('newsletter::email-campaigns.analytics', compact('analytics'));
+        return view('newsletter::email-campaigns.analytics-test', compact('analytics'));
+    }
+
+    public function analyticsApi(): \Illuminate\Http\JsonResponse
+    {
+        $analytics = $this->newsletterService->getAllCampaignsAnalytics();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $analytics,
+        ]);
     }
 }
 

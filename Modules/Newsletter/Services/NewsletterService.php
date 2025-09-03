@@ -238,6 +238,55 @@ class NewsletterService
     }
 
     /**
+     * Get all campaigns analytics
+     */
+    public function getAllCampaignsAnalytics(): array
+    {
+        $analytics = EmailAnalytics::all();
+
+        $totalSent = $analytics->count();
+        $totalOpened = $analytics->where('opened_at', '!=', null)->count();
+        $totalClicked = $analytics->where('clicked_at', '!=', null)->count();
+        $totalBounced = $analytics->where('bounced', true)->count();
+
+        return [
+            'total_sent' => $totalSent,
+            'total_opened' => $totalOpened,
+            'total_clicked' => $totalClicked,
+            'total_bounced' => $totalBounced,
+            'open_rate' => $totalSent > 0 ? round(($totalOpened / $totalSent) * 100, 2) : 0,
+            'click_rate' => $totalSent > 0 ? round(($totalClicked / $totalSent) * 100, 2) : 0,
+            'bounce_rate' => $totalSent > 0 ? round(($totalBounced / $totalSent) * 100, 2) : 0,
+            'campaigns' => $this->getCampaignsList(),
+            'campaign_performance' => $this->getCampaignPerformanceData(),
+        ];
+    }
+
+    /**
+     * Get campaigns list
+     */
+    private function getCampaignsList(): array
+    {
+        // This would return a list of campaigns with their basic info
+        // For now, return empty array as we don't have campaigns table yet
+        return [];
+    }
+
+    /**
+     * Get campaign performance data for charts
+     */
+    private function getCampaignPerformanceData(): array
+    {
+        // This would return performance data over time
+        // For now, return sample data
+        return [
+            ['date' => '2025-01-01', 'sent' => 100, 'opened' => 25],
+            ['date' => '2025-01-02', 'sent' => 150, 'opened' => 40],
+            ['date' => '2025-01-03', 'sent' => 200, 'opened' => 60],
+        ];
+    }
+
+    /**
      * Get date range for analytics
      */
     private function getDateRange(string $period): array
