@@ -26,9 +26,10 @@ class BusinessLogicValidationTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
-        $this->actingAs($this->user);
+        // Reuse existing user from parent setup to avoid memory issues
+        $this->user = auth()->user();
 
+        // Create minimal test data
         $this->product = Product::factory()->create([
             'status' => 'active',
             'price' => 100.00,

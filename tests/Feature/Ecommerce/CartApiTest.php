@@ -25,9 +25,8 @@ class CartApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
-        $this->user->assignRole('super-admin');
-        $this->actingAs($this->user);
+        // Reuse existing user from parent setup to avoid memory issues
+        $this->user = auth()->user();
 
         $this->product = Product::factory()->create([
             'status' => 'active',

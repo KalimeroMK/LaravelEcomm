@@ -15,10 +15,21 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Role::findOrCreate('super-admin');
-        Role::findOrCreate('client');
-        $user = User::factory()->create();
-        $user->assignRole('super-admin');
+        
+        // Only create roles if they don't exist to avoid memory issues
+        if (!Role::where('name', 'super-admin')->exists()) {
+            Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
+        }
+        if (!Role::where('name', 'client')->exists()) {
+            Role::create(['name' => 'client', 'guard_name' => 'web']);
+        }
+        
+        // Create user only if needed
+        $user = User::first();
+        if (!$user) {
+            $user = User::factory()->create();
+            $user->assignRole('super-admin');
+        }
         $this->actingAs($user);
     }
 }
