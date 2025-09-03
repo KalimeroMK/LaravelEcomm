@@ -26,9 +26,11 @@ Route::apiResource('newsletters', NewsletterController::class)->names('api.newsl
 // Newsletter Analytics Routes
 Route::prefix('newsletter')->group(function () {
     Route::get('analytics', [NewsletterAnalyticsController::class, 'index'])->name('api.newsletter.analytics');
+    Route::post('analytics', [NewsletterAnalyticsController::class, 'index'])->name('api.newsletter.analytics.post');
     Route::get('analytics/campaign/{campaignId}', [NewsletterAnalyticsController::class, 'campaign'])->name('api.newsletter.analytics.campaign');
     Route::get('analytics/subscribers', [NewsletterAnalyticsController::class, 'subscribers'])->name('api.newsletter.analytics.subscribers');
     Route::get('analytics/segments', [NewsletterAnalyticsController::class, 'segments'])->name('api.newsletter.analytics.segments');
+    Route::post('analytics/export', [NewsletterAnalyticsController::class, 'export'])->name('api.newsletter.analytics.export');
 });
 
 // Newsletter Campaign Routes

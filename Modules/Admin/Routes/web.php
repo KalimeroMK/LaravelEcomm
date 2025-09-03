@@ -22,6 +22,10 @@ Route::get('/analytics', function () {
     return view('admin::analytics-dashboard');
 })->name('admin.analytics');
 
+Route::get('/email-campaigns/analytics', function () {
+    return view('admin::email-analytics');
+})->name('admin.email-campaigns.analytics');
+
 // Analytics API Routes for web interface (temporarily without auth for testing)
 Route::prefix('analytics')->group(function () {
     Route::get('dashboard', [AnalyticsController::class, 'dashboard'])->name('admin.analytics.dashboard');

@@ -78,6 +78,11 @@ class RouteServiceProvider extends ServiceProvider
                     Route::get('date-range', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'dateRange']);
                     Route::post('export', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'export']);
                 });
+                
+                // Email Analytics route without authentication for testing
+                Route::get('email-campaigns/analytics', function () {
+                    return view('admin::email-analytics');
+                })->name('admin.email-campaigns.analytics');
             });
     }
 }
