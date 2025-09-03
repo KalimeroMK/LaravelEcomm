@@ -436,7 +436,12 @@
     // Load analytics data
     async function loadAnalytics() {
         try {
-            const response = await fetch('/api/admin/analytics/dashboard');
+            const response = await fetch('/admin/analytics/dashboard', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
             const data = await response.json();
             
             if (data.success && data.data) {
@@ -844,7 +849,12 @@
     function startRealTimeUpdates() {
         realTimeInterval = setInterval(async () => {
             try {
-                const response = await fetch('/api/admin/analytics/real-time');
+                const response = await fetch('/admin/analytics/real-time', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
                 const data = await response.json();
                 
                 if (data.success) {
@@ -876,7 +886,7 @@
         console.log('Export parameters:', { type, format: 'xlsx', startDate, endDate });
         
         try {
-            const response = await fetch('/api/admin/analytics/export?_t=' + Date.now(), {
+            const response = await fetch('/admin/analytics/export?_t=' + Date.now(), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -928,7 +938,12 @@
     // Load date range analytics
     async function loadDateRangeAnalytics(type, startDate, endDate) {
         try {
-            const response = await fetch(`/api/admin/analytics/date-range?type=${type}&start_date=${startDate}&end_date=${endDate}`);
+            const response = await fetch(`/admin/analytics/date-range?type=${type}&start_date=${startDate}&end_date=${endDate}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
             const data = await response.json();
             
             if (data.success) {

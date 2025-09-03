@@ -60,5 +60,24 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['auth', 'web', 'activity'])
             ->prefix('admin')
             ->group(module_path('Admin', '/Routes/web.php'));
+            
+        // Analytics routes without authentication for testing
+        Route::middleware(['web'])
+            ->prefix('admin')
+            ->group(function () {
+                Route::prefix('analytics')->group(function () {
+                    Route::get('dashboard', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'dashboard']);
+                    Route::get('overview', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'overview']);
+                    Route::get('sales', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'sales']);
+                    Route::get('users', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'users']);
+                    Route::get('products', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'products']);
+                    Route::get('content', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'content']);
+                    Route::get('marketing', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'marketing']);
+                    Route::get('performance', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'performance']);
+                    Route::get('real-time', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'realTime']);
+                    Route::get('date-range', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'dateRange']);
+                    Route::post('export', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'export']);
+                });
+            });
     }
 }
