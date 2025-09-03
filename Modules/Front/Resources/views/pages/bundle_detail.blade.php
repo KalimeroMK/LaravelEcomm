@@ -208,14 +208,18 @@
                                         nemo ipsum numquam.</p>
                                 </div>
                                 @php
-                                    $attributes = collect($data->attributeValues ?? [])
-                                        ->filter(fn($val) => !empty($val->attribute));
+                                    // Bundles don't have attributeValues, so we'll show bundle information instead
+                                    $bundleInfo = [
+                                        'Bundle Name' => $bundle->name ?? 'N/A',
+                                        'Bundle Price' => '$' . number_format($bundle->price ?? 0, 2),
+                                        'Products Count' => $bundle->products->count() ?? 0,
+                                    ];
                                 @endphp
-                                @if($attributes->count())
+                                @if(!empty($bundleInfo))
                                     <div class="product-attributes">
                                         <ul class="list-unstyled mb-0">
-                                            @foreach($attributes as $attrVal)
-                                                <li><strong>{{ $attrVal->attribute->name }}:</strong> {{ $attrVal->value ?? '-' }}</li>
+                                            @foreach($bundleInfo as $key => $value)
+                                                <li><strong>{{ $key }}:</strong> {{ $value }}</li>
                                             @endforeach
                                         </ul>
                                     </div>

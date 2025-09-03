@@ -52,7 +52,7 @@ class ProductController extends CoreController
     public function index(): Renderable
     {
         $productsDto = $this->getAllProductsAction->execute();
-        $hotProducts = Product::where('is_featured', true)->get();
+        $hotProducts = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->where('is_featured', true)->get();
 
         return view('product::index', [
             'products' => $productsDto->products,
@@ -131,7 +131,7 @@ class ProductController extends CoreController
 
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
-        $model = Product::findOrFail($modelId);
+        $model = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->findOrFail($modelId);
         $model->media()->where('id', $mediaId)->first()->delete();
 
         return back()->with('success', 'Media deleted successfully.');

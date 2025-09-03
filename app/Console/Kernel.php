@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         PostNewsletterCommand::class,
         StockNotifyCommand::class,
         \App\Console\Commands\RunEcommerceTests::class,
+        \App\Console\Commands\GenerateAnalyticsDemoData::class,
 
     ];
 

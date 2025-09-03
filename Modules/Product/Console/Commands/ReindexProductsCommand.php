@@ -44,7 +44,7 @@ class ReindexProductsCommand extends Command
             $bar = $this->output->createProgressBar($totalProducts);
             $bar->start();
 
-            Product::chunk(100, function ($products) use ($elasticsearchService, $bar) {
+            Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->chunk(100, function ($products) use ($elasticsearchService, $bar) {
                 foreach ($products as $product) {
                     try {
                         $elasticsearchService->indexProduct($product);

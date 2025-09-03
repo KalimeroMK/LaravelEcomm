@@ -29,7 +29,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function search(array $data): mixed
     {
-        $cacheKey = 'search_'.md5(json_encode($data));
+        $cacheKey = 'search_' . md5(json_encode($data));
 
         return Cache::store('redis')->remember($cacheKey, 86400, function () use ($data) {
             $query = (new $this->modelClass)->newQuery();
@@ -48,7 +48,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
 
             foreach ($searchableFields as $field) {
                 if (Arr::has($data, $field)) {
-                    $query->where($field, 'like', '%'.Arr::get($data, $field).'%');
+                    $query->where($field, 'like', '%' . Arr::get($data, $field) . '%');
                 }
             }
 
@@ -76,7 +76,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function findById(int $id): ?Model
     {
-        return (new $this->modelClass)->with(['brand', 'categories', 'carts', 'tags'])->find($id);
+        return (new $this->modelClass)->with($this->withRelations())->find($id);
     }
 
     /**

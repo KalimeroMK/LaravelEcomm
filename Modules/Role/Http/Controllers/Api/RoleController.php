@@ -52,9 +52,9 @@ class RoleController extends CoreController
     public function index(): AnonymousResourceCollection
     {
         $this->authorize('viewAny', Role::class);
-        $rolesDto = $this->getAllAction->execute();
+        $roles = $this->getAllAction->execute();
 
-        return RoleResource::collection($rolesDto->roles);
+        return RoleResource::collection($roles);
     }
 
     public function store(Store $request): JsonResponse
@@ -64,8 +64,10 @@ class RoleController extends CoreController
         $dto = RoleDTO::fromRequest($request);
         $role = $this->storeAction->execute($dto);
 
-        SyncRelations::execute($role,
-            ['categories' => $dto->permissions]);
+        SyncRelations::execute(
+            $role,
+            ['categories' => $dto->permissions]
+        );
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', ['resource' => 'Role']))
@@ -86,8 +88,10 @@ class RoleController extends CoreController
         $dto = RoleDTO::fromRequest($request, $id);
         $role = $this->updateAction->execute($id, $dto);
 
-        SyncRelations::execute($role,
-            ['categories' => $dto->permissions]);
+        SyncRelations::execute(
+            $role,
+            ['categories' => $dto->permissions]
+        );
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Role']))

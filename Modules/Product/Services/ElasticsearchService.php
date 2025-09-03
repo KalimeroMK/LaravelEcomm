@@ -208,7 +208,7 @@ class ElasticsearchService
     {
         $this->createIndex();
 
-        Product::chunk(100, function ($products) {
+        Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->chunk(100, function ($products) {
             foreach ($products as $product) {
                 $this->indexProduct($product);
             }
