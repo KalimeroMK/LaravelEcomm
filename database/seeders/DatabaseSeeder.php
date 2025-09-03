@@ -15,6 +15,7 @@ use Modules\Brand\Models\Brand;
 use Modules\Bundle\Models\BundleProduct;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
+use Modules\Complaint\Database\Factories\ComplaintReplaiesFactory;
 use Modules\Complaint\Models\Complaint;
 use Modules\Complaint\Models\ComplaintReply;
 use Modules\Coupon\Database\Seeders\CouponSeeder;
@@ -56,8 +57,7 @@ class DatabaseSeeder extends Seeder
         Newsletter::factory()->count(20)->create();
         Setting::factory()->create();
         Complaint::factory()->count(50)->create();
-        \Modules\Complaint\Database\Factories\ComplaintReplaiesFactory::new()->count(50)->create();
-
+        ComplaintReplaiesFactory::new()->count(50)->create();
         // Add Analytics Demo Data
         $this->call(AnalyticsDemoDataSeeder::class);
 
