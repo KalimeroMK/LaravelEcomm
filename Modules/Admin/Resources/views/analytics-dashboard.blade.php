@@ -414,7 +414,26 @@
 @endpush
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+<script>
+    // Fix for missing Echo variable and prevent jQuery deferred exceptions
+    if (typeof window.Echo === 'undefined') {
+        window.Echo = {
+            channel: function() { return { listen: function() {} }; },
+            private: function() { return { listen: function() {} }; },
+            leave: function() {},
+            disconnect: function() {}
+        };
+    }
+    
+    // Prevent jQuery deferred exceptions
+    window.addEventListener('unhandledrejection', function(event) {
+        if (event.reason && event.reason.message && event.reason.message.includes('Echo')) {
+            event.preventDefault();
+            console.warn('Echo error suppressed:', event.reason);
+        }
+    });
+</script>
 <script>
     // Global variables
     let revenueChart, ordersPieChart, salesChart, userRegistrationsChart, userSegmentsChart;
