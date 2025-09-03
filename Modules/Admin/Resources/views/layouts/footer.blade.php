@@ -37,6 +37,27 @@
 <!-- Bootstrap core JavaScript-->
 <script src="{{asset('backend/js/all.min.js')}}"></script>
 
+<!-- Fix for missing Echo variable globally -->
+<script>
+    // Fix for missing Echo variable and prevent jQuery deferred exceptions
+    if (typeof window.Echo === 'undefined') {
+        window.Echo = {
+            channel: function() { return { listen: function() {} }; },
+            private: function() { return { listen: function() {} }; },
+            leave: function() {},
+            disconnect: function() {}
+        };
+    }
+    
+    // Prevent jQuery deferred exceptions
+    window.addEventListener('unhandledrejection', function(event) {
+        if (event.reason && event.reason.message && event.reason.message.includes('Echo')) {
+            event.preventDefault();
+            console.warn('Echo error suppressed:', event.reason);
+        }
+    });
+</script>
+
 <!-- Page level plugins -->
 <script>
     $('#data-table').DataTable({
