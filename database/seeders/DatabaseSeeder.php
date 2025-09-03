@@ -57,6 +57,10 @@ class DatabaseSeeder extends Seeder
         Setting::factory()->create();
         Complaint::factory()->count(50)->create();
         \Modules\Complaint\Database\Factories\ComplaintReplaiesFactory::new()->count(50)->create();
+
+        // Add Analytics Demo Data
+        $this->call(AnalyticsDemoDataSeeder::class);
+
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

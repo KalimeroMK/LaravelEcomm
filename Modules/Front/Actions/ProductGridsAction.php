@@ -17,7 +17,7 @@ class ProductGridsAction
 
         // Generate main cache key based on all parameters
         $mainCacheKey = 'product_grids_' . md5(json_encode($queryParams));
-        
+
         return Cache::remember($mainCacheKey, 1800, function () use ($queryParams) {
             // Retrieve category and brand IDs from slugs with caching
             $categorySlugs = explode(',', $queryParams['category'] ?? '');
@@ -47,12 +47,12 @@ class ProductGridsAction
 
             $products = Cache::remember($productsCacheKey, 900, function () use ($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder, $perPage) {
                 return Product::query()
-                    ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
-                    ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
-                    ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
+                    ->when($categoryIds, fn($query) => $query->whereIn('cat_id', $categoryIds))
+                    ->when($brandIds, fn($query) => $query->whereIn('brand_id', $brandIds))
+                    ->when($minPrice || $maxPrice, fn($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
                     ->where('status', 'active')
                     ->orderBy($sortColumn, $sortOrder)
-                    ->with(['categories', 'brand', 'tags'])
+                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
                     ->paginate($perPage);
             });
 
@@ -69,6 +69,7 @@ class ProductGridsAction
             $recent_products = Cache::remember($recentProductsCacheKey, 1800, function () {
                 return Product::where('status', 'active')
                     ->orderByDesc('id')
+                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
                     ->take(3)
                     ->get();
             });
@@ -91,7 +92,7 @@ class ProductGridsAction
         }
 
         $cacheKey = 'category_ids_grid_' . md5(json_encode($slugs));
-        
+
         return Cache::remember($cacheKey, 86400, function () use ($slugs) {
             return Category::whereIn('slug', $slugs)
                 ->where('status', 'active')
@@ -110,7 +111,7 @@ class ProductGridsAction
         }
 
         $cacheKey = 'brand_ids_grid_' . md5(json_encode($slugs));
-        
+
         return Cache::remember($cacheKey, 86400, function () use ($slugs) {
             return Brand::whereIn('slug', $slugs)
                 ->where('status', 'active')

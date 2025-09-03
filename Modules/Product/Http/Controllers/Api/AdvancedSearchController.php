@@ -163,7 +163,7 @@ class AdvancedSearchController extends Controller
             'limit' => 'nullable|integer|min:1|max:20'
         ]);
 
-        $product = \Modules\Product\Models\Product::findOrFail($productId);
+        $product = \Modules\Product\Models\Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->findOrFail($productId);
         $limit = min($request->input('limit', 10), 20);
 
         $relatedProducts = $this->recommendationService->getContentBasedRecommendations($product, $limit);

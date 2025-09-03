@@ -15,16 +15,17 @@ class ProductSearchAction
     {
         $searchTerm = Arr::get($data, 'search', '');
         $perPage = Arr::get($data, 'per_page', 9);
-        
+
         // Generate cache key based on search term and pagination
         $cacheKey = 'product_search_' . md5($searchTerm . '_' . $perPage);
-        
+
         return Cache::remember($cacheKey, 1800, function () use ($searchTerm, $perPage) {
             // Get recent products with caching
             $recentProductsCacheKey = 'recent_products_search_' . md5('active_3');
             $recent_products = Cache::remember($recentProductsCacheKey, 1800, function () {
                 return Product::whereStatus('active')
                     ->orderBy('id', 'DESC')
+                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
                     ->limit(3)
                     ->get();
             });
@@ -35,6 +36,7 @@ class ProductSearchAction
                 return Product::search($searchTerm)
                     ->where('status', 'active')
                     ->orderBy('id', 'desc')
+                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
                     ->paginate($perPage);
             });
 

@@ -40,7 +40,7 @@
                         <div id="attributes-container">
                             @php
                                 $attributeValuesMap = [];
-                                if (isset($product) && isset($product->attributeValues)) {
+                                if (isset($product) && is_object($product) && isset($product->attributeValues)) {
                                     foreach ($product->attributeValues as $av) {
                                         $attributeValuesMap[$av->attribute->code] =
                                             $av->text_value ??
@@ -95,7 +95,7 @@
                     <div class="form-group">
                         <label for="images">@lang('partials.image')</label>
                         <input type="file" name="images[]" id="image" class="form-control">
-                        @if(isset($product) && $product->hasMedia('images'))
+                        @if(isset($product) && is_object($product) && $product->hasMedia('images'))
                             <div class="mt-2">
                                 <img src="{{ $product->getFirstMediaUrl('images', 'thumb') }}" alt="Product Image"
                                      style="max-width: 150px; max-height: 150px;">
@@ -202,6 +202,7 @@
         </form>
     </div>
 
+    @if(isset($product) && is_object($product))
     <div class="row container-fluid mt-4">
         @foreach($product->getMedia('product') as $media)
             <div class="col-md-3">
@@ -216,6 +217,7 @@
             </div>
         @endforeach
     </div>
+    @endif
 
     @push('styles')
         <link rel="stylesheet" href="{{ asset('backend/summernote/summernote.min.css') }}">

@@ -18,6 +18,17 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
+    <!-- Analytics Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('admin.analytics')}}">
+            <i class="fas fa-chart-line"></i>
+            <span>Analytics Dashboard</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
     <div class="sidebar-heading">
         Shop
     </div>
@@ -202,6 +213,40 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
+        Marketing
+    </div>
+
+    <!-- Email Marketing -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#emailMarketingCollapse" aria-expanded="true"
+           aria-controls="emailMarketingCollapse">
+            <i class="fas fa-envelope"></i>
+            <span>Email Marketing</span>
+        </a>
+        <div id="emailMarketingCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Email Marketing Options:</h6>
+                <a class="collapse-item" href="{{route('newsletters.index')}}">Newsletters</a>
+                <a class="collapse-item" href="{{route('newsletters.create')}}">Create Campaign</a>
+                <a class="collapse-item" href="/api/v1/newsletter/analytics">Email Analytics</a>
+                <a class="collapse-item" href="/api/v1/newsletter/campaigns">Campaigns</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Abandoned Cart -->
+    <li class="nav-item">
+        <a class="nav-link" href="/api/v1/admin/analytics/abandoned-carts">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Abandoned Carts</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
         Posts
     </div>
     @hasrole('super-admin')
@@ -254,6 +299,40 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
+    
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        SEO & Performance
+    </div>
+
+    <!-- SEO Tools -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#seoCollapse" aria-expanded="true"
+           aria-controls="seoCollapse">
+            <i class="fas fa-search"></i>
+            <span>SEO Tools</span>
+        </a>
+        <div id="seoCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">SEO Options:</h6>
+                <a class="collapse-item" href="/sitemap.xml">XML Sitemap</a>
+                <a class="collapse-item" href="/robots.txt">Robots.txt</a>
+                <a class="collapse-item" href="#" onclick="generateSitemap()">Generate Sitemap</a>
+                <a class="collapse-item" href="/api/v1/admin/seo/meta-tags">Meta Tags</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Performance -->
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="clearCache()">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Clear Cache</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
     <!-- Heading -->
     <div class="sidebar-heading">
         @lang('sidebar.general_settings')
@@ -296,3 +375,44 @@
 
 
 </ul>
+
+<script>
+// SEO and Performance Functions
+function generateSitemap() {
+    if (confirm('Generate XML Sitemap? This may take a few minutes.')) {
+        fetch('/api/v1/admin/seo/generate-sitemap', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Sitemap generated successfully!');
+        })
+        .catch(error => {
+            alert('Error generating sitemap: ' + error.message);
+        });
+    }
+}
+
+function clearCache() {
+    if (confirm('Clear all application cache? This will improve performance but may slow down the next few requests.')) {
+        fetch('/api/v1/admin/clear-cache', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Cache cleared successfully!');
+        })
+        .catch(error => {
+            alert('Error clearing cache: ' + error.message);
+        });
+    }
+}
+</script>

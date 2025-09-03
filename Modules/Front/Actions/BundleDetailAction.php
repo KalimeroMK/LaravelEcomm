@@ -19,7 +19,11 @@ class BundleDetailAction
     public function __invoke(string $slug): array
     {
         $bundle = $this->bundleRepository->findBySlug($slug);
-        $related = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+        $related = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
+            ->where('status', 'active')
+            ->orderBy('id', 'DESC')
+            ->limit(3)
+            ->get();
 
         return [
             'bundle' => $bundle,

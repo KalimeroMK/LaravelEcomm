@@ -51,9 +51,9 @@ class RoleController extends CoreController
      */
     public function index(): View
     {
-        $rolesDto = $this->getAllAction->execute();
+        $roles = $this->getAllAction->execute();
 
-        return view('role::index', ['roles' => $rolesDto->roles]);
+        return view('role::index', ['roles' => $roles]);
     }
 
     /**

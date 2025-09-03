@@ -14,12 +14,13 @@ class ProductBrandAction
     {
         $products = Product::whereHas('brand', function (Builder $query) use ($data): void {
             $query->where('slug', $data['slug']);
-        })->paginate(9);
+        })->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])->paginate(9);
         $brands = Brand::where('status', 'active')
             ->orderBy('title')
             ->get();
         $recentProducts = Product::where('status', 'active')
             ->orderBy('id', 'DESC')
+            ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
             ->limit(3)
             ->get();
 

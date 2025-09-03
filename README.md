@@ -246,14 +246,42 @@ php artisan seo:generate-sitemap
 # Analytics dashboard available at /admin/analytics
 ```
 
-### Requirements installation and configuration for docker
+### 🐳 Docker Setup
 
--   **Docker**
--   **In project root run**: docker-compose up -d.
--   **Install laravel packages**: composer install
--   **ENV**: rename DB_HOST=127.0.0.1 to DB_HOST=mysql
--   **Container ssh**: docker-compose exec app sh
--   **Run migrations**: php artisan:migrate:fresh --seed.
+#### Prerequisites
+
+-   **Docker** and **Docker Compose** installed on your system
+
+#### Quick Docker Setup
+
+1. **Start containers**: `docker-compose up -d`
+2. **Install Laravel packages**: `docker exec e_comm_app composer install`
+3. **Configure environment**: Update `.env` file:
+    ```env
+    DB_HOST=mysql
+    DB_DATABASE=homestead
+    DB_USERNAME=homestead
+    DB_PASSWORD=secret
+    ```
+4. **Run migrations**: `docker exec e_comm_app php artisan migrate:fresh --seed`
+5. **Create storage link**: `docker exec e_comm_app php artisan storage:link`
+6. **Access the application**:
+    - **Frontend**: http://localhost:90
+    - **Admin Panel**: http://localhost:90/admin
+    - **API**: http://localhost:90/api/v1
+
+#### Docker Container Access
+
+-   **App container**: `docker exec -it e_comm_app sh`
+-   **Database**: `docker exec -it e_comm_mysql mysql -u homestead -p`
+-   **Redis**: `docker exec -it e_comm_redis redis-cli`
+
+#### Container Ports
+
+-   **Nginx (Web)**: 90 → 80
+-   **MySQL**: 3311 → 3306
+-   **Redis**: 6379 → 6379
+-   **Elasticsearch**: 9200 → 9200
 
 ### 🛠️ Management Commands
 

@@ -216,7 +216,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h5>Sales by Month</h5>
-                                    <canvas id="salesChart"></canvas>
+                                    <div style="height: 300px; position: relative;">
+                                        <canvas id="salesChart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -424,6 +426,11 @@
         loadAnalytics();
         initializeCharts();
         startRealTimeUpdates();
+        
+        // Add event listener for analytics type dropdown
+        document.getElementById('analyticsType').addEventListener('change', function() {
+            updateDateRange();
+        });
     });
 
     // Load analytics data
@@ -432,27 +439,54 @@
             const response = await fetch('/api/admin/analytics/dashboard');
             const data = await response.json();
             
-            if (data.success) {
-                updateOverviewCards(data.data.overview);
+            if (data.success && data.data) {
+                if (data.data.overview) {
+                    updateOverviewCards(data.data.overview);
+                }
                 updateCharts(data.data);
                 updateTables(data.data);
+            } else {
+                console.warn('Analytics data not available');
+                showNotification('Analytics data not available', 'warning');
             }
         } catch (error) {
             console.error('Error loading analytics:', error);
+            showNotification('Error loading analytics data', 'error');
         }
     }
 
     // Update overview cards
     function updateOverviewCards(overview) {
-        document.getElementById('totalRevenue').textContent = '$' + formatNumber(overview.total_revenue.current);
-        document.getElementById('totalOrders').textContent = formatNumber(overview.total_orders.current);
-        document.getElementById('totalCustomers').textContent = formatNumber(overview.total_customers.current);
-        document.getElementById('totalProducts').textContent = formatNumber(overview.total_products.current);
+        if (!overview) return;
+        
+        const totalRevenue = document.getElementById('totalRevenue');
+        const totalOrders = document.getElementById('totalOrders');
+        const totalCustomers = document.getElementById('totalCustomers');
+        const totalProducts = document.getElementById('totalProducts');
+        
+        if (totalRevenue && overview.total_revenue) {
+            totalRevenue.textContent = '$' + formatNumber(overview.total_revenue.current || 0);
+        }
+        if (totalOrders && overview.total_orders) {
+            totalOrders.textContent = formatNumber(overview.total_orders.current || 0);
+        }
+        if (totalCustomers && overview.total_customers) {
+            totalCustomers.textContent = formatNumber(overview.total_customers.current || 0);
+        }
+        if (totalProducts && overview.total_products) {
+            totalProducts.textContent = formatNumber(overview.total_products.current || 0);
+        }
         
         // Update change indicators
-        updateChangeIndicator('revenueChange', overview.total_revenue.this_month, overview.total_revenue.last_month);
-        updateChangeIndicator('ordersChange', overview.total_orders.this_month, overview.total_orders.last_month);
-        updateChangeIndicator('customersChange', overview.total_customers.this_month, overview.total_customers.last_month);
+        if (overview.total_revenue) {
+            updateChangeIndicator('revenueChange', overview.total_revenue.this_month, overview.total_revenue.last_month);
+        }
+        if (overview.total_orders) {
+            updateChangeIndicator('ordersChange', overview.total_orders.this_month, overview.total_orders.last_month);
+        }
+        if (overview.total_customers) {
+            updateChangeIndicator('customersChange', overview.total_customers.this_month, overview.total_customers.last_month);
+        }
     }
 
     // Update change indicators
@@ -522,14 +556,15 @@
     // Initialize other charts
     function initializeOtherCharts() {
         // Sales Chart
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesElement = document.getElementById('salesChart');
+        const salesCtx = salesElement.getContext('2d');
         salesChart = new Chart(salesCtx, {
             type: 'bar',
             data: {
-                labels: [],
+                labels: ['No Data'],
                 datasets: [{
                     label: 'Sales',
-                    data: [],
+                    data: [0],
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
@@ -537,10 +572,19 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
                     }
                 }
             }
@@ -670,107 +714,129 @@
 
     // Update charts with data
     function updateCharts(data) {
-        // Update revenue chart
-        if (data.sales.revenue_by_month) {
-            revenueChart.data.labels = data.sales.revenue_by_month.map(item => item.month);
-            revenueChart.data.datasets[0].data = data.sales.revenue_by_month.map(item => item.revenue);
-            revenueChart.update();
-        }
+        try {
+            if (!data) {
+                console.warn('No data provided to updateCharts');
+                return;
+            }
 
-        // Update orders pie chart
-        if (data.sales.sales_by_status.order_status) {
-            ordersPieChart.data.labels = Object.keys(data.sales.sales_by_status.order_status);
-            ordersPieChart.data.datasets[0].data = Object.values(data.sales.sales_by_status.order_status);
-            ordersPieChart.update();
-        }
+            // Update revenue chart
+            if (data.sales && data.sales.revenue_by_month && revenueChart) {
+                revenueChart.data.labels = data.sales.revenue_by_month.map(item => item.month);
+                revenueChart.data.datasets[0].data = data.sales.revenue_by_month.map(item => item.revenue);
+                revenueChart.update();
+            }
 
-        // Update sales chart
-        if (data.sales.orders_by_month) {
-            salesChart.data.labels = data.sales.orders_by_month.map(item => item.month);
-            salesChart.data.datasets[0].data = data.sales.orders_by_month.map(item => item.orders);
-            salesChart.update();
-        }
+            // Update orders pie chart
+            if (data.sales && data.sales.sales_by_status && data.sales.sales_by_status.order_status && ordersPieChart) {
+                ordersPieChart.data.labels = Object.keys(data.sales.sales_by_status.order_status);
+                ordersPieChart.data.datasets[0].data = Object.values(data.sales.sales_by_status.order_status);
+                ordersPieChart.update();
+            }
 
-        // Update user registrations chart
-        if (data.users.user_registrations) {
-            const registrations = data.users.user_registrations;
-            userRegistrationsChart.data.labels = Object.keys(registrations);
-            userRegistrationsChart.data.datasets[0].data = Object.values(registrations);
-            userRegistrationsChart.update();
-        }
+            // Update sales chart
+            if (data.sales && data.sales.orders_by_month && data.sales.orders_by_month.length > 0 && salesChart) {
+                salesChart.data.labels = data.sales.orders_by_month.map(item => item.month);
+                salesChart.data.datasets[0].data = data.sales.orders_by_month.map(item => item.orders);
+                salesChart.update();
+            } else if (salesChart) {
+                // Show message when no data
+                salesChart.data.labels = ['No Sales Data'];
+                salesChart.data.datasets[0].data = [0];
+                salesChart.update();
+            }
 
-        // Update user segments chart
-        if (data.users.user_segments) {
-            userSegmentsChart.data.labels = Object.keys(data.users.user_segments);
-            userSegmentsChart.data.datasets[0].data = Object.values(data.users.user_segments);
-            userSegmentsChart.update();
-        }
+            // Update user registrations chart
+            if (data.users && data.users.user_registrations && userRegistrationsChart) {
+                const registrations = data.users.user_registrations;
+                userRegistrationsChart.data.labels = Object.keys(registrations);
+                userRegistrationsChart.data.datasets[0].data = Object.values(registrations);
+                userRegistrationsChart.update();
+            }
 
-        // Update inventory chart
-        if (data.products.inventory_status) {
-            const inventory = data.products.inventory_status;
-            inventoryChart.data.labels = ['In Stock', 'Out of Stock', 'Low Stock'];
-            inventoryChart.data.datasets[0].data = [
-                inventory.in_stock,
-                inventory.out_of_stock,
-                inventory.low_stock
-            ];
-            inventoryChart.update();
-        }
+            // Update user segments chart
+            if (data.users && data.users.user_segments && userSegmentsChart) {
+                userSegmentsChart.data.labels = Object.keys(data.users.user_segments);
+                userSegmentsChart.data.datasets[0].data = Object.values(data.users.user_segments);
+                userSegmentsChart.update();
+            }
 
-        // Update page views chart
-        if (data.performance.page_views) {
-            const pageViews = data.performance.page_views;
-            pageViewsChart.data.labels = Object.keys(pageViews);
-            pageViewsChart.data.datasets[0].data = Object.values(pageViews);
-            pageViewsChart.update();
-        }
+            // Update inventory chart
+            if (data.products && data.products.inventory_status && inventoryChart) {
+                const inventory = data.products.inventory_status;
+                inventoryChart.data.labels = ['In Stock', 'Out of Stock', 'Low Stock'];
+                inventoryChart.data.datasets[0].data = [
+                    inventory.in_stock || 0,
+                    inventory.out_of_stock || 0,
+                    inventory.low_stock || 0
+                ];
+                inventoryChart.update();
+            }
 
-        // Update traffic sources chart
-        if (data.performance.traffic_sources) {
-            const traffic = data.performance.traffic_sources;
-            trafficSourcesChart.data.labels = Object.keys(traffic);
-            trafficSourcesChart.data.datasets[0].data = Object.values(traffic);
-            trafficSourcesChart.update();
+            // Update page views chart
+            if (data.performance && data.performance.page_views && pageViewsChart) {
+                const pageViews = data.performance.page_views;
+                pageViewsChart.data.labels = Object.keys(pageViews);
+                pageViewsChart.data.datasets[0].data = Object.values(pageViews);
+                pageViewsChart.update();
+            }
+
+            // Update traffic sources chart
+            if (data.performance && data.performance.traffic_sources && trafficSourcesChart) {
+                const traffic = data.performance.traffic_sources;
+                trafficSourcesChart.data.labels = Object.keys(traffic);
+                trafficSourcesChart.data.datasets[0].data = Object.values(traffic);
+                trafficSourcesChart.update();
+            }
+        } catch (error) {
+            console.error('Error updating charts:', error);
         }
     }
 
     // Update tables with data
     function updateTables(data) {
         // Update top products table
-        if (data.sales.top_selling_products) {
+        if (data.sales && data.sales.top_selling_products) {
             const tbody = document.querySelector('#topProductsTable tbody');
-            tbody.innerHTML = '';
-            data.sales.top_selling_products.forEach(product => {
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = product.title;
-                row.insertCell(1).textContent = product.total_sold;
-                row.insertCell(2).textContent = '$' + formatNumber(product.total_revenue);
-            });
+            if (tbody) {
+                tbody.innerHTML = '';
+                data.sales.top_selling_products.forEach(product => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = product.title || 'N/A';
+                    row.insertCell(1).textContent = product.total_sold || 0;
+                    row.insertCell(2).textContent = '$' + formatNumber(product.total_revenue || 0);
+                });
+            }
         }
 
         // Update product performance table
-        if (data.products.product_performance) {
+        if (data.products && data.products.product_performance) {
             const tbody = document.querySelector('#productPerformanceTable tbody');
-            tbody.innerHTML = '';
-            data.products.product_performance.forEach(product => {
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = product.title;
-                row.insertCell(1).textContent = product.clicks;
-                row.insertCell(2).textContent = product.impressions;
-                row.insertCell(3).textContent = product.ctr + '%';
-            });
+            if (tbody) {
+                tbody.innerHTML = '';
+                data.products.product_performance.forEach(product => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = product.title || 'N/A';
+                    row.insertCell(1).textContent = product.clicks || 0;
+                    row.insertCell(2).textContent = product.impressions || 0;
+                    row.insertCell(3).textContent = (product.ctr || 0) + '%';
+                });
+            }
         }
 
         // Update marketing metrics
-        if (data.marketing.email_campaigns) {
-            document.getElementById('emailOpenRate').textContent = data.marketing.email_campaigns.open_rate + '%';
-            document.getElementById('emailClickRate').textContent = data.marketing.email_campaigns.click_rate + '%';
+        if (data.marketing && data.marketing.email_campaigns) {
+            const emailOpenRate = document.getElementById('emailOpenRate');
+            const emailClickRate = document.getElementById('emailClickRate');
+            if (emailOpenRate) emailOpenRate.textContent = (data.marketing.email_campaigns.open_rate || 0) + '%';
+            if (emailClickRate) emailClickRate.textContent = (data.marketing.email_campaigns.click_rate || 0) + '%';
         }
 
-        if (data.marketing.newsletter_stats) {
-            document.getElementById('totalSubscribers').textContent = formatNumber(data.marketing.newsletter_stats.total_subscribers);
-            document.getElementById('newSubscribers').textContent = formatNumber(data.marketing.newsletter_stats.new_this_month);
+        if (data.marketing && data.marketing.newsletter_stats) {
+            const totalSubscribers = document.getElementById('totalSubscribers');
+            const newSubscribers = document.getElementById('newSubscribers');
+            if (totalSubscribers) totalSubscribers.textContent = formatNumber(data.marketing.newsletter_stats.total_subscribers || 0);
+            if (newSubscribers) newSubscribers.textContent = formatNumber(data.marketing.newsletter_stats.new_this_month || 0);
         }
     }
 
@@ -801,13 +867,52 @@
     }
 
     // Export analytics
-    function exportAnalytics() {
+    async function exportAnalytics() {
+        console.log('Export function called - using POST method');
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
         const type = document.getElementById('analyticsType').value;
         
-        // Implement export functionality
-        window.open(`/api/admin/analytics/export?type=${type}&format=xlsx&start_date=${startDate}&end_date=${endDate}`, '_blank');
+        console.log('Export parameters:', { type, format: 'xlsx', startDate, endDate });
+        
+        try {
+            const response = await fetch('/api/admin/analytics/export?_t=' + Date.now(), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Cache-Control': 'no-cache'
+                },
+                body: JSON.stringify({
+                    type: type,
+                    format: 'xlsx',
+                    start_date: startDate,
+                    end_date: endDate
+                })
+            });
+            
+            console.log('Response status:', response.status);
+            
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `analytics-${type}-${startDate}-to-${endDate}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                console.log('Export completed successfully');
+            } else {
+                const errorText = await response.text();
+                console.error('Export failed:', response.status, errorText);
+                alert('Export failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Export error:', error);
+            alert('Export failed. Please try again.');
+        }
     }
 
     // Update date range
@@ -828,10 +933,17 @@
             
             if (data.success) {
                 // Update charts and tables with filtered data
-                updateCharts({ [type]: data.data });
+                // Create a proper data structure for updateCharts
+                const chartData = {};
+                chartData[type] = data.data;
+                updateCharts(chartData);
+                
+                // Show success message
+                showNotification('Analytics updated successfully!', 'success');
             }
         } catch (error) {
             console.error('Error loading date range analytics:', error);
+            showNotification('Error loading analytics data', 'error');
         }
     }
 
@@ -850,6 +962,29 @@
     // Format number
     function formatNumber(num) {
         return new Intl.NumberFormat().format(num);
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 3000);
     }
 
     // Cleanup on page unload

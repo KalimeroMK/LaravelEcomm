@@ -39,7 +39,8 @@ class RecommendationService
         // Get products liked by similar users
         $recommendedProductIds = $this->getProductsFromSimilarUsers($similarUsers, $user);
 
-        return Product::whereIn('id', $recommendedProductIds)
+        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+            ->whereIn('id', $recommendedProductIds)
             ->where('status', 'active')
             ->where('stock', '>', 0)
             ->limit($limit)
@@ -51,7 +52,8 @@ class RecommendationService
      */
     public function getContentBasedRecommendations(Product $product, int $limit = 10): Collection
     {
-        return Product::where('id', '!=', $product->id)
+        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+            ->where('id', '!=', $product->id)
             ->where('status', 'active')
             ->where('stock', '>', 0)
             ->where(function ($query) use ($product) {
@@ -79,7 +81,8 @@ class RecommendationService
             ->limit($limit)
             ->pluck('product_id');
 
-        return Product::whereIn('id', $trendingProductIds)
+        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+            ->whereIn('id', $trendingProductIds)
             ->where('status', 'active')
             ->where('stock', '>', 0)
             ->get();
@@ -210,7 +213,8 @@ class RecommendationService
      */
     protected function getRecommendedProducts(array $recommendations, int $limit): Collection
     {
-        $query = Product::where('status', 'active')
+        $query = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+            ->where('status', 'active')
             ->where('stock', '>', 0);
 
         if (!empty($recommendations['categories'])) {
