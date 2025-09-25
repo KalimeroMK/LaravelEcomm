@@ -10,10 +10,6 @@ class ReplyToMessageAction
 {
     public function execute(Message $message, array $replyData): Message
     {
-        if (!auth()->user()->hasRole('admin')) {
-            abort(403, 'Unauthorized - Admin access required');
-        }
-        
         return Message::create([
             'name' => auth()->user()->name,
             'email' => auth()->user()->email,

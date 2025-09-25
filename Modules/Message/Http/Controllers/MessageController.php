@@ -44,6 +44,7 @@ class MessageController extends CoreController
      */
     public function index(): View|Factory|Application
     {
+        $this->authorize('viewAny', Message::class);
         $messages = $this->getAllAction->execute();
 
         return view('message::index', ['messages' => $messages]);
@@ -54,6 +55,7 @@ class MessageController extends CoreController
      */
     public function show(Message $message): Factory|View|Application
     {
+        $this->authorize('view', $message);
         return view('message::show', ['message' => $message]);
     }
 
@@ -62,6 +64,7 @@ class MessageController extends CoreController
      */
     public function destroy(Message $message): RedirectResponse
     {
+        $this->authorize('delete', $message);
         $this->deleteAction->execute($message->id);
 
         return redirect()->back();
@@ -72,6 +75,7 @@ class MessageController extends CoreController
      */
     public function markAsRead(Message $message): RedirectResponse
     {
+        $this->authorize('update', $message);
         $this->markAsReadAction->execute($message);
 
         return redirect()->back();
@@ -82,6 +86,7 @@ class MessageController extends CoreController
      */
     public function reply(Message $message, Request $request): RedirectResponse
     {
+        $this->authorize('update', $message);
         $replyData = $request->validate([
             'subject' => 'required|string|max:255',
             'message' => 'required|string|min:10',
@@ -97,6 +102,7 @@ class MessageController extends CoreController
      */
     public function markMultipleAsRead(Request $request): RedirectResponse
     {
+        $this->authorize('viewAny', Message::class);
         $messageIds = $request->validate([
             'message_ids' => 'required|array',
             'message_ids.*' => 'integer|exists:messages,id',

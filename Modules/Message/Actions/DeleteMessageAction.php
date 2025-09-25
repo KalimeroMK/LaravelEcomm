@@ -13,10 +13,6 @@ readonly class DeleteMessageAction
 
     public function execute(int $id): JsonResponse
     {
-        if (!auth()->user()->hasRole('admin')) {
-            abort(403, 'Unauthorized - Admin access required');
-        }
-        
         $this->repository->destroy($id);
 
         return response()->json();

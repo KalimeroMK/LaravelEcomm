@@ -109,6 +109,7 @@ class Kernel extends HttpKernel
             '2fa' => Google2faMiddleware::class,
             'activity' => LogActivity::class,
             'rate.limit' => \Modules\Core\Http\Middleware\CustomRateLimiter::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
 
         ];
 }

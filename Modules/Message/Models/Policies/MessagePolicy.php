@@ -14,26 +14,36 @@ class MessagePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('message-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user, Message $message): bool
     {
-        return $user->can('message-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function create(User $user): bool
     {
-        return $user->can('message-create');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Message $message): bool
     {
-        return $user->can('message-update');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function delete(User $user, Message $message): bool
     {
-        return $user->can('message-delete');
+        return $user->hasAnyRole(['admin', 'super-admin']);
+    }
+
+    public function restore(User $user, Message $message): bool
+    {
+        return $user->hasAnyRole(['admin', 'super-admin']);
+    }
+
+    public function forceDelete(User $user, Message $message): bool
+    {
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 }

@@ -57,7 +57,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware(['auth', 'web', 'activity'])
+        Route::middleware(['auth', 'admin', 'web', 'activity'])
             ->prefix('admin')
             ->group(module_path('Role', '/Routes/web.php'));
     }

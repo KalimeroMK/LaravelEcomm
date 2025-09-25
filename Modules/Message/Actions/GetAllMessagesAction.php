@@ -18,10 +18,6 @@ class GetAllMessagesAction
 
     public function execute(): Collection
     {
-        if (!auth()->user()->hasRole('admin')) {
-            abort(403, 'Unauthorized - Admin access required');
-        }
-        
         return $this->repository->findAll();
     }
 }

@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/admin', function (Request $request) {
 });
 
 // Analytics API Routes
-Route::prefix('admin/analytics')->middleware(['auth:api', 'admin'])->group(function (): void {
+Route::prefix('admin/analytics')->middleware(['auth:sanctum', 'admin'])->group(function (): void {
     Route::get('dashboard', [AnalyticsController::class, 'dashboard'])->name('admin.analytics.dashboard');
     Route::get('overview', [AnalyticsController::class, 'overview'])->name('admin.analytics.overview');
     Route::get('sales', [AnalyticsController::class, 'sales'])->name('admin.analytics.sales');
