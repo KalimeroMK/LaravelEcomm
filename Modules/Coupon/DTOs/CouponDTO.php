@@ -17,7 +17,6 @@ readonly class CouponDTO
         public ?string $status = null,
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
-
     ) {}
 
     public static function fromRequest(Request $request, ?int $id = null): self

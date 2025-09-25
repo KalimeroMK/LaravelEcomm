@@ -6,13 +6,14 @@ namespace Modules\Front\Actions;
 
 use App\Events\MessageSent;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Message\Models\Message;
 
 class MessageStoreAction
 {
-    public function __invoke(Request $request): string
+    public function __invoke(Request $request): RedirectResponse
     {
         try {
             $message = Message::create($request->all());
@@ -27,9 +28,9 @@ class MessageStoreAction
             $data['photo'] = Auth::user()->photo ?? '';
             event(new MessageSent($data));
 
-            return 'message sent';
+            return redirect()->back()->with('success', 'Message sent successfully!');
         } catch (Exception $exception) {
-            return $exception->getMessage();
+            return redirect()->back()->with('error', $exception->getMessage());
         }
     }
 }

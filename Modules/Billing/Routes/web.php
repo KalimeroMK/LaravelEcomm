@@ -18,7 +18,7 @@ use Modules\Billing\Http\Controllers\PaypalController;
 use Modules\Billing\Http\Controllers\StripeController;
 use Modules\Billing\Http\Controllers\WishlistController;
 
-Route::get('wishlist', function () {
+Route::get('wishlist', function (): Illuminate\Contracts\View\View|Illuminate\Contracts\View\Factory {
     return view('front::pages.wishlist');
 })->name('wishlist');
 Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist');

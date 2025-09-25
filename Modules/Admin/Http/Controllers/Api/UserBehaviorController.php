@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Admin\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Admin\Services\UserBehaviorService;
@@ -51,7 +52,7 @@ class UserBehaviorController extends Controller
                 'message' => 'Event tracked successfully',
                 'tracking_id' => $tracking->id,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to track event',
@@ -72,7 +73,7 @@ class UserBehaviorController extends Controller
                 'success' => true,
                 'data' => $analytics,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get analytics',
@@ -93,7 +94,7 @@ class UserBehaviorController extends Controller
                 'success' => true,
                 'data' => $pageViews,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get page view analytics',
@@ -114,7 +115,7 @@ class UserBehaviorController extends Controller
                 'success' => true,
                 'data' => $engagement,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get engagement analytics',
@@ -135,7 +136,7 @@ class UserBehaviorController extends Controller
                 'success' => true,
                 'data' => $popularPages,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get popular pages',
@@ -156,7 +157,7 @@ class UserBehaviorController extends Controller
                 'success' => true,
                 'data' => $sessions,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get session analytics',
@@ -177,7 +178,7 @@ class UserBehaviorController extends Controller
                 'success' => true,
                 'data' => $devices,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get device analytics',
@@ -198,7 +199,7 @@ class UserBehaviorController extends Controller
                 'success' => true,
                 'data' => $geographic,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get geographic analytics',

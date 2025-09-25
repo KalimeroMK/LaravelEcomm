@@ -114,6 +114,7 @@ class OptimizePerformance extends Command
 
         // Check for slow queries
         $this->line('  - Checking for slow queries...');
+
         try {
             $slowQueries = DB::select('SHOW PROCESSLIST');
             $longRunningQueries = array_filter($slowQueries, function ($query) {
@@ -173,6 +174,7 @@ class OptimizePerformance extends Command
     {
         // Check cache statistics
         $this->line('  - Checking cache performance...');
+
         try {
             $cacheStats = $cacheService->getStats();
             $this->line("    ✓ Cache hit rate: {$cacheStats['hit_rate']}%");
@@ -184,6 +186,7 @@ class OptimizePerformance extends Command
 
         // Check database connections
         $this->line('  - Checking database connections...');
+
         try {
             $connectionCount = DB::select("SHOW STATUS LIKE 'Threads_connected'");
             $this->line("    ✓ Active database connections: {$connectionCount[0]->Value}");
@@ -193,6 +196,7 @@ class OptimizePerformance extends Command
 
         // Check queue status
         $this->line('  - Checking queue status...');
+
         try {
             $pendingJobs = DB::table('jobs')->count();
             $failedJobs = DB::table('failed_jobs')->count();

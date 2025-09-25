@@ -15,8 +15,6 @@ use Modules\Product\Models\Product;
 
 class ProductRepository extends EloquentRepository implements EloquentRepositoryInterface, SearchInterface
 {
-    private const LATEST_PRODUCTS_LIMIT = 4;
-
     public function __construct()
     {
         parent::__construct(Product::class);
@@ -29,7 +27,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function search(array $data): mixed
     {
-        $cacheKey = 'search_' . md5(json_encode($data));
+        $cacheKey = 'search_'.md5(json_encode($data));
 
         return Cache::store('redis')->remember($cacheKey, 86400, function () use ($data) {
             $query = (new $this->modelClass)->newQuery();
@@ -48,7 +46,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
 
             foreach ($searchableFields as $field) {
                 if (Arr::has($data, $field)) {
-                    $query->where($field, 'like', '%' . Arr::get($data, $field) . '%');
+                    $query->where($field, 'like', '%'.Arr::get($data, $field).'%');
                 }
             }
 

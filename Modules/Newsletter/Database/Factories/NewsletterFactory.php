@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\Newsletter\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 use Modules\Newsletter\Models\Newsletter;
 
 class NewsletterFactory extends Factory

@@ -152,7 +152,7 @@ class AnalyticsController extends Controller
         $endDate = $request->get('end_date');
         $type = $request->get('type');
 
-        $analytics = $this->getDateRangeAnalytics($type, $startDate, $endDate);
+        $analytics = $this->getDateRangeAnalytics($type);
 
         return response()->json([
             'success' => true,
@@ -228,7 +228,7 @@ class AnalyticsController extends Controller
     /**
      * Get date range analytics
      */
-    private function getDateRangeAnalytics(string $type, string $startDate, string $endDate): array
+    private function getDateRangeAnalytics(string $type): array
     {
         // Implementation for date range analytics
         return match ($type) {

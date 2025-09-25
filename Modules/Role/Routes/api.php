@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 use Modules\Role\Http\Controllers\Api\RoleController;
 
 // API Routes
-    Route::apiResource('roles', RoleController::class)->names('api.roles');
+Route::apiResource('roles', RoleController::class)->names('api.roles');

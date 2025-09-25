@@ -99,7 +99,7 @@ class UserController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function create()
+    public function create(): Factory|View
     {
         $roles = $this->getAllRolesAction->execute();
 
@@ -114,7 +114,7 @@ class UserController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function show(User $user)
+    public function show(User $user): Factory|View
     {
         $userDto = $this->findUserAction->execute($user->id);
 
@@ -126,7 +126,7 @@ class UserController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function edit(User $user)
+    public function edit(User $user): Factory|View
     {
         $roles = $this->getAllRolesAction->execute();
         $userRole = $this->getUserRolesAction->execute($user->id);
@@ -140,7 +140,7 @@ class UserController extends Controller
      */
     public function update(Update $request, int $id): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        User::findOrFail($id);
         $this->updateUserAction->execute($id, $request->validated());
 
         return redirect()->route('users.index')->with('success', 'User updated successfully');
@@ -159,7 +159,7 @@ class UserController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function profile()
+    public function profile(): Factory|View
     {
         $user = Auth()->user();
         $userDto = $this->findUserAction->execute($user->id);

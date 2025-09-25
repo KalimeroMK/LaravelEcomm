@@ -16,9 +16,9 @@ class ProductGridsAction
         $queryParams = request()->only(['category', 'brand', 'price', 'show', 'sortBy']);
 
         // Generate main cache key based on all parameters
-        $mainCacheKey = 'product_grids_' . md5(json_encode($queryParams));
+        $mainCacheKey = 'product_grids_'.md5(json_encode($queryParams));
 
-        return Cache::remember($mainCacheKey, 1800, function () use ($queryParams) {
+        return Cache::remember($mainCacheKey, 1800, function () use ($queryParams): array {
             // Retrieve category and brand IDs from slugs with caching
             $categorySlugs = explode(',', $queryParams['category'] ?? '');
             $brandSlugs = explode(',', $queryParams['brand'] ?? '');
@@ -35,7 +35,7 @@ class ProductGridsAction
             $perPage = (int) ($queryParams['show'] ?? 9);
 
             // Get products with caching
-            $productsCacheKey = 'products_grid_' . md5(json_encode([
+            $productsCacheKey = 'products_grid_'.md5(json_encode([
                 'categoryIds' => $categoryIds,
                 'brandIds' => $brandIds,
                 'minPrice' => $minPrice,
@@ -47,9 +47,9 @@ class ProductGridsAction
 
             $products = Cache::remember($productsCacheKey, 900, function () use ($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder, $perPage) {
                 return Product::query()
-                    ->when($categoryIds, fn($query) => $query->whereIn('cat_id', $categoryIds))
-                    ->when($brandIds, fn($query) => $query->whereIn('brand_id', $brandIds))
-                    ->when($minPrice || $maxPrice, fn($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
+                    ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
+                    ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
+                    ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
                     ->where('status', 'active')
                     ->orderBy($sortColumn, $sortOrder)
                     ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
@@ -87,11 +87,11 @@ class ProductGridsAction
      */
     private function getCachedCategoryIds(array $slugs): array
     {
-        if (empty($slugs)) {
+        if ($slugs === []) {
             return [];
         }
 
-        $cacheKey = 'category_ids_grid_' . md5(json_encode($slugs));
+        $cacheKey = 'category_ids_grid_'.md5(json_encode($slugs));
 
         return Cache::remember($cacheKey, 86400, function () use ($slugs) {
             return Category::whereIn('slug', $slugs)
@@ -106,11 +106,11 @@ class ProductGridsAction
      */
     private function getCachedBrandIds(array $slugs): array
     {
-        if (empty($slugs)) {
+        if ($slugs === []) {
             return [];
         }
 
-        $cacheKey = 'brand_ids_grid_' . md5(json_encode($slugs));
+        $cacheKey = 'brand_ids_grid_'.md5(json_encode($slugs));
 
         return Cache::remember($cacheKey, 86400, function () use ($slugs) {
             return Brand::whereIn('slug', $slugs)
@@ -125,14 +125,15 @@ class ProductGridsAction
      */
     private function parsePriceRange(?string $priceRange): array
     {
-        if (empty($priceRange)) {
+        if ($priceRange === null || $priceRange === '' || $priceRange === '0') {
             return [0, PHP_INT_MAX];
         }
 
         $prices = explode('-', $priceRange);
+
         return [
             (int) ($prices[0] ?? 0),
-            (int) ($prices[1] ?? PHP_INT_MAX)
+            (int) ($prices[1] ?? PHP_INT_MAX),
         ];
     }
 

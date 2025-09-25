@@ -20,10 +20,11 @@ class ImportProductsAction
         if (is_array($file)) {
             throw new InvalidArgumentException('Multiple files uploaded. Please upload only one file.');
         }
+
         try {
             Excel::import(new Products, $file);
         } catch (Throwable $e) {
-            throw new RuntimeException('Failed to import products: '.$e->getMessage());
+            throw new RuntimeException('Failed to import products: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 }

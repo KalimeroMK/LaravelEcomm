@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Modules\Cart\Services\AbandonedCartService;
 
@@ -40,11 +41,13 @@ class ProcessAbandonedCartEmails extends Command
 
         if ($this->option('stats')) {
             $this->showStats();
+
             return Command::SUCCESS;
         }
 
         if ($this->option('cleanup')) {
             $this->cleanupOldCarts();
+
             return Command::SUCCESS;
         }
 
@@ -56,8 +59,9 @@ class ProcessAbandonedCartEmails extends Command
             $this->showStats();
 
             return Command::SUCCESS;
-        } catch (\Exception $e) {
-            $this->error('❌ Error processing abandoned cart emails: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('❌ Error processing abandoned cart emails: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
@@ -73,7 +77,7 @@ class ProcessAbandonedCartEmails extends Command
             [
                 ['Total Abandoned Carts', $stats['total_abandoned_carts']],
                 ['Converted Carts', $stats['converted_carts']],
-                ['Conversion Rate', $stats['conversion_rate'] . '%'],
+                ['Conversion Rate', $stats['conversion_rate'].'%'],
                 ['Pending First Email', $stats['pending_first_email']],
                 ['Pending Second Email', $stats['pending_second_email']],
                 ['Pending Third Email', $stats['pending_third_email']],

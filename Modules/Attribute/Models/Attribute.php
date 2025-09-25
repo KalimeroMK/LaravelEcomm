@@ -134,8 +134,12 @@ class Attribute extends Core
      */
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(AttributeGroup::class, 'attribute_attribute_group', 'attribute_id',
-            'attribute_group_id');
+        return $this->belongsToMany(
+            AttributeGroup::class,
+            'attribute_attribute_group',
+            'attribute_id',
+            'attribute_group_id'
+        );
     }
 
     /**

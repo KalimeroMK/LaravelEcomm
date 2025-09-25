@@ -6,14 +6,9 @@ namespace Modules\Tag\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Tag\DTOs\TagDTO;
-use Modules\Tag\Repository\TagRepository;
 
 readonly class UpdateTagAction
 {
-    public function __construct(
-        private TagRepository $repository
-    ) {}
-
     public function execute(Model $tag, TagDTO $dto): Model
     {
         $tag->update([

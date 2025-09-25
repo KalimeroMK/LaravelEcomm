@@ -50,7 +50,7 @@ class ProductReviewController extends CoreController
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory
     {
         $reviews = auth()->user()->hasRole('client')
             ? $this->getProductReviewsByUserAction->execute()

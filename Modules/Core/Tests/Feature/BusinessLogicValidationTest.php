@@ -18,7 +18,9 @@ class BusinessLogicValidationTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private User $user;
+
     private Product $product;
+
     private Shipping $shipping;
 
     protected function setUp(): void
@@ -31,17 +33,17 @@ class BusinessLogicValidationTest extends TestCase
         $this->product = Product::factory()->create([
             'status' => 'active',
             'price' => 100.00,
-            'stock' => 10
+            'stock' => 10,
         ]);
 
         $this->shipping = Shipping::factory()->create([
             'status' => 'active',
-            'price' => 15.00
+            'price' => 15.00,
         ]);
     }
 
     /** @test */
-    public function cart_total_calculation_is_accurate()
+    public function cart_total_calculation_is_accurate(): void
     {
         // Add multiple products with different quantities
         $cart1 = Cart::factory()->create([
@@ -49,12 +51,12 @@ class BusinessLogicValidationTest extends TestCase
             'product_id' => $this->product->id,
             'quantity' => 3,
             'price' => $this->product->price,
-            'amount' => $this->product->price * 3
+            'amount' => $this->product->price * 3,
         ]);
 
         $product2 = Product::factory()->create([
             'price' => 75.50,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $cart2 = Cart::factory()->create([
@@ -62,7 +64,7 @@ class BusinessLogicValidationTest extends TestCase
             'product_id' => $product2->id,
             'quantity' => 2,
             'price' => $product2->price,
-            'amount' => $product2->price * 2
+            'amount' => $product2->price * 2,
         ]);
 
         // Calculate expected totals
@@ -79,12 +81,12 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function order_status_progression_is_valid()
+    public function order_status_progression_is_valid(): void
     {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'status' => 'pending',
-            'payment_status' => 'pending'
+            'payment_status' => 'pending',
         ]);
 
         // Test valid status progression
@@ -92,7 +94,7 @@ class BusinessLogicValidationTest extends TestCase
             'pending' => ['processing', 'cancelled'],
             'processing' => ['shipped', 'cancelled'],
             'shipped' => ['delivered', 'returned'],
-            'delivered' => ['completed', 'returned']
+            'delivered' => ['completed', 'returned'],
         ];
 
         foreach ($validTransitions as $currentStatus => $allowedNextStatuses) {
@@ -106,12 +108,12 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function payment_status_affects_order_status()
+    public function payment_status_affects_order_status(): void
     {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'status' => 'pending',
-            'payment_status' => 'pending'
+            'payment_status' => 'pending',
         ]);
 
         // Payment completed should update order status
@@ -126,11 +128,11 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function stock_validation_prevents_over_ordering()
+    public function stock_validation_prevents_over_ordering(): void
     {
         $product = Product::factory()->create([
             'stock' => 5,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         // Try to add more than available stock
@@ -139,7 +141,7 @@ class BusinessLogicValidationTest extends TestCase
             'product_id' => $product->id,
             'quantity' => 7, // More than available stock
             'price' => $product->price,
-            'amount' => $product->price * 7
+            'amount' => $product->price * 7,
         ]);
 
         // Business rule: Cart should not allow quantities exceeding stock
@@ -150,13 +152,13 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function shipping_costs_are_correctly_applied()
+    public function shipping_costs_are_correctly_applied(): void
     {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'sub_total' => 200.00,
             'shipping_id' => $this->shipping->id,
-            'total_amount' => 215.00
+            'total_amount' => 215.00,
         ]);
 
         // Verify shipping cost calculation
@@ -166,19 +168,19 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function user_can_only_access_own_data()
+    public function user_can_only_access_own_data(): void
     {
         $otherUser = User::factory()->create();
 
         // Create cart items for different users
         $userCart = Cart::factory()->create([
             'user_id' => $this->user->id,
-            'product_id' => $this->product->id
+            'product_id' => $this->product->id,
         ]);
 
         $otherUserCart = Cart::factory()->create([
             'user_id' => $otherUser->id,
-            'product_id' => $this->product->id
+            'product_id' => $this->product->id,
         ]);
 
         // Business rule: Users can only see their own cart items
@@ -188,19 +190,19 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function order_quantities_match_cart_items()
+    public function order_quantities_match_cart_items(): void
     {
         // Create cart items
         $cart1 = Cart::factory()->create([
             'user_id' => $this->user->id,
             'product_id' => $this->product->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $cart2 = Cart::factory()->create([
             'user_id' => $this->user->id,
             'product_id' => $this->product->id,
-            'quantity' => 1
+            'quantity' => 1,
         ]);
 
         // Calculate total quantity
@@ -211,12 +213,12 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function product_status_affects_cart_operations()
+    public function product_status_affects_cart_operations(): void
     {
         // Create inactive product
         $inactiveProduct = Product::factory()->create([
             'status' => 'inactive',
-            'price' => 50.00
+            'price' => 50.00,
         ]);
 
         // Business rule: Inactive products should not be added to cart
@@ -228,7 +230,7 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function price_consistency_is_maintained()
+    public function price_consistency_is_maintained(): void
     {
         $originalPrice = $this->product->price;
 
@@ -237,7 +239,7 @@ class BusinessLogicValidationTest extends TestCase
             'user_id' => $this->user->id,
             'product_id' => $this->product->id,
             'quantity' => 1,
-            'price' => $originalPrice
+            'price' => $originalPrice,
         ]);
 
         $this->assertEquals($originalPrice, $cart->price);
@@ -249,7 +251,7 @@ class BusinessLogicValidationTest extends TestCase
     }
 
     /** @test */
-    public function order_totals_are_accurate_with_multiple_items()
+    public function order_totals_are_accurate_with_multiple_items(): void
     {
         // Create multiple cart items
         $cart1 = Cart::factory()->create([
@@ -257,12 +259,12 @@ class BusinessLogicValidationTest extends TestCase
             'product_id' => $this->product->id,
             'quantity' => 2,
             'price' => $this->product->price,
-            'amount' => $this->product->price * 2
+            'amount' => $this->product->price * 2,
         ]);
 
         $product2 = Product::factory()->create([
             'price' => 75.00,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $cart2 = Cart::factory()->create([
@@ -270,7 +272,7 @@ class BusinessLogicValidationTest extends TestCase
             'product_id' => $product2->id,
             'quantity' => 1,
             'price' => $product2->price,
-            'amount' => $product2->price * 1
+            'amount' => $product2->price * 1,
         ]);
 
         // Calculate totals

@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace Modules\Admin\Services;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Modules\Brand\Models\Brand;
+use Modules\Category\Models\Category;
+use Modules\Newsletter\Models\EmailAnalytics;
+use Modules\Newsletter\Models\Newsletter;
 use Modules\Order\Models\Order;
+use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
-use Modules\ProductStats\Models\ProductClick;
 use Modules\ProductStats\Models\ProductImpression;
 use Modules\User\Models\User;
-use Modules\Post\Models\Post;
-use Modules\Category\Models\Category;
-use Modules\Brand\Models\Brand;
-use Modules\Newsletter\Models\Newsletter;
-use Modules\Newsletter\Models\EmailAnalytics;
 
 class AnalyticsService
 {
@@ -174,7 +172,7 @@ class AnalyticsService
             ->orderBy('month', 'desc')
             ->get();
 
-        return $revenue->map(function ($item) {
+        return $revenue->map(function ($item): array {
             return [
                 'month' => Carbon::create($item->year, $item->month)->format('M Y'),
                 'revenue' => (float) $item->revenue,
@@ -198,7 +196,7 @@ class AnalyticsService
             ->orderBy('month', 'desc')
             ->get();
 
-        return $orders->map(function ($item) {
+        return $orders->map(function ($item): array {
             return [
                 'month' => Carbon::create($item->year, $item->month)->format('M Y'),
                 'orders' => (int) $item->count,
@@ -266,7 +264,7 @@ class AnalyticsService
             'this_month' => $paidOrders->where('created_at', '>=', Carbon::now()->startOfMonth())->avg('total_amount'),
             'last_month' => $paidOrders->whereBetween('created_at', [
                 Carbon::now()->subMonth()->startOfMonth(),
-                Carbon::now()->startOfMonth()
+                Carbon::now()->startOfMonth(),
             ])->avg('total_amount'),
         ];
     }
@@ -337,10 +335,10 @@ class AnalyticsService
         return [
             'customers_with_orders' => User::whereHas('orders')->count(),
             'customers_without_orders' => User::whereDoesntHave('orders')->count(),
-            'repeat_customers' => User::whereHas('orders', function ($query) {
+            'repeat_customers' => User::whereHas('orders', function ($query): void {
                 $query->havingRaw('COUNT(*) > 1');
             })->count(),
-            'high_value_customers' => User::whereHas('orders', function ($query) {
+            'high_value_customers' => User::whereHas('orders', function ($query): void {
                 $query->where('total_amount', '>=', 500);
             })->count(),
         ];
@@ -374,7 +372,7 @@ class AnalyticsService
     {
         $products = Product::with(['clicks', 'impressions'])->get();
 
-        return $products->map(function ($product) {
+        return $products->map(function ($product): array {
             $clicks = $product->clicks->count();
             $impressions = $product->impressions->count();
             $ctr = $impressions > 0 ? round(($clicks / $impressions) * 100, 2) : 0;
@@ -399,7 +397,7 @@ class AnalyticsService
             ->orderBy('products_count', 'desc')
             ->limit(10)
             ->get()
-            ->map(function ($category) {
+            ->map(function ($category): array {
                 return [
                     'id' => $category->id,
                     'title' => $category->title,
@@ -417,7 +415,7 @@ class AnalyticsService
             ->orderBy('products_count', 'desc')
             ->limit(10)
             ->get()
-            ->map(function ($brand) {
+            ->map(function ($brand): array {
                 return [
                     'id' => $brand->id,
                     'title' => $brand->title,

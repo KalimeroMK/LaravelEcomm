@@ -17,5 +17,5 @@ use Modules\Coupon\Http\Controllers\Api\CouponController;
 */
 
 // API Routes
-    Route::apiResource('coupons', CouponController::class)
-        ->names('api.coupons');
+Route::apiResource('coupons', CouponController::class)
+    ->names('api.coupons');

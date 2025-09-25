@@ -6,11 +6,10 @@ namespace Modules\Product\DTOs;
 
 class ProductListDTO
 {
-    public array $products;
+    public array $products = [];
 
     public function __construct($products)
     {
-        $this->products = [];
         foreach ($products as $product) {
             $arr = $product->toArray();
             // Map attributeValues to attributes array

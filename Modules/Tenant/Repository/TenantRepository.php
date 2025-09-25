@@ -10,7 +10,10 @@ use Modules\Tenant\Models\Tenant;
 class TenantRepository extends Repository
 {
     /**
-     * @var string
+     * Get the model instance.
      */
-    public $model = Tenant::class;
+    public function getModel(): Tenant
+    {
+        return new Tenant;
+    }
 }

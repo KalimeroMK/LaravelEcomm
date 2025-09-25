@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Newsletter\Jobs;
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -45,12 +46,13 @@ class SendNewsletterJob implements ShouldQueue
                 \Modules\Newsletter\Models\EmailAnalytics::find($this->analyticsId)
                     ?->update(['sent_at' => now()]);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Mark as bounced if sending fails
             if ($this->analyticsId) {
                 \Modules\Newsletter\Models\EmailAnalytics::find($this->analyticsId)
                     ?->markAsBounced();
             }
+
             throw $e;
         }
     }

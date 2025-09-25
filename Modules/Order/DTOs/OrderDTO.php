@@ -82,6 +82,6 @@ readonly class OrderDTO
             'status' => $this->status,
             'payer_id' => $this->payer_id,
             'transaction_reference' => $this->transaction_reference,
-        ], fn ($v) => $v !== null);
+        ], fn (float|int|string|null $v): bool => $v !== null);
     }
 }

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\Newsletter\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Core\Http\Controllers\Controller;
 use Modules\Newsletter\Services\NewsletterService;
 
 class NewsletterAnalyticsController extends Controller
@@ -95,28 +95,30 @@ class NewsletterAnalyticsController extends Controller
         $format = $request->get('format');
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
-        $campaignType = $request->get('campaign_type', 'all');
+        $request->get('campaign_type', 'all');
 
-        $exportData = $this->generateExportData($startDate, $endDate, $campaignType);
+        $exportData = $this->generateExportData();
 
         if ($format === 'xlsx') {
             return $this->exportToExcel($exportData, $startDate, $endDate);
-        } elseif ($format === 'csv') {
-            return $this->exportToCsv($exportData, $startDate, $endDate);
-        } else {
-            return response()->json([
-                'success' => true,
-                'message' => 'Export data generated successfully',
-                'data' => $exportData,
-                'format' => $format,
-            ]);
         }
+        if ($format === 'csv') {
+            return $this->exportToCsv($exportData, $startDate, $endDate);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Export data generated successfully',
+            'data' => $exportData,
+            'format' => $format,
+        ]);
+
     }
 
     /**
      * Generate export data
      */
-    private function generateExportData(?string $startDate, ?string $endDate, string $campaignType): array
+    private function generateExportData(): array
     {
         $analytics = $this->newsletterService->getNewsletterAnalytics('30_days');
         $subscriberStats = $this->newsletterService->getSubscriberStats();
@@ -201,8 +203,10 @@ class NewsletterAnalyticsController extends Controller
             $title .= " ({$startDate} to {$endDate})";
         }
 
-        return Excel::download(new EmailAnalyticsExport($exportData, $title), 
-            'email-analytics-' . ($startDate ?? 'all') . '-to-' . ($endDate ?? 'all') . '.xlsx');
+        return Excel::download(
+            new EmailAnalyticsExport($exportData, $title),
+            'email-analytics-'.($startDate ?? 'all').'-to-'.($endDate ?? 'all').'.xlsx'
+        );
     }
 
     /**
@@ -216,8 +220,10 @@ class NewsletterAnalyticsController extends Controller
             $title .= " ({$startDate} to {$endDate})";
         }
 
-        return Excel::download(new EmailAnalyticsExport($exportData, $title), 
-            'email-analytics-' . ($startDate ?? 'all') . '-to-' . ($endDate ?? 'all') . '.csv');
+        return Excel::download(
+            new EmailAnalyticsExport($exportData, $title),
+            'email-analytics-'.($startDate ?? 'all').'-to-'.($endDate ?? 'all').'.csv'
+        );
     }
 
     /**
@@ -257,8 +263,9 @@ class NewsletterAnalyticsController extends Controller
  */
 class EmailAnalyticsExport implements FromArray, WithHeadings, WithTitle
 {
-    protected $data;
-    protected $title;
+    protected array $data;
+
+    protected string $title;
 
     public function __construct(array $data, string $title = 'Email Analytics')
     {

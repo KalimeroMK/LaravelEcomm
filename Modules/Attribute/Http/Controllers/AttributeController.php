@@ -41,7 +41,7 @@ class AttributeController extends CoreController
         $this->authorize('create', Attribute::class);
 
         return view('attribute::create', [
-            'attribute' => new Attribute(),
+            'attribute' => new Attribute,
         ]);
     }
 

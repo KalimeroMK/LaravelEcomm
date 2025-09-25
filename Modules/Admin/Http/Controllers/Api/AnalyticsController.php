@@ -4,42 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\Admin\Services\AnalyticsService;
 use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
-
-class AnalyticsExport implements FromArray, WithHeadings, WithTitle
-{
-    protected $data;
-    protected $title;
-
-    public function __construct(array $data, string $title = 'Analytics')
-    {
-        $this->data = $data;
-        $this->title = $title;
-    }
-
-    public function array(): array
-    {
-        return $this->data;
-    }
-
-    public function headings(): array
-    {
-        // For analytics data, we don't need dynamic headings since we structure the data ourselves
-        return ['Metric', 'Value'];
-    }
-
-    public function title(): string
-    {
-        return $this->title;
-    }
-}
+use Modules\Admin\Exports\AnalyticsExport;
+use Modules\Admin\Services\AnalyticsService;
+use Modules\Core\Http\Controllers\Controller;
 
 class AnalyticsController extends Controller
 {
@@ -184,7 +154,7 @@ class AnalyticsController extends Controller
         $endDate = $request->get('end_date');
         $type = $request->get('type');
 
-        $analytics = $this->getDateRangeAnalytics($type, $startDate, $endDate);
+        $analytics = $this->getDateRangeAnalytics($type);
 
         return response()->json([
             'success' => true,
@@ -218,16 +188,18 @@ class AnalyticsController extends Controller
 
         if ($format === 'xlsx') {
             return $this->exportToExcel($exportData, $type, $startDate, $endDate);
-        } elseif ($format === 'csv') {
-            return $this->exportToCsv($exportData, $type, $startDate, $endDate);
-        } else {
-            return response()->json([
-                'success' => true,
-                'message' => 'Export data generated successfully',
-                'data' => $exportData,
-                'format' => $format,
-            ]);
         }
+        if ($format === 'csv') {
+            return $this->exportToCsv($exportData, $type, $startDate, $endDate);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Export data generated successfully',
+            'data' => $exportData,
+            'format' => $format,
+        ]);
+
     }
 
     /**
@@ -279,7 +251,7 @@ class AnalyticsController extends Controller
     /**
      * Get analytics for specific date range
      */
-    private function getDateRangeAnalytics(string $type, string $startDate, string $endDate): array
+    private function getDateRangeAnalytics(string $type): array
     {
         // This would implement date-range specific analytics
         // For now, return the general analytics
@@ -308,7 +280,7 @@ class AnalyticsController extends Controller
                 'start' => $startDate,
                 'end' => $endDate,
             ],
-            'data' => $this->getDateRangeAnalytics($type, $startDate ?? now()->subMonth()->toDateString(), $endDate ?? now()->toDateString()),
+            'data' => $this->getDateRangeAnalytics($type),
         ];
     }
 
@@ -317,12 +289,12 @@ class AnalyticsController extends Controller
      */
     private function exportToExcel(array $exportData, string $type, ?string $startDate, ?string $endDate)
     {
-        $filename = "analytics-{$type}-" . ($startDate ?? 'all') . "-to-" . ($endDate ?? 'now') . ".xlsx";
+        $filename = "analytics-{$type}-".($startDate ?? 'all').'-to-'.($endDate ?? 'now').'.xlsx';
 
         // Convert export data to Excel format
         $excelData = $this->convertToExcelData($exportData);
 
-        return Excel::download(new AnalyticsExport($excelData, ucfirst($type) . ' Analytics'), $filename);
+        return Excel::download(new AnalyticsExport($excelData, ucfirst($type).' Analytics'), $filename);
     }
 
     /**
@@ -330,12 +302,12 @@ class AnalyticsController extends Controller
      */
     private function exportToCsv(array $exportData, string $type, ?string $startDate, ?string $endDate)
     {
-        $filename = "analytics-{$type}-" . ($startDate ?? 'all') . "-to-" . ($endDate ?? 'now') . ".csv";
+        $filename = "analytics-{$type}-".($startDate ?? 'all').'-to-'.($endDate ?? 'now').'.csv';
         $csvData = $this->convertToCsv($exportData);
 
         return response($csvData)
             ->header('Content-Type', 'text/csv')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
     }
 
     /**
@@ -344,9 +316,9 @@ class AnalyticsController extends Controller
     private function convertToCsv(array $data): string
     {
         $csv = "Analytics Export\n";
-        $csv .= "Generated: " . $data['generated_at'] . "\n";
-        $csv .= "Type: " . $data['type'] . "\n";
-        $csv .= "Date Range: " . $data['date_range']['start'] . " to " . $data['date_range']['end'] . "\n\n";
+        $csv .= 'Generated: '.$data['generated_at']."\n";
+        $csv .= 'Type: '.$data['type']."\n";
+        $csv .= 'Date Range: '.$data['date_range']['start'].' to '.$data['date_range']['end']."\n\n";
 
         // Convert the data to CSV format
         $analyticsData = $data['data'];
@@ -357,10 +329,10 @@ class AnalyticsController extends Controller
             foreach ($analyticsData['overview'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $subKey => $subValue) {
-                        $csv .= "{$key}_{$subKey}," . (is_numeric($subValue) ? $subValue : '"' . $subValue . '"') . "\n";
+                        $csv .= "{$key}_{$subKey},".(is_numeric($subValue) ? $subValue : '"'.$subValue.'"')."\n";
                     }
                 } else {
-                    $csv .= "{$key}," . (is_numeric($value) ? $value : '"' . $value . '"') . "\n";
+                    $csv .= "{$key},".(is_numeric($value) ? $value : '"'.$value.'"')."\n";
                 }
             }
             $csv .= "\n";
@@ -372,10 +344,10 @@ class AnalyticsController extends Controller
             foreach ($analyticsData['sales'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $subKey => $subValue) {
-                        $csv .= "{$key}_{$subKey}," . (is_numeric($subValue) ? $subValue : '"' . $subValue . '"') . "\n";
+                        $csv .= "{$key}_{$subKey},".(is_numeric($subValue) ? $subValue : '"'.$subValue.'"')."\n";
                     }
                 } else {
-                    $csv .= "{$key}," . (is_numeric($value) ? $value : '"' . $value . '"') . "\n";
+                    $csv .= "{$key},".(is_numeric($value) ? $value : '"'.$value.'"')."\n";
                 }
             }
             $csv .= "\n";
@@ -387,10 +359,10 @@ class AnalyticsController extends Controller
             foreach ($analyticsData['users'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $subKey => $subValue) {
-                        $csv .= "{$key}_{$subKey}," . (is_numeric($subValue) ? $subValue : '"' . $subValue . '"') . "\n";
+                        $csv .= "{$key}_{$subKey},".(is_numeric($subValue) ? $subValue : '"'.$subValue.'"')."\n";
                     }
                 } else {
-                    $csv .= "{$key}," . (is_numeric($value) ? $value : '"' . $value . '"') . "\n";
+                    $csv .= "{$key},".(is_numeric($value) ? $value : '"'.$value.'"')."\n";
                 }
             }
             $csv .= "\n";
@@ -411,7 +383,7 @@ class AnalyticsController extends Controller
         $excelData[] = ['Analytics Export', ''];
         $excelData[] = ['Generated', $data['generated_at']];
         $excelData[] = ['Type', $data['type']];
-        $excelData[] = ['Date Range', $data['date_range']['start'] . ' to ' . $data['date_range']['end']];
+        $excelData[] = ['Date Range', $data['date_range']['start'].' to '.$data['date_range']['end']];
         $excelData[] = ['', '']; // Empty row
 
         // Convert the analytics data to Excel format
@@ -421,7 +393,7 @@ class AnalyticsController extends Controller
             foreach ($analyticsData['overview'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $subKey => $subValue) {
-                        $excelData[] = [$key . '_' . $subKey, is_numeric($subValue) ? $subValue : $subValue];
+                        $excelData[] = [$key.'_'.$subKey, is_numeric($subValue) ? $subValue : $subValue];
                     }
                 } else {
                     $excelData[] = [$key, is_numeric($value) ? $value : $value];
@@ -457,7 +429,7 @@ class AnalyticsController extends Controller
                 $excelData[] = ['Sales by Status', ''];
                 foreach ($analyticsData['sales']['sales_by_status'] as $statusType => $statuses) {
                     foreach ($statuses as $status => $count) {
-                        $excelData[] = [$statusType . '_' . $status, $count];
+                        $excelData[] = [$statusType.'_'.$status, $count];
                     }
                 }
                 $excelData[] = ['', '']; // Empty row
@@ -466,14 +438,14 @@ class AnalyticsController extends Controller
             // Average order value
             if (isset($analyticsData['sales']['average_order_value'])) {
                 foreach ($analyticsData['sales']['average_order_value'] as $key => $value) {
-                    $excelData[] = ['average_order_value_' . $key, $value];
+                    $excelData[] = ['average_order_value_'.$key, $value];
                 }
             }
 
             // Conversion rate
             if (isset($analyticsData['sales']['conversion_rate'])) {
                 foreach ($analyticsData['sales']['conversion_rate'] as $key => $value) {
-                    $excelData[] = ['conversion_rate_' . $key, $value];
+                    $excelData[] = ['conversion_rate_'.$key, $value];
                 }
             }
         }
@@ -485,21 +457,21 @@ class AnalyticsController extends Controller
             // User activity
             if (isset($analyticsData['users']['user_activity'])) {
                 foreach ($analyticsData['users']['user_activity'] as $key => $value) {
-                    $excelData[] = ['user_activity_' . $key, $value];
+                    $excelData[] = ['user_activity_'.$key, $value];
                 }
             }
 
             // User segments
             if (isset($analyticsData['users']['user_segments'])) {
                 foreach ($analyticsData['users']['user_segments'] as $key => $value) {
-                    $excelData[] = ['user_segments_' . $key, $value];
+                    $excelData[] = ['user_segments_'.$key, $value];
                 }
             }
 
             // Customer lifetime value
             if (isset($analyticsData['users']['customer_lifetime_value'])) {
                 foreach ($analyticsData['users']['customer_lifetime_value'] as $key => $value) {
-                    $excelData[] = ['customer_lifetime_value_' . $key, $value];
+                    $excelData[] = ['customer_lifetime_value_'.$key, $value];
                 }
             }
         }
@@ -511,7 +483,7 @@ class AnalyticsController extends Controller
             // Inventory status
             if (isset($analyticsData['products']['inventory_status'])) {
                 foreach ($analyticsData['products']['inventory_status'] as $key => $value) {
-                    $excelData[] = ['inventory_' . $key, $value];
+                    $excelData[] = ['inventory_'.$key, $value];
                 }
             }
 

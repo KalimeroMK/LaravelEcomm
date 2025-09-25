@@ -13,9 +13,9 @@ class BlogByTagAction
     {
         $cacheKey = 'blogByTag_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
             $posts = Post::with(['author', 'tags'])
-                ->whereHas('tags', function ($q) use ($slug) {
+                ->whereHas('tags', function ($q) use ($slug): void {
                     $q->where('slug', $slug);
                 })
                 ->paginate(10);

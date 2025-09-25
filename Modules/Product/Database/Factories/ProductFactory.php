@@ -38,7 +38,7 @@ class ProductFactory extends Factory
             'special_price' => $this->faker->randomFloat(2, 10, 9000),
             'special_price_start' => Carbon::now(),
             'special_price_end' => Carbon::now()->addDays(7),
-            'sku' => 'SKU-' . mb_strtoupper(Str::random(10)),
+            'sku' => 'SKU-'.mb_strtoupper(Str::random(10)),
             'brand_id' => Brand::inRandomOrder()->first()?->id ?? Brand::factory()->create()->id,
         ];
     }

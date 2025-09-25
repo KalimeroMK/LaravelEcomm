@@ -16,6 +16,7 @@ class ProductApiTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
@@ -32,12 +33,12 @@ class ProductApiTest extends TestCase
     public function user_can_view_all_products()
     {
         Product::factory()->count(5)->create([
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products');
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -55,12 +56,12 @@ class ProductApiTest extends TestCase
         $product = Product::factory()->create([
             'status' => 'active',
             'title' => 'Test Product',
-            'price' => 99.99
+            'price' => 99.99,
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/products/{$product->id}");
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -78,17 +79,17 @@ class ProductApiTest extends TestCase
     {
         Product::factory()->create([
             'title' => 'iPhone 15 Pro',
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         Product::factory()->create([
             'title' => 'Samsung Galaxy S24',
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?search=iPhone');
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -109,8 +110,8 @@ class ProductApiTest extends TestCase
         Product::factory()->create(['status' => 'active']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?status=active');
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -134,8 +135,8 @@ class ProductApiTest extends TestCase
         Product::factory()->create(['price' => 300.00, 'status' => 'active']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?min_price=100&max_price=200');
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -156,8 +157,8 @@ class ProductApiTest extends TestCase
         Product::factory()->create(['price' => 200.00, 'status' => 'active']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?sort_by=price&sort_order=asc');
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -176,17 +177,17 @@ class ProductApiTest extends TestCase
     {
         Product::factory()->create([
             'is_featured' => true,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         Product::factory()->create([
             'is_featured' => false,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?featured=true');
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -203,12 +204,12 @@ class ProductApiTest extends TestCase
     public function user_can_view_products_with_categories()
     {
         $product = Product::factory()->create([
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/products/{$product->id}?include=categories");
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -227,8 +228,8 @@ class ProductApiTest extends TestCase
         Product::factory()->create(['status' => 'inactive']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products');
 
         // Note: Product API endpoint exists but requires proper permissions
@@ -248,12 +249,12 @@ class ProductApiTest extends TestCase
             'status' => 'active',
             'title' => 'Test Product',
             'price' => 99.99,
-            'stock' => 10
+            'stock' => 10,
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/products/{$product->id}");
 
         // Note: Product API endpoint exists but requires proper permissions

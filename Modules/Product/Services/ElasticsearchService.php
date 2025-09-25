@@ -23,7 +23,7 @@ class ElasticsearchService
      */
     public function indexProduct(Product $product): void
     {
-        $params = [
+        [
             'index' => $this->index,
             'id' => $product->id,
             'body' => [
@@ -36,17 +36,17 @@ class ElasticsearchService
                 'brand' => $product->brand?->name,
                 'categories' => $product->categories->pluck('name')->toArray(),
                 'tags' => $product->tags->pluck('name')->toArray(),
-                'attributes' => $product->attributeValues->map(function ($attr) {
+                'attributes' => $product->attributeValues->map(function ($attr): array {
                     return [
                         'name' => $attr->attribute->name,
-                        'value' => $attr->value
+                        'value' => $attr->value,
                     ];
                 })->toArray(),
                 'status' => $product->status,
                 'is_featured' => $product->is_featured,
                 'stock' => $product->stock,
                 'created_at' => $product->created_at?->toISOString(),
-            ]
+            ],
         ];
 
         // $this->elasticsearch->index($params); // Commented out for now as Elasticsearch is not configured
@@ -67,54 +67,54 @@ class ElasticsearchService
                                 'query' => $query,
                                 'fields' => ['title^3', 'summary^2', 'description', 'sku'],
                                 'type' => 'best_fields',
-                                'fuzziness' => 'AUTO'
-                            ]
+                                'fuzziness' => 'AUTO',
+                            ],
                         ],
-                        'filter' => []
-                    ]
+                        'filter' => [],
+                    ],
                 ],
                 'sort' => [
                     '_score' => ['order' => 'desc'],
-                    'created_at' => ['order' => 'desc']
+                    'created_at' => ['order' => 'desc'],
                 ],
-                'size' => 50
-            ]
+                'size' => 50,
+            ],
         ];
 
         // Add filters
-        if (!empty($filters['price_min'])) {
+        if (! empty($filters['price_min'])) {
             $searchParams['body']['query']['bool']['filter'][] = [
-                'range' => ['price' => ['gte' => $filters['price_min']]]
+                'range' => ['price' => ['gte' => $filters['price_min']]],
             ];
         }
 
-        if (!empty($filters['price_max'])) {
+        if (! empty($filters['price_max'])) {
             $searchParams['body']['query']['bool']['filter'][] = [
-                'range' => ['price' => ['lte' => $filters['price_max']]]
+                'range' => ['price' => ['lte' => $filters['price_max']]],
             ];
         }
 
-        if (!empty($filters['brand'])) {
+        if (! empty($filters['brand'])) {
             $searchParams['body']['query']['bool']['filter'][] = [
-                'term' => ['brand' => $filters['brand']]
+                'term' => ['brand' => $filters['brand']],
             ];
         }
 
-        if (!empty($filters['categories'])) {
+        if (! empty($filters['categories'])) {
             $searchParams['body']['query']['bool']['filter'][] = [
-                'terms' => ['categories' => $filters['categories']]
+                'terms' => ['categories' => $filters['categories']],
             ];
         }
 
-        if (!empty($filters['status'])) {
+        if (! empty($filters['status'])) {
             $searchParams['body']['query']['bool']['filter'][] = [
-                'term' => ['status' => $filters['status']]
+                'term' => ['status' => $filters['status']],
             ];
         }
 
-        if (!empty($filters['in_stock'])) {
+        if (! empty($filters['in_stock'])) {
             $searchParams['body']['query']['bool']['filter'][] = [
-                'range' => ['stock' => ['gt' => 0]]
+                'range' => ['stock' => ['gt' => 0]],
             ];
         }
 
@@ -124,8 +124,8 @@ class ElasticsearchService
             ->where('stock', '>', 0);
 
         // Add basic text search
-        if (!empty($query)) {
-            $productQuery->where(function ($q) use ($query) {
+        if ($query !== '' && $query !== '0') {
+            $productQuery->where(function ($q) use ($query): void {
                 $q->where('title', 'like', "%{$query}%")
                     ->orWhere('summary', 'like', "%{$query}%")
                     ->orWhere('description', 'like', "%{$query}%");
@@ -133,31 +133,31 @@ class ElasticsearchService
         }
 
         // Add filters
-        if (!empty($filters['price_min'])) {
+        if (! empty($filters['price_min'])) {
             $productQuery->where('price', '>=', $filters['price_min']);
         }
 
-        if (!empty($filters['price_max'])) {
+        if (! empty($filters['price_max'])) {
             $productQuery->where('price', '<=', $filters['price_max']);
         }
 
-        if (!empty($filters['brand'])) {
-            $productQuery->whereHas('brand', function ($q) use ($filters) {
+        if (! empty($filters['brand'])) {
+            $productQuery->whereHas('brand', function ($q) use ($filters): void {
                 $q->where('name', $filters['brand']);
             });
         }
 
-        if (!empty($filters['categories'])) {
-            $productQuery->whereHas('categories', function ($q) use ($filters) {
+        if (! empty($filters['categories'])) {
+            $productQuery->whereHas('categories', function ($q) use ($filters): void {
                 $q->whereIn('id', $filters['categories']);
             });
         }
 
-        if (!empty($filters['status'])) {
+        if (! empty($filters['status'])) {
             $productQuery->where('status', $filters['status']);
         }
 
-        if (!empty($filters['in_stock'])) {
+        if (! empty($filters['in_stock'])) {
             $productQuery->where('stock', '>', 0);
         }
 
@@ -167,76 +167,17 @@ class ElasticsearchService
     /**
      * Create the Elasticsearch index
      */
-    public function createIndex(): void
-    {
-        $params = [
-            'index' => $this->index,
-            'body' => [
-                'settings' => [
-                    'analysis' => [
-                        'analyzer' => [
-                            'product_analyzer' => [
-                                'type' => 'custom',
-                                'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'stop', 'snowball']
-                            ]
-                        ]
-                    ]
-                ],
-                'mappings' => [
-                    'properties' => [
-                        'title' => ['type' => 'text', 'analyzer' => 'product_analyzer'],
-                        'summary' => ['type' => 'text', 'analyzer' => 'product_analyzer'],
-                        'description' => ['type' => 'text', 'analyzer' => 'product_analyzer'],
-                        'sku' => ['type' => 'keyword'],
-                        'price' => ['type' => 'float'],
-                        'special_price' => ['type' => 'float'],
-                        'brand' => ['type' => 'keyword'],
-                        'categories' => ['type' => 'keyword'],
-                        'tags' => ['type' => 'keyword'],
-                        'attributes' => ['type' => 'nested'],
-                        'status' => ['type' => 'keyword'],
-                        'is_featured' => ['type' => 'boolean'],
-                        'stock' => ['type' => 'integer'],
-                        'created_at' => ['type' => 'date']
-                    ]
-                ]
-            ]
-        ];
-
-        try {
-            // $this->elasticsearch->indices()->create($params); // Commented out for now as Elasticsearch is not configured
-        } catch (\Exception $e) {
-            // Index might already exist
-        }
-    }
+    public function createIndex(): void {}
 
     /**
      * Delete a product from Elasticsearch
      */
-    public function deleteProduct(int $productId): void
-    {
-        try {
-            // $this->elasticsearch->delete([
-            //     'index' => $this->index,
-            //     'id' => $productId
-            // ]); // Commented out for now as Elasticsearch is not configured
-        } catch (\Exception $e) {
-            // Product might not exist in index
-        }
-    }
+    public function deleteProduct(int $productId): void {}
 
     /**
      * Delete the entire index
      */
-    public function deleteIndex(): void
-    {
-        try {
-            // $this->elasticsearch->indices()->delete(['index' => $this->index]); // Commented out for now as Elasticsearch is not configured
-        } catch (\Exception $e) {
-            // Index might not exist
-        }
-    }
+    public function deleteIndex(): void {}
 
     /**
      * Reindex all products
@@ -245,7 +186,7 @@ class ElasticsearchService
     {
         $this->createIndex();
 
-        Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->chunk(100, function ($products) {
+        Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->chunk(100, function ($products): void {
             foreach ($products as $product) {
                 $this->indexProduct($product);
             }

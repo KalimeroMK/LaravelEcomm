@@ -32,16 +32,16 @@ class ComplaintController extends Controller
         $this->deleteAction = $deleteAction;
     }
 
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         $complaints = Complaint::where('user_id', auth()->id())->get();
 
         return view('complaint::index', ['complaints' => $complaints]);
     }
 
-    public function create($order_id)
+    public function create($order_id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
-        $complaint = new Complaint();
+        $complaint = new Complaint;
 
         return view('complaint::create', ['complaint' => $complaint, 'order_id' => $order_id]);
     }

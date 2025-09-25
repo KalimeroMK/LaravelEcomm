@@ -64,7 +64,7 @@ class BillingServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
-        
+
         $this->app->singleton(\Modules\Billing\Services\WishlistService::class);
     }
 

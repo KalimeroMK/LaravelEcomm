@@ -14,7 +14,6 @@ class BrandService extends CoreService
 
     public function __construct(BrandRepository $brand_repository)
     {
-        parent::__construct($brand_repository);
         $this->brand_repository = $brand_repository;
     }
 

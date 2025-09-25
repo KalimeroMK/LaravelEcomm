@@ -13,14 +13,14 @@ use Modules\ProductStats\Repository\ProductStatsRepository;
 
 class ProductStatsController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         $filters = [
             'from' => $request->input('from'),
             'to' => $request->input('to'),
             'category_id' => $request->input('category_id'),
         ];
-        $repo = new ProductStatsRepository();
+        $repo = new ProductStatsRepository;
         $statsListDto = $repo->getProductStats($filters);
         $categories = Category::all();
 
@@ -33,7 +33,7 @@ class ProductStatsController extends Controller
         ]);
     }
 
-    public function detail(Request $request, $id)
+    public function detail(Request $request, $id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         $product = Product::findOrFail($id);
         $from = $request->input('from');
@@ -50,9 +50,9 @@ class ProductStatsController extends Controller
         }
         $impressions = $impressionsQuery->orderByDesc('created_at')->limit(30)->get();
         $clicks = $clicksQuery->orderByDesc('created_at')->limit(30)->get();
-        $statsAction = new GetProductStatsAction();
-        $stats = $statsAction->execute($product->id, $from, $to);
+        $statsAction = new GetProductStatsAction;
+        $stats = $statsAction->execute($product->id);
 
-        return view('productstats::admin.detail', compact('product', 'impressions', 'clicks', 'stats'));
+        return view('productstats::admin.detail', ['product' => $product, 'impressions' => $impressions, 'clicks' => $clicks, 'stats' => $stats]);
     }
 }

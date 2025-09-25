@@ -42,8 +42,8 @@ class WishlistController extends Controller
             'data' => [
                 'wishlist' => $wishlist,
                 'statistics' => $stats,
-                'count' => $wishlist->count()
-            ]
+                'count' => $wishlist->count(),
+            ],
         ]);
     }
 
@@ -54,7 +54,7 @@ class WishlistController extends Controller
     {
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
-            'quantity' => 'nullable|integer|min:1|max:100'
+            'quantity' => 'nullable|integer|min:1|max:100',
         ]);
 
         $user = Auth::user();
@@ -65,7 +65,7 @@ class WishlistController extends Controller
         if ($this->wishlistService->isInWishlist($user, $product->id)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product is already in your wishlist'
+                'message' => 'Product is already in your wishlist',
             ], 400);
         }
 
@@ -74,7 +74,7 @@ class WishlistController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Product added to wishlist successfully',
-            'data' => $wishlistItem->load('product')
+            'data' => $wishlistItem->load('product'),
         ], 201);
     }
 
@@ -84,7 +84,7 @@ class WishlistController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1|max:100'
+            'quantity' => 'required|integer|min:1|max:100',
         ]);
 
         $user = Auth::user();
@@ -92,17 +92,17 @@ class WishlistController extends Controller
 
         $wishlistItem = $this->wishlistService->updateQuantity($user, $id, $quantity);
 
-        if (!$wishlistItem) {
+        if (! $wishlistItem instanceof \Modules\Billing\Models\Wishlist) {
             return response()->json([
                 'success' => false,
-                'message' => 'Wishlist item not found'
+                'message' => 'Wishlist item not found',
             ], 404);
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Wishlist item updated successfully',
-            'data' => $wishlistItem->load('product')
+            'data' => $wishlistItem->load('product'),
         ]);
     }
 
@@ -116,16 +116,16 @@ class WishlistController extends Controller
 
         $removed = $this->wishlistService->removeFromWishlist($user, $product->id);
 
-        if (!$removed) {
+        if (! $removed) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product not found in wishlist'
+                'message' => 'Product not found in wishlist',
             ], 404);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Product removed from wishlist successfully'
+            'message' => 'Product removed from wishlist successfully',
         ]);
     }
 
@@ -139,16 +139,16 @@ class WishlistController extends Controller
 
         $moved = $this->wishlistService->moveToCart($user, $product->id);
 
-        if (!$moved) {
+        if (! $moved) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to move product to cart'
+                'message' => 'Failed to move product to cart',
             ], 400);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Product moved to cart successfully'
+            'message' => 'Product moved to cart successfully',
         ]);
     }
 
@@ -166,8 +166,8 @@ class WishlistController extends Controller
             'success' => true,
             'data' => [
                 'recommendations' => $recommendations,
-                'count' => $recommendations->count()
-            ]
+                'count' => $recommendations->count(),
+            ],
         ]);
     }
 
@@ -185,8 +185,8 @@ class WishlistController extends Controller
             'success' => true,
             'data' => [
                 'in_wishlist' => $isInWishlist,
-                'product_id' => $product->id
-            ]
+                'product_id' => $product->id,
+            ],
         ]);
     }
 
@@ -201,8 +201,8 @@ class WishlistController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'count' => $count
-            ]
+                'count' => $count,
+            ],
         ]);
     }
 
@@ -214,7 +214,7 @@ class WishlistController extends Controller
         $request->validate([
             'action' => 'required|string|in:add_to_cart,remove',
             'product_ids' => 'required|array|min:1',
-            'product_ids.*' => 'integer|exists:products,id'
+            'product_ids.*' => 'integer|exists:products,id',
         ]);
 
         $user = Auth::user();
@@ -230,7 +230,7 @@ class WishlistController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Bulk operation completed successfully',
-            'data' => $results
+            'data' => $results,
         ]);
     }
 
@@ -240,27 +240,27 @@ class WishlistController extends Controller
     public function share(Request $request): JsonResponse
     {
         $request->validate([
-            'recipient_email' => 'required|email|exists:users,email'
+            'recipient_email' => 'required|email|exists:users,email',
         ]);
 
         $user = Auth::user();
         $recipient = \Modules\User\Models\User::where('email', $request->input('recipient_email'))->first();
 
-        if (!$recipient) {
+        if (! $recipient) {
             return response()->json([
                 'success' => false,
-                'message' => 'Recipient user not found'
+                'message' => 'Recipient user not found',
             ], 404);
         }
 
         if ($recipient->id === $user->id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Cannot share wishlist with yourself'
+                'message' => 'Cannot share wishlist with yourself',
             ], 400);
         }
 
-        $shared = $this->wishlistService->shareWishlist($user, $recipient);
+        $this->wishlistService->shareWishlist($user, $recipient);
 
         return response()->json([
             'success' => true,
@@ -269,9 +269,9 @@ class WishlistController extends Controller
                 'recipient' => [
                     'id' => $recipient->id,
                     'name' => $recipient->name,
-                    'email' => $recipient->email
-                ]
-            ]
+                    'email' => $recipient->email,
+                ],
+            ],
         ]);
     }
 
@@ -282,10 +282,10 @@ class WishlistController extends Controller
     {
         $wishlist = $this->wishlistService->getPublicWishlist($username);
 
-        if (!$wishlist) {
+        if (! $wishlist instanceof \Illuminate\Support\Collection) {
             return response()->json([
                 'success' => false,
-                'message' => 'Public wishlist not found or not accessible'
+                'message' => 'Public wishlist not found or not accessible',
             ], 404);
         }
 
@@ -294,8 +294,8 @@ class WishlistController extends Controller
             'data' => [
                 'wishlist' => $wishlist,
                 'owner' => $username,
-                'count' => $wishlist->count()
-            ]
+                'count' => $wishlist->count(),
+            ],
         ]);
     }
 
@@ -315,11 +315,11 @@ class WishlistController extends Controller
             'data' => [
                 'alerts' => [
                     'price_drops' => $priceDrops,
-                    'no_price_changes' => $noPriceDrops
+                    'no_price_changes' => $noPriceDrops,
                 ],
                 'total_price_drops' => $priceDrops->count(),
-                'total_items' => $wishlistWithAlerts->count()
-            ]
+                'total_items' => $wishlistWithAlerts->count(),
+            ],
         ]);
     }
 }

@@ -74,7 +74,7 @@ class PostController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory
     {
         $postsDto = $this->getAllAction->execute();
 
@@ -103,7 +103,7 @@ class PostController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function create()
+    public function create(): View|Factory
     {
         return view('post::create', [
             'categories' => $this->getAllCategoriesAction->execute(),
@@ -119,7 +119,7 @@ class PostController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function edit(Post $post)
+    public function edit(Post $post): View|Factory
     {
         $categories = $this->getAllCategoriesAction->execute();
         $tags = $this->getAllTagsAction->execute();

@@ -10,7 +10,6 @@ use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Page\Actions\CreatePageAction;
 use Modules\Page\Actions\DeletePageAction;
-use Modules\Page\Actions\GetAllPagesAction;
 use Modules\Page\Actions\UpdatePageAction;
 use Modules\Page\DTOs\PageDTO;
 use Modules\Page\Http\Requests\Api\Store;
@@ -24,7 +23,6 @@ class PageController extends CoreController
 {
     public function __construct(
         private readonly PageRepository $repository,
-        private readonly GetAllPagesAction $getAllPagesAction,
         private readonly CreatePageAction $createAction,
         private readonly UpdatePageAction $updateAction,
         private readonly DeletePageAction $deleteAction

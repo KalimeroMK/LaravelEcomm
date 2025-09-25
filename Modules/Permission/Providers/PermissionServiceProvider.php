@@ -60,8 +60,11 @@ class PermissionServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
 
-        $componentNamespace = str_replace('/', '\\',
-            config('modules.namespace').'\\'.$this->moduleName.'\\'.config('modules.paths.generator.component-class.path'));
+        $componentNamespace = str_replace(
+            '/',
+            '\\',
+            config('modules.namespace').'\\'.$this->moduleName.'\\'.config('modules.paths.generator.component-class.path')
+        );
         Blade::componentNamespace($componentNamespace, $this->moduleNameLower);
     }
 

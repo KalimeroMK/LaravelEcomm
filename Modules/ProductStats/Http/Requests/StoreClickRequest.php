@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreClickRequest extends FormRequest
 {
-    public function rules()
+    public function rules(): array
     {
         return [
             'product_id' => 'required|integer',

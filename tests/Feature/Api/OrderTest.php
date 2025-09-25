@@ -33,7 +33,7 @@ class OrderTest extends TestCase
             'user_id' => User::factory()->create()->id,
             'shipping_id' => Shipping::factory()->create()->id,
             'status' => 'pending',
-            'payment_status' => 'pending'
+            'payment_status' => 'pending',
         ])->toArray();
 
         return $this->create($this->url, $data);
@@ -50,7 +50,7 @@ class OrderTest extends TestCase
             'user_id' => $order->user_id,
             'shipping_id' => $order->shipping_id,
             'status' => 'pending',
-            'payment_status' => 'pending'
+            'payment_status' => 'pending',
         ])->toArray();
         $id = $order->id;
 

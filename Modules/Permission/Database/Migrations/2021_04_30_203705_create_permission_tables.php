@@ -40,14 +40,17 @@ return new class extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create($tableNames['model_has_permissions'],
+        Schema::create(
+            $tableNames['model_has_permissions'],
             function (Blueprint $table) use ($tableNames, $columnNames): void {
                 $table->unsignedBigInteger('permission_id');
 
                 $table->string('model_type');
                 $table->unsignedBigInteger($columnNames['model_morph_key']);
-                $table->index([$columnNames['model_morph_key'], 'model_type'],
-                    'model_has_permissions_model_id_model_type_index');
+                $table->index(
+                    [$columnNames['model_morph_key'], 'model_type'],
+                    'model_has_permissions_model_id_model_type_index'
+                );
 
                 $table->foreign('permission_id')
                     ->references('id')
@@ -58,7 +61,8 @@ return new class extends Migration
                     ['permission_id', $columnNames['model_morph_key'], 'model_type'],
                     'model_has_permissions_permission_model_type_primary'
                 );
-            });
+            }
+        );
 
         Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames): void {
             $table->unsignedBigInteger('role_id');

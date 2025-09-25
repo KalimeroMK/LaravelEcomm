@@ -16,7 +16,7 @@ class PaymentProviderTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_paypal_charge_action_executes_securely()
+    public function test_paypal_charge_action_executes_securely(): void
     {
         $dto = new PaypalDTO(
             amount: 10.00,
@@ -40,7 +40,7 @@ class PaymentProviderTest extends TestCase
         $this->assertTrue($response->isRedirect());
     }
 
-    public function test_stripe_charge_action_executes_securely()
+    public function test_stripe_charge_action_executes_securely(): void
     {
         $dto = new StripeDTO(
             amount: 10.00,

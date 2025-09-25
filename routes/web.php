@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Auth\MagicLoginController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Modules\Front\Http\Controllers\FrontController;
 use Modules\User\Http\Controllers\Api\AuthController;
+use Modules\User\Http\Controllers\MagicLoginController;
 use Spatie\Feed\Http\FeedController;
 
 /*

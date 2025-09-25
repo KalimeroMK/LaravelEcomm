@@ -98,7 +98,7 @@ class EmailAnalytics extends Core
      */
     public function markAsOpened(): void
     {
-        if (!$this->opened_at) {
+        if (! $this->opened_at) {
             $this->update(['opened_at' => now()]);
         }
     }
@@ -106,7 +106,7 @@ class EmailAnalytics extends Core
     /**
      * Mark email as clicked
      */
-    public function markAsClicked(string $url = null): void
+    public function markAsClicked(?string $url = null): void
     {
         $this->update([
             'clicked_at' => now(),

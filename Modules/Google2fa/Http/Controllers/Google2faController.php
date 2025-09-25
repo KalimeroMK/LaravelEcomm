@@ -123,7 +123,7 @@ class Google2faController extends Controller
     /**
      * @return Application|RedirectResponse|Redirector
      */
-    public function verify2fa()
+    public function verify2fa(): Redirector|RedirectResponse
     {
         return redirect(URL()->previous());
     }

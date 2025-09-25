@@ -15,7 +15,7 @@ readonly class GetAllBundlesAction
         $this->repository = $repository;
     }
 
-    public function execute()
+    public function execute(): \Illuminate\Support\Collection
     {
         return $this->repository->findAll();
     }

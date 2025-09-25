@@ -1,25 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\User\Models\User;
-use Modules\Post\Models\Post;
 use Modules\Post\Models\Category;
+use Modules\Post\Models\Post;
+use Modules\User\Models\User;
+
+require_once __DIR__ . '/../../../TestHelpers.php';
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->admin = User::factory()->create(['role' => 'admin']);
+    $this->admin = createAdminUser();
     $this->category = Category::factory()->create();
 });
 
 test('blog listing page loads', function () {
     Post::factory()->count(5)->create([
         'category_id' => $this->category->id,
-        'status' => 'published'
+        'status' => 'published',
     ]);
-    
+
     $response = $this->get('/blog');
-    
+
     $response->assertStatus(200);
     $response->assertSee('Blog');
 });
@@ -30,11 +34,11 @@ test('blog post detail page loads', function () {
         'slug' => 'test-post',
         'content' => 'This is test content',
         'category_id' => $this->category->id,
-        'status' => 'published'
+        'status' => 'published',
     ]);
-    
+
     $response = $this->get("/blog/{$post->slug}");
-    
+
     $response->assertStatus(200);
     $response->assertSee('Test Post');
     $response->assertSee('This is test content');
@@ -42,10 +46,10 @@ test('blog post detail page loads', function () {
 
 test('admin can view posts list', function () {
     Post::factory()->count(5)->create();
-    
+
     $response = $this->actingAs($this->admin)
         ->get('/admin/posts');
-    
+
     $response->assertStatus(200);
     $response->assertSee('Posts');
 });
@@ -58,73 +62,73 @@ test('admin can create post', function () {
         'excerpt' => 'Post excerpt',
         'category_id' => $this->category->id,
         'status' => 'published',
-        'featured_image' => 'post-image.jpg'
+        'featured_image' => 'post-image.jpg',
     ];
-    
+
     $response = $this->actingAs($this->admin)
         ->post('/admin/posts', $postData);
-    
+
     $response->assertRedirect();
     $this->assertDatabaseHas('posts', [
         'title' => 'New Post',
-        'slug' => 'new-post'
+        'slug' => 'new-post',
     ]);
 });
 
 test('admin can edit post', function () {
     $post = Post::factory()->create();
-    
+
     $response = $this->actingAs($this->admin)
         ->get("/admin/posts/{$post->id}/edit");
-    
+
     $response->assertStatus(200);
     $response->assertSee($post->title);
 });
 
 test('admin can update post', function () {
     $post = Post::factory()->create([
-        'title' => 'Old Title'
+        'title' => 'Old Title',
     ]);
-    
+
     $response = $this->actingAs($this->admin)
         ->put("/admin/posts/{$post->id}", [
             'title' => 'Updated Title',
             'content' => 'Updated content',
-            'status' => 'published'
+            'status' => 'published',
         ]);
-    
+
     $response->assertRedirect();
     $this->assertDatabaseHas('posts', [
         'id' => $post->id,
-        'title' => 'Updated Title'
+        'title' => 'Updated Title',
     ]);
 });
 
 test('admin can delete post', function () {
     $post = Post::factory()->create();
-    
+
     $response = $this->actingAs($this->admin)
         ->delete("/admin/posts/{$post->id}");
-    
+
     $response->assertRedirect();
     $this->assertDatabaseMissing('posts', [
-        'id' => $post->id
+        'id' => $post->id,
     ]);
 });
 
 test('only published posts show on blog', function () {
     Post::factory()->create([
         'title' => 'Published Post',
-        'status' => 'published'
+        'status' => 'published',
     ]);
-    
+
     Post::factory()->create([
         'title' => 'Draft Post',
-        'status' => 'draft'
+        'status' => 'draft',
     ]);
-    
+
     $response = $this->get('/blog');
-    
+
     $response->assertStatus(200);
     $response->assertSee('Published Post');
     $response->assertDontSee('Draft Post');
@@ -133,21 +137,21 @@ test('only published posts show on blog', function () {
 test('posts can be filtered by category', function () {
     $category1 = Category::factory()->create(['name' => 'Technology']);
     $category2 = Category::factory()->create(['name' => 'Business']);
-    
+
     Post::factory()->create([
         'title' => 'Tech Post',
         'category_id' => $category1->id,
-        'status' => 'published'
+        'status' => 'published',
     ]);
-    
+
     Post::factory()->create([
         'title' => 'Business Post',
         'category_id' => $category2->id,
-        'status' => 'published'
+        'status' => 'published',
     ]);
-    
+
     $response = $this->get("/blog/category/{$category1->slug}");
-    
+
     $response->assertStatus(200);
     $response->assertSee('Tech Post');
     $response->assertDontSee('Business Post');
@@ -157,17 +161,17 @@ test('post search works', function () {
     Post::factory()->create([
         'title' => 'Laravel Tutorial',
         'content' => 'Learn Laravel framework',
-        'status' => 'published'
+        'status' => 'published',
     ]);
-    
+
     Post::factory()->create([
         'title' => 'PHP Basics',
         'content' => 'Learn PHP programming',
-        'status' => 'published'
+        'status' => 'published',
     ]);
-    
+
     $response = $this->get('/blog/search?q=Laravel');
-    
+
     $response->assertStatus(200);
     $response->assertSee('Laravel Tutorial');
     $response->assertDontSee('PHP Basics');
@@ -176,7 +180,7 @@ test('post search works', function () {
 test('admin can manage post categories', function () {
     $response = $this->actingAs($this->admin)
         ->get('/admin/posts/categories');
-    
+
     $response->assertStatus(200);
     $response->assertSee('Categories');
 });
@@ -185,15 +189,15 @@ test('admin can create post category', function () {
     $categoryData = [
         'name' => 'Technology',
         'slug' => 'technology',
-        'description' => 'Tech related posts'
+        'description' => 'Tech related posts',
     ];
-    
+
     $response = $this->actingAs($this->admin)
         ->post('/admin/posts/categories', $categoryData);
-    
+
     $response->assertRedirect();
     $this->assertDatabaseHas('post_categories', [
         'name' => 'Technology',
-        'slug' => 'technology'
+        'slug' => 'technology',
     ]);
 });

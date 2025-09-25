@@ -23,7 +23,7 @@ class EmailCampaignController extends CoreController
     {
         $templates = EmailTemplate::active()->get();
         $subscribers = Newsletter::where('is_validated', true)->count();
-        
+
         return $this->respond([
             'templates_count' => $templates->count(),
             'subscribers_count' => $subscribers,
@@ -38,7 +38,7 @@ class EmailCampaignController extends CoreController
         $templates = EmailTemplate::active()->get();
         $posts = Post::where('status', 'active')->orderBy('created_at', 'desc')->limit(10)->get();
         $products = Product::where('status', 'active')->where('is_featured', true)->orderBy('created_at', 'desc')->limit(10)->get();
-        
+
         return $this->respond([
             'templates' => $templates,
             'posts' => $posts,
@@ -60,7 +60,7 @@ class EmailCampaignController extends CoreController
         ]);
 
         $template = EmailTemplate::findOrFail($request->template_id);
-        
+
         $posts = [];
         $products = [];
 
@@ -82,9 +82,9 @@ class EmailCampaignController extends CoreController
         }
 
         if ($request->send_to === 'all') {
-            $results = $this->newsletterService->sendNewsletterToAll($posts, $products, $template);
+            $results = $this->newsletterService->sendNewsletterToAll($posts, $products);
         } else {
-            $results = $this->newsletterService->sendNewsletterToSegment($posts, $products, $template, $request->segment_criteria);
+            $results = $this->newsletterService->sendNewsletterToSegment($posts, $products, $template);
         }
 
         return $this
@@ -106,7 +106,7 @@ class EmailCampaignController extends CoreController
         ]);
 
         $template = EmailTemplate::findOrFail($request->template_id);
-        
+
         $posts = [];
         $products = [];
 
@@ -129,28 +129,26 @@ class EmailCampaignController extends CoreController
             'template' => $template,
             'posts' => $posts,
             'products' => $products,
-            'preview_html' => $this->generatePreviewHtml($template, $posts, $products),
+            'preview_html' => $this->generatePreviewHtml($template),
         ]);
     }
 
     public function analytics(): JsonResponse
     {
         $analytics = $this->newsletterService->getCampaignAnalytics();
-        
+
         return $this->respond($analytics);
     }
 
-    private function generatePreviewHtml($template, $posts, $products): string
+    private function generatePreviewHtml($template): string
     {
         // Generate preview HTML based on template and content
         $html = $template->html_content;
-        
+
         // Replace placeholders with sample data
         $html = str_replace('{{name}}', 'John Doe', $html);
         $html = str_replace('{{email}}', 'john@example.com', $html);
-        $html = str_replace('{{company}}', config('app.name'), $html);
-        
-        return $html;
+
+        return str_replace('{{company}}', config('app.name'), $html);
     }
 }
-

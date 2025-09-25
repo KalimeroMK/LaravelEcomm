@@ -60,12 +60,12 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['auth', 'web', 'activity'])
             ->prefix('admin')
             ->group(module_path('Admin', '/Routes/web.php'));
-            
+
         // Analytics routes without authentication for testing
         Route::middleware(['web'])
             ->prefix('admin')
-            ->group(function () {
-                Route::prefix('analytics')->group(function () {
+            ->group(function (): void {
+                Route::prefix('analytics')->group(function (): void {
                     Route::get('dashboard', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'dashboard']);
                     Route::get('overview', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'overview']);
                     Route::get('sales', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'sales']);
@@ -78,9 +78,9 @@ class RouteServiceProvider extends ServiceProvider
                     Route::get('date-range', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'dateRange']);
                     Route::post('export', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'export']);
                 });
-                
+
                 // Email Analytics route without authentication for testing
-                Route::get('email-campaigns/analytics', function () {
+                Route::get('email-campaigns/analytics', function (): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory {
                     return view('admin::email-analytics');
                 })->name('admin.email-campaigns.analytics');
             });

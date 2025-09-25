@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Modules\Front\Services;
 
 use Illuminate\Support\Str;
-use Modules\Product\Models\Product;
-use Modules\Post\Models\Post;
-use Modules\Category\Models\Category;
 use Modules\Brand\Models\Brand;
+use Modules\Category\Models\Category;
+use Modules\Post\Models\Post;
+use Modules\Product\Models\Product;
 
 class SeoService
 {
@@ -54,59 +54,13 @@ class SeoService
         $keywords = $baseKeywords;
 
         if ($model) {
-            $keywords = array_merge($keywords, $this->extractModelKeywords($model, $type));
+            $keywords = array_merge($keywords, $this->extractModelKeywords($model));
         }
 
         // Add type-specific keywords
         $keywords = array_merge($keywords, $this->getTypeKeywords($type));
 
         return implode(', ', array_unique($keywords));
-    }
-
-    /**
-     * Extract keywords from model
-     */
-    private function extractModelKeywords(object $model, string $type): array
-    {
-        $keywords = [];
-
-        if ($model instanceof Product) {
-            $keywords[] = $model->title;
-            $keywords[] = $model->brand?->title;
-            $keywords[] = $model->categories->pluck('title')->toArray();
-            $keywords[] = 'buy online';
-            $keywords[] = 'shop now';
-        } elseif ($model instanceof Category) {
-            $keywords[] = $model->title;
-            $keywords[] = 'products';
-            $keywords[] = 'shop online';
-        } elseif ($model instanceof Brand) {
-            $keywords[] = $model->title;
-            $keywords[] = 'official store';
-            $keywords[] = 'authentic';
-        } elseif ($model instanceof Post) {
-            $keywords[] = $model->title;
-            $keywords[] = $model->tags->pluck('title')->toArray();
-            $keywords[] = 'blog';
-            $keywords[] = 'article';
-        }
-
-        return array_filter(array_merge(...array_map(fn($k) => is_array($k) ? $k : [$k], $keywords)));
-    }
-
-    /**
-     * Get type-specific keywords
-     */
-    private function getTypeKeywords(string $type): array
-    {
-        return match ($type) {
-            'product' => ['online shopping', 'ecommerce', 'buy now', 'fast shipping'],
-            'category' => ['products', 'shop', 'online store', 'categories'],
-            'brand' => ['official', 'authentic', 'brand store', 'genuine'],
-            'blog' => ['blog', 'article', 'news', 'tips', 'guide'],
-            'home' => ['online shopping', 'ecommerce', 'store', 'products', 'deals'],
-            default => ['online', 'shopping', 'store'],
-        };
     }
 
     /**
@@ -120,7 +74,7 @@ class SeoService
     /**
      * Generate Open Graph data
      */
-    public function generateOpenGraphData(string $type, object $model = null): array
+    public function generateOpenGraphData(string $type, ?object $model = null): array
     {
         $baseData = [
             'og:type' => $type,
@@ -129,84 +83,27 @@ class SeoService
         ];
 
         if ($model) {
-            $baseData = array_merge($baseData, $this->getModelOpenGraphData($model, $type));
+            $baseData = array_merge($baseData, $this->getModelOpenGraphData($model));
         }
 
         return $baseData;
-    }
-
-    /**
-     * Get model-specific Open Graph data
-     */
-    private function getModelOpenGraphData(object $model, string $type): array
-    {
-        if ($model instanceof Product) {
-            return [
-                'og:title' => $this->generateTitle($model->title, 'product'),
-                'og:description' => $this->generateDescription($model->summary ?? $model->description, 'product'),
-                'og:image' => $model->imageUrl,
-                'og:url' => route('front.product-detail', $model->slug),
-                'product:price:amount' => $model->price,
-                'product:price:currency' => 'USD',
-                'product:availability' => $model->stock > 0 ? 'in stock' : 'out of stock',
-            ];
-        } elseif ($model instanceof Post) {
-            return [
-                'og:title' => $this->generateTitle($model->title, 'blog'),
-                'og:description' => $this->generateDescription($model->summary ?? $model->description, 'blog'),
-                'og:image' => $model->imageUrl,
-                'og:url' => route('front.blog-detail', $model->slug),
-                'article:published_time' => $model->created_at->toISOString(),
-                'article:author' => $model->user?->name ?? 'Admin',
-            ];
-        } elseif ($model instanceof Category) {
-            return [
-                'og:title' => $this->generateTitle($model->title, 'category'),
-                'og:description' => $this->generateDescription($model->summary ?? $model->description, 'category'),
-                'og:url' => route('front.product-cat', $model->slug),
-            ];
-        }
-
-        return [];
     }
 
     /**
      * Generate Twitter Card data
      */
-    public function generateTwitterCardData(string $type, object $model = null): array
+    public function generateTwitterCardData(string $type, ?object $model = null): array
     {
         $baseData = [
             'twitter:card' => 'summary_large_image',
-            'twitter:site' => '@' . config('app.name'),
+            'twitter:site' => '@'.config('app.name'),
         ];
 
         if ($model) {
-            $baseData = array_merge($baseData, $this->getModelTwitterData($model, $type));
+            $baseData = array_merge($baseData, $this->getModelTwitterData($model));
         }
 
         return $baseData;
-    }
-
-    /**
-     * Get model-specific Twitter data
-     */
-    private function getModelTwitterData(object $model, string $type): array
-    {
-        if ($model instanceof Product) {
-            return [
-                'twitter:title' => $this->generateTitle($model->title, 'product'),
-                'twitter:description' => $this->generateDescription($model->summary ?? $model->description, 'product'),
-                'twitter:image' => $model->imageUrl,
-            ];
-        } elseif ($model instanceof Post) {
-            return [
-                'twitter:title' => $this->generateTitle($model->title, 'blog'),
-                'twitter:description' => $this->generateDescription($model->summary ?? $model->description, 'blog'),
-                'twitter:image' => $model->imageUrl,
-            ];
-        }
-
-        return [];
     }
 
     /**
@@ -290,7 +187,7 @@ class SeoService
             '@type' => 'Organization',
             'name' => config('app.name'),
             'url' => config('app.url'),
-            'logo' => config('app.url') . '/assets/img/logo/logo.png',
+            'logo' => config('app.url').'/assets/img/logo/logo.png',
             'contactPoint' => [
                 '@type' => 'ContactPoint',
                 'telephone' => '+1-555-123-4567',
@@ -320,10 +217,116 @@ class SeoService
                 '@type' => 'SearchAction',
                 'target' => [
                     '@type' => 'EntryPoint',
-                    'urlTemplate' => config('app.url') . '/product/search?q={search_term_string}',
+                    'urlTemplate' => config('app.url').'/product/search?q={search_term_string}',
                 ],
                 'query-input' => 'required name=search_term_string',
             ],
         ];
+    }
+
+    /**
+     * Extract keywords from model
+     */
+    private function extractModelKeywords(object $model): array
+    {
+        $keywords = [];
+
+        if ($model instanceof Product) {
+            $keywords[] = $model->title;
+            $keywords[] = $model->brand?->title;
+            $keywords[] = $model->categories->pluck('title')->toArray();
+            $keywords[] = 'buy online';
+            $keywords[] = 'shop now';
+        } elseif ($model instanceof Category) {
+            $keywords[] = $model->title;
+            $keywords[] = 'products';
+            $keywords[] = 'shop online';
+        } elseif ($model instanceof Brand) {
+            $keywords[] = $model->title;
+            $keywords[] = 'official store';
+            $keywords[] = 'authentic';
+        } elseif ($model instanceof Post) {
+            $keywords[] = $model->title;
+            $keywords[] = $model->tags->pluck('title')->toArray();
+            $keywords[] = 'blog';
+            $keywords[] = 'article';
+        }
+
+        return array_filter(array_merge(...array_map(fn ($k): array => is_array($k) ? $k : [$k], $keywords)));
+    }
+
+    /**
+     * Get type-specific keywords
+     */
+    private function getTypeKeywords(string $type): array
+    {
+        return match ($type) {
+            'product' => ['online shopping', 'ecommerce', 'buy now', 'fast shipping'],
+            'category' => ['products', 'shop', 'online store', 'categories'],
+            'brand' => ['official', 'authentic', 'brand store', 'genuine'],
+            'blog' => ['blog', 'article', 'news', 'tips', 'guide'],
+            'home' => ['online shopping', 'ecommerce', 'store', 'products', 'deals'],
+            default => ['online', 'shopping', 'store'],
+        };
+    }
+
+    /**
+     * Get model-specific Open Graph data
+     */
+    private function getModelOpenGraphData(object $model): array
+    {
+        if ($model instanceof Product) {
+            return [
+                'og:title' => $this->generateTitle($model->title, 'product'),
+                'og:description' => $this->generateDescription($model->summary ?? $model->description, 'product'),
+                'og:image' => $model->imageUrl,
+                'og:url' => route('front.product-detail', $model->slug),
+                'product:price:amount' => $model->price,
+                'product:price:currency' => 'USD',
+                'product:availability' => $model->stock > 0 ? 'in stock' : 'out of stock',
+            ];
+        }
+        if ($model instanceof Post) {
+            return [
+                'og:title' => $this->generateTitle($model->title, 'blog'),
+                'og:description' => $this->generateDescription($model->summary ?? $model->description, 'blog'),
+                'og:image' => $model->imageUrl,
+                'og:url' => route('front.blog-detail', $model->slug),
+                'article:published_time' => $model->created_at->toISOString(),
+                'article:author' => $model->user?->name ?? 'Admin',
+            ];
+        }
+        if ($model instanceof Category) {
+            return [
+                'og:title' => $this->generateTitle($model->title, 'category'),
+                'og:description' => $this->generateDescription($model->summary ?? $model->description, 'category'),
+                'og:url' => route('front.product-cat', $model->slug),
+            ];
+        }
+
+        return [];
+    }
+
+    /**
+     * Get model-specific Twitter data
+     */
+    private function getModelTwitterData(object $model): array
+    {
+        if ($model instanceof Product) {
+            return [
+                'twitter:title' => $this->generateTitle($model->title, 'product'),
+                'twitter:description' => $this->generateDescription($model->summary ?? $model->description, 'product'),
+                'twitter:image' => $model->imageUrl,
+            ];
+        }
+        if ($model instanceof Post) {
+            return [
+                'twitter:title' => $this->generateTitle($model->title, 'blog'),
+                'twitter:description' => $this->generateDescription($model->summary ?? $model->description, 'blog'),
+                'twitter:image' => $model->imageUrl,
+            ];
+        }
+
+        return [];
     }
 }

@@ -44,18 +44,18 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['auth', 'activity', 'web'])
             ->prefix('admin')
             ->group(module_path('Newsletter', '/Routes/web.php'));
-            
+
         // Admin routes with authentication
         Route::middleware(['auth', 'activity', 'web'])
             ->prefix('admin')
-            ->group(function () {
+            ->group(function (): void {
                 // Email Campaigns routes
                 Route::get('email-campaigns', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'index'])->name('admin.email-campaigns.index');
                 Route::get('email-campaigns/create', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'create'])->name('admin.email-campaigns.create');
                 Route::post('email-campaigns', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'store'])->name('admin.email-campaigns.store');
                 Route::get('email-campaigns/analytics', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analytics'])->name('admin.email-campaigns.analytics');
                 Route::get('email-campaigns/analytics/api', [\Modules\Newsletter\Http\Controllers\EmailCampaignController::class, 'analyticsApi'])->name('admin.email-campaigns.analytics.api');
-                
+
                 // Email Templates routes
                 Route::get('email-templates', [\Modules\Newsletter\Http\Controllers\EmailTemplateController::class, 'index'])->name('admin.email-templates.index');
                 Route::get('email-templates/create', [\Modules\Newsletter\Http\Controllers\EmailTemplateController::class, 'create'])->name('admin.email-templates.create');

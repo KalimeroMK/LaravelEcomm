@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Product\Services;
 
+use Exception;
 use Illuminate\Support\Collection;
 use Modules\Product\Models\Product;
 use Modules\ProductStats\Models\ProductClick;
@@ -59,19 +60,19 @@ class RecommendationService
 
         // Try to find similar products
         if ($product->brand_id || $product->categories->isNotEmpty() || $product->tags->isNotEmpty()) {
-            $query->where(function ($q) use ($product) {
+            $query->where(function ($q) use ($product): void {
                 if ($product->brand_id) {
                     $q->where('brand_id', $product->brand_id);
                 }
-                
+
                 if ($product->categories->isNotEmpty()) {
-                    $q->orWhereHas('categories', function ($categoryQuery) use ($product) {
+                    $q->orWhereHas('categories', function ($categoryQuery) use ($product): void {
                         $categoryQuery->whereIn('categories.id', $product->categories->pluck('id'));
                     });
                 }
-                
+
                 if ($product->tags->isNotEmpty()) {
-                    $q->orWhereHas('tags', function ($tagQuery) use ($product) {
+                    $q->orWhereHas('tags', function ($tagQuery) use ($product): void {
                         $tagQuery->whereIn('tags.id', $product->tags->pluck('id'));
                     });
                 }
@@ -147,7 +148,7 @@ class RecommendationService
                 'impressions' => $impressions->count(),
                 'cart_adds' => $cartItems->count(),
                 'wishlist_adds' => $wishlistItems->count(),
-            ]
+            ],
         ];
     }
 
@@ -164,12 +165,12 @@ class RecommendationService
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'You are an e-commerce product recommendation expert. Analyze user behavior and suggest product categories and attributes.'
+                        'content' => 'You are an e-commerce product recommendation expert. Analyze user behavior and suggest product categories and attributes.',
                     ],
                     [
                         'role' => 'user',
-                        'content' => $prompt
-                    ]
+                        'content' => $prompt,
+                    ],
                 ],
                 'max_tokens' => 500,
                 'temperature' => 0.7,
@@ -179,7 +180,7 @@ class RecommendationService
 
             // Parse AI response and extract recommendations
             return $this->parseAIRecommendations($content);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Fallback to rule-based recommendations
             return $this->getFallbackRecommendations($userBehavior);
         }
@@ -216,7 +217,7 @@ class RecommendationService
                     return $json;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Continue to fallback
         }
 
@@ -234,7 +235,7 @@ class RecommendationService
                 ['min' => 0, 'max' => 50],
                 ['min' => 50, 'max' => 200],
                 ['min' => 200, 'max' => 1000],
-            ]
+            ],
         ];
     }
 
@@ -247,20 +248,20 @@ class RecommendationService
             ->where('status', 'active')
             ->where('stock', '>', 0);
 
-        if (!empty($recommendations['categories'])) {
-            $query->whereHas('categories', function ($q) use ($recommendations) {
+        if (! empty($recommendations['categories'])) {
+            $query->whereHas('categories', function ($q) use ($recommendations): void {
                 $q->whereIn('id', $recommendations['categories']);
             });
         }
 
-        if (!empty($recommendations['price_ranges'])) {
+        if (! empty($recommendations['price_ranges'])) {
             $priceConditions = [];
             foreach ($recommendations['price_ranges'] as $range) {
-                $priceConditions[] = function ($q) use ($range) {
+                $priceConditions[] = function ($q) use ($range): void {
                     $q->whereBetween('price', [$range['min'], $range['max']]);
                 };
             }
-            $query->where(function ($q) use ($priceConditions) {
+            $query->where(function ($q) use ($priceConditions): void {
                 foreach ($priceConditions as $condition) {
                     $q->orWhere($condition);
                 }
@@ -285,7 +286,7 @@ class RecommendationService
             return collect();
         }
 
-        return User::whereHas('carts.product.categories', function ($query) use ($userCategories) {
+        return User::whereHas('carts.product.categories', function ($query) use ($userCategories): void {
             $query->whereIn('categories.id', $userCategories);
         })->where('id', '!=', $user->id)
             ->limit(10)

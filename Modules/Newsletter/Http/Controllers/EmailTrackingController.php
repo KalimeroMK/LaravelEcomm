@@ -83,6 +83,6 @@ class EmailTrackingController extends Controller
             }
         }
 
-        return view('newsletter::unsubscribe-success', compact('email'));
+        return view('newsletter::unsubscribe-success', ['email' => $email]);
     }
 }

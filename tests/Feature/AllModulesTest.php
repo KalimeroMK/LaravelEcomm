@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\User\Models\User;
+
+require_once __DIR__ . '/../../../TestHelpers.php';
 
 uses(RefreshDatabase::class);
 
 test('all module routes are accessible', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
+    $admin = createAdminUser();
     $user = User::factory()->create();
-    
+
     // Test admin routes
     $adminRoutes = [
         '/admin',
@@ -32,14 +36,14 @@ test('all module routes are accessible', function () {
         '/admin/billing/invoices',
         '/admin/2fa/settings',
         '/admin/logs',
-        '/admin/system/info'
+        '/admin/system/info',
     ];
-    
+
     foreach ($adminRoutes as $route) {
         $response = $this->actingAs($admin)->get($route);
         expect($response->status())->toBeIn([200, 302, 404]);
     }
-    
+
     // Test user routes
     $userRoutes = [
         '/',
@@ -50,9 +54,9 @@ test('all module routes are accessible', function () {
         '/cart',
         '/profile',
         '/orders',
-        '/billing/history'
+        '/billing/history',
     ];
-    
+
     foreach ($userRoutes as $route) {
         $response = $this->actingAs($user)->get($route);
         expect($response->status())->toBeIn([200, 302, 404]);
@@ -60,8 +64,8 @@ test('all module routes are accessible', function () {
 });
 
 test('all API endpoints return proper responses', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    
+    $admin = createAdminUser();
+
     $apiRoutes = [
         '/api/v1/analytics/overview',
         '/api/v1/analytics/sales',
@@ -70,9 +74,9 @@ test('all API endpoints return proper responses', function () {
         '/api/v1/newsletter/analytics',
         '/api/v1/products/search',
         '/api/v1/categories',
-        '/api/v1/brands'
+        '/api/v1/brands',
     ];
-    
+
     foreach ($apiRoutes as $route) {
         $response = $this->actingAs($admin)->get($route);
         expect($response->status())->toBeIn([200, 401, 404]);
@@ -81,20 +85,20 @@ test('all API endpoints return proper responses', function () {
 
 test('authentication works across all modules', function () {
     $user = User::factory()->create();
-    
+
     // Test protected routes require authentication
     $protectedRoutes = [
         '/admin',
         '/profile',
         '/cart',
-        '/orders'
+        '/orders',
     ];
-    
+
     foreach ($protectedRoutes as $route) {
         $response = $this->get($route);
         expect($response->status())->toBe(302); // Redirect to login
     }
-    
+
     // Test authenticated access
     foreach ($protectedRoutes as $route) {
         $response = $this->actingAs($user)->get($route);
@@ -103,12 +107,12 @@ test('authentication works across all modules', function () {
 });
 
 test('all modules have proper error handling', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    
+    $admin = createAdminUser();
+
     // Test 404 handling
     $response = $this->actingAs($admin)->get('/admin/nonexistent');
     expect($response->status())->toBe(404);
-    
+
     // Test 403 handling for non-admin users
     $user = User::factory()->create();
     $response = $this->actingAs($user)->get('/admin');
@@ -116,15 +120,15 @@ test('all modules have proper error handling', function () {
 });
 
 test('all forms have CSRF protection', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    
+    $admin = createAdminUser();
+
     $forms = [
         ['url' => '/admin/categories', 'method' => 'POST'],
         ['url' => '/admin/brands', 'method' => 'POST'],
         ['url' => '/admin/products', 'method' => 'POST'],
-        ['url' => '/admin/posts', 'method' => 'POST']
+        ['url' => '/admin/posts', 'method' => 'POST'],
     ];
-    
+
     foreach ($forms as $form) {
         $response = $this->actingAs($admin)->post($form['url'], []);
         expect($response->status())->toBeIn([200, 302, 422]);

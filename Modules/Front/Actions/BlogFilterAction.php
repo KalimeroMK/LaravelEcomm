@@ -15,7 +15,7 @@ class BlogFilterAction
             $query->where('title', 'like', '%'.$data['search'].'%');
         }
         if (! empty($data['category'])) {
-            $query->whereHas('categories', function ($q) use ($data) {
+            $query->whereHas('categories', function ($q) use ($data): void {
                 $q->where('slug', $data['category']);
             });
         }

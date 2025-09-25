@@ -25,8 +25,6 @@ class ShippingController extends CoreController
 
     private readonly StoreShippingAction $storeAction;
 
-    private readonly UpdateShippingAction $updateAction;
-
     private readonly DeleteShippingAction $deleteAction;
 
     public function __construct(
@@ -37,7 +35,6 @@ class ShippingController extends CoreController
     ) {
         $this->getAllAction = $getAllAction;
         $this->storeAction = $storeAction;
-        $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
     }
 

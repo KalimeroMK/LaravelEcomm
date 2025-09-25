@@ -29,7 +29,7 @@ class PostCommentController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory
     {
         return view('post::comment.index', ['comments' => $this->postCommentService->index()]);
     }
@@ -53,7 +53,7 @@ class PostCommentController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function edit(PostComment $comment)
+    public function edit(PostComment $comment): View|Factory
     {
         return view('post::comment.edit', ['comment' => $this->postCommentService->edit($comment->id)]);
     }

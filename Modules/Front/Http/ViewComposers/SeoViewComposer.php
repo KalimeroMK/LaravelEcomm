@@ -6,7 +6,6 @@ namespace Modules\Front\Http\ViewComposers;
 
 use Illuminate\View\View;
 use Modules\Front\Services\SeoService;
-use Spatie\SchemaOrg\Schema;
 
 class SeoViewComposer
 {
@@ -66,7 +65,7 @@ class SeoViewComposer
         return $seoData;
     }
 
-    private function generatePostSeo($post, array $seoData): array
+    private function generatePostSeo(?object $post, array $seoData): array
     {
         $seoData['title'] = $this->seoService->generateTitle($post->title, 'blog');
         $seoData['description'] = $this->seoService->generateDescription($post->summary ?? $post->description, 'blog');
@@ -78,7 +77,7 @@ class SeoViewComposer
         return $seoData;
     }
 
-    private function generateCategorySeo($category, array $seoData): array
+    private function generateCategorySeo(?object $category, array $seoData): array
     {
         $seoData['title'] = $this->seoService->generateTitle($category->title, 'category');
         $seoData['description'] = $this->seoService->generateDescription($category->summary ?? $category->description, 'category');
@@ -90,7 +89,7 @@ class SeoViewComposer
         return $seoData;
     }
 
-    private function generateBrandSeo($brand, array $seoData): array
+    private function generateBrandSeo(?object $brand, array $seoData): array
     {
         $seoData['title'] = $this->seoService->generateTitle($brand->title, 'brand');
         $seoData['description'] = $this->seoService->generateDescription($brand->description ?? '', 'brand');

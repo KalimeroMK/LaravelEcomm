@@ -19,16 +19,16 @@ class PostNewsletterMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public ?int $analyticsId = null;
+
+    public string $email;
+
     /**
      * The posts for the newsletter.
      *
      * @var array<int, Post>
      */
     private array $posts;
-
-    public ?int $analyticsId = null;
-
-    public string $email;
 
     /**
      * Create a new message instance.

@@ -29,17 +29,23 @@ class FrontServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
-        View::composer(['front::layouts.header', 'front::layouts.footer', 'front::pages.about-us'],
-            SettingsViewComposer::class);
-        View::composer([
-            'front::pages.product-grids',
-            'front::layouts.header',
-            'front::pages.product-lists',
-            'front::pages.bundles',
-        ],
-            MenuViewComposer::class);
-        View::composer(['front::pages.product-grids', 'front::pages.product-lists', 'front::pages.bundles'],
-            MaxViewComposer::class);
+        View::composer(
+            ['front::layouts.header', 'front::layouts.footer', 'front::pages.about-us'],
+            SettingsViewComposer::class
+        );
+        View::composer(
+            [
+                'front::pages.product-grids',
+                'front::layouts.header',
+                'front::pages.product-lists',
+                'front::pages.bundles',
+            ],
+            MenuViewComposer::class
+        );
+        View::composer(
+            ['front::pages.product-grids', 'front::pages.product-lists', 'front::pages.bundles'],
+            MaxViewComposer::class
+        );
         View::composer('front::layouts.master', SchemaOrgViewComposer::class);
         View::composer('front::layouts.footer', InformationViewComposer::class);
     }

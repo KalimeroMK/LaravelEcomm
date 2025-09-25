@@ -18,12 +18,12 @@ use Modules\Admin\Http\Controllers\AdminController;
 use Modules\Admin\Http\Controllers\AnalyticsController;
 
 Route::get('/', [AdminController::class, 'index'])->name('admin');
-Route::get('/analytics', function () {
+Route::get('/analytics', function (): Illuminate\Contracts\View\View|Illuminate\Contracts\View\Factory {
     return view('admin::analytics-dashboard');
 })->name('admin.analytics');
 
 // Analytics API Routes for web interface (temporarily without auth for testing)
-Route::prefix('analytics')->group(function () {
+Route::prefix('analytics')->group(function (): void {
     Route::get('dashboard', [AnalyticsController::class, 'dashboard'])->name('admin.analytics.dashboard');
     Route::get('overview', [AnalyticsController::class, 'overview'])->name('admin.analytics.overview');
     Route::get('sales', [AnalyticsController::class, 'sales'])->name('admin.analytics.sales');

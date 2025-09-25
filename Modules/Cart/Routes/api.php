@@ -17,5 +17,5 @@ use Modules\Cart\Http\Controllers\Api\CartController;
 */
 
 // API Routes
-    Route::apiResource('carts', CartController::class)
-        ->names('api.carts');
+Route::apiResource('carts', CartController::class)
+    ->names('api.carts');

@@ -100,7 +100,7 @@ class ProductController extends CoreController
         $tags = Tag::get();
         $product->load(['attributeValues.attribute']);
 
-        return view('product::edit', compact('brands', 'categories', 'product', 'tags', 'attributes'));
+        return view('product::edit', ['brands' => $brands, 'categories' => $categories, 'product' => $product, 'tags' => $tags, 'attributes' => $attributes]);
     }
 
     /**

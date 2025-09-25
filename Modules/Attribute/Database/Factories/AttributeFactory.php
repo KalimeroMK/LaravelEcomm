@@ -15,8 +15,8 @@ class AttributeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'mame-' . mb_strtoupper(Str::random(10)),
-            'code' => 'code-' . mb_strtoupper(Str::random(10)),
+            'name' => 'mame-'.mb_strtoupper(Str::random(10)),
+            'code' => 'code-'.mb_strtoupper(Str::random(10)),
             'type' => $this->faker->randomElement(['url', 'hex', 'text', 'date', 'time', 'float', 'integer', 'boolean', 'decimal', 'string']),
             'display' => $this->faker->randomElement(['input', 'radio', 'color', 'button', 'select', 'checkbox', 'multiselect']),
             'is_filterable' => $this->faker->numberBetween(0, 1),

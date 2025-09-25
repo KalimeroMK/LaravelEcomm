@@ -27,7 +27,7 @@ readonly class CartDTO
 
         // Get product_id from slug if slug is provided
         $product_id = $data['product_id'] ?? null;
-        if (isset($data['slug']) && !$product_id) {
+        if (isset($data['slug']) && ! $product_id) {
             $product = Product::where('slug', $data['slug'])->first();
             $product_id = $product?->id;
         }
@@ -37,12 +37,12 @@ readonly class CartDTO
         $quantity = $data['quantity'] ?? $existing?->quantity ?? 1;
         $amount = $data['amount'] ?? $existing?->amount;
 
-        if (!$price && $product_id) {
+        if (! $price && $product_id) {
             $product = Product::find($product_id);
             $price = $product?->price;
         }
 
-        if (!$amount && $price && $quantity) {
+        if (! $amount && $price && $quantity) {
             $amount = $price * $quantity;
         }
 

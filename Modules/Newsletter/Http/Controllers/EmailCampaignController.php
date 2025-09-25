@@ -26,8 +26,8 @@ class EmailCampaignController extends CoreController
     {
         $templates = EmailTemplate::active()->get();
         $subscribers = Newsletter::where('is_validated', true)->count();
-        
-        return view('newsletter::email-campaigns.index', compact('templates', 'subscribers'));
+
+        return view('newsletter::email-campaigns.index', ['templates' => $templates, 'subscribers' => $subscribers]);
     }
 
     public function create(): View
@@ -35,8 +35,8 @@ class EmailCampaignController extends CoreController
         $templates = EmailTemplate::active()->get();
         $posts = Post::where('status', 'active')->orderBy('created_at', 'desc')->limit(10)->get();
         $products = Product::where('status', 'active')->where('is_featured', true)->orderBy('created_at', 'desc')->limit(10)->get();
-        
-        return view('newsletter::email-campaigns.create', compact('templates', 'posts', 'products'));
+
+        return view('newsletter::email-campaigns.create', ['templates' => $templates, 'posts' => $posts, 'products' => $products]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -53,7 +53,7 @@ class EmailCampaignController extends CoreController
         ]);
 
         $template = EmailTemplate::findOrFail($request->template_id);
-        
+
         $posts = [];
         $products = [];
 
@@ -75,20 +75,20 @@ class EmailCampaignController extends CoreController
         }
 
         if ($request->send_to === 'all') {
-            $results = $this->newsletterService->sendNewsletterToAll($posts, $products, $template);
+            $results = $this->newsletterService->sendNewsletterToAll($posts, $products);
         } else {
-            $results = $this->newsletterService->sendNewsletterToSegment($posts, $products, $template, $request->segment_criteria);
+            $results = $this->newsletterService->sendNewsletterToSegment($posts, $products, $template);
         }
 
         return redirect()
             ->route('admin.email-campaigns.index')
-            ->with('success', 'Email campaign sent successfully! ' . $results['sent_count'] . ' emails sent.');
+            ->with('success', 'Email campaign sent successfully! '.$results['sent_count'].' emails sent.');
     }
 
     public function preview(Request $request): View
     {
         $template = EmailTemplate::findOrFail($request->template_id);
-        
+
         $posts = [];
         $products = [];
 
@@ -107,25 +107,24 @@ class EmailCampaignController extends CoreController
                 ->get();
         }
 
-        return view('newsletter::email-campaigns.preview', compact('template', 'posts', 'products'));
+        return view('newsletter::email-campaigns.preview', ['template' => $template, 'posts' => $posts, 'products' => $products]);
     }
 
     public function analytics(): View
     {
-        $newsletterService = new \Modules\Newsletter\Services\NewsletterService();
+        $newsletterService = new NewsletterService;
         $analytics = $newsletterService->getAllCampaignsAnalytics();
-        
-        return view('newsletter::email-campaigns.analytics-test', compact('analytics'));
+
+        return view('newsletter::email-campaigns.analytics-test', ['analytics' => $analytics]);
     }
 
     public function analyticsApi(): \Illuminate\Http\JsonResponse
     {
         $analytics = $this->newsletterService->getAllCampaignsAnalytics();
-        
+
         return response()->json([
             'success' => true,
             'data' => $analytics,
         ]);
     }
 }
-

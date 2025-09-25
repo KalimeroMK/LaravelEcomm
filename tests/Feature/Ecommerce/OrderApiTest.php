@@ -20,8 +20,11 @@ class OrderApiTest extends TestCase
     use RefreshDatabase, WithFaker, WithoutMiddleware;
 
     private User $user;
+
     private Product $product;
+
     private Shipping $shipping;
+
     private string $token;
 
     protected function setUp(): void
@@ -35,12 +38,12 @@ class OrderApiTest extends TestCase
         $this->product = Product::factory()->create([
             'status' => 'active',
             'price' => 100.00,
-            'stock' => 10
+            'stock' => 10,
         ]);
 
         $this->shipping = Shipping::factory()->create([
             'status' => 'active',
-            'price' => 15.00
+            'price' => 15.00,
         ]);
 
         $this->token = $this->user->createToken('test-token')->plainTextToken;
@@ -55,7 +58,7 @@ class OrderApiTest extends TestCase
             'product_id' => $this->product->id,
             'quantity' => 2,
             'price' => $this->product->price,
-            'amount' => $this->product->price * 2
+            'amount' => $this->product->price * 2,
         ]);
 
         // Create order using factory instead of API call
@@ -66,13 +69,13 @@ class OrderApiTest extends TestCase
             'quantity' => $cart1->quantity,
             'payment_method' => 'stripe',
             'payment_status' => 'pending',
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $this->assertDatabaseHas('orders', [
             'user_id' => $this->user->id,
             'sub_total' => $cart1->amount,
-            'total_amount' => $cart1->amount + $this->shipping->price
+            'total_amount' => $cart1->amount + $this->shipping->price,
         ]);
     }
 
@@ -83,12 +86,12 @@ class OrderApiTest extends TestCase
             'user_id' => $this->user->id,
             'sub_total' => 200.00,
             'total_amount' => 215.00,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/v1/orders');
 
         $response->assertStatus(200);
@@ -101,12 +104,12 @@ class OrderApiTest extends TestCase
             'user_id' => $this->user->id,
             'sub_total' => 200.00,
             'total_amount' => 215.00,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/v1/orders/{$order->id}");
 
         $response->assertStatus(200);
@@ -119,12 +122,12 @@ class OrderApiTest extends TestCase
         $order = Order::factory()->create([
             'user_id' => $otherUser->id,
             'sub_total' => 200.00,
-            'total_amount' => 215.00
+            'total_amount' => 215.00,
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/v1/orders/{$order->id}");
 
         // Note: Authorization is not currently implemented
@@ -136,8 +139,8 @@ class OrderApiTest extends TestCase
     public function order_validates_required_fields()
     {
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/v1/orders', []);
 
         $response->assertStatus(422);
@@ -151,7 +154,7 @@ class OrderApiTest extends TestCase
             'product_id' => $this->product->id,
             'quantity' => 3,
             'price' => $this->product->price,
-            'amount' => $this->product->price * 3
+            'amount' => $this->product->price * 3,
         ]);
 
         $expectedSubTotal = $this->product->price * 3;
@@ -165,13 +168,13 @@ class OrderApiTest extends TestCase
             'quantity' => $cart1->quantity,
             'payment_method' => 'stripe',
             'payment_status' => 'pending',
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'sub_total' => $expectedSubTotal,
-            'total_amount' => $expectedTotal
+            'total_amount' => $expectedTotal,
         ]);
     }
 }

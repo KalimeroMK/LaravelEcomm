@@ -37,7 +37,7 @@ class BrandController extends CoreController
     public function create(): View
     {
         return view('brand::create', [
-            'brand' => new Brand(),
+            'brand' => new Brand,
         ]);
     }
 

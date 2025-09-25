@@ -28,7 +28,7 @@ class TagResource extends JsonResource
             'updated_at' => $this->updated_at,
             'posts_count' => $this->when(
                 $this->relationLoaded('posts'),
-                fn() => $this->posts->count(),
+                fn () => $this->posts->count(),
                 0
             ),
 

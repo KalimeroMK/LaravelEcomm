@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
@@ -35,8 +36,9 @@ class RunEcommerceTests extends Command
             $this->displayResults($results);
 
             return $results['success'] ? Command::SUCCESS : Command::FAILURE;
-        } catch (\Exception $e) {
-            $this->error('❌ Test execution failed: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('❌ Test execution failed: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
@@ -51,7 +53,7 @@ class RunEcommerceTests extends Command
             'payment' => 'Payment processing and validation',
             'product' => 'Product listing, search, and filtering',
             'workflow' => 'End-to-end e-commerce workflow',
-            'business' => 'Business logic validation'
+            'business' => 'Business logic validation',
         ];
 
         if ($module === 'all') {
@@ -77,7 +79,7 @@ class RunEcommerceTests extends Command
             'failed' => 0,
             'skipped' => 0,
             'time' => 0,
-            'coverage' => null
+            'coverage' => null,
         ];
 
         $testCommands = $this->getTestCommands($module);
@@ -117,7 +119,7 @@ class RunEcommerceTests extends Command
             'payment' => ['Modules/Billing/Tests/Feature/PaymentApiTest.php'],
             'product' => ['Modules/Product/Tests/Feature/ProductApiTest.php'],
             'workflow' => ['Modules/Core/Tests/Feature/EcommerceWorkflowTest.php'],
-            'business' => ['Modules/Core/Tests/Feature/BusinessLogicValidationTest.php']
+            'business' => ['Modules/Core/Tests/Feature/BusinessLogicValidationTest.php'],
         ];
 
         if ($module === 'all') {
@@ -160,7 +162,7 @@ class RunEcommerceTests extends Command
                 ['Failed', "❌ {$results['failed']}"],
                 ['Skipped', "⏭️ {$results['skipped']}"],
                 ['Execution Time', "⏱️ {$results['time']}s"],
-                ['Overall Status', $results['success'] ? '✅ PASSED' : '❌ FAILED']
+                ['Overall Status', $results['success'] ? '✅ PASSED' : '❌ FAILED'],
             ]
         );
 
@@ -170,7 +172,7 @@ class RunEcommerceTests extends Command
             $this->line($results['coverage']);
         }
 
-        if (!$results['success']) {
+        if (! $results['success']) {
             $this->newLine();
             $this->warn('⚠️ Some tests failed. Check the output above for details.');
             $this->info('💡 Run individual module tests to isolate issues:');
@@ -183,9 +185,10 @@ class RunEcommerceTests extends Command
     {
         try {
             $output = Artisan::call('test --coverage-text');
+
             return Artisan::output();
-        } catch (\Exception $e) {
-            return 'Coverage report generation failed: ' . $e->getMessage();
+        } catch (Exception $e) {
+            return 'Coverage report generation failed: '.$e->getMessage();
         }
     }
 }

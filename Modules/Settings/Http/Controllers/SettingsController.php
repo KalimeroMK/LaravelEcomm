@@ -31,7 +31,7 @@ class SettingsController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): Factory|View
     {
         $this->authorize('viewAny', Setting::class);
         $settingsDto = $this->getSettingsAction->execute();

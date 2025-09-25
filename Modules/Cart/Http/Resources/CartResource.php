@@ -31,7 +31,7 @@ class CartResource extends JsonResource
             'updated_at' => $this->updated_at?->toDateTimeString(),
             'wishlists_count' => $this->when(
                 $this->relationLoaded('wishlists'),
-                fn() => $this->wishlists->count(),
+                fn () => $this->wishlists->count(),
                 0
             ),
 

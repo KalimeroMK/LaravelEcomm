@@ -22,7 +22,7 @@ Route::post('/add-to-cart', [CartController::class, 'singleAddToCart'])->name('s
 Route::group(['middleware' => 'auth'], function (): void {
     Route::get('cart-delete/{id}', [CartController::class, 'cartDelete'])->name('cart-delete');
     Route::post('cart-update', [CartController::class, 'cartUpdate'])->name('cart-update');
-    Route::get('/cart-list', function () {
+    Route::get('/cart-list', function (): Illuminate\Contracts\View\Factory|Illuminate\Contracts\View\View {
         return view('front::pages.cart');
     })->name('cart-list');
     Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');

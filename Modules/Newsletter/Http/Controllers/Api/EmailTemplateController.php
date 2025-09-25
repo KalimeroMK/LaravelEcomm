@@ -29,7 +29,7 @@ class EmailTemplateController extends CoreController
             'subject' => 'required|string|max:255',
             'html_content' => 'required|string',
             'text_content' => 'nullable|string',
-            'template_type' => 'required|string|in:' . implode(',', array_keys(EmailTemplate::getTemplateTypes())),
+            'template_type' => 'required|string|in:'.implode(',', array_keys(EmailTemplate::getTemplateTypes())),
             'is_active' => 'boolean',
             'is_default' => 'boolean',
             'settings' => 'nullable|array',
@@ -60,7 +60,7 @@ class EmailTemplateController extends CoreController
             'subject' => 'required|string|max:255',
             'html_content' => 'required|string',
             'text_content' => 'nullable|string',
-            'template_type' => 'required|string|in:' . implode(',', array_keys(EmailTemplate::getTemplateTypes())),
+            'template_type' => 'required|string|in:'.implode(',', array_keys(EmailTemplate::getTemplateTypes())),
             'is_active' => 'boolean',
             'is_default' => 'boolean',
             'settings' => 'nullable|array',
@@ -107,7 +107,7 @@ class EmailTemplateController extends CoreController
     public function duplicate(EmailTemplate $emailTemplate): JsonResponse
     {
         $newTemplate = $emailTemplate->replicate();
-        $newTemplate->name = $emailTemplate->name . ' (Copy)';
+        $newTemplate->name = $emailTemplate->name.' (Copy)';
         $newTemplate->is_default = false;
         $newTemplate->save();
 
@@ -127,7 +127,7 @@ class EmailTemplateController extends CoreController
 
     public function toggleActive(EmailTemplate $emailTemplate): JsonResponse
     {
-        $emailTemplate->update(['is_active' => !$emailTemplate->is_active]);
+        $emailTemplate->update(['is_active' => ! $emailTemplate->is_active]);
 
         $status = $emailTemplate->is_active ? 'activated' : 'deactivated';
 
@@ -153,4 +153,3 @@ class EmailTemplateController extends CoreController
         return EmailTemplateResource::collection($templates);
     }
 }
-

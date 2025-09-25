@@ -22,7 +22,7 @@ readonly class CreateAttributeGroupAction
         $group = $this->repository->create([
             'name' => $dto->name,
         ]);
-        if (! empty($dto->attributes)) {
+        if ($dto->attributes !== null && $dto->attributes !== []) {
             $group->attributes()->sync($dto->attributes);
         }
 

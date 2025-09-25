@@ -19,8 +19,8 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         if ($response->status() !== 200) {
-            dump('Response status: ' . $response->status());
-            dump('Response content: ' . $response->content());
+            dump('Response status: '.$response->status());
+            dump('Response content: '.$response->content());
         }
 
         $response->assertStatus(200);

@@ -25,7 +25,7 @@ class ProductStatsRepository
         $query = Product::with(['media', 'categories']);
 
         if (! empty($filters['category_id'])) {
-            $query->whereHas('categories', function ($q) use ($filters) {
+            $query->whereHas('categories', function ($q) use ($filters): void {
                 $q->where('categories.id', $filters['category_id']);
             });
         }
@@ -43,7 +43,7 @@ class ProductStatsRepository
         /** @var Collection $products */
         $products = $query->get();
 
-        return $products->map(function (Product $product) {
+        return $products->map(function (Product $product): ProductStatsDTO {
             $clicks = ProductClick::where('product_id', $product->id)->count();
             $impressions = ProductImpression::where('product_id', $product->id)->count();
             $ctr = $impressions > 0 ? round($clicks / $impressions, 4) : 0;

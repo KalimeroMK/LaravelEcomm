@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Requests;
+namespace Modules\User\Http\Requests;
 
 use Modules\Core\Http\Requests\Api\CoreRequest;
 

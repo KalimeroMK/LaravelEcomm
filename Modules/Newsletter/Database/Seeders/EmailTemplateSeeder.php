@@ -26,13 +26,13 @@ class EmailTemplateSeeder extends Seeder
                 'settings' => [
                     'show_unsubscribe' => true,
                     'show_company_info' => true,
-                    'footer_text' => 'Thank you for joining us!'
+                    'footer_text' => 'Thank you for joining us!',
                 ],
                 'preview_data' => [
                     'name' => 'John Doe',
                     'email' => 'john@example.com',
-                    'company' => config('app.name', 'Our Company')
-                ]
+                    'company' => config('app.name', 'Our Company'),
+                ],
             ],
             [
                 'name' => 'Newsletter Template',
@@ -46,14 +46,14 @@ class EmailTemplateSeeder extends Seeder
                     'show_unsubscribe' => true,
                     'show_company_info' => true,
                     'max_products' => 6,
-                    'max_posts' => 3
+                    'max_posts' => 3,
                 ],
                 'preview_data' => [
                     'name' => 'Subscriber',
                     'email' => 'subscriber@example.com',
                     'company' => config('app.name', 'Our Company'),
-                    'date' => now()->format('F Y')
-                ]
+                    'date' => now()->format('F Y'),
+                ],
             ],
             [
                 'name' => 'Abandoned Cart Template',
@@ -66,15 +66,15 @@ class EmailTemplateSeeder extends Seeder
                 'settings' => [
                     'show_unsubscribe' => true,
                     'show_company_info' => true,
-                    'cart_expiry_hours' => 24
+                    'cart_expiry_hours' => 24,
                 ],
                 'preview_data' => [
                     'name' => 'Customer',
                     'email' => 'customer@example.com',
                     'company' => config('app.name', 'Our Company'),
                     'cart_total' => '$99.99',
-                    'cart_items' => 3
-                ]
+                    'cart_items' => 3,
+                ],
             ],
             [
                 'name' => 'Order Confirmation Template',
@@ -87,15 +87,15 @@ class EmailTemplateSeeder extends Seeder
                 'settings' => [
                     'show_unsubscribe' => false,
                     'show_company_info' => true,
-                    'show_tracking_info' => true
+                    'show_tracking_info' => true,
                 ],
                 'preview_data' => [
                     'name' => 'Customer',
                     'email' => 'customer@example.com',
                     'company' => config('app.name', 'Our Company'),
                     'order_number' => 'ORD-12345',
-                    'order_total' => '$149.99'
-                ]
+                    'order_total' => '$149.99',
+                ],
             ],
             [
                 'name' => 'Promotional Template',
@@ -108,23 +108,23 @@ class EmailTemplateSeeder extends Seeder
                 'settings' => [
                     'show_unsubscribe' => true,
                     'show_company_info' => true,
-                    'promotion_expiry' => 7
+                    'promotion_expiry' => 7,
                 ],
                 'preview_data' => [
                     'name' => 'Customer',
                     'email' => 'customer@example.com',
                     'company' => config('app.name', 'Our Company'),
                     'promotion_title' => '50% Off Everything!',
-                    'promotion_code' => 'SAVE50'
-                ]
-            ]
+                    'promotion_code' => 'SAVE50',
+                ],
+            ],
         ];
 
         foreach ($templates as $templateData) {
             EmailTemplate::updateOrCreate(
                 [
                     'name' => $templateData['name'],
-                    'template_type' => $templateData['template_type']
+                    'template_type' => $templateData['template_type'],
                 ],
                 $templateData
             );

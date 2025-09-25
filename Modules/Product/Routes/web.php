@@ -21,8 +21,10 @@ use Modules\Product\Http\Controllers\ProductReviewController;
 Route::prefix('admin')->middleware(['auth'])->group(function (): void {
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('reviews', ProductReviewController::class)->except('show', 'create');
-    Route::delete('/products/{modelId}/media/{mediaId}',
-        [ProductController::class, 'deleteMedia'])->name('product.delete-media');
+    Route::delete(
+        '/products/{modelId}/media/{mediaId}',
+        [ProductController::class, 'deleteMedia']
+    )->name('product.delete-media');
     /* Excel import export */
     Route::get('products-export', [ProductImportExportController::class, 'export'])->name('product.export');
     Route::post('products-import', [ProductImportExportController::class, 'import'])->name('product.import');
@@ -30,13 +32,17 @@ Route::prefix('admin')->middleware(['auth'])->group(function (): void {
 });
 
 // Product Comparison
-Route::prefix('products/compare')->group(function () {
+Route::prefix('products/compare')->group(function (): void {
     Route::post('add/{productId}', [ProductComparisonController::class, 'addToCompare'])->name('products.compare.add');
-    Route::post('remove/{productId}',
-        [ProductComparisonController::class, 'removeFromCompare'])->name('products.compare.remove');
+    Route::post(
+        'remove/{productId}',
+        [ProductComparisonController::class, 'removeFromCompare']
+    )->name('products.compare.remove');
     Route::get('/', [ProductComparisonController::class, 'showComparison'])->name('products.compare.show');
 });
 
 Route::post('reviews/{slug}', [ProductReviewController::class, 'store'])->name('product.review.store');
-Route::post('generate-description',
-    [ProductController::class, 'generateDescription'])->name('products.generate-description');
+Route::post(
+    'generate-description',
+    [ProductController::class, 'generateDescription']
+)->name('products.generate-description');

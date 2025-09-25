@@ -13,8 +13,8 @@ class ProductFilterAction
         $query = array_filter([
             'show' => $data['show'] ?? null,
             'sortBy' => $data['sortBy'] ?? null,
-            'category' => ! empty($data['category']) ? implode(',', $data['category']) : null,
-            'brand' => ! empty($data['brand']) ? implode(',', $data['brand']) : null,
+            'category' => empty($data['category']) ? null : implode(',', $data['category']),
+            'brand' => empty($data['brand']) ? null : implode(',', $data['brand']),
             'price' => $data['price_range'] ?? null,
         ]);
         $appUrl = config('app.url');

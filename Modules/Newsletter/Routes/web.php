@@ -15,8 +15,6 @@ declare(strict_types=1);
 
 use Modules\Newsletter\Http\Controllers\EmailTrackingController;
 use Modules\Newsletter\Http\Controllers\NewsletterController;
-use Modules\Newsletter\Http\Controllers\EmailTemplateController;
-use Modules\Newsletter\Http\Controllers\EmailCampaignController;
 
 Route::resource('newsletters', NewsletterController::class)->except('show');
 

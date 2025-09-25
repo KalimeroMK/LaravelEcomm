@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\Newsletter\Services;
 
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Modules\Newsletter\Jobs\SendNewsletterJob;
 use Modules\Newsletter\Models\EmailAnalytics;
 use Modules\Newsletter\Models\Newsletter;
-use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 
@@ -31,10 +31,10 @@ class NewsletterService
             try {
                 $this->sendNewsletterToSubscriber($subscriber, $posts, $products);
                 $results['sent']++;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $results['failed']++;
                 $results['errors'][] = $e->getMessage();
-                Log::error('Failed to send newsletter to ' . $subscriber->email . ': ' . $e->getMessage());
+                Log::error('Failed to send newsletter to '.$subscriber->email.': '.$e->getMessage());
             }
         }
 
@@ -46,7 +46,7 @@ class NewsletterService
      */
     public function sendNewsletterToSubscriber(Newsletter $subscriber, array $posts = [], array $products = []): void
     {
-        $campaignId = 'newsletter_' . now()->format('Y_m_d_H_i_s');
+        $campaignId = 'newsletter_'.now()->format('Y_m_d_H_i_s');
 
         // Track email analytics
         $analytics = EmailAnalytics::create([
@@ -82,10 +82,10 @@ class NewsletterService
             try {
                 $this->sendNewsletterToSubscriber($subscriber, $posts, $products);
                 $results['sent']++;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $results['failed']++;
                 $results['errors'][] = $e->getMessage();
-                Log::error('Failed to send newsletter to ' . $subscriber->email . ': ' . $e->getMessage());
+                Log::error('Failed to send newsletter to '.$subscriber->email.': '.$e->getMessage());
             }
         }
 
@@ -106,82 +106,6 @@ class NewsletterService
             'blog_readers' => $this->getBlogReadersSubscribers(),
             default => Newsletter::where('is_validated', true)->get(),
         };
-    }
-
-    /**
-     * Get active users (users who have made purchases in last 6 months)
-     */
-    private function getActiveUsersSubscribers(): Collection
-    {
-        $activeUserIds = User::whereHas('orders', function ($query) {
-            $query->where('created_at', '>=', now()->subMonths(6))
-                ->where('payment_status', 'paid');
-        })->pluck('id');
-
-        return Newsletter::whereIn('user_id', $activeUserIds)
-            ->where('is_validated', true)
-            ->get();
-    }
-
-    /**
-     * Get new subscribers (subscribed in last 30 days)
-     */
-    private function getNewSubscribers(): Collection
-    {
-        return Newsletter::where('created_at', '>=', now()->subDays(30))
-            ->where('is_validated', true)
-            ->get();
-    }
-
-    /**
-     * Get premium users (users with high-value orders)
-     */
-    private function getPremiumUsersSubscribers(): Collection
-    {
-        $premiumUserIds = User::whereHas('orders', function ($query) {
-            $query->where('total_amount', '>=', 500)
-                ->where('payment_status', 'paid');
-        })->pluck('id');
-
-        return Newsletter::whereIn('user_id', $premiumUserIds)
-            ->where('is_validated', true)
-            ->get();
-    }
-
-    /**
-     * Get inactive users (no activity in last 3 months)
-     */
-    private function getInactiveUsersSubscribers(): Collection
-    {
-        $inactiveUserIds = User::whereDoesntHave('orders', function ($query) {
-            $query->where('created_at', '>=', now()->subMonths(3));
-        })->pluck('id');
-
-        return Newsletter::whereIn('user_id', $inactiveUserIds)
-            ->where('is_validated', true)
-            ->get();
-    }
-
-    /**
-     * Get product-interested subscribers (users who viewed products)
-     */
-    private function getProductInterestedSubscribers(): Collection
-    {
-        // This would require product view tracking
-        // For now, return all validated subscribers
-        return Newsletter::where('is_validated', true)->get();
-    }
-
-    /**
-     * Get blog readers (users who commented on posts)
-     */
-    private function getBlogReadersSubscribers(): Collection
-    {
-        $blogReaderIds = User::whereHas('comments')->pluck('id');
-
-        return Newsletter::whereIn('user_id', $blogReaderIds)
-            ->where('is_validated', true)
-            ->get();
     }
 
     /**
@@ -263,6 +187,103 @@ class NewsletterService
     }
 
     /**
+     * Get subscriber statistics
+     */
+    public function getSubscriberStats(): array
+    {
+        $totalSubscribers = Newsletter::count();
+        $validatedSubscribers = Newsletter::where('is_validated', true)->count();
+        $newThisMonth = Newsletter::where('created_at', '>=', now()->startOfMonth())->count();
+        $unsubscribedThisMonth = EmailAnalytics::where('unsubscribed', true)
+            ->where('unsubscribed_at', '>=', now()->startOfMonth())
+            ->count();
+
+        return [
+            'total_subscribers' => $totalSubscribers,
+            'validated_subscribers' => $validatedSubscribers,
+            'new_this_month' => $newThisMonth,
+            'unsubscribed_this_month' => $unsubscribedThisMonth,
+            'validation_rate' => $totalSubscribers > 0 ? round(($validatedSubscribers / $totalSubscribers) * 100, 2) : 0,
+        ];
+    }
+
+    /**
+     * Get active users (users who have made purchases in last 6 months)
+     */
+    private function getActiveUsersSubscribers(): Collection
+    {
+        $activeUserIds = User::whereHas('orders', function ($query): void {
+            $query->where('created_at', '>=', now()->subMonths(6))
+                ->where('payment_status', 'paid');
+        })->pluck('id');
+
+        return Newsletter::whereIn('user_id', $activeUserIds)
+            ->where('is_validated', true)
+            ->get();
+    }
+
+    /**
+     * Get new subscribers (subscribed in last 30 days)
+     */
+    private function getNewSubscribers(): Collection
+    {
+        return Newsletter::where('created_at', '>=', now()->subDays(30))
+            ->where('is_validated', true)
+            ->get();
+    }
+
+    /**
+     * Get premium users (users with high-value orders)
+     */
+    private function getPremiumUsersSubscribers(): Collection
+    {
+        $premiumUserIds = User::whereHas('orders', function ($query): void {
+            $query->where('total_amount', '>=', 500)
+                ->where('payment_status', 'paid');
+        })->pluck('id');
+
+        return Newsletter::whereIn('user_id', $premiumUserIds)
+            ->where('is_validated', true)
+            ->get();
+    }
+
+    /**
+     * Get inactive users (no activity in last 3 months)
+     */
+    private function getInactiveUsersSubscribers(): Collection
+    {
+        $inactiveUserIds = User::whereDoesntHave('orders', function ($query): void {
+            $query->where('created_at', '>=', now()->subMonths(3));
+        })->pluck('id');
+
+        return Newsletter::whereIn('user_id', $inactiveUserIds)
+            ->where('is_validated', true)
+            ->get();
+    }
+
+    /**
+     * Get product-interested subscribers (users who viewed products)
+     */
+    private function getProductInterestedSubscribers(): Collection
+    {
+        // This would require product view tracking
+        // For now, return all validated subscribers
+        return Newsletter::where('is_validated', true)->get();
+    }
+
+    /**
+     * Get blog readers (users who commented on posts)
+     */
+    private function getBlogReadersSubscribers(): Collection
+    {
+        $blogReaderIds = User::whereHas('comments')->pluck('id');
+
+        return Newsletter::whereIn('user_id', $blogReaderIds)
+            ->where('is_validated', true)
+            ->get();
+    }
+
+    /**
      * Get campaigns list
      */
     private function getCampaignsList(): array
@@ -313,26 +334,5 @@ class NewsletterService
                 'to' => now(),
             ],
         };
-    }
-
-    /**
-     * Get subscriber statistics
-     */
-    public function getSubscriberStats(): array
-    {
-        $totalSubscribers = Newsletter::count();
-        $validatedSubscribers = Newsletter::where('is_validated', true)->count();
-        $newThisMonth = Newsletter::where('created_at', '>=', now()->startOfMonth())->count();
-        $unsubscribedThisMonth = EmailAnalytics::where('unsubscribed', true)
-            ->where('unsubscribed_at', '>=', now()->startOfMonth())
-            ->count();
-
-        return [
-            'total_subscribers' => $totalSubscribers,
-            'validated_subscribers' => $validatedSubscribers,
-            'new_this_month' => $newThisMonth,
-            'unsubscribed_this_month' => $unsubscribedThisMonth,
-            'validation_rate' => $totalSubscribers > 0 ? round(($validatedSubscribers / $totalSubscribers) * 100, 2) : 0,
-        ];
     }
 }

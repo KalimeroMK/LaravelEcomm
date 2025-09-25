@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreImpressionsRequest extends FormRequest
 {
-    public function rules()
+    public function rules(): array
     {
         return [
             'product_ids' => 'required|array',

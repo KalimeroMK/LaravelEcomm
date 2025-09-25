@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Modules\Product\Models\Product;
-use Modules\Post\Models\Post;
-use Modules\Category\Models\Category;
 use Modules\Brand\Models\Brand;
+use Modules\Category\Models\Category;
+use Modules\Post\Models\Post;
+use Modules\Product\Models\Product;
 
 class GenerateSeoSitemap extends Command
 {
@@ -45,26 +46,33 @@ class GenerateSeoSitemap extends Command
             switch ($type) {
                 case 'products':
                     $this->generateProductsSitemap($limit, $compress);
+
                     break;
                 case 'posts':
                     $this->generatePostsSitemap($limit, $compress);
+
                     break;
                 case 'categories':
                     $this->generateCategoriesSitemap($limit, $compress);
+
                     break;
                 case 'brands':
                     $this->generateBrandsSitemap($limit, $compress);
+
                     break;
                 case 'all':
                 default:
                     $this->generateAllSitemaps($limit, $compress);
+
                     break;
             }
 
             $this->info('✅ Sitemap generation completed successfully!');
+
             return Command::SUCCESS;
-        } catch (\Exception $e) {
-            $this->error('❌ Error generating sitemap: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('❌ Error generating sitemap: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
@@ -82,25 +90,25 @@ class GenerateSeoSitemap extends Command
     {
         $this->info('📄 Generating main sitemap...');
 
-        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $sitemap .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $sitemap .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         $baseUrl = config('app.url');
         $timestamp = now()->format('Y-m-d\TH:i:s\Z');
 
         // Add sitemap entries
         $sitemaps = [
-            ['loc' => $baseUrl . '/sitemap-products.xml', 'lastmod' => $timestamp],
-            ['loc' => $baseUrl . '/sitemap-posts.xml', 'lastmod' => $timestamp],
-            ['loc' => $baseUrl . '/sitemap-categories.xml', 'lastmod' => $timestamp],
-            ['loc' => $baseUrl . '/sitemap-brands.xml', 'lastmod' => $timestamp],
+            ['loc' => $baseUrl.'/sitemap-products.xml', 'lastmod' => $timestamp],
+            ['loc' => $baseUrl.'/sitemap-posts.xml', 'lastmod' => $timestamp],
+            ['loc' => $baseUrl.'/sitemap-categories.xml', 'lastmod' => $timestamp],
+            ['loc' => $baseUrl.'/sitemap-brands.xml', 'lastmod' => $timestamp],
         ];
 
         foreach ($sitemaps as $sitemapEntry) {
-            $sitemap .= '  <sitemap>' . "\n";
-            $sitemap .= '    <loc>' . $sitemapEntry['loc'] . '</loc>' . "\n";
-            $sitemap .= '    <lastmod>' . $sitemapEntry['lastmod'] . '</lastmod>' . "\n";
-            $sitemap .= '  </sitemap>' . "\n";
+            $sitemap .= '  <sitemap>'."\n";
+            $sitemap .= '    <loc>'.$sitemapEntry['loc'].'</loc>'."\n";
+            $sitemap .= '    <lastmod>'.$sitemapEntry['lastmod'].'</lastmod>'."\n";
+            $sitemap .= '  </sitemap>'."\n";
         }
 
         $sitemap .= '</sitemapindex>';
@@ -199,8 +207,8 @@ class GenerateSeoSitemap extends Command
 
     private function generateSitemapXml($items, string $route, string $paramKey): string
     {
-        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         $baseUrl = config('app.url');
 
@@ -208,12 +216,12 @@ class GenerateSeoSitemap extends Command
             $url = route($route, [$paramKey => $item->slug]);
             $lastmod = $item->updated_at->format('Y-m-d\TH:i:s\Z');
 
-            $sitemap .= '  <url>' . "\n";
-            $sitemap .= '    <loc>' . $url . '</loc>' . "\n";
-            $sitemap .= '    <lastmod>' . $lastmod . '</lastmod>' . "\n";
-            $sitemap .= '    <changefreq>weekly</changefreq>' . "\n";
-            $sitemap .= '    <priority>0.8</priority>' . "\n";
-            $sitemap .= '  </url>' . "\n";
+            $sitemap .= '  <url>'."\n";
+            $sitemap .= '    <loc>'.$url.'</loc>'."\n";
+            $sitemap .= '    <lastmod>'.$lastmod.'</lastmod>'."\n";
+            $sitemap .= '    <changefreq>weekly</changefreq>'."\n";
+            $sitemap .= '    <priority>0.8</priority>'."\n";
+            $sitemap .= '  </url>'."\n";
         }
 
         $sitemap .= '</urlset>';
@@ -224,7 +232,7 @@ class GenerateSeoSitemap extends Command
     private function compressSitemap(string $filename): void
     {
         $filePath = public_path($filename);
-        $compressedPath = $filePath . '.gz';
+        $compressedPath = $filePath.'.gz';
 
         $content = File::get($filePath);
         $compressed = gzencode($content, 9);

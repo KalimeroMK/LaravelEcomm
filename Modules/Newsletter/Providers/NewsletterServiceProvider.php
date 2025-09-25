@@ -72,7 +72,7 @@ class NewsletterServiceProvider extends ServiceProvider
             return new MailboxLayerService(new Client);
         });
         $this->app->singleton(NewsletterService::class, function ($app): NewsletterService {
-            return new NewsletterService();
+            return new NewsletterService;
         });
     }
 

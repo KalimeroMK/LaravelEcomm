@@ -21,6 +21,9 @@ class AdvancedFeaturesTest extends TestCase
     use RefreshDatabase;
     use WithoutMiddleware;
 
+    /** @var User */
+    private $user;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,9 +51,6 @@ class AdvancedFeaturesTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    /** @var User */
-    private $user;
-
     /**
      * Test advanced search functionality
      */
@@ -61,20 +61,20 @@ class AdvancedFeaturesTest extends TestCase
         $product1 = Product::factory()->create([
             'title' => 'Gaming Laptop',
             'price' => 1200.00,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $product2 = Product::factory()->create([
             'title' => 'Office Laptop',
             'price' => 800.00,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $data = [
             'query' => 'laptop',
             'price_min' => 500,
             'price_max' => 1000,
-            'status' => 'active'
+            'status' => 'active',
         ];
 
         $response = $this->post('/api/v1/search', $data);
@@ -100,8 +100,8 @@ class AdvancedFeaturesTest extends TestCase
                 'popular_terms',
                 'categories',
                 'brands',
-                'suggested_query'
-            ]
+                'suggested_query',
+            ],
         ]);
     }
 
@@ -143,8 +143,8 @@ class AdvancedFeaturesTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'data' => [
-                'products'
-            ]
+                'products',
+            ],
         ]);
     }
 
@@ -158,14 +158,14 @@ class AdvancedFeaturesTest extends TestCase
 
         $data = [
             'product_id' => $product->id,
-            'quantity' => 2
+            'quantity' => 2,
         ];
 
         $response = $this->post('/api/v1/wishlist', $data);
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'success',
-            'message'
+            'message',
         ]);
     }
 
@@ -180,8 +180,8 @@ class AdvancedFeaturesTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'data' => [
-                'count'
-            ]
+                'count',
+            ],
         ]);
     }
 
@@ -198,8 +198,8 @@ class AdvancedFeaturesTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'data' => [
-                'in_wishlist'
-            ]
+                'in_wishlist',
+            ],
         ]);
     }
 
@@ -214,8 +214,8 @@ class AdvancedFeaturesTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'data' => [
-                'recommendations'
-            ]
+                'recommendations',
+            ],
         ]);
     }
 
@@ -230,8 +230,8 @@ class AdvancedFeaturesTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'data' => [
-                'alerts'
-            ]
+                'alerts',
+            ],
         ]);
     }
 
@@ -246,14 +246,14 @@ class AdvancedFeaturesTest extends TestCase
 
         $data = [
             'action' => 'remove',
-            'product_ids' => $productIds
+            'product_ids' => $productIds,
         ];
 
         $response = $this->post('/api/v1/wishlist/bulk-operations', $data);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
-            'message'
+            'message',
         ]);
     }
 
@@ -266,14 +266,14 @@ class AdvancedFeaturesTest extends TestCase
         $recipient = User::factory()->create();
 
         $data = [
-            'recipient_email' => $recipient->email
+            'recipient_email' => $recipient->email,
         ];
 
         $response = $this->post('/api/v1/wishlist/share', $data);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
-            'message'
+            'message',
         ]);
     }
 
@@ -290,8 +290,8 @@ class AdvancedFeaturesTest extends TestCase
         $response->assertJsonStructure([
             'success',
             'data' => [
-                'wishlist'
-            ]
+                'wishlist',
+            ],
         ]);
     }
 
@@ -303,7 +303,7 @@ class AdvancedFeaturesTest extends TestCase
     {
         $response = $this->post('/api/v1/search', [
             'query' => 'test',
-            'per_page' => 10
+            'per_page' => 10,
         ]);
 
         $response->assertStatus(200);
@@ -315,11 +315,11 @@ class AdvancedFeaturesTest extends TestCase
                     'current_page',
                     'per_page',
                     'total',
-                    'last_page'
+                    'last_page',
                 ],
                 'filters_applied',
-                'search_query'
-            ]
+                'search_query',
+            ],
         ]);
 
         return $response;
@@ -339,8 +339,8 @@ class AdvancedFeaturesTest extends TestCase
             'data' => [
                 'recommendations',
                 'type',
-                'count'
-            ]
+                'count',
+            ],
         ]);
 
         return $response;
@@ -367,11 +367,11 @@ class AdvancedFeaturesTest extends TestCase
                     'price_range' => [
                         'min',
                         'max',
-                        'avg'
-                    ]
+                        'avg',
+                    ],
                 ],
-                'count'
-            ]
+                'count',
+            ],
         ]);
 
         return $response;

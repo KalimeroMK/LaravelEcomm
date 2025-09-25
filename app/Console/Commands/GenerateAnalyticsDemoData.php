@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Database\Seeders\AnalyticsDemoDataSeeder;
+use Illuminate\Console\Command;
 
 class GenerateAnalyticsDemoData extends Command
 {
@@ -33,7 +35,7 @@ class GenerateAnalyticsDemoData extends Command
             $this->clearExistingData();
         }
 
-        $seeder = new AnalyticsDemoDataSeeder();
+        $seeder = new AnalyticsDemoDataSeeder;
         $seeder->setCommand($this);
         $seeder->run();
 

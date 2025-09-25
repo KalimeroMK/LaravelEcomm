@@ -37,7 +37,7 @@ class AttributeGroupController extends CoreController
     public function create(): View
     {
         return view('attribute::groups.create', [
-            'group' => new AttributeGroup(),
+            'group' => new AttributeGroup,
         ]);
     }
 

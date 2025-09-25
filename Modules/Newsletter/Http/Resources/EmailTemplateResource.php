@@ -63,4 +63,3 @@ class EmailTemplateResource extends JsonResource
         return $totalSent > 0 ? round(($totalClicked / $totalSent) * 100, 2) : 0;
     }
 }
-

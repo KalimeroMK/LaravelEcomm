@@ -29,7 +29,6 @@ class BundleProductFactory extends Factory
                 return $bundle->id;
             },
             'product_id' => function () {
-                /** @var Product $product */
                 return Product::inRandomOrder()->first()->id;
             },
         ];

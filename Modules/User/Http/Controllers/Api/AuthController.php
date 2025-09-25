@@ -69,7 +69,7 @@ class AuthController extends CoreController
 
         $user = $this->repository->findByEmail($userSocial->getEmail());
 
-        if ($user) {
+        if ($user instanceof \Modules\User\Models\User) {
             Auth::login($user);
 
             return redirect()->route('admin');

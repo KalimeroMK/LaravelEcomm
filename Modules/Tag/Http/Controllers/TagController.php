@@ -50,7 +50,7 @@ class TagController extends CoreController
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory
     {
         return view('tag::index', ['tags' => $this->getAllTagsAction->execute()]);
     }
@@ -70,7 +70,7 @@ class TagController extends CoreController
      *
      * @return Application|Factory|View
      */
-    public function create()
+    public function create(): View|Factory
     {
         return view('tag::create', ['tag' => new Tag]);
     }
@@ -81,7 +81,7 @@ class TagController extends CoreController
      *
      * @return Application|Factory|View
      */
-    public function edit(Tag $tag)
+    public function edit(Tag $tag): View|Factory
     {
         return view('tag::edit', ['tag' => $this->showTagAction->execute($tag->id)]);
     }

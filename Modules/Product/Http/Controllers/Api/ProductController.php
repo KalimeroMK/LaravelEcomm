@@ -44,8 +44,10 @@ class ProductController extends CoreController
         $dto = ProductDTO::fromRequest($request);
         $product = $this->storeProductAction->execute($dto);
 
-        SyncRelations::execute($product,
-            ['categories' => $dto->categories, 'tags' => $dto->tags, 'brand' => $dto->brand_id]);
+        SyncRelations::execute(
+            $product,
+            ['categories' => $dto->categories, 'tags' => $dto->tags, 'brand' => $dto->brand_id]
+        );
         MediaUploader::uploadMultiple($product, ['images'], 'product');
 
         return $this
@@ -69,8 +71,10 @@ class ProductController extends CoreController
         $dto = ProductDTO::fromRequest($request, $id, $product);
         $product = $this->updateProductAction->execute($id, $dto);
 
-        SyncRelations::execute($product,
-            ['categories' => $dto->categories, 'tags' => $dto->tags, 'brand' => $dto->brand_id]);
+        SyncRelations::execute(
+            $product,
+            ['categories' => $dto->categories, 'tags' => $dto->tags, 'brand' => $dto->brand_id]
+        );
         /** @var Product $product */
         MediaUploader::clearAndUpload($product, ['images'], 'post');
 

@@ -15,6 +15,7 @@ class ProductApiTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
@@ -28,15 +29,15 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_view_all_products()
+    public function user_can_view_all_products(): void
     {
         Product::factory()->count(5)->create([
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products');
 
         $response->assertStatus(200);
@@ -46,17 +47,17 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_view_specific_product()
+    public function user_can_view_specific_product(): void
     {
         $product = Product::factory()->create([
             'status' => 'active',
             'title' => 'Test Product',
-            'price' => 99.99
+            'price' => 99.99,
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/products/{$product->id}");
 
         $response->assertStatus(200);
@@ -67,21 +68,21 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_search_products()
+    public function user_can_search_products(): void
     {
         Product::factory()->create([
             'title' => 'iPhone 15 Pro',
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         Product::factory()->create([
             'title' => 'Samsung Galaxy S24',
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?search=iPhone');
 
         $response->assertStatus(200);
@@ -92,15 +93,15 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_filter_products_by_status()
+    public function user_can_filter_products_by_status(): void
     {
         Product::factory()->create(['status' => 'active']);
         Product::factory()->create(['status' => 'inactive']);
         Product::factory()->create(['status' => 'active']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?status=active');
 
         $response->assertStatus(200);
@@ -114,15 +115,15 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_filter_products_by_price_range()
+    public function user_can_filter_products_by_price_range(): void
     {
         Product::factory()->create(['price' => 50.00, 'status' => 'active']);
         Product::factory()->create(['price' => 150.00, 'status' => 'active']);
         Product::factory()->create(['price' => 300.00, 'status' => 'active']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?min_price=100&max_price=200');
 
         $response->assertStatus(200);
@@ -133,15 +134,15 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_sort_products_by_price()
+    public function user_can_sort_products_by_price(): void
     {
         Product::factory()->create(['price' => 300.00, 'status' => 'active']);
         Product::factory()->create(['price' => 100.00, 'status' => 'active']);
         Product::factory()->create(['price' => 200.00, 'status' => 'active']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?sort_by=price&sort_order=asc');
 
         $response->assertStatus(200);
@@ -153,21 +154,21 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_view_featured_products()
+    public function user_can_view_featured_products(): void
     {
         Product::factory()->create([
             'is_featured' => true,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         Product::factory()->create([
             'is_featured' => false,
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products?featured=true');
 
         $response->assertStatus(200);
@@ -178,15 +179,15 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_can_view_products_with_categories()
+    public function user_can_view_products_with_categories(): void
     {
         $product = Product::factory()->create([
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/products/{$product->id}?include=categories");
 
         $response->assertStatus(200);
@@ -196,14 +197,14 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function user_cannot_view_inactive_products_by_default()
+    public function user_cannot_view_inactive_products_by_default(): void
     {
         Product::factory()->create(['status' => 'active']);
         Product::factory()->create(['status' => 'inactive']);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/products');
 
         $response->assertStatus(200);
@@ -214,18 +215,18 @@ class ProductApiTest extends TestCase
     }
 
     /** @test */
-    public function product_returns_correct_structure()
+    public function product_returns_correct_structure(): void
     {
         $product = Product::factory()->create([
             'status' => 'active',
             'title' => 'Test Product',
             'price' => 99.99,
-            'stock' => 10
+            'stock' => 10,
         ]);
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson("/api/products/{$product->id}");
 
         $response->assertStatus(200)
@@ -237,8 +238,8 @@ class ProductApiTest extends TestCase
                     'stock',
                     'status',
                     'created_at',
-                    'updated_at'
-                ]
+                    'updated_at',
+                ],
             ]);
     }
 }

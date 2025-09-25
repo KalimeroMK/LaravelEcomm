@@ -16,8 +16,6 @@ use Modules\Post\Models\Post;
 
 class PostRepository extends EloquentRepository implements EloquentRepositoryInterface, SearchInterface
 {
-    private const LATEST_POSTS_LIMIT = 3;
-
     public function __construct()
     {
         parent::__construct(Post::class);

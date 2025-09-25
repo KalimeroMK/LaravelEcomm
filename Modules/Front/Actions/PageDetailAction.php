@@ -13,7 +13,7 @@ class PageDetailAction
     {
         $cacheKey = 'page_'.$slug;
 
-        return Cache::remember($cacheKey, 86400, function () use ($slug) {
+        return Cache::remember($cacheKey, 86400, function () use ($slug): array {
             $page = Page::where('slug', $slug)->first();
 
             return [

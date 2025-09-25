@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\Front\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
-use Modules\Front\Services\FrontCacheService;
-use Modules\Product\Models\Product;
-use Modules\Category\Models\Category;
-use Modules\Brand\Models\Brand;
-use Modules\Post\Models\Post;
 use Modules\Banner\Models\Banner;
+use Modules\Brand\Models\Brand;
+use Modules\Category\Models\Category;
+use Modules\Front\Services\FrontCacheService;
+use Modules\Post\Models\Post;
+use Modules\Product\Models\Product;
 
 class OptimizeFrontPerformance extends Command
 {
@@ -29,8 +30,9 @@ class OptimizeFrontPerformance extends Command
      */
     public function handle(FrontCacheService $cacheService): int
     {
-        if (!$this->option('force') && !$this->confirm('Do you want to proceed with front-end performance optimization?')) {
+        if (! $this->option('force') && ! $this->confirm('Do you want to proceed with front-end performance optimization?')) {
             $this->info('Front-end performance optimization cancelled.');
+
             return Command::SUCCESS;
         }
 
@@ -51,9 +53,11 @@ class OptimizeFrontPerformance extends Command
             $this->checkCachePerformance($cacheService);
 
             $this->info('✅ Front-end performance optimization completed successfully!');
+
             return Command::SUCCESS;
-        } catch (\Exception $e) {
-            $this->error('❌ Front-end performance optimization failed: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('❌ Front-end performance optimization failed: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
@@ -115,7 +119,7 @@ class OptimizeFrontPerformance extends Command
         $cacheService->rememberLong('active_banners_warmup', function () {
             return Banner::with('categories')
                 ->get()
-                ->filter(fn($b) => $b->isActive());
+                ->filter(fn ($b): bool => $b->isActive());
         });
 
         $this->info('  ✅ Data warm-up completed');
@@ -137,8 +141,8 @@ class OptimizeFrontPerformance extends Command
             if (isset($stats['error'])) {
                 $this->warn("    ⚠️ Error: {$stats['error']}");
             }
-        } catch (\Exception $e) {
-            $this->warn("    ⚠️ Could not retrieve cache statistics: " . $e->getMessage());
+        } catch (Exception $e) {
+            $this->warn('    ⚠️ Could not retrieve cache statistics: '.$e->getMessage());
         }
     }
 }

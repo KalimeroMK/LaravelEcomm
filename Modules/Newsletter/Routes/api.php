@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\Newsletter\Http\Controllers\Api\EmailCampaignController;
+use Modules\Newsletter\Http\Controllers\Api\EmailTemplateController;
 use Modules\Newsletter\Http\Controllers\Api\NewsletterAnalyticsController;
 use Modules\Newsletter\Http\Controllers\Api\NewsletterCampaignController;
 use Modules\Newsletter\Http\Controllers\Api\NewsletterController;
-use Modules\Newsletter\Http\Controllers\Api\EmailTemplateController;
-use Modules\Newsletter\Http\Controllers\Api\EmailCampaignController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ use Modules\Newsletter\Http\Controllers\Api\EmailCampaignController;
 Route::apiResource('newsletters', NewsletterController::class)->names('api.newsletters')->only(['index', 'store', 'destroy']);
 
 // Newsletter Analytics Routes
-Route::prefix('newsletter')->group(function () {
+Route::prefix('newsletter')->group(function (): void {
     Route::get('analytics', [NewsletterAnalyticsController::class, 'index'])->name('api.newsletter.analytics');
     Route::post('analytics', [NewsletterAnalyticsController::class, 'index'])->name('api.newsletter.analytics.post');
     Route::get('analytics/campaign/{campaignId}', [NewsletterAnalyticsController::class, 'campaign'])->name('api.newsletter.analytics.campaign');
@@ -34,14 +34,14 @@ Route::prefix('newsletter')->group(function () {
 });
 
 // Newsletter Campaign Routes
-Route::prefix('newsletter')->group(function () {
+Route::prefix('newsletter')->group(function (): void {
     Route::post('campaigns/send-all', [NewsletterCampaignController::class, 'sendToAll'])->name('api.newsletter.campaigns.send-all');
     Route::post('campaigns/send-segment', [NewsletterCampaignController::class, 'sendToSegment'])->name('api.newsletter.campaigns.send-segment');
     Route::get('campaigns/segments', [NewsletterCampaignController::class, 'segments'])->name('api.newsletter.campaigns.segments');
 });
 
 // Email Template API Routes
-Route::prefix('email-templates')->group(function () {
+Route::prefix('email-templates')->group(function (): void {
     Route::get('/', [EmailTemplateController::class, 'index'])->name('api.email-templates.index');
     Route::post('/', [EmailTemplateController::class, 'store'])->name('api.email-templates.store');
     Route::get('/{emailTemplate}', [EmailTemplateController::class, 'show'])->name('api.email-templates.show');
@@ -56,7 +56,7 @@ Route::prefix('email-templates')->group(function () {
 });
 
 // Email Campaign API Routes
-Route::prefix('email-campaigns')->group(function () {
+Route::prefix('email-campaigns')->group(function (): void {
     Route::get('/', [EmailCampaignController::class, 'index'])->name('api.email-campaigns.index');
     Route::get('/create', [EmailCampaignController::class, 'create'])->name('api.email-campaigns.create');
     Route::post('/', [EmailCampaignController::class, 'store'])->name('api.email-campaigns.store');

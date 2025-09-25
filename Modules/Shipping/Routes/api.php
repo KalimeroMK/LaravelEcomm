@@ -17,12 +17,12 @@ use Modules\Shipping\Http\Controllers\Api\ShippingController;
 */
 
 // API Routes
-    Route::apiResource('shipping', ShippingController::class)->names(
-        [
-            'index' => 'api.shipping.index',
-            'store' => 'api.shipping.store',
-            'show' => 'api.shipping.show',
-            'update' => 'api.shipping.update',
-            'destroy' => 'api.shipping.destroy',
-        ]
-    );
+Route::apiResource('shipping', ShippingController::class)->names(
+    [
+        'index' => 'api.shipping.index',
+        'store' => 'api.shipping.store',
+        'show' => 'api.shipping.show',
+        'update' => 'api.shipping.update',
+        'destroy' => 'api.shipping.destroy',
+    ]
+);

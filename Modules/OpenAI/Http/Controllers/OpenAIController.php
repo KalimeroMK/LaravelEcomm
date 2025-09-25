@@ -13,7 +13,7 @@ class OpenAIController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         return view('openai::index');
     }
@@ -21,7 +21,7 @@ class OpenAIController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         return view('openai::create');
     }
@@ -37,7 +37,7 @@ class OpenAIController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show($id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         return view('openai::show');
     }
@@ -45,7 +45,7 @@ class OpenAIController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         return view('openai::edit');
     }

@@ -16,11 +16,11 @@ use Modules\User\Http\Controllers\Api\AuthController;
 |
 */
 // API Routes
-    // Public routes
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login'])->name('api.login');
-    
-    // Protected routes
-    Route::group(['middleware' => ['auth:sanctum']], function (): void {
-        Route::post('/logout', [AuthController::class, 'logout']);
-    });
+// Public routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login'])->name('api.login');
+
+// Protected routes
+Route::group(['middleware' => ['auth:sanctum']], function (): void {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});

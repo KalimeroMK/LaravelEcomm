@@ -27,6 +27,7 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use jeremykenedy\LaravelLogger\App\Http\Middleware\LogActivity;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Modules\Google2fa\Http\Middleware\Google2faMiddleware;
 use Spatie\CookieConsent\CookieConsentMiddleware;
@@ -34,7 +35,6 @@ use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\RobotsMiddleware\RobotsMiddleware;
-use jeremykenedy\LaravelLogger\App\Http\Middleware\LogActivity;
 
 class Kernel extends HttpKernel
 {
@@ -108,6 +108,7 @@ class Kernel extends HttpKernel
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             '2fa' => Google2faMiddleware::class,
             'activity' => LogActivity::class,
+            'rate.limit' => \Modules\Core\Http\Middleware\CustomRateLimiter::class,
 
         ];
 }

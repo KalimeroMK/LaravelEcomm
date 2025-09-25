@@ -14,7 +14,7 @@ class BlogDetailAction
     {
         $cacheKey = 'blogDetail_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
             $post = Post::with(['author', 'categories'])->whereSlug($slug)->firstOrFail();
             $recentPosts = Post::with('author')->whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
             $tags = Tag::whereHas('posts')->take(50)->get();

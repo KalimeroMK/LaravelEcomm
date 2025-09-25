@@ -28,6 +28,7 @@ class WishlistService
                 'price' => $product->price,
                 'amount' => ($existingWishlist->quantity + $quantity) * $product->price,
             ]);
+
             return $existingWishlist;
         }
 
@@ -59,7 +60,7 @@ class WishlistService
             ->where('product_id', $productId)
             ->first();
 
-        if (!$wishlist) {
+        if (! $wishlist) {
             return null;
         }
 
@@ -80,7 +81,7 @@ class WishlistService
             ->where('product_id', $productId)
             ->first();
 
-        if (!$wishlist) {
+        if (! $wishlist) {
             return false;
         }
 
@@ -142,7 +143,7 @@ class WishlistService
                 'min' => $wishlist->pluck('price')->min(),
                 'max' => $wishlist->pluck('price')->max(),
                 'avg' => $wishlist->pluck('price')->avg(),
-            ]
+            ],
         ];
     }
 
@@ -171,8 +172,8 @@ class WishlistService
         return Product::where('status', 'active')
             ->where('stock', '>', 0)
             ->whereNotIn('id', $wishlistProductIds)
-            ->where(function ($query) use ($wishlistCategories, $wishlistBrands) {
-                $query->whereHas('categories', function ($q) use ($wishlistCategories) {
+            ->where(function ($query) use ($wishlistCategories, $wishlistBrands): void {
+                $query->whereHas('categories', function ($q) use ($wishlistCategories): void {
                     $q->whereIn('id', $wishlistCategories);
                 })
                     ->orWhereIn('brand_id', $wishlistBrands);
@@ -199,7 +200,7 @@ class WishlistService
         // For now, use name instead of username since username field doesn't exist
         $user = User::where('name', $username)->first();
 
-        if (!$user) {
+        if (! $user) {
             return null;
         }
 
@@ -236,7 +237,7 @@ class WishlistService
         return $user->wishlists()
             ->with(['product.media', 'product.brand'])
             ->get()
-            ->map(function ($wishlist) {
+            ->map(function ($wishlist): \Illuminate\Database\Eloquent\Model {
                 $product = $wishlist->product;
                 $currentPrice = $product->special_price ?? $product->price;
                 $wishlistPrice = $wishlist->price;

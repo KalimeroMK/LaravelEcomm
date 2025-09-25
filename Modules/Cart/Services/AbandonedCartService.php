@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Cart\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Modules\Cart\Jobs\SendAbandonedCartFirstEmailJob;
 use Modules\Cart\Jobs\SendAbandonedCartSecondEmailJob;
@@ -23,7 +24,7 @@ class AbandonedCartService
             // Get cart items for the user or session
             $cartItems = $this->getCartItems($user, $sessionId);
 
-            if (empty($cartItems)) {
+            if ($cartItems === []) {
                 return;
             }
 
@@ -33,7 +34,7 @@ class AbandonedCartService
             // Check if we already have an abandoned cart for this user/session
             $existingAbandonedCart = $this->findExistingAbandonedCart($user, $sessionId, $email);
 
-            if ($existingAbandonedCart) {
+            if ($existingAbandonedCart instanceof AbandonedCart) {
                 // Update existing abandoned cart
                 $existingAbandonedCart->update([
                     'cart_data' => $cartItems,
@@ -57,56 +58,9 @@ class AbandonedCartService
                 // Schedule first email (1 hour after cart abandonment)
                 SendAbandonedCartFirstEmailJob::dispatch($abandonedCart)->delay(now()->addHour());
             }
-        } catch (\Exception $e) {
-            Log::error('Failed to track abandoned cart: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Log::error('Failed to track abandoned cart: '.$e->getMessage());
         }
-    }
-
-    /**
-     * Get cart items for user or session
-     */
-    private function getCartItems(?User $user = null, ?string $sessionId = null): array
-    {
-        $query = Cart::with('product')
-            ->where('status', 'new')
-            ->whereNull('order_id');
-
-        if ($user) {
-            $query->where('user_id', $user->id);
-        } elseif ($sessionId) {
-            $query->where('session_id', $sessionId);
-        } else {
-            return [];
-        }
-
-        return $query->get()->map(function ($cart) {
-            return [
-                'product_id' => $cart->product_id,
-                'quantity' => $cart->quantity,
-                'price' => $cart->price,
-                'amount' => $cart->amount,
-            ];
-        })->toArray();
-    }
-
-    /**
-     * Find existing abandoned cart
-     */
-    private function findExistingAbandonedCart(?User $user = null, ?string $sessionId = null, ?string $email = null): ?AbandonedCart
-    {
-        $query = AbandonedCart::where('converted', false);
-
-        if ($user) {
-            $query->where('user_id', $user->id);
-        } elseif ($sessionId) {
-            $query->where('session_id', $sessionId);
-        } elseif ($email) {
-            $query->where('email', $email);
-        } else {
-            return null;
-        }
-
-        return $query->first();
     }
 
     /**
@@ -140,7 +94,7 @@ class AbandonedCartService
     {
         $abandonedCart = $this->findExistingAbandonedCart($user, $sessionId);
 
-        if ($abandonedCart) {
+        if ($abandonedCart instanceof AbandonedCart) {
             $abandonedCart->markAsConverted();
         }
     }
@@ -172,5 +126,52 @@ class AbandonedCartService
             'pending_second_email' => AbandonedCart::needsSecondEmail()->count(),
             'pending_third_email' => AbandonedCart::needsThirdEmail()->count(),
         ];
+    }
+
+    /**
+     * Get cart items for user or session
+     */
+    private function getCartItems(?User $user = null, ?string $sessionId = null): array
+    {
+        $query = Cart::with('product')
+            ->where('status', 'new')
+            ->whereNull('order_id');
+
+        if ($user instanceof User) {
+            $query->where('user_id', $user->id);
+        } elseif ($sessionId) {
+            $query->where('session_id', $sessionId);
+        } else {
+            return [];
+        }
+
+        return $query->get()->map(function ($cart): array {
+            return [
+                'product_id' => $cart->product_id,
+                'quantity' => $cart->quantity,
+                'price' => $cart->price,
+                'amount' => $cart->amount,
+            ];
+        })->toArray();
+    }
+
+    /**
+     * Find existing abandoned cart
+     */
+    private function findExistingAbandonedCart(?User $user = null, ?string $sessionId = null, ?string $email = null): ?AbandonedCart
+    {
+        $query = AbandonedCart::where('converted', false);
+
+        if ($user instanceof User) {
+            $query->where('user_id', $user->id);
+        } elseif ($sessionId) {
+            $query->where('session_id', $sessionId);
+        } elseif ($email) {
+            $query->where('email', $email);
+        } else {
+            return null;
+        }
+
+        return $query->first();
     }
 }

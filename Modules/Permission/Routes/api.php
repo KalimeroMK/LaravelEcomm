@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 use Modules\Permission\Http\Controllers\Api\PermissionController;
 
 // API Routes
-    Route::apiResource('permissions', PermissionController::class)->names('api.permission');
+Route::apiResource('permissions', PermissionController::class)->names('api.permission');

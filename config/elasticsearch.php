@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -17,7 +19,7 @@ return [
             'scheme' => env('ELASTICSEARCH_SCHEME', 'http'),
             'user' => env('ELASTICSEARCH_USER', null),
             'pass' => env('ELASTICSEARCH_PASS', null),
-        ]
+        ],
     ],
 
     'index_prefix' => env('ELASTICSEARCH_INDEX_PREFIX', 'laravel_'),
@@ -33,12 +35,12 @@ return [
                         'product_analyzer' => [
                             'type' => 'custom',
                             'tokenizer' => 'standard',
-                            'filter' => ['lowercase', 'stop', 'snowball']
-                        ]
-                    ]
-                ]
-            ]
-        ]
+                            'filter' => ['lowercase', 'stop', 'snowball'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
 
     'connection_timeout' => env('ELASTICSEARCH_CONNECTION_TIMEOUT', 10),

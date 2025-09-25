@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\Brand\DTOs;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Modules\Brand\Models\Brand;
+use Str;
 
 readonly class BrandDTO
 {
@@ -26,7 +26,7 @@ readonly class BrandDTO
         return new self(
             $id,
             $data['title'] ?? $existing?->title,
-            $data['slug'] ?? $existing?->slug ?? \Str::slug($data['title'] ?? $existing?->title ?? 'brand'),
+            $data['slug'] ?? $existing?->slug ?? Str::slug($data['title'] ?? $existing?->title ?? 'brand'),
             $data['status'] ?? $existing?->status ?? 'active',
             $existing?->created_at?->toDateTimeString(),
             $existing?->updated_at?->toDateTimeString(),

@@ -129,6 +129,8 @@ class User extends Authenticatable implements HasMedia
             'password',
             'status',
             'remember_token',
+            'google2fa_secret',
+            'recovery_codes',
         ];
 
     public static function Factory(): UserFactory

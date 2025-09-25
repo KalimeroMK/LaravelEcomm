@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         // This migration is now obsolete. See product_attribute_options and attribute_options.
-        Schema::create('attribute_values', function (Blueprint $table) {
+        Schema::create('attribute_values', function (Blueprint $table): void {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('attribute_id');

@@ -24,8 +24,6 @@ use Modules\Product\Models\Product;
 
 class CartController extends CoreController
 {
-    private CartRepository $repository;
-
     private CreateCartAction $createAction;
 
     private UpdateCartAction $updateAction;
@@ -38,7 +36,6 @@ class CartController extends CoreController
         UpdateCartAction $updateAction,
         DeleteCartAction $deleteAction
     ) {
-        $this->repository = $repository;
         $this->createAction = $createAction;
         $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;

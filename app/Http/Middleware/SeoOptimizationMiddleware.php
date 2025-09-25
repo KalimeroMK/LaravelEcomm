@@ -13,7 +13,7 @@ class SeoOptimizationMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -68,14 +68,14 @@ class SeoOptimizationMiddleware
 
                 // Skip if already has width/height
                 if (
-                    str_contains($beforeSrc . $afterSrc, 'width=') ||
-                    str_contains($beforeSrc . $afterSrc, 'height=')
+                    str_contains($beforeSrc.$afterSrc, 'width=') ||
+                    str_contains($beforeSrc.$afterSrc, 'height=')
                 ) {
                     return $matches[0];
                 }
 
                 // Add default dimensions for better CLS
-                return '<img' . $beforeSrc . 'src="' . $src . '"' . $afterSrc . ' width="300" height="200">';
+                return '<img'.$beforeSrc.'src="'.$src.'"'.$afterSrc.' width="300" height="200">';
             },
             $content
         );
@@ -111,8 +111,9 @@ class SeoOptimizationMiddleware
                 // Remove extra whitespace and semicolons
                 $style = preg_replace('/\s+/', ' ', $style);
                 $style = preg_replace('/;\s*/', ';', $style);
-                $style = trim($style, '; ');
-                return 'style="' . $style . '"';
+                $style = mb_trim($style, '; ');
+
+                return 'style="'.$style.'"';
             },
             $content
         );
@@ -134,7 +135,7 @@ class SeoOptimizationMiddleware
     <link rel="preload" href="/assets/fonts/main.woff2" as="font" type="font/woff2" crossorigin>
 ';
 
-            $content = str_replace('<head>', '<head>' . $preloadHints, $content);
+            $content = str_replace('<head>', '<head>'.$preloadHints, $content);
         }
 
         return $content;

@@ -14,7 +14,6 @@ readonly class ProductReviewDTO
         public int $user_id,
         public string $review,
         public int $rate
-
     ) {}
 
     public static function fromRequest(Request $request, ?int $id = null): self

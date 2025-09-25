@@ -31,7 +31,7 @@ class AttributeSystemSeeder extends Seeder
         if ($isNew) {
             $attachIds[] = $isNew->id;
         }
-        if (! empty($attachIds)) {
+        if ($attachIds !== []) {
             $product->attributes()->attach($attachIds);
         }
 

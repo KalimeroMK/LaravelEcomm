@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use Modules\User\Models\User;
-use Modules\Product\Models\Product;
-use Modules\Order\Models\Order;
-
-use Modules\Category\Models\Category;
+use Illuminate\Database\Seeder;
 use Modules\Brand\Models\Brand;
+use Modules\Order\Models\Order;
+use Modules\Product\Models\Product;
+use Modules\User\Models\User;
 
 class AnalyticsDemoDataSeeder extends Seeder
 {
@@ -67,13 +66,13 @@ class AnalyticsDemoDataSeeder extends Seeder
 
         foreach ($months as $month => $count) {
             for ($i = 0; $i < $count; $i++) {
-                $user = new User();
+                $user = new User;
                 $user->name = fake()->name();
-                $user->email = 'user' . microtime(true) . rand(1000, 9999) . '@demo.com';
+                $user->email = 'user'.microtime(true).rand(1000, 9999).'@demo.com';
                 $user->email_verified_at = now();
                 $user->password = bcrypt('password');
-                $user->created_at = Carbon::parse($month . '-' . rand(1, 28));
-                $user->updated_at = Carbon::parse($month . '-' . rand(1, 28));
+                $user->created_at = Carbon::parse($month.'-'.rand(1, 28));
+                $user->updated_at = Carbon::parse($month.'-'.rand(1, 28));
                 $user->save();
             }
         }
@@ -92,14 +91,14 @@ class AnalyticsDemoDataSeeder extends Seeder
         }
 
         for ($i = 0; $i < 50; $i++) {
-            $product = new Product();
+            $product = new Product;
             $product->title = fake()->words(3, true);
             $product->slug = fake()->slug();
             $product->summary = fake()->paragraph();
             $product->description = fake()->paragraphs(3, true);
             $product->price = fake()->randomFloat(2, 10, 1000);
             $product->special_price = fake()->randomFloat(2, 5, 500);
-            $product->sku = 'DEMO-' . microtime(true) . rand(1000, 9999);
+            $product->sku = 'DEMO-'.microtime(true).rand(1000, 9999);
             $product->stock = fake()->numberBetween(0, 100);
             $product->status = fake()->randomElement(['active', 'inactive']);
             $product->is_featured = fake()->boolean(30);
@@ -119,6 +118,7 @@ class AnalyticsDemoDataSeeder extends Seeder
 
         if ($users->isEmpty() || $products->isEmpty()) {
             $this->command->warn('No users or products found. Skipping orders...');
+
             return;
         }
 
@@ -150,11 +150,11 @@ class AnalyticsDemoDataSeeder extends Seeder
         foreach ($months as $month => $count) {
             for ($i = 0; $i < $count; $i++) {
                 $user = $users->random();
-                $orderDate = Carbon::parse($month . '-' . rand(1, 28));
+                $orderDate = Carbon::parse($month.'-'.rand(1, 28));
 
-                $order = new Order();
+                $order = new Order;
                 $order->user_id = $user->id;
-                $order->order_number = 'ORD-' . microtime(true) . rand(1000, 9999);
+                $order->order_number = 'ORD-'.microtime(true).rand(1000, 9999);
                 $order->status = fake()->randomElement(['pending', 'processing', 'shipped', 'delivered', 'cancelled']);
                 $order->payment_status = fake()->randomElement(['pending', 'paid', 'unpaid']);
                 $order->payment_method = fake()->randomElement(['cod', 'paypal', 'stripe']);
@@ -196,13 +196,13 @@ class AnalyticsDemoDataSeeder extends Seeder
             'ToyLand',
             'AutoPro',
             'FoodFresh',
-            'OfficeMax'
+            'OfficeMax',
         ];
 
         foreach ($brands as $brand) {
-            $br = new Brand();
+            $br = new Brand;
             $br->title = $brand;
-            $br->slug = strtolower(str_replace(' ', '-', $brand));
+            $br->slug = mb_strtolower(str_replace(' ', '-', $brand));
             $br->status = 'active';
             $br->save();
         }
@@ -212,7 +212,7 @@ class AnalyticsDemoDataSeeder extends Seeder
     {
         // Create at least one brand if none exist
         if (Brand::count() === 0) {
-            $br = new Brand();
+            $br = new Brand;
             $br->title = 'Generic';
             $br->slug = 'generic';
             $br->status = 'active';

@@ -17,7 +17,6 @@ use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Complaint\Database\Factories\ComplaintReplaiesFactory;
 use Modules\Complaint\Models\Complaint;
-use Modules\Complaint\Models\ComplaintReply;
 use Modules\Coupon\Database\Seeders\CouponSeeder;
 use Modules\Message\Models\Message;
 use Modules\Newsletter\Database\Seeders\EmailTemplateSeeder;

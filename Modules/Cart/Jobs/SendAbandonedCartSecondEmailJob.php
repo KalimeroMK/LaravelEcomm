@@ -37,13 +37,13 @@ class SendAbandonedCartSecondEmailJob implements ShouldQueue
     public function handle(): void
     {
         // Check if email should still be sent
-        if (!$this->abandonedCart->shouldSendSecondEmail()) {
+        if (! $this->abandonedCart->shouldSendSecondEmail()) {
             return;
         }
 
         $email = $this->abandonedCart->email ?? $this->abandonedCart->user?->email;
 
-        if (!$email) {
+        if (! $email) {
             return;
         }
 

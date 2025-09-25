@@ -45,7 +45,7 @@ class OrderController extends CoreController
 
     public function create(): View
     {
-        return view('order::create', ['order' => new Order()]);
+        return view('order::create', ['order' => new Order]);
     }
 
     public function store(Store $request): RedirectResponse
@@ -101,7 +101,7 @@ class OrderController extends CoreController
             ->whereYear('created_at', $year)
             ->where('status', 'delivered')
             ->get()
-            ->groupBy(fn ($d) => Carbon::parse($d->created_at)->format('m'));
+            ->groupBy(fn ($d): string => Carbon::parse($d->created_at)->format('m'));
 
         $result = [];
 

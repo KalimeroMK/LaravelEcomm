@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Product\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Modules\Product\Models\Product;
@@ -44,14 +45,14 @@ class ReindexProductsCommand extends Command
             $bar = $this->output->createProgressBar($totalProducts);
             $bar->start();
 
-            Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->chunk(100, function ($products) use ($elasticsearchService, $bar) {
+            Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->chunk(100, function ($products) use ($elasticsearchService, $bar): void {
                 foreach ($products as $product) {
                     try {
                         $elasticsearchService->indexProduct($product);
                         $bar->advance();
-                    } catch (\Exception $e) {
-                        Log::error("Failed to index product {$product->id}: " . $e->getMessage());
-                        $this->error("Failed to index product {$product->id}: " . $e->getMessage());
+                    } catch (Exception $e) {
+                        Log::error("Failed to index product {$product->id}: ".$e->getMessage());
+                        $this->error("Failed to index product {$product->id}: ".$e->getMessage());
                     }
                 }
             });
@@ -63,9 +64,9 @@ class ReindexProductsCommand extends Command
             $this->info("Total products indexed: {$totalProducts}");
 
             return Command::SUCCESS;
-        } catch (\Exception $e) {
-            $this->error('Product reindexing failed: ' . $e->getMessage());
-            Log::error('Product reindexing failed: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('Product reindexing failed: '.$e->getMessage());
+            Log::error('Product reindexing failed: '.$e->getMessage());
 
             return Command::FAILURE;
         }

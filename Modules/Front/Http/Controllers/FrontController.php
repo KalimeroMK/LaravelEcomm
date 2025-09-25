@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Front\Http\Controllers;
 
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -14,6 +15,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Modules\Banner\Models\Banner;
+use Modules\Billing\Services\WishlistService;
 use Modules\Front\Actions\BlogAction;
 use Modules\Front\Actions\BlogByCategoryAction;
 use Modules\Front\Actions\BlogByTagAction;
@@ -38,17 +40,16 @@ use Modules\Front\Actions\ProductGridsAction;
 use Modules\Front\Actions\ProductListsAction;
 use Modules\Front\Actions\ProductSearchAction;
 use Modules\Front\Http\Requests\ProductSearchRequest;
-use Modules\Message\Http\Requests\Api\Store;
+use Modules\Message\Http\Requests\Store;
 use Modules\Product\Services\ElasticsearchService;
 use Modules\Product\Services\RecommendationService;
-use Modules\Billing\Services\WishlistService;
 
 class FrontController extends Controller
 {
     /**
      * @return Application|Factory|View
      */
-    public function index(IndexAction $indexAction)
+    public function index(IndexAction $indexAction): Factory|View
     {
         return view('front::index', $indexAction());
     }
@@ -56,7 +57,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function aboutUs()
+    public function aboutUs(): Factory|View
     {
         return view('front::pages.about-us', []);
     }
@@ -64,7 +65,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function contact()
+    public function contact(): Factory|View
     {
         return view('front::pages.contact', []);
     }
@@ -72,7 +73,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productDetail(string $slug, ProductDetailAction $productDetailAction)
+    public function productDetail(string $slug, ProductDetailAction $productDetailAction): Factory|View
     {
         return view('front::pages.product_detail', $productDetailAction($slug));
     }
@@ -80,7 +81,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productGrids(ProductGridsAction $productGridsAction)
+    public function productGrids(ProductGridsAction $productGridsAction): Factory|View
     {
         return view('front::pages.product-grids', $productGridsAction());
     }
@@ -88,12 +89,12 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function bundles(ProductBundlesAction $productBundlesAction)
+    public function bundles(ProductBundlesAction $productBundlesAction): Factory|View
     {
         return view('front::pages.bundles', $productBundlesAction());
     }
 
-    public function bundleDetail(string $slug, BundleDetailAction $bundleDetailAction)
+    public function bundleDetail(string $slug, BundleDetailAction $bundleDetailAction): Factory|View
     {
         return view('front::pages.bundle_detail', $bundleDetailAction($slug));
     }
@@ -101,7 +102,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productLists(ProductListsAction $productListsAction)
+    public function productLists(ProductListsAction $productListsAction): Factory|View
     {
         return view('front::pages.product-lists', $productListsAction());
     }
@@ -114,7 +115,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productSearch(ProductSearchRequest $request, ProductSearchAction $productSearchAction)
+    public function productSearch(ProductSearchRequest $request, ProductSearchAction $productSearchAction): Factory|View
     {
         return view('front::pages.product-grids', $productSearchAction($request->validated()));
     }
@@ -122,7 +123,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productDeal(ProductDealAction $productDealAction)
+    public function productDeal(ProductDealAction $productDealAction): Factory|View
     {
         return view('front::pages.product-deal', $productDealAction());
     }
@@ -130,7 +131,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productBrand(Request $request, ProductBrandAction $productBrandAction)
+    public function productBrand(Request $request, ProductBrandAction $productBrandAction): Factory|View
     {
         if (request()->is('e-shop.loc/product-grids')) {
             return view('front::pages.product-grids', $productBrandAction($request->all()));
@@ -142,7 +143,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productCat(string $slug, ProductCatAction $productCatAction)
+    public function productCat(string $slug, ProductCatAction $productCatAction): Factory|View
     {
         return view('front::pages.product-lists', $productCatAction($slug));
     }
@@ -150,7 +151,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function blog(BlogAction $blogAction)
+    public function blog(BlogAction $blogAction): Factory|View
     {
         return view('front::pages.blog', $blogAction());
     }
@@ -158,7 +159,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function blogDetail(string $slug, BlogDetailAction $blogDetailAction)
+    public function blogDetail(string $slug, BlogDetailAction $blogDetailAction): Factory|View
     {
         return view('front::pages.blog-detail', $blogDetailAction($slug));
     }
@@ -166,7 +167,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function blogSearch(Request $request, BlogSearchAction $blogSearchAction)
+    public function blogSearch(Request $request, BlogSearchAction $blogSearchAction): Factory|View
     {
         return view('front::pages.blog', $blogSearchAction($request));
     }
@@ -179,7 +180,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function blogByCategory(string $slug, BlogByCategoryAction $blogByCategoryAction)
+    public function blogByCategory(string $slug, BlogByCategoryAction $blogByCategoryAction): Factory|View
     {
         return view('front::pages.blog', $blogByCategoryAction($slug));
     }
@@ -230,7 +231,7 @@ class FrontController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function messageStore(Store $request, MessageStoreAction $messageStoreAction): ?string
+    public function messageStore(Store $request, MessageStoreAction $messageStoreAction): RedirectResponse
     {
         return $messageStoreAction($request);
     }
@@ -248,7 +249,7 @@ class FrontController extends Controller
             'categories',
             'status',
             'in_stock',
-            'sort_by'
+            'sort_by',
         ]);
 
         $products = collect();
@@ -257,10 +258,11 @@ class FrontController extends Controller
 
         if ($query) {
             $searchPerformed = true;
+
             try {
                 $products = $elasticsearchService->search($query, $filters);
                 $totalResults = $products->count();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Fallback to basic search if Elasticsearch fails
                 $products = \Modules\Product\Models\Product::where('title', 'like', "%{$query}%")
                     ->orWhere('summary', 'like', "%{$query}%")
@@ -279,7 +281,7 @@ class FrontController extends Controller
             'filters' => $filters,
             'availableFilters' => $availableFilters,
             'totalResults' => $totalResults,
-            'searchPerformed' => $searchPerformed
+            'searchPerformed' => $searchPerformed,
         ]);
     }
 
@@ -290,7 +292,7 @@ class FrontController extends Controller
     {
         $query = $request->input('query', '');
 
-        if (strlen($query) < 2) {
+        if (mb_strlen($query) < 2) {
             return response()->json(['suggestions' => []]);
         }
 
@@ -317,17 +319,20 @@ class FrontController extends Controller
                     case 'ai':
                         $recommendations = $recommendationService->getAIRecommendations($user, $limit);
                         $recommendationType = 'AI-powered';
+
                         break;
                     case 'collaborative':
                         $recommendations = $recommendationService->getCollaborativeRecommendations($user, $limit);
                         $recommendationType = 'Based on similar users';
+
                         break;
                     case 'trending':
                         $recommendations = $recommendationService->getTrendingProducts($limit);
                         $recommendationType = 'Trending now';
+
                         break;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Fallback to trending products
                 $recommendations = $recommendationService->getTrendingProducts($limit);
                 $recommendationType = 'Trending now';
@@ -342,7 +347,7 @@ class FrontController extends Controller
             'recommendations' => $recommendations,
             'type' => $type,
             'recommendationType' => $recommendationType,
-            'totalCount' => $recommendations->count()
+            'totalCount' => $recommendations->count(),
         ]);
     }
 
@@ -359,7 +364,7 @@ class FrontController extends Controller
         return view('front::pages.related-products', [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
-            'totalCount' => $relatedProducts->count()
+            'totalCount' => $relatedProducts->count(),
         ]);
     }
 
@@ -370,7 +375,7 @@ class FrontController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('front.login')->with('message', 'Please login to view your wishlist.');
         }
 
@@ -389,100 +394,8 @@ class FrontController extends Controller
             'wishlist' => $wishlist,
             'statistics' => $stats,
             'recommendations' => $recommendations,
-            'withPriceAlerts' => $withPriceAlerts
+            'withPriceAlerts' => $withPriceAlerts,
         ]);
-    }
-
-    /**
-     * Get available filters for search
-     */
-    private function getAvailableFilters(?string $query): array
-    {
-        $baseQuery = \Modules\Product\Models\Product::query();
-
-        if ($query) {
-            $baseQuery->where(function ($q) use ($query) {
-                $q->where('title', 'like', "%{$query}%")
-                    ->orWhere('summary', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%");
-            });
-        }
-
-        $baseQuery->where('status', 'active');
-
-        // Get price range
-        $priceRange = $baseQuery->selectRaw('MIN(price) as min_price, MAX(price) as max_price')->first();
-
-        // Get available brands
-        $brands = $baseQuery->join('brands', 'products.brand_id', '=', 'brands.id')
-            ->select('brands.id', 'brands.name')
-            ->distinct()
-            ->get();
-
-        // Get available categories
-        $categories = $baseQuery->join('category_product', 'products.id', '=', 'category_product.product_id')
-            ->join('categories', 'category_product.category_id', '=', 'categories.id')
-            ->select('categories.id', 'categories.name')
-            ->distinct()
-            ->get();
-
-        return [
-            'price_range' => [
-                'min' => $priceRange->min_price ?? 0,
-                'max' => $priceRange->max_price ?? 1000
-            ],
-            'brands' => $brands,
-            'categories' => $categories,
-            'statuses' => ['active', 'inactive'],
-            'stock_options' => ['in_stock', 'out_of_stock']
-        ];
-    }
-
-    /**
-     * Get search suggestions
-     */
-    private function getSearchSuggestions(string $query): array
-    {
-        // Get popular search terms
-        $popularTerms = \Modules\Product\Models\Product::where('title', 'like', "%{$query}%")
-            ->orWhere('summary', 'like', "%{$query}%")
-            ->pluck('title')
-            ->take(5)
-            ->toArray();
-
-        // Get category suggestions
-        $categorySuggestions = \Modules\Category\Models\Category::where('name', 'like', "%{$query}%")
-            ->pluck('name')
-            ->take(3)
-            ->toArray();
-
-        // Get brand suggestions
-        $brandSuggestions = \Modules\Brand\Models\Brand::where('name', 'like', "%{$query}%")
-            ->pluck('name')
-            ->take(3)
-            ->toArray();
-
-        return [
-            'popular_terms' => $popularTerms,
-            'categories' => $categorySuggestions,
-            'brands' => $brandSuggestions,
-            'suggested_query' => $this->generateSuggestedQuery($query)
-        ];
-    }
-
-    /**
-     * Generate suggested search query
-     */
-    private function generateSuggestedQuery(string $query): string
-    {
-        $corrections = [
-            'laptop' => 'laptop computer',
-            'phone' => 'smartphone',
-            'tv' => 'television',
-            'pc' => 'personal computer'
-        ];
-
-        return $corrections[$query] ?? $query;
     }
 
     /**
@@ -521,11 +434,11 @@ class FrontController extends Controller
         $categoryId = $request->query('category');
         $query = Banner::with('categories');
         if ($categoryId) {
-            $query->whereHas('categories', function ($q) use ($categoryId) {
+            $query->whereHas('categories', function ($q) use ($categoryId): void {
                 $q->where('categories.id', $categoryId);
             });
         }
-        $banners = $query->get()->filter(fn($b) => $b->isActive());
+        $banners = $query->get()->filter(fn ($b): bool => $b->isActive());
 
         return view('front::banner', ['banners' => $banners]);
     }
@@ -539,5 +452,97 @@ class FrontController extends Controller
         $banner->incrementImpression();
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Get available filters for search
+     */
+    private function getAvailableFilters(?string $query): array
+    {
+        $baseQuery = \Modules\Product\Models\Product::query();
+
+        if ($query) {
+            $baseQuery->where(function ($q) use ($query): void {
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('summary', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%");
+            });
+        }
+
+        $baseQuery->where('status', 'active');
+
+        // Get price range
+        $priceRange = $baseQuery->selectRaw('MIN(price) as min_price, MAX(price) as max_price')->first();
+
+        // Get available brands
+        $brands = $baseQuery->join('brands', 'products.brand_id', '=', 'brands.id')
+            ->select('brands.id', 'brands.name')
+            ->distinct()
+            ->get();
+
+        // Get available categories
+        $categories = $baseQuery->join('category_product', 'products.id', '=', 'category_product.product_id')
+            ->join('categories', 'category_product.category_id', '=', 'categories.id')
+            ->select('categories.id', 'categories.name')
+            ->distinct()
+            ->get();
+
+        return [
+            'price_range' => [
+                'min' => $priceRange->min_price ?? 0,
+                'max' => $priceRange->max_price ?? 1000,
+            ],
+            'brands' => $brands,
+            'categories' => $categories,
+            'statuses' => ['active', 'inactive'],
+            'stock_options' => ['in_stock', 'out_of_stock'],
+        ];
+    }
+
+    /**
+     * Get search suggestions
+     */
+    private function getSearchSuggestions(string $query): array
+    {
+        // Get popular search terms
+        $popularTerms = \Modules\Product\Models\Product::where('title', 'like', "%{$query}%")
+            ->orWhere('summary', 'like', "%{$query}%")
+            ->pluck('title')
+            ->take(5)
+            ->toArray();
+
+        // Get category suggestions
+        $categorySuggestions = \Modules\Category\Models\Category::where('name', 'like', "%{$query}%")
+            ->pluck('name')
+            ->take(3)
+            ->toArray();
+
+        // Get brand suggestions
+        $brandSuggestions = \Modules\Brand\Models\Brand::where('name', 'like', "%{$query}%")
+            ->pluck('name')
+            ->take(3)
+            ->toArray();
+
+        return [
+            'popular_terms' => $popularTerms,
+            'categories' => $categorySuggestions,
+            'brands' => $brandSuggestions,
+            'suggested_query' => $this->generateSuggestedQuery($query),
+        ];
+    }
+
+    /**
+     * Generate suggested search query
+     */
+    private function generateSuggestedQuery(string $query): string
+    {
+        $corrections = [
+            'laptop' => 'laptop computer',
+            'phone' => 'smartphone',
+            'tv' => 'television',
+            'pc' => 'personal computer',
+        ];
+
+        return $corrections[$query] ?? $query;
     }
 }

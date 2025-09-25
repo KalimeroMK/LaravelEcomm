@@ -17,6 +17,6 @@ use Illuminate\Support\Facades\Route;
 use Modules\Post\Http\Controllers\Api\PostController;
 
 // API Routes
-    Route::apiResource('posts', PostController::class)
-        ->names('api.posts');
-    Route::post('posts/{id}', [PostController::class, 'update'])->name('api.post.update');
+Route::apiResource('posts', PostController::class)
+    ->names('api.posts');
+Route::post('posts/{id}', [PostController::class, 'update'])->name('api.post.update');

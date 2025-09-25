@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Password;
+namespace Modules\User\Http\Requests\Password;
 
 use App\Rules\MatchOldPassword;
 use Modules\Core\Http\Requests\Api\CoreRequest;

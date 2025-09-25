@@ -14,6 +14,7 @@ use Modules\Product\Services\RecommendationService;
 class AdvancedSearchController extends Controller
 {
     protected ElasticsearchService $elasticsearchService;
+
     protected RecommendationService $recommendationService;
 
     public function __construct(
@@ -40,7 +41,7 @@ class AdvancedSearchController extends Controller
             'in_stock' => 'nullable|boolean',
             'sort_by' => 'nullable|string|in:relevance,price_asc,price_desc,newest,popular',
             'page' => 'nullable|integer|min:1',
-            'per_page' => 'nullable|integer|min:1|max:100'
+            'per_page' => 'nullable|integer|min:1|max:100',
         ]);
 
         $filters = $request->only([
@@ -49,7 +50,7 @@ class AdvancedSearchController extends Controller
             'brand',
             'categories',
             'status',
-            'in_stock'
+            'in_stock',
         ]);
 
         $query = $request->input('query');
@@ -75,8 +76,8 @@ class AdvancedSearchController extends Controller
                     'last_page' => ceil($products->count() / $perPage),
                 ],
                 'filters_applied' => $filters,
-                'search_query' => $query
-            ]
+                'search_query' => $query,
+            ],
         ]);
     }
 
@@ -86,7 +87,7 @@ class AdvancedSearchController extends Controller
     public function suggestions(Request $request): JsonResponse
     {
         $request->validate([
-            'query' => 'required|string|min:1|max:50'
+            'query' => 'required|string|min:1|max:50',
         ]);
 
         $query = $request->input('query');
@@ -96,7 +97,7 @@ class AdvancedSearchController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $suggestions
+            'data' => $suggestions,
         ]);
     }
 
@@ -106,7 +107,7 @@ class AdvancedSearchController extends Controller
     public function filters(Request $request): JsonResponse
     {
         $request->validate([
-            'query' => 'nullable|string|min:1'
+            'query' => 'nullable|string|min:1',
         ]);
 
         $query = $request->input('query');
@@ -116,7 +117,7 @@ class AdvancedSearchController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $filters
+            'data' => $filters,
         ]);
     }
 
@@ -127,10 +128,10 @@ class AdvancedSearchController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Authentication required for personalized recommendations'
+                'message' => 'Authentication required for personalized recommendations',
             ], 401);
         }
 
@@ -149,8 +150,8 @@ class AdvancedSearchController extends Controller
             'data' => [
                 'recommendations' => $recommendations,
                 'type' => $type,
-                'count' => $recommendations->count()
-            ]
+                'count' => $recommendations->count(),
+            ],
         ]);
     }
 
@@ -160,7 +161,7 @@ class AdvancedSearchController extends Controller
     public function relatedProducts(Request $request, int $productId): JsonResponse
     {
         $request->validate([
-            'limit' => 'nullable|integer|min:1|max:20'
+            'limit' => 'nullable|integer|min:1|max:20',
         ]);
 
         $product = \Modules\Product\Models\Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->findOrFail($productId);
@@ -175,9 +176,9 @@ class AdvancedSearchController extends Controller
                 'base_product' => [
                     'id' => $product->id,
                     'title' => $product->title,
-                    'slug' => $product->slug
-                ]
-            ]
+                    'slug' => $product->slug,
+                ],
+            ],
         ]);
     }
 
@@ -225,7 +226,7 @@ class AdvancedSearchController extends Controller
             'popular_terms' => $popularTerms,
             'categories' => $categorySuggestions,
             'brands' => $brandSuggestions,
-            'suggested_query' => $this->generateSuggestedQuery($query)
+            'suggested_query' => $this->generateSuggestedQuery($query),
         ];
     }
 
@@ -239,7 +240,7 @@ class AdvancedSearchController extends Controller
             'laptop' => 'laptop computer',
             'phone' => 'smartphone',
             'tv' => 'television',
-            'pc' => 'personal computer'
+            'pc' => 'personal computer',
         ];
 
         return $corrections[$query] ?? $query;
@@ -253,7 +254,7 @@ class AdvancedSearchController extends Controller
         $baseQuery = \Modules\Product\Models\Product::query();
 
         if ($query) {
-            $baseQuery->where(function ($q) use ($query) {
+            $baseQuery->where(function ($q) use ($query): void {
                 $q->where('title', 'like', "%{$query}%")
                     ->orWhere('summary', 'like', "%{$query}%")
                     ->orWhere('description', 'like', "%{$query}%");
@@ -281,12 +282,12 @@ class AdvancedSearchController extends Controller
         return [
             'price_range' => [
                 'min' => $priceRange->min_price ?? 0,
-                'max' => $priceRange->max_price ?? 1000
+                'max' => $priceRange->max_price ?? 1000,
             ],
             'brands' => $brands,
             'categories' => $categories,
             'statuses' => ['active', 'inactive'],
-            'stock_options' => ['in_stock', 'out_of_stock']
+            'stock_options' => ['in_stock', 'out_of_stock'],
         ];
     }
 }

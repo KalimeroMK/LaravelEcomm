@@ -29,12 +29,12 @@ class OrderResource extends JsonResource
             'updated_at' => $this->updated_at,
             'cart_info_count' => $this->when(
                 $this->relationLoaded('carts'),
-                fn() => $this->carts->count(),
+                fn () => $this->carts->count(),
                 0
             ),
             'carts_count' => $this->when(
                 $this->relationLoaded('carts'),
-                fn() => $this->carts->count(),
+                fn () => $this->carts->count(),
                 0
             ),
             'user' => UserResource::make($this->whenLoaded('user')),

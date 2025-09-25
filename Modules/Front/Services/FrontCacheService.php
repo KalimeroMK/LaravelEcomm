@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Front\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
@@ -11,14 +12,17 @@ use Illuminate\Support\Str;
 class FrontCacheService
 {
     private const DEFAULT_TTL = 3600;      // 1 hour
+
     private const SHORT_TTL = 900;         // 15 minutes
+
     private const LONG_TTL = 86400;        // 24 hours
+
     private const SEARCH_TTL = 1800;       // 30 minutes
 
     /**
      * Get cached data for front-end content
      */
-    public function remember(string $key, callable $callback, int $ttl = null): mixed
+    public function remember(string $key, callable $callback, ?int $ttl = null): mixed
     {
         $ttl = $ttl ?? self::DEFAULT_TTL;
         $cacheKey = $this->generateKey($key);
@@ -106,7 +110,7 @@ class FrontCacheService
             'recent_*',
             'hot_*',
             'blog_*',
-            'banner_*'
+            'banner_*',
         ];
 
         $totalCleared = 0;
@@ -115,6 +119,44 @@ class FrontCacheService
         }
 
         return $totalCleared;
+    }
+
+    /**
+     * Get cache statistics for front-end
+     */
+    public function getStats(): array
+    {
+        try {
+            $info = Redis::info();
+
+            return [
+                'used_memory' => $info['used_memory_human'] ?? 'N/A',
+                'connected_clients' => $info['connected_clients'] ?? 0,
+                'keyspace_hits' => $info['keyspace_hits'] ?? 0,
+                'keyspace_misses' => $info['keyspace_misses'] ?? 0,
+                'hit_rate' => $this->calculateHitRate($info),
+                'total_keys' => Redis::dbsize(),
+            ];
+        } catch (Exception $e) {
+            return [
+                'used_memory' => 'N/A',
+                'connected_clients' => 0,
+                'keyspace_hits' => 0,
+                'keyspace_misses' => 0,
+                'hit_rate' => 0.0,
+                'total_keys' => 0,
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
+     * Warm up frequently accessed front-end data
+     */
+    public function warmUp(): void
+    {
+        // This method can be called to pre-load frequently accessed data
+        // Implementation would depend on your specific needs
     }
 
     /**
@@ -140,36 +182,8 @@ class FrontCacheService
     private function generateKey(string $key): string
     {
         $prefix = 'front_cache';
-        return Str::slug($prefix . '_' . $key);
-    }
 
-    /**
-     * Get cache statistics for front-end
-     */
-    public function getStats(): array
-    {
-        try {
-            $info = Redis::info();
-
-            return [
-                'used_memory' => $info['used_memory_human'] ?? 'N/A',
-                'connected_clients' => $info['connected_clients'] ?? 0,
-                'keyspace_hits' => $info['keyspace_hits'] ?? 0,
-                'keyspace_misses' => $info['keyspace_misses'] ?? 0,
-                'hit_rate' => $this->calculateHitRate($info),
-                'total_keys' => Redis::dbsize(),
-            ];
-        } catch (\Exception $e) {
-            return [
-                'used_memory' => 'N/A',
-                'connected_clients' => 0,
-                'keyspace_hits' => 0,
-                'keyspace_misses' => 0,
-                'hit_rate' => 0.0,
-                'total_keys' => 0,
-                'error' => $e->getMessage(),
-            ];
-        }
+        return Str::slug($prefix.'_'.$key);
     }
 
     /**
@@ -186,14 +200,5 @@ class FrontCacheService
         }
 
         return round(($hits / $total) * 100, 2);
-    }
-
-    /**
-     * Warm up frequently accessed front-end data
-     */
-    public function warmUp(): void
-    {
-        // This method can be called to pre-load frequently accessed data
-        // Implementation would depend on your specific needs
     }
 }

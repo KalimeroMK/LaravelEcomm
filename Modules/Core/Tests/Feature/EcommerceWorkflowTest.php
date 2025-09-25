@@ -18,9 +18,13 @@ class EcommerceWorkflowTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private User $user;
+
     private Product $product1;
+
     private Product $product2;
+
     private Shipping $shipping;
+
     private string $token;
 
     protected function setUp(): void
@@ -34,25 +38,25 @@ class EcommerceWorkflowTest extends TestCase
         $this->product1 = Product::factory()->create([
             'status' => 'active',
             'price' => 100.00,
-            'stock' => 10
+            'stock' => 10,
         ]);
 
         $this->product2 = Product::factory()->create([
             'status' => 'active',
             'price' => 75.50,
-            'stock' => 5
+            'stock' => 5,
         ]);
 
         $this->shipping = Shipping::factory()->create([
             'status' => 'active',
-            'price' => 15.00
+            'price' => 15.00,
         ]);
 
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 
     /** @test */
-    public function complete_ecommerce_workflow_from_cart_to_payment()
+    public function complete_ecommerce_workflow_from_cart_to_payment(): void
     {
         // Step 1: Add products to cart
         $cart1 = $this->addProductToCart($this->product1, 2);
@@ -62,14 +66,14 @@ class EcommerceWorkflowTest extends TestCase
             'id' => $cart1->id,
             'user_id' => $this->user->id,
             'product_id' => $this->product1->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $this->assertDatabaseHas('carts', [
             'id' => $cart2->id,
             'user_id' => $this->user->id,
             'product_id' => $this->product2->id,
-            'quantity' => 1
+            'quantity' => 1,
         ]);
 
         // Step 2: Calculate totals
@@ -88,7 +92,7 @@ class EcommerceWorkflowTest extends TestCase
             'sub_total' => $subTotal,
             'total_amount' => $totalAmount,
             'payment_status' => 'pending',
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         // Step 4: Link cart items to order
@@ -97,12 +101,12 @@ class EcommerceWorkflowTest extends TestCase
 
         $this->assertDatabaseHas('carts', [
             'id' => $cart1->id,
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]);
 
         $this->assertDatabaseHas('carts', [
             'id' => $cart2->id,
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]);
 
         // Step 5: Process payment
@@ -114,53 +118,53 @@ class EcommerceWorkflowTest extends TestCase
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'payment_status' => 'completed',
-            'status' => 'processing'
+            'status' => 'processing',
         ]);
     }
 
     /** @test */
-    public function ecommerce_workflow_handles_stock_validation()
+    public function ecommerce_workflow_handles_stock_validation(): void
     {
         // Try to add more products than available stock
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/carts', [
             'product_id' => $this->product1->id,
             'quantity' => 15, // More than available stock (10)
             'user_id' => $this->user->id,
-            'price' => $this->product1->price
+            'price' => $this->product1->price,
         ]);
 
         $response->assertStatus(422);
     }
 
     /** @test */
-    public function ecommerce_workflow_handles_invalid_products()
+    public function ecommerce_workflow_handles_invalid_products(): void
     {
         // Try to add non-existent product
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/carts', [
             'product_id' => 99999,
             'quantity' => 1,
             'user_id' => $this->user->id,
-            'price' => 100.00
+            'price' => 100.00,
         ]);
 
         $response->assertStatus(422);
     }
 
     /** @test */
-    public function ecommerce_workflow_handles_user_authorization()
+    public function ecommerce_workflow_handles_user_authorization(): void
     {
-        $otherUser = User::factory()->create();
+        User::factory()->create();
 
         // Try to access other user's cart
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->getJson('/api/carts');
 
         $response->assertStatus(200);
@@ -173,18 +177,18 @@ class EcommerceWorkflowTest extends TestCase
     }
 
     /** @test */
-    public function ecommerce_workflow_handles_cart_updates()
+    public function ecommerce_workflow_handles_cart_updates(): void
     {
         // Add product to cart
         $cart = $this->addProductToCart($this->product1, 1);
 
         // Update quantity
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->putJson("/api/carts/{$cart->id}", [
             'quantity' => 3,
-            'amount' => $this->product1->price * 3
+            'amount' => $this->product1->price * 3,
         ]);
 
         $response->assertStatus(200);
@@ -192,20 +196,20 @@ class EcommerceWorkflowTest extends TestCase
         $this->assertDatabaseHas('carts', [
             'id' => $cart->id,
             'quantity' => 3,
-            'amount' => $this->product1->price * 3
+            'amount' => $this->product1->price * 3,
         ]);
     }
 
     /** @test */
-    public function ecommerce_workflow_handles_cart_removal()
+    public function ecommerce_workflow_handles_cart_removal(): void
     {
         // Add product to cart
         $cart = $this->addProductToCart($this->product1, 1);
 
         // Remove from cart
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->deleteJson("/api/carts/{$cart->id}");
 
         $response->assertStatus(200);
@@ -221,12 +225,12 @@ class EcommerceWorkflowTest extends TestCase
             'quantity' => $quantity,
             'user_id' => $this->user->id,
             'price' => $product->price,
-            'amount' => $product->price * $quantity
+            'amount' => $product->price * $quantity,
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/carts', $cartData);
 
         $response->assertStatus(201);
@@ -247,12 +251,12 @@ class EcommerceWorkflowTest extends TestCase
             'quantity' => 3, // Total items from both products
             'payment_method' => 'stripe',
             'payment_status' => 'pending',
-            'status' => 'pending'
+            'status' => 'pending',
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/orders', $orderData);
 
         $response->assertStatus(201);
@@ -274,20 +278,21 @@ class EcommerceWorkflowTest extends TestCase
             'amount' => $order->total_amount,
             'currency' => 'usd',
             'payment_method' => 'stripe',
-            'description' => 'Order payment for #' . $order->order_number
+            'description' => 'Order payment for #'.$order->order_number,
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/stripe', $paymentData);
 
         if ($response->status() === 200) {
             // Simulate successful payment
             $order->update([
                 'payment_status' => 'completed',
-                'status' => 'processing'
+                'status' => 'processing',
             ]);
+
             return true;
         }
 

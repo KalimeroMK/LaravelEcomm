@@ -17,5 +17,5 @@ use Modules\Tag\Http\Controllers\Api\TagController;
 */
 
 // API Routes
-    Route::apiResource('tag', TagController::class);
-    Route::apiResource('tags', TagController::class);
+Route::apiResource('tag', TagController::class);
+Route::apiResource('tags', TagController::class);

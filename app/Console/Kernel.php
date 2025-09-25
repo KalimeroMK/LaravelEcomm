@@ -22,8 +22,8 @@ class Kernel extends ConsoleKernel
         ProductNewsletterCommand::class,
         PostNewsletterCommand::class,
         StockNotifyCommand::class,
-        \App\Console\Commands\RunEcommerceTests::class,
-        \App\Console\Commands\GenerateAnalyticsDemoData::class,
+        Commands\RunEcommerceTests::class,
+        Commands\GenerateAnalyticsDemoData::class,
 
     ];
 
@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

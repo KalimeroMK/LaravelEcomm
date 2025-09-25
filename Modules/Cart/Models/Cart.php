@@ -65,27 +65,27 @@ class Cart extends Core
     protected $table = 'carts';
 
     protected $casts
-    = [
-        'product_id' => 'int',
-        'order_id' => 'int',
-        'user_id' => 'int',
-        'price' => 'float',
-        'quantity' => 'int',
-        'amount' => 'float',
-        'session_id' => 'string',
-    ];
+        = [
+            'product_id' => 'int',
+            'order_id' => 'int',
+            'user_id' => 'int',
+            'price' => 'float',
+            'quantity' => 'int',
+            'amount' => 'float',
+            'session_id' => 'string',
+        ];
 
     protected $fillable
-    = [
-        'product_id',
-        'order_id',
-        'user_id',
-        'price',
-        'status',
-        'quantity',
-        'amount',
-        'session_id',
-    ];
+        = [
+            'product_id',
+            'order_id',
+            'user_id',
+            'price',
+            'status',
+            'quantity',
+            'amount',
+            'session_id',
+        ];
 
     public static function Factory(): CartFactory
     {
@@ -120,7 +120,7 @@ class Cart extends Core
         parent::boot();
 
         // Track abandoned cart when cart is created
-        static::created(function (Cart $cart) {
+        static::created(function (Cart $cart): void {
             if ($cart->user_id || $cart->session_id) {
                 app(AbandonedCartService::class)->trackAbandonedCart(
                     $cart->user,
@@ -131,7 +131,7 @@ class Cart extends Core
         });
 
         // Update abandoned cart when cart is updated
-        static::updated(function (Cart $cart) {
+        static::updated(function (Cart $cart): void {
             if ($cart->user_id || $cart->session_id) {
                 app(AbandonedCartService::class)->trackAbandonedCart(
                     $cart->user,
@@ -142,7 +142,7 @@ class Cart extends Core
         });
 
         // Mark as converted when cart is associated with an order
-        static::updated(function (Cart $cart) {
+        static::updated(function (Cart $cart): void {
             if ($cart->order_id && $cart->wasChanged('order_id')) {
                 app(AbandonedCartService::class)->markAsConverted(
                     $cart->user,

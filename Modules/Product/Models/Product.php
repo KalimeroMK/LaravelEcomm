@@ -113,35 +113,35 @@ class Product extends Core implements HasMedia
     protected $table = 'products';
 
     protected $casts
-    = [
-        'stock' => 'int',
-        'price' => 'float',
-        'discount' => 'float',
-        'is_featured' => 'bool',
-        'brand_id' => 'int',
-        'special_price_start' => 'date',
-        'special_price_end' => 'date',
-        'special_price' => 'float',
-    ];
+        = [
+            'stock' => 'int',
+            'price' => 'float',
+            'discount' => 'float',
+            'is_featured' => 'bool',
+            'brand_id' => 'int',
+            'special_price_start' => 'date',
+            'special_price_end' => 'date',
+            'special_price' => 'float',
+        ];
 
     protected $fillable
-    = [
-        'title',
-        'slug',
-        'sku',
-        'summary',
-        'description',
-        'stock',
-        'status',
-        'price',
-        'discount',
-        'is_featured',
-        'brand_id',
-        'special_price',
-        'special_price_start',
-        'special_price_end',
-        'd_deal',
-    ];
+        = [
+            'title',
+            'slug',
+            'sku',
+            'summary',
+            'description',
+            'stock',
+            'status',
+            'price',
+            'discount',
+            'is_featured',
+            'brand_id',
+            'special_price',
+            'special_price_start',
+            'special_price_end',
+            'd_deal',
+        ];
 
     public static function Factory(): ProductFactory
     {

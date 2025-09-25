@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\Front\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Modules\Front\Services\SeoService;
-use Modules\Front\Http\ViewComposers\SeoViewComposer;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+use Modules\Front\Http\ViewComposers\SeoViewComposer;
+use Modules\Front\Services\SeoService;
 
 class SeoServiceProvider extends ServiceProvider
 {
@@ -16,8 +16,8 @@ class SeoServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(SeoService::class, function ($app) {
-            return new SeoService();
+        $this->app->singleton(SeoService::class, function ($app): SeoService {
+            return new SeoService;
         });
     }
 
@@ -36,7 +36,7 @@ class SeoServiceProvider extends ServiceProvider
 
         // Publish configuration
         $this->publishes([
-            __DIR__ . '/../../config/seo.php' => config_path('seo.php'),
+            __DIR__.'/../../config/seo.php' => config_path('seo.php'),
         ], 'seo-config');
 
         // Register console commands

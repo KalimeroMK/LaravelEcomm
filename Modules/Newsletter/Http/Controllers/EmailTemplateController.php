@@ -14,19 +14,19 @@ class EmailTemplateController extends CoreController
 {
     public function index(): View
     {
-        $templates = \Modules\Newsletter\Models\EmailTemplate::orderBy('template_type')
+        $templates = EmailTemplate::orderBy('template_type')
             ->orderBy('name')
             ->paginate(15);
 
-        return view('newsletter::email-templates.index', compact('templates'));
+        return view('newsletter::email-templates.index', ['templates' => $templates]);
     }
 
     public function create(): View
     {
         $templateTypes = EmailTemplate::getTemplateTypes();
-        $template = new EmailTemplate();
+        $template = new EmailTemplate;
 
-        return view('newsletter::email-templates.create', compact('templateTypes', 'template'));
+        return view('newsletter::email-templates.create', ['templateTypes' => $templateTypes, 'template' => $template]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -36,7 +36,7 @@ class EmailTemplateController extends CoreController
             'subject' => 'required|string|max:255',
             'html_content' => 'required|string',
             'text_content' => 'nullable|string',
-            'template_type' => 'required|string|in:' . implode(',', array_keys(EmailTemplate::getTemplateTypes())),
+            'template_type' => 'required|string|in:'.implode(',', array_keys(EmailTemplate::getTemplateTypes())),
             'is_active' => 'boolean',
             'is_default' => 'boolean',
             'settings' => 'nullable|array',
@@ -57,14 +57,14 @@ class EmailTemplateController extends CoreController
 
     public function show(EmailTemplate $emailTemplate): View
     {
-        return view('newsletter::email-templates.show', compact('emailTemplate'));
+        return view('newsletter::email-templates.show', ['emailTemplate' => $emailTemplate]);
     }
 
     public function edit(EmailTemplate $emailTemplate): View
     {
         $templateTypes = EmailTemplate::getTemplateTypes();
 
-        return view('newsletter::email-templates.edit', compact('emailTemplate', 'templateTypes'));
+        return view('newsletter::email-templates.edit', ['emailTemplate' => $emailTemplate, 'templateTypes' => $templateTypes]);
     }
 
     public function update(Request $request, EmailTemplate $emailTemplate): RedirectResponse
@@ -74,7 +74,7 @@ class EmailTemplateController extends CoreController
             'subject' => 'required|string|max:255',
             'html_content' => 'required|string',
             'text_content' => 'nullable|string',
-            'template_type' => 'required|string|in:' . implode(',', array_keys(EmailTemplate::getTemplateTypes())),
+            'template_type' => 'required|string|in:'.implode(',', array_keys(EmailTemplate::getTemplateTypes())),
             'is_active' => 'boolean',
             'is_default' => 'boolean',
             'settings' => 'nullable|array',
@@ -111,13 +111,13 @@ class EmailTemplateController extends CoreController
 
     public function preview(EmailTemplate $emailTemplate): View
     {
-        return view('newsletter::email-templates.preview', compact('emailTemplate'));
+        return view('newsletter::email-templates.preview', ['emailTemplate' => $emailTemplate]);
     }
 
     public function duplicate(EmailTemplate $emailTemplate): RedirectResponse
     {
         $newTemplate = $emailTemplate->replicate();
-        $newTemplate->name = $emailTemplate->name . ' (Copy)';
+        $newTemplate->name = $emailTemplate->name.' (Copy)';
         $newTemplate->is_default = false;
         $newTemplate->save();
 
@@ -137,7 +137,7 @@ class EmailTemplateController extends CoreController
 
     public function toggleActive(EmailTemplate $emailTemplate): RedirectResponse
     {
-        $emailTemplate->update(['is_active' => !$emailTemplate->is_active]);
+        $emailTemplate->update(['is_active' => ! $emailTemplate->is_active]);
 
         $status = $emailTemplate->is_active ? 'activated' : 'deactivated';
 
@@ -159,7 +159,6 @@ class EmailTemplateController extends CoreController
         // Get recent campaigns (placeholder - would need campaigns table)
         $recentCampaigns = collect([]);
 
-        return view('newsletter::email-templates.usage', compact('emailTemplate', 'usageStats', 'recentCampaigns'));
+        return view('newsletter::email-templates.usage', ['emailTemplate' => $emailTemplate, 'usageStats' => $usageStats, 'recentCampaigns' => $recentCampaigns]);
     }
 }
-

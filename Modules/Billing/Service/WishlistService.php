@@ -12,10 +12,7 @@ class WishlistService extends CoreService
 {
     public WishlistRepository $wishlist_repository;
 
-    public function __construct(WishlistRepository $wishlist_repository)
-    {
-        parent::__construct($wishlist_repository);
-    }
+    public function __construct() {}
 
     public function getAllByUser(): Model
     {

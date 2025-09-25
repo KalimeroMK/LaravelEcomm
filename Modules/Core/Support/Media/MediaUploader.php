@@ -15,8 +15,9 @@ class MediaUploader
         foreach ($fields as $field) {
             if (request()->hasFile($field)) {
                 $model->addMultipleMediaFromRequest([$field])
-                    ->each(fn (FileAdder $fileAdder
-                    ) => $fileAdder->preservingOriginal()->toMediaCollection($collection));
+                    ->each(fn (
+                        FileAdder $fileAdder
+                    ): \Spatie\MediaLibrary\MediaCollections\Models\Media => $fileAdder->preservingOriginal()->toMediaCollection($collection));
             }
         }
     }

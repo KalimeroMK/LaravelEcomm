@@ -13,7 +13,6 @@ class PaymentProviderService extends CoreService
 
     public function __construct(PaymentProviderRepository $paymentProviderRepository)
     {
-        parent::__construct($paymentProviderRepository);
         $this->paymentProviderRepository = $paymentProviderRepository;
     }
 }

@@ -11,7 +11,7 @@
     "php": "^8.4",
     "bacon/bacon-qr-code": "*",
     "barryvdh/laravel-dompdf": "*",
-    "darkaonline/l5-swagger": "*",
+    "darkaonline/l5-swagger": "^9.0",
     "elasticsearch/elasticsearch": "^8.0",
     "guzzlehttp/guzzle": "*",
     "intervention/image": "*",
@@ -55,7 +55,7 @@
     "larastan/larastan": "^3.0",
     "laravel/boost": "^1.0",
     "laravel/pail": "^1.2.2",
-    "laravel/pint": "^1.13",
+    "laravel/pint": "^1.25",
     "laravel/sail": "^1.41",
     "mockery/mockery": "^1.6",
     "nunomaduro/collision": "^8.0",
@@ -83,6 +83,8 @@
   ],
   "scripts": {
     "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse",
+    "pint": "vendor/bin/pint",
+    "pint:test": "vendor/bin/pint --test",
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
       "@php artisan package:discover --ansi"

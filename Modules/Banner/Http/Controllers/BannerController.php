@@ -42,7 +42,7 @@ class BannerController extends CoreController
     public function create(): View|Factory|Application
     {
         return view('banner::create', [
-            'banner' => new Banner(),
+            'banner' => new Banner,
             'categories' => Category::all(),
         ]);
     }

@@ -15,7 +15,9 @@ class PaymentApiTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private User $user;
+
     private Order $order;
+
     private string $token;
 
     protected function setUp(): void
@@ -30,116 +32,116 @@ class PaymentApiTest extends TestCase
             'sub_total' => 200.00,
             'total_amount' => 215.00,
             'payment_status' => 'pending',
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 
     /** @test */
-    public function user_can_initiate_stripe_payment()
+    public function user_can_initiate_stripe_payment(): void
     {
         $paymentData = [
             'order_id' => $this->order->id,
             'amount' => $this->order->total_amount,
             'currency' => 'usd',
             'payment_method' => 'stripe',
-            'description' => 'Order payment for #' . $this->order->order_number
+            'description' => 'Order payment for #'.$this->order->order_number,
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/stripe', $paymentData);
 
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function payment_validates_required_fields()
+    public function payment_validates_required_fields(): void
     {
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/stripe', []);
 
         $response->assertStatus(422);
     }
 
     /** @test */
-    public function payment_validates_order_exists()
+    public function payment_validates_order_exists(): void
     {
         $paymentData = [
             'order_id' => 99999, // Non-existent order
             'amount' => 100.00,
             'currency' => 'usd',
-            'payment_method' => 'stripe'
+            'payment_method' => 'stripe',
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/stripe', $paymentData);
 
         $response->assertStatus(422);
     }
 
     /** @test */
-    public function payment_validates_amount_matches_order()
+    public function payment_validates_amount_matches_order(): void
     {
         $paymentData = [
             'order_id' => $this->order->id,
             'amount' => 100.00, // Different amount
             'currency' => 'usd',
-            'payment_method' => 'stripe'
+            'payment_method' => 'stripe',
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/stripe', $paymentData);
 
         $response->assertStatus(422);
     }
 
     /** @test */
-    public function user_cannot_pay_for_other_users_order()
+    public function user_cannot_pay_for_other_users_order(): void
     {
         $otherUser = User::factory()->create();
         $otherOrder = Order::factory()->create([
             'user_id' => $otherUser->id,
-            'total_amount' => 100.00
+            'total_amount' => 100.00,
         ]);
 
         $paymentData = [
             'order_id' => $otherOrder->id,
             'amount' => $otherOrder->total_amount,
             'currency' => 'usd',
-            'payment_method' => 'stripe'
+            'payment_method' => 'stripe',
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/stripe', $paymentData);
 
         $response->assertStatus(403);
     }
 
     /** @test */
-    public function payment_updates_order_status_after_success()
+    public function payment_updates_order_status_after_success(): void
     {
         $paymentData = [
             'order_id' => $this->order->id,
             'amount' => $this->order->total_amount,
             'currency' => 'usd',
             'payment_method' => 'stripe',
-            'description' => 'Order payment for #' . $this->order->order_number
+            'description' => 'Order payment for #'.$this->order->order_number,
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json'
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
         ])->postJson('/api/stripe', $paymentData);
 
         $response->assertStatus(200);

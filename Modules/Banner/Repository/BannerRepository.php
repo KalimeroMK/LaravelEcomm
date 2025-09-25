@@ -13,8 +13,6 @@ use Modules\Core\Repositories\EloquentRepository;
 
 class BannerRepository extends EloquentRepository implements SearchInterface
 {
-    private const LATEST_BANNERS_LIMIT = 3;
-
     public function __construct()
     {
         parent::__construct(Banner::class);

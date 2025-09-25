@@ -97,8 +97,9 @@ class AbandonedCart extends Core
      */
     public function getCartItemsAttribute(): array
     {
-        return collect($this->cart_data)->map(function ($item) {
+        return collect($this->cart_data)->map(function (array $item): array {
             $product = \Modules\Product\Models\Product::find($item['product_id']);
+
             return [
                 'product' => $product,
                 'quantity' => $item['quantity'],

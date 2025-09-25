@@ -15,7 +15,7 @@ class ProductCatAction
     {
         $cacheKey = 'productCat_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug) {
+        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): string|array {
             $category = Category::whereSlug($slug)->first();
             if (! $category) {
                 return 'Category not found';

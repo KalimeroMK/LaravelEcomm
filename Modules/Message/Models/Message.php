@@ -28,6 +28,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string|null $phone
  * @property string $message
  * @property string|null $read_at
+ * @property bool $is_read
+ * @property int|null $parent_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -73,6 +75,8 @@ class Message extends Core implements HasMedia
             'phone',
             'message',
             'read_at',
+            'is_read',
+            'parent_id',
         ];
 
     public static function Factory(): MessageFactory

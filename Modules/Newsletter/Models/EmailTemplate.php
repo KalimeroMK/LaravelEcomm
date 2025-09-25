@@ -71,6 +71,32 @@ class EmailTemplate extends Core
         'preview_data',
     ];
 
+    /**
+     * Get default template for type
+     */
+    public static function getDefaultForType(string $type): ?self
+    {
+        return static::where('template_type', $type)
+            ->where('is_default', true)
+            ->where('is_active', true)
+            ->first();
+    }
+
+    /**
+     * Get template types
+     */
+    public static function getTemplateTypes(): array
+    {
+        return [
+            'newsletter' => 'Newsletter',
+            'abandoned_cart' => 'Abandoned Cart',
+            'welcome' => 'Welcome Email',
+            'order_confirmation' => 'Order Confirmation',
+            'promotional' => 'Promotional',
+            'custom' => 'Custom',
+        ];
+    }
+
     public function emailAnalytics(): HasMany
     {
         return $this->hasMany(EmailAnalytics::class, 'email_type', 'template_type');
@@ -93,17 +119,6 @@ class EmailTemplate extends Core
     }
 
     /**
-     * Get default template for type
-     */
-    public static function getDefaultForType(string $type): ?self
-    {
-        return static::where('template_type', $type)
-            ->where('is_default', true)
-            ->where('is_active', true)
-            ->first();
-    }
-
-    /**
      * Set as default template
      */
     public function setAsDefault(): void
@@ -123,20 +138,4 @@ class EmailTemplate extends Core
     {
         return route('admin.email-templates.preview', $this->id);
     }
-
-    /**
-     * Get template types
-     */
-    public static function getTemplateTypes(): array
-    {
-        return [
-            'newsletter' => 'Newsletter',
-            'abandoned_cart' => 'Abandoned Cart',
-            'welcome' => 'Welcome Email',
-            'order_confirmation' => 'Order Confirmation',
-            'promotional' => 'Promotional',
-            'custom' => 'Custom',
-        ];
-    }
 }
-

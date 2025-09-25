@@ -22,6 +22,9 @@ class CartTest extends TestCase
 
     public string $url = '/api/v1/carts';
 
+    /** @var User */
+    private $user;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,9 +34,6 @@ class CartTest extends TestCase
         $this->user->assignRole('super-admin');
         $this->actingAs($this->user);
     }
-
-    /** @var User */
-    private $user;
 
     /**
      * test create product.
