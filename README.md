@@ -311,51 +311,145 @@ php artisan seo:generate-sitemap
 -   **Seed database**: `php artisan db:seed`
 -   **Clear and rebuild cache**: `php artisan cache:clear && php artisan config:cache`
 
-### Enabling Multi-Tenant Functionality
+### Multi-Tenant Functionality
 
-To enable and configure the multi-tenant functionality in your application, follow these steps:
+This Laravel ecommerce application includes comprehensive multi-tenancy support, allowing you to run multiple independent instances of the application with separate databases for each tenant.
 
-1. **Add Multi-Tenant Configuration**:
+#### Features
 
-    Update your `.env` file to include the multi-tenant configuration:
+- **Database Isolation**: Each tenant has its own database
+- **Domain-based Tenant Detection**: Automatic tenant switching based on domain
+- **Queue Awareness**: Jobs are tenant-aware and execute in the correct context
+- **Session Isolation**: Optional tenant-specific session handling
+- **Admin Management**: Full CRUD operations for tenant management
+- **Command Line Tools**: Easy tenant creation and migration management
+
+#### Configuration
+
+1. **Enable Multi-Tenancy**:
+
+    Update your `.env` file to enable multi-tenancy:
 
     ```env
     MULTI_TENANT_ENABLED=true
-
-    OWNER_DB_CONNECTION=owner
-    OWNER_DB_HOST=127.0.0.1
-    OWNER_DB_PORT=3306
-    OWNER_DB_DATABASE=homestead
-    OWNER_DB_USERNAME=homestead
-    OWNER_DB_PASSWORD=secret
-
+    TENANT_MAIN_DOMAIN=yourdomain.com
+    TENANT_OWNER_CONNECTION=owner
+    TENANT_DEFAULT_CONNECTION=tenant
     ```
 
-2. **Init Multi-Tenant database**:
+2. **Database Configuration**:
 
-    ```env
-    php artisan tenant:init
+    Add owner database connection to your `config/database.php`:
+
+    ```php
+    'connections' => [
+        'owner' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('OWNER_DB_DATABASE', 'owner_db'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+        ],
+        'tenant' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('TENANT_DB_DATABASE', 'tenant_db'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+        ],
+    ],
     ```
 
-3. **Creating a Tenant**:
+#### Setup Commands
 
-    You will be prompted to provide the tenant's name, domain, and database name.
+1. **Initialize Multi-Tenant Database**:
 
-    ```env
-    php artisan tenant:create
+    ```bash
+    php artisan tenants:init
     ```
 
-4. **Migrate Tenant**:
+2. **Create a New Tenant**:
 
-    The command tenants:migrate has optional arguments (tenant) and options (--fresh and --seed).
-    Single Tenant Migration: If a tenant ID is provided (tenant argument), it finds the tenant and calls the migrate
-    method for that specific tenant.
-    All Tenants Migration: If no tenant ID is provided, it fetches all tenants and calls the migrate method for each
-    one using each, also it accepts --fresh and --seed options.
-
-    ```env
-    php artisan tenant:migrate
+    ```bash
+    php artisan tenants:create
     ```
+    
+    You'll be prompted for:
+    - Tenant name
+    - Domain (e.g., `tenant1.yourdomain.com`)
+    - Database name (e.g., `tenant1_db`)
+
+3. **Migrate Tenant Databases**:
+
+    ```bash
+    # Migrate all tenants
+    php artisan tenants:migrate
+    
+    # Migrate specific tenant
+    php artisan tenants:migrate 1
+    
+    # Fresh migration with seeding
+    php artisan tenants:migrate --fresh --seed
+    ```
+
+#### Admin Management
+
+Access tenant management through the admin panel at `/admin/tenants` (requires admin role):
+
+- **View Tenants**: List all tenants with their domains and databases
+- **Create Tenant**: Add new tenants through the web interface
+- **Edit Tenant**: Update tenant information
+- **Delete Tenant**: Remove tenants (with proper cleanup)
+
+#### Tenant Detection
+
+The application automatically detects tenants based on the incoming domain:
+
+- `tenant1.yourdomain.com` → Tenant 1 database
+- `tenant2.yourdomain.com` → Tenant 2 database
+- `yourdomain.com` → Main application
+
+#### Security Features
+
+- **Admin-only Access**: Only users with admin/super-admin roles can manage tenants
+- **Database Isolation**: Complete separation of tenant data
+- **Session Isolation**: Optional tenant-specific sessions
+- **Queue Isolation**: Jobs run in the correct tenant context
+
+#### Testing
+
+Run the tenant-specific tests:
+
+```bash
+# Run all tenant tests
+php artisan test tests/Feature/Tenant/
+
+# Run specific tenant test
+php artisan test tests/Feature/Tenant/TenantModelTest.php
+```
+
+#### Troubleshooting
+
+1. **Tenant Not Found**: Ensure the domain is registered in the tenants table
+2. **Database Connection Issues**: Verify tenant database exists and is accessible
+3. **Permission Denied**: Ensure you have admin role for tenant management
+4. **Migration Issues**: Check that tenant databases are properly configured
+
+#### Advanced Configuration
+
+The tenant system supports extensive configuration through `config/tenant.php`:
+
+- Cache isolation
+- Session isolation
+- Storage isolation
+- Security settings
+- Middleware configuration
 
 ### Enabling OpenAI Functionality
 

@@ -45,6 +45,12 @@ class TenantServiceProvider extends ServiceProvider
     {
         if (config('tenant.multi_tenant.enabled')) {
             $this->app->register(RouteServiceProvider::class);
+            
+            // Register tenant as singleton
+            $this->app->singleton('tenant', function () {
+                $host = request()->getHost();
+                return Tenant::whereDomain($host)->first();
+            });
         }
     }
 
