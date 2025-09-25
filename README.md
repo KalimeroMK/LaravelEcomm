@@ -317,12 +317,12 @@ This Laravel ecommerce application includes comprehensive multi-tenancy support,
 
 #### Features
 
-- **Database Isolation**: Each tenant has its own database
-- **Domain-based Tenant Detection**: Automatic tenant switching based on domain
-- **Queue Awareness**: Jobs are tenant-aware and execute in the correct context
-- **Session Isolation**: Optional tenant-specific session handling
-- **Admin Management**: Full CRUD operations for tenant management
-- **Command Line Tools**: Easy tenant creation and migration management
+-   **Database Isolation**: Each tenant has its own database
+-   **Domain-based Tenant Detection**: Automatic tenant switching based on domain
+-   **Queue Awareness**: Jobs are tenant-aware and execute in the correct context
+-   **Session Isolation**: Optional tenant-specific session handling
+-   **Admin Management**: Full CRUD operations for tenant management
+-   **Command Line Tools**: Easy tenant creation and migration management
 
 #### Configuration
 
@@ -379,8 +379,9 @@ This Laravel ecommerce application includes comprehensive multi-tenancy support,
     ```bash
     php artisan tenants:create
     ```
-    
+
     You'll be prompted for:
+
     - Tenant name
     - Domain (e.g., `tenant1.yourdomain.com`)
     - Database name (e.g., `tenant1_db`)
@@ -390,10 +391,10 @@ This Laravel ecommerce application includes comprehensive multi-tenancy support,
     ```bash
     # Migrate all tenants
     php artisan tenants:migrate
-    
+
     # Migrate specific tenant
     php artisan tenants:migrate 1
-    
+
     # Fresh migration with seeding
     php artisan tenants:migrate --fresh --seed
     ```
@@ -402,25 +403,25 @@ This Laravel ecommerce application includes comprehensive multi-tenancy support,
 
 Access tenant management through the admin panel at `/admin/tenants` (requires admin role):
 
-- **View Tenants**: List all tenants with their domains and databases
-- **Create Tenant**: Add new tenants through the web interface
-- **Edit Tenant**: Update tenant information
-- **Delete Tenant**: Remove tenants (with proper cleanup)
+-   **View Tenants**: List all tenants with their domains and databases
+-   **Create Tenant**: Add new tenants through the web interface
+-   **Edit Tenant**: Update tenant information
+-   **Delete Tenant**: Remove tenants (with proper cleanup)
 
 #### Tenant Detection
 
 The application automatically detects tenants based on the incoming domain:
 
-- `tenant1.yourdomain.com` → Tenant 1 database
-- `tenant2.yourdomain.com` → Tenant 2 database
-- `yourdomain.com` → Main application
+-   `tenant1.yourdomain.com` → Tenant 1 database
+-   `tenant2.yourdomain.com` → Tenant 2 database
+-   `yourdomain.com` → Main application
 
 #### Security Features
 
-- **Admin-only Access**: Only users with admin/super-admin roles can manage tenants
-- **Database Isolation**: Complete separation of tenant data
-- **Session Isolation**: Optional tenant-specific sessions
-- **Queue Isolation**: Jobs run in the correct tenant context
+-   **Admin-only Access**: Only users with admin/super-admin roles can manage tenants
+-   **Database Isolation**: Complete separation of tenant data
+-   **Session Isolation**: Optional tenant-specific sessions
+-   **Queue Isolation**: Jobs run in the correct tenant context
 
 #### Testing
 
@@ -445,11 +446,11 @@ php artisan test tests/Feature/Tenant/TenantModelTest.php
 
 The tenant system supports extensive configuration through `config/tenant.php`:
 
-- Cache isolation
-- Session isolation
-- Storage isolation
-- Security settings
-- Middleware configuration
+-   Cache isolation
+-   Session isolation
+-   Storage isolation
+-   Security settings
+-   Middleware configuration
 
 ### Enabling OpenAI Functionality
 
