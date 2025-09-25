@@ -41,12 +41,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware(['auth', 'activity', 'web'])
+        Route::middleware(['auth', 'admin', 'activity', 'web'])
             ->prefix('admin')
             ->group(module_path('Newsletter', '/Routes/web.php'));
 
         // Admin routes with authentication
-        Route::middleware(['auth', 'activity', 'web'])
+        Route::middleware(['auth', 'admin', 'activity', 'web'])
             ->prefix('admin')
             ->group(function (): void {
                 // Email Campaigns routes

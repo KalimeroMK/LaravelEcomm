@@ -61,8 +61,8 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix('admin')
             ->group(module_path('Admin', '/Routes/web.php'));
 
-        // Analytics routes without authentication for testing
-        Route::middleware(['web'])
+        // Analytics routes with proper authentication
+        Route::middleware(['auth', 'admin', 'web'])
             ->prefix('admin')
             ->group(function (): void {
                 Route::prefix('analytics')->group(function (): void {
@@ -79,7 +79,7 @@ class RouteServiceProvider extends ServiceProvider
                     Route::post('export', [\Modules\Admin\Http\Controllers\AnalyticsController::class, 'export']);
                 });
 
-                // Email Analytics route without authentication for testing
+                // Email Analytics route with proper authentication
                 Route::get('email-campaigns/analytics', function (): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory {
                     return view('admin::email-analytics');
                 })->name('admin.email-campaigns.analytics');
