@@ -1,0 +1,5 @@
+# Test specific ignores
+*.log
+coverage/
+.phpunit.result.cache
+.phpunit.cache

@@ -15,7 +15,6 @@
     "elasticsearch/elasticsearch": "^8.0",
     "guzzlehttp/guzzle": "*",
     "intervention/image": "*",
-    "jeremykenedy/laravel-blocker": "dev-master",
     "jeremykenedy/laravel-logger": "*",
     "kalimeromk/filterable": "*",
     "kalimeromk/laravel-translation-manager": "*",
@@ -60,16 +59,11 @@
     "laravel/sail": "^1.41",
     "mockery/mockery": "^1.6",
     "nunomaduro/collision": "^8.0",
+    "pestphp/pest": "^4.1",
     "phpunit/phpunit": "^12.3",
     "rector/rector": "^2.0.10",
     "reliese/laravel": "^1.4"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/KalimeroMK/laravel-blocker"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "App\\": "app/",

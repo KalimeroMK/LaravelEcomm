@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Application;
 
 trait CreatesApplication
 {
     /**
      * Creates the application.
      *
-     * @return Application
+     * @return \Illuminate\Foundation\Application
      */
     public function createApplication()
     {
