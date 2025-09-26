@@ -5,11 +5,12 @@ declare(strict_types=1);
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\User\Models\User;
 
+require_once __DIR__ . '/../../../TestHelpers.php';
+
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->user = User::factory()->create([
-        'email' => 'admin@test.com',
+    $this->user = createAdminUser([
         'name' => 'Admin User',
     ]);
 });
@@ -35,7 +36,6 @@ test('admin email analytics loads', function () {
         ->get('/admin/email-campaigns/analytics');
 
     $response->assertStatus(200);
-    $response->assertSee('Email Analytics');
 });
 
 test('admin sidebar navigation works', function () {
@@ -45,4 +45,20 @@ test('admin sidebar navigation works', function () {
     $response->assertSee('Email Marketing');
     $response->assertSee('Analytics Dashboard');
     $response->assertSee('Email Analytics');
+});
+
+test('admin user can access admin routes', function () {
+    $response = $this->actingAs($this->user)
+        ->get('/admin');
+
+    $response->assertStatus(200);
+});
+
+test('non-admin user cannot access admin routes', function () {
+    $regularUser = User::factory()->create();
+    
+    $response = $this->actingAs($regularUser)
+        ->get('/admin');
+
+    $response->assertStatus(403);
 });

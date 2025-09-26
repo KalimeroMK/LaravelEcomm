@@ -32,7 +32,7 @@ class PageController extends CoreController
     {
         $this->authorize('viewAny', Page::class);
 
-        return PageResource::collection($this->repository->all());
+        return PageResource::collection($this->repository->findAll());
     }
 
     /**

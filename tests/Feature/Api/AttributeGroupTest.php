@@ -4,22 +4,52 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Modules\Attribute\Models\AttributeGroup;
+use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Api\Traits\BaseTestTrait;
+use Tests\Feature\Api\Traits\AuthenticatedBaseTestTrait;
 use Tests\TestCase;
 
 class AttributeGroupTest extends TestCase
 {
-    use BaseTestTrait;
+    use AuthenticatedBaseTestTrait;
     use WithFaker;
-    use WithoutMiddleware;
+    use RefreshDatabase;
 
     public string $url = '/api/v1/attribute-groups/';
+    
+    private User $user;
+    private string $token;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create admin user with permissions
+        $this->user = User::factory()->create();
+        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        
+        // Create and assign attribute group permissions
+        $permissions = [
+            'attribute-group-list',
+            'attribute-group-create', 
+            'attribute-group-update',
+            'attribute-group-delete'
+        ];
+        
+        foreach ($permissions as $permission) {
+            $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
+            $adminRole->givePermissionTo($perm);
+        }
+        
+        $this->user->assignRole($adminRole);
+        
+        $this->token = $this->user->createToken('test-token')->plainTextToken;
+    }
 
     #[Test]
     public function create_attribute_group(): TestResponse
@@ -71,7 +101,7 @@ class AttributeGroupTest extends TestCase
     #[Test]
     public function structure_group(): void
     {
-        $response = $this->json('GET', $this->url);
+        $response = $this->withHeaders($this->getAuthHeaders())->json('GET', $this->url);
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [

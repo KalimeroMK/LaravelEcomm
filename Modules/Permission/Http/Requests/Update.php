@@ -12,7 +12,7 @@ class Update extends CoreRequest
     {
         return [
             'name' => 'nullable|string|max:255|unique:permissions',
-            'guard_name' => 'nullable|string|max:255|in:web,api|default:web',
+            'guard_name' => 'nullable|string|max:255|in:web,api',
         ];
     }
 }

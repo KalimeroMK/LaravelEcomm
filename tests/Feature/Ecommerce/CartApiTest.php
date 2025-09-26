@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 class CartApiTest extends TestCase
 {
-    use RefreshDatabase, WithFaker, WithoutMiddleware;
+    use RefreshDatabase, WithFaker;
 
     private User $user;
 
@@ -27,8 +27,7 @@ class CartApiTest extends TestCase
     {
         parent::setUp();
 
-        // Reuse existing user from parent setup to avoid memory issues
-        $this->user = auth()->user();
+        $this->user = User::factory()->create();
 
         $this->product = Product::factory()->create([
             'status' => 'active',

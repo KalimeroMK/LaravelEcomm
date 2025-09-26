@@ -43,7 +43,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware(['web', 'auth', 'admin'])
+        Route::middleware(['web', 'auth', \App\Http\Middleware\AdminMiddleware::class])
             ->prefix('admin')
             ->group(module_path('Google2fa', '/Routes/web.php'));
     }

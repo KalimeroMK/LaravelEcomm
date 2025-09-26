@@ -4,19 +4,49 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use Modules\Brand\Models\Brand;
+use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Api\Traits\BaseTestTrait;
+use Tests\Feature\Api\Traits\AuthenticatedBaseTestTrait;
 use Tests\TestCase;
 
 class BrandTest extends TestCase
 {
-    use BaseTestTrait;
-    use WithoutMiddleware;
+    use AuthenticatedBaseTestTrait;
+    use RefreshDatabase;
 
     public string $url = '/api/v1/brands';
+    
+    private User $user;
+    private string $token;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create admin user with permissions
+        $this->user = User::factory()->create();
+        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        
+        // Create and assign brand permissions
+        $permissions = [
+            'brand-list',
+            'brand-create', 
+            'brand-update',
+            'brand-delete'
+        ];
+        
+        foreach ($permissions as $permission) {
+            $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
+            $adminRole->givePermissionTo($perm);
+        }
+        
+        $this->user->assignRole($adminRole);
+        
+        $this->token = $this->user->createToken('test-token')->plainTextToken;
+    }
 
     /**
      * test create product.
@@ -90,7 +120,7 @@ class BrandTest extends TestCase
     public function test_structure()
     {
         Brand::factory()->count(2)->create();
-        $response = $this->json('GET', '/api/v1/brands');
+        $response = $this->withHeaders($this->getAuthHeaders())->json('GET', '/api/v1/brands');
         $response->assertStatus(200);
 
         $response->assertJsonStructure(

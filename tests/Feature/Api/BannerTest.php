@@ -4,23 +4,53 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use Modules\Banner\Models\Banner;
-use Tests\Feature\Api\Traits\BaseTestTrait;
+use Modules\User\Models\User;
+use Tests\Feature\Api\Traits\AuthenticatedBaseTestTrait;
 use Tests\TestCase;
 
 class BannerTest extends TestCase
 {
-    use BaseTestTrait;
+    use AuthenticatedBaseTestTrait;
     use WithFaker;
-    use WithoutMiddleware;
+    use RefreshDatabase;
 
     public string $url = '/api/v1/banners/';
+    
+    private User $user;
+    private string $token;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create admin user with permissions
+        $this->user = User::factory()->create();
+        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        
+        // Create and assign banner permissions (BannerPolicy uses brand permissions)
+        $permissions = [
+            'brand-list',
+            'brand-create', 
+            'brand-update',
+            'brand-delete'
+        ];
+        
+        foreach ($permissions as $permission) {
+            $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
+            $adminRole->givePermissionTo($perm);
+        }
+        
+        $this->user->assignRole($adminRole);
+        
+        $this->token = $this->user->createToken('test-token')->plainTextToken;
+    }
 
     /**
      * test create product.
@@ -47,6 +77,8 @@ class BannerTest extends TestCase
      */
     public function test_update_banner(): TestResponse
     {
+        $banner = Banner::factory()->create();
+        
         $data = [
             'title' => time().'Test title',
             'description' => time().'test-description',
@@ -54,9 +86,7 @@ class BannerTest extends TestCase
             'images' => [UploadedFile::fake()->image('updated_file.png', 600, 600)],
         ];
 
-        $id = Banner::firstOrFail()->id;
-
-        return $this->updatePUT($this->url, $data, $id);
+        return $this->updatePUT($this->url, $data, $banner->id);
     }
 
     /**
@@ -64,9 +94,9 @@ class BannerTest extends TestCase
      */
     public function test_find_banner(): TestResponse
     {
-        $id = Banner::firstOrFail()->id;
+        $banner = Banner::factory()->create();
 
-        return $this->show($this->url, $id);
+        return $this->show($this->url, $banner->id);
     }
 
     /**
@@ -82,14 +112,14 @@ class BannerTest extends TestCase
      */
     public function test_delete_banner(): TestResponse
     {
-        $id = Banner::firstOrFail()->id;
+        $banner = Banner::factory()->create();
 
-        return $this->destroy($this->url, $id);
+        return $this->destroy($this->url, $banner->id);
     }
 
     public function test_structure()
     {
-        $response = $this->json('GET', '/api/v1/banners/');
+        $response = $this->withHeaders($this->getAuthHeaders())->json('GET', '/api/v1/banners/');
         $response->assertStatus(200);
 
         $response->assertJsonStructure([

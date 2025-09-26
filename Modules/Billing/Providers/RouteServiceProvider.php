@@ -41,9 +41,16 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
+        // Wishlist routes without authentication
+        Route::prefix('api/v1')
+            ->group(module_path('Billing', '/Routes/api.php'));
+
+        // Other billing routes with authentication
         Route::prefix('api/v1')
             ->middleware('auth:sanctum')
-            ->group(module_path('Billing', '/Routes/api.php'));
+            ->group(function () {
+                Route::post('stripe', [\Modules\Billing\Http\Controllers\Api\StripeController::class, 'stripe']);
+            });
     }
 
     /**

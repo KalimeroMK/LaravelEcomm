@@ -48,7 +48,6 @@ use Modules\Settings\Models\Setting;
 use Modules\Tag\Models\Policies\TagPolicy;
 use Modules\Tag\Models\Tag;
 use Modules\Tenant\Models\Policy\TenantPolicy;
-use Modules\Message\Models\Policies\MessagePolicy;
 use Modules\Tenant\Models\Tenant;
 use Modules\User\Models\Policies\UserPolicy;
 use Modules\User\Models\User;

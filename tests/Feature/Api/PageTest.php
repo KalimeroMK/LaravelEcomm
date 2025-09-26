@@ -7,19 +7,19 @@ namespace Tests\Feature\Api;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
-use Modules\Post\Models\Post;
+use Modules\Page\Models\Page;
 use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Api\Traits\AuthenticatedBaseTestTrait;
 use Tests\TestCase;
 
-class PostTest extends TestCase
+class PageTest extends TestCase
 {
     use AuthenticatedBaseTestTrait;
     use WithFaker;
     use RefreshDatabase;
 
-    public string $url = '/api/v1/posts';
+    public string $url = '/api/v1/pages';
     
     private User $user;
     private string $token;
@@ -32,12 +32,12 @@ class PostTest extends TestCase
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
         
-        // Create and assign post permissions
+        // Create and assign page permissions
         $permissions = [
-            'post-list',
-            'post-create', 
-            'post-update',
-            'post-delete'
+            'page-list',
+            'page-create', 
+            'page-update',
+            'page-delete'
         ];
         
         foreach ($permissions as $permission) {
@@ -51,74 +51,63 @@ class PostTest extends TestCase
     }
 
     /**
-     * test create product.
+     * test create page.
      */
     #[Test]
-    public function test_create_post(): TestResponse
+    public function test_create_page(): TestResponse
     {
-        $data = Post::factory()->create()->toArray();
+        $data = [
+            'title' => 'Test Page ' . time(),
+            'slug' => 'test-page-' . time(),
+            'content' => 'This is test page content',
+            'is_active' => true,
+            'user_id' => $this->user->id,
+        ];
 
         return $this->create($this->url, $data);
     }
 
     /**
-     * test find post.
+     * test find page.
      */
     #[Test]
-    public function test_find_post(): TestResponse
+    public function test_find_page(): TestResponse
     {
-        $post = Post::factory()->create();
-        $id = $post->id;
+        $page = Page::factory()->create(['user_id' => $this->user->id]);
 
-        return $this->show($this->url, $id);
+        return $this->show($this->url, $page->id);
     }
 
     /**
-     * test get all posts.
+     * test get all pages.
      */
     #[Test]
-    public function test_get_all_posts(): TestResponse
+    public function test_get_all_pages(): TestResponse
     {
-        Post::factory()->count(3)->create();
+        Page::factory()->create(['user_id' => $this->user->id]);
+        Page::factory()->create(['user_id' => $this->user->id]);
+        Page::factory()->create(['user_id' => $this->user->id]);
 
         return $this->list($this->url);
     }
 
     /**
-     * test update post.
+     * test delete page.
      */
     #[Test]
-    public function test_update_post(): TestResponse
+    public function test_delete_page(): TestResponse
     {
-        $post = Post::factory()->create();
+        $page = Page::factory()->create(['user_id' => $this->user->id]);
 
-        $user = User::factory()->create(); //
-        $data = Post::factory()->make([
-            'user_id' => $user->id, //
-        ])->toArray();
-
-        $id = $post->id;
-
-        return $this->updatePUT($this->url, $data, $id);
-    }
-
-    /**
-     * test delete post.
-     */
-    #[Test]
-    public function test_delete_post(): TestResponse
-    {
-        $post = Post::factory()->create();
-        $id = $post->id;
-
-        return $this->destroy($this->url, $id);
+        return $this->destroy($this->url, $page->id);
     }
 
     #[Test]
-    public function test_structure()
+    public function test_structure(): void
     {
-        Post::factory()->count(2)->create();
-        $response = $this->withHeaders($this->getAuthHeaders())->json('GET', '/api/v1/posts');
+        Page::factory()->create(['user_id' => $this->user->id]);
+        Page::factory()->create(['user_id' => $this->user->id]);
+        $response = $this->withHeaders($this->getAuthHeaders())->json('GET', '/api/v1/pages');
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
@@ -127,13 +116,10 @@ class PostTest extends TestCase
                     'id',
                     'title',
                     'slug',
-                    'summary',
-                    'description',
-                    'tags',
-                    'status',
+                    'content',
+                    'is_active',
                     'created_at',
                     'updated_at',
-                    'categories', // conditional but we assume it's loaded
                 ],
             ],
         ]);

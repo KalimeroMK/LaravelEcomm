@@ -20,7 +20,7 @@ class Store extends CoreRequest
             'slug' => ['required'],
             'content' => ['required'],
             'is_active' => ['boolean'],
-            'user_id' => ['required', 'exists:users'],
+            'user_id' => ['required', 'exists:users,id'],
         ];
     }
 }

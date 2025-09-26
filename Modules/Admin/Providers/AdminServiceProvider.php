@@ -60,6 +60,10 @@ class AdminServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+        
+        // Bind services
+        $this->app->bind(\Modules\Admin\Repository\AdminRepository::class);
+        $this->app->bind(\Modules\Admin\Service\AdminService::class);
     }
 
     /**

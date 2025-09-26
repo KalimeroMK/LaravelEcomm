@@ -60,7 +60,7 @@ class FrontController extends CoreController
 
     public function productSearch(Request $request, ProductSearchAction $productSearchAction): JsonResponse
     {
-        return response()->json($productSearchAction($request->validated()));
+        return response()->json($productSearchAction($request->all()));
     }
 
     public function productDeal(ProductDealAction $productDealAction): JsonResponse
@@ -68,9 +68,9 @@ class FrontController extends CoreController
         return response()->json($productDealAction());
     }
 
-    public function productBrand(Request $request, ProductBrandAction $productBrandAction): JsonResponse
+    public function productBrand(string $slug, ProductBrandAction $productBrandAction): JsonResponse
     {
-        return response()->json($productBrandAction($request->all()));
+        return response()->json($productBrandAction($slug));
     }
 
     public function productCat(string $slug, ProductCatAction $productCatAction): JsonResponse

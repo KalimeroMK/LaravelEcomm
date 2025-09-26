@@ -194,16 +194,16 @@ php artisan tenants:create
 
 За production, користете:
 
-- **Различни database servers** за owner и tenant бази
-- **SSL connections** за сите database connections
-- **Connection pooling** за подобри перформанси
-- **Backup стратегии** за сите tenant бази
-- **Monitoring** за database перформанси
+-   **Различни database servers** за owner и tenant бази
+-   **SSL connections** за сите database connections
+-   **Connection pooling** за подобри перформанси
+-   **Backup стратегии** за сите tenant бази
+-   **Monitoring** за database перформанси
 
 ## Безбедносни забелешки
 
-- **Користете различни credentials** за owner и tenant бази
-- **Ограничете го пристапот** до owner базата
-- **Користете SSL** за production
-- **Регуларно backup-увајте** ги сите бази
-- **Мониторирајте го пристапот** до базите
+-   **Користете различни credentials** за owner и tenant бази
+-   **Ограничете го пристапот** до owner базата
+-   **Користете SSL** за production
+-   **Регуларно backup-увајте** ги сите бази
+-   **Мониторирајте го пристапот** до базите

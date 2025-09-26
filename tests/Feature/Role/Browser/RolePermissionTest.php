@@ -12,7 +12,7 @@ use Spatie\Permission\Models\Role;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->admin = createAdminUser();
+    $this->admin = createSuperAdminUser();
 });
 
 test('admin can view roles list', function () {

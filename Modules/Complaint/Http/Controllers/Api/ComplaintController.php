@@ -38,6 +38,15 @@ class ComplaintController extends CoreController
         );
     }
 
+    public function create(int $orderId): JsonResponse
+    {
+        $this->authorize('create', Complaint::class);
+
+        return $this
+            ->setMessage(__('apiResponse.ok'))
+            ->respond(['order_id' => $orderId]);
+    }
+
     /**
      * @throws ReflectionException
      */

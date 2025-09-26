@@ -18,7 +18,7 @@ class WishlistController extends Controller
     public function __construct(WishlistService $wishlistService)
     {
         $this->wishlistService = $wishlistService;
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth:sanctum')->except(['count', 'check']);
     }
 
     /**
@@ -26,6 +26,14 @@ class WishlistController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please login to view your wishlist',
+                'login_required' => true,
+            ], 401);
+        }
+
         $user = Auth::user();
         $withPriceAlerts = $request->boolean('with_price_alerts', false);
 
@@ -52,6 +60,14 @@ class WishlistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please login to add products to your wishlist',
+                'login_required' => true,
+            ], 401);
+        }
+
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
             'quantity' => 'nullable|integer|min:1|max:100',
@@ -176,6 +192,16 @@ class WishlistController extends Controller
      */
     public function check(int $id): JsonResponse
     {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'in_wishlist' => false,
+                    'product_id' => $id,
+                ],
+            ]);
+        }
+
         $user = Auth::user();
         $product = Product::findOrFail($id);
 
@@ -195,6 +221,15 @@ class WishlistController extends Controller
      */
     public function count(): JsonResponse
     {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'count' => 0,
+                ],
+            ]);
+        }
+
         $user = Auth::user();
         $count = $this->wishlistService->getWishlistCount($user);
 

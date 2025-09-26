@@ -214,8 +214,8 @@ TENANT_CROSS_ACCESS=false
 
 ## Безбедносни забелешки
 
-- **Никогаш не комитирајте `.env` фајл** во git
-- **Користете различни passwords** за различни environments
-- **Овозможете SSL** за production
-- **Конфигурирајте го firewall** за database пристап
-- **Регуларно backup-увајте** ги tenant базите
+-   **Никогаш не комитирајте `.env` фајл** во git
+-   **Користете различни passwords** за различни environments
+-   **Овозможете SSL** за production
+-   **Конфигурирајте го firewall** за database пристап
+-   **Регуларно backup-увајте** ги tenant базите

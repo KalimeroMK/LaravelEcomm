@@ -10,10 +10,10 @@ use Modules\Product\Models\Product;
 
 class ProductBrandAction
 {
-    public function __invoke(array $data): array
+    public function __invoke(string $slug): array
     {
-        $products = Product::whereHas('brand', function (Builder $query) use ($data): void {
-            $query->where('slug', $data['slug']);
+        $products = Product::whereHas('brand', function (Builder $query) use ($slug): void {
+            $query->where('slug', $slug);
         })->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])->paginate(9);
         $brands = Brand::where('status', 'active')
             ->orderBy('title')

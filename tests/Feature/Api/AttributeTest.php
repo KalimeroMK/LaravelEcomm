@@ -4,20 +4,50 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Modules\Attribute\Models\Attribute;
+use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Api\Traits\BaseTestTrait;
+use Tests\Feature\Api\Traits\AuthenticatedBaseTestTrait;
 use Tests\TestCase;
 
 class AttributeTest extends TestCase
 {
-    use BaseTestTrait;
+    use AuthenticatedBaseTestTrait;
     use WithFaker;
-    use WithoutMiddleware;
+    use RefreshDatabase;
 
     public string $url = '/api/v1/attributes/';
+    
+    private User $user;
+    private string $token;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Create admin user with permissions
+        $this->user = User::factory()->create();
+        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        
+        // Create and assign attribute permissions
+        $permissions = [
+            'attribute-list',
+            'attribute-create', 
+            'attribute-update',
+            'attribute-delete'
+        ];
+        
+        foreach ($permissions as $permission) {
+            $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
+            $adminRole->givePermissionTo($perm);
+        }
+        
+        $this->user->assignRole($adminRole);
+        
+        $this->token = $this->user->createToken('test-token')->plainTextToken;
+    }
 
     #[Test]
     public function create_attribute(): void
@@ -64,7 +94,7 @@ class AttributeTest extends TestCase
     #[Test]
     public function structure(): void
     {
-        $response = $this->json('GET', '/api/v1/attributes/');
+        $response = $this->withHeaders($this->getAuthHeaders())->json('GET', '/api/v1/attributes/');
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
@@ -89,7 +119,7 @@ class AttributeTest extends TestCase
             'type' => 'text',
         ]);
 
-        $response = $this->json('GET', "/api/v1/attributes/{$attribute->id}");
+        $response = $this->withHeaders($this->getAuthHeaders())->json('GET', "/api/v1/attributes/{$attribute->id}");
 
         $response->assertStatus(200);
         $response->assertJsonFragment([

@@ -6,12 +6,13 @@ namespace Modules\Permission\Actions;
 
 use Modules\Permission\DTOs\PermissionDTO;
 use Modules\Permission\Repository\PermissionRepository;
+use Modules\Permission\Models\Permission;
 
 readonly class CreatePermissionAction
 {
     public function __construct(private PermissionRepository $repository) {}
 
-    public function execute(PermissionDTO $dto): PermissionDTO
+    public function execute(PermissionDTO $dto): Permission
     {
         return $this->repository->create([
             'name' => $dto->name,

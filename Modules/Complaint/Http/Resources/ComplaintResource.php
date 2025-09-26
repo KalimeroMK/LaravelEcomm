@@ -17,11 +17,12 @@ class ComplaintResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'order_id' => $this->order_id,
+            'user_id' => $this->user_id,
             'status' => $this->status,
             'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'replies_count' => $this->replies_count,
             'user' => new UserResource($this->whenLoaded('user')),
             'order' => new OrderResource($this->whenLoaded('order')),
         ];

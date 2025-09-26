@@ -47,7 +47,8 @@ class AdvancedFeaturesTest extends TestCase
 
         // Create a super-admin user and authenticate
         $this->user = User::factory()->create();
-        $this->user->assignRole('super-admin');
+        $superAdminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super-admin']);
+        $this->user->assignRole($superAdminRole);
         $this->actingAs($this->user);
     }
 

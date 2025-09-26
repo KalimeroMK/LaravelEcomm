@@ -43,7 +43,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
+        Route::prefix('api/v1')
             ->middleware('api')
             ->group(module_path('Admin', '/Routes/api.php'));
     }
@@ -57,12 +57,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware(['auth', 'admin', 'web', 'activity'])
+        Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class, 'web', 'activity'])
             ->prefix('admin')
             ->group(module_path('Admin', '/Routes/web.php'));
 
         // Analytics routes with proper authentication
-        Route::middleware(['auth', 'admin', 'web'])
+        Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class, 'web'])
             ->prefix('admin')
             ->group(function (): void {
                 Route::prefix('analytics')->group(function (): void {
