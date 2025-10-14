@@ -1,8 +1,8 @@
 # Database Configuration for Multi-Tenant Setup
 
-Ова е пример за database конфигурацијата во `config/database.php` за мултитенант функционалност.
+This is an example database configuration in `config/database.php` for multi-tenant functionality.
 
-## Додајте ги овие connections во config/database.php
+## Add these connections to config/database.php
 
 ```php
 <?php
@@ -131,9 +131,9 @@ return [
 ];
 ```
 
-## Environment Variables за Database
+## Environment Variables for Database
 
-Додајте ги овие во вашиот `.env` фајл:
+Add these to your `.env` file:
 
 ```env
 # Main Database
@@ -144,7 +144,7 @@ DB_DATABASE=laravel_ecommerce
 DB_USERNAME=root
 DB_PASSWORD=your_password
 
-# Owner Database (за tenant metadata)
+# Owner Database (for tenant metadata)
 OWNER_DB_HOST=127.0.0.1
 OWNER_DB_PORT=3306
 OWNER_DB_DATABASE=owner_db
@@ -159,51 +159,51 @@ TENANT_DB_USERNAME=root
 TENANT_DB_PASSWORD=your_password
 ```
 
-## Database Setup инструкции
+## Database Setup Instructions
 
-1. **Креирајте ги базите на податоци**:
+1. **Create the databases**:
 
 ```sql
 -- Main application database
 CREATE DATABASE laravel_ecommerce;
 
--- Owner database (за tenant metadata)
+-- Owner database (for tenant metadata)
 CREATE DATABASE owner_db;
 
 -- Tenant template database
 CREATE DATABASE tenant_template;
 ```
 
-2. **Стартувајте ги миграциите**:
+2. **Run the migrations**:
 
 ```bash
-# Мигрирајте ја главната база
+# Migrate main database
 php artisan migrate
 
-# Иницијализирајте го tenant системот
+# Initialize tenant system
 php artisan tenants:init
 ```
 
-3. **Креирајте тест tenant**:
+3. **Create test tenant**:
 
 ```bash
 php artisan tenants:create
 ```
 
-## Production настройки
+## Production Settings
 
-За production, користете:
+For production, use:
 
--   **Различни database servers** за owner и tenant бази
--   **SSL connections** за сите database connections
--   **Connection pooling** за подобри перформанси
--   **Backup стратегии** за сите tenant бази
--   **Monitoring** за database перформанси
+-   **Different database servers** for owner and tenant databases
+-   **SSL connections** for all database connections
+-   **Connection pooling** for better performance
+-   **Backup strategies** for all tenant databases
+-   **Monitoring** for database performance
 
-## Безбедносни забелешки
+## Security Notes
 
--   **Користете различни credentials** за owner и tenant бази
--   **Ограничете го пристапот** до owner базата
--   **Користете SSL** за production
--   **Регуларно backup-увајте** ги сите бази
--   **Мониторирајте го пристапот** до базите
+-   **Use different credentials** for owner and tenant databases
+-   **Restrict access** to owner database
+-   **Use SSL** for production
+-   **Regularly backup** all databases
+-   **Monitor access** to databases

@@ -26,5 +26,6 @@
     "Shipping": true,
     "Tag": true,
     "Tenant": true,
-    "User": true
+    "User": true,
+    "Language": true
 }

@@ -88,6 +88,61 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Available Locales
+    |--------------------------------------------------------------------------
+    |
+    | List all locales that your application supports. This will be used
+    | for language switching and validation.
+    |
+    */
+
+    'locales' => [
+        'en' => [
+            'name' => 'English',
+            'native' => 'English',
+            'flag' => '🇺🇸',
+            'rtl' => false,
+        ],
+        'mk' => [
+            'name' => 'Macedonian',
+            'native' => 'Македонски',
+            'flag' => '🇲🇰',
+            'rtl' => false,
+        ],
+        'de' => [
+            'name' => 'German',
+            'native' => 'Deutsch',
+            'flag' => '🇩🇪',
+            'rtl' => false,
+        ],
+        'fr' => [
+            'name' => 'French',
+            'native' => 'Français',
+            'flag' => '🇫🇷',
+            'rtl' => false,
+        ],
+        'es' => [
+            'name' => 'Spanish',
+            'native' => 'Español',
+            'flag' => '🇪🇸',
+            'rtl' => false,
+        ],
+        'it' => [
+            'name' => 'Italian',
+            'native' => 'Italiano',
+            'flag' => '🇮🇹',
+            'rtl' => false,
+        ],
+        'ar' => [
+            'name' => 'Arabic',
+            'native' => 'العربية',
+            'flag' => '🇸🇦',
+            'rtl' => true,
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |

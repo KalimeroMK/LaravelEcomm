@@ -40,6 +40,7 @@ class CoreServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(RTLServiceProvider::class);
         
         // Register Cache Service
         $this->app->singleton(CacheService::class);

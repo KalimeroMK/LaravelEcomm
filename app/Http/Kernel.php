@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http;
 
+use App\Http\Middleware\SetLocale;
 use Carbon\Traits\Localization;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
@@ -74,8 +75,7 @@ class Kernel extends HttpKernel
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
-                Localization::class,
-
+                SetLocale::class,
             ],
 
             'api' => [

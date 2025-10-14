@@ -1,8 +1,8 @@
 # Multi-Tenant Environment Configuration Example
 
-Ова е пример за `.env` фајлот со сите потребни настройки за мултитенант функционалноста.
+This is an example `.env` file with all necessary settings for multi-tenant functionality.
 
-## Основна конфигурација
+## Basic Configuration
 
 ```env
 # Application Configuration
@@ -14,7 +14,7 @@ APP_TIMEZONE=UTC
 APP_URL=http://localhost
 ```
 
-## Database конфигурација
+## Database Configuration
 
 ```env
 # Main Application Database
@@ -31,7 +31,7 @@ TENANT_MAIN_DOMAIN=localhost
 TENANT_OWNER_CONNECTION=owner
 TENANT_DEFAULT_CONNECTION=tenant
 
-# Owner Database (за tenant metadata)
+# Owner Database (for tenant metadata)
 OWNER_DB_CONNECTION=owner
 OWNER_DB_HOST=127.0.0.1
 OWNER_DB_PORT=3306
@@ -48,7 +48,7 @@ TENANT_DB_USERNAME=root
 TENANT_DB_PASSWORD=your_password
 ```
 
-## Tenant специфични настройки
+## Tenant Specific Settings
 
 ```env
 # Tenant Database Naming
@@ -89,7 +89,7 @@ TENANT_ISOLATE_PERMISSIONS=true
 TENANT_CROSS_ACCESS=false
 ```
 
-## Дополнителни настройки
+## Additional Settings
 
 ```env
 # Cache Configuration
@@ -117,7 +117,7 @@ MAIL_ENCRYPTION=null
 MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
 
-# Redis Configuration (ако користиш Redis)
+# Redis Configuration (if using Redis)
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
@@ -140,9 +140,9 @@ RATE_LIMIT_ATTEMPTS=60
 RATE_LIMIT_DECAY_MINUTES=1
 ```
 
-## Database конфигурација во config/database.php
+## Database Configuration in config/database.php
 
-Додајте ги овие connections во вашиот `config/database.php`:
+Add these connections to your `config/database.php`:
 
 ```php
 'connections' => [
@@ -178,27 +178,27 @@ RATE_LIMIT_DECAY_MINUTES=1
 ],
 ```
 
-## Setup инструкции
+## Setup Instructions
 
-1. **Копирајте го овој пример во `.env` фајлот**
-2. **Ажурирајте ги database настройките** според вашата конфигурација
-3. **Додајте ги database connections** во `config/database.php`
-4. **Стартувајте ги командите**:
+1. **Copy this example to your `.env` file**
+2. **Update database settings** according to your configuration
+3. **Add database connections** to `config/database.php`
+4. **Run the commands**:
 
 ```bash
-# Иницијализирајте го tenant системот
+# Initialize tenant system
 php artisan tenants:init
 
-# Креирајте нов tenant
+# Create new tenant
 php artisan tenants:create
 
-# Мигрирајте ги tenant базите
+# Migrate tenant databases
 php artisan tenants:migrate
 ```
 
-## Пример за production настройки
+## Production Settings Example
 
-За production, променете ги овие вредности:
+For production, change these values:
 
 ```env
 APP_ENV=production
@@ -212,10 +212,10 @@ TENANT_ISOLATE_PERMISSIONS=true
 TENANT_CROSS_ACCESS=false
 ```
 
-## Безбедносни забелешки
+## Security Notes
 
--   **Никогаш не комитирајте `.env` фајл** во git
--   **Користете различни passwords** за различни environments
--   **Овозможете SSL** за production
--   **Конфигурирајте го firewall** за database пристап
--   **Регуларно backup-увајте** ги tenant базите
+-   **Never commit `.env` file** to git
+-   **Use different passwords** for different environments
+-   **Enable SSL** for production
+-   **Configure firewall** for database access
+-   **Regularly backup** tenant databases

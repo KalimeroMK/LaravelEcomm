@@ -38,7 +38,7 @@ Route::get('/login/{social}/callback', [AuthController::class, 'handleProviderCa
     'twitter|facebook|linkedin|google|github|bitbucket'
 );
 
-Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
+Route::get('language/{lang}', [LanguageController::class, 'switchLang'])->name('language.switch');
 
 // Attribute Group CRUD
 Route::resource('attribute-groups', Modules\Attribute\Http\Controllers\AttributeGroupController::class);
