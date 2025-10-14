@@ -41,7 +41,7 @@
                 Default Theme
             </option>
             <option value="modern" {{ ($settings['active_template'] ?? 'default') == 'modern' ? 'selected' : '' }}>
-                Modern Theme (Coming Soon)
+                Modern Theme
             </option>
         </select>
         <small class="form-text text-muted">Choose the active theme for your website.</small>

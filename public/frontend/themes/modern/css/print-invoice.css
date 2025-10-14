@@ -1,0 +1,36 @@
+/*
+Theme Name: The Project - Responsive Website Template
+Author: HtmlCoder
+Author URI: http://www.htmlcoder.me
+Author e-mail: htmlcoder.me@gmail.com
+Version: 1.4.0
+Created: May 2015
+License URI: http://support.wrapbootstrap.com/
+File Description: CSS rules for invoice print
+*/
+
+.header-top,
+.header,
+.page-intro,
+.page-title,
+.parallax,
+.call-to-action,
+.section,
+#footer,
+.scrollToTop,
+.btn-print,
+.breadcrumb-container {
+	display: none!important;
+}
+
+.col-sm-offset-3 {
+	margin-left: 25%;
+}
+.col-sm-3 {
+	width: 25%;
+	float: left;
+}
+.col-sm-6 {
+	width: 50%;
+	float: left;
+}

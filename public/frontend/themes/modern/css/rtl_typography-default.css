@@ -1,0 +1,309 @@
+@charset "UTF-8";
+/* 1 Typography
+----------------------------------------------------------------------------- */
+/*Fonts
+---------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar .navbar-nav {
+  font-family: "Raleway", sans-serif;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.logo-font {
+  font-family: "Pacifico", cursive, sans-serif;
+}
+
+/*Typography
+---------------------------------- */
+html {
+  height: 100%;
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.4666666667;
+  color: #777777;
+  background-color: #ffffff;
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #333333;
+  line-height: 1.2;
+}
+
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  color: #333333;
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #ffffff;
+}
+
+.dark h1 a,
+.dark h2 a,
+.dark h3 a,
+.dark h4 a,
+.dark h5 a,
+.dark h6 a {
+  color: #ffffff;
+}
+
+.dark .footer h1,
+.dark .footer h2,
+.dark .footer h3,
+.dark .footer h4,
+.dark .footer h5,
+.dark .footer h6 {
+  color: #999999;
+}
+
+.dark .footer h1 a,
+.dark .footer h2 a,
+.dark .footer h3 a,
+.dark .footer h4 a,
+.dark .footer h5 a,
+.dark .footer h6 a {
+  color: #999999;
+}
+
+h1 {
+  font-size: 33px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1.logo-font {
+  text-transform: none;
+  font-weight: 300;
+  font-size: 50px;
+}
+
+h1.large {
+  font-size: 45px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+h2.logo-font {
+  text-transform: none;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 19px;
+}
+
+h5 {
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+h6 {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media screen and (min-width: 768px) {
+  .jumbotron h1 {
+    font-size: 130px;
+  }
+}
+
+/* Small devices (tablets, phones less than 767px) */
+@media screen and (max-width: 767px) {
+  .jumbotron h1 {
+    font-size: 60px;
+  }
+}
+
+.page-title {
+  margin-top: 0;
+}
+
+/* Medium devices (desktops, tablets, 992px and up) */
+@media (min-width: 992px) {
+  .title {
+    margin-top: 0;
+  }
+}
+
+.sidebar .title {
+  margin-top: 3px;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+p.large {
+  font-size: 18px;
+  line-height: 1.4;
+  margin-bottom: 30px;
+}
+
+a {
+  color: #09afdf;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+a:hover {
+  color: #0c9ec7;
+}
+
+a:focus, a:active {
+  outline: none;
+  color: #0c9ec7;
+}
+
+.link-dark {
+  color: #333333;
+  text-decoration: none !important;
+}
+
+.link-dark:hover {
+  color: #333333;
+  text-decoration: underline !important;
+}
+
+.dark .footer .link-dark {
+  color: #777777;
+  text-decoration: none !important;
+}
+
+.dark .footer .link-dark:hover {
+  color: #777777;
+  text-decoration: underline !important;
+}
+
+.link-light {
+  color: #ffffff;
+  text-decoration: none !important;
+}
+
+.link-light:hover {
+  color: #ffffff;
+  text-decoration: underline !important;
+}
+
+blockquote {
+  border-left: none;
+  display: inline-block;
+  margin: 20px auto 20px;
+  font-size: 16px;
+  position: relative;
+  padding: 10px 25px;
+}
+
+blockquote:after {
+  content: "”";
+  width: 25px;
+  height: 25px;
+  line-height: 36px;
+  font-size: 36px;
+  font-family: "PT Serif", serif;
+  position: absolute;
+  top: 12px;
+  right: 0px;
+  color: #cdcdcd;
+}
+
+.blockquote:before {
+  font-family: "PT Serif", serif;
+  content: "”";
+  font-size: 40px;
+}
+
+blockquote.inline {
+  padding: 0;
+}
+
+blockquote.inline p {
+  width: 60%;
+  display: inline-block;
+  margin: 0;
+}
+
+blockquote.inline footer {
+  width: 37%;
+  display: inline-block;
+  padding-right: 5px;
+}
+
+blockquote.inline:after {
+  top: 0;
+}
+
+mark,
+.mark {
+  background-color: #09afdf;
+  color: #ffffff;
+}
+
+pre {
+  padding: 20px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.text-muted {
+  color: #999999;
+}
+
+.text-default {
+  color: #09afdf;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+.well {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  background-color: #f3f3f3;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.dark hr {
+  border-color: #333333;
+}
