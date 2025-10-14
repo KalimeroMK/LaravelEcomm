@@ -6,6 +6,7 @@ namespace Modules\Core\Providers;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Modules\Core\Services\CacheService;
 use Modules\Front\Providers\RouteServiceProvider;
 use Modules\Settings\Models\Setting;
 
@@ -24,6 +25,13 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        
+        // Register commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Modules\Core\Console\Commands\CacheManagementCommand::class,
+            ]);
+        }
     }
 
     /**
@@ -32,6 +40,10 @@ class CoreServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+        
+        // Register Cache Service
+        $this->app->singleton(CacheService::class);
+        
         $this->app->singleton('settings', function () {
             return Setting::get();
         });

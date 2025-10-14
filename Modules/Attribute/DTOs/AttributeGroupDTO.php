@@ -12,6 +12,7 @@ readonly class AttributeGroupDTO
     public function __construct(
         public ?int $id,
         public ?string $name,
+        /** @var array<string, mixed> */
         public ?array $attributes = [],
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
@@ -20,9 +21,10 @@ readonly class AttributeGroupDTO
 
     public static function fromRequest(Request $request): self
     {
-        return self::fromArray($request->validated());
+        return self::fromArray($request->all());
     }
 
+    /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -35,6 +37,7 @@ readonly class AttributeGroupDTO
         );
     }
 
+    /** @return array<string, mixed> */
     public function toArray(): array
     {
         return [

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\Permission\Actions;
 
 use Modules\Permission\DTOs\PermissionDTO;
-use Modules\Permission\Repository\PermissionRepository;
 use Modules\Permission\Models\Permission;
+use Modules\Permission\Repository\PermissionRepository;
 
 readonly class CreatePermissionAction
 {

@@ -26,7 +26,7 @@ class WishlistController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Please login to view your wishlist',
@@ -60,7 +60,7 @@ class WishlistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Please login to add products to your wishlist',
@@ -192,7 +192,7 @@ class WishlistController extends Controller
      */
     public function check(int $id): JsonResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -221,7 +221,7 @@ class WishlistController extends Controller
      */
     public function count(): JsonResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return response()->json([
                 'success' => true,
                 'data' => [

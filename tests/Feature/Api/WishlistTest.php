@@ -6,7 +6,6 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Testing\TestResponse;
 use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
@@ -14,16 +13,17 @@ use Tests\TestCase;
 
 class WishlistTest extends TestCase
 {
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create user for authenticated tests
         $this->user = User::factory()->create();
         $this->token = $this->user->createToken('test-token')->plainTextToken;
@@ -36,7 +36,7 @@ class WishlistTest extends TestCase
     public function test_wishlist_index_without_auth(): void
     {
         $response = $this->json('GET', '/api/v1/wishlist');
-        
+
         $response->assertStatus(401);
         $response->assertJson([
             'message' => 'Unauthenticated.',
@@ -50,10 +50,10 @@ class WishlistTest extends TestCase
     public function test_wishlist_index_with_auth(): void
     {
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ])->json('GET', '/api/v1/wishlist');
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -72,12 +72,12 @@ class WishlistTest extends TestCase
     public function test_wishlist_store_without_auth(): void
     {
         $product = Product::factory()->create();
-        
+
         $response = $this->json('POST', '/api/v1/wishlist', [
             'product_id' => $product->id,
             'quantity' => 1,
         ]);
-        
+
         $response->assertStatus(401);
         $response->assertJson([
             'message' => 'Unauthenticated.',
@@ -91,15 +91,15 @@ class WishlistTest extends TestCase
     public function test_wishlist_store_with_auth(): void
     {
         $product = Product::factory()->create();
-        
+
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ])->json('POST', '/api/v1/wishlist', [
             'product_id' => $product->id,
             'quantity' => 1,
         ]);
-        
+
         $response->assertStatus(201);
         $response->assertJson([
             'success' => true,
@@ -122,7 +122,7 @@ class WishlistTest extends TestCase
     public function test_wishlist_count_without_auth(): void
     {
         $response = $this->json('GET', '/api/v1/wishlist/count');
-        
+
         $response->assertStatus(200);
         $response->assertJson([
             'success' => true,
@@ -139,10 +139,10 @@ class WishlistTest extends TestCase
     public function test_wishlist_count_with_auth(): void
     {
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ])->json('GET', '/api/v1/wishlist/count');
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -159,9 +159,9 @@ class WishlistTest extends TestCase
     public function test_wishlist_check_without_auth(): void
     {
         $product = Product::factory()->create();
-        
+
         $response = $this->json('GET', "/api/v1/wishlist/check/{$product->id}");
-        
+
         $response->assertStatus(200);
         $response->assertJson([
             'success' => true,
@@ -179,12 +179,12 @@ class WishlistTest extends TestCase
     public function test_wishlist_check_with_auth(): void
     {
         $product = Product::factory()->create();
-        
+
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ])->json('GET', "/api/v1/wishlist/check/{$product->id}");
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -202,25 +202,25 @@ class WishlistTest extends TestCase
     public function test_duplicate_product_in_wishlist(): void
     {
         $product = Product::factory()->create();
-        
+
         // Add product to wishlist first time
         $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ])->json('POST', '/api/v1/wishlist', [
             'product_id' => $product->id,
             'quantity' => 1,
         ]);
-        
+
         // Try to add same product again
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ])->json('POST', '/api/v1/wishlist', [
             'product_id' => $product->id,
             'quantity' => 1,
         ]);
-        
+
         $response->assertStatus(400);
         $response->assertJson([
             'success' => false,

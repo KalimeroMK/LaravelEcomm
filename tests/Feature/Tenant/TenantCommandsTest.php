@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Tenant;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Modules\Tenant\Models\Tenant;
 use Tests\TestCase;
@@ -17,7 +16,7 @@ class TenantCommandsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Set up owner connection for testing
         config(['database.connections.owner' => config('database.connections.mysql')]);
         config(['database.connections.tenant' => config('database.connections.mysql')]);
@@ -39,10 +38,10 @@ class TenantCommandsTest extends TestCase
         DB::shouldReceive('connection')
             ->with('owner')
             ->andReturnSelf();
-        
+
         DB::shouldReceive('select')
             ->andReturn([]); // No existing database
-        
+
         DB::shouldReceive('statement')
             ->with('CREATE DATABASE `test_tenant_db`')
             ->andReturn(true);

@@ -35,8 +35,8 @@ class ProductSearchAction
             $products = Cache::remember($productsCacheKey, 900, function () use ($searchTerm, $perPage) {
                 return Product::where('status', 'active')
                     ->where(function ($query) use ($searchTerm) {
-                        $query->where('title', 'like', '%' . $searchTerm . '%')
-                              ->orWhere('description', 'like', '%' . $searchTerm . '%');
+                        $query->where('title', 'like', '%'.$searchTerm.'%')
+                            ->orWhere('description', 'like', '%'.$searchTerm.'%');
                     })
                     ->orderBy('id', 'desc')
                     ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
@@ -47,7 +47,7 @@ class ProductSearchAction
             $brandsCacheKey = 'search_brands_'.md5($searchTerm);
             $brands = Cache::remember($brandsCacheKey, 1800, function () use ($searchTerm) {
                 return Brand::where('status', 'active')
-                    ->where('title', 'like', '%' . $searchTerm . '%')
+                    ->where('title', 'like', '%'.$searchTerm.'%')
                     ->orderBy('title')
                     ->get();
             });

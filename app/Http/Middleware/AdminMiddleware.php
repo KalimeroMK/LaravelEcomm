@@ -14,18 +14,18 @@ class AdminMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
         $user = Auth::user();
-        
+
         // Check if user has admin or super-admin role
-        if (!$user->hasAnyRole(['admin', 'super-admin'])) {
+        if (! $user->hasAnyRole(['admin', 'super-admin'])) {
             abort(403, 'Unauthorized - Admin access required');
         }
 

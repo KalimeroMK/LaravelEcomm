@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Modules\Billing\Http\Controllers\Api\StripeController;
 use Modules\Billing\Http\Controllers\Api\WishlistController;
 
 /*

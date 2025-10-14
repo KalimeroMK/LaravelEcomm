@@ -17,38 +17,39 @@ use Tests\TestCase;
 class NewsletterTest extends TestCase
 {
     use AuthenticatedBaseTestTrait;
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     public string $url = '/api/v1/newsletters';
-    
+
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user with permissions
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        
+
         // Create and assign newsletter permissions
         $permissions = [
             'newsletter-list',
-            'newsletter-create', 
+            'newsletter-create',
             'newsletter-update',
             'newsletter-delete',
-            'newsletter-show'
+            'newsletter-show',
         ];
-        
+
         foreach ($permissions as $permission) {
             $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
             $adminRole->givePermissionTo($perm);
         }
-        
+
         $this->user->assignRole($adminRole);
-        
+
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 

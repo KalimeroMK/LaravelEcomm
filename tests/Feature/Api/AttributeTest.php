@@ -15,37 +15,38 @@ use Tests\TestCase;
 class AttributeTest extends TestCase
 {
     use AuthenticatedBaseTestTrait;
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     public string $url = '/api/v1/attributes/';
-    
+
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user with permissions
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        
+
         // Create and assign attribute permissions
         $permissions = [
             'attribute-list',
-            'attribute-create', 
+            'attribute-create',
             'attribute-update',
-            'attribute-delete'
+            'attribute-delete',
         ];
-        
+
         foreach ($permissions as $permission) {
             $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
             $adminRole->givePermissionTo($perm);
         }
-        
+
         $this->user->assignRole($adminRole);
-        
+
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 

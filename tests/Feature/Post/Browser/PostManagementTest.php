@@ -5,9 +5,8 @@ declare(strict_types=1);
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Post\Models\Category;
 use Modules\Post\Models\Post;
-use Modules\User\Models\User;
 
-require_once __DIR__ . '/../../../TestHelpers.php';
+require_once __DIR__.'/../../../TestHelpers.php';
 
 uses(RefreshDatabase::class);
 

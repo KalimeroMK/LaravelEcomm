@@ -6,18 +6,17 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Testing\TestResponse;
-use Modules\Product\Models\Product;
-use Modules\Category\Models\Category;
 use Modules\Brand\Models\Brand;
+use Modules\Category\Models\Category;
 use Modules\Post\Models\Post;
+use Modules\Product\Models\Product;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class FrontTest extends TestCase
 {
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     /**
      * test front homepage.
@@ -26,7 +25,7 @@ class FrontTest extends TestCase
     public function test_front_homepage(): void
     {
         $response = $this->json('GET', '/api/v1/');
-        
+
         $response->assertStatus(200);
     }
 
@@ -39,9 +38,9 @@ class FrontTest extends TestCase
         $product = Product::factory()->create([
             'status' => 'active',
         ]);
-        
+
         $response = $this->json('GET', "/api/v1/product-detail/{$product->slug}");
-        
+
         $response->assertStatus(200);
     }
 
@@ -55,11 +54,11 @@ class FrontTest extends TestCase
             'title' => 'Test Product',
             'status' => 'active',
         ]);
-        
+
         $response = $this->json('POST', '/api/v1/product/search', [
             'search' => 'Test',
         ]);
-        
+
         $response->assertStatus(200);
     }
 
@@ -72,15 +71,15 @@ class FrontTest extends TestCase
         $category = Category::factory()->create([
             'status' => 'active',
         ]);
-        
+
         $product = Product::factory()->create([
             'status' => 'active',
         ]);
-        
+
         $product->categories()->attach($category->id);
-        
+
         $response = $this->json('GET', "/api/v1/product-cat/{$category->slug}");
-        
+
         $response->assertStatus(200);
     }
 
@@ -93,14 +92,14 @@ class FrontTest extends TestCase
         $brand = Brand::factory()->create([
             'status' => 'active',
         ]);
-        
+
         $product = Product::factory()->create([
             'status' => 'active',
             'brand_id' => $brand->id,
         ]);
-        
+
         $response = $this->json('GET', "/api/v1/product-brand/{$brand->slug}");
-        
+
         $response->assertStatus(200);
     }
 
@@ -111,7 +110,7 @@ class FrontTest extends TestCase
     public function test_blog(): void
     {
         $response = $this->json('GET', '/api/v1/blog');
-        
+
         $response->assertStatus(200);
     }
 
@@ -124,9 +123,9 @@ class FrontTest extends TestCase
         $post = Post::factory()->create([
             'status' => 'active',
         ]);
-        
+
         $response = $this->json('GET', "/api/v1/blog-detail/{$post->slug}");
-        
+
         $response->assertStatus(200);
     }
 
@@ -140,11 +139,11 @@ class FrontTest extends TestCase
             'title' => 'Test Post',
             'status' => 'active',
         ]);
-        
+
         $response = $this->json('GET', '/api/v1/blog/search', [
             'search' => 'Test',
         ]);
-        
+
         $response->assertStatus(200);
     }
 
@@ -157,9 +156,9 @@ class FrontTest extends TestCase
         $category = Category::factory()->create([
             'status' => 'active',
         ]);
-        
+
         $response = $this->json('GET', "/api/v1/blog-cat/{$category->slug}");
-        
+
         $response->assertStatus(200);
     }
 
@@ -172,9 +171,9 @@ class FrontTest extends TestCase
         $tag = \Modules\Tag\Models\Tag::factory()->create([
             'status' => 'active',
         ]);
-        
+
         $response = $this->json('GET', "/api/v1/blog-tag/{$tag->slug}");
-        
+
         $response->assertStatus(200);
     }
 
@@ -185,7 +184,7 @@ class FrontTest extends TestCase
     public function test_product_deal(): void
     {
         $response = $this->json('GET', '/api/v1/product/deal');
-        
+
         $response->assertStatus(200);
     }
 }

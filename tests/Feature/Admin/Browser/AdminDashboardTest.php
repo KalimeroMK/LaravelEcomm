@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\User\Models\User;
 
-require_once __DIR__ . '/../../../TestHelpers.php';
+require_once __DIR__.'/../../../TestHelpers.php';
 
 uses(RefreshDatabase::class);
 
@@ -56,7 +56,7 @@ test('admin user can access admin routes', function () {
 
 test('non-admin user cannot access admin routes', function () {
     $regularUser = User::factory()->create();
-    
+
     $response = $this->actingAs($regularUser)
         ->get('/admin');
 

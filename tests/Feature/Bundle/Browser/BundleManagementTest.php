@@ -7,9 +7,8 @@ use Modules\Brand\Models\Brand;
 use Modules\Bundle\Models\Bundle;
 use Modules\Category\Models\Category;
 use Modules\Product\Models\Product;
-use Modules\User\Models\User;
 
-require_once __DIR__ . '/../../../TestHelpers.php';
+require_once __DIR__.'/../../../TestHelpers.php';
 
 uses(RefreshDatabase::class);
 

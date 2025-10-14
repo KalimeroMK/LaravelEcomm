@@ -41,7 +41,7 @@ class TenantService extends CoreService
     public function update(int $id, array $data): bool
     {
         $tenant = Tenant::find($id);
-        if (!$tenant) {
+        if (! $tenant) {
             return false;
         }
 
@@ -54,7 +54,7 @@ class TenantService extends CoreService
     public function delete(int $id): bool
     {
         $tenant = Tenant::find($id);
-        if (!$tenant) {
+        if (! $tenant) {
             return false;
         }
 

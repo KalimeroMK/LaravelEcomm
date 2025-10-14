@@ -8,14 +8,6 @@ use Illuminate\Testing\TestResponse;
 
 trait AuthenticatedBaseTestTrait
 {
-    protected function getAuthHeaders(): array
-    {
-        return [
-            'Authorization' => 'Bearer ' . $this->token,
-            'Accept' => 'application/json',
-        ];
-    }
-
     public function list(string $url): TestResponse
     {
         $response = $this->withHeaders($this->getAuthHeaders())->json('GET', $url);
@@ -69,5 +61,13 @@ trait AuthenticatedBaseTestTrait
         $response = $this->withHeaders($this->getAuthHeaders())->json('DELETE', $uri);
 
         return $response->assertStatus(200); // No Content
+    }
+
+    protected function getAuthHeaders(): array
+    {
+        return [
+            'Authorization' => 'Bearer '.$this->token,
+            'Accept' => 'application/json',
+        ];
     }
 }

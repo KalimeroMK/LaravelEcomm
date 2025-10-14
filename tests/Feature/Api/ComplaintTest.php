@@ -17,37 +17,38 @@ use Tests\TestCase;
 class ComplaintTest extends TestCase
 {
     use AuthenticatedBaseTestTrait;
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     public string $url = '/api/v1/complaints';
-    
+
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user with permissions
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        
+
         // Create and assign complaint permissions
         $permissions = [
             'complaint-list',
-            'complaint-create', 
+            'complaint-create',
             'complaint-edit',
-            'complaint-delete'
+            'complaint-delete',
         ];
-        
+
         foreach ($permissions as $permission) {
             $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
             $adminRole->givePermissionTo($perm);
         }
-        
+
         $this->user->assignRole($adminRole);
-        
+
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 
@@ -58,10 +59,10 @@ class ComplaintTest extends TestCase
     public function test_create_complaint(): TestResponse
     {
         $order = Order::factory()->create(['user_id' => $this->user->id]);
-        
+
         $data = [
             'order_id' => $order->id,
-            'subject' => 'Test Complaint ' . time(),
+            'subject' => 'Test Complaint '.time(),
             'description' => 'This is a test complaint description',
             'status' => 'pending',
         ];
@@ -93,7 +94,7 @@ class ComplaintTest extends TestCase
         $order1 = Order::factory()->create(['user_id' => $this->user->id]);
         $order2 = Order::factory()->create(['user_id' => $this->user->id]);
         $order3 = Order::factory()->create(['user_id' => $this->user->id]);
-        
+
         Complaint::factory()->create([
             'order_id' => $order1->id,
             'user_id' => $this->user->id,
@@ -117,9 +118,9 @@ class ComplaintTest extends TestCase
     public function test_create_complaint_with_order(): void
     {
         $order = Order::factory()->create(['user_id' => $this->user->id]);
-        
+
         $response = $this->withHeaders($this->getAuthHeaders())->json('GET', "/api/v1/complaints/create/{$order->id}");
-        
+
         $response->assertStatus(200);
     }
 
@@ -128,7 +129,7 @@ class ComplaintTest extends TestCase
     {
         $order1 = Order::factory()->create(['user_id' => $this->user->id]);
         $order2 = Order::factory()->create(['user_id' => $this->user->id]);
-        
+
         Complaint::factory()->create([
             'order_id' => $order1->id,
             'user_id' => $this->user->id,
@@ -137,7 +138,7 @@ class ComplaintTest extends TestCase
             'order_id' => $order2->id,
             'user_id' => $this->user->id,
         ]);
-        
+
         $response = $this->withHeaders($this->getAuthHeaders())->json('GET', '/api/v1/complaints');
         $response->assertStatus(200);
 

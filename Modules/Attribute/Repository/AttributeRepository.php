@@ -23,7 +23,7 @@ class AttributeRepository extends EloquentRepository implements SearchInterface
      */
     public function search(array $data): mixed
     {
-        $query = (new $this->modelClass)->newQuery();
+        $query = Attribute::query();
 
         $filterableKeys = ['name', 'code', 'type', 'display'];
 
@@ -50,7 +50,7 @@ class AttributeRepository extends EloquentRepository implements SearchInterface
 
         $query->orderBy($orderBy, $sort);
 
-        $perPage = Arr::get($data, 'per_page', (new $this->modelClass)->getPerPage());
+        $perPage = Arr::get($data, 'per_page', 15);
 
         return $query->paginate($perPage);
     }

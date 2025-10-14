@@ -19,6 +19,7 @@ readonly class CreateAttributeGroupAction
 
     public function execute(AttributeGroupDTO $dto): AttributeGroup
     {
+        /** @var AttributeGroup $group */
         $group = $this->repository->create([
             'name' => $dto->name,
         ]);

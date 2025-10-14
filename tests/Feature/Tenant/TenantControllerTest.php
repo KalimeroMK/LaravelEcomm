@@ -16,10 +16,10 @@ class TenantControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Set up owner connection for testing
         config(['database.connections.owner' => config('database.connections.mysql')]);
-        
+
         // Create admin user for testing
         $this->adminUser = User::factory()->create();
         $this->adminUser->assignRole('admin');
@@ -58,7 +58,7 @@ class TenantControllerTest extends TestCase
             ->post(route('tenant.store'), $tenantData);
 
         $response->assertRedirect(route('banners.index'));
-        
+
         $this->assertDatabaseHas('tenants', [
             'name' => 'Test Tenant',
             'domain' => 'test.example.com',
@@ -102,7 +102,7 @@ class TenantControllerTest extends TestCase
             ->put(route('tenant.update', $tenant), $updateData);
 
         $response->assertRedirect(route('tenant.edit', $tenant));
-        
+
         $this->assertDatabaseHas('tenants', [
             'id' => $tenant->id,
             'name' => 'Updated Tenant',
@@ -124,7 +124,7 @@ class TenantControllerTest extends TestCase
             ->delete(route('tenant.destroy', $tenant));
 
         $response->assertRedirect(route('tenant.index'));
-        
+
         $this->assertDatabaseMissing('tenants', [
             'id' => $tenant->id,
         ]);

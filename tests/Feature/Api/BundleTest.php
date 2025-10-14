@@ -19,38 +19,39 @@ use Tests\TestCase;
 class BundleTest extends TestCase
 {
     use AuthenticatedBaseTestTrait;
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     public string $url = '/api/v1/bundles';
-    
+
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user with permissions
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        
+
         // Create and assign bundle permissions
         $permissions = [
             'bundle-list',
-            'bundle-create', 
+            'bundle-create',
             'bundle-update',
             'bundle-delete',
-            'bundle-show'
+            'bundle-show',
         ];
-        
+
         foreach ($permissions as $permission) {
             $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
             $adminRole->givePermissionTo($perm);
         }
-        
+
         $this->user->assignRole($adminRole);
-        
+
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 

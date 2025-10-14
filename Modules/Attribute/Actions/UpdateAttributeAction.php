@@ -14,7 +14,11 @@ readonly class UpdateAttributeAction
 
     public function execute(AttributeDTO $dto): Model
     {
-        $attribute = $this->repository->findById($dto->id);
+        $attribute = $this->repository->findById($dto->id ?? 0);
+
+        if ($attribute === null) {
+            throw new \InvalidArgumentException('Attribute not found');
+        }
 
         $attribute->update([
             'name' => $dto->name,

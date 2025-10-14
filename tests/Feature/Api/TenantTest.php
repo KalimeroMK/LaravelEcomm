@@ -6,23 +6,23 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Testing\TestResponse;
 use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class TenantTest extends TestCase
 {
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create user for authenticated tests
         $this->user = User::factory()->create();
         $this->token = $this->user->createToken('test-token')->plainTextToken;
@@ -35,7 +35,7 @@ class TenantTest extends TestCase
     public function test_tenant_without_auth(): void
     {
         $response = $this->json('GET', '/api/v1/tenant');
-        
+
         $response->assertStatus(401);
     }
 
@@ -46,10 +46,10 @@ class TenantTest extends TestCase
     public function test_tenant_with_auth(): void
     {
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
             'Accept' => 'application/json',
         ])->json('GET', '/api/v1/tenant');
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'id',

@@ -13,7 +13,7 @@ class ReplyToMessageAction
         return Message::create([
             'name' => auth()->user()->name,
             'email' => auth()->user()->email,
-            'subject' => 'Re: ' . $message->subject,
+            'subject' => 'Re: '.$message->subject,
             'message' => $replyData['message'],
             'parent_id' => $message->id,
             'is_read' => true,

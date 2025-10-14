@@ -29,6 +29,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use jeremykenedy\LaravelLogger\App\Http\Middleware\LogActivity;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Modules\Core\Http\Middleware\ApiCacheMiddleware;
 use Modules\Google2fa\Http\Middleware\Google2faMiddleware;
 use Spatie\CookieConsent\CookieConsentMiddleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;
@@ -81,6 +82,7 @@ class Kernel extends HttpKernel
                 EnsureFrontendRequestsAreStateful::class,
                 'throttle:60,1',
                 SubstituteBindings::class,
+                ApiCacheMiddleware::class,
             ],
         ];
 
@@ -108,8 +110,9 @@ class Kernel extends HttpKernel
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             '2fa' => Google2faMiddleware::class,
             'activity' => LogActivity::class,
+            'api.cache' => ApiCacheMiddleware::class,
             'rate.limit' => \Modules\Core\Http\Middleware\CustomRateLimiter::class,
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'admin' => Middleware\AdminMiddleware::class,
 
         ];
 }

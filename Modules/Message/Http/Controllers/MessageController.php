@@ -20,9 +20,13 @@ use Modules\Message\Models\Message;
 class MessageController extends CoreController
 {
     private GetAllMessagesAction $getAllAction;
+
     private DeleteMessageAction $deleteAction;
+
     private MarkAsReadAction $markAsReadAction;
+
     private ReplyToMessageAction $replyAction;
+
     private MarkMultipleAsReadAction $markMultipleAsReadAction;
 
     public function __construct(
@@ -56,6 +60,7 @@ class MessageController extends CoreController
     public function show(Message $message): Factory|View|Application
     {
         $this->authorize('view', $message);
+
         return view('message::show', ['message' => $message]);
     }
 

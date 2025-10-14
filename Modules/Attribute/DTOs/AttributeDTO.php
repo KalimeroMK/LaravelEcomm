@@ -24,11 +24,11 @@ readonly class AttributeDTO
 
     public static function fromRequest(Request $request, ?int $id = null, ?Attribute $existing = null): self
     {
-        $data = $request->validated();
+        $data = $request->all();
 
         return new self(
             $id,
-            $data['name'] ?? $existing?->name,
+            $data['name'] ?? $existing?->name ?? '',
             $data['code'] ?? $existing?->code,
             $data['type'] ?? $existing?->type,
             $data['display'] ?? $existing?->display,

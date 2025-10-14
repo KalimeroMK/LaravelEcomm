@@ -18,7 +18,7 @@ class TenantServiceProviderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Set up owner connection for testing
         config(['database.connections.owner' => config('database.connections.mysql')]);
     }
@@ -27,10 +27,10 @@ class TenantServiceProviderTest extends TestCase
     public function it_registers_tenant_service_provider_when_enabled()
     {
         Config::set('tenant.multi_tenant.enabled', true);
-        
+
         $provider = new TenantServiceProvider($this->app);
         $provider->register();
-        
+
         $this->assertTrue($this->app->bound('tenant'));
     }
 
@@ -38,10 +38,10 @@ class TenantServiceProviderTest extends TestCase
     public function it_does_not_register_when_disabled()
     {
         Config::set('tenant.multi_tenant.enabled', false);
-        
+
         $provider = new TenantServiceProvider($this->app);
         $provider->register();
-        
+
         $this->assertFalse($this->app->bound('tenant'));
     }
 
@@ -49,7 +49,7 @@ class TenantServiceProviderTest extends TestCase
     public function it_configures_tenant_based_on_domain()
     {
         Config::set('tenant.multi_tenant.enabled', true);
-        
+
         // Create a tenant
         $tenant = Tenant::create([
             'name' => 'Test Tenant',
@@ -78,7 +78,7 @@ class TenantServiceProviderTest extends TestCase
     public function it_handles_tenant_not_found_gracefully()
     {
         Config::set('tenant.multi_tenant.enabled', true);
-        
+
         // Mock request with non-existent domain
         $this->app['request'] = $this->app['request']->duplicate(
             null,
@@ -90,7 +90,7 @@ class TenantServiceProviderTest extends TestCase
         );
 
         $provider = new TenantServiceProvider($this->app);
-        
+
         $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         $provider->boot();
     }
@@ -99,10 +99,10 @@ class TenantServiceProviderTest extends TestCase
     public function it_skips_tenant_configuration_in_console()
     {
         Config::set('tenant.multi_tenant.enabled', true);
-        
+
         // Mock console environment
         $this->app->shouldReceive('runningInConsole')->andReturn(true);
-        
+
         $provider = new TenantServiceProvider($this->app);
         $provider->boot();
 
@@ -114,7 +114,7 @@ class TenantServiceProviderTest extends TestCase
     public function it_registers_tenant_commands_when_enabled()
     {
         Config::set('tenant.multi_tenant.enabled', true);
-        
+
         $provider = new TenantServiceProvider($this->app);
         $provider->boot();
 
@@ -128,7 +128,7 @@ class TenantServiceProviderTest extends TestCase
     public function it_does_not_register_commands_when_disabled()
     {
         Config::set('tenant.multi_tenant.enabled', false);
-        
+
         $provider = new TenantServiceProvider($this->app);
         $provider->boot();
 
@@ -142,7 +142,7 @@ class TenantServiceProviderTest extends TestCase
     public function it_configures_queue_for_tenant_awareness()
     {
         Config::set('tenant.multi_tenant.enabled', true);
-        
+
         $tenant = Tenant::create([
             'name' => 'Test Tenant',
             'domain' => 'test.example.com',
@@ -150,7 +150,7 @@ class TenantServiceProviderTest extends TestCase
         ]);
 
         $this->app->instance('tenant', $tenant);
-        
+
         $provider = new TenantServiceProvider($this->app);
         $provider->boot();
 
@@ -167,7 +167,7 @@ class TenantServiceProviderTest extends TestCase
     public function it_handles_queue_without_tenant()
     {
         Config::set('tenant.multi_tenant.enabled', true);
-        
+
         $provider = new TenantServiceProvider($this->app);
         $provider->boot();
 

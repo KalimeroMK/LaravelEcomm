@@ -12,6 +12,7 @@ class AttributeRequest extends BaseRequest
     /**
      * Get the validation rules that apply to the request.
      */
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         $attributeId = $this->route('attribute') ?? $this->route('id');
@@ -415,6 +416,7 @@ class AttributeRequest extends BaseRequest
     /**
      * Get custom messages for validator errors.
      */
+    /** @return array<string, mixed> */
     public function messages(): array
     {
         return array_merge(parent::messages(), [
@@ -482,7 +484,7 @@ class AttributeRequest extends BaseRequest
     /**
      * Additional validation rules.
      */
-    protected function additionalValidation($validator): void
+    protected function additionalValidation(\Illuminate\Contracts\Validation\Validator $validator): void
     {
         $validator->after(function ($validator): void {
             // Validate name length
@@ -802,7 +804,7 @@ class AttributeRequest extends BaseRequest
             }
 
             // Validate locale
-            if ($this->filled('locale') && mb_strlen($this->locale) > 10) {
+            if ($this->filled('locale') && $this->locale && mb_strlen($this->locale) > 10) {
                 $validator->errors()->add(
                     'locale',
                     'Locale must not exceed 10 characters.'

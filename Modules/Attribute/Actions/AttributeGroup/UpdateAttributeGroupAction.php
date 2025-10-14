@@ -19,7 +19,12 @@ readonly class UpdateAttributeGroupAction
 
     public function execute(AttributeGroupDTO $dto): Model
     {
-        $group = $this->repository->findById($dto->id);
+        $group = $this->repository->findById($dto->id ?? 0);
+
+        if ($group === null) {
+            throw new \InvalidArgumentException('Attribute group not found');
+        }
+
         $group->update([
             'name' => $dto->name,
         ]);

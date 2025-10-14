@@ -19,33 +19,34 @@ class CartTest extends TestCase
     use RefreshDatabase;
 
     public string $url = '/api/v1/carts';
-    
+
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user with permissions
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        
+
         // Create and assign cart permissions
         $permissions = [
             'cart-list',
-            'cart-create', 
+            'cart-create',
             'cart-update',
-            'cart-delete'
+            'cart-delete',
         ];
-        
+
         foreach ($permissions as $permission) {
             $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
             $adminRole->givePermissionTo($perm);
         }
-        
+
         $this->user->assignRole($adminRole);
-        
+
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 
@@ -74,8 +75,8 @@ class CartTest extends TestCase
     {
         $product = Product::factory()->create();
         $id = Cart::factory()->create([
-            'product_id' => $product->id, 
-            'user_id' => $this->user->id // Use the authenticated user
+            'product_id' => $product->id,
+            'user_id' => $this->user->id, // Use the authenticated user
         ])->id;
 
         $data = [
@@ -117,7 +118,7 @@ class CartTest extends TestCase
     public function test_delete_cart(): TestResponse
     {
         $cart = Cart::factory()->create([
-            'user_id' => $this->user->id // Use the authenticated user
+            'user_id' => $this->user->id, // Use the authenticated user
         ]);
         $id = $cart->id;
 

@@ -13,8 +13,6 @@ class Update extends CoreRequest
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
-     *
-     * @throws Exception
      */
     public function rules(): array
     {

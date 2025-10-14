@@ -7,7 +7,7 @@ use Modules\Billing\Models\Invoice;
 use Modules\Billing\Models\Payment;
 use Modules\User\Models\User;
 
-require_once __DIR__ . '/../../../TestHelpers.php';
+require_once __DIR__.'/../../../TestHelpers.php';
 
 uses(RefreshDatabase::class);
 

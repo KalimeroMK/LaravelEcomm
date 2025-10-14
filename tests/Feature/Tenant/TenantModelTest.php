@@ -17,7 +17,7 @@ class TenantModelTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Set up owner connection for testing
         config(['database.connections.owner' => config('database.connections.mysql')]);
         config(['database.connections.tenant' => config('database.connections.mysql')]);

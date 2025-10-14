@@ -17,37 +17,38 @@ use Tests\TestCase;
 class AttributeGroupTest extends TestCase
 {
     use AuthenticatedBaseTestTrait;
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
 
     public string $url = '/api/v1/attribute-groups/';
-    
+
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user with permissions
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        
+
         // Create and assign attribute group permissions
         $permissions = [
             'attribute-group-list',
-            'attribute-group-create', 
+            'attribute-group-create',
             'attribute-group-update',
-            'attribute-group-delete'
+            'attribute-group-delete',
         ];
-        
+
         foreach ($permissions as $permission) {
             $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
             $adminRole->givePermissionTo($perm);
         }
-        
+
         $this->user->assignRole($adminRole);
-        
+
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 

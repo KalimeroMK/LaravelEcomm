@@ -18,33 +18,34 @@ class BrandTest extends TestCase
     use RefreshDatabase;
 
     public string $url = '/api/v1/brands';
-    
+
     private User $user;
+
     private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user with permissions
         $this->user = User::factory()->create();
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
-        
+
         // Create and assign brand permissions
         $permissions = [
             'brand-list',
-            'brand-create', 
+            'brand-create',
             'brand-update',
-            'brand-delete'
+            'brand-delete',
         ];
-        
+
         foreach ($permissions as $permission) {
             $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
             $adminRole->givePermissionTo($perm);
         }
-        
+
         $this->user->assignRole($adminRole);
-        
+
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 

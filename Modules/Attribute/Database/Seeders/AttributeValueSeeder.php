@@ -18,7 +18,10 @@ class AttributeValueSeeder extends Seeder
             'size' => ['M', 'XXL'],       // M is predefined, XXL is custom
         ];
 
-        $product = Product::first() ?? Product::factory()->create();
+        $product = Product::first();
+        if (! $product) {
+            $product = Product::factory()->create();
+        }
 
         foreach ($values as $code => $items) {
             $attribute = Attribute::where('code', $code)->first();

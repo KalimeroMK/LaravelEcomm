@@ -33,7 +33,6 @@ test('products page loads', function () {
     $response->assertStatus(200);
 });
 
-
 test('about page loads', function () {
     $response = $this->get('/about-us');
 
@@ -45,4 +44,3 @@ test('contact page loads', function () {
 
     $response->assertStatus(200);
 });
-

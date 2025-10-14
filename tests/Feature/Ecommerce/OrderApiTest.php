@@ -6,7 +6,6 @@ namespace Tests\Feature\Ecommerce;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Modules\Cart\Models\Cart;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;

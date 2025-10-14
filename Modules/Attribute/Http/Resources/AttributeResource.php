@@ -11,6 +11,7 @@ use Modules\Attribute\Models\Attribute;
 /** @mixin Attribute */
 class AttributeResource extends JsonResource
 {
+    /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
         return [
@@ -25,8 +26,8 @@ class AttributeResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'values_count' => $this->values_count,
-            'filterable' => $this->filterable,
-            'configurable' => $this->configurable,
+            'filterable' => $this->is_filterable,
+            'configurable' => $this->is_configurable,
 
         ];
     }

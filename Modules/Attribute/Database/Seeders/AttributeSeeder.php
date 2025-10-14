@@ -49,7 +49,7 @@ class AttributeSeeder extends Seeder
         }
         // Attach attributes to groups via pivot
         foreach ($createdAttributes as $item) {
-            if ($item['group_id'] && isset($groups[$item['group_id']])) {
+            if ($item['group_id'] !== null && isset($groups[$item['group_id']])) {
                 $groups[$item['group_id']]->attributes()->syncWithoutDetaching([$item['attribute']->id]);
             }
         }

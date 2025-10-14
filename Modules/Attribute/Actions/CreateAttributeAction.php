@@ -14,7 +14,8 @@ readonly class CreateAttributeAction
 
     public function execute(AttributeDTO $dto): Attribute
     {
-        return $this->repository->create([
+        /** @var Attribute $attribute */
+        $attribute = $this->repository->create([
             'name' => $dto->name,
             'code' => $dto->code,
             'type' => $dto->type,
@@ -23,5 +24,7 @@ readonly class CreateAttributeAction
             'is_configurable' => $dto->is_configurable,
             'is_required' => $dto->is_required,
         ]);
+
+        return $attribute;
     }
 }

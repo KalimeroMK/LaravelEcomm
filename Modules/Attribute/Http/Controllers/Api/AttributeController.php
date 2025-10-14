@@ -74,7 +74,7 @@ class AttributeController extends CoreController
         $this->authorizeFromRepo(AttributeRepository::class, 'update', $id);
 
         $existing = $this->repository->findById($id);
-        $dto = AttributeDTO::fromRequest($request, $id, $existing);
+        $dto = AttributeDTO::fromRequest($request, $id, $existing instanceof Attribute ? $existing : null);
 
         $attribute = $this->updateAction->execute($dto);
 
