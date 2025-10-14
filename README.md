@@ -4,25 +4,25 @@
 
 ## 📋 Table of Contents
 
-- [🚀 Features](#-features)
-  - [Frontend](#frontend)
-  - [Admin Dashboard](#admin-dashboard)
-  - [User Dashboard](#user-dashboard)
-  - [Security & Performance](#security--performance)
-  - [AI & Automation](#ai--automation)
-- [🆕 Recent Enhancements](#-recent-enhancements)
-- [📸 Screenshots](#-screenshots)
-- [🚀 Installation & Setup](#-installation--setup)
-- [🐳 Docker Setup](#-docker-setup)
-- [🛠️ Management Commands](#️-management-commands)
-- [🏢 Multi-Tenant Functionality](#-multi-tenant-functionality)
-- [🤖 OpenAI Integration](#-openai-integration)
-- [📚 Documentation & Guides](#-documentation--guides)
-- [🎯 Getting Started](#-getting-started)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+-   [🚀 Features](#features)
+    -   [Frontend](#frontend)
+    -   [Admin Dashboard](#admin-dashboard)
+    -   [User Dashboard](#user-dashboard)
+    -   [Security & Performance](#security--performance)
+    -   [AI & Automation](#ai--automation)
+-   [🆕 Recent Enhancements](#recent-enhancements)
+-   [📸 Screenshots](#screenshots)
+-   [🚀 Installation & Setup](#installation--setup)
+-   [🐳 Docker Setup](#docker-setup)
+-   [🛠️ Management Commands](#management-commands)
+-   [🏢 Multi-Tenant Functionality](#multi-tenant-functionality)
+-   [🤖 OpenAI Integration](#openai-integration)
+-   [📚 Documentation & Guides](#documentation--guides)
+-   [🎯 Getting Started](#getting-started)
+-   [🤝 Contributing](#contributing)
+-   [📄 License](#license)
 
-## 🚀 Features :
+## Features
 
 ### Frontend
 
@@ -152,7 +152,7 @@
     -   A/B testing capabilities
     -   Performance monitoring
 
-## 🆕 Recent Enhancements (Latest Update)
+## Recent Enhancements
 
 ### Email Marketing & Automation
 
@@ -185,7 +185,7 @@
 -   **Service Architecture**: Better separation of concerns and modularity
 -   **Performance Monitoring**: Real-time performance tracking and optimization
 
-## 📸 Screenshots :
+## Screenshots
 
 ![screencapture-e-shop-loc-admin-2020-08-15-15_47_37](https://user-images.githubusercontent.com/29488275/90719413-13b82200-e2d4-11ea-8ca0-f0e5551c4c9d.png)
 
@@ -207,7 +207,7 @@
 
 ![screencapture-e-shop-loc-product-track-2020-08-14-18_51_07](https://user-images.githubusercontent.com/29488275/90719682-bbcdeb00-e2d4-11ea-8e4e-7d6bfab1c421.png)
 
-## 🚀 Installation & Setup :
+## Installation & Setup
 
 ### Quick Start
 
@@ -266,7 +266,7 @@ php artisan seo:generate-sitemap
 # Analytics dashboard available at /admin/analytics
 ```
 
-### 🐳 Docker Setup
+## Docker Setup
 
 #### Prerequisites
 
@@ -303,7 +303,7 @@ php artisan seo:generate-sitemap
 -   **Redis**: 6379 → 6379
 -   **Elasticsearch**: 9200 → 9200
 
-### 🛠️ Management Commands
+## Management Commands
 
 #### User Management
 
@@ -331,7 +331,7 @@ php artisan seo:generate-sitemap
 -   **Seed database**: `php artisan db:seed`
 -   **Clear and rebuild cache**: `php artisan cache:clear && php artisan config:cache`
 
-### Multi-Tenant Functionality
+## Multi-Tenant Functionality
 
 This Laravel ecommerce application includes comprehensive multi-tenancy support, allowing you to run multiple independent instances of the application with separate databases for each tenant.
 
@@ -472,7 +472,7 @@ The tenant system supports extensive configuration through `config/tenant.php`:
 -   Security settings
 -   Middleware configuration
 
-### OpenAI Integration
+## OpenAI Integration
 
 To enable and configure the OpenAI functionality in your application, follow these steps:
 
@@ -487,7 +487,7 @@ To enable and configure the OpenAI functionality in your application, follow the
 
 Generate description button will SHOW in product CRUD page.
 
-### Documentation & Guides
+## Documentation & Guides
 
 ### Available Documentation
 
@@ -510,7 +510,7 @@ Generate description button will SHOW in product CRUD page.
 -   ✅ **Performance Optimization**: Caching, compression, and optimization middleware
 -   ✅ **Test Coverage**: 100% passing test suite with comprehensive coverage
 
-### Getting Started
+## Getting Started
 
 1. **Follow the installation steps** above
 2. **Configure your email settings** for marketing features
@@ -518,11 +518,11 @@ Generate description button will SHOW in product CRUD page.
 4. **Access the analytics dashboard** at `/admin/analytics`
 5. **Run the console commands** to set up automated features
 
-### Contributing
+## Contributing
 
 We welcome contributions! Please feel free to submit issues and enhancement requests.
 
-### License
+## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
