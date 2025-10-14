@@ -2,9 +2,29 @@
 
 ### Demo page: https://e-comm.mk
 
+## 📋 Table of Contents
+
+- [🚀 Features](#-features)
+  - [Frontend](#frontend)
+  - [Admin Dashboard](#admin-dashboard)
+  - [User Dashboard](#user-dashboard)
+  - [Security & Performance](#security--performance)
+  - [AI & Automation](#ai--automation)
+- [🆕 Recent Enhancements](#-recent-enhancements)
+- [📸 Screenshots](#-screenshots)
+- [🚀 Installation & Setup](#-installation--setup)
+- [🐳 Docker Setup](#-docker-setup)
+- [🛠️ Management Commands](#️-management-commands)
+- [🏢 Multi-Tenant Functionality](#-multi-tenant-functionality)
+- [🤖 OpenAI Integration](#-openai-integration)
+- [📚 Documentation & Guides](#-documentation--guides)
+- [🎯 Getting Started](#-getting-started)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+
 ## 🚀 Features :
 
-====== FRONT-END =======
+### Frontend
 
 -   **Responsive Layout** with modern UI/UX design
 -   **Advanced Search** with Elasticsearch integration
@@ -39,7 +59,7 @@
 -   **User Behavior Tracking** and analytics
 -   **Performance Monitoring** and optimization
 
-======= ADMIN DASHBOARD =======
+### Admin Dashboard
 
 -   **Advanced Analytics Dashboard**:
     -   Interactive charts and graphs (Chart.js)
@@ -88,7 +108,7 @@
     -   Profile settings and preferences
     -   Multi-tenant support
 
-======= USER DASHBOARD =======
+### User Dashboard
 
 -   **Order Management**: Track orders, view order history, download invoices
 -   **Review & Rating Management**: Manage product reviews and ratings
@@ -98,7 +118,7 @@
 -   **Address Book**: Manage shipping and billing addresses
 -   **Account Security**: Password management and security settings
 
-======= SECURITY & PERFORMANCE =======
+### Security & Performance
 
 -   **Security Features**:
     -   Google 2FA (Two-Factor Authentication)
@@ -114,7 +134,7 @@
     -   Gzip compression
     -   Browser caching headers
 
-======= AI & AUTOMATION =======
+### AI & Automation
 
 -   **OpenAI Integration**:
     -   AI-powered product description generation
@@ -452,7 +472,7 @@ The tenant system supports extensive configuration through `config/tenant.php`:
 -   Security settings
 -   Middleware configuration
 
-### Enabling OpenAI Functionality
+### OpenAI Integration
 
 To enable and configure the OpenAI functionality in your application, follow these steps:
 
@@ -467,7 +487,7 @@ To enable and configure the OpenAI functionality in your application, follow the
 
 Generate description button will SHOW in product CRUD page.
 
-## 📚 Documentation & Guides
+### Documentation & Guides
 
 ### Available Documentation
 
@@ -490,7 +510,7 @@ Generate description button will SHOW in product CRUD page.
 -   ✅ **Performance Optimization**: Caching, compression, and optimization middleware
 -   ✅ **Test Coverage**: 100% passing test suite with comprehensive coverage
 
-## 🎯 Getting Started
+### Getting Started
 
 1. **Follow the installation steps** above
 2. **Configure your email settings** for marketing features
@@ -498,11 +518,11 @@ Generate description button will SHOW in product CRUD page.
 4. **Access the analytics dashboard** at `/admin/analytics`
 5. **Run the console commands** to set up automated features
 
-## 🤝 Contributing
+### Contributing
 
 We welcome contributions! Please feel free to submit issues and enhancement requests.
 
-## 📄 License
+### License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
