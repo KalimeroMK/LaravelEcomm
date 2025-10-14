@@ -78,6 +78,7 @@ class Setting extends Core implements HasMedia
             'phone',
             'email',
             'site-name',
+            'active_template',
             'fb_app_id',
             'keywords',
             'google-site-verification',

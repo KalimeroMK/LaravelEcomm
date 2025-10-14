@@ -18,6 +18,7 @@ class Update extends FormRequest
             'address' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|string',
+            'active_template' => 'required|string|in:default,modern',
             'latitude' => 'nullable|numeric|between:-90,90|required_with:longitude',
             'longitude' => 'nullable|numeric|between:-180,180|required_with:latitude',
             'google_map_api_key' => 'nullable|string',

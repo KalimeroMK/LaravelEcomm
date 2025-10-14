@@ -42,11 +42,13 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(RTLServiceProvider::class);
         
-        // Register Cache Service
-        $this->app->singleton(CacheService::class);
+        // Register Cache Service only if Redis is available
+        if (config('cache.default') === 'redis' && config('database.redis.default.host')) {
+            $this->app->singleton(CacheService::class);
+        }
         
         $this->app->singleton('settings', function () {
-            return Setting::get();
+            return Setting::first();
         });
     }
 

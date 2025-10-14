@@ -32,6 +32,21 @@
                value="{{ $settings['address'] ?? null }}"
                class="form-control">
     </div>
+    
+    <!-- Template Selection -->
+    <div class="form-group">
+        <label for="active_template" class="col-form-label">Active Template <span class="text-danger">*</span></label>
+        <select id="active_template" name="active_template" class="form-control">
+            <option value="default" {{ ($settings['active_template'] ?? 'default') == 'default' ? 'selected' : '' }}>
+                Default Theme
+            </option>
+            <option value="modern" {{ ($settings['active_template'] ?? 'default') == 'modern' ? 'selected' : '' }}>
+                Modern Theme (Coming Soon)
+            </option>
+        </select>
+        <small class="form-text text-muted">Choose the active theme for your website.</small>
+    </div>
+    
     <div class="form-group">
        <textarea class="form-control" id="description"
                  name="description">{{ $settings['description'] ?? null }}</textarea>

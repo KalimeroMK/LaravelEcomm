@@ -12,6 +12,7 @@ use Modules\Front\Http\ViewComposers\MaxViewComposer;
 use Modules\Front\Http\ViewComposers\MenuViewComposer;
 use Modules\Front\Http\ViewComposers\SchemaOrgViewComposer;
 use Modules\Front\Http\ViewComposers\SettingsViewComposer;
+use Modules\Front\Http\ViewComposers\ThemeViewComposer;
 
 class FrontServiceProvider extends ServiceProvider
 {
@@ -48,6 +49,7 @@ class FrontServiceProvider extends ServiceProvider
         );
         View::composer('front::layouts.master', SchemaOrgViewComposer::class);
         View::composer('front::layouts.footer', InformationViewComposer::class);
+        View::composer('*', ThemeViewComposer::class);
     }
 
     /**
@@ -77,7 +79,24 @@ class FrontServiceProvider extends ServiceProvider
             $sourcePath => $viewPath,
         ], ['views', $this->moduleNameLower.'-module-views']);
 
-        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
+        // Register theme-specific views
+        $activeTheme = $this->getActiveTheme();
+        $themePath = $sourcePath . '/themes/' . $activeTheme;
+        
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$themePath]), $this->moduleNameLower);
+    }
+
+    /**
+     * Get the active theme from settings.
+     */
+    private function getActiveTheme(): string
+    {
+        try {
+            $setting = \Modules\Settings\Models\Setting::first();
+            return $setting->active_template ?? 'default';
+        } catch (\Exception $e) {
+            return 'default';
+        }
     }
 
     /**
@@ -86,6 +105,12 @@ class FrontServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->register(RouteServiceProvider::class);
+        
+        // Load theme helpers
+        $helperPath = base_path("Modules/Front/Helpers/theme.php");
+        if (file_exists($helperPath)) {
+            require_once $helperPath;
+        }
     }
 
     /**
@@ -120,7 +145,7 @@ class FrontServiceProvider extends ServiceProvider
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (Config::get('view.paths') as $path) {
+        foreach (config('view.paths') as $path) {
             if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }
