@@ -14,26 +14,26 @@ class OrderPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('order-list');
+        return true; // Any authenticated user can view their own orders
     }
 
     public function view(User $user, Order $order): bool
     {
-        return $user->can('order-list');
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $order->user_id;
     }
 
     public function create(User $user): bool
     {
-        return $user->can('order-create');
+        return true; // Any authenticated user can create orders
     }
 
     public function update(User $user, Order $order): bool
     {
-        return $user->can('order-list') && $user->id === $order->user_id;
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $order->user_id;
     }
 
     public function delete(User $user, Order $order): bool
     {
-        return $user->can('order-delete') && $user->id === $order->user_id;
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $order->user_id;
     }
 }

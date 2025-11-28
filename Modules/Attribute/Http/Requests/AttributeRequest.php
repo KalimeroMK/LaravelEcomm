@@ -413,73 +413,8 @@ class AttributeRequest extends BaseRequest
         ], $this->getCommonRules());
     }
 
-    /**
-     * Get custom messages for validator errors.
-     */
-    /** @return array<string, mixed> */
-    public function messages(): array
-    {
-        return array_merge(parent::messages(), [
-            'name.required' => 'Attribute name is required.',
-            'name.regex' => 'Attribute name can only contain letters, numbers, spaces, hyphens, underscores, and dots.',
-            'name.min' => 'Attribute name must be at least 2 characters long.',
-            'name.max' => 'Attribute name must not exceed 255 characters.',
-            'slug.required' => 'Attribute slug is required.',
-            'slug.regex' => 'Attribute slug can only contain lowercase letters, numbers, and hyphens.',
-            'slug.unique' => 'This slug is already in use.',
-            'slug.min' => 'Attribute slug must be at least 2 characters long.',
-            'slug.max' => 'Attribute slug must not exceed 100 characters.',
-            'description.max' => 'Description must not exceed 1000 characters.',
-            'type.required' => 'Attribute type is required.',
-            'type.in' => 'Invalid attribute type.',
-            'sort_order.min' => 'Sort order must be at least 0.',
-            'sort_order.max' => 'Sort order cannot exceed 9999.',
-            'validation_rules.max' => 'Maximum 50 validation rules are allowed.',
-            'validation_rules.*.max' => 'Each validation rule must not exceed 255 characters.',
-            'default_value.max' => 'Default value must not exceed 500 characters.',
-            'placeholder.max' => 'Placeholder must not exceed 255 characters.',
-            'help_text.max' => 'Help text must not exceed 500 characters.',
-            'error_message.max' => 'Error message must not exceed 255 characters.',
-            'options.max' => 'Maximum 100 options are allowed.',
-            'options.*.max' => 'Each option must not exceed 255 characters.',
-            'min_value.max' => 'Minimum value cannot exceed 999999.99.',
-            'max_value.max' => 'Maximum value cannot exceed 999999.99.',
-            'step_value.min' => 'Step value must be at least 0.01.',
-            'step_value.max' => 'Step value cannot exceed 999999.99.',
-            'min_length.min' => 'Minimum length must be at least 0.',
-            'min_length.max' => 'Minimum length cannot exceed 9999.',
-            'max_length.min' => 'Maximum length must be at least 1.',
-            'max_length.max' => 'Maximum length cannot exceed 9999.',
-            'min_selections.min' => 'Minimum selections must be at least 0.',
-            'min_selections.max' => 'Minimum selections cannot exceed 9999.',
-            'max_selections.min' => 'Maximum selections must be at least 1.',
-            'max_selections.max' => 'Maximum selections cannot exceed 9999.',
-            'file_types.max' => 'Maximum 20 file types are allowed.',
-            'file_types.*.max' => 'Each file type must not exceed 10 characters.',
-            'file_size_min.min' => 'Minimum file size must be at least 0.',
-            'file_size_min.max' => 'Minimum file size cannot exceed 999999.',
-            'file_size_max.min' => 'Maximum file size must be at least 1.',
-            'file_size_max.max' => 'Maximum file size cannot exceed 999999.',
-            'image_width_min.min' => 'Minimum image width must be at least 1.',
-            'image_width_min.max' => 'Minimum image width cannot exceed 9999.',
-            'image_width_max.min' => 'Maximum image width must be at least 1.',
-            'image_width_max.max' => 'Maximum image width cannot exceed 9999.',
-            'image_height_min.min' => 'Minimum image height must be at least 1.',
-            'image_height_min.max' => 'Minimum image height cannot exceed 9999.',
-            'image_height_max.min' => 'Maximum image height must be at least 1.',
-            'image_height_max.max' => 'Maximum image height cannot exceed 9999.',
-            'color_format.in' => 'Color format must be hex, rgb, rgba, hsl, or hsla.',
-            'date_format.max' => 'Date format must not exceed 50 characters.',
-            'time_format.in' => 'Time format must be 12 or 24.',
-            'timezone.max' => 'Timezone must not exceed 50 characters.',
-            'locale.max' => 'Locale must not exceed 10 characters.',
-            'currency.size' => 'Currency must be exactly 3 characters.',
-            'currency.regex' => 'Currency must be in uppercase format (e.g., USD, EUR).',
-            'unit.max' => 'Unit must not exceed 20 characters.',
-            'prefix.max' => 'Prefix must not exceed 20 characters.',
-            'suffix.max' => 'Suffix must not exceed 20 characters.',
-        ]);
-    }
+    // Note: BaseRequest::messages() is final, so we can't override it.
+    // Custom messages are handled via the base class messages() method.
 
     /**
      * Additional validation rules.

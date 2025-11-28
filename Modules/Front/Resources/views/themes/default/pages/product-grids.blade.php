@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 
 @section('title','E-SHOP || PRODUCT PAGE')
 
@@ -39,7 +39,7 @@
                                                 }}</a>
                                                 <ul>
                                                     @foreach ($category->childrenCategories as $childCategory)
-                                                        @include('front::layouts.child_category', ['child_category' => $childCategory])
+                                                        @include($themePath . '.layouts.child_category', ['child_category' => $childCategory])
                                                     @endforeach
                                                 </ul>
                                             </li>

@@ -14,26 +14,26 @@ class RolePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('role-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user): bool
     {
-        return $user->can('role-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function create(User $user): bool
     {
-        return $user->can('role-create');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Role $role): bool
     {
-        return $user->can('role-update');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function delete(User $user, Role $role): bool
     {
-        return $user->can('role-delete');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 }

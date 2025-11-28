@@ -15,10 +15,13 @@ class Update extends CoreRequest
      */
     public function rules(): array
     {
+        $banner = optional($this->route('banner'))->id;
+
         return [
-            'title' => 'required|string|unique:banners,title|max:50',
+            'title' => 'required|string|unique:banners,title,'.$banner.'|max:50',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'link' => 'nullable|url',
+            'status' => 'nullable|in:active,inactive',
             'active_from' => 'nullable|date',
             'active_to' => 'nullable|date|after_or_equal:active_from',
             'max_clicks' => 'nullable|integer|min:0',

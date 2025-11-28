@@ -79,7 +79,7 @@
                                 <ul class="dropdown-menu">
                                     @if(isset($categories) && $categories->count() > 0)
                                         @foreach($categories->take(10) as $category)
-                                            <li><a href="{{ route('front.product-category', $category->slug) }}">{{ $category->title }}</a></li>
+                                            <li><a href="{{ route('front.product-cat', $category->slug) }}">{{ $category->title }}</a></li>
                                         @endforeach
                                     @else
                                         <li><a href="#">No categories available</a></li>
@@ -108,7 +108,7 @@
 
                             <!-- About -->
                             <li class="{{ request()->routeIs('front.about') ? 'active' : '' }}">
-                                <a href="{{ route('front.about') }}">About</a>
+                                <a href="{{ route('front.about-us') }}">About</a>
                             </li>
 
                             <!-- Contact -->
@@ -146,7 +146,7 @@
                                                 <p class="text-center">Your cart is empty</p>
                                             </div>
                                             <div class="cart-actions">
-                                                <a href="{{ route('front.cart') }}" class="btn btn-primary btn-sm">View Cart</a>
+                                                <a href="{{ route('cart-list') }}" class="btn btn-primary btn-sm">View Cart</a>
                                                 <a href="{{ route('front.checkout') }}" class="btn btn-success btn-sm">Checkout</a>
                                             </div>
                                         </div>

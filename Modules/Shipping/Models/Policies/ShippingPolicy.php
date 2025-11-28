@@ -14,26 +14,26 @@ class ShippingPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('shipping-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user, Shipping $shipping): bool
     {
-        return $user->can('shipping-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function create(User $user): bool
     {
-        return $user->can('shipping-create');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Shipping $shipping): bool
     {
-        return $user->can('shipping-update');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function delete(User $user, Shipping $shipping): bool
     {
-        return $user->can('shipping-delete');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 }

@@ -17,41 +17,38 @@ class AttributeSystemSeeder extends Seeder
         $size = Attribute::where('code', 'size')->first();
         $isNew = Attribute::where('code', 'is_new')->first();
 
+        /** @var Product|null $product */
         $product = Product::first();
-        if (! $product) {
+        if (! $product instanceof Product) {
             $product = Product::factory()->create();
         }
-        $attachIds = [];
-        if ($color) {
-            $attachIds[] = $color->id;
+
+        if (! $product instanceof Product) {
+            return;
         }
-        if ($size) {
-            $attachIds[] = $size->id;
-        }
-        if ($isNew) {
-            $attachIds[] = $isNew->id;
-        }
-        if ($attachIds !== []) {
-            $product->attributes()->attach($attachIds);
-        }
+
+        // Product doesn't have attributes() method, attributes are stored via AttributeValue
+        // So we skip the attach call and just create AttributeValue records below
+
+        $productId = $product->id;
 
         if ($color) {
             AttributeValue::factory()->create([
-                'product_id' => $product->id,
+                'product_id' => $productId,
                 'attribute_id' => $color->id,
                 'text_value' => 'Red',
             ]);
         }
         if ($size) {
             AttributeValue::factory()->create([
-                'product_id' => $product->id,
+                'product_id' => $productId,
                 'attribute_id' => $size->id,
                 'text_value' => 'Large',
             ]);
         }
         if ($isNew) {
             AttributeValue::factory()->create([
-                'product_id' => $product->id,
+                'product_id' => $productId,
                 'attribute_id' => $isNew->id,
                 'boolean_value' => true,
             ]);

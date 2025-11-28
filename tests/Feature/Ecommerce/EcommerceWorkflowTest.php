@@ -15,6 +15,8 @@ use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+require_once __DIR__.'/../../TestHelpers.php';
+
 class EcommerceWorkflowTest extends TestCase
 {
     use RefreshDatabase, WithFaker, WithoutMiddleware;
@@ -33,8 +35,7 @@ class EcommerceWorkflowTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
-        $this->user->assignRole('super-admin');
+        $this->user = createSuperAdminUser();
         $this->actingAs($this->user);
 
         // Create test products

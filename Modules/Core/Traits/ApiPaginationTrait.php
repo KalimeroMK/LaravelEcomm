@@ -27,7 +27,7 @@ trait ApiPaginationTrait
     protected function getPerPage(Request $request, int $defaultPerPage = 15, int $maxPerPage = 100): int
     {
         $perPage = (int) $request->get('per_page', $defaultPerPage);
-        
+
         return max(1, min($perPage, $maxPerPage));
     }
 
@@ -164,10 +164,10 @@ trait ApiPaginationTrait
     {
         $currentPage = $paginator->currentPage();
         $lastPage = $paginator->lastPage();
-        
+
         $start = max(1, $currentPage - $range);
         $end = min($lastPage, $currentPage + $range);
-        
+
         return range($start, $end);
     }
 }

@@ -18,7 +18,7 @@ readonly class CreateBannerAction
             'title' => $dto->title,
             'slug' => $dto->slug,
             'description' => $dto->description,
-            'status' => $dto->status,
+            'status' => $dto->status ?? 'inactive',
             'active_from' => $dto->active_from,
             'active_to' => $dto->active_to,
             'max_clicks' => $dto->max_clicks,

@@ -1,5 +1,5 @@
 @php use Modules\Core\Helpers\Helper; @endphp
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 
 @section('title','E-TECH || Blog Detail page')
 
@@ -131,7 +131,7 @@
                                     <h3 class="comment-title">Comments ({{$post->allComments->count()}})</h3>
                                     <!-- Single Comment -->
 
-                                    @include('front::pages.comment', ['comments' => $post->comments, 'post_id' =>
+                                    @include($themePath . '.pages.comment', ['comments' => $post->comments, 'post_id' =>
                                     $post->id, 'depth' => 3])
                                     <!-- End Single Comment -->
                                 </div>

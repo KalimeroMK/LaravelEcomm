@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Front\Http\ViewComposers;
 
+use Exception;
 use Illuminate\Contracts\View\View;
 use Modules\Settings\Models\Setting;
 
@@ -15,7 +16,7 @@ class ThemeViewComposer
     public function compose(View $view): void
     {
         $activeTheme = $this->getActiveTheme();
-        
+
         $view->with('activeTheme', $activeTheme);
         $view->with('themePath', "front::themes.{$activeTheme}");
         $view->with('themeAsset', function ($path) use ($activeTheme) {
@@ -29,9 +30,10 @@ class ThemeViewComposer
     private function getActiveTheme(): string
     {
         try {
-            $setting = \Modules\Settings\Models\Setting::first();
+            $setting = Setting::first();
+
             return $setting->active_template ?? 'default';
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return 'default';
         }
     }

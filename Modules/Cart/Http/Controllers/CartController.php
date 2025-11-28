@@ -22,6 +22,8 @@ use Modules\Cart\Repository\CartRepository;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Product\Models\Product;
 
+// theme_view() is loaded via composer autoload files
+
 class CartController extends CoreController
 {
     private CreateCartAction $createAction;
@@ -58,6 +60,7 @@ class CartController extends CoreController
                 price: $product->price,
                 session_id: session()->getId(),
                 amount: $product->price,
+                order_id: null,
             );
             $this->createAction->execute($dto);
             session()->flash('success', 'Product successfully added to cart');
@@ -85,9 +88,12 @@ class CartController extends CoreController
                 price: $product->price,
                 session_id: session()->getId(),
                 amount: $product->price * $data['quantity'],
+                order_id: null,
             );
             $this->createAction->execute($dto);
             session()->flash('success', 'Product successfully added to cart');
+
+            return redirect()->back();
         }
         request()->session()->flash('error', 'Pls login first');
 
@@ -97,9 +103,9 @@ class CartController extends CoreController
     /**
      * @throws Exception
      */
-    public function cartDelete(Request $request): RedirectResponse
+    public function cartDelete(int $id): RedirectResponse
     {
-        $this->deleteAction->execute($request->id);
+        $this->deleteAction->execute($id);
 
         return redirect()->back();
     }
@@ -123,6 +129,7 @@ class CartController extends CoreController
                     price: $cart->price,
                     session_id: session()->getId(),
                     amount: $cart->price * $qty,
+                    order_id: $cart->order_id,
                 );
                 $this->updateAction->execute($updateDto);
             }
@@ -143,6 +150,6 @@ class CartController extends CoreController
             return back();
         }
 
-        return view('front::pages.checkout');
+        return view(theme_view('pages.checkout'));
     }
 }

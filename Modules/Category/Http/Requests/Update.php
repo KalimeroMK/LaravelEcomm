@@ -18,7 +18,7 @@ class Update extends CoreRequest
         $category = optional($this->route('category'))->id;
 
         return [
-            'title' => 'required|string|unique:categories,title|max:50',
+            'title' => 'required|string|unique:categories,title,'.$category.'|max:50',
             'parent_id' => 'sometimes|exists:categories,id|not_in:'.$category,
         ];
     }

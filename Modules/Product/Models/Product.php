@@ -167,6 +167,14 @@ class Product extends Core implements HasMedia
         return self::orderBy('created_at', 'desc')->limit(20)->get();
     }
 
+    /**
+     * Get size attribute with fallback to null.
+     */
+    public function getSizeAttribute(): ?string
+    {
+        return $this->attributes['size'] ?? null;
+    }
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);

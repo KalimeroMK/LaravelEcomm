@@ -70,7 +70,10 @@
       "Database\\Factories\\": "database/factories/",
       "Database\\Seeders\\": "database/seeders/",
       "Modules\\": "Modules/"
-    }
+    },
+    "files": [
+      "Modules/Front/Helpers/theme.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

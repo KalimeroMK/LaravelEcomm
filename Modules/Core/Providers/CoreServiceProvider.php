@@ -25,7 +25,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-        
+
         // Register commands
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -41,12 +41,12 @@ class CoreServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(RTLServiceProvider::class);
-        
+
         // Register Cache Service only if Redis is available
         if (config('cache.default') === 'redis' && config('database.redis.default.host')) {
             $this->app->singleton(CacheService::class);
         }
-        
+
         $this->app->singleton('settings', function () {
             return Setting::first();
         });

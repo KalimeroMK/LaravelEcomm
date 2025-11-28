@@ -6,7 +6,6 @@ namespace Modules\Google2fa\Providers;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
-use Modules\Brand\Providers\RouteServiceProvider;
 
 class Google2faServiceProvider extends ServiceProvider
 {

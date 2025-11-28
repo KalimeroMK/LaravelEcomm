@@ -115,7 +115,7 @@
     {{-- Products --}}
     {{-- Bandle --}}
     <li class="nav-item">
-        <a class="nav-link" href="{{route('coupons.index')}}">
+        <a class="nav-link" href="{{route('admin.coupons.index')}}">
             <i class="fas fa-table"></i>
             <span>@lang('sidebar.coupons')</span></a>
     </li>
@@ -161,8 +161,8 @@
         <div id="shippingCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">@lang('sidebar.shipping_options'):</h6>
-                <a class="collapse-item" href="{{route('shipping.index')}}">@lang('sidebar.shipping')</a>
-                <a class="collapse-item" href="{{route('shipping.create')}}">@lang('sidebar.add_shipping')</a>
+                <a class="collapse-item" href="{{route('admin.shipping.index')}}">@lang('sidebar.shipping')</a>
+                <a class="collapse-item" href="{{route('admin.shipping.create')}}">@lang('sidebar.add_shipping')</a>
             </div>
         </div>
     </li>
@@ -283,7 +283,7 @@
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{route('coupons.index')}}">
+        <a class="nav-link" href="{{route('admin.coupons.index')}}">
             <i class="fas fa-table"></i>
             <span>@lang('sidebar.coupons')</span></a>
     </li>
@@ -360,7 +360,7 @@
                     <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>
                 @endif
                 <a class="collapse-item"
-                   href="{{route('laravelblocker::blocker.index')}}">@lang('sidebar.blocked_ip')</a>
+                   href="javascript:void(0);">@lang('sidebar.blocked_ip')</a>
                 <a class="collapse-item" href="{{route('activity')}}">@lang('sidebar.activity_log')</a>
                 <a class="collapse-item" href="{{ url('translations/') }}">@lang('sidebar.translation')</a>
             </div>

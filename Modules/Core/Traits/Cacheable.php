@@ -13,18 +13,6 @@ trait Cacheable
     private static ?CacheService $cacheService = null;
 
     /**
-     * Get cache service instance
-     */
-    private static function getCacheService(): CacheService
-    {
-        if (self::$cacheService === null) {
-            self::$cacheService = app(CacheService::class);
-        }
-
-        return self::$cacheService;
-    }
-
-    /**
      * Cache model query results
      */
     public static function remember(string $key, callable $callback, int $ttl = 3600): mixed
@@ -69,27 +57,6 @@ trait Cacheable
     }
 
     /**
-     * Boot cacheable trait
-     */
-    protected static function bootCacheable(): void
-    {
-        // Clear cache when model is created
-        static::created(function (Model $model): void {
-            static::invalidateCache();
-        });
-
-        // Clear cache when model is updated
-        static::updated(function (Model $model): void {
-            static::invalidateCache();
-        });
-
-        // Clear cache when model is deleted
-        static::deleted(function (Model $model): void {
-            static::invalidateCache();
-        });
-    }
-
-    /**
      * Get cached model by ID
      */
     public static function findCached(int $id): ?Model
@@ -107,7 +74,7 @@ trait Cacheable
     public static function findManyCached(array $ids): \Illuminate\Database\Eloquent\Collection
     {
         return static::remember(
-            'models_' . md5(serialize($ids)),
+            'models_'.md5(serialize($ids)),
             fn () => static::whereIn('id', $ids)->get(),
             1800
         );
@@ -147,5 +114,38 @@ trait Cacheable
             fn () => static::where('is_featured', true)->get(),
             1800
         );
+    }
+
+    /**
+     * Boot cacheable trait
+     */
+    protected static function bootCacheable(): void
+    {
+        // Clear cache when model is created
+        static::created(function (Model $model): void {
+            static::invalidateCache();
+        });
+
+        // Clear cache when model is updated
+        static::updated(function (Model $model): void {
+            static::invalidateCache();
+        });
+
+        // Clear cache when model is deleted
+        static::deleted(function (Model $model): void {
+            static::invalidateCache();
+        });
+    }
+
+    /**
+     * Get cache service instance
+     */
+    private static function getCacheService(): CacheService
+    {
+        if (self::$cacheService === null) {
+            self::$cacheService = app(CacheService::class);
+        }
+
+        return self::$cacheService;
     }
 }

@@ -24,7 +24,7 @@ class LanguageSwitcher extends Component
     {
         $locales = config('app.locales', []);
         $currentLocale = app()->getLocale();
-        
+
         return view('core::components.language-switcher', [
             'locales' => $locales,
             'currentLocale' => $currentLocale,

@@ -119,9 +119,9 @@
             @endswitch
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="{{ route('lang.switch', 'en') }}">English</a>
-            <a class="dropdown-item" href="{{ route('lang.switch', 'mk') }}">Macedonian</a>
-            <a class="dropdown-item" href="{{ route('lang.switch', 'de') }}">German</a>
+            <a class="dropdown-item" href="{{ route('language.switch', 'en') }}">English</a>
+            <a class="dropdown-item" href="{{ route('language.switch', 'mk') }}">Macedonian</a>
+            <a class="dropdown-item" href="{{ route('language.switch', 'de') }}">German</a>
         </div>
     </div>
 </nav>

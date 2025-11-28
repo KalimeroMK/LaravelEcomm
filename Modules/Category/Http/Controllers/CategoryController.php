@@ -74,7 +74,7 @@ class CategoryController extends CoreController
 
     public function update(Update $request, Category $category): RedirectResponse
     {
-        $this->updateAction->execute(CategoryDTO::fromRequest($request, $category->id));
+        $this->updateAction->execute(CategoryDTO::fromRequest($request, $category->id, $category));
 
         return redirect()->route('categories.index');
     }

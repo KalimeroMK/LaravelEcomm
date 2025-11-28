@@ -14,31 +14,26 @@ class TenantPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('tenant-list');
-
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user, Tenant $tenant): bool
     {
-        return $user->can('tenant-list');
-
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function create(User $user): bool
     {
-        return $user->can('tenant-create');
-
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Tenant $tenant): bool
     {
-        return $user->can('tenant-update');
-
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function delete(User $user, Tenant $tenant): bool
     {
-        return $user->can('tenant-delete');
-
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 }

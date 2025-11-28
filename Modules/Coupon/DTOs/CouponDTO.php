@@ -19,9 +19,17 @@ readonly class CouponDTO
         public ?Carbon $updated_at = null,
     ) {}
 
-    public static function fromRequest(Request $request, ?int $id = null): self
+    public static function fromRequest(Request $request, ?int $id = null, ?\Modules\Coupon\Models\Coupon $existing = null): self
     {
-        return self::fromArray($request->validated() + ['id' => $id]);
+        $validated = $request->validated();
+
+        return self::fromArray([
+            'id' => $id,
+            'code' => $validated['code'] ?? $existing?->code,
+            'type' => $validated['type'] ?? $existing?->type,
+            'value' => $validated['value'] ?? $existing?->value,
+            'status' => $validated['status'] ?? $existing?->status,
+        ]);
     }
 
     public static function fromArray(array $data): self

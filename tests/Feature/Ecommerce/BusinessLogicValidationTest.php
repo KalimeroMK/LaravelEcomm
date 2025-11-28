@@ -14,6 +14,8 @@ use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+require_once __DIR__.'/../../TestHelpers.php';
+
 class BusinessLogicValidationTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
@@ -28,8 +30,9 @@ class BusinessLogicValidationTest extends TestCase
     {
         parent::setUp();
 
-        // Reuse existing user from parent setup to avoid memory issues
-        $this->user = auth()->user();
+        // Create user with proper authentication
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
 
         // Create minimal test data
         $this->product = Product::factory()->create([

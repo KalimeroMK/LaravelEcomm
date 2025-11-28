@@ -46,7 +46,7 @@ class TenantController extends Controller
     {
         $this->tenantService->create($request->validated());
 
-        return redirect()->route('banners.index');
+        return redirect()->route('tenant.index');
     }
 
     /**

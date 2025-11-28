@@ -14,26 +14,26 @@ class PostPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('post-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user): bool
     {
-        return $user->can('post-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function create(User $user): bool
     {
-        return $user->can('post-create');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Post $post): bool
     {
-        return $user->can('post-update') || $user->id === $post->added_by;
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $post->added_by;
     }
 
     public function delete(User $user, Post $post): bool
     {
-        return $user->can('post-delete') || $user->id === $post->added_by;
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $post->added_by;
     }
 }

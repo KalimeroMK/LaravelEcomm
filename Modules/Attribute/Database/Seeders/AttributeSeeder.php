@@ -34,24 +34,16 @@ class AttributeSeeder extends Seeder
 
         $createdAttributes = [];
         foreach ($attributes as $attr) {
-            $groupId = null;
-            if (isset($attr['attribute_group_id'])) {
-                $groupId = $attr['attribute_group_id'];
-                unset($attr['attribute_group_id']);
-            }
+            // attribute_group_id is not in the array structure, so we don't check for it
             $attribute = Attribute::firstOrCreate([
                 'code' => $attr['code'],
             ], array_merge($attr, [
                 'is_required' => false,
                 'is_filterable' => true,
             ]));
-            $createdAttributes[] = ['attribute' => $attribute, 'group_id' => $groupId];
+            $createdAttributes[] = $attribute;
         }
-        // Attach attributes to groups via pivot
-        foreach ($createdAttributes as $item) {
-            if ($item['group_id'] !== null && isset($groups[$item['group_id']])) {
-                $groups[$item['group_id']]->attributes()->syncWithoutDetaching([$item['attribute']->id]);
-            }
-        }
+        // Note: Attributes are not automatically attached to groups in this seeder
+        // They can be attached manually or via another seeder if needed
     }
 }

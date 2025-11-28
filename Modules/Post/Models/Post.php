@@ -95,6 +95,7 @@ class Post extends Core implements HasMedia
             'slug',
             'summary',
             'description',
+            'quote',
             'author.name',
             'status',
             'user_id',
@@ -148,6 +149,14 @@ class Post extends Core implements HasMedia
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get quote attribute with fallback to null.
+     */
+    public function getQuoteAttribute(): ?string
+    {
+        return $this->attributes['quote'] ?? null;
     }
 
     public function getImageUrlAttribute(): ?string

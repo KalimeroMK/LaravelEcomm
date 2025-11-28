@@ -20,12 +20,14 @@ readonly class UpdateCouponAction
     public function execute(CouponDTO $dto): Model
     {
         $coupon = $this->repository->findById($dto->id);
-        $coupon->update([
+        $updateData = array_filter([
             'code' => $dto->code,
             'type' => $dto->type,
             'value' => $dto->value,
             'status' => $dto->status,
-        ]);
+        ], fn ($value) => $value !== null);
+
+        $coupon->update($updateData);
 
         return $coupon;
     }

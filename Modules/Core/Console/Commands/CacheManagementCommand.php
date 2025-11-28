@@ -55,7 +55,7 @@ class CacheManagementCommand extends Command
             [
                 ['Memory Used', $stats['memory_used']],
                 ['Memory Peak', $stats['memory_peak']],
-                ['Hit Rate', $stats['hit_rate'] . '%'],
+                ['Hit Rate', $stats['hit_rate'].'%'],
                 ['Total Keys', $stats['total_keys']],
             ]
         );
@@ -94,6 +94,7 @@ class CacheManagementCommand extends Command
             $this->info("Cache invalidated for pattern: {$pattern}");
         } else {
             $this->error('Please specify --model or --pattern option');
+
             return Command::FAILURE;
         }
 

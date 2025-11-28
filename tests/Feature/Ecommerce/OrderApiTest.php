@@ -127,9 +127,8 @@ class OrderApiTest extends TestCase
             'Accept' => 'application/json',
         ])->getJson("/api/v1/orders/{$order->id}");
 
-        // Note: Authorization is not currently implemented
-        // The test documents the expected business rule for future implementation
-        $response->assertStatus(200);
+        // User should not be able to view other user's orders
+        $response->assertStatus(403);
     }
 
     #[Test]

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\Tenant\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Modules\Tenant\Database\Factories\TenantFactory;
 
 /**
  * @property int $id
@@ -16,9 +18,28 @@ use Illuminate\Support\Facades\DB;
  */
 class Tenant extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['name', 'domain', 'database'];
 
-    protected $connection = 'owner'; // Default connection for the owner database
+    /**
+     * Get the database connection name for the model.
+     * In test environment, use default connection. Otherwise use 'owner' connection.
+     */
+    public function getConnectionName(): ?string
+    {
+        if (app()->environment('testing')) {
+            return config('database.default');
+        }
+
+        // Check if 'owner' connection is configured
+        if (config('database.connections.owner')) {
+            return 'owner';
+        }
+
+        // Fallback to default connection
+        return config('database.default');
+    }
 
     /**
      * Configure the tenant's database connection dynamically.
@@ -48,5 +69,13 @@ class Tenant extends Model
         DB::setDefaultConnection('tenant');
 
         return $this;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return TenantFactory::new();
     }
 }

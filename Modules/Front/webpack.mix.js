@@ -1,5 +1,10 @@
 const dotenvExpand = require('dotenv-expand');
-dotenvExpand(require('dotenv').config({path: '../../.env'/*, debug: true*/}));
+const fs = require('fs');
+const path = require('path');
+const envPath = path.resolve(__dirname, '../../.env');
+if (fs.existsSync(envPath)) {
+    dotenvExpand(require('dotenv').config({path: envPath, silent: true}));
+}
 
 const mix = require('laravel-mix');
 require('laravel-mix-merge-manifest');

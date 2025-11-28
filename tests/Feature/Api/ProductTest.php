@@ -31,8 +31,10 @@ class ProductTest extends TestCase
         parent::setUp();
 
         // Create admin user with permissions
-        $this->user = User::factory()->create();
-        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        require_once __DIR__.'/../../TestHelpers.php';
+        $this->user = createAdminUser();
+
+        $adminRole = \Spatie\Permission\Models\Role::where('name', 'admin')->where('guard_name', 'web')->first();
 
         // Create and assign product permissions
         $permissions = [
@@ -43,11 +45,12 @@ class ProductTest extends TestCase
         ];
 
         foreach ($permissions as $permission) {
-            $perm = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
+            $perm = \Spatie\Permission\Models\Permission::firstOrCreate(
+                ['name' => $permission, 'guard_name' => 'web'],
+                ['guard_name' => 'web']
+            );
             $adminRole->givePermissionTo($perm);
         }
-
-        $this->user->assignRole($adminRole);
 
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }

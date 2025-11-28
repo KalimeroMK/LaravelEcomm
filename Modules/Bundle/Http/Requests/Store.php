@@ -16,13 +16,12 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|unique:bundles,title|max:50',
-            'name' => 'required|string',
+            'name' => 'required|string|unique:bundles,name|max:50',
             'description' => 'nullable',
             'price' => 'required|numeric',
             'products' => 'sometimes|array',
             'products.*' => 'required|exists:products,id',
-            'images' => 'required|array',
+            'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }

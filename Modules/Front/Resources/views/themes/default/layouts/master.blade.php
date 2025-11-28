@@ -52,8 +52,8 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/img/favicon.ico">
-    @include('front::layouts.head')
-    {!! $schema !!}
+    @include($themePath . '.layouts.head')
+    {!! $schema ?? '' !!}
 </head>
 <body class="js">
 <!-- Preloader -->
@@ -66,13 +66,13 @@
     </div>
 </div>
 <!-- End Preloader -->
-@include('front::layouts.notification')
+@include($themePath . '.layouts.notification')
 <!-- Header -->
-@include('front::layouts.header')
+@include($themePath . '.layouts.header')
 <!--/ End Header -->
 @yield('content')
 
-@include('front::layouts.footer')
+@include($themePath . '.layouts.footer')
 
 </body>
 </html>

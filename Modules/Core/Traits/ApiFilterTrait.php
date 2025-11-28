@@ -62,7 +62,7 @@ trait ApiFilterTrait
     protected function applyCommaSeparatedFilter(Builder $query, string $key, string $value): void
     {
         $values = array_filter(explode(',', $value));
-        if (!empty($values)) {
+        if (! empty($values)) {
             $query->whereIn($key, $values);
         }
     }
@@ -89,20 +89,23 @@ trait ApiFilterTrait
     protected function applySimpleFilter(Builder $query, string $key, mixed $value): void
     {
         // Handle boolean values
-        if (in_array(strtolower($value), ['true', 'false', '1', '0'])) {
+        if (in_array(mb_strtolower($value), ['true', 'false', '1', '0'])) {
             $query->where($key, (bool) $value);
+
             return;
         }
 
         // Handle date values
         if (str_contains($key, 'date') || str_contains($key, 'created_at') || str_contains($key, 'updated_at')) {
             $query->whereDate($key, $value);
+
             return;
         }
 
         // Handle text search
         if (str_contains($key, 'name') || str_contains($key, 'title') || str_contains($key, 'description')) {
-            $query->where($key, 'like', '%' . $value . '%');
+            $query->where($key, 'like', '%'.$value.'%');
+
             return;
         }
 
@@ -117,13 +120,13 @@ trait ApiFilterTrait
     {
         $search = $request->get('search');
 
-        if (!$search || empty($searchableFields)) {
+        if (! $search || empty($searchableFields)) {
             return $query;
         }
 
         $query->where(function (Builder $q) use ($search, $searchableFields) {
             foreach ($searchableFields as $field) {
-                $q->orWhere($field, 'like', '%' . $search . '%');
+                $q->orWhere($field, 'like', '%'.$search.'%');
             }
         });
 
@@ -139,12 +142,12 @@ trait ApiFilterTrait
         $sortOrder = $request->get('sort_order', 'asc');
 
         // Validate sort field
-        if (!in_array($sortBy, $allowedSorts)) {
+        if (! in_array($sortBy, $allowedSorts)) {
             $sortBy = $defaultSort;
         }
 
         // Validate sort order
-        if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
+        if (! in_array(mb_strtolower($sortOrder), ['asc', 'desc'])) {
             $sortOrder = 'asc';
         }
 
@@ -197,12 +200,12 @@ trait ApiFilterTrait
         $validated['page'] = max(1, $validated['page']);
 
         // Validate sort_by
-        if (!empty($allowedSorts) && !in_array($validated['sort_by'], $allowedSorts)) {
+        if (! empty($allowedSorts) && ! in_array($validated['sort_by'], $allowedSorts)) {
             $validated['sort_by'] = 'id';
         }
 
         // Validate sort_order
-        if (!in_array(strtolower($validated['sort_order']), ['asc', 'desc'])) {
+        if (! in_array(mb_strtolower($validated['sort_order']), ['asc', 'desc'])) {
             $validated['sort_order'] = 'asc';
         }
 

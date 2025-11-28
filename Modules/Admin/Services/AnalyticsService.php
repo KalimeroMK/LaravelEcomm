@@ -160,17 +160,33 @@ class AnalyticsService
      */
     private function getRevenueByMonth(): array
     {
-        $revenue = Order::select(
-            DB::raw('YEAR(created_at) as year'),
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('SUM(total_amount) as revenue')
-        )
-            ->where('payment_status', 'paid')
-            ->where('created_at', '>=', Carbon::now()->subYear())
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'desc')
-            ->orderBy('month', 'desc')
-            ->get();
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'sqlite') {
+            $revenue = Order::select(
+                DB::raw('CAST(strftime("%Y", created_at) AS INTEGER) as year'),
+                DB::raw('CAST(strftime("%m", created_at) AS INTEGER) as month'),
+                DB::raw('SUM(total_amount) as revenue')
+            )
+                ->where('payment_status', 'paid')
+                ->where('created_at', '>=', Carbon::now()->subYear())
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'desc')
+                ->orderBy('month', 'desc')
+                ->get();
+        } else {
+            $revenue = Order::select(
+                DB::raw('YEAR(created_at) as year'),
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('SUM(total_amount) as revenue')
+            )
+                ->where('payment_status', 'paid')
+                ->where('created_at', '>=', Carbon::now()->subYear())
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'desc')
+                ->orderBy('month', 'desc')
+                ->get();
+        }
 
         return $revenue->map(function ($item): array {
             return [
@@ -185,16 +201,31 @@ class AnalyticsService
      */
     private function getOrdersByMonth(): array
     {
-        $orders = Order::select(
-            DB::raw('YEAR(created_at) as year'),
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('COUNT(*) as count')
-        )
-            ->where('created_at', '>=', Carbon::now()->subYear())
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'desc')
-            ->orderBy('month', 'desc')
-            ->get();
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'sqlite') {
+            $orders = Order::select(
+                DB::raw('CAST(strftime("%Y", created_at) AS INTEGER) as year'),
+                DB::raw('CAST(strftime("%m", created_at) AS INTEGER) as month'),
+                DB::raw('COUNT(*) as count')
+            )
+                ->where('created_at', '>=', Carbon::now()->subYear())
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'desc')
+                ->orderBy('month', 'desc')
+                ->get();
+        } else {
+            $orders = Order::select(
+                DB::raw('YEAR(created_at) as year'),
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(*) as count')
+            )
+                ->where('created_at', '>=', Carbon::now()->subYear())
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'desc')
+                ->orderBy('month', 'desc')
+                ->get();
+        }
 
         return $orders->map(function ($item): array {
             return [
@@ -336,7 +367,13 @@ class AnalyticsService
             'customers_with_orders' => User::whereHas('orders')->count(),
             'customers_without_orders' => User::whereDoesntHave('orders')->count(),
             'repeat_customers' => User::whereHas('orders', function ($query): void {
-                $query->havingRaw('COUNT(*) > 1');
+                $driver = DB::connection()->getDriverName();
+                if ($driver === 'sqlite') {
+                    // SQLite doesn't support HAVING in subqueries, use a different approach
+                    $query->groupBy('user_id');
+                } else {
+                    $query->havingRaw('COUNT(*) > 1');
+                }
             })->count(),
             'high_value_customers' => User::whereHas('orders', function ($query): void {
                 $query->where('total_amount', '>=', 500);

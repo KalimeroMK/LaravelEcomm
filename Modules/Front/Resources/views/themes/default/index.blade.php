@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 @section('title','E-SHOP || HOME PAGE')
 @section('content')
     <!-- Slider Area -->
@@ -269,7 +269,7 @@
                 </div>
             </section>
             <!-- End Shop Services Area -->
-            @include('front::layouts.newsletter')
+            @include($themePath . '.layouts.newsletter')
             <!-- Modal -->
             @if($hot_products)
                 @foreach($hot_products as $key=>$product)

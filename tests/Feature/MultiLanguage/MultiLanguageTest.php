@@ -21,7 +21,7 @@ class MultiLanguageTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->user = User::factory()->create([
             'locale' => 'en',
         ]);
@@ -31,7 +31,7 @@ class MultiLanguageTest extends TestCase
     public function test_language_switching_works(): void
     {
         $response = $this->get('/language/fr');
-        
+
         $response->assertRedirect();
         $this->assertEquals('fr', Session::get('locale'));
         $this->assertEquals('fr', App::getLocale());
@@ -41,9 +41,9 @@ class MultiLanguageTest extends TestCase
     public function test_invalid_language_does_not_change_locale(): void
     {
         $originalLocale = App::getLocale();
-        
+
         $response = $this->get('/language/invalid');
-        
+
         $response->assertRedirect();
         $this->assertEquals($originalLocale, App::getLocale());
     }
@@ -52,9 +52,9 @@ class MultiLanguageTest extends TestCase
     public function test_authenticated_user_locale_is_saved(): void
     {
         $this->actingAs($this->user);
-        
+
         $response = $this->get('/language/mk');
-        
+
         $response->assertRedirect();
         $this->assertEquals('mk', $this->user->fresh()->locale);
     }
@@ -64,7 +64,7 @@ class MultiLanguageTest extends TestCase
     {
         // Test that middleware works by making a request and checking session
         $response = $this->get('/language/de');
-        
+
         $response->assertRedirect();
         $this->assertEquals('de', Session::get('locale'));
     }
@@ -76,7 +76,7 @@ class MultiLanguageTest extends TestCase
         $response = $this->withHeaders([
             'Accept-Language' => 'fr-FR,fr;q=0.9,en;q=0.8',
         ])->get('/language/fr');
-        
+
         $response->assertRedirect();
         $this->assertEquals('fr', Session::get('locale'));
     }
@@ -85,7 +85,7 @@ class MultiLanguageTest extends TestCase
     public function test_rtl_locale_detection(): void
     {
         $locales = config('app.locales', []);
-        
+
         $this->assertTrue($locales['ar']['rtl'] ?? false);
         $this->assertFalse($locales['en']['rtl'] ?? true);
         $this->assertFalse($locales['fr']['rtl'] ?? true);
@@ -95,7 +95,7 @@ class MultiLanguageTest extends TestCase
     public function test_translation_files_exist(): void
     {
         $locales = ['en', 'mk', 'de', 'fr', 'es', 'it', 'ar'];
-        
+
         foreach ($locales as $locale) {
             $this->assertFileExists(resource_path("lang/{$locale}/messages.php"));
             $this->assertFileExists(resource_path("lang/{$locale}/auth.php"));
@@ -107,7 +107,7 @@ class MultiLanguageTest extends TestCase
     public function test_french_translations_are_correct(): void
     {
         App::setLocale('fr');
-        
+
         $this->assertEquals('Accueil', __('messages.home'));
         $this->assertEquals('Nom', __('messages.name'));
         $this->assertEquals('Enregistrer', __('messages.save'));
@@ -117,7 +117,7 @@ class MultiLanguageTest extends TestCase
     public function test_language_switcher_component_renders(): void
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         // The component should be available for use in views
         $this->assertTrue(class_exists(\Modules\Core\View\Components\LanguageSwitcher::class));
@@ -127,7 +127,7 @@ class MultiLanguageTest extends TestCase
     public function test_rtl_support_component_renders(): void
     {
         $response = $this->get('/');
-        
+
         $response->assertStatus(200);
         // The component should be available for use in views
         $this->assertTrue(class_exists(\Modules\Core\View\Components\RTLSupport::class));
@@ -137,7 +137,7 @@ class MultiLanguageTest extends TestCase
     public function test_translation_service_works(): void
     {
         $translationService = app(\Modules\Core\Services\TranslationService::class);
-        
+
         $this->assertInstanceOf(\Modules\Core\Services\TranslationService::class, $translationService);
     }
 
@@ -145,11 +145,11 @@ class MultiLanguageTest extends TestCase
     public function test_translation_api_endpoints_exist(): void
     {
         $this->actingAs($this->user);
-        
+
         // Test that the translation service exists
         $translationService = app(\Modules\Core\Services\TranslationService::class);
         $this->assertInstanceOf(\Modules\Core\Services\TranslationService::class, $translationService);
-        
+
         // Test that we can get translations for a model
         $translations = $translationService->getModelTranslations($this->user);
         $this->assertIsArray($translations);

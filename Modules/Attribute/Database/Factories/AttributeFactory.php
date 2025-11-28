@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Modules\Attribute\Models\Attribute;
 
+/**
+ * @extends Factory<Attribute>
+ */
 class AttributeFactory extends Factory
 {
     protected $model = Attribute::class;

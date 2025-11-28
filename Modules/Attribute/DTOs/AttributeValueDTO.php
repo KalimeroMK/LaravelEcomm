@@ -28,9 +28,18 @@ readonly class AttributeValueDTO
 
     public static function fromRequest(Request $request): self
     {
-        return self::fromArray($request->validated());
+        if (method_exists($request, 'validated')) {
+            $data = $request->validated();
+        } else {
+            $data = $request->all();
+        }
+
+        return self::fromArray($data);
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -51,6 +60,9 @@ readonly class AttributeValueDTO
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

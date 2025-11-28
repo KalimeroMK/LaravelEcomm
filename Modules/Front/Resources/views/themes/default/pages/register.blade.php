@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 
 @section('title','E-SHOP || Register Page')
 

@@ -8,7 +8,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Modules\Attribute\Database\Factories\AttributeValueFactory;
 use Modules\Core\Models\Core;
@@ -64,8 +63,6 @@ class AttributeValue extends Core
     }
 
     /**
-     * @phpstan-ignore-next-line
-     *
      * @return BelongsTo<Attribute, AttributeValue>
      */
     public function attribute(): BelongsTo
@@ -74,8 +71,6 @@ class AttributeValue extends Core
     }
 
     /**
-     * @phpstan-ignore-next-line
-     *
      * @return BelongsTo<Product, AttributeValue>
      */
     public function product(): BelongsTo
@@ -83,8 +78,7 @@ class AttributeValue extends Core
         return $this->belongsTo(Product::class);
     }
 
-    public function values(): HasMany|self
-    {
-        return $this->hasMany(AttributeOption::class);
-    }
+    // Note: AttributeValue doesn't have a direct relationship to AttributeOption
+    // AttributeOption belongs to Attribute, not AttributeValue
+    // This method seems incorrect and should be removed or fixed
 }

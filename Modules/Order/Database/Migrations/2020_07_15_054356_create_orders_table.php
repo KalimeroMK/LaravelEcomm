@@ -14,10 +14,8 @@ return new class extends Migration
             $table->id();
             $table->string('order_number')->nullable();
             $table->unsignedBigInteger('user_id')->nullable()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');
             $table->float('sub_total');
             $table->unsignedBigInteger('shipping_id')->nullable()->index();
-            $table->foreign('shipping_id')->references('id')->on('shipping')->onDelete('SET NULL');
             $table->float('total_amount');
             $table->integer('quantity');
             $table->enum('payment_method', ['cod', 'paypal', 'stripe'])->default('cod');
@@ -26,6 +24,12 @@ return new class extends Migration
             $table->string('payer_id')->nullable();
             $table->string('transaction_reference')->nullable();
             $table->timestamps();
+        });
+
+        // Add foreign keys after table creation to avoid dependency issues
+        Schema::table('orders', function (Blueprint $table): void {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');
+            $table->foreign('shipping_id')->references('id')->on('shipping')->onDelete('SET NULL');
         });
     }
 

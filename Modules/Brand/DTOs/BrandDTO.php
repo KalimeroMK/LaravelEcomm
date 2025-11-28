@@ -23,10 +23,13 @@ readonly class BrandDTO
     {
         $data = $request->validated();
 
+        // Support both 'name' and 'title' for backward compatibility
+        $title = $data['title'] ?? $data['name'] ?? $existing?->title;
+
         return new self(
             $id,
-            $data['title'] ?? $existing?->title,
-            $data['slug'] ?? $existing?->slug ?? Str::slug($data['title'] ?? $existing?->title ?? 'brand'),
+            $title,
+            $data['slug'] ?? $existing?->slug ?? Str::slug($title ?? 'brand'),
             $data['status'] ?? $existing?->status ?? 'active',
             $existing?->created_at?->toDateTimeString(),
             $existing?->updated_at?->toDateTimeString(),

@@ -147,7 +147,8 @@ class Attribute extends Core
      */
     public function values(): HasMany
     {
-        return $this->hasMany(AttributeValue::class);
+        /** @var HasMany<AttributeValue, Attribute> */
+        return $this->hasMany(AttributeValue::class, 'attribute_id');
     }
 
     /**
@@ -155,7 +156,8 @@ class Attribute extends Core
      */
     public function options(): HasMany
     {
-        return $this->hasMany(AttributeOption::class);
+        /** @var HasMany<AttributeOption, Attribute> */
+        return $this->hasMany(AttributeOption::class, 'attribute_id');
     }
 
     /**

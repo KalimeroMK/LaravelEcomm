@@ -20,7 +20,7 @@ class TranslationService
             ->where('group', $group)
             ->value('value');
     }
-    
+
     /**
      * Set translation for a specific key and locale
      */
@@ -40,65 +40,65 @@ class TranslationService
             ]
         );
     }
-    
+
     /**
      * Get all translations for a model
      */
     public function getModelTranslations(Model $model): array
     {
         $translations = [];
-        
+
         $modelClass = class_basename($model);
-        $modelName = strtolower($modelClass);
+        $modelName = mb_strtolower($modelClass);
         $keyPattern = "{$modelName}.{$model->getKey()}.";
-        
+
         $keys = DB::table('ltm_translations')
             ->where('group', 'models')
-            ->where('key', 'like', $keyPattern . '%')
+            ->where('key', 'like', $keyPattern.'%')
             ->get();
-            
+
         foreach ($keys as $translation) {
             $attribute = str_replace($keyPattern, '', $translation->key);
             $locale = $translation->locale;
-            
+
             $translations[$attribute][$locale] = $translation->value;
         }
-        
+
         return $translations;
     }
-    
+
     /**
      * Set translations for a model
      */
     public function setModelTranslations(Model $model, array $translations): void
     {
         $modelClass = class_basename($model);
-        $modelName = strtolower($modelClass);
+        $modelName = mb_strtolower($modelClass);
         $keyPrefix = "{$modelName}.{$model->getKey()}.";
-        
+
         foreach ($translations as $attribute => $localeTranslations) {
             foreach ($localeTranslations as $locale => $value) {
-                $key = $keyPrefix . $attribute;
+                $key = $keyPrefix.$attribute;
                 $this->setTranslation($key, $locale, $value, 'models');
             }
         }
     }
-    
+
     /**
      * Delete all translations for a model
      */
     public function deleteModelTranslations(Model $model): void
     {
         $modelClass = class_basename($model);
-        $modelName = strtolower($modelClass);
+        $modelName = mb_strtolower($modelClass);
         $keyPattern = "{$modelName}.{$model->getKey()}.";
-        
+
         DB::table('ltm_translations')
             ->where('group', 'models')
-            ->where('key', 'like', $keyPattern . '%')
+            ->where('key', 'like', $keyPattern.'%')
             ->delete();
     }
-    
+
     /**
      * Get missing translations for a model
      */
@@ -106,18 +106,18 @@ class TranslationService
     {
         $missing = [];
         $translations = $this->getModelTranslations($model);
-        
+
         foreach ($translations as $attribute => $localeTranslations) {
             foreach ($locales as $locale) {
-                if (!isset($localeTranslations[$locale])) {
+                if (! isset($localeTranslations[$locale])) {
                     $missing[$attribute][] = $locale;
                 }
             }
         }
-        
+
         return $missing;
     }
-    
+
     /**
      * Auto-translate using AI (if available)
      */

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Attribute\Http\Requests\Api\AttributeGroup;
 
-use Exception;
 use Modules\Core\Http\Requests\Api\CoreRequest;
 
 class Update extends CoreRequest

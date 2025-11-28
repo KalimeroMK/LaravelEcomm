@@ -14,26 +14,26 @@ class CartPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('cart-list');
+        return true; // Any authenticated user can view their own cart
     }
 
     public function view(User $user, Cart $cart): bool
     {
-        return $user->can('cart-list');
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $cart->user_id;
     }
 
     public function create(User $user): bool
     {
-        return $user->can('cart-create');
+        return true; // Any authenticated user can create cart items
     }
 
     public function update(User $user, Cart $cart): bool
     {
-        return $user->can('cart-create') && $user->id === $cart->user_id;
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $cart->user_id;
     }
 
     public function delete(User $user, Cart $cart): bool
     {
-        return $user->can('cart-delete') && $user->id === $cart->user_id;
+        return $user->hasAnyRole(['admin', 'super-admin']) || $user->id === $cart->user_id;
     }
 }

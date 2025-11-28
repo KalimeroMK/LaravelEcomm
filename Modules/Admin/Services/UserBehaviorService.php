@@ -346,12 +346,24 @@ class UserBehaviorService
             ->distinct()
             ->count();
 
-        $returningUsers = UserBehaviorTracking::select('user_id')
-            ->where('event_timestamp', '>=', Carbon::now()->subMonth())
-            ->whereNotNull('user_id')
-            ->groupBy('user_id')
-            ->havingRaw('COUNT(DISTINCT DATE(event_timestamp)) > 1')
-            ->count();
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'sqlite') {
+            // SQLite doesn't support DATE() function, use strftime
+            $returningUsers = UserBehaviorTracking::select('user_id')
+                ->where('event_timestamp', '>=', Carbon::now()->subMonth())
+                ->whereNotNull('user_id')
+                ->groupBy('user_id')
+                ->havingRaw('COUNT(DISTINCT strftime("%Y-%m-%d", event_timestamp)) > 1')
+                ->count();
+        } else {
+            $returningUsers = UserBehaviorTracking::select('user_id')
+                ->where('event_timestamp', '>=', Carbon::now()->subMonth())
+                ->whereNotNull('user_id')
+                ->groupBy('user_id')
+                ->havingRaw('COUNT(DISTINCT DATE(event_timestamp)) > 1')
+                ->count();
+        }
 
         return $uniqueUsers > 0 ? round(($returningUsers / $uniqueUsers) * 100, 2) : 0;
     }

@@ -28,13 +28,13 @@ readonly class AttributeDTO
 
         return new self(
             $id,
-            $data['name'] ?? $existing?->name ?? '',
-            $data['code'] ?? $existing?->code,
-            $data['type'] ?? $existing?->type,
-            $data['display'] ?? $existing?->display,
-            (bool) ($data['is_required'] ?? $existing?->is_required ?? false),
-            (bool) ($data['filterable'] ?? $data['is_filterable'] ?? $existing?->is_filterable ?? false),
-            (bool) ($data['configurable'] ?? $data['is_configurable'] ?? $existing?->is_configurable ?? false),
+            $data['name'] ?? ($existing !== null ? $existing->name : ''),
+            $data['code'] ?? ($existing !== null ? $existing->code : null),
+            $data['type'] ?? ($existing !== null ? $existing->type : null),
+            $data['display'] ?? ($existing !== null ? $existing->display : null),
+            (bool) ($data['is_required'] ?? ($existing !== null ? (bool) $existing->is_required : false)),
+            (bool) ($data['filterable'] ?? $data['is_filterable'] ?? ($existing !== null ? (bool) $existing->is_filterable : false)),
+            (bool) ($data['configurable'] ?? $data['is_configurable'] ?? ($existing !== null ? (bool) $existing->is_configurable : false)),
             $existing?->created_at?->toDateTimeString(),
             $existing?->updated_at?->toDateTimeString(),
         );
@@ -48,9 +48,9 @@ readonly class AttributeDTO
             $attribute->code,
             $attribute->type,
             $attribute->display,
-            $attribute->is_required,
-            $attribute->is_filterable,
-            $attribute->is_configurable,
+            (bool) $attribute->is_required,
+            (bool) $attribute->is_filterable,
+            (bool) $attribute->is_configurable,
             $attribute->created_at?->toDateTimeString(),
             $attribute->updated_at?->toDateTimeString(),
         );

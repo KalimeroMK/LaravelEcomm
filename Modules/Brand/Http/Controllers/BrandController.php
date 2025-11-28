@@ -43,7 +43,7 @@ class BrandController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->createAction->execute(BrandDTO::fromRequest($request));
+        $brand = $this->createAction->execute(BrandDTO::fromRequest($request));
         /**
          * @var Brand $brand
          */
@@ -63,7 +63,7 @@ class BrandController extends CoreController
     public function update(Store $request, Brand $brand): RedirectResponse
     {
         $dto = BrandDTO::fromRequest($request, $brand->id, $brand);
-        $this->updateAction->execute($dto);
+        $brand = $this->updateAction->execute($dto);
         MediaUploader::uploadMultiple($brand, ['images'], 'brand');
 
         return redirect()->route('brands.edit', $brand)

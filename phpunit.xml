@@ -3,6 +3,9 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
+         stopOnFailure="false"
+         processIsolation="false"
+         backupGlobals="false"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -19,14 +22,13 @@
         </include>
     </source>
            <php>
+               <ini name="memory_limit" value="512M"/>
                <env name="APP_ENV" value="testing"/>
                <env name="APP_KEY" value="base64:VGVzdEFwcEtleUZvclRlc3RpbmdQdXJwb3Nlc09ubHk="/>
                <env name="BCRYPT_ROUNDS" value="4"/>
                <env name="CACHE_DRIVER" value="array"/>
-               <env name="DB_CONNECTION" value="mysql"/>
-               <env name="DB_DATABASE" value="laravel_ecomm_test"/>
-               <env name="DB_USERNAME" value="root"/>
-               <env name="DB_PASSWORD" value="secret"/>
+               <env name="DB_CONNECTION" value="sqlite"/>
+               <env name="DB_DATABASE" value=":memory:"/>
                <env name="MAIL_MAILER" value="array"/>
                <env name="QUEUE_CONNECTION" value="sync"/>
                <env name="SESSION_DRIVER" value="array"/>

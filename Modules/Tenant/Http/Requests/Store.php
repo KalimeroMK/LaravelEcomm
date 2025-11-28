@@ -16,9 +16,9 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'domain' => ['required', 'string'],
-            'database' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:255'],
+            'domain' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z0-9\-\.]+$/'],
+            'database' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z0-9_]+$/'],
         ];
     }
 }

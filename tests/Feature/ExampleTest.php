@@ -15,6 +15,9 @@ class ExampleTest extends TestCase
      */
     public function test_basic_test()
     {
+        // Ensure settings exist for the test
+        \Modules\Settings\Models\Setting::factory()->create();
+
         // The root route '/' exists and returns 200
         $response = $this->get('/');
 

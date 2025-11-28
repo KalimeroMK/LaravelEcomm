@@ -10,8 +10,9 @@ use Illuminate\View\View;
 class RTLSupport extends Component
 {
     public string $currentLocale;
+
     public bool $isRTL;
-    
+
     /**
      * Create a new component instance.
      */
@@ -20,17 +21,7 @@ class RTLSupport extends Component
         $this->currentLocale = app()->getLocale();
         $this->isRTL = $this->isRTLLocale($this->currentLocale);
     }
-    
-    /**
-     * Check if locale is RTL
-     */
-    private function isRTLLocale(string $locale): bool
-    {
-        $locales = config('app.locales', []);
-        
-        return $locales[$locale]['rtl'] ?? false;
-    }
-    
+
     /**
      * Get the view / contents that represent the component.
      */
@@ -40,5 +31,15 @@ class RTLSupport extends Component
             'isRTL' => $this->isRTL,
             'currentLocale' => $this->currentLocale,
         ]);
+    }
+
+    /**
+     * Check if locale is RTL
+     */
+    private function isRTLLocale(string $locale): bool
+    {
+        $locales = config('app.locales', []);
+
+        return $locales[$locale]['rtl'] ?? false;
     }
 }

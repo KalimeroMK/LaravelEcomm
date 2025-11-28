@@ -14,10 +14,10 @@ class Update extends CoreRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|unique:coupons,code|max:50',
-            'type' => 'required|in:fixed,percent|string',
-            'value' => 'required|numeric|string',
-            'status' => 'required|in:active,inactive|string',
+            'code' => 'sometimes|string|max:50',
+            'type' => 'sometimes|in:fixed,percent|string',
+            'value' => 'sometimes|numeric',
+            'status' => 'sometimes|in:active,inactive|string',
         ];
     }
 }

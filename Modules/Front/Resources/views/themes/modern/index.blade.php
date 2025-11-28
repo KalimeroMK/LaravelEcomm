@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 
 @section('title', 'Home - ' . ($settings['site-name'] ?? 'E-commerce Website'))
 @section('description', $settings['short_des'] ?? 'Modern e-commerce website with advanced features')

@@ -15,4 +15,12 @@ declare(strict_types=1);
 
 use Modules\Shipping\Http\Controllers\ShippingController;
 
-Route::resource('shipping', ShippingController::class);
+Route::resource('shipping', ShippingController::class)->names([
+    'index' => 'admin.shipping.index',
+    'create' => 'admin.shipping.create',
+    'store' => 'admin.shipping.store',
+    'show' => 'admin.shipping.show',
+    'edit' => 'admin.shipping.edit',
+    'update' => 'admin.shipping.update',
+    'destroy' => 'admin.shipping.destroy',
+]);

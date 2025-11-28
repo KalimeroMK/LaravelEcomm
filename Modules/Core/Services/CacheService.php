@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Redis;
 class CacheService
 {
     private const DEFAULT_TTL = 3600; // 1 hour
+
     private const API_CACHE_PREFIX = 'api_cache:';
+
     private const QUERY_CACHE_PREFIX = 'query_cache:';
 
     /**
@@ -19,7 +21,7 @@ class CacheService
     public function rememberApiResponse(string $endpoint, array $params, callable $callback, int $ttl = self::DEFAULT_TTL): mixed
     {
         $key = $this->generateApiCacheKey($endpoint, $params);
-        
+
         return Cache::remember($key, $ttl, $callback);
     }
 
@@ -29,7 +31,7 @@ class CacheService
     public function rememberQuery(string $model, string $method, array $params, callable $callback, int $ttl = self::DEFAULT_TTL): mixed
     {
         $key = $this->generateQueryCacheKey($model, $method, $params);
-        
+
         return Cache::remember($key, $ttl, $callback);
     }
 
@@ -54,8 +56,8 @@ class CacheService
      */
     public function invalidateApiCache(string $pattern): void
     {
-        $keys = Redis::keys(self::API_CACHE_PREFIX . $pattern . '*');
-        if (!empty($keys)) {
+        $keys = Redis::keys(self::API_CACHE_PREFIX.$pattern.'*');
+        if (! empty($keys)) {
             Redis::del($keys);
         }
     }
@@ -75,7 +77,7 @@ class CacheService
     public function getStats(): array
     {
         $info = Redis::info();
-        
+
         return [
             'memory_used' => $info['used_memory_human'] ?? 'N/A',
             'memory_peak' => $info['used_memory_peak_human'] ?? 'N/A',
@@ -99,8 +101,8 @@ class CacheService
     {
         $sortedParams = $params;
         ksort($sortedParams);
-        
-        return self::API_CACHE_PREFIX . $endpoint . ':' . md5(serialize($sortedParams));
+
+        return self::API_CACHE_PREFIX.$endpoint.':'.md5(serialize($sortedParams));
     }
 
     /**
@@ -110,8 +112,8 @@ class CacheService
     {
         $sortedParams = $params;
         ksort($sortedParams);
-        
-        return self::QUERY_CACHE_PREFIX . $model . ':' . $method . ':' . md5(serialize($sortedParams));
+
+        return self::QUERY_CACHE_PREFIX.$model.':'.$method.':'.md5(serialize($sortedParams));
     }
 
     /**
@@ -122,11 +124,11 @@ class CacheService
         $info = Redis::info();
         $hits = $info['keyspace_hits'] ?? 0;
         $misses = $info['keyspace_misses'] ?? 0;
-        
+
         if ($hits + $misses === 0) {
             return 0.0;
         }
-        
+
         return round(($hits / ($hits + $misses)) * 100, 2);
     }
 }

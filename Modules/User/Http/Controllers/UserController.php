@@ -164,7 +164,7 @@ class UserController extends Controller
         $user = Auth()->user();
         $userDto = $this->findUserAction->execute($user->id);
 
-        return view('user::profile', ['profile' => $userDto->user]);
+        return view('user::profile', ['profile' => $userDto]);
     }
 
     /**

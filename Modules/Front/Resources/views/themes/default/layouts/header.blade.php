@@ -27,7 +27,7 @@
                                     <li><i class="ti-user"></i> <a href="{{route('admin')}}"
                                                                    target="_blank">Dashboard</a></li>
                                 @else
-                                    <li><i class="ti-user"></i> <a href="{{route('user')}}"
+                                    <li><i class="ti-user"></i> <a href="{{route('user-profile')}}"
                                                                    target="_blank">Dashboard</a></li>
                                 @endif
                                 <li>
@@ -177,7 +177,7 @@
                                             <span
                                                     class="total-amount">${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </div>
-                                        <a href="{{route('checkout')}}" class="btn animate">Checkout</a>
+                                        <a href="{{route('front.checkout')}}" class="btn animate">Checkout</a>
                                     </div>
                                 </div>
                             @endauth
@@ -240,7 +240,7 @@
                                         @if($category->childrenCategories->isNotEmpty())
                                             <ul class="sub-category">
                                                 @foreach ($category->childrenCategories as $childCategory)
-                                                    @include('front::layouts.child_category', ['child_category' => $childCategory])
+                                                    @include($themePath . '.layouts.child_category', ['child_category' => $childCategory])
                                                 @endforeach
                                             </ul>
                                         @endif
@@ -253,7 +253,7 @@
                         <div class="col-lg-9 col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
-                                @include('front::layouts.menu')
+                                @include($themePath . '.layouts.menu')
                                 <!--/ End Main Menu -->
                             </div>
                         </div>
@@ -261,7 +261,7 @@
                         <div class="col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
-                                @include('front::layouts.menu')
+                                @include($themePath . '.layouts.menu')
                                 <!--/ End Main Menu -->
                             </div>
                         </div>

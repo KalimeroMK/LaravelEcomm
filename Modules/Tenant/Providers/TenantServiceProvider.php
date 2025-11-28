@@ -26,15 +26,26 @@ class TenantServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Always register views and translations, even if multi-tenant is disabled
+        $this->registerTranslations();
+        $this->registerViews();
+
         if (config('tenant.multi_tenant.enabled')) {
             $this->registerCommands();
             $this->registerCommandSchedules();
-            $this->registerTranslations();
-            $this->registerViews();
             $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+            // In test environment, also load Owner migrations to default connection
+            if (app()->environment('testing')) {
+                $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations/Owner'));
+            }
             $this->autoRegisterCommands($this->moduleName);
             $this->configureTenant();
             $this->configureQueue();
+        } else {
+            // Even if multi-tenant is disabled, load migrations in test environment
+            if (app()->environment('testing')) {
+                $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations/Owner'));
+            }
         }
     }
 
@@ -81,7 +92,9 @@ class TenantServiceProvider extends ServiceProvider
 
         $this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower.'-module-views']);
 
-        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
+        // Register views with namespace
+        $viewPaths = array_merge($this->getPublishableViewPaths(), [$sourcePath]);
+        $this->loadViewsFrom($viewPaths, $this->moduleNameLower);
 
         $componentNamespace = str_replace(
             '/',

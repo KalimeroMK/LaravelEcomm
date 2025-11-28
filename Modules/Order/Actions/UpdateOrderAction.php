@@ -22,19 +22,21 @@ class UpdateOrderAction
         /** @var Order $order */
         $order = $this->repository->findById($dto->id);
 
-        $order->update([
+        $updateData = array_filter([
             'order_number' => $dto->order_number,
             'user_id' => $dto->user_id,
-            'sub_total' => $dto->sub_total,
+            'sub_total' => $dto->sub_total ?? $order->sub_total,
             'shipping_id' => $dto->shipping_id,
             'total_amount' => $dto->total_amount,
             'quantity' => $dto->quantity,
             'payment_method' => $dto->payment_method,
             'payment_status' => $dto->payment_status,
             'status' => $dto->status,
-            'payer_id' => (int) $dto->payer_id,
+            'payer_id' => $dto->payer_id !== null ? (int) $dto->payer_id : null,
             'transaction_reference' => $dto->transaction_reference,
-        ]);
+        ], fn ($value) => $value !== null);
+
+        $order->update($updateData);
 
         return $order;
     }

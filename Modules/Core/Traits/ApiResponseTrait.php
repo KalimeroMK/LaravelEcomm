@@ -170,9 +170,9 @@ trait ApiResponseTrait
     protected function addPerformanceMeta(array $response, float $executionTime): array
     {
         $response['performance'] = [
-            'execution_time' => round($executionTime, 3) . 's',
-            'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . 'MB',
-            'peak_memory' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'MB',
+            'execution_time' => round($executionTime, 3).'s',
+            'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2).'MB',
+            'peak_memory' => round(memory_get_peak_usage(true) / 1024 / 1024, 2).'MB',
         ];
 
         return $response;

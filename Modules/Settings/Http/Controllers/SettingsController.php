@@ -34,9 +34,9 @@ class SettingsController extends Controller
     public function index(): Factory|View
     {
         $this->authorize('viewAny', Setting::class);
-        $settingsDto = $this->getSettingsAction->execute();
+        $settings = $this->getSettingsAction->execute();
 
-        return view('settings::edit', ['settings' => $settingsDto->settings]);
+        return view('settings::edit', ['settings' => $settings]);
     }
 
     public function update(Update $request, Setting $setting): RedirectResponse
@@ -44,6 +44,6 @@ class SettingsController extends Controller
         $this->authorize('update', $setting);
         $this->updateSettingsAction->execute($setting->id, $request->validated());
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Settings updated successfully');
     }
 }

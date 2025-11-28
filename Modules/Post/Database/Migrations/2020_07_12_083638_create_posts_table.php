@@ -16,9 +16,14 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('summary');
             $table->longText('description')->nullable();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->index();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
+        });
+
+        // Add foreign key after table creation to avoid dependency issues
+        Schema::table('posts', function (Blueprint $table): void {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Attribute\Actions;
 
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Repository\AttributeRepository;
 
@@ -17,7 +18,7 @@ readonly class UpdateAttributeAction
         $attribute = $this->repository->findById($dto->id ?? 0);
 
         if ($attribute === null) {
-            throw new \InvalidArgumentException('Attribute not found');
+            throw new InvalidArgumentException('Attribute not found');
         }
 
         $attribute->update([

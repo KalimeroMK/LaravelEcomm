@@ -13,8 +13,11 @@ use Symfony\Component\HttpFoundation\Response as BaseResponse;
 class ApiCacheMiddleware
 {
     private const CACHEABLE_METHODS = ['GET'];
+
     private const DEFAULT_TTL = 1800; // 30 minutes
+
     private const LONG_TTL = 3600; // 1 hour
+
     private const SHORT_TTL = 300; // 5 minutes
 
     public function __construct(private CacheService $cacheService) {}
@@ -25,7 +28,7 @@ class ApiCacheMiddleware
     public function handle(Request $request, Closure $next): BaseResponse
     {
         // Only cache GET requests
-        if (!in_array($request->method(), self::CACHEABLE_METHODS)) {
+        if (! in_array($request->method(), self::CACHEABLE_METHODS)) {
             return $next($request);
         }
 
@@ -43,7 +46,7 @@ class ApiCacheMiddleware
             $request->query(),
             function () use ($next, $request) {
                 $response = $next($request);
-                
+
                 // Only cache successful responses
                 if ($response->getStatusCode() === 200) {
                     return [
@@ -52,7 +55,7 @@ class ApiCacheMiddleware
                         'status' => $response->getStatusCode(),
                     ];
                 }
-                
+
                 return null;
             },
             $ttl
@@ -64,19 +67,19 @@ class ApiCacheMiddleware
                 $cachedResponse['status'],
                 $cachedResponse['headers']
             );
-            
+
             // Add cache headers
             $response->headers->set('X-Cache', 'HIT');
             $response->headers->set('X-Cache-TTL', (string) $ttl);
-            
+
             return $response;
         }
 
         $response = $next($request);
-        
+
         // Add cache miss header
         $response->headers->set('X-Cache', 'MISS');
-        
+
         return $response;
     }
 
@@ -118,7 +121,7 @@ class ApiCacheMiddleware
     private function hasSensitiveData(Request $request): bool
     {
         $sensitiveParams = ['user_id', 'token', 'password', 'email'];
-        
+
         foreach ($sensitiveParams as $param) {
             if ($request->has($param)) {
                 return true;
@@ -135,8 +138,8 @@ class ApiCacheMiddleware
     {
         $params = $request->query();
         ksort($params);
-        
-        return 'api:' . $request->path() . ':' . md5(serialize($params));
+
+        return 'api:'.$request->path().':'.md5(serialize($params));
     }
 
     /**

@@ -22,6 +22,7 @@ class SettingFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'email' => $this->faker->unique()->safeEmail(),
             'site-name' => $this->faker->word(),
+            'active_template' => 'default',
             'keywords' => $this->faker->word(),
             'google-site-verification' => $this->faker->word(),
             'created_at' => Carbon::now(),

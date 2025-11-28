@@ -40,7 +40,9 @@ class ProductImportExportController extends Controller
      */
     public function export(): BinaryFileResponse
     {
-        return $this->exportProductsAction->execute();
+        $filePath = $this->exportProductsAction->execute();
+
+        return response()->download($filePath);
     }
 
     /**

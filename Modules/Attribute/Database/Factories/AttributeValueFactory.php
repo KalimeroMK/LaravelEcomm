@@ -9,6 +9,9 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Product\Models\Product;
 
+/**
+ * @extends Factory<AttributeValue>
+ */
 class AttributeValueFactory extends Factory
 {
     protected $model = AttributeValue::class;

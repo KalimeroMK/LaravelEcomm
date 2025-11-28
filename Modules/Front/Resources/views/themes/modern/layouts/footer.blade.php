@@ -61,13 +61,13 @@
                                     @auth
                                         <li><a href="{{ route('user.dashboard') }}"><i class="icon-tools"></i> Dashboard</a></li>
                                         <li><a href="{{ route('user.orders') }}"><i class="icon-search"></i> My Orders</a></li>
-                                        <li><a href="{{ route('front.cart') }}"><i class="icon-basket-1"></i> Cart</a></li>
+                                        <li><a href="{{ route('cart-list') }}"><i class="icon-basket-1"></i> Cart</a></li>
                                         <li><a href="{{ route('user.wishlist') }}"><i class="icon-heart"></i> Wish List</a></li>
                                         <li><a href="{{ route('user.profile') }}"><i class="icon-chat"></i> Profile</a></li>
                                     @else
                                         <li><a href="{{ route('login') }}"><i class="icon-tools"></i> Login</a></li>
                                         <li><a href="{{ route('register') }}"><i class="icon-user"></i> Register</a></li>
-                                        <li><a href="{{ route('front.cart') }}"><i class="icon-basket-1"></i> Cart</a></li>
+                                        <li><a href="{{ route('cart-list') }}"><i class="icon-basket-1"></i> Cart</a></li>
                                     @endauth
                                     <li><a href="{{ route('front.contact') }}"><i class="icon-thumbs-up"></i> Support</a></li>
                                     <li><a href="#"><i class="icon-lock"></i> Privacy</a></li>
@@ -84,7 +84,7 @@
                                     <li><a href="{{ route('front.index') }}"><i class="icon-home"></i> Home</a></li>
                                     <li><a href="{{ route('front.product-grids') }}"><i class="icon-basket-1"></i> All Products</a></li>
                                     <li><a href="{{ route('front.blog') }}"><i class="icon-pencil"></i> Blog</a></li>
-                                    <li><a href="{{ route('front.about') }}"><i class="icon-info"></i> About Us</a></li>
+                                    <li><a href="{{ route('front.about-us') }}"><i class="icon-info"></i> About Us</a></li>
                                     <li><a href="{{ route('front.contact') }}"><i class="icon-mail"></i> Contact</a></li>
                                     <li><a href="#"><i class="icon-help"></i> FAQ</a></li>
                                     <li><a href="#"><i class="icon-truck"></i> Shipping</a></li>

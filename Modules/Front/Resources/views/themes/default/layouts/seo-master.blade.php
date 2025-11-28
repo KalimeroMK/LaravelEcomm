@@ -67,7 +67,7 @@
     <link rel="dns-prefetch" href="//www.google-analytics.com">
     
     <!-- Include head content -->
-    @include('front::layouts.head')
+    @include($themePath . '.layouts.head')
     
     <!-- JSON-LD Structured Data -->
     @if(isset($seo['schema']))
@@ -99,15 +99,15 @@
     </div>
     <!-- End Preloader -->
     
-    @include('front::layouts.notification')
+    @include($themePath . '.layouts.notification')
     
     <!-- Header -->
-    @include('front::layouts.header')
+    @include($themePath . '.layouts.header')
     <!--/ End Header -->
     
     @yield('content')
     
-    @include('front::layouts.footer')
+    @include($themePath . '.layouts.footer')
     
     <!-- Performance optimization scripts -->
     <script>

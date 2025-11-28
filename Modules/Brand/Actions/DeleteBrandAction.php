@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Brand\Actions;
 
-use Illuminate\Http\JsonResponse;
 use Modules\Brand\Repository\BrandRepository;
 
 readonly class DeleteBrandAction
@@ -13,10 +12,8 @@ readonly class DeleteBrandAction
         private BrandRepository $repository
     ) {}
 
-    public function execute(int $id): JsonResponse
+    public function execute(int $id): void
     {
         $this->repository->destroy($id);
-
-        return response()->json();
     }
 }

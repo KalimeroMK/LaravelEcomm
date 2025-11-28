@@ -15,6 +15,8 @@ use Modules\Core\Helpers\Payment;
 use Modules\Core\Http\Controllers\CoreController;
 use Session;
 
+// theme_view() is loaded via composer autoload files
+
 class StripeController extends CoreController
 {
     private CreateStripeChargeAction $createAction;
@@ -32,7 +34,7 @@ class StripeController extends CoreController
      */
     public function stripe(int $id): View|Factory|Application
     {
-        return view('front::pages.stripe', ['id' => $id]);
+        return view(theme_view('pages.stripe'), ['id' => $id]);
     }
 
     public function stripePost(Request $request): RedirectResponse

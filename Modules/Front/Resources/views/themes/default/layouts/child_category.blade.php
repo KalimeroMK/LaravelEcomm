@@ -7,7 +7,7 @@
     @if ($child_category->childrenCategories->isNotEmpty())
         <ul class="sub-category">
             @foreach ($child_category->childrenCategories as $childCategory)
-                @include('front::layouts.child_category', ['child_category' => $childCategory])
+                @include($themePath . '.layouts.child_category', ['child_category' => $childCategory])
             @endforeach
         </ul>
     @endif

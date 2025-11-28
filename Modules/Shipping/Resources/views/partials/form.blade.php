@@ -1,4 +1,4 @@
-<form method="post" action="{{ isset($shipping['id']) ? route('shipping.update', $shipping['id']) : route('shipping.store') }}">
+<form method="post" action="{{ isset($shipping['id']) ? route('admin.shipping.update', $shipping['id']) : route('admin.shipping.store') }}">
     @csrf
     @if(isset($shipping['id']))
         @method('PATCH')

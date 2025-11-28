@@ -37,12 +37,15 @@
     <div class="form-group">
         <label for="active_template" class="col-form-label">Active Template <span class="text-danger">*</span></label>
         <select id="active_template" name="active_template" class="form-control">
-            <option value="default" {{ ($settings['active_template'] ?? 'default') == 'default' ? 'selected' : '' }}>
-                Default Theme
-            </option>
-            <option value="modern" {{ ($settings['active_template'] ?? 'default') == 'modern' ? 'selected' : '' }}>
-                Modern Theme
-            </option>
+            @php
+                $availableThemes = get_available_themes();
+                $activeTheme = $settings['active_template'] ?? 'default';
+            @endphp
+            @foreach($availableThemes as $theme)
+                <option value="{{ $theme }}" {{ $activeTheme == $theme ? 'selected' : '' }}>
+                    {{ ucfirst($theme) }} Theme
+                </option>
+            @endforeach
         </select>
         <small class="form-text text-muted">Choose the active theme for your website.</small>
     </div>

@@ -18,8 +18,10 @@ use Modules\Billing\Http\Controllers\PaypalController;
 use Modules\Billing\Http\Controllers\StripeController;
 use Modules\Billing\Http\Controllers\WishlistController;
 
+// theme_view() is loaded via composer autoload files
+
 Route::get('wishlist', function (): Illuminate\Contracts\View\View|Illuminate\Contracts\View\Factory {
-    return view('front::pages.wishlist');
+    return view(theme_view('pages.wishlist'));
 })->name('wishlist');
 Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist');
 Route::get('wishlist-delete/{id}', [WishlistController::class, 'wishlistDelete'])->name('wishlist-delete');

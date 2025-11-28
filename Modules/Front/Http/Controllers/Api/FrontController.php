@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\Front\Http\Controllers\Api;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Front\Actions\BlogAction;
 use Modules\Front\Actions\BlogByCategoryAction;
@@ -16,6 +18,7 @@ use Modules\Front\Actions\BlogSearchAction;
 use Modules\Front\Actions\CouponStoreAction;
 use Modules\Front\Actions\IndexAction;
 use Modules\Front\Actions\MessageStoreAction;
+use Modules\Front\Actions\NewsletterSubscribeAction;
 use Modules\Front\Actions\ProductBrandAction;
 use Modules\Front\Actions\ProductCatAction;
 use Modules\Front\Actions\ProductDealAction;
@@ -26,7 +29,6 @@ use Modules\Front\Actions\ProductListsAction;
 use Modules\Front\Actions\ProductSearchAction;
 use Modules\Message\Http\Requests\Api\Store;
 use Modules\Newsletter\Http\Requests\Store as NewsletterStoreRequest;
-use Modules\Newsletter\Models\Newsletter;
 
 class FrontController extends CoreController
 {
@@ -55,7 +57,10 @@ class FrontController extends CoreController
 
     public function productFilter(Request $request, ProductFilterAction $productFilterAction): JsonResponse
     {
-        return response()->json($productFilterAction($request->all()));
+        $currentRoute = $request->input('route', 'product-grids');
+        $url = $productFilterAction->execute($request->all(), $currentRoute);
+
+        return response()->json(['url' => $url]);
     }
 
     public function productSearch(Request $request, ProductSearchAction $productSearchAction): JsonResponse
@@ -110,17 +115,22 @@ class FrontController extends CoreController
 
     public function couponStore(Request $request, CouponStoreAction $couponStoreAction): JsonResponse
     {
-        return response()->json($couponStoreAction($request));
+        try {
+            $couponData = $couponStoreAction->execute($request->code);
+
+            return response()->json(['success' => true, 'data' => $couponData, 'message' => 'Coupon successfully applied']);
+        } catch (InvalidArgumentException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
     }
 
-    public function subscribe(NewsletterStoreRequest $request): JsonResponse
+    public function subscribe(NewsletterStoreRequest $request, NewsletterSubscribeAction $newsletterSubscribeAction): JsonResponse
     {
-        if (Newsletter::whereEmail($request->email)->exists()) {
-            return response()->json('Email already present in the database', 409);
+        if ($newsletterSubscribeAction($request)) {
+            return response()->json('Subscribed successfully', 200);
         }
 
-        // Dummy action – заменете со NewsletterSubscribeAction ако имате
-        return response()->json('Subscribed successfully', 200);
+        return response()->json('Email already present in the database', 409);
     }
 
     public function verifyNewsletter(string $token): JsonResponse
@@ -137,6 +147,12 @@ class FrontController extends CoreController
 
     public function messageStore(Store $request, MessageStoreAction $messageStoreAction): JsonResponse
     {
-        return response()->json($messageStoreAction($request));
+        try {
+            $message = $messageStoreAction->execute($request->validated());
+
+            return response()->json(['success' => true, 'data' => $message, 'message' => 'Message sent successfully!']);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

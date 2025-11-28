@@ -27,7 +27,7 @@
                                     <li><i class="ti-user"></i> <a href="{{route('admin')}}"
                                                                    target="_blank">Dashboard</a></li>
                                 @else
-                                    <li><i class="ti-user"></i> <a href="{{route('user')}}"
+                                    <li><i class="ti-user"></i> <a href="{{route('user-profile')}}"
                                                                    target="_blank">Dashboard</a></li>
                                 @endif
                                 <li>
@@ -177,7 +177,7 @@
                                             <span
                                                     class="total-amount">${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </div>
-                                        <a href="{{route('checkout')}}" class="btn animate">Checkout</a>
+                                        <a href="{{route('front.checkout')}}" class="btn animate">Checkout</a>
                                     </div>
                                 </div>
                             @endauth

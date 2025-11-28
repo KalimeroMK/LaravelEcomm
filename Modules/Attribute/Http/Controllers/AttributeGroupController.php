@@ -62,7 +62,9 @@ class AttributeGroupController extends CoreController
         $dto = AttributeGroupDTO::fromRequest($request)->withId($attribute_group->id);
         $group = $this->updateAction->execute($dto);
 
-        $group->attributes()->sync($request->input('attributes', []));
+        if ($group instanceof AttributeGroup) {
+            $group->attributes()->sync($request->input('attributes', []));
+        }
 
         return redirect()->route('attribute-groups.index')
             ->with('success', __('Attribute group updated successfully.'));

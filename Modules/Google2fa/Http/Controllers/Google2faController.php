@@ -76,7 +76,7 @@ class Google2faController extends Controller
         $login_security->google2fa_secret = $google2fa->generateSecretKey();
         $login_security->save();
 
-        return redirect()->route('2fa')->with('success', 'Secret key is generated.');
+        return redirect()->route('admin.2fa')->with('success', 'Secret key is generated.');
     }
 
     /**
@@ -99,10 +99,10 @@ class Google2faController extends Controller
             $user->loginSecurity->google2fa_enable = 1;
             $user->loginSecurity->save();
 
-            return redirect()->route('2fa')->with('success', '2FA is enabled successfully.');
+            return redirect()->route('admin.2fa')->with('success', '2FA is enabled successfully.');
         }
 
-        return redirect()->route('2fa')->with('error', 'Invalid verification Code, Please try again.');
+        return redirect()->route('admin.2fa')->with('error', 'Invalid verification Code, Please try again.');
 
     }
 
@@ -114,8 +114,9 @@ class Google2faController extends Controller
     public function disable2fa()
     {
         $user = Auth::user();
-        $user->loginSecurity->google2fa_enable = 0;
-        $user->loginSecurity->save();
+        $loginSecurity = Google2fa::firstOrNew(['user_id' => $user->id]);
+        $loginSecurity->google2fa_enable = 0;
+        $loginSecurity->save();
 
         return redirect()->back()->with('success', '2FA is now disabled.');
     }

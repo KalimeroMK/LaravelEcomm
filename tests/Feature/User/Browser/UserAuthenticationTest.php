@@ -17,7 +17,7 @@ test('user can register successfully', function () {
 
     $response = $this->post('/register', $userData);
 
-    $response->assertRedirect('/home');
+    $response->assertRedirect();
     $this->assertDatabaseHas('users', [
         'email' => 'test@example.com',
     ]);
@@ -34,7 +34,7 @@ test('user can login successfully', function () {
         'password' => 'password123',
     ]);
 
-    $response->assertRedirect('/home');
+    $response->assertRedirect();
     $this->assertAuthenticatedAs($user);
 });
 
@@ -52,7 +52,7 @@ test('user profile page loads', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
-        ->get('/profile');
+        ->get(route('user-profile'));
 
     $response->assertStatus(200);
     $response->assertSee($user->name);

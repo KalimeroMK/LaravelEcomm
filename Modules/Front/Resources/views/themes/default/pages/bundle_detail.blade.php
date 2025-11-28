@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 @section('SOE')
     <title>{{$bundle->name ?? ''}} || PRODUCT DETAIL</title>
     <meta charset="utf-8">

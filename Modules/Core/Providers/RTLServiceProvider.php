@@ -28,7 +28,7 @@ class RTLServiceProvider extends ServiceProvider
         });
 
         Blade::directive('endrtl', function () {
-            return "<?php endif; ?>";
+            return '<?php endif; ?>';
         });
 
         // LTR Blade directive
@@ -37,7 +37,7 @@ class RTLServiceProvider extends ServiceProvider
         });
 
         Blade::directive('endltr', function () {
-            return "<?php endif; ?>";
+            return '<?php endif; ?>';
         });
 
         // Locale Blade directive
@@ -46,7 +46,7 @@ class RTLServiceProvider extends ServiceProvider
         });
 
         Blade::directive('endlocale', function () {
-            return "<?php endif; ?>";
+            return '<?php endif; ?>';
         });
 
         // Translation Blade directive

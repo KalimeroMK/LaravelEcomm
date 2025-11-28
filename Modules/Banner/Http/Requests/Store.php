@@ -19,6 +19,7 @@ class Store extends CoreRequest
             'title' => 'required|string|unique:banners,title|max:50',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'link' => 'nullable|url',
+            'status' => 'nullable|in:active,inactive',
             'active_from' => 'nullable|date',
             'active_to' => 'nullable|date|after_or_equal:active_from',
             'max_clicks' => 'nullable|integer|min:0',

@@ -13,6 +13,12 @@ declare(strict_types=1);
 |
 */
 
+// Create empty .env file if it doesn't exist to prevent warnings
+$envPath = __DIR__.'/../.env';
+if (! file_exists($envPath)) {
+    @file_put_contents($envPath, '');
+}
+
 uses(
     Tests\TestCase::class,
     Illuminate\Foundation\Testing\RefreshDatabase::class,

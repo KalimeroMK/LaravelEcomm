@@ -19,9 +19,18 @@ readonly class CreateCategoryAction
 
     public function execute(CategoryDTO $dto): Category
     {
-        return $this->repository->create([
+        $category = new Category([
             'title' => $dto->title,
             'parent_id' => $dto->parent_id,
         ]);
+
+        if ($dto->parent_id) {
+            $parent = $this->repository->findById($dto->parent_id);
+            $category->appendToNode($parent)->save();
+        } else {
+            $category->makeRoot()->save();
+        }
+
+        return $category->fresh();
     }
 }

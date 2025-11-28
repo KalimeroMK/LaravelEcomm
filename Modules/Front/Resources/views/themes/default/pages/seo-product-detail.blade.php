@@ -1,4 +1,4 @@
-@extends('front::layouts.seo-master')
+@extends($themePath . '.layouts.seo-master')
 
 @section('seo')
     <!-- Additional product-specific SEO -->
@@ -96,7 +96,7 @@
                         
                         @if($product_detail->stock > 0)
                             <div class="product-actions">
-                                <form action="{{ route('front.cart.add', $product_detail->slug) }}" method="POST">
+                                <form action="{{ route('add-to-cart', $product_detail->slug) }}" method="GET">
                                     @csrf
                                     <div class="quantity-selector">
                                         <label for="quantity">Quantity:</label>

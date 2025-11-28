@@ -14,26 +14,26 @@ class ProductPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('product-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user): bool
     {
-        return $user->can('product-list');
+        return true; // Anyone can view products
     }
 
     public function create(User $user): bool
     {
-        return $user->can('product-create');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Product $product): bool
     {
-        return $user->can('product-update');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function delete(User $user, Product $product): bool
     {
-        return $user->can('product-delete');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 }

@@ -1,4 +1,4 @@
-@extends('front::layouts.app')
+@extends($themePath . '.layouts.app')
 
 @section('title', 'My Wishlist - ' . config('app.name'))
 

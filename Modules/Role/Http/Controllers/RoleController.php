@@ -71,7 +71,8 @@ class RoleController extends CoreController
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->storeAction->execute($request->all());
+        $dto = RoleDTO::fromArray($request->all());
+        $this->storeAction->execute($dto);
 
         return redirect()->route('roles.index');
     }

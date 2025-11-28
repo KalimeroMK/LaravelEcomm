@@ -18,17 +18,24 @@ class AttributeValueSeeder extends Seeder
             'size' => ['M', 'XXL'],       // M is predefined, XXL is custom
         ];
 
+        /** @var Product|null $product */
         $product = Product::first();
-        if (! $product) {
+        if (! $product instanceof Product) {
             $product = Product::factory()->create();
         }
+
+        if (! $product instanceof Product) {
+            return;
+        }
+
+        $productId = $product->id;
 
         foreach ($values as $code => $items) {
             $attribute = Attribute::where('code', $code)->first();
             if ($attribute) {
                 foreach ($items as $value) {
                     AttributeValue::create([
-                        'product_id' => $product->id,
+                        'product_id' => $productId,
                         'attribute_id' => $attribute->id,
                         'text_value' => $value,
                     ]);

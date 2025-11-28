@@ -14,26 +14,26 @@ class BrandPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('brand-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user, Brand $brand): bool
     {
-        return $user->can('brand-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function create(User $user): bool
     {
-        return $user->can('brand-create');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Brand $brand): bool
     {
-        return $user->can('brand-update');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function delete(User $user, Brand $brand): bool
     {
-        return $user->can('brand-delete');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 }

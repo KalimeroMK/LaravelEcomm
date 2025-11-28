@@ -97,7 +97,7 @@ class BundleController extends Controller
      */
     public function update(Update $request, Bundle $bundle): RedirectResponse
     {
-        $dto = BundleDTO::fromRequest($request)->withId($bundle->id);
+        $dto = BundleDTO::fromRequest($request, $bundle->id, $bundle);
         $bundle = $this->updateAction->execute($dto);
         SyncRelations::execute($bundle, ['products' => $dto->products]);
         /** @var Bundle $bundle */

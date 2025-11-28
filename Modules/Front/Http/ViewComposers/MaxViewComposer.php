@@ -11,6 +11,7 @@ class MaxViewComposer
 {
     public function compose(View $view): void
     {
-        $view->with('max', Product::max('price'));
+        $max = Product::max('price');
+        $view->with('max', $max ?? 1000); // Default to 1000 if no products exist
     }
 }

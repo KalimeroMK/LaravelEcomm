@@ -1,4 +1,4 @@
-@extends('front::layouts.app')
+@extends($themePath . '.layouts.app')
 
 @section('title', 'Advanced Search - ' . config('app.name'))
 

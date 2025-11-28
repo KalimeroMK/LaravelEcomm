@@ -76,7 +76,7 @@
     
         <!-- header-container start -->
         <div class="header-container">
-            @include('front::layouts.header')
+            @include($themePath . '.layouts.header')
         </div>
         <!-- header-container end -->
 
@@ -89,7 +89,7 @@
 
         <!-- footer start -->
         <!-- ================ -->
-        @include('front::layouts.footer')
+        @include($themePath . '.layouts.footer')
         <!-- footer end -->
         
     </div>

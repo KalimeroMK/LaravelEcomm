@@ -14,26 +14,26 @@ class CouponPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->can('coupon-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function view(User $user, Coupon $coupon): bool
     {
-        return $user->can('coupon-list');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function create(User $user): bool
     {
-        return $user->can('coupon-create');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function update(User $user, Coupon $coupon): bool
     {
-        return $user->can('coupon-update');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 
     public function delete(User $user, Coupon $coupon): bool
     {
-        return $user->can('coupon-delete');
+        return $user->hasAnyRole(['admin', 'super-admin']);
     }
 }

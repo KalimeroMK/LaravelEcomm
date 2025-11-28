@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Banner\Actions;
 
-use Illuminate\Http\JsonResponse;
 use Modules\Banner\Repository\BannerRepository;
 
 readonly class DeleteBannerAction
@@ -16,10 +15,8 @@ readonly class DeleteBannerAction
         $this->repository = $repository;
     }
 
-    public function execute(int $id): JsonResponse
+    public function execute(int $id): void
     {
         $this->repository->destroy($id);
-
-        return response()->json();
     }
 }

@@ -1,5 +1,5 @@
 @php use Modules\Core\Helpers\Helper; @endphp
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 @section('title','Cart Page')
 @section('content')
     <!-- Breadcrumbs -->
@@ -182,7 +182,7 @@
                                         @endif
                                     </ul>
                                     <div class="button5">
-                                        <a href="{{route('checkout')}}" class="btn">Checkout</a>
+                                        <a href="{{route('front.checkout')}}" class="btn">Checkout</a>
                                         <a href="{{route('front.product-grids')}}" class="btn">Continue shopping</a>
                                     </div>
                                 </div>
@@ -242,7 +242,7 @@
     <!-- End Shop Newsletter -->
 
     <!-- Start Shop Newsletter  -->
-    @include('front::layouts.newsletter')
+    @include($themePath . '.layouts.newsletter')
     <!-- End Shop Newsletter -->
 
 

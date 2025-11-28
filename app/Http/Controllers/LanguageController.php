@@ -17,11 +17,11 @@ class LanguageController extends Controller
     public function switchLang(Request $request, string $lang): RedirectResponse
     {
         $locales = config('app.locales', []);
-        
+
         if (array_key_exists($lang, $locales)) {
             Session::put('locale', $lang);
             app()->setLocale($lang);
-            
+
             // Store in user preferences if user is authenticated
             if (auth()->check()) {
                 auth()->user()->update(['locale' => $lang]);

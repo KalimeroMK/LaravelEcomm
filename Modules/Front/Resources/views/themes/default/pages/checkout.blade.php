@@ -1,5 +1,5 @@
 @php use Modules\Core\Helpers\Helper; @endphp
-@extends('front::layouts.master')
+@extends($themePath . '.layouts.master')
 
 @section('title','Checkout page')
 

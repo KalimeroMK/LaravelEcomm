@@ -20,11 +20,22 @@ readonly class UpdateCategoryAction
     public function execute(CategoryDTO $dto): Model
     {
         $category = $this->repository->findById($dto->id);
-        $category->update([
-            'title' => $dto->title,
-            'parent_id' => $dto->parent_id,
-        ]);
 
-        return $category;
+        // Update title
+        $category->title = $dto->title;
+
+        // Handle parent change for nested set
+        if ($dto->parent_id !== $category->parent_id) {
+            if ($dto->parent_id) {
+                $parent = $this->repository->findById($dto->parent_id);
+                $category->appendToNode($parent)->save();
+            } else {
+                $category->makeRoot()->save();
+            }
+        } else {
+            $category->save();
+        }
+
+        return $category->fresh();
     }
 }

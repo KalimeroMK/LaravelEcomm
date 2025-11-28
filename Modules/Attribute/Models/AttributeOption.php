@@ -45,8 +45,6 @@ class AttributeOption extends Model
     ];
 
     /**
-     * @phpstan-ignore-next-line
-     *
      * @return BelongsTo<Attribute, AttributeOption>
      */
     public function attribute(): BelongsTo

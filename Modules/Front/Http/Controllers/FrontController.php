@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use InvalidArgumentException;
 use Modules\Banner\Models\Banner;
 use Modules\Billing\Services\WishlistService;
 use Modules\Front\Actions\BlogAction;
@@ -44,6 +45,8 @@ use Modules\Message\Http\Requests\Store;
 use Modules\Product\Services\ElasticsearchService;
 use Modules\Product\Services\RecommendationService;
 
+// theme_view() is loaded via composer autoload files
+
 class FrontController extends Controller
 {
     /**
@@ -51,7 +54,7 @@ class FrontController extends Controller
      */
     public function index(IndexAction $indexAction): Factory|View
     {
-        return view('front::index', $indexAction());
+        return view(theme_view('index'), $indexAction());
     }
 
     /**
@@ -59,7 +62,7 @@ class FrontController extends Controller
      */
     public function aboutUs(): Factory|View
     {
-        return view('front::pages.about-us', []);
+        return view(theme_view('pages.about-us'), []);
     }
 
     /**
@@ -67,7 +70,7 @@ class FrontController extends Controller
      */
     public function contact(): Factory|View
     {
-        return view('front::pages.contact', []);
+        return view(theme_view('pages.contact'), []);
     }
 
     /**
@@ -75,7 +78,7 @@ class FrontController extends Controller
      */
     public function productDetail(string $slug, ProductDetailAction $productDetailAction): Factory|View
     {
-        return view('front::pages.product_detail', $productDetailAction($slug));
+        return view(theme_view('pages.product_detail'), $productDetailAction($slug));
     }
 
     /**
@@ -83,7 +86,7 @@ class FrontController extends Controller
      */
     public function productGrids(ProductGridsAction $productGridsAction): Factory|View
     {
-        return view('front::pages.product-grids', $productGridsAction());
+        return view(theme_view('pages.product-grids'), $productGridsAction());
     }
 
     /**
@@ -91,12 +94,12 @@ class FrontController extends Controller
      */
     public function bundles(ProductBundlesAction $productBundlesAction): Factory|View
     {
-        return view('front::pages.bundles', $productBundlesAction());
+        return view(theme_view('pages.bundles'), $productBundlesAction());
     }
 
     public function bundleDetail(string $slug, BundleDetailAction $bundleDetailAction): Factory|View
     {
-        return view('front::pages.bundle_detail', $bundleDetailAction($slug));
+        return view(theme_view('pages.bundle_detail'), $bundleDetailAction($slug));
     }
 
     /**
@@ -104,12 +107,16 @@ class FrontController extends Controller
      */
     public function productLists(ProductListsAction $productListsAction): Factory|View
     {
-        return view('front::pages.product-lists', $productListsAction());
+        return view(theme_view('pages.product-lists'), $productListsAction());
     }
 
     public function productFilter(Request $request, ProductFilterAction $productFilterAction): RedirectResponse
     {
-        return $productFilterAction($request->all());
+        $appUrl = config('app.url');
+        $currentRoute = request()->is($appUrl.'/product-grids') ? 'product-grids' : 'product-lists';
+        $url = $productFilterAction->execute($request->all(), $currentRoute);
+
+        return redirect($url);
     }
 
     /**
@@ -117,7 +124,7 @@ class FrontController extends Controller
      */
     public function productSearch(ProductSearchRequest $request, ProductSearchAction $productSearchAction): Factory|View
     {
-        return view('front::pages.product-grids', $productSearchAction($request->validated()));
+        return view(theme_view('pages.product-grids'), $productSearchAction($request->validated()));
     }
 
     /**
@@ -125,19 +132,19 @@ class FrontController extends Controller
      */
     public function productDeal(ProductDealAction $productDealAction): Factory|View
     {
-        return view('front::pages.product-deal', $productDealAction());
+        return view(theme_view('pages.product-deal'), $productDealAction());
     }
 
     /**
      * @return Application|Factory|View
      */
-    public function productBrand(Request $request, ProductBrandAction $productBrandAction): Factory|View
+    public function productBrand(string $slug, ProductBrandAction $productBrandAction): Factory|View
     {
         if (request()->is('e-shop.loc/product-grids')) {
-            return view('front::pages.product-grids', $productBrandAction($request->all()));
+            return view(theme_view('pages.product-grids'), $productBrandAction($slug));
         }
 
-        return view('front::pages.product-lists', $productBrandAction($request->all()));
+        return view(theme_view('pages.product-lists'), $productBrandAction($slug));
     }
 
     /**
@@ -145,7 +152,7 @@ class FrontController extends Controller
      */
     public function productCat(string $slug, ProductCatAction $productCatAction): Factory|View
     {
-        return view('front::pages.product-lists', $productCatAction($slug));
+        return view(theme_view('pages.product-lists'), $productCatAction($slug));
     }
 
     /**
@@ -153,7 +160,7 @@ class FrontController extends Controller
      */
     public function blog(BlogAction $blogAction): Factory|View
     {
-        return view('front::pages.blog', $blogAction());
+        return view(theme_view('pages.blog'), $blogAction());
     }
 
     /**
@@ -161,7 +168,7 @@ class FrontController extends Controller
      */
     public function blogDetail(string $slug, BlogDetailAction $blogDetailAction): Factory|View
     {
-        return view('front::pages.blog-detail', $blogDetailAction($slug));
+        return view(theme_view('pages.blog-detail'), $blogDetailAction($slug));
     }
 
     /**
@@ -169,7 +176,7 @@ class FrontController extends Controller
      */
     public function blogSearch(Request $request, BlogSearchAction $blogSearchAction): Factory|View
     {
-        return view('front::pages.blog', $blogSearchAction($request));
+        return view(theme_view('pages.blog'), $blogSearchAction($request));
     }
 
     public function blogFilter(Request $request, BlogFilterAction $blogFilterAction): RedirectResponse
@@ -182,7 +189,7 @@ class FrontController extends Controller
      */
     public function blogByCategory(string $slug, BlogByCategoryAction $blogByCategoryAction): Factory|View
     {
-        return view('front::pages.blog', $blogByCategoryAction($slug));
+        return view(theme_view('pages.blog'), $blogByCategoryAction($slug));
     }
 
     /**
@@ -193,12 +200,19 @@ class FrontController extends Controller
      */
     public function blogByTag(string $slug, BlogByTagAction $blogByTagAction): View
     {
-        return view('front::pages.blog', $blogByTagAction($slug));
+        return view(theme_view('pages.blog'), $blogByTagAction($slug));
     }
 
     public function couponStore(Request $request, CouponStoreAction $couponStoreAction): RedirectResponse
     {
-        return $couponStoreAction($request);
+        try {
+            $couponData = $couponStoreAction->execute($request->code);
+            request()->session()->flash('success', 'Coupon successfully applied');
+        } catch (InvalidArgumentException $e) {
+            request()->session()->flash('error', $e->getMessage());
+        }
+
+        return redirect()->back();
     }
 
     public function subscribe(Request $request, NewsletterSubscribeAction $newsletterSubscribeAction): RedirectResponse
@@ -233,7 +247,14 @@ class FrontController extends Controller
      */
     public function messageStore(Store $request, MessageStoreAction $messageStoreAction): RedirectResponse
     {
-        return $messageStoreAction($request);
+        try {
+            $message = $messageStoreAction->execute($request->validated());
+            request()->session()->flash('success', 'Message sent successfully!');
+        } catch (Exception $e) {
+            request()->session()->flash('error', $e->getMessage());
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -275,7 +296,7 @@ class FrontController extends Controller
         // Get available filters
         $availableFilters = $this->getAvailableFilters($query);
 
-        return view('front::pages.advanced-search', [
+        return view(theme_view('pages.advanced-search'), [
             'products' => $products,
             'query' => $query,
             'filters' => $filters,
@@ -343,7 +364,7 @@ class FrontController extends Controller
             $recommendationType = 'Trending now';
         }
 
-        return view('front::pages.recommendations', [
+        return view(theme_view('pages.recommendations'), [
             'recommendations' => $recommendations,
             'type' => $type,
             'recommendationType' => $recommendationType,
@@ -361,7 +382,7 @@ class FrontController extends Controller
 
         $relatedProducts = $recommendationService->getContentBasedRecommendations($product, $limit);
 
-        return view('front::pages.related-products', [
+        return view(theme_view('pages.related-products'), [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
             'totalCount' => $relatedProducts->count(),
@@ -390,7 +411,7 @@ class FrontController extends Controller
         $stats = $wishlistService->getWishlistStats($user);
         $recommendations = $wishlistService->getWishlistRecommendations($user, 6);
 
-        return view('front::pages.enhanced-wishlist', [
+        return view(theme_view('pages.enhanced-wishlist'), [
             'wishlist' => $wishlist,
             'statistics' => $stats,
             'recommendations' => $recommendations,
@@ -423,7 +444,7 @@ class FrontController extends Controller
 
     public function pages(string $slug, PageDetailAction $pageDetailAction): View
     {
-        return view('front::pages.page', $pageDetailAction($slug));
+        return view(theme_view('pages.page'), $pageDetailAction($slug));
     }
 
     /**
@@ -440,7 +461,7 @@ class FrontController extends Controller
         }
         $banners = $query->get()->filter(fn ($b): bool => $b->isActive());
 
-        return view('front::banner', ['banners' => $banners]);
+        return view(theme_view('banner'), ['banners' => $banners]);
     }
 
     /**

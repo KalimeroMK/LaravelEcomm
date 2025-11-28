@@ -14,6 +14,7 @@ use Modules\Shipping\Actions\FindShippingAction;
 use Modules\Shipping\Actions\GetAllShippingAction;
 use Modules\Shipping\Actions\StoreShippingAction;
 use Modules\Shipping\Actions\UpdateShippingAction;
+use Modules\Shipping\DTOs\ShippingDTO;
 use Modules\Shipping\Http\Requests\Store;
 use Modules\Shipping\Http\Requests\Update;
 use Modules\Shipping\Models\Shipping;
@@ -54,9 +55,9 @@ class ShippingController extends CoreController
 
     public function store(Store $request): RedirectResponse
     {
-        $this->storeShippingAction->execute($request->validated());
+        $this->storeShippingAction->execute(ShippingDTO::fromRequest($request));
 
-        return redirect()->route('shippings.index');
+        return redirect()->route('admin.shipping.index');
     }
 
     public function create(): Application|Factory|View
@@ -73,9 +74,9 @@ class ShippingController extends CoreController
 
     public function update(Update $request, Shipping $shipping): RedirectResponse
     {
-        $this->updateShippingAction->execute($shipping->id, $request->validated());
+        $this->updateShippingAction->execute($shipping->id, ShippingDTO::fromRequest($request, $shipping->id, $shipping));
 
-        return redirect()->route('shippings.index');
+        return redirect()->route('admin.shipping.index');
     }
 
     public function destroy(Shipping $shipping): RedirectResponse
