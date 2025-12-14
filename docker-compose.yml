@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD", "php", "artisan", "--version"]
+      test: [ "CMD", "php", "artisan", "--version" ]
       interval: 30s
       retries: 3
       start_period: 10s
@@ -33,6 +33,10 @@ services:
       - PHP_OPCACHE_MEMORY_CONSUMPTION=128
       - PHP_OPCACHE_MAX_ACCELERATED_FILES=4000
       - PHP_OPCACHE_REVALIDATE_FREQ=2
+      - DB_HOST=db
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOST=elasticsearch
 
   db:
     image: mariadb:latest
@@ -58,7 +62,6 @@ services:
     ports:
       - "3311:3306"
 
-
   nginx:
     image: nginx:alpine
     container_name: e_comm_nginx
@@ -71,7 +74,7 @@ services:
     networks:
       - laravelapp
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/" ]
       interval: 30s
       retries: 3
       start_period: 5s
@@ -92,7 +95,7 @@ services:
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 30s
       retries: 3
       start_period: 5s
@@ -113,7 +116,7 @@ services:
     ports:
       - "9200:9200"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
       interval: 30s
       retries: 3
       start_period: 60s

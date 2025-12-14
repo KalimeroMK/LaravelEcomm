@@ -34,5 +34,6 @@
                <env name="SESSION_DRIVER" value="array"/>
                <env name="TELESCOPE_ENABLED" value="false"/>
                <env name="DB_SEED_CLASS" value="Database\Seeders\TestDataSeeder"/>
+               <env name="LARAVEL_LOGGER_DATABASE_CONNECTION" value="sqlite"/>
            </php>
 </phpunit>

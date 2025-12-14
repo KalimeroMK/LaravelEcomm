@@ -302,6 +302,13 @@ php artisan seo:generate-sitemap
 -   **MySQL**: 3311 → 3306
 -   **Redis**: 6379 → 6379
 -   **Elasticsearch**: 9200 → 9200
+-   **Elasticsearch (DB)**: 9200 → 9200
+
+#### Elasticsearch Setup
+
+1. **Ensure container is running**: `docker ps | grep elasticsearch`
+2. **Index products**: `docker-compose exec app php artisan product:index`
+    - Use `--fresh` flag to rebuild index from scratch: `php artisan product:index --fresh`
 
 ## Management Commands
 
@@ -319,6 +326,7 @@ php artisan seo:generate-sitemap
 -   **Generate XML sitemaps**: `php artisan seo:generate-sitemap`
 -   **Clear application cache**: `php artisan cache:clear`
 -   **Optimize application**: `php artisan optimize`
+-   **Index products in Elasticsearch**: `php artisan product:index`
 
 #### Analytics & Reports
 

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\Product\Providers;
 
-use Config;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Modules\Core\Traits\AutoRegistersCommands;
+use Modules\Product\Console\IndexProducts;
 use Modules\Product\Models\Policies\ProductReviewPolicy;
+use Modules\Product\Models\Product;
 use Modules\Product\Models\ProductReview;
+use Modules\Product\Observers\ProductObserver;
 
 class ProductServiceProvider extends ServiceProvider
 {
@@ -30,6 +33,12 @@ class ProductServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         $this->registerPolicies();
         $this->autoRegisterCommands($this->moduleName);
+        
+        Product::observe(ProductObserver::class);
+    
+        $this->commands([
+            IndexProducts::class,
+        ]);
     }
 
     /**

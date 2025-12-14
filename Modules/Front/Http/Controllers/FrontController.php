@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use Modules\Banner\Models\Banner;
 use Modules\Billing\Services\WishlistService;
@@ -480,44 +481,51 @@ class FrontController extends Controller
      */
     private function getAvailableFilters(?string $query): array
     {
-        $baseQuery = \Modules\Product\Models\Product::query();
+        $cacheKey = 'front_search_filters_' . md5(json_encode(['query' => $query]));
 
-        if ($query) {
-            $baseQuery->where(function ($q) use ($query): void {
-                $q->where('title', 'like', "%{$query}%")
-                    ->orWhere('summary', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%");
-            });
-        }
+        return Cache::remember($cacheKey, 3600, function () use ($query) {
+            $baseQuery = \Modules\Product\Models\Product::query();
 
-        $baseQuery->where('status', 'active');
+            if ($query) {
+                $baseQuery->where(function ($q) use ($query): void {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('summary', 'like', "%{$query}%")
+                        ->orWhere('description', 'like', "%{$query}%");
+                });
+            }
 
-        // Get price range
-        $priceRange = $baseQuery->selectRaw('MIN(price) as min_price, MAX(price) as max_price')->first();
+            $baseQuery->where('status', 'active');
 
-        // Get available brands
-        $brands = $baseQuery->join('brands', 'products.brand_id', '=', 'brands.id')
-            ->select('brands.id', 'brands.name')
-            ->distinct()
-            ->get();
+            // Get price range
+            $priceRange = $baseQuery->selectRaw('MIN(price) as min_price, MAX(price) as max_price')->first();
 
-        // Get available categories
-        $categories = $baseQuery->join('category_product', 'products.id', '=', 'category_product.product_id')
-            ->join('categories', 'category_product.category_id', '=', 'categories.id')
-            ->select('categories.id', 'categories.name')
-            ->distinct()
-            ->get();
+            // Get available brands
+            // Clone query to avoid modifying the base query for subsequent calls if any (though here we build new ones)
+            $brandsQuery = clone $baseQuery;
+            $brands = $brandsQuery->join('brands', 'products.brand_id', '=', 'brands.id')
+                ->select('brands.id', 'brands.name')
+                ->distinct()
+                ->get();
 
-        return [
-            'price_range' => [
-                'min' => $priceRange->min_price ?? 0,
-                'max' => $priceRange->max_price ?? 1000,
-            ],
-            'brands' => $brands,
-            'categories' => $categories,
-            'statuses' => ['active', 'inactive'],
-            'stock_options' => ['in_stock', 'out_of_stock'],
-        ];
+            // Get available categories
+            $categoriesQuery = clone $baseQuery;
+            $categories = $categoriesQuery->join('category_product', 'products.id', '=', 'category_product.product_id')
+                ->join('categories', 'category_product.category_id', '=', 'categories.id')
+                ->select('categories.id', 'categories.name')
+                ->distinct()
+                ->get();
+
+            return [
+                'price_range' => [
+                    'min' => $priceRange->min_price ?? 0,
+                    'max' => $priceRange->max_price ?? 1000,
+                ],
+                'brands' => $brands,
+                'categories' => $categories,
+                'statuses' => ['active', 'inactive'],
+                'stock_options' => ['in_stock', 'out_of_stock'],
+            ];
+        });
     }
 
     /**
