@@ -154,6 +154,31 @@
 
 ## Recent Enhancements
 
+### API Refactoring & Architecture Improvements (Latest)
+
+-   **Action-Based Architecture**: Complete refactoring of all web and API controllers to use reusable Action classes
+-   **API Controller Alignment**: All API controllers now fully aligned with their web counterparts
+-   **Comprehensive API Coverage**: Complete API endpoints for all modules (Products, Orders, Categories, Settings, Users, etc.)
+-   **Postman Collection**: Fully updated Postman collection with all API endpoints documented
+-   **Test Suite Improvements**: 503 tests passing (up from 500) with comprehensive API test coverage
+-   **PHPStan Compliance**: Fixed all PHPStan errors for better code quality
+-   **Code Reusability**: Action classes shared between web and API controllers for DRY principle
+
+### Modern Theme Implementation
+
+-   **Complete Modern Theme**: Full implementation of modern theme with 32+ view files
+-   **Theme Components**: Advanced navigation, layouts, and page templates
+-   **Responsive Design**: Modern, responsive UI/UX with comprehensive page coverage
+-   **Theme Switching**: Easy theme switching through settings configuration
+-   **Email Templates**: Modern newsletter and email templates included
+
+### Elasticsearch Integration
+
+-   **Advanced Search**: Elasticsearch service integration for powerful product search
+-   **Indexing Commands**: Automated product indexing with console commands
+-   **Observer Pattern**: Product observer for automatic index updates
+-   **Search Performance**: Optimized search queries and results
+
 ### Email Marketing & Automation
 
 -   **Abandoned Cart Recovery**: 3-email sequence automation to recover lost sales
@@ -179,7 +204,7 @@
 
 ### Technical Improvements
 
--   **100% Test Coverage**: All unit tests passing with comprehensive test suite
+-   **503 Tests Passing**: Comprehensive test suite with 503 passing tests
 -   **Code Quality**: Enhanced error handling, validation, and documentation
 -   **Database Optimization**: Improved migrations with proper indexing
 -   **Service Architecture**: Better separation of concerns and modularity
@@ -505,9 +530,22 @@ Generate description button will SHOW in product CRUD page.
 
 ### API Endpoints
 
+The application provides comprehensive RESTful API endpoints for all modules:
+
+-   **Products API**: `/api/v1/products/*` - Complete product CRUD, reviews, comparison, import/export
+-   **Orders API**: `/api/v1/orders/*` - Order management, tracking, PDF generation
+-   **Categories API**: `/api/v1/categories/*` - Category management with tree structure
+-   **Users API**: `/api/v1/users/*` - User management with roles and permissions
+-   **Settings API**: `/api/v1/settings/*` - General, email, payment, shipping, SEO settings
 -   **Analytics API**: `/api/v1/admin/analytics/*` - Analytics data endpoints
 -   **Email Marketing API**: `/api/v1/newsletter/*` - Newsletter and email management
 -   **User Behavior API**: `/api/v1/admin/analytics/behavior/*` - User tracking endpoints
+-   **Google2FA API**: `/api/v1/admin/2fa/*` - Two-factor authentication management
+-   **OpenAI API**: `/api/v1/openai/*` - AI-powered text generation and chat completion
+-   **Product Stats API**: `/api/v1/product-stats/*` - Product analytics and tracking
+-   **And many more...**: Complete API documentation available in Postman collection
+
+**Postman Collection**: Import `LaravelEcomm_Product_API.postman_collection.json` for complete API documentation
 
 ### Key Features Overview
 
