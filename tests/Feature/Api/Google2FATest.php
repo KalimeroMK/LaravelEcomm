@@ -130,4 +130,3 @@ class Google2FATest extends TestCase
         expect($response->status())->toBeIn([200, 403]);
     }
 }
-

@@ -249,4 +249,3 @@ class SettingsTest extends TestCase
         expect($setting->seo_settings['meta_title'])->toBe('Test Store - SEO Title');
     }
 }
-

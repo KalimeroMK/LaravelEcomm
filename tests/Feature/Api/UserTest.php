@@ -6,7 +6,6 @@ namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\User\Models\User;
 use PHPUnit\Framework\Attributes\Test;
@@ -183,4 +182,3 @@ class UserTest extends TestCase
         ]);
     }
 }
-

@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 class PageListDTO
 {
     /**
-     * @param Collection<int, \Modules\Page\Models\Page> $pages
+     * @param  Collection<int, \Modules\Page\Models\Page>  $pages
      */
     public function __construct(public Collection $pages) {}
 }

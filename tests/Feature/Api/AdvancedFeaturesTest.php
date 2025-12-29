@@ -143,14 +143,14 @@ class AdvancedFeaturesTest extends TestCase
 
         // Try both Product module route (uses productId) and Front module route (uses slug)
         $response = $this->get("/api/v1/recommendations/related/{$product->id}?limit=5");
-        
+
         // If 404, try with slug (Front module route)
         if ($response->status() === 404) {
             $response = $this->get("/api/v1/recommendations/related/{$product->slug}?limit=5");
         }
-        
+
         $response->assertStatus(200);
-        
+
         // Front module returns different structure, check for either structure
         $responseData = $response->json();
         if (isset($responseData['success'])) {
