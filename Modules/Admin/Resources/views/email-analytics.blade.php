@@ -185,7 +185,7 @@
 </div>
 
 <!-- Notification Container -->
-<div id="notificationContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+<div id="notificationContainer" class="notification-container"></div>
 
 @endsection
 

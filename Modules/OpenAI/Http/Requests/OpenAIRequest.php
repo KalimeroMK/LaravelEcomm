@@ -278,43 +278,6 @@ class OpenAIRequest extends BaseRequest
     }
 
     /**
-     * Get custom messages for validator errors.
-     */
-    public function messages(): array
-    {
-        return array_merge(parent::messages(), [
-            'prompt.required' => 'Prompt is required.',
-            'prompt.min' => 'Prompt must be at least 10 characters long.',
-            'prompt.max' => 'Prompt must not exceed 4000 characters.',
-            'model.required' => 'Model is required.',
-            'model.in' => 'Invalid model selected.',
-            'max_tokens.min' => 'Max tokens must be at least 1.',
-            'max_tokens.max' => 'Max tokens cannot exceed 4096.',
-            'temperature.min' => 'Temperature must be at least 0.',
-            'temperature.max' => 'Temperature cannot exceed 2.',
-            'top_p.min' => 'Top P must be at least 0.',
-            'top_p.max' => 'Top P cannot exceed 1.',
-            'frequency_penalty.min' => 'Frequency penalty must be at least -2.',
-            'frequency_penalty.max' => 'Frequency penalty cannot exceed 2.',
-            'presence_penalty.min' => 'Presence penalty must be at least -2.',
-            'presence_penalty.max' => 'Presence penalty cannot exceed 2.',
-            'stop.max' => 'Maximum 4 stop sequences are allowed.',
-            'stop.*.max' => 'Each stop sequence must not exceed 200 characters.',
-            'user.max' => 'User must not exceed 100 characters.',
-            'logit_bias.max' => 'Maximum 300 logit bias entries are allowed.',
-            'logit_bias.*.min' => 'Logit bias value must be at least -100.',
-            'logit_bias.*.max' => 'Logit bias value cannot exceed 100.',
-            'suffix.max' => 'Suffix must not exceed 500 characters.',
-            'best_of.min' => 'Best of must be at least 1.',
-            'best_of.max' => 'Best of cannot exceed 20.',
-            'n.min' => 'N must be at least 1.',
-            'n.max' => 'N cannot exceed 10.',
-            'logprobs.min' => 'Logprobs must be at least 0.',
-            'logprobs.max' => 'Logprobs cannot exceed 5.',
-        ]);
-    }
-
-    /**
      * Additional validation rules.
      */
     protected function additionalValidation($validator): void

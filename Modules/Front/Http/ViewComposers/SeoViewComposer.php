@@ -26,14 +26,32 @@ class SeoViewComposer
 
     private function generateSeoData(array $data): array
     {
+        // Get SEO settings from database
+        $settings = \Modules\Settings\Models\Setting::first();
+        $seoSettings = $settings?->seo_settings ?? [];
+
         $seoData = [
-            'title' => config('app.name'),
-            'description' => 'Online shopping store with quality products and fast delivery.',
-            'keywords' => 'online shopping, ecommerce, products, deals, discounts',
+            'title' => $seoSettings['meta_title'] ?? config('app.name'),
+            'description' => $seoSettings['meta_description'] ?? 'Online shopping store with quality products and fast delivery.',
+            'keywords' => $seoSettings['meta_keywords'] ?? 'online shopping, ecommerce, products, deals, discounts',
             'canonical' => request()->url(),
             'og' => [],
             'twitter' => [],
             'schema' => [],
+            'analytics' => [
+                'google_analytics_id' => $seoSettings['google_analytics_id'] ?? null,
+                'google_tag_manager_id' => $seoSettings['google_tag_manager_id'] ?? null,
+                'facebook_pixel_id' => $seoSettings['facebook_pixel_id'] ?? null,
+            ],
+            'og_settings' => [
+                'og_title' => $seoSettings['og_title'] ?? null,
+                'og_description' => $seoSettings['og_description'] ?? null,
+                'og_image' => $seoSettings['og_image'] ?? null,
+            ],
+            'twitter_settings' => [
+                'twitter_card' => $seoSettings['twitter_card'] ?? 'summary',
+                'twitter_site' => $seoSettings['twitter_site'] ?? null,
+            ],
         ];
 
         // Determine page type and generate appropriate SEO data

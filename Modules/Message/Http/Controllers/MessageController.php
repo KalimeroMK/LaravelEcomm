@@ -15,6 +15,7 @@ use Modules\Message\Actions\GetAllMessagesAction;
 use Modules\Message\Actions\MarkAsReadAction;
 use Modules\Message\Actions\MarkMultipleAsReadAction;
 use Modules\Message\Actions\ReplyToMessageAction;
+use Modules\Message\Actions\ShowMessageAction;
 use Modules\Message\Models\Message;
 
 class MessageController extends CoreController
@@ -29,18 +30,22 @@ class MessageController extends CoreController
 
     private MarkMultipleAsReadAction $markMultipleAsReadAction;
 
+    private ShowMessageAction $showAction;
+
     public function __construct(
         GetAllMessagesAction $getAllAction,
         DeleteMessageAction $deleteAction,
         MarkAsReadAction $markAsReadAction,
         ReplyToMessageAction $replyAction,
         MarkMultipleAsReadAction $markMultipleAsReadAction,
+        ShowMessageAction $showAction,
     ) {
         $this->getAllAction = $getAllAction;
         $this->deleteAction = $deleteAction;
         $this->markAsReadAction = $markAsReadAction;
         $this->replyAction = $replyAction;
         $this->markMultipleAsReadAction = $markMultipleAsReadAction;
+        $this->showAction = $showAction;
     }
 
     /**
@@ -60,6 +65,7 @@ class MessageController extends CoreController
     public function show(Message $message): Factory|View|Application
     {
         $this->authorize('view', $message);
+        $message = $this->showAction->execute($message->id);
 
         return view('message::show', ['message' => $message]);
     }

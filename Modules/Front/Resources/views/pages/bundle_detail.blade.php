@@ -54,6 +54,40 @@
                             </div>
                             <!-- End Product slider -->
                         </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="product-info">
+                                <h2 class="product-title">{{$bundle->name}}</h2>
+                                <div class="product-price">
+                                    <span class="price">${{number_format($bundle->price, 2)}}</span>
+                                </div>
+                                <div class="product-description">
+                                    <p>{!! ($bundle->description) !!}</p>
+                                </div>
+                                
+                                @if($bundle->products && $bundle->products->count() > 0)
+                                    <div class="bundle-products mt-4">
+                                        <h4>Products in this Bundle ({{$bundle->products->count()}})</h4>
+                                        <div class="row">
+                                            @foreach($bundle->products as $product)
+                                                <div class="col-md-6 mb-3">
+                                                    <div class="bundle-product-item">
+                                                        <a href="{{route('front.product-detail', $product->slug)}}">
+                                                            <img src="{{$product->imageUrl}}" alt="{{$product->title}}" class="img-fluid" style="max-width: 100px;">
+                                                            <h5>{{$product->title}}</h5>
+                                                            <p class="price">${{number_format($product->price, 2)}}</p>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                                <div class="add-to-cart mt-4">
+                                    <a href="#" class="btn btn-primary">Add Bundle to Cart</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -63,6 +97,8 @@
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab"
                                                                 href="#description" role="tab">Description</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab"
+                                                                href="#products" role="tab">Products</a></li>
                                     </ul>
                                     <!--/ End Tab Nav -->
                                 </div>
@@ -76,6 +112,33 @@
                                                         <p>{!! ($bundle->description) !!}</p>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Products Tab -->
+                                    <div class="tab-pane fade" id="products" role="tabpanel">
+                                        <div class="tab-single">
+                                            <div class="row">
+                                                @if($bundle->products && $bundle->products->count() > 0)
+                                                    @foreach($bundle->products as $product)
+                                                        <div class="col-md-4 mb-4">
+                                                            <div class="product-item">
+                                                                <a href="{{route('front.product-detail', $product->slug)}}">
+                                                                    <img src="{{$product->imageUrl}}" alt="{{$product->title}}" class="img-fluid">
+                                                                    <h5>{{$product->title}}</h5>
+                                                                    <p class="price">${{number_format($product->price, 2)}}</p>
+                                                                    @if($product->summary)
+                                                                        <p class="summary">{{Str::limit($product->summary, 100)}}</p>
+                                                                    @endif
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="col-12">
+                                                        <p>No products in this bundle.</p>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

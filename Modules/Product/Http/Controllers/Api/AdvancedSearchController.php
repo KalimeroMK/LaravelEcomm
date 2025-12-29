@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Log;
 use Modules\Product\Services\ElasticsearchService;
 use Modules\Product\Services\RecommendationService;
 
@@ -54,10 +55,20 @@ class AdvancedSearchController extends Controller
         ]);
 
         $query = $request->input('query');
+
+        // Try Elasticsearch first, fallback to SQL if it fails
         $products = $this->elasticsearchService->search($query, $filters);
 
-        // Apply sorting
-        $products = $this->applySorting($products, $request->input('sort_by', 'relevance'));
+        if ($products === null) {
+            // Elasticsearch failed, use SQL fallback
+            Log::warning('Elasticsearch unavailable, falling back to SQL search');
+            $products = $this->elasticsearchService->searchFallback($query, $filters);
+        }
+
+        // Apply sorting (only if not already sorted by Elasticsearch)
+        if ($products !== null && $request->input('sort_by') !== 'relevance') {
+            $products = $this->applySorting($products, $request->input('sort_by', 'relevance'));
+        }
 
         // Paginate results
         $perPage = $request->input('per_page', 20);

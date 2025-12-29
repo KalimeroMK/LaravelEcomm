@@ -1,0 +1,57 @@
+/* Analytics Dashboard Styles */
+.chart-area {
+    position: relative;
+    height: 300px;
+}
+
+.chart-pie {
+    position: relative;
+    height: 250px;
+}
+
+/* Chart container */
+.chart-container {
+    height: 300px;
+    position: relative;
+}
+
+/* Analytics specific card styles */
+.analytics-dashboard .card {
+    transition: transform 0.2s;
+}
+
+.analytics-dashboard .card:hover {
+    transform: translateY(-2px);
+}
+
+/* Analytics nav tabs */
+.analytics-dashboard .nav-tabs .nav-link.active {
+    background-color: #4e73df;
+    color: white;
+    border-color: #4e73df;
+}
+
+/* Analytics table responsive */
+.analytics-dashboard .table-responsive {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Analytics badge */
+.analytics-dashboard .badge {
+    font-size: 0.8em;
+}
+
+/* Notification container */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+/* Hidden form */
+.hidden-form {
+    display: none;
+}
+

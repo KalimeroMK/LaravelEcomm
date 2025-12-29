@@ -117,4 +117,32 @@ class ProductFactory extends Factory
             }
         });
     }
+
+    /**
+     * Configure the factory to create a product with media images.
+     */
+    public function withMedia(int $count = 3): self
+    {
+        return $this->afterCreating(function (Model $model) use ($count): void {
+            /** @var Product $product */
+            $product = $model;
+
+            for ($i = 0; $i < $count; $i++) {
+                // Download from picsum.photos (works in Docker)
+                $imageUrl = 'https://picsum.photos/800/800?random='.rand(1, 10000);
+                $imageContents = @file_get_contents($imageUrl);
+
+                if ($imageContents !== false) {
+                    $tempFile = tempnam(sys_get_temp_dir(), 'product_image');
+                    file_put_contents($tempFile, $imageContents);
+
+                    $product->addMedia($tempFile)
+                        ->preservingOriginal()
+                        ->toMediaCollection('product');
+
+                    @unlink($tempFile);
+                }
+            }
+        });
+    }
 }

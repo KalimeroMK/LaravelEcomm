@@ -15,6 +15,7 @@
     <!-- Custom styles for this template-->
     <link href="{{asset('backend/css/all.min.css')}}" rel="stylesheet">
     <link href="{{asset('backend/css/custom.css')}}" rel="stylesheet">
+    <link href="{{asset('backend/css/pagination.css')}}" rel="stylesheet">
     @stack('styles')
 
 </head>

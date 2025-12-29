@@ -31,21 +31,56 @@ test('user can unsubscribe from newsletter', function () {
         'is_validated' => true,
     ]);
 
-    // Unsubscribe route not implemented, skip
-    $this->markTestSkipped('Newsletter unsubscribe route not implemented');
+    $response = $this->get(route('email.unsubscribe', ['email' => 'test@example.com']));
+
+    $response->assertStatus(200);
+    $this->assertDatabaseHas('newsletters', [
+        'email' => 'test@example.com',
+        'is_validated' => false,
+    ]);
 });
 
 test('newsletter analytics page loads', function () {
-    // Newsletter analytics page route not implemented, skip
-    $this->markTestSkipped('Newsletter analytics page route not implemented');
+    $admin = createAdminUser();
+
+    $response = $this->actingAs($admin)
+        ->get(route('newsletters.analytics'));
+
+    $response->assertStatus(200);
+    $response->assertSee('Newsletter Analytics', false);
 });
 
 test('newsletter analytics API returns data', function () {
-    // Newsletter analytics API route not implemented, skip
-    $this->markTestSkipped('Newsletter analytics API route not implemented');
+    $admin = createAdminUser();
+
+    $response = $this->actingAs($admin, 'sanctum')
+        ->get(route('api.newsletter.analytics'));
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'success',
+        'data' => [
+            'total_sent',
+            'total_opened',
+            'total_clicked',
+            'open_rate',
+            'click_rate',
+        ],
+    ]);
 });
 
 test('newsletter export works', function () {
-    // Newsletter export API route not implemented, skip
-    $this->markTestSkipped('Newsletter export API route not implemented');
+    $admin = createAdminUser();
+
+    $response = $this->actingAs($admin, 'sanctum')
+        ->post(route('api.newsletter.analytics.export'), [
+            'format' => 'json',
+        ]);
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'success',
+        'data',
+        'format',
+    ]);
 });

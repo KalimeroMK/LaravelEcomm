@@ -1,7 +1,8 @@
 {{-- TODO: Update markup/classes for Bootstrap 5 as needed --}}
+@if(isset($group) && !empty($group))
 <div class="card mt-2">
     <div class="card-body">
-        <form action="{{ action($controller.'@postAdd', array($group))}}" method="POST" role="form">
+        <form action="{{ action($controller.'@postAdd', [$group])}}" method="POST" role="form">
             @csrf()
             <div class="mb-3">
                 <label>Add new keys to this group</label>
@@ -53,5 +54,12 @@
            @endforeach
             </tbody>
         </table>
+        
+        @if(isset($paginationEnabled) && $paginationEnabled && isset($translations) && method_exists($translations, 'links'))
+            <div class="d-flex justify-content-center mt-3">
+                {{ $translations->links('pagination::admin-bootstrap-5') }}
+            </div>
+        @endif
     </div>
 </div>
+@endif

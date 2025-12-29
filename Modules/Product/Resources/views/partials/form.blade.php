@@ -4,7 +4,7 @@
 @section('content')
     <div class="container-fluid">
         <form method="POST"
-              action="{{ isset($product['id']) ? route('products.update', $product['id']) : route('products.store') }}"
+              action="{{ isset($product['id']) ? route('admin.products.update', $product['id']) : route('admin.products.store') }}"
               enctype="multipart/form-data">
             @csrf
             @if(isset($product['id']))

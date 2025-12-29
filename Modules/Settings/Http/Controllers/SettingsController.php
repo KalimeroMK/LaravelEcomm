@@ -9,6 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Settings\Actions\FindSettingAction;
 use Modules\Settings\Actions\GetSettingsAction;
 use Modules\Settings\Actions\UpdateSettingsAction;
 use Modules\Settings\Http\Requests\Update;
@@ -18,13 +19,17 @@ class SettingsController extends Controller
 {
     private readonly GetSettingsAction $getSettingsAction;
 
+    private readonly FindSettingAction $findSettingAction;
+
     private readonly UpdateSettingsAction $updateSettingsAction;
 
     public function __construct(
         GetSettingsAction $getSettingsAction,
+        FindSettingAction $findSettingAction,
         UpdateSettingsAction $updateSettingsAction
     ) {
         $this->getSettingsAction = $getSettingsAction;
+        $this->findSettingAction = $findSettingAction;
         $this->updateSettingsAction = $updateSettingsAction;
     }
 
@@ -42,6 +47,7 @@ class SettingsController extends Controller
     public function update(Update $request, Setting $setting): RedirectResponse
     {
         $this->authorize('update', $setting);
+        $setting = $this->findSettingAction->execute($setting->id);
         $this->updateSettingsAction->execute($setting->id, $request->validated());
 
         return redirect()->back()->with('success', 'Settings updated successfully');

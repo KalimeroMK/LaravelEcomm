@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\Page\DTOs;
 
+use Illuminate\Support\Collection;
+
 class PageListDTO
 {
-    public array $pages;
-
-    public function __construct($pages)
-    {
-        $this->pages = $pages->toArray();
-    }
+    /**
+     * @param Collection<int, \Modules\Page\Models\Page> $pages
+     */
+    public function __construct(public Collection $pages) {}
 }

@@ -8,18 +8,20 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Modules\Attribute\Actions\CreateAttributeAction;
 use Modules\Attribute\Actions\DeleteAttributeAction;
+use Modules\Attribute\Actions\FindAttributeAction;
+use Modules\Attribute\Actions\GetAllAttributesAction;
 use Modules\Attribute\Actions\UpdateAttributeAction;
 use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Http\Requests\Attribute\Store;
 use Modules\Attribute\Http\Requests\Attribute\Update;
 use Modules\Attribute\Models\Attribute;
-use Modules\Attribute\Repository\AttributeRepository;
 use Modules\Core\Http\Controllers\CoreController;
 
 class AttributeController extends CoreController
 {
     public function __construct(
-        private readonly AttributeRepository $repository,
+        private readonly GetAllAttributesAction $getAllAttributesAction,
+        private readonly FindAttributeAction $findAttributeAction,
         private readonly CreateAttributeAction $createAction,
         private readonly UpdateAttributeAction $updateAction,
         private readonly DeleteAttributeAction $deleteAction
@@ -32,7 +34,7 @@ class AttributeController extends CoreController
         $this->authorize('viewAny', Attribute::class);
 
         return view('attribute::index', [
-            'attributes' => $this->repository->findAll(),
+            'attributes' => $this->getAllAttributesAction->execute(),
         ]);
     }
 
@@ -56,7 +58,7 @@ class AttributeController extends CoreController
     public function edit(Attribute $attribute): Renderable
     {
         return view('attribute::edit', [
-            'attribute' => $this->repository->findById($attribute->id),
+            'attribute' => $this->findAttributeAction->execute($attribute->id),
         ]);
     }
 

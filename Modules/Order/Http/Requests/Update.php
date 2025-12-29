@@ -24,6 +24,8 @@ class Update extends CoreRequest
     {
         return [
             'status' => 'required|in:new,process,delivered,cancel',
+            'tracking_number' => 'nullable|string|max:255',
+            'tracking_carrier' => 'nullable|string|max:255',
         ];
     }
 }

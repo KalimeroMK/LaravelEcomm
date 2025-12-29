@@ -19,4 +19,5 @@ use Modules\Post\Http\Controllers\Api\PostController;
 // API Routes
 Route::apiResource('posts', PostController::class)
     ->names('api.posts');
-Route::post('posts/{id}', [PostController::class, 'update'])->name('api.post.update');
+Route::delete('posts/{modelId}/media/{mediaId}', [PostController::class, 'deleteMedia'])->name('api.posts.delete-media');
+Route::post('posts/import', [PostController::class, 'import'])->name('api.posts.import');

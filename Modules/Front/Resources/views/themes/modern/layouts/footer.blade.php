@@ -59,11 +59,11 @@
                             <nav class="mb-20">
                                 <ul class="nav nav-pills nav-stacked list-style-icons">
                                     @auth
-                                        <li><a href="{{ route('user.dashboard') }}"><i class="icon-tools"></i> Dashboard</a></li>
-                                        <li><a href="{{ route('user.orders') }}"><i class="icon-search"></i> My Orders</a></li>
+                                        <li><a href="{{ route('user-profile') }}"><i class="icon-tools"></i> Dashboard</a></li>
+                                        <li><a href="{{ route('orders.index') }}"><i class="icon-search"></i> My Orders</a></li>
                                         <li><a href="{{ route('cart-list') }}"><i class="icon-basket-1"></i> Cart</a></li>
-                                        <li><a href="{{ route('user.wishlist') }}"><i class="icon-heart"></i> Wish List</a></li>
-                                        <li><a href="{{ route('user.profile') }}"><i class="icon-chat"></i> Profile</a></li>
+                                        <li><a href="{{ route('wishlist') }}"><i class="icon-heart"></i> Wish List</a></li>
+                                        <li><a href="{{ route('user-profile') }}"><i class="icon-chat"></i> Profile</a></li>
                                     @else
                                         <li><a href="{{ route('login') }}"><i class="icon-tools"></i> Login</a></li>
                                         <li><a href="{{ route('register') }}"><i class="icon-user"></i> Register</a></li>

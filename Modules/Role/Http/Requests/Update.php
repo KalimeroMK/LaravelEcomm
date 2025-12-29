@@ -10,9 +10,18 @@ class Update extends CoreRequest
 {
     public function rules(): array
     {
+        $roleId = $this->route('role')?->id ?? $this->route('id');
+
         return [
-            'name' => 'required|string|max:50',
-            'guard_name' => 'nullable|string|max:255|in:web,api|default:web',
+            'name' => 'required|string|max:50|unique:roles,name,'.$roleId,
+            'guard_name' => 'nullable|string|max:255|in:web,api',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if (! $this->has('guard_name')) {
+            $this->merge(['guard_name' => 'web']);
+        }
     }
 }

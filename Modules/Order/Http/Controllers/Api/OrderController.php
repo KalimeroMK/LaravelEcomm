@@ -6,8 +6,13 @@ namespace Modules\Order\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Order\Actions\DeleteOrderAction;
+use Modules\Order\Actions\FindOrdersByUserAction;
+use Modules\Order\Actions\GenerateOrderPdfAction;
+use Modules\Order\Actions\GetAllOrdersAction;
+use Modules\Order\Actions\GetIncomeChartAction;
 use Modules\Order\Actions\ShowOrderAction;
 use Modules\Order\Actions\StoreOrderAction;
 use Modules\Order\Actions\UpdateOrderAction;
@@ -23,10 +28,14 @@ class OrderController extends CoreController
 {
     public function __construct(
         private readonly OrderRepository $repository,
+        private readonly GetAllOrdersAction $getAllAction,
+        private readonly FindOrdersByUserAction $findByUserAction,
         private readonly ShowOrderAction $showAction,
         private readonly StoreOrderAction $storeAction,
         private readonly UpdateOrderAction $updateAction,
-        private readonly DeleteOrderAction $deleteAction
+        private readonly DeleteOrderAction $deleteAction,
+        private readonly GenerateOrderPdfAction $generatePdfAction,
+        private readonly GetIncomeChartAction $getIncomeChartAction
     ) {}
 
     public function index(Search $request): ResourceCollection
@@ -34,8 +43,8 @@ class OrderController extends CoreController
         $this->authorize('viewAny', Order::class);
 
         $orders = auth()->user()->hasRole('super-admin')
-            ? $this->repository->paginateAll()
-            : $this->repository->findAllByUser($request['user_id']);
+            ? $this->getAllAction->execute()
+            : $this->findByUserAction->execute($request['user_id'] ?? auth()->id());
 
         return OrderResource::collection($orders);
     }
@@ -85,5 +94,33 @@ class OrderController extends CoreController
         return $this
             ->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Order']))
             ->respond(null);
+    }
+
+    /**
+     * Generate PDF for order.
+     */
+    public function pdf(int $id): Response
+    {
+        $order = Order::findOrFail($id);
+        $this->authorize('view', $order);
+
+        $pdf = $this->generatePdfAction->execute($id);
+        $file_name = $order->order_number.'-'.($order->user->name ?? $order->first_name ?? 'order').'.pdf';
+
+        return $pdf->download($file_name);
+    }
+
+    /**
+     * Get income chart data.
+     */
+    public function incomeChart(): JsonResponse
+    {
+        $this->authorize('viewAny', Order::class);
+
+        $data = $this->getIncomeChartAction->execute();
+
+        return $this
+            ->setMessage('Income chart data retrieved successfully.')
+            ->respond($data);
     }
 }

@@ -5,12 +5,18 @@ declare(strict_types=1);
 namespace Modules\Message\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Core\Support\Media\MediaUploader;
 use Modules\Message\Actions\CreateMessageAction;
 use Modules\Message\Actions\DeleteMessageAction;
+use Modules\Message\Actions\GetAllMessagesAction;
+use Modules\Message\Actions\MarkAsReadAction;
+use Modules\Message\Actions\MarkMultipleAsReadAction;
+use Modules\Message\Actions\ReplyToMessageAction;
+use Modules\Message\Actions\ShowMessageAction;
 use Modules\Message\Actions\UpdateMessageAction;
 use Modules\Message\DTOs\MessageDTO;
 use Modules\Message\Http\Requests\Api\Store;
@@ -24,16 +30,21 @@ class MessageController extends CoreController
 {
     public function __construct(
         private readonly MessageRepository $repository,
+        private readonly GetAllMessagesAction $getAllAction,
+        private readonly ShowMessageAction $showAction,
         private readonly CreateMessageAction $createAction,
         private readonly UpdateMessageAction $updateAction,
-        private readonly DeleteMessageAction $deleteAction
+        private readonly DeleteMessageAction $deleteAction,
+        private readonly MarkAsReadAction $markAsReadAction,
+        private readonly ReplyToMessageAction $replyAction,
+        private readonly MarkMultipleAsReadAction $markMultipleAsReadAction
     ) {}
 
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Message::class);
 
-        return MessageResource::collection($this->repository->findAll());
+        return MessageResource::collection($this->getAllAction->execute());
     }
 
     /**
@@ -60,7 +71,8 @@ class MessageController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $message = $this->authorizeFromRepo(MessageRepository::class, 'view', $id);
+        $this->authorizeFromRepo(MessageRepository::class, 'view', $id);
+        $message = $this->showAction->execute($id);
 
         return $this
             ->setMessage(__('apiResponse.ok', [
@@ -104,5 +116,60 @@ class MessageController extends CoreController
                 'resource' => Helper::getResourceName($this->repository->modelClass),
             ]))
             ->respond(null);
+    }
+
+    /**
+     * Mark message as read
+     *
+     * @throws ReflectionException
+     */
+    public function markAsRead(int $id): JsonResponse
+    {
+        $message = $this->authorizeFromRepo(MessageRepository::class, 'update', $id);
+        $this->markAsReadAction->execute($message);
+
+        return $this
+            ->setMessage('Message marked as read successfully.')
+            ->respond(new MessageResource($message->fresh()));
+    }
+
+    /**
+     * Reply to message
+     *
+     * @throws ReflectionException
+     */
+    public function reply(int $id, Request $request): JsonResponse
+    {
+        $message = $this->authorizeFromRepo(MessageRepository::class, 'update', $id);
+
+        $replyData = $request->validate([
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|min:10',
+        ]);
+
+        $reply = $this->replyAction->execute($message, $replyData);
+
+        return $this
+            ->setMessage('Reply sent successfully!')
+            ->respond(new MessageResource($reply));
+    }
+
+    /**
+     * Mark multiple messages as read
+     */
+    public function markMultipleAsRead(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', Message::class);
+
+        $messageIds = $request->validate([
+            'message_ids' => 'required|array',
+            'message_ids.*' => 'integer|exists:messages,id',
+        ])['message_ids'];
+
+        $this->markMultipleAsReadAction->execute($messageIds);
+
+        return $this
+            ->setMessage('Messages marked as read!')
+            ->respond(['count' => count($messageIds)]);
     }
 }

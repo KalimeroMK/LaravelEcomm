@@ -37,8 +37,14 @@ class BundleRepository extends EloquentRepository implements EloquentRepositoryI
     /**
      * Get bundle by slug with media and products.
      */
-    public function findBySlug(string $slug): Core|Bundle
+    public function findBySlug(string $slug): Core|Bundle|null
     {
-        return (new $this->modelClass)->with(['media', 'products'])->where('slug', $slug)->first();
+        $bundle = (new $this->modelClass)->with(['media', 'products'])->where('slug', $slug)->first();
+
+        if (! $bundle) {
+            return null;
+        }
+
+        return $bundle;
     }
 }

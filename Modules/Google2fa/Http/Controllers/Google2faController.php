@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Google2fa\Http\Controllers;
 
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;
-use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Writer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -16,14 +12,29 @@ use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Modules\Google2fa\Models\Google2fa;
+use Modules\Google2fa\Actions\Disable2FAAction;
+use Modules\Google2fa\Actions\Enable2FAAction;
+use Modules\Google2fa\Actions\Generate2FASecretAction;
+use Modules\Google2fa\Actions\GenerateRecoveryCodesAction;
+use Modules\Google2fa\Actions\Get2FAQRCodeAction;
+use Modules\Google2fa\Actions\Verify2FAAction;
+use Modules\Google2fa\Actions\VerifyRecoveryCodeAction;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
-use PragmaRX\Google2FAQRCode\Google2FA as PragmaRXGoogle2FA;
 
 class Google2faController extends Controller
 {
+    public function __construct(
+        private readonly Generate2FASecretAction $generate2FASecretAction,
+        private readonly Get2FAQRCodeAction $get2FAQRCodeAction,
+        private readonly Enable2FAAction $enable2FAAction,
+        private readonly Disable2FAAction $disable2FAAction,
+        private readonly Verify2FAAction $verify2FAAction,
+        private readonly GenerateRecoveryCodesAction $generateRecoveryCodesAction,
+        private readonly VerifyRecoveryCodeAction $verifyRecoveryCodeAction
+    ) {}
+
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|RedirectResponse|View
      */
@@ -32,23 +43,11 @@ class Google2faController extends Controller
         $user = Auth::user();
 
         if ($user->loginSecurity()->exists()) {
-            $google2fa = (new PragmaRXGoogle2FA);
-            $google2fa_url = $google2fa->getQRCodeUrl(
-                'Kalimero-Ecomm',
-                $user->email,
-                $user->loginSecurity->google2fa_secret
-            );
-            $renderer = new ImageRenderer(
-                new RendererStyle(400),
-                new SvgImageBackEnd
-            );
+            $qrData = $this->get2FAQRCodeAction->execute($user->loginSecurity, $user->email);
+            $secret_key = $qrData['secret_key'];
+            $google2fa_url = $qrData['qr_code'];
 
-            $writer = new Writer($renderer);
-            $qrImage = $writer->writeString($google2fa_url);
-            $google2fa_url = 'data:image/svg+xml;base64,'.base64_encode($qrImage);
-            $secret_key = $user->loginSecurity->google2fa_secret;
-
-            return view('google2fa::2fa_settings', compact($user, $secret_key, $google2fa_url));
+            return view('google2fa::2fa_settings', compact('user', 'secret_key', 'google2fa_url'));
         }
 
         return redirect()->route('user-profile')->with('error', 'Pls enable 2FA');
@@ -66,15 +65,7 @@ class Google2faController extends Controller
     public function generate2faSecret()
     {
         $user = Auth::user();
-        // Initialise the 2FA class
-        $google2fa = (new PragmaRXGoogle2FA);
-
-        // Add the secret key to the registration data
-        $login_security = Google2fa::firstOrNew(['user_id' => $user->id]);
-        $login_security->user_id = $user->id;
-        $login_security->google2fa_enable = false;
-        $login_security->google2fa_secret = $google2fa->generateSecretKey();
-        $login_security->save();
+        $this->generate2FASecretAction->execute($user);
 
         return redirect()->route('admin.2fa')->with('success', 'Secret key is generated.');
     }
@@ -91,19 +82,13 @@ class Google2faController extends Controller
     public function enable2fa(Request $request)
     {
         $user = Auth::user();
-        $google2fa = (new PragmaRXGoogle2FA);
+        $enabled = $this->enable2FAAction->execute($user->loginSecurity, $request->input('secret'));
 
-        $secret = $request->input('secret');
-        $valid = $google2fa->verifyKey($user->loginSecurity->google2fa_secret, $secret);
-        if ($valid) {
-            $user->loginSecurity->google2fa_enable = 1;
-            $user->loginSecurity->save();
-
+        if ($enabled) {
             return redirect()->route('admin.2fa')->with('success', '2FA is enabled successfully.');
         }
 
         return redirect()->route('admin.2fa')->with('error', 'Invalid verification Code, Please try again.');
-
     }
 
     /**
@@ -114,9 +99,7 @@ class Google2faController extends Controller
     public function disable2fa()
     {
         $user = Auth::user();
-        $loginSecurity = Google2fa::firstOrNew(['user_id' => $user->id]);
-        $loginSecurity->google2fa_enable = 0;
-        $loginSecurity->save();
+        $this->disable2FAAction->execute($user);
 
         return redirect()->back()->with('success', '2FA is now disabled.');
     }
@@ -127,5 +110,67 @@ class Google2faController extends Controller
     public function verify2fa(): Redirector|RedirectResponse
     {
         return redirect(URL()->previous());
+    }
+
+    /**
+     * Show recovery codes
+     */
+    public function showRecoveryCodes(): View|Factory|Application
+    {
+        $user = Auth::user();
+        $loginSecurity = $user->loginSecurity;
+
+        if (! $loginSecurity || ! $loginSecurity->google2fa_enable) {
+            return redirect()->route('admin.2fa')->with('error', '2FA is not enabled.');
+        }
+
+        return view('google2fa::recovery_codes', [
+            'recovery_codes' => $loginSecurity->recovery_codes ?? [],
+        ]);
+    }
+
+    /**
+     * Regenerate recovery codes
+     */
+    public function regenerateRecoveryCodes(): RedirectResponse
+    {
+        $user = Auth::user();
+        $loginSecurity = $user->loginSecurity;
+
+        if (! $loginSecurity || ! $loginSecurity->google2fa_enable) {
+            return redirect()->route('admin.2fa')->with('error', '2FA is not enabled.');
+        }
+
+        $codes = $this->generateRecoveryCodesAction->execute($loginSecurity);
+
+        return redirect()->route('admin.2fa.recovery-codes')->with('success', 'Recovery codes regenerated successfully.');
+    }
+
+    /**
+     * Verify recovery code during login
+     */
+    public function verifyRecoveryCode(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'recovery_code' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        $loginSecurity = $user->loginSecurity;
+
+        if (! $loginSecurity) {
+            return redirect()->back()->with('error', '2FA is not enabled.');
+        }
+
+        $code = mb_strtoupper(str_replace(' ', '', $request->input('recovery_code')));
+
+        if ($this->verifyRecoveryCodeAction->execute($loginSecurity, $code)) {
+            // Mark 2FA as verified for this session
+            session(['2fa_verified' => true]);
+
+            return redirect()->intended('/')->with('success', 'Recovery code verified successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Invalid recovery code.');
     }
 }

@@ -29,7 +29,7 @@
         <h1 class="my-3 h2">@yield('documentTitle')</h1>
         <main id="content-wrapper" class="">
             @yield('content')
-            <?php if ($paginationEnabled) echo $translations->links()->toHtml(); ?>
+            <?php if ($paginationEnabled && isset($translations) && method_exists($translations, 'links')) echo $translations->links('pagination::admin-bootstrap-5')->toHtml(); ?>
 
         </main>
     </div>

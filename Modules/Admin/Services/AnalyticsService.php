@@ -545,11 +545,18 @@ class AnalyticsService
      */
     private function getAbandonedCartStats(): array
     {
-        // This would use the AbandonedCart model we created earlier
+        $abandonedCarts = \Modules\Cart\Models\AbandonedCart::query();
+        $totalAbandoned = $abandonedCarts->count();
+        $converted = $abandonedCarts->where('converted', true)->count();
+        $totalRevenue = $abandonedCarts->sum('total_amount');
+        $recoveredRevenue = $abandonedCarts->where('converted', true)->sum('total_amount');
+
         return [
-            'total_abandoned' => 0, // Placeholder - implement with AbandonedCart model
-            'recovery_rate' => 0, // Placeholder
-            'revenue_recovered' => 0, // Placeholder
+            'total_abandoned' => $totalAbandoned,
+            'converted' => $converted,
+            'recovery_rate' => $totalAbandoned > 0 ? round(($converted / $totalAbandoned) * 100, 2) : 0,
+            'total_revenue' => round($totalRevenue, 2),
+            'revenue_recovered' => round($recoveredRevenue, 2),
         ];
     }
 

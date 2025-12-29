@@ -3,7 +3,14 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\Core\Http\Controllers\SystemController;
 use Modules\Core\Http\Controllers\TranslationController;
+
+// System API routes
+Route::prefix('system')->name('api.system.')->group(function () {
+    Route::get('health', [SystemController::class, 'health'])->name('health');
+    Route::get('version', [SystemController::class, 'version'])->name('version');
+});
 
 Route::prefix('api/v1')
     ->middleware(['api', 'auth:sanctum'])

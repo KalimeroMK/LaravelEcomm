@@ -1,6 +1,6 @@
 <div class="card mt-2">
     <div class="card-body">
-        <form action="{{ action($controller.'@postAdd', array($group))}}" method="POST" role="form">
+        <form action="{{ action($controller.'@postAdd', [($group ?? '') ?: ''])}}" method="POST" role="form">
                @csrf()
           <div class="form-group">
                 <label>Add new keys to this group</label>

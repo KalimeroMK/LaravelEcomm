@@ -11,8 +11,15 @@ class Store extends CoreRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:50',
-            'guard_name' => 'required|string|max:255|in:web,api|default:web|unique:permissions',
+            'name' => 'required|string|max:50|unique:roles,name',
+            'guard_name' => 'nullable|string|max:255|in:web,api',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if (! $this->has('guard_name')) {
+            $this->merge(['guard_name' => 'web']);
+        }
     }
 }

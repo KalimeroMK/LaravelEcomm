@@ -16,11 +16,12 @@ class ProductDetailAction
         return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
             $product_detail = Product::getProductBySlug($slug);
 
-            $related = Product::with('categories')
+            $related = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
                 ->whereHas('categories', function ($q) use ($product_detail): void {
                     $q->whereIn('title', $product_detail->categories->pluck('title'));
                 })
                 ->where('id', '!=', $product_detail->id)
+                ->where('status', 'active')
                 ->limit(8)
                 ->get();
 

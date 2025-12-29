@@ -60,7 +60,8 @@ class TagController extends CoreController
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->createTagAction->execute($request->validated());
+        $dto = TagDto::fromRequest($request);
+        $this->createTagAction->execute($dto);
 
         return redirect()->route('post-tag.index');
     }
@@ -91,7 +92,7 @@ class TagController extends CoreController
      */
     public function update(Store $request, Tag $tag): RedirectResponse
     {
-        $dto = new TagDto(array_merge(['id' => $tag->id], $request->validated()));
+        $dto = TagDto::fromRequest($request, $tag->id);
         $this->updateTagAction->execute($dto);
 
         return redirect()->route('post-tag.index');

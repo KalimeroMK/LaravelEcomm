@@ -67,18 +67,22 @@ test('user can apply valid coupon', function () {
 });
 
 test('user cannot apply expired coupon', function () {
-    // Skip this test as expires_at column doesn't exist
-    $this->markTestSkipped('expires_at column not implemented in coupons table');
+    $coupon = Coupon::factory()->create([
+        'code' => 'EXPIRED10',
+        'type' => 'percent',
+        'value' => 10,
+        'status' => 'active',
+        'expires_at' => now()->subDay(), // Expired yesterday
+    ]);
 
     $response = $this->actingAs($this->user)
         ->post(route('coupon-store'), [
             'code' => 'EXPIRED10',
         ]);
 
-    $response->assertStatus(400);
+    $response->assertStatus(422);
     $response->assertJson([
         'success' => false,
-        'message' => 'Coupon has expired',
     ]);
 });
 

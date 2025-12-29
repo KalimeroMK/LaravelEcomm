@@ -17,4 +17,4 @@ use Modules\Page\Http\Controllers\Api\PageController;
 */
 
 // API Routes
-Route::apiResource('pages', PageController::class)->except('update')->names('api.pages');
+Route::apiResource('pages', PageController::class)->names('api.pages');

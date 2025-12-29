@@ -120,10 +120,10 @@ class NewsletterService
             ->get();
 
         $totalSent = $analytics->count();
-        $totalOpened = $analytics->opened()->count();
-        $totalClicked = $analytics->clicked()->count();
-        $totalBounced = $analytics->bounced()->count();
-        $totalUnsubscribed = $analytics->unsubscribed()->count();
+        $totalOpened = $analytics->whereNotNull('opened_at')->count();
+        $totalClicked = $analytics->whereNotNull('clicked_at')->count();
+        $totalBounced = $analytics->where('bounced', true)->count();
+        $totalUnsubscribed = $analytics->where('unsubscribed', true)->count();
 
         return [
             'period' => $period,
@@ -276,7 +276,7 @@ class NewsletterService
      */
     private function getBlogReadersSubscribers(): Collection
     {
-        $blogReaderIds = User::whereHas('comments')->pluck('id');
+        $blogReaderIds = User::whereHas('post_comments')->pluck('id');
 
         return Newsletter::whereIn('user_id', $blogReaderIds)
             ->where('is_validated', true)

@@ -71,23 +71,119 @@ test('admin can update general settings', function () {
 });
 
 test('admin can update payment settings', function () {
-    // Payment settings are updated through main settings update
-    $this->markTestSkipped('Payment settings route not implemented separately');
+    $setting = Setting::first();
+    if (! $setting) {
+        $setting = Setting::create([
+            'description' => 'Test Description',
+            'short_des' => 'Test Short',
+            'logo' => 'test.jpg',
+            'address' => 'Test Address',
+            'phone' => '1234567890',
+            'email' => 'test@test.com',
+            'site-name' => 'Test Site',
+        ]);
+    }
+
+    $response = $this->actingAs($this->admin)
+        ->put(route('settings.payment.update', $setting), [
+            'stripe_enabled' => true,
+            'stripe_public_key' => 'pk_test_123',
+            'stripe_secret_key' => 'sk_test_123',
+            'paypal_enabled' => true,
+            'cod_enabled' => true,
+        ]);
+
+    $response->assertRedirect();
+    $setting->refresh();
+    expect($setting->payment_settings)->toBeArray();
+    expect($setting->payment_settings['stripe_enabled'])->toBeTrue();
 });
 
 test('admin can update shipping settings', function () {
-    // Shipping settings are updated through main settings update
-    $this->markTestSkipped('Shipping settings route not implemented separately');
+    $setting = Setting::first();
+    if (! $setting) {
+        $setting = Setting::create([
+            'description' => 'Test Description',
+            'short_des' => 'Test Short',
+            'logo' => 'test.jpg',
+            'address' => 'Test Address',
+            'phone' => '1234567890',
+            'email' => 'test@test.com',
+            'site-name' => 'Test Site',
+        ]);
+    }
+
+    $response = $this->actingAs($this->admin)
+        ->put(route('settings.shipping.update', $setting), [
+            'default_shipping_method' => 'flat_rate',
+            'flat_rate_shipping' => 10.00,
+            'free_shipping_threshold' => 100.00,
+            'estimated_delivery_days' => 5,
+        ]);
+
+    $response->assertRedirect();
+    $setting->refresh();
+    expect($setting->shipping_settings)->toBeArray();
+    expect($setting->shipping_settings['default_shipping_method'])->toBe('flat_rate');
 });
 
 test('admin can update email settings', function () {
-    // Email settings are updated through main settings update
-    $this->markTestSkipped('Email settings route not implemented separately');
+    $setting = Setting::first();
+    if (! $setting) {
+        $setting = Setting::create([
+            'description' => 'Test Description',
+            'short_des' => 'Test Short',
+            'logo' => 'test.jpg',
+            'address' => 'Test Address',
+            'phone' => '1234567890',
+            'email' => 'test@test.com',
+            'site-name' => 'Test Site',
+        ]);
+    }
+
+    $response = $this->actingAs($this->admin)
+        ->put(route('settings.email.update', $setting), [
+            'mail_driver' => 'smtp',
+            'mail_host' => 'smtp.example.com',
+            'mail_port' => 587,
+            'mail_username' => 'user@example.com',
+            'mail_from_address' => 'noreply@example.com',
+            'mail_from_name' => 'Test Store',
+        ]);
+
+    $response->assertRedirect();
+    $setting->refresh();
+    expect($setting->email_settings)->toBeArray();
+    expect($setting->email_settings['mail_driver'])->toBe('smtp');
 });
 
 test('admin can update SEO settings', function () {
-    // SEO settings are updated through main settings update
-    $this->markTestSkipped('SEO settings route not implemented separately');
+    $setting = Setting::first();
+    if (! $setting) {
+        $setting = Setting::create([
+            'description' => 'Test Description',
+            'short_des' => 'Test Short',
+            'logo' => 'test.jpg',
+            'address' => 'Test Address',
+            'phone' => '1234567890',
+            'email' => 'test@test.com',
+            'site-name' => 'Test Site',
+        ]);
+    }
+
+    $response = $this->actingAs($this->admin)
+        ->put(route('settings.seo.update', $setting), [
+            'meta_title' => 'Test Meta Title',
+            'meta_description' => 'Test Meta Description',
+            'meta_keywords' => 'test, keywords',
+            'google_analytics_id' => 'UA-123456789-1',
+            'sitemap_enabled' => true,
+        ]);
+
+    $response->assertRedirect();
+    $setting->refresh();
+    expect($setting->seo_settings)->toBeArray();
+    expect($setting->seo_settings['meta_title'])->toBe('Test Meta Title');
 });
 
 test('settings are applied to frontend', function () {

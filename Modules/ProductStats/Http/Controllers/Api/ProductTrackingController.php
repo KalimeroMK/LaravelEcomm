@@ -4,47 +4,43 @@ declare(strict_types=1);
 
 namespace Modules\ProductStats\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Modules\ProductStats\Events\ProductClicked;
-use Modules\ProductStats\Events\ProductImpressionRecorded;
+use Illuminate\Http\JsonResponse;
+use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\ProductStats\Actions\StoreProductClickAction;
+use Modules\ProductStats\Actions\StoreProductImpressionAction;
 use Modules\ProductStats\Http\Requests\StoreClickRequest;
 use Modules\ProductStats\Http\Requests\StoreImpressionsRequest;
-use Modules\ProductStats\Models\ProductClick;
-use Modules\ProductStats\Models\ProductImpression;
 
-class ProductTrackingController extends Controller
+class ProductTrackingController extends CoreController
 {
-    public function storeImpressions(StoreImpressionsRequest $request)
+    public function __construct(
+        private readonly StoreProductImpressionAction $storeImpressionAction,
+        private readonly StoreProductClickAction $storeClickAction
+    ) {}
+
+    public function storeImpressions(StoreImpressionsRequest $request): JsonResponse
     {
         $userId = auth()->check() ? auth()->id() : null;
         $ip = $request->ip();
         $productIds = $request->input('product_ids');
-        $impressions = [];
-        foreach ($productIds as $productId) {
-            $impression = ProductImpression::create([
-                'product_id' => $productId,
-                'user_id' => $userId,
-                'ip_address' => $ip,
-            ]);
-            $impressions[] = $impression;
-            event(new ProductImpressionRecorded($impression));
-        }
 
-        return response()->json(['success' => true, 'count' => count($impressions)]);
+        $impressions = $this->storeImpressionAction->execute($productIds, $userId, $ip);
+
+        return $this
+            ->setMessage('Impressions recorded successfully.')
+            ->respond(['count' => $impressions->count()]);
     }
 
-    public function storeClick(StoreClickRequest $request)
+    public function storeClick(StoreClickRequest $request): JsonResponse
     {
         $userId = auth()->check() ? auth()->id() : null;
         $ip = $request->ip();
         $productId = $request->input('product_id');
-        $click = ProductClick::create([
-            'product_id' => $productId,
-            'user_id' => $userId,
-            'ip_address' => $ip,
-        ]);
-        event(new ProductClicked($click));
 
-        return response()->json(['success' => true]);
+        $this->storeClickAction->execute($productId, $userId, $ip);
+
+        return $this
+            ->setMessage('Click recorded successfully.')
+            ->respond(null);
     }
 }

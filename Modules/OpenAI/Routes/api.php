@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\OpenAI\Http\Controllers\Api\OpenAIController;
 
 /*
     |--------------------------------------------------------------------------
@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
     |
 */
 
-Route::middleware(['auth:sanctum'])->name('api.')->group(function (): void {
-    Route::get('openai', fn (Request $request) => $request->user())->name('openai');
+Route::middleware(['auth:sanctum'])->prefix('openai')->name('api.openai.')->group(function (): void {
+    Route::post('generate-text', [OpenAIController::class, 'generateText'])->name('generate-text');
+    Route::post('chat-completion', [OpenAIController::class, 'chatCompletion'])->name('chat-completion');
+    Route::post('text-completion', [OpenAIController::class, 'textCompletion'])->name('text-completion');
 });

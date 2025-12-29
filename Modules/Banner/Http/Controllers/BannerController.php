@@ -11,13 +11,15 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Banner\Actions\CreateBannerAction;
 use Modules\Banner\Actions\DeleteBannerAction;
+use Modules\Banner\Actions\FindBannerAction;
+use Modules\Banner\Actions\GetAllBannersAction;
 use Modules\Banner\Actions\UpdateBannerAction;
 use Modules\Banner\DTOs\BannerDTO;
 use Modules\Banner\Http\Requests\Store;
 use Modules\Banner\Http\Requests\Update;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
-use Modules\Category\Models\Category;
+use Modules\Category\Actions\GetAllCategoriesAction;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Core\Support\Media\MediaUploader;
 
@@ -25,6 +27,9 @@ class BannerController extends CoreController
 {
     public function __construct(
         private readonly BannerRepository $repository,
+        private readonly GetAllCategoriesAction $getAllCategoriesAction,
+        private readonly GetAllBannersAction $getAllBannersAction,
+        private readonly FindBannerAction $findBannerAction,
         private readonly CreateBannerAction $createAction,
         private readonly UpdateBannerAction $updateAction,
         private readonly DeleteBannerAction $deleteAction
@@ -35,7 +40,7 @@ class BannerController extends CoreController
     public function index(): View|Factory|Application
     {
         return view('banner::index', [
-            'banners' => $this->repository->all(),
+            'banners' => $this->getAllBannersAction->execute(),
         ]);
     }
 
@@ -43,7 +48,7 @@ class BannerController extends CoreController
     {
         return view('banner::create', [
             'banner' => new Banner,
-            'categories' => Category::all(),
+            'categories' => $this->getAllCategoriesAction->execute(),
         ]);
     }
 
@@ -62,8 +67,8 @@ class BannerController extends CoreController
     public function edit(Banner $banner): View|Factory|Application
     {
         return view('banner::edit', [
-            'banner' => $banner,
-            'categories' => Category::all(),
+            'banner' => $this->findBannerAction->execute($banner->id),
+            'categories' => $this->getAllCategoriesAction->execute(),
         ]);
     }
 

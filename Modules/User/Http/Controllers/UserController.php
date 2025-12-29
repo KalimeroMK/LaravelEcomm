@@ -4,81 +4,48 @@ declare(strict_types=1);
 
 namespace Modules\User\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Role\Actions\GetAllRolesAction;
 use Modules\User\Actions\DeleteUserAction;
 use Modules\User\Actions\FindUserAction;
-use Modules\User\Actions\GetAllUsersAction;
 use Modules\User\Actions\GetUserRolesAction;
+use Modules\User\Actions\GetUsersForIndexAction;
+use Modules\User\Actions\ImpersonateUserAction;
+use Modules\User\Actions\LeaveImpersonationAction;
 use Modules\User\Actions\ProfileUpdateAction;
 use Modules\User\Actions\StoreUserAction;
 use Modules\User\Actions\UpdateUserAction;
+use Modules\User\DTOs\UserDTO;
 use Modules\User\Http\Requests\Store;
 use Modules\User\Http\Requests\Update;
 use Modules\User\Models\User;
 
-class UserController extends Controller
+class UserController extends CoreController
 {
-    private GetAllUsersAction $getAllUsersAction;
-
-    private StoreUserAction $storeUserAction;
-
-    private UpdateUserAction $updateUserAction;
-
-    private DeleteUserAction $deleteUserAction;
-
-    private FindUserAction $findUserAction;
-
-    private GetAllRolesAction $getAllRolesAction;
-
-    private GetUserRolesAction $getUserRolesAction;
-
-    private ProfileUpdateAction $profileUpdateAction;
-
     public function __construct(
-        GetAllUsersAction $getAllUsersAction,
-        StoreUserAction $storeUserAction,
-        UpdateUserAction $updateUserAction,
-        DeleteUserAction $deleteUserAction,
-        FindUserAction $findUserAction,
-        GetAllRolesAction $getAllRolesAction,
-        GetUserRolesAction $getUserRolesAction,
-        ProfileUpdateAction $profileUpdateAction
+        private readonly GetUsersForIndexAction $getUsersForIndexAction,
+        private readonly GetAllRolesAction $getAllRolesAction,
+        private readonly GetUserRolesAction $getUserRolesAction,
+        private readonly FindUserAction $findUserAction,
+        private readonly StoreUserAction $storeUserAction,
+        private readonly UpdateUserAction $updateUserAction,
+        private readonly DeleteUserAction $deleteUserAction,
+        private readonly ProfileUpdateAction $profileUpdateAction,
+        private readonly ImpersonateUserAction $impersonateUserAction,
+        private readonly LeaveImpersonationAction $leaveImpersonationAction
     ) {
-        $this->getAllUsersAction = $getAllUsersAction;
-        $this->storeUserAction = $storeUserAction;
-        $this->updateUserAction = $updateUserAction;
-        $this->deleteUserAction = $deleteUserAction;
-        $this->findUserAction = $findUserAction;
-        $this->getAllRolesAction = $getAllRolesAction;
-        $this->getUserRolesAction = $getUserRolesAction;
-        $this->profileUpdateAction = $profileUpdateAction;
         $this->authorizeResource(User::class, 'user');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function index(Request $request)
+    public function index(Request $request): View|Factory|Application
     {
-        $userId = Auth::id();
-        if (Auth::user() && Auth::user()->isSuperAdmin()) {
-            $usersDto = $this->getAllUsersAction->execute();
-            $users = $usersDto->users;
-        } elseif (! is_numeric($userId)) {
-            abort(404, 'User not found.');
-        } else {
-            $userDto = $this->findUserAction->execute((int) $userId);
-            $users = [$userDto];
-        }
+        $users = $this->getUsersForIndexAction->execute();
 
         return view('user::index', ['users' => $users])->with(
             'i',
@@ -86,19 +53,14 @@ class UserController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Store $request): RedirectResponse
     {
-        $this->storeUserAction->execute($request->validated());
+        $dto = UserDTO::fromRequest($request);
+        $this->storeUserAction->execute($dto);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully');
+        return redirect()->route('users.index')->with('success', __('messages.user_created_successfully'));
     }
 
-    /**
-     * @return Application|Factory|View
-     */
     public function create(): Factory|View
     {
         $roles = $this->getAllRolesAction->execute();
@@ -109,11 +71,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return Application|Factory|View
-     */
     public function show(User $user): Factory|View
     {
         $userDto = $this->findUserAction->execute($user->id);
@@ -121,11 +78,6 @@ class UserController extends Controller
         return view('user::edit', ['user' => $userDto->user]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return Application|Factory|View
-     */
     public function edit(User $user): Factory|View
     {
         $roles = $this->getAllRolesAction->execute();
@@ -135,80 +87,60 @@ class UserController extends Controller
         return view('user::edit', ['user' => $user, 'roles' => $roles, 'userRole' => $userRole]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Update $request, int $id): RedirectResponse
     {
-        User::findOrFail($id);
-        $this->updateUserAction->execute($id, $request->validated());
+        $dto = UserDTO::fromRequest($request, $id);
+        $this->updateUserAction->execute($id, $dto);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully');
+        return redirect()->route('users.index')->with('success', __('messages.user_updated_successfully'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user): RedirectResponse
     {
         $this->deleteUserAction->execute($user->id);
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully');
+        return redirect()->route('users.index')->with('success', __('messages.user_deleted_successfully'));
     }
 
-    /**
-     * @return Application|Factory|View
-     */
     public function profile(): Factory|View
     {
-        $user = Auth()->user();
+        $user = auth()->user();
         $userDto = $this->findUserAction->execute($user->id);
 
         return view('user::profile', ['profile' => $userDto]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function impersonate(User $user)
+    public function impersonate(User $user): RedirectResponse
     {
-        $authUser = auth()->user();
+        try {
+            $this->impersonateUserAction->execute($user);
 
-        if ($authUser === null) {
-            return redirect()->back()->withErrors('No authenticated user found.');
+            return redirect()->route('admin');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage());
         }
-
-        $authUser->impersonate($user);
-
-        return redirect()->route('admin');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function leaveImpersonate()
+    public function leaveImpersonate(): RedirectResponse
     {
-        $authUser = auth()->user();
+        try {
+            $this->leaveImpersonationAction->execute();
 
-        if ($authUser === null) {
-            return redirect()->back()->withErrors('No authenticated user found.');
+            return redirect()->route('admin');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage());
         }
-
-        $authUser->leaveImpersonation();
-
-        return redirect()->route('admin');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function profileUpdate(Request $request, User $user)
+    public function profileUpdate(Request $request, User $user): RedirectResponse
     {
-        $status = $this->profileUpdateAction->execute($user, $request->all());
+        $dto = UserDTO::fromRequest($request, $user->id);
+        $status = $this->profileUpdateAction->execute($user, $dto);
+
         if ($status) {
-            request()->session()->flash('success', 'Successfully updated your profile');
+            request()->session()->flash('success', __('messages.profile_updated_successfully'));
         } else {
-            request()->session()->flash('error', 'Please try again!');
+            request()->session()->flash('error', __('messages.please_try_again'));
         }
 
         return redirect()->back();

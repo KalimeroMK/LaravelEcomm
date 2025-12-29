@@ -12,15 +12,17 @@ readonly class UpdateUserAction
 {
     public function __construct(private UserRepository $repository) {}
 
-    public function execute(int $id, UserDTO $dto): void
+    public function execute(int $id, UserDTO $dto): \Modules\User\Models\User
     {
         $this->repository->update($id, [
             'name' => $dto->name,
             'email' => $dto->email,
             'email_verified_at' => $dto->email_verified_at,
         ]);
-        $user = $this->repository->find($id);
+        $user = $this->repository->findById($id);
         // Optional photo upload using MediaUploader
         MediaUploader::uploadSingle($user, 'photo', 'photo');
+
+        return $user->fresh();
     }
 }

@@ -19,3 +19,9 @@ use Modules\Category\Http\Controllers\Api\CategoryController;
 // API Routes
 Route::apiResource('categories', CategoryController::class)
     ->names('api.categories');
+
+// Category Tree and Order Routes
+Route::prefix('categories')->group(function (): void {
+    Route::get('tree', [CategoryController::class, 'tree'])->name('api.categories.tree');
+    Route::post('order/update', [CategoryController::class, 'updateOrder'])->name('api.categories.order');
+});

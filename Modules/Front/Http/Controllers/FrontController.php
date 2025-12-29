@@ -16,6 +16,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
+use Log;
 use Modules\Banner\Models\Banner;
 use Modules\Billing\Services\WishlistService;
 use Modules\Front\Actions\BlogAction;
@@ -281,17 +282,16 @@ class FrontController extends Controller
         if ($query) {
             $searchPerformed = true;
 
-            try {
-                $products = $elasticsearchService->search($query, $filters);
-                $totalResults = $products->count();
-            } catch (Exception $e) {
-                // Fallback to basic search if Elasticsearch fails
-                $products = \Modules\Product\Models\Product::where('title', 'like', "%{$query}%")
-                    ->orWhere('summary', 'like', "%{$query}%")
-                    ->where('status', 'active')
-                    ->get();
-                $totalResults = $products->count();
+            // Try Elasticsearch first, fallback to SQL if it fails
+            $products = $elasticsearchService->search($query, $filters);
+
+            if ($products === null) {
+                // Elasticsearch failed, use SQL fallback with proper relationships
+                Log::warning('Elasticsearch unavailable, falling back to SQL search');
+                $products = $elasticsearchService->searchFallback($query, $filters);
             }
+
+            $totalResults = $products ? $products->count() : 0;
         }
 
         // Get available filters
@@ -481,7 +481,7 @@ class FrontController extends Controller
      */
     private function getAvailableFilters(?string $query): array
     {
-        $cacheKey = 'front_search_filters_' . md5(json_encode(['query' => $query]));
+        $cacheKey = 'front_search_filters_'.md5(json_encode(['query' => $query]));
 
         return Cache::remember($cacheKey, 3600, function () use ($query) {
             $baseQuery = \Modules\Product\Models\Product::query();

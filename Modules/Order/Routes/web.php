@@ -16,6 +16,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use Modules\Order\Http\Controllers\OrderController;
 
+// Admin routes (these will be prefixed with /admin in RouteServiceProvider)
 Route::resource('/orders', OrderController::class);
 Route::get('orders/pdf/{id}', [OrderController::class, 'pdf'])->name('order.pdf');
 Route::get('/income', [OrderController::class, 'incomeChart'])->name('product.order.income');

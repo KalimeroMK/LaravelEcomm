@@ -10,6 +10,8 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Core\Support\Media\MediaUploader;
 use Modules\Core\Support\Relations\SyncRelations;
 use Modules\Product\Actions\DeleteProductAction;
+use Modules\Product\Actions\DeleteProductMediaAction;
+use Modules\Product\Actions\GenerateProductDescriptionAction;
 use Modules\Product\Actions\StoreProductAction;
 use Modules\Product\Actions\UpdateProductAction;
 use Modules\Product\DTOs\ProductDTO;
@@ -26,7 +28,9 @@ class ProductController extends CoreController
         public readonly ProductRepository $repository,
         private readonly StoreProductAction $storeProductAction,
         private readonly UpdateProductAction $updateProductAction,
-        private readonly DeleteProductAction $deleteProductAction
+        private readonly DeleteProductAction $deleteProductAction,
+        private readonly DeleteProductMediaAction $deleteProductMediaAction,
+        private readonly GenerateProductDescriptionAction $generateDescriptionAction
     ) {}
 
     public function index(Search $request): ResourceCollection
@@ -92,5 +96,36 @@ class ProductController extends CoreController
         return $this
             ->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Product']))
             ->respond(null);
+    }
+
+    /**
+     * Delete product media.
+     */
+    public function deleteMedia(int $modelId, int $mediaId): JsonResponse
+    {
+        $this->authorizeFromRepo(ProductRepository::class, 'update', $modelId);
+
+        $this->deleteProductMediaAction->execute($modelId, $mediaId);
+
+        return $this
+            ->setMessage('Media deleted successfully.')
+            ->respond(null);
+    }
+
+    /**
+     * Generate product description using AI.
+     */
+    public function generateDescription(\Illuminate\Http\Request $request): JsonResponse
+    {
+        $request->validate([
+            'title' => 'required|string',
+        ]);
+
+        $title = $request->input('title');
+        $description = $this->generateDescriptionAction->execute($title);
+
+        return $this
+            ->setMessage('Description generated successfully.')
+            ->respond(['description' => $description]);
     }
 }

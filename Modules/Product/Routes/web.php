@@ -19,7 +19,14 @@ use Modules\Product\Http\Controllers\ProductImportExportController;
 use Modules\Product\Http\Controllers\ProductReviewController;
 
 Route::prefix('admin')->middleware(['auth'])->group(function (): void {
-    Route::resource('products', ProductController::class)->except('show');
+    Route::resource('products', ProductController::class)->except('show')->names([
+        'index' => 'admin.products.index',
+        'create' => 'admin.products.create',
+        'store' => 'admin.products.store',
+        'edit' => 'admin.products.edit',
+        'update' => 'admin.products.update',
+        'destroy' => 'admin.products.destroy',
+    ]);
     Route::resource('reviews', ProductReviewController::class)->except('show', 'create');
     Route::delete(
         '/products/{modelId}/media/{mediaId}',

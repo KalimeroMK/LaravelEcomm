@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\User\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Modules\User\Models\User;
@@ -27,5 +28,21 @@ class UserFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
+    }
+
+    public function withMedia(): self
+    {
+        return $this->afterCreating(function (Model $model): void {
+            /** @var User $user */
+            $user = $model;
+            $imageUrl = 'https://picsum.photos/400/400?random='.rand(1, 10000);
+            $imageContents = @file_get_contents($imageUrl);
+            if ($imageContents !== false) {
+                $tempFile = tempnam(sys_get_temp_dir(), 'user_avatar');
+                file_put_contents($tempFile, $imageContents);
+                $user->addMedia($tempFile)->preservingOriginal()->toMediaCollection('photo');
+                @unlink($tempFile);
+            }
+        });
     }
 }

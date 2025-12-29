@@ -24,6 +24,7 @@ readonly class CreateCouponAction
             'type' => $dto->type,
             'value' => $dto->value,
             'status' => $dto->status,
+            'expires_at' => $dto->expires_at,
         ]);
     }
 }

@@ -10,6 +10,9 @@ use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Newsletter\Actions\CreateNewsletterAction;
 use Modules\Newsletter\Actions\DeleteNewsletterAction;
+use Modules\Newsletter\Actions\FindNewsletterAction;
+use Modules\Newsletter\Actions\GetAllNewslettersAction;
+use Modules\Newsletter\Actions\UpdateNewsletterAction;
 use Modules\Newsletter\DTOs\NewsletterDTO;
 use Modules\Newsletter\Http\Requests\Api\Store;
 use Modules\Newsletter\Http\Resources\NewsletterResource;
@@ -21,7 +24,10 @@ class NewsletterController extends CoreController
 {
     public function __construct(
         private readonly NewsletterRepository $repository,
+        private readonly GetAllNewslettersAction $getAllAction,
+        private readonly FindNewsletterAction $findAction,
         private readonly CreateNewsletterAction $createAction,
+        private readonly UpdateNewsletterAction $updateAction,
         private readonly DeleteNewsletterAction $deleteAction
     ) {}
 
@@ -29,7 +35,7 @@ class NewsletterController extends CoreController
     {
         $this->authorize('viewAny', Newsletter::class);
 
-        return NewsletterResource::collection($this->repository->findAll());
+        return NewsletterResource::collection($this->getAllAction->execute());
     }
 
     /**
@@ -44,6 +50,38 @@ class NewsletterController extends CoreController
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
+                'resource' => Helper::getResourceName(Newsletter::class),
+            ]))
+            ->respond(new NewsletterResource($newsletter));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function show(int $id): JsonResponse
+    {
+        $this->authorizeFromRepo(NewsletterRepository::class, 'view', $id);
+        $newsletter = $this->findAction->execute($id);
+
+        return $this
+            ->setMessage(__('apiResponse.ok', [
+                'resource' => Helper::getResourceName(Newsletter::class),
+            ]))
+            ->respond(new NewsletterResource($newsletter));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function update(Store $request, int $id): JsonResponse
+    {
+        $this->authorizeFromRepo(NewsletterRepository::class, 'update', $id);
+
+        $dto = NewsletterDTO::fromRequest($request, $id);
+        $newsletter = $this->updateAction->execute($dto);
+
+        return $this
+            ->setMessage(__('apiResponse.updateSuccess', [
                 'resource' => Helper::getResourceName(Newsletter::class),
             ]))
             ->respond(new NewsletterResource($newsletter));

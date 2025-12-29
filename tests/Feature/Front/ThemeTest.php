@@ -63,7 +63,8 @@ describe('Multi-Theme Functionality', function () {
 
         $asset = theme_asset('css/style.css');
 
-        expect($asset)->toBe('http://localhost/frontend/themes/modern/css/style.css');
+        // asset() helper may include port number, so just check the path
+        expect($asset)->toContain('/frontend/themes/modern/css/style.css');
     });
 
     it('generates default theme asset URL when no setting exists', function () {
@@ -71,13 +72,15 @@ describe('Multi-Theme Functionality', function () {
 
         $asset = theme_asset('css/style.css');
 
-        expect($asset)->toBe('http://localhost/frontend/themes/default/css/style.css');
+        // asset() helper may include port number, so just check the path
+        expect($asset)->toContain('/frontend/themes/default/css/style.css');
     });
 
     it('can use specific theme for asset', function () {
         $asset = theme_asset('css/style.css', 'modern');
 
-        expect($asset)->toBe('http://localhost/frontend/themes/modern/css/style.css');
+        // asset() helper may include port number, so just check the path
+        expect($asset)->toContain('/frontend/themes/modern/css/style.css');
     });
 });
 

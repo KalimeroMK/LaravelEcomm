@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Billing\Actions\Wishlist\CreateWishlistAction;
 use Modules\Billing\Actions\Wishlist\DeleteWishlistAction;
 use Modules\Billing\DTOs\WishlistDTO;
-use Modules\Billing\Http\Requests\Store;
 use Modules\Core\Http\Controllers\CoreController;
+use Modules\Product\Models\Product;
 use Throwable;
 
 class WishlistController extends CoreController
@@ -21,18 +21,24 @@ class WishlistController extends CoreController
         private readonly DeleteWishlistAction $deleteAction
     ) {}
 
-    public function wishlist(string $slug, Store $request): RedirectResponse
+    public function wishlist(string $slug, Request $request): RedirectResponse
     {
         if (! Auth::check()) {
             return back()->with('error', __('Please login first.'));
         }
 
         try {
-            $request->merge(['slug' => $slug]);
+            $product = Product::where('slug', $slug)->firstOrFail();
 
-            $request->validate($request->rules());
+            $dto = new WishlistDTO(
+                null,
+                $product->id,
+                Auth::id(),
+                1,
+                (float) $product->price,
+                (float) $product->discount
+            );
 
-            $dto = WishlistDTO::fromRequest($request);
             $this->createAction->execute($dto);
 
             return back()->with('success', __('Product successfully added to wishlist.'));

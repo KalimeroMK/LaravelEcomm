@@ -10,14 +10,14 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(count($complaints) > 0)
-                    <table class="table table-bordered" id="data-table" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="complaints-table" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th>@lang('partials.s_n')</th>
                             <th>@lang('messages.users')</th>
                             <th>@lang('partials.order_no')</th>
                             <th>@lang('partials.status')</th>
-                            <th>@lang('partials.replies_count')</th> {{-- New Replies Count Column --}}
+                            <th>@lang('partials.replies_count')</th>
                             <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
@@ -42,9 +42,9 @@
                                         {{ ucfirst($complaint->status) }}
                                     </span>
                                 </td>
-                                <td>{{ $complaint->complaint_replies->count() }}</td> {{-- New Replies Count --}}
+                                <td>{{ $complaint->complaint_replies->count() }}</td>
                                 <td>
-                                    <a href="{{ route('complaints.edit', $complaint->id) }}"
+                                    <a href="{{ route('admin.complaints.edit', $complaint->id) }}"
                                        class="btn btn-info btn-sm float-left mr-1"
                                        style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                        title="View" data-placement="bottom"><i class="fas fa-eye"></i></a>
@@ -53,9 +53,14 @@
                         @endforeach
                         </tbody>
                     </table>
+                    
+                    <div class="d-flex justify-content-center">
+                        {{ $complaints->appends($_GET)->links('pagination::admin-bootstrap-5') }}
+                    </div>
                 @else
                     <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif
+
             </div>
         </div>
     </div>

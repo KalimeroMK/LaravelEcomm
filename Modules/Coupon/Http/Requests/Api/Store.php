@@ -20,6 +20,7 @@ class Store extends CoreRequest
             'type' => 'required|in:fixed,percent',
             'value' => 'required|numeric',
             'status' => 'required|in:active,inactive',
+            'expires_at' => 'required|date|after:now',
         ];
     }
 }

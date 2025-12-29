@@ -14,26 +14,46 @@ class ComplaintPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('complaint-list');
+        // Сите корисници можат да гледаат complaints, но ќе се филтрираат во action
+        return true;
     }
 
     public function view(User $user, Complaint $complaint): bool
     {
-        return $user->hasPermissionTo('complaint-list');
+        // Admin и super-admin можат да гледаат сите complaints
+        if ($user->hasAnyRole(['admin', 'super-admin'])) {
+            return true;
+        }
+
+        // Обични корисници можат да гледаат само свои complaints
+        return $user->id === $complaint->user_id;
     }
 
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('complaint-create');
+        // Сите автентификувани корисници можат да креираат complaints
+        return true;
     }
 
     public function update(User $user, Complaint $complaint): bool
     {
-        return $user->hasPermissionTo('complaint-edit');
+        // Admin и super-admin можат да ажурираат сите complaints
+        if ($user->hasAnyRole(['admin', 'super-admin'])) {
+            return true;
+        }
+
+        // Обични корисници можат да ажурираат само свои complaints
+        return $user->id === $complaint->user_id;
     }
 
     public function delete(User $user, Complaint $complaint): bool
     {
-        return $user->hasPermissionTo('complaint-delete');
+        // Admin и super-admin можат да бришат сите complaints
+        if ($user->hasAnyRole(['admin', 'super-admin'])) {
+            return true;
+        }
+
+        // Обични корисници можат да бришат само свои complaints
+        return $user->id === $complaint->user_id;
     }
 }

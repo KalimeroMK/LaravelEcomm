@@ -119,7 +119,7 @@
                     
                     <!-- Pagination -->
                     <div class="d-flex justify-content-center">
-                        {{ $templates->links() }}
+                        {{ $templates->links('pagination::admin-bootstrap-5') }}
                     </div>
                 @else
                     <div class="text-center py-4">

@@ -10,6 +10,8 @@ use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Page\Actions\CreatePageAction;
 use Modules\Page\Actions\DeletePageAction;
+use Modules\Page\Actions\FindPageAction;
+use Modules\Page\Actions\GetAllPagesAction;
 use Modules\Page\Actions\UpdatePageAction;
 use Modules\Page\DTOs\PageDTO;
 use Modules\Page\Http\Requests\Api\Store;
@@ -23,6 +25,8 @@ class PageController extends CoreController
 {
     public function __construct(
         private readonly PageRepository $repository,
+        private readonly GetAllPagesAction $getAllAction,
+        private readonly FindPageAction $findAction,
         private readonly CreatePageAction $createAction,
         private readonly UpdatePageAction $updateAction,
         private readonly DeletePageAction $deleteAction
@@ -32,7 +36,9 @@ class PageController extends CoreController
     {
         $this->authorize('viewAny', Page::class);
 
-        return PageResource::collection($this->repository->findAll());
+        $pageListDto = $this->getAllAction->execute();
+
+        return PageResource::collection($pageListDto->pages);
     }
 
     /**
@@ -57,7 +63,8 @@ class PageController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $page = $this->authorizeFromRepo(PageRepository::class, 'view', $id);
+        $this->authorizeFromRepo(PageRepository::class, 'view', $id);
+        $page = $this->findAction->execute($id);
 
         return $this
             ->setMessage(__('apiResponse.ok', [

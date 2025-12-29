@@ -7,7 +7,7 @@ namespace Modules\ProductStats\Actions;
 use Modules\ProductStats\Models\ProductClick;
 use Modules\ProductStats\Models\ProductImpression;
 
-class GetProductStatsAction
+readonly class GetProductStatsAction
 {
     public function execute(int $productId): array
     {

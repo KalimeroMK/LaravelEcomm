@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Modules\Permission\Actions\CreatePermissionAction;
 use Modules\Permission\Actions\DeletePermissionAction;
+use Modules\Permission\Actions\FindPermissionAction;
 use Modules\Permission\Actions\GetAllPermissionsAction;
 use Modules\Permission\Actions\UpdatePermissionAction;
 use Modules\Permission\DTOs\PermissionDTO;
@@ -20,6 +21,8 @@ class PermissionController extends Controller
 {
     private readonly GetAllPermissionsAction $getAllAction;
 
+    private readonly FindPermissionAction $findAction;
+
     private readonly CreatePermissionAction $createAction;
 
     private readonly UpdatePermissionAction $updateAction;
@@ -28,11 +31,13 @@ class PermissionController extends Controller
 
     public function __construct(
         GetAllPermissionsAction $getAllAction,
+        FindPermissionAction $findAction,
         CreatePermissionAction $createAction,
         UpdatePermissionAction $updateAction,
         DeletePermissionAction $deleteAction
     ) {
         $this->getAllAction = $getAllAction;
+        $this->findAction = $findAction;
         $this->createAction = $createAction;
         $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
@@ -73,6 +78,8 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission): View
     {
+        $permission = $this->findAction->execute($permission->id);
+
         return view('permission::edit', ['permission' => $permission]);
     }
 

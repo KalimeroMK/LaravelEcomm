@@ -45,13 +45,27 @@ test('user can create order', function () {
 });
 
 test('user can view order history', function () {
-    // User order history route not implemented, skip
-    $this->markTestSkipped('User order history route not implemented');
+    Order::factory()->count(3)->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->get(route('user.orders.history'));
+
+    $response->assertStatus(200);
+    $response->assertSee('My Orders', false);
 });
 
 test('user can view order details', function () {
-    // User order detail route not implemented, skip
-    $this->markTestSkipped('User order detail route not implemented');
+    $order = Order::factory()->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->get(route('user.orders.detail', $order));
+
+    $response->assertStatus(200);
+    $response->assertSee($order->order_number, false);
 });
 
 test('user can track order status', function () {
@@ -60,8 +74,13 @@ test('user can track order status', function () {
         'status' => 'processing',
     ]);
 
-    // Order tracking route not implemented for users, skip
-    $this->markTestSkipped('User order tracking route not implemented');
+    $response = $this->actingAs($this->user)
+        ->get(route('user.orders.track', $order));
+
+    $response->assertStatus(200);
+    $response->assertSee('Track Order', false);
+    $response->assertSee($order->order_number, false);
+    $response->assertSee('Processing', false);
 });
 
 test('admin can update order status', function () {

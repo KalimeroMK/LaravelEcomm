@@ -4,7 +4,13 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">@lang('sidebar.admin')</div>
+        <div class="sidebar-brand-text mx-3">
+            @hasrole('super-admin')
+            @lang('sidebar.admin')
+            @else
+            {{ Auth::user()->name ?? 'Account' }}
+            @endhasrole
+        </div>
     </a>
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
@@ -18,19 +24,21 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
+    @hasrole('super-admin')
     <!-- Analytics Dashboard -->
     <li class="nav-item">
         <a class="nav-link" href="{{route('admin.analytics')}}">
             <i class="fas fa-chart-line"></i>
-            <span>Analytics Dashboard</span>
+            <span>@lang('sidebar.analytics_dashboard')</span>
         </a>
     </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
+    @endhasrole
 
     <div class="sidebar-heading">
-        Shop
+        @lang('sidebar.shop')
     </div>
     @hasrole('super-admin')
     {{-- Attrinute --}}
@@ -137,9 +145,9 @@
         <div id="productCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">@lang('sidebar.product_options'):</h6>
-                <a class="collapse-item" href="{{route('products.index')}}">@lang('sidebar.products')</a>
-                <a class="collapse-item" href="{{route('products.create')}}">@lang('sidebar.add_product')</a>
-                <a class="collapse-item" href="{{route('export-import-product.index')}}">CSV Import & Export</a>
+                <a class="collapse-item" href="{{route('admin.products.index')}}">@lang('sidebar.products')</a>
+                <a class="collapse-item" href="{{route('admin.products.create')}}">@lang('sidebar.add_product')</a>
+                <a class="collapse-item" href="{{route('export-import-product.index')}}">@lang('sidebar.csv_import_export')</a>
             </div>
         </div>
     </li>
@@ -148,7 +156,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('product-stats.index') }}">
             <i class="fas fa-chart-bar"></i>
-            <span>Product Stats</span>
+            <span>@lang('sidebar.product_stats')</span>
         </a>
     </li>
     {{-- Shipping --}}
@@ -178,10 +186,10 @@
                 <h6 class="collapse-header">@lang('sidebar.newsletters_options'):</h6>
                 <a class="collapse-item" href="{{route('newsletters.index')}}">@lang('sidebar.newsletters')</a>
                 <a class="collapse-item" href="{{route('newsletters.create')}}">@lang('sidebar.add_newsletter')</a>
-                <a class="collapse-item" href="{{route('admin.email-templates.index')}}">Email Templates</a>
-                <a class="collapse-item" href="{{route('admin.email-templates.create')}}">Create Template</a>
-                <a class="collapse-item" href="{{route('admin.email-campaigns.index')}}">Email Campaigns</a>
-                <a class="collapse-item" href="{{route('admin.email-campaigns.create')}}">Create Campaign</a>
+                <a class="collapse-item" href="{{route('admin.email-templates.index')}}">@lang('sidebar.email_templates')</a>
+                <a class="collapse-item" href="{{route('admin.email-templates.create')}}">@lang('sidebar.create_template')</a>
+                <a class="collapse-item" href="{{route('admin.email-campaigns.index')}}">@lang('sidebar.email_campaigns')</a>
+                <a class="collapse-item" href="{{route('admin.email-campaigns.create')}}">@lang('sidebar.create_campaign')</a>
             </div>
         </div>
     </li>
@@ -195,7 +203,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('complaints.index') }}">
+        <a class="nav-link" href="{{ route('admin.complaints.index') }}">
             <i class="fas fa-question fa-chart-area"></i>
             <span>@lang('sidebar.complaints')</span>
         </a>
@@ -211,9 +219,10 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
+    @hasrole('super-admin')
     <!-- Heading -->
     <div class="sidebar-heading">
-        Marketing
+        @lang('sidebar.marketing')
     </div>
 
     <!-- Email Marketing -->
@@ -221,33 +230,34 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#emailMarketingCollapse" aria-expanded="true"
            aria-controls="emailMarketingCollapse">
             <i class="fas fa-envelope"></i>
-            <span>Email Marketing</span>
+            <span>@lang('sidebar.email_marketing')</span>
         </a>
         <div id="emailMarketingCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Email Marketing Options:</h6>
-                <a class="collapse-item" href="{{route('newsletters.index')}}">Newsletters</a>
-                <a class="collapse-item" href="{{route('newsletters.create')}}">Create Campaign</a>
-                <a class="collapse-item" href="{{route('admin.email-campaigns.analytics')}}">Email Analytics</a>
-                <a class="collapse-item" href="/api/v1/newsletter/campaigns">Campaigns</a>
+                <h6 class="collapse-header">@lang('sidebar.email_marketing_options'):</h6>
+                <a class="collapse-item" href="{{route('newsletters.index')}}">@lang('sidebar.newsletters')</a>
+                <a class="collapse-item" href="{{route('newsletters.create')}}">@lang('sidebar.create_campaign')</a>
+                <a class="collapse-item" href="{{route('admin.email-campaigns.analytics')}}">@lang('sidebar.email_analytics')</a>
+                <a class="collapse-item" href="{{ route('admin.email-campaigns.index') }}">@lang('sidebar.campaigns')</a>
             </div>
         </div>
     </li>
 
     <!-- Abandoned Cart -->
     <li class="nav-item">
-        <a class="nav-link" href="/api/v1/admin/analytics/abandoned-carts">
+        <a class="nav-link" href="{{ route('admin.analytics.abandoned-carts') }}">
             <i class="fas fa-shopping-cart"></i>
-            <span>Abandoned Carts</span>
+            <span>@lang('sidebar.abandoned_carts')</span>
         </a>
     </li>
+    @endhasrole
 
     <!-- Divider -->
     <hr class="sidebar-divider">
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Posts
+        @lang('sidebar.posts')
     </div>
     @hasrole('super-admin')
 
@@ -300,9 +310,10 @@
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
     
+    @hasrole('super-admin')
     <!-- Heading -->
     <div class="sidebar-heading">
-        SEO & Performance
+        @lang('sidebar.seo_performance')
     </div>
 
     <!-- SEO Tools -->
@@ -310,15 +321,15 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#seoCollapse" aria-expanded="true"
            aria-controls="seoCollapse">
             <i class="fas fa-search"></i>
-            <span>SEO Tools</span>
+            <span>@lang('sidebar.seo_tools')</span>
         </a>
         <div id="seoCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">SEO Options:</h6>
-                <a class="collapse-item" href="/sitemap.xml">XML Sitemap</a>
-                <a class="collapse-item" href="/robots.txt">Robots.txt</a>
-                <a class="collapse-item" href="#" onclick="generateSitemap()">Generate Sitemap</a>
-                <a class="collapse-item" href="/api/v1/admin/seo/meta-tags">Meta Tags</a>
+                <h6 class="collapse-header">@lang('sidebar.seo_options'):</h6>
+                <a class="collapse-item" href="/sitemap.xml">@lang('sidebar.xml_sitemap')</a>
+                <a class="collapse-item" href="/robots.txt">@lang('sidebar.robots_txt')</a>
+                <a class="collapse-item" href="#" onclick="generateSitemap()">@lang('sidebar.generate_sitemap')</a>
+                <a class="collapse-item" href="{{ route('settings.seo.index') }}">@lang('sidebar.meta_tags')</a>
             </div>
         </div>
     </li>
@@ -327,9 +338,10 @@
     <li class="nav-item">
         <a class="nav-link" href="#" onclick="clearCache()">
             <i class="fas fa-tachometer-alt"></i>
-            <span>Clear Cache</span>
+            <span>@lang('sidebar.clear_cache')</span>
         </a>
     </li>
+    @endhasrole
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -355,6 +367,10 @@
                 <a class="collapse-item" href="{{route('roles.index')}}">@lang('sidebar.roles')</a>
                 <a class="collapse-item" href="{{route('permissions.index')}}">@lang('sidebar.permissions')</a>
                 <a class="collapse-item" href="{{route('settings.index')}}">@lang('sidebar.settings')</a>
+                <a class="collapse-item" href="{{route('settings.payment.index')}}">@lang('sidebar.payment_settings')</a>
+                <a class="collapse-item" href="{{route('settings.shipping.index')}}">@lang('sidebar.shipping_settings')</a>
+                <a class="collapse-item" href="{{route('settings.email.index')}}">@lang('sidebar.email_settings')</a>
+                <a class="collapse-item" href="{{route('settings.seo.index')}}">@lang('sidebar.seo_settings')</a>
                 <a class="collapse-item" href="{{route('pages.index')}}">@lang('sidebar.page')</a>
                 @if (config('tenant.multi_tenant.enabled'))
                     <a class="collapse-item" href="{{route('tenant.index')}}">@lang('sidebar.tenant')</a>

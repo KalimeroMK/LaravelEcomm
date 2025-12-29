@@ -20,6 +20,9 @@ class CouponFactory extends Factory
         return [
             'code' => 'code-'.mb_strtoupper(Str::random(10)),
             'value' => $this->faker->randomFloat(),
+            'type' => $this->faker->randomElement(['fixed', 'percent']),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'expires_at' => now()->addDays($this->faker->numberBetween(1, 30)),
         ];
     }
 }

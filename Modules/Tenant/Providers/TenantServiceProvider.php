@@ -30,22 +30,31 @@ class TenantServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerViews();
 
-        if (config('tenant.multi_tenant.enabled')) {
+        // In test environment, always register commands and load migrations
+        $isTesting = app()->environment('testing');
+        $isEnabled = config('tenant.multi_tenant.enabled', false);
+
+        // Always auto-register commands (needed for tests and when enabled)
+        if ($isEnabled || $isTesting) {
             $this->registerCommands();
             $this->registerCommandSchedules();
-            $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-            // In test environment, also load Owner migrations to default connection
-            if (app()->environment('testing')) {
-                $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations/Owner'));
-            }
             $this->autoRegisterCommands($this->moduleName);
+        }
+
+        // Load migrations
+        if ($isEnabled) {
+            $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        }
+
+        // In test environment, always load Owner migrations to default connection
+        if ($isTesting) {
+            $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations/Owner'));
+        }
+
+        // Configure tenant and queue only when enabled
+        if ($isEnabled) {
             $this->configureTenant();
             $this->configureQueue();
-        } else {
-            // Even if multi-tenant is disabled, load migrations in test environment
-            if (app()->environment('testing')) {
-                $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations/Owner'));
-            }
         }
     }
 

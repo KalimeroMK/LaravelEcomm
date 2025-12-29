@@ -7,14 +7,11 @@ namespace Modules\Settings\Actions;
 use Modules\Settings\Models\Setting;
 use Modules\Settings\Repository\SettingsRepository;
 
-class UpdateSettingsAction
+readonly class UpdateSettingsAction
 {
-    private SettingsRepository $repository;
-
-    public function __construct(SettingsRepository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(
+        private SettingsRepository $repository
+    ) {}
 
     public function execute(int $id, array $data): Setting
     {

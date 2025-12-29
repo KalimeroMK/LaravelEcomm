@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Brand\Actions\CreateBrandAction;
 use Modules\Brand\Actions\DeleteBrandAction;
+use Modules\Brand\Actions\FindBrandAction;
+use Modules\Brand\Actions\SearchBrandsAction;
 use Modules\Brand\Actions\UpdateBrandAction;
 use Modules\Brand\DTOs\BrandDTO;
 use Modules\Brand\Http\Requests\Api\Store;
@@ -25,6 +27,8 @@ class BrandController extends CoreController
 {
     public function __construct(
         public readonly BrandRepository $repository,
+        private readonly SearchBrandsAction $searchBrandsAction,
+        private readonly FindBrandAction $findBrandAction,
         private readonly CreateBrandAction $createAction,
         private readonly UpdateBrandAction $updateAction,
         private readonly DeleteBrandAction $deleteAction
@@ -36,7 +40,9 @@ class BrandController extends CoreController
     {
         $this->authorize('viewAny', Brand::class);
 
-        return BrandResource::collection($this->repository->search($request->all()));
+        $brands = $this->searchBrandsAction->execute($request->all());
+
+        return BrandResource::collection($brands);
     }
 
     /**
@@ -62,7 +68,8 @@ class BrandController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $brand = $this->authorizeFromRepo(BrandRepository::class, 'view', $id);
+        $brand = $this->findBrandAction->execute($id);
+        $this->authorize('view', $brand);
 
         return $this
             ->setMessage(__('apiResponse.ok', [
@@ -97,7 +104,8 @@ class BrandController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->authorizeFromRepo(BrandRepository::class, 'delete', $id);
+        $brand = $this->findBrandAction->execute($id);
+        $this->authorize('delete', $brand);
 
         $this->deleteAction->execute($id);
 

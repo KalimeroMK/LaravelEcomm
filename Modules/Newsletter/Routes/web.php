@@ -13,14 +13,12 @@ declare(strict_types=1);
 |
 */
 
-use Modules\Newsletter\Http\Controllers\EmailTrackingController;
+use Modules\Newsletter\Http\Controllers\NewsletterAnalyticsController;
 use Modules\Newsletter\Http\Controllers\NewsletterController;
 
 Route::resource('newsletters', NewsletterController::class)->except('show');
 
-// Email tracking routes
-Route::get('email/track/open', [EmailTrackingController::class, 'trackOpen'])->name('email.track.open');
-Route::get('email/track/click', [EmailTrackingController::class, 'trackClick'])->name('email.track.click');
-Route::get('email/unsubscribe', [EmailTrackingController::class, 'unsubscribe'])->name('email.unsubscribe');
+// Newsletter Analytics
+Route::get('newsletters/analytics', [NewsletterAnalyticsController::class, 'index'])->name('newsletters.analytics');
 
 // Email Template and Campaign Routes are handled in RouteServiceProvider to avoid conflicts

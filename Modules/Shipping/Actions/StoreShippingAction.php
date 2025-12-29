@@ -10,12 +10,7 @@ use Modules\Shipping\Repository\ShippingRepository;
 
 readonly class StoreShippingAction
 {
-    private ShippingRepository $repository;
-
-    public function __construct(ShippingRepository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(private ShippingRepository $repository) {}
 
     public function execute(ShippingDTO $dto): Shipping
     {

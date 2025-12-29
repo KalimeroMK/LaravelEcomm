@@ -7,9 +7,68 @@
 
 <head>
     <meta charset="utf-8">
-    <title>@yield('title', 'E-commerce Website')</title>
-    <meta name="description" content="@yield('description', 'Modern E-commerce Website')">
-    <meta name="author" content="Laravel E-commerce">
+    @php
+        $settings = \Modules\Settings\Models\Setting::first();
+        $seoSettings = $settings?->seo_settings ?? [];
+        // Use $seo from SeoViewComposer if available, otherwise use settings from database
+        $seoTitle = isset($seo) ? ($seo['title'] ?? null) : ($seoSettings['meta_title'] ?? config('app.name', 'E-commerce Store'));
+        $seoDescription = isset($seo) ? ($seo['description'] ?? null) : ($seoSettings['meta_description'] ?? 'Shop online for quality products with fast delivery and secure payment. Best deals and discounts available.');
+        $seoKeywords = isset($seo) ? ($seo['keywords'] ?? null) : ($seoSettings['meta_keywords'] ?? 'online shopping, ecommerce, products, deals, discounts');
+        $metaTitle = $seoTitle ?? config('app.name', 'E-commerce Store');
+        $metaDescription = $seoDescription ?? 'Shop online for quality products with fast delivery and secure payment. Best deals and discounts available.';
+        $metaKeywords = $seoKeywords ?? 'online shopping, ecommerce, products, deals, discounts';
+    @endphp
+    <title>@yield('title', $metaTitle)</title>
+    <meta name="description" content="@yield('description', $metaDescription)">
+    <meta name="keywords" content="{{ $metaKeywords }}">
+    <meta name="author" content="{{ config('app.name') }}">
+    
+    <?php if(isset($seoSettings['og_title']) && !empty($seoSettings['og_title'])): ?>
+        <meta property="og:title" content="{{ $seoSettings['og_title'] }}">
+    <?php endif; ?>
+    <?php if(isset($seoSettings['og_description']) && !empty($seoSettings['og_description'])): ?>
+        <meta property="og:description" content="{{ $seoSettings['og_description'] }}">
+    <?php endif; ?>
+    <?php if(isset($seoSettings['og_image']) && !empty($seoSettings['og_image'])): ?>
+        <meta property="og:image" content="{{ $seoSettings['og_image'] }}">
+    <?php endif; ?>
+    
+    <?php if(isset($seoSettings['twitter_card']) && !empty($seoSettings['twitter_card'])): ?>
+        <meta name="twitter:card" content="{{ $seoSettings['twitter_card'] }}">
+    <?php endif; ?>
+    <?php if(isset($seoSettings['twitter_site']) && !empty($seoSettings['twitter_site'])): ?>
+        <meta name="twitter:site" content="{{ $seoSettings['twitter_site'] }}">
+    <?php endif; ?>
+    
+    <?php if(isset($seoSettings['google_analytics_id']) && !empty($seoSettings['google_analytics_id'])): ?>
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $seoSettings['google_analytics_id'] }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $seoSettings['google_analytics_id'] }}');
+        </script>
+    <?php endif; ?>
+    
+    <?php if(isset($seoSettings['facebook_pixel_id']) && !empty($seoSettings['facebook_pixel_id'])): ?>
+        <!-- Facebook Pixel Code -->
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '{{ $seoSettings['facebook_pixel_id'] }}');
+            fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id={{ $seoSettings['facebook_pixel_id'] }}&ev=PageView&noscript=1"
+        /></noscript>
+    <?php endif; ?>
 
     <!-- Mobile Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,6 +142,9 @@
         <!-- main-container start -->
         <!-- ================ -->
         <div class="main-container">
+            <div class="container">
+                @include($themePath . '.layouts.notification')
+            </div>
             @yield('content')
         </div>
         <!-- main-container end -->

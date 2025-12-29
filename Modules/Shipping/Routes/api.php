@@ -26,3 +26,7 @@ Route::apiResource('shipping', ShippingController::class)->names(
         'destroy' => 'api.shipping.destroy',
     ]
 );
+
+// Shipping calculation API
+Route::post('shipping/calculate', [Modules\Shipping\Http\Controllers\Api\ShippingCalculationController::class, 'calculate'])
+    ->name('api.shipping.calculate');

@@ -18,6 +18,7 @@ class Update extends CoreRequest
             'type' => 'sometimes|in:fixed,percent|string',
             'value' => 'sometimes|numeric',
             'status' => 'sometimes|in:active,inactive|string',
+            'expires_at' => 'sometimes|date|after:now',
         ];
     }
 }

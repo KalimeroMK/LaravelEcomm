@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Cart\Http\Controllers;
 
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -14,95 +13,92 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Actions\CreateCartAction;
 use Modules\Cart\Actions\DeleteCartAction;
-use Modules\Cart\Actions\UpdateCartAction;
+use Modules\Cart\Actions\GetUserCartAction;
+use Modules\Cart\Actions\UpdateCartItemsAction;
 use Modules\Cart\DTOs\CartDTO;
 use Modules\Cart\Http\Requests\AddToCartSingle;
 use Modules\Cart\Models\Cart;
-use Modules\Cart\Repository\CartRepository;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\Product\Models\Product;
+use Modules\Product\Actions\FindProductBySlugAction;
 
 // theme_view() is loaded via composer autoload files
 
 class CartController extends CoreController
 {
-    private CreateCartAction $createAction;
-
-    private UpdateCartAction $updateAction;
-
-    private DeleteCartAction $deleteAction;
-
     public function __construct(
-        CartRepository $repository,
-        CreateCartAction $createAction,
-        UpdateCartAction $updateAction,
-        DeleteCartAction $deleteAction
+        private readonly FindProductBySlugAction $findProductBySlugAction,
+        private readonly CreateCartAction $createAction,
+        private readonly UpdateCartItemsAction $updateCartItemsAction,
+        private readonly DeleteCartAction $deleteAction,
+        private readonly GetUserCartAction $getUserCartAction
     ) {
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
+        $this->authorizeResource(Cart::class, 'cart');
     }
 
     public function addToCart(string $slug): RedirectResponse
     {
-        if (Auth::check()) {
-            $product = Product::whereSlug($slug)->first();
-            if (! $slug || ! $product) {
-                request()->session()->flash('error', 'Product not added to cart');
+        if (! Auth::check()) {
+            request()->session()->flash('error', __('messages.please_login_first'));
 
-                return back();
-            }
-            $dto = new CartDTO(
-                id: null,
-                product_id: $product->id,
-                quantity: 1,
-                user_id: Auth::id(),
-                price: $product->price,
-                session_id: session()->getId(),
-                amount: $product->price,
-                order_id: null,
-            );
-            $this->createAction->execute($dto);
-            session()->flash('success', 'Product successfully added to cart');
-
-            return redirect()->back();
+            return back();
         }
-        request()->session()->flash('error', 'Pls login first');
 
-        return back();
-    }
+        $product = $this->findProductBySlugAction->execute($slug);
+        if (! $slug || ! $product) {
+            request()->session()->flash('error', __('messages.product_not_added_to_cart'));
 
-    /**
-     * @throws Exception
-     */
-    public function singleAddToCart(AddToCartSingle $request): RedirectResponse
-    {
-        if (Auth::check()) {
-            $data = $request->validated();
-            $product = Product::whereSlug($data['slug'])->firstOrFail();
-            $dto = new CartDTO(
-                id: null,
-                product_id: $product->id,
-                quantity: $data['quantity'],
-                user_id: Auth::id(),
-                price: $product->price,
-                session_id: session()->getId(),
-                amount: $product->price * $data['quantity'],
-                order_id: null,
-            );
-            $this->createAction->execute($dto);
-            session()->flash('success', 'Product successfully added to cart');
-
-            return redirect()->back();
+            return back();
         }
-        request()->session()->flash('error', 'Pls login first');
+
+        $dto = new CartDTO(
+            id: null,
+            product_id: $product->id,
+            quantity: 1,
+            user_id: Auth::id(),
+            price: $product->price,
+            session_id: session()->getId(),
+            amount: $product->price,
+            order_id: null,
+        );
+        $this->createAction->execute($dto);
+        session()->flash('success', __('messages.product_added_to_cart'));
 
         return redirect()->back();
     }
 
-    /**
-     * @throws Exception
-     */
+    public function singleAddToCart(AddToCartSingle $request): RedirectResponse
+    {
+        if (! Auth::check()) {
+            request()->session()->flash('error', __('messages.please_login_first'));
+
+            return redirect()->back();
+        }
+
+        $data = $request->validated();
+        $product = $this->findProductBySlugAction->execute($data['slug']);
+
+        if (! $product) {
+            request()->session()->flash('error', __('messages.product_not_found'));
+
+            return redirect()->back();
+        }
+
+        $dto = new CartDTO(
+            id: null,
+            product_id: $product->id,
+            quantity: (int) $data['quantity'],
+            user_id: Auth::id(),
+            price: $product->price,
+            session_id: session()->getId(),
+            amount: $product->price * (int) $data['quantity'],
+            order_id: null,
+        );
+        $this->createAction->execute($dto);
+        session()->flash('success', __('messages.product_added_to_cart'));
+
+        return redirect()->back();
+    }
+
     public function cartDelete(int $id): RedirectResponse
     {
         $this->deleteAction->execute($id);
@@ -110,42 +106,18 @@ class CartController extends CoreController
         return redirect()->back();
     }
 
-    /**
-     * Updates cart information.
-     */
     public function cartUpdate(Request $request): RedirectResponse
     {
-        // Example: expects quantity and qty_id arrays in request
-        if ($request->has('quantity') && $request->has('qty_id')) {
-            foreach ($request->input('quantity') as $k => $qty) {
-                $id = $request->input('qty_id')[$k];
-                $cart = Cart::findOrFail($id);
-                $product = $cart->product;
-                $updateDto = new CartDTO(
-                    id: $cart->id,
-                    product_id: $cart->product_id,
-                    quantity: $qty,
-                    user_id: $cart->user_id,
-                    price: $cart->price,
-                    session_id: session()->getId(),
-                    amount: $cart->price * $qty,
-                    order_id: $cart->order_id,
-                );
-                $this->updateAction->execute($updateDto);
-            }
-        }
+        $this->updateCartItemsAction->execute($request);
 
         return redirect()->back();
     }
 
-    /**
-     * @throws Exception
-     */
     public function checkout(): View|Factory|RedirectResponse|Application
     {
-        $cart = Cart::whereUserId(Auth::id())->whereOrderId(null)->get();
+        $cart = $this->getUserCartAction->execute();
         if (! $cart instanceof Collection || $cart->isEmpty()) {
-            session()->flash('error', 'Cart is empty');
+            session()->flash('error', __('messages.cart_is_empty'));
 
             return back();
         }

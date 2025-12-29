@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Post\Http\Controllers\Api;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
@@ -11,7 +12,10 @@ use Modules\Core\Support\Media\MediaUploader;
 use Modules\Core\Support\Relations\SyncRelations;
 use Modules\Post\Actions\CreatePostAction;
 use Modules\Post\Actions\DeletePostAction;
+use Modules\Post\Actions\DeletePostMediaAction;
 use Modules\Post\Actions\FindPostAction;
+use Modules\Post\Actions\GetAllPostsAction;
+use Modules\Post\Actions\ImportPostsAction;
 use Modules\Post\Actions\UpdatePostAction;
 use Modules\Post\DTOs\PostDTO;
 use Modules\Post\Http\Requests\Api\Store;
@@ -24,16 +28,19 @@ class PostController extends CoreController
 {
     public function __construct(
         private readonly PostRepository $repository,
+        private readonly GetAllPostsAction $getAllAction,
+        private readonly FindPostAction $findAction,
         private readonly CreatePostAction $createAction,
         private readonly UpdatePostAction $updateAction,
         private readonly DeletePostAction $deleteAction,
-        private readonly FindPostAction $findAction
+        private readonly DeletePostMediaAction $deletePostMediaAction,
+        private readonly ImportPostsAction $importPostsAction
     ) {}
 
     public function index(): ResourceCollection
     {
         $this->authorize('viewAny', Post::class);
-        $posts = $this->repository->findAll();
+        $posts = $this->getAllAction->execute();
 
         return PostResource::collection($posts);
     }
@@ -86,11 +93,59 @@ class PostController extends CoreController
     {
         $this->authorizeFromRepo(PostRepository::class, 'delete', $id);
 
-        $this->findAction->execute($id);
         $this->deleteAction->execute($id);
 
         return $this
             ->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Post']))
             ->respond(null);
+    }
+
+    /**
+     * Delete post media
+     */
+    public function deleteMedia(int $modelId, int $mediaId): JsonResponse
+    {
+        $this->authorizeFromRepo(PostRepository::class, 'update', $modelId);
+        $this->deletePostMediaAction->execute($modelId, $mediaId);
+
+        return $this
+            ->setMessage('Media deleted successfully.')
+            ->respond(null);
+    }
+
+    /**
+     * Import posts from file
+     */
+    public function import(): JsonResponse
+    {
+        $this->authorize('create', Post::class);
+
+        $file = request()->file('file');
+        if (! $file) {
+            return $this
+                ->setMessage('Please upload a file.')
+                ->setStatusCode(422)
+                ->respond(null);
+        }
+
+        if (is_array($file)) {
+            return $this
+                ->setMessage('Please upload only one file.')
+                ->setStatusCode(422)
+                ->respond(null);
+        }
+
+        try {
+            $this->importPostsAction->execute($file);
+
+            return $this
+                ->setMessage('Posts imported successfully.')
+                ->respond(null);
+        } catch (Exception $e) {
+            return $this
+                ->setMessage('An error occurred during import: '.$e->getMessage())
+                ->setStatusCode(500)
+                ->respond(null);
+        }
     }
 }

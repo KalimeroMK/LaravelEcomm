@@ -15,6 +15,7 @@ readonly class CouponDTO
         public ?string $type = null,
         public ?float $value = null,
         public ?string $status = null,
+        public ?Carbon $expires_at = null,
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
     ) {}
@@ -29,6 +30,7 @@ readonly class CouponDTO
             'type' => $validated['type'] ?? $existing?->type,
             'value' => $validated['value'] ?? $existing?->value,
             'status' => $validated['status'] ?? $existing?->status,
+            'expires_at' => isset($validated['expires_at']) ? Carbon::parse($validated['expires_at']) : $existing?->expires_at,
         ]);
     }
 
@@ -40,6 +42,7 @@ readonly class CouponDTO
             $data['type'] ?? null,
             isset($data['value']) ? (float) $data['value'] : null,
             $data['status'] ?? null,
+            isset($data['expires_at']) ? Carbon::parse($data['expires_at']) : null,
             isset($data['created_at']) ? Carbon::parse($data['created_at']) : null,
             isset($data['updated_at']) ? Carbon::parse($data['updated_at']) : null,
         );

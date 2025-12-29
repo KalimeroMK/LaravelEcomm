@@ -6,7 +6,6 @@ namespace Modules\Product\Console;
 
 use Illuminate\Console\Command;
 use Modules\Product\Services\ElasticsearchService;
-use Symfony\Component\Console\Input\InputOption;
 
 class IndexProducts extends Command
 {
@@ -36,7 +35,7 @@ class IndexProducts extends Command
         $elasticsearchService->createIndex();
 
         $this->info('Indexing products...');
-        
+
         $startTime = microtime(true);
         $elasticsearchService->reindexAll();
         $duration = round(microtime(true) - $startTime, 2);

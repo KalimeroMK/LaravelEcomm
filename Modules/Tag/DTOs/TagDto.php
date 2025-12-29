@@ -4,25 +4,37 @@ declare(strict_types=1);
 
 namespace Modules\Tag\DTOs;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class TagDto
+readonly class TagDto
 {
-    public string $title;
+    public function __construct(
+        public ?int $id,
+        public string $title,
+        public string $slug,
+        public string $status,
+    ) {}
 
-    public string $slug;
-
-    public string $status;
-
-    public function __construct(array $data)
+    public static function fromRequest(Request $request, ?int $id = null): self
     {
-        $this->title = $data['title'];
-        $this->slug = $data['slug'] ?? Str::slug($data['title']);
-        $this->status = $data['status'] ?? 'active';
+        $data = $request->validated();
+
+        return new self(
+            id: $id,
+            title: $data['title'] ?? '',
+            slug: $data['slug'] ?? Str::slug($data['title'] ?? ''),
+            status: $data['status'] ?? 'active',
+        );
     }
 
-    public static function fromRequest(array $data): self
+    public static function fromArray(array $data): self
     {
-        return new self($data);
+        return new self(
+            id: $data['id'] ?? null,
+            title: $data['title'] ?? '',
+            slug: $data['slug'] ?? Str::slug($data['title'] ?? ''),
+            status: $data['status'] ?? 'active',
+        );
     }
 }

@@ -35,6 +35,8 @@ Route::prefix('analytics')->group(function (): void {
     Route::get('real-time', [AnalyticsController::class, 'realTime'])->name('admin.analytics.real-time');
     Route::get('date-range', [AnalyticsController::class, 'dateRange'])->name('admin.analytics.date-range');
     Route::post('export', [AnalyticsController::class, 'export'])->name('admin.analytics.export');
+    Route::get('abandoned-carts', [AnalyticsController::class, 'abandonedCarts'])->name('admin.analytics.abandoned-carts');
+    Route::get('abandoned-carts/{id}', [AnalyticsController::class, 'abandonedCartDetails'])->name('admin.analytics.abandoned-carts.details');
 });
 
 Route::get('/messages/five', [AdminController::class, 'messageFive'])->name('messages.five');

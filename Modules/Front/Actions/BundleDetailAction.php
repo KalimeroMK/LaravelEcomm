@@ -19,10 +19,21 @@ class BundleDetailAction
     public function __invoke(string $slug): array
     {
         $bundle = $this->bundleRepository->findBySlug($slug);
+
+        if (! $bundle) {
+            abort(404, 'Bundle not found');
+        }
+
+        // Load products relationship if not already loaded
+        if (! $bundle->relationLoaded('products')) {
+            $bundle->load('products');
+        }
+
         $related = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
             ->where('status', 'active')
+            ->whereNotIn('id', $bundle->products->pluck('id'))
             ->orderBy('id', 'DESC')
-            ->limit(3)
+            ->limit(8)
             ->get();
 
         return [

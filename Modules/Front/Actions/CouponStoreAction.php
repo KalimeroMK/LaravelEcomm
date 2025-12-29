@@ -19,6 +19,16 @@ class CouponStoreAction
             throw new InvalidArgumentException('Invalid coupon code, Please try again');
         }
 
+        // Check if coupon is expired
+        if ($coupon->expires_at && $coupon->expires_at->isPast()) {
+            throw new InvalidArgumentException('Coupon has expired');
+        }
+
+        // Check if coupon is active
+        if ($coupon->status !== 'active') {
+            throw new InvalidArgumentException('Coupon is not active');
+        }
+
         $total_price = (float) Cart::whereUserId(Auth::id())->where('order_id', null)->sum('price');
 
         $couponData = [

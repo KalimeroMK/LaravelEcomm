@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Modules\Tag\Actions;
 
-use Illuminate\Database\Eloquent\Model;
-use Modules\Tag\DTOs\TagDTO;
+use Modules\Tag\DTOs\TagDto;
+use Modules\Tag\Models\Tag;
+use Modules\Tag\Repository\TagRepository;
 
 readonly class UpdateTagAction
 {
-    public function execute(Model $tag, TagDTO $dto): Model
+    public function __construct(private TagRepository $repository) {}
+
+    public function execute(TagDto $dto): Tag
     {
-        $tag->update([
+        return $this->repository->update($dto->id, [
             'title' => $dto->title,
             'slug' => $dto->slug,
             'status' => $dto->status,
         ]);
-
-        return $tag->refresh();
     }
 }

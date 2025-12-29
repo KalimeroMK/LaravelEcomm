@@ -16,23 +16,16 @@ use Modules\Coupon\DTOs\CouponDTO;
 use Modules\Coupon\Http\Requests\Store;
 use Modules\Coupon\Http\Requests\Update;
 use Modules\Coupon\Models\Coupon;
+use Modules\Coupon\Repository\CouponRepository;
 
 class CouponController extends CoreController
 {
-    private CreateCouponAction $createAction;
-
-    private UpdateCouponAction $updateAction;
-
-    private DeleteCouponAction $deleteAction;
-
     public function __construct(
-        CreateCouponAction $createAction,
-        UpdateCouponAction $updateAction,
-        DeleteCouponAction $deleteAction
+        private readonly CouponRepository $repository,
+        private readonly CreateCouponAction $createAction,
+        private readonly UpdateCouponAction $updateAction,
+        private readonly DeleteCouponAction $deleteAction
     ) {
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
         $this->authorizeResource(Coupon::class, 'coupon');
     }
 
@@ -41,7 +34,7 @@ class CouponController extends CoreController
      */
     public function index(): Factory|View|Application
     {
-        return view('coupon::index', ['coupons' => Coupon::all()]);
+        return view('coupon::index', ['coupons' => $this->repository->findAll()]);
     }
 
     /**

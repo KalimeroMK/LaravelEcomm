@@ -12,10 +12,10 @@
             </div>
         </div>
         <div class="card-header py-3">
-            <h4 class=" font-weight-bold">Profile</h4>
+            <h4 class=" font-weight-bold">@lang('partials.profile')</h4>
             <ul class="breadcrumbs">
-                <li><a href="{{route('admin')}}" style="color:#999">Dashboard</a></li>
-                <li><a href="" class="active text-primary">Profile Page</a></li>
+                <li><a href="{{route('admin')}}" style="color:#999">@lang('partials.dashboard')</a></li>
+                <li><a href="" class="active text-primary">@lang('partials.profile_page')</a></li>
             </ul>
         </div>
         <div class="card-body">
@@ -51,7 +51,7 @@
                           action="{{route('profile-update',$profile['id'] ?? '')}}">
                         @csrf
                         <div class="form-group">
-                            <label for="inputTitle" class="col-form-label">Name</label>
+                            <label for="inputTitle" class="col-form-label">@lang('partials.name')</label>
                             <input id="inputTitle" type="text" name="name" placeholder="@lang('partials.name')"
                                    value="{{$profile['name'] ?? ''}}" class="form-control">
                             @error('name')
@@ -60,8 +60,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="inputEmail" class="col-form-label">Email</label>
-                            <input id="inputEmail" disabled type="email" name="email" placeholder="Enter email"
+                            <label for="inputEmail" class="col-form-label">@lang('partials.email')</label>
+                            <input id="inputEmail" disabled type="email" name="email" placeholder="@lang('partials.email')"
                                    value="{{$profile['email'] ?? ''}}" class="form-control">
                             @error('email')
 
@@ -69,11 +69,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="inputPhoto" class="col-form-label">Photo</label>
+                            <label for="inputPhoto" class="col-form-label">@lang('partials.image')</label>
                             <div class="input-group">
                           <span class="input-group-btn">
                               <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                              <i class="fa fa-picture-o"></i> Choose
+                              <i class="fa fa-picture-o"></i> @lang('partials.choose')
                               </a>
                           </span>
                                 <input id="thumbnail" class="form-control" type="text" name="photo"
@@ -83,17 +83,24 @@
 
                             @enderror
                         </div>
-                        <div class="col-md-12 mt-3">
-                            @if(isset($profile['loginSecurity']) && $profile['loginSecurity']['google2fa_enable'] ?? false)
-                                <a class="btn btn-warning"
-                                   href="{{ route('admin.google-disable2fa') }}">@lang('translation.users.2fa_disable')
-                                </a>
-                            @else
-                                <a class="btn btn-secondary"
-                                   href="{{ route('admin.2fa') }}">@lang('translation.users.2fa_enable')</a>
-                            @endif
+                        
+                        <!-- Buttons Row -->
+                        <div class="row mt-4 align-items-center">
+                            <div class="col-6">
+                                @if(isset($profile['loginSecurity']) && $profile['loginSecurity']['google2fa_enable'] ?? false)
+                                    <a class="btn btn-warning"
+                                       href="{{ route('admin.google-disable2fa') }}">@lang('partials.2fa_disable')
+                                    </a>
+                                @else
+                                    <a class="btn btn-secondary"
+                                       href="{{ route('admin.2fa') }}">@lang('partials.2fa_enable')</a>
+                                @endif
+                            </div>
+                            <div class="col-6 text-right">
+                                <button type="submit" class="btn btn-success">@lang('partials.update')</button>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-sm float-right">Update</button>
+
                     </form>
 
                 </div>

@@ -7,17 +7,12 @@ namespace Modules\Tag\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Tag\Repository\TagRepository;
 
-class ShowTagAction
+readonly class ShowTagAction
 {
-    private TagRepository $tagRepository;
+    public function __construct(private TagRepository $repository) {}
 
-    public function __construct(TagRepository $tagRepository)
+    public function execute(int $id): Model
     {
-        $this->tagRepository = $tagRepository;
-    }
-
-    public function execute(array|int $id): Model
-    {
-        return $this->tagRepository->findById($id);
+        return $this->repository->findById($id);
     }
 }

@@ -8,7 +8,7 @@
         <div class="card-body">
             {{-- Complaint Detail Form --}}
             <form class="form-horizontal" method="POST"
-                  action="{{ route($complaint->exists ? 'complaints.update' : 'complaints.store', $complaint->exists ?
+                  action="{{ route($complaint->exists ? 'admin.complaints.update' : 'admin.complaints.store', $complaint->exists ?
                   $complaint->id :
                   null) }}"
                   enctype="multipart/form-data">

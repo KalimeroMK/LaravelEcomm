@@ -47,6 +47,7 @@ class Coupon extends Core
     protected $casts
         = [
             'value' => 'float',
+            'expires_at' => 'datetime',
         ];
 
     protected $fillable
@@ -55,11 +56,37 @@ class Coupon extends Core
             'type',
             'value',
             'status',
+            'expires_at',
         ];
 
     public static function Factory(): CouponFactory
     {
         return CouponFactory::new();
+    }
+
+    /**
+     * Get the expires_at attribute with fallback.
+     * This handles cases where the column might not exist in the database yet.
+     *
+     * @param  mixed  $value
+     * @return \Illuminate\Support\Carbon|null
+     */
+    public function getExpiresAtAttribute($value)
+    {
+        // Check if the attribute exists in the model's attributes array
+        // This prevents MissingAttributeException when column doesn't exist
+        if (! array_key_exists('expires_at', $this->attributes)) {
+            return null;
+        }
+
+        // If value is null, return null
+        if ($value === null) {
+            return null;
+        }
+
+        // Let Laravel handle the casting through $casts
+        // Just return the value as-is, Laravel will cast it
+        return $value;
     }
 
     /**

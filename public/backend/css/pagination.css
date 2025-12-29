@@ -1,0 +1,169 @@
+/* Global pagination styling for admin panel */
+.pagination,
+ul.pagination {
+    margin: 20px 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+.pagination .page-item,
+ul.pagination > li {
+    margin: 0 2px !important;
+    display: inline-block !important;
+    list-style: none !important;
+}
+
+.pagination .page-link,
+ul.pagination > li > a,
+ul.pagination > li > span {
+    padding: 6px 12px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.35rem !important;
+    color: #858796 !important;
+    background-color: #fff !important;
+    font-size: 0.875rem !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    text-align: center !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    line-height: 1.5 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}
+
+.pagination .page-item.active .page-link,
+ul.pagination > li.active > span,
+ul.pagination > li.active > a {
+    background-color: #4e73df !important;
+    border-color: #4e73df !important;
+    color: #fff !important;
+    z-index: 1 !important;
+    position: relative !important;
+}
+
+.pagination .page-link:hover,
+ul.pagination > li > a:hover:not(.disabled) {
+    background-color: #e9ecef !important;
+    border-color: #dee2e6 !important;
+    color: #4e73df !important;
+}
+
+.pagination .page-item.disabled .page-link,
+ul.pagination > li.disabled > span,
+ul.pagination > li.disabled > a {
+    color: #858796 !important;
+    cursor: not-allowed !important;
+    opacity: 0.65 !important;
+    background-color: #fff !important;
+}
+
+.pagination .page-link:focus,
+ul.pagination > li > a:focus,
+ul.pagination > li > span:focus {
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25) !important;
+}
+
+/* Hide or minimize large icons */
+.pagination svg,
+ul.pagination svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+.pagination i.fa,
+ul.pagination i.fa {
+    font-size: 0.75rem !important;
+}
+
+/* Hide empty pagination items */
+.pagination > li:empty,
+ul.pagination > li:empty {
+    display: none !important;
+}
+
+/* Fix for large chevron/arrow icons */
+.pagination .page-link[aria-label],
+ul.pagination > li > a[aria-label],
+ul.pagination > li > span[aria-label] {
+    min-width: auto !important;
+    max-width: 45px !important;
+    padding: 6px 10px !important;
+}
+
+/* Ensure arrows are small */
+.pagination .page-link span[aria-hidden="true"],
+ul.pagination > li > a span[aria-hidden="true"],
+ul.pagination > li > span span[aria-hidden="true"] {
+    font-size: 0.875rem !important;
+    line-height: 1 !important;
+}
+
+/* DataTables pagination styling */
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 20px !important;
+    text-align: center !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 0.35rem !important;
+    color: #858796 !important;
+    background-color: #fff !important;
+    font-size: 0.875rem !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    text-align: center !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    line-height: 1.5 !important;
+    margin: 0 2px !important;
+    cursor: pointer !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #e9ecef !important;
+    border-color: #dee2e6 !important;
+    color: #4e73df !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #4e73df !important;
+    border-color: #4e73df !important;
+    color: #fff !important;
+    z-index: 1 !important;
+    position: relative !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: #858796 !important;
+    cursor: not-allowed !important;
+    opacity: 0.65 !important;
+    background-color: #fff !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next {
+    min-width: auto !important;
+    max-width: 45px !important;
+    padding: 6px 10px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous:before {
+    content: "\00ab" !important;
+    font-size: 0.875rem !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:after {
+    content: "\00bb" !important;
+    font-size: 0.875rem !important;
+}
+

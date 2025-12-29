@@ -110,6 +110,7 @@ class Order extends Core
             'total_amount' => 'float',
             'quantity' => 'int',
             'payer_id' => 'int',
+            'shipped_at' => 'datetime',
         ];
 
     protected $fillable
@@ -126,6 +127,9 @@ class Order extends Core
             'payer_id',
             'transaction_reference',
             'post_code',
+            'tracking_number',
+            'tracking_carrier',
+            'shipped_at',
         ];
 
     public static function Factory(): OrderFactory

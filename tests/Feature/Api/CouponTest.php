@@ -60,10 +60,11 @@ class CouponTest extends TestCase
     {
         $coupon = Coupon::factory()->create();
         $data = [
-            'code' => $this->faker->word,
-            'value' => $this->faker->randomFloat(),
+            'code' => $this->faker->unique()->word,
+            'value' => $this->faker->randomFloat(2, 1, 100),
             'type' => 'fixed',
             'status' => 'active',
+            'expires_at' => now()->addDays(30)->format('Y-m-d H:i:s'),
         ];
 
         return $this->create($this->url, $data);

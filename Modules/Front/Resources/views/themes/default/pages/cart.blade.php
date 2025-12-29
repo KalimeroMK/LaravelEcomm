@@ -2,22 +2,19 @@
 @extends($themePath . '.layouts.master')
 @section('title','Cart Page')
 @section('content')
-    <!-- Breadcrumbs -->
-    <div class="breadcrumbs">
+    <section class="page-header page-header-dark bg-secondary">
         <div class="container">
             <div class="row">
-                <div class="col-12">
-                    <div class="bread-inner">
-                        <ul class="bread-list">
-                            <li><a href="{{('home')}}">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="">Cart</a></li>
-                        </ul>
-                    </div>
+                <div class="col-md-12">
+                    <h1>Cart</h1>
+                    <ol class="breadcrumb">
+                        <li><a href="{{ route('front.index') }}">Home</a></li>
+                        <li class="active">Cart</li>
+                    </ol>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- End Breadcrumbs -->
+    </section>
 
     <!-- Shopping Cart -->
     <div class="shopping-cart section">
@@ -33,7 +30,7 @@
                             <th class="text-center">UNIT PRICE</th>
                             <th class="text-center">QUANTITY</th>
                             <th class="text-center">TOTAL</th>
-                            <th class="text-center"><i class="ti-trash remove-icon"></i></th>
+                            <th class="text-center"><i class="fa fa-trash remove-icon"></i></th>
                         </tr>
                         </thead>
                         <tbody id="cart_item_list">
@@ -43,15 +40,15 @@
                                 @foreach(Helper::getAllProductFromCart() as $key=>$cart)
                                     <tr>
                                         @php
-                                            $photo=explode(',',$cart->product['photo']);
+                                            $photo = $cart->product->image_url ?? 'default-image.jpg';
                                         @endphp
-                                        <td class="image" data-title="No"><img src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                                        <td class="image" data-title="No"><img src="{{$photo}}" alt="{{$photo}}">
                                         </td>
                                         <td class="product-des" data-title="Description">
                                             <p class="product-name"><a
                                                         href="{{route('front.product-detail',$cart->product['slug'])}}"
                                                         target="_blank">{{$cart->product['title']}}</a></p>
-                                            <p class="product-des">{!!($cart['summary']) !!}</p>
+                                            <p class="product-des">{!!($cart->product->summary) !!}</p>
                                         </td>
                                         <td class="price" data-title="Price">
                                             <span>${{number_format($cart['price'],2)}}</span></td>
@@ -60,17 +57,17 @@
                                                 <div class="button minus">
                                                     <button type="button" class="btn btn-primary btn-number"
                                                             disabled="disabled" data-type="minus"
-                                                            data-field="quantity[{{$key}}]">
-                                                        <i class="ti-minus"></i>
+                                                            data-field="quantity[{{$loop->index}}]">
+                                                        <i class="fa fa-minus"></i>
                                                     </button>
                                                 </div>
-                                                <input type="text" name="quantity[{{$key}}]" class="input-number"
+                                                <input type="text" name="quantity[{{$loop->index}}]" class="input-number"
                                                        data-min="1" data-max="100" value="{{$cart->quantity}}">
                                                 <input type="hidden" name="qty_id[]" value="{{$cart->id}}">
                                                 <div class="button plus">
                                                     <button type="button" class="btn btn-primary btn-number"
-                                                            data-type="plus" data-field="quantity[{{$key}}]">
-                                                        <i class="ti-plus"></i>
+                                                            data-type="plus" data-field="quantity[{{$loop->index}}]">
+                                                        <i class="fa fa-plus"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -81,7 +78,7 @@
 
                                         <td class="action" data-title="Remove"><a
                                                     href="{{route('cart-delete',$cart->id)}}"><i
-                                                        class="ti-trash remove-icon"></i></a></td>
+                                                        class="fa fa-trash remove-icon"></i></a></td>
                                     </tr>
                                 @endforeach
                                 <track>
@@ -416,6 +413,35 @@
         .form-select .nice-select::after {
             top: 14px;
         }
+        /* Cart Quantity Styles */
+        .shopping-cart .qty .input-group {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        .shopping-cart .qty .input-group .button {
+            display: inline-flex;
+            width: auto;
+        }
+        .shopping-cart .qty .input-group .input-number {
+             width: 50px;
+             text-align: center;
+             display: inline-block;
+             margin: 0 5px;
+             height: 40px;
+             padding: 0;
+             border-radius: 0;
+        }
+        .shopping-cart .qty .input-group .btn-number {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 0;
+        }
     </style>
 @endpush
 @push('scripts')
@@ -435,6 +461,22 @@
                 let coupon = parseFloat($('.coupon_price').data('price')) || 0;
                 // alert(coupon);
                 $('#order_total_price span').text('$' + (subtotal + cost - coupon).toFixed(2));
+            });
+
+            // Quantity buttons
+            $(document).on('click', '.btn-number', function(e) {
+                e.preventDefault();
+                const type = $(this).attr('data-type');
+                const input = $(this).closest('.input-group').find('.input-number');
+                let currentVal = parseInt(input.val()) || 1;
+                let min = parseInt(input.attr('data-min')) || 1;
+                let max = parseInt(input.attr('data-max')) || 100;
+
+                if(type == 'minus') {
+                    if(currentVal > min) input.val(currentVal - 1).change();
+                } else {
+                    if(currentVal < max) input.val(currentVal + 1).change();
+                }
             });
 
         });

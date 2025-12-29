@@ -93,31 +93,95 @@ test('invalid 2FA code is rejected', function () {
 });
 
 test('user can view 2FA recovery codes', function () {
-    // Recovery codes route not implemented, skip
-    $this->markTestSkipped('2FA recovery codes route not implemented');
+    $loginSecurity = Modules\Google2fa\Models\Google2fa::factory()->create([
+        'user_id' => $this->user->id,
+        'google2fa_enable' => true,
+        'recovery_codes' => ['CODE1-CODE1', 'CODE2-CODE2'],
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->get(route('admin.2fa.recovery-codes'));
+
+    $response->assertStatus(200);
+    $response->assertSee('Recovery Codes', false);
 });
 
 test('user can generate new recovery codes', function () {
-    // Recovery codes regenerate route not implemented, skip
-    $this->markTestSkipped('2FA recovery codes regenerate route not implemented');
+    $loginSecurity = Modules\Google2fa\Models\Google2fa::factory()->create([
+        'user_id' => $this->user->id,
+        'google2fa_enable' => true,
+        'recovery_codes' => ['OLD-CODE1'],
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->post(route('admin.2fa.recovery-codes.regenerate'));
+
+    $response->assertRedirect();
+    $loginSecurity->refresh();
+    expect($loginSecurity->recovery_codes)->not->toContain('OLD-CODE1');
+    expect(count($loginSecurity->recovery_codes))->toBeGreaterThan(0);
 });
 
 test('user can use recovery code for login', function () {
-    // Recovery code login route not implemented, skip
-    $this->markTestSkipped('2FA recovery code login route not implemented');
+    $loginSecurity = Modules\Google2fa\Models\Google2fa::factory()->create([
+        'user_id' => $this->user->id,
+        'google2fa_enable' => true,
+        'recovery_codes' => ['TEST-CODE1'],
+    ]);
+
+    $response = $this->actingAs($this->user)
+        ->post(route('admin.2fa.recovery-code.verify'), [
+            'recovery_code' => 'TEST-CODE1',
+        ]);
+
+    $response->assertRedirect();
+    expect(session('2fa_verified'))->toBeTrue();
 });
 
 test('used recovery code cannot be reused', function () {
-    // Recovery code login route not implemented, skip
-    $this->markTestSkipped('2FA recovery code login route not implemented');
+    $loginSecurity = Modules\Google2fa\Models\Google2fa::factory()->create([
+        'user_id' => $this->user->id,
+        'google2fa_enable' => true,
+        'recovery_codes' => ['TEST-CODE2'],
+    ]);
+
+    // First use
+    $this->actingAs($this->user)
+        ->post(route('admin.2fa.recovery-code.verify'), [
+            'recovery_code' => 'TEST-CODE2',
+        ]);
+
+    $loginSecurity->refresh();
+
+    // Second use should fail
+    $response = $this->actingAs($this->user)
+        ->post(route('admin.2fa.recovery-code.verify'), [
+            'recovery_code' => 'TEST-CODE2',
+        ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
 });
 
 test('admin can view 2FA settings', function () {
-    // Admin 2FA settings route not implemented, skip
-    $this->markTestSkipped('Admin 2FA settings route not implemented');
+    $response = $this->actingAs($this->user)
+        ->get(route('admin.2fa.settings'));
+
+    $response->assertStatus(200);
+    $response->assertSee('Two-Factor Authentication Settings', false);
 });
 
 test('admin can enforce 2FA for users', function () {
-    // Admin 2FA enforce route not implemented, skip
-    $this->markTestSkipped('Admin 2FA enforce route not implemented');
+    $response = $this->actingAs($this->user)
+        ->put(route('admin.2fa.settings.update'), [
+            'enforce_for_admins' => true,
+            'enforce_for_users' => false,
+            'enforced_roles' => [],
+            'recovery_codes_count' => 10,
+            'require_backup_codes' => true,
+        ]);
+
+    $response->assertRedirect();
+    $settings = Modules\Google2fa\Models\Google2faSetting::getSettings();
+    expect($settings->enforce_for_admins)->toBeTrue();
 });

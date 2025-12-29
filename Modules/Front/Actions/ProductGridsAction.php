@@ -47,7 +47,7 @@ class ProductGridsAction
 
             $products = Cache::remember($productsCacheKey, 900, function () use ($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder, $perPage) {
                 return Product::query()
-                    ->when($categoryIds, fn ($query) => $query->whereIn('cat_id', $categoryIds))
+                    ->when($categoryIds, fn ($query) => $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds)))
                     ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
                     ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
                     ->where('status', 'active')

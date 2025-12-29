@@ -10,6 +10,8 @@ use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Permission\Actions\CreatePermissionAction;
 use Modules\Permission\Actions\DeletePermissionAction;
+use Modules\Permission\Actions\FindPermissionAction;
+use Modules\Permission\Actions\GetAllPermissionsAction;
 use Modules\Permission\Actions\UpdatePermissionAction;
 use Modules\Permission\DTOs\PermissionDTO;
 use Modules\Permission\Http\Requests\Store;
@@ -21,6 +23,8 @@ use ReflectionException;
 class PermissionController extends CoreController
 {
     public function __construct(
+        private readonly GetAllPermissionsAction $getAllAction,
+        private readonly FindPermissionAction $findAction,
         private readonly CreatePermissionAction $createAction,
         private readonly UpdatePermissionAction $updateAction,
         private readonly DeletePermissionAction $deleteAction,
@@ -30,7 +34,9 @@ class PermissionController extends CoreController
     {
         $this->authorize('viewAny', Permission::class);
 
-        return PermissionResource::collection(Permission::all());
+        $permissionsDto = $this->getAllAction->execute();
+
+        return PermissionResource::collection($permissionsDto->permissions);
     }
 
     /**
@@ -53,7 +59,7 @@ class PermissionController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $permission = Permission::findOrFail($id);
+        $permission = $this->findAction->execute($id);
         $this->authorize('view', $permission);
 
         return $this
@@ -66,9 +72,10 @@ class PermissionController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        $this->authorize('update', Permission::findOrFail($id));
+        $permission = $this->findAction->execute($id);
+        $this->authorize('update', $permission);
 
-        $dto = PermissionDTO::fromRequest($request, $id, Permission::findOrFail($id));
+        $dto = PermissionDTO::fromRequest($request, $id, $permission);
         $permission = $this->updateAction->execute($dto);
 
         return $this
@@ -81,7 +88,8 @@ class PermissionController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->authorize('delete', Permission::findOrFail($id));
+        $permission = $this->findAction->execute($id);
+        $this->authorize('delete', $permission);
 
         $this->deleteAction->execute($id);
 

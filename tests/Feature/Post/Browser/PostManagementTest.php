@@ -174,9 +174,3 @@ test('admin can manage post categories', function () {
 
     expect($response->status())->toBeIn([200, 302]);
 });
-
-test('admin can create post category', function () {
-    // Post categories are managed through the Post module, not Category module
-    // Skip this test as it's testing the wrong endpoint
-    $this->markTestSkipped('Post categories are managed separately from product categories');
-});

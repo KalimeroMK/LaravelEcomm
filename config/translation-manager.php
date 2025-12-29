@@ -87,7 +87,7 @@ return [
      | ------------------------------------------------------------------------------------------------
      | Here you can set The "extends" blade of index.blade.php
     */
-    'layout' => 'translation-manager::layout',
+    'layout' => 'admin::layouts.master',
     /**
      * Choose which  template to use [bootstrap3, bootstrap4, bootstrap5 ]
      */

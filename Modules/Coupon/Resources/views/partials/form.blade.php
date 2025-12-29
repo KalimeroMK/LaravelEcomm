@@ -34,6 +34,14 @@
         </select>
     </div>
 
+    <div class="form-group">
+        <label for="expires_at">Expires At <span class="text-danger">*</span></label>
+        <input id="expires_at" type="datetime-local" name="expires_at" 
+               value="{{$coupon->expires_at ? \Carbon\Carbon::parse($coupon->expires_at)->format('Y-m-d\TH:i') : ''}}"
+               class="form-control" required>
+        <small class="form-text text-muted">Coupon must have an expiration date</small>
+    </div>
+
     <div class="form-group mb-3">
         <button type="submit" class="btn btn-success">Update</button>
     </div>

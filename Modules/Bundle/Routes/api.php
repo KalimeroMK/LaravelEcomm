@@ -17,3 +17,8 @@ use Modules\Bundle\Http\Controllers\Api\BundleController;
 */
 
 Route::apiResource('bundles', BundleController::class)->names('api.bundles');
+
+// Bundle Media Routes
+Route::prefix('bundles')->group(function (): void {
+    Route::delete('{modelId}/media/{mediaId}', [BundleController::class, 'deleteMedia'])->name('api.bundles.delete-media');
+});

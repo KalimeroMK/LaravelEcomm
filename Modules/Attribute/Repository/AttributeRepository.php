@@ -17,6 +17,16 @@ class AttributeRepository extends EloquentRepository implements SearchInterface
     }
 
     /**
+     * Get all attributes with options.
+     *
+     * @return \Illuminate\Support\Collection<int, Attribute>
+     */
+    public function findAll(): \Illuminate\Support\Collection
+    {
+        return Attribute::with('options')->get();
+    }
+
+    /**
      * Search for entries based on filter criteria.
      *
      * @param  array<string, mixed>  $data

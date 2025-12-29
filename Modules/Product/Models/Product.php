@@ -229,6 +229,17 @@ class Product extends Core implements HasMedia
         return 'https://placehold.co/600x400@2x.png';
     }
 
+    /**
+     * Register media conversions for thumbnails.
+     */
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(400)
+            ->height(400)
+            ->sharpen(10);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);

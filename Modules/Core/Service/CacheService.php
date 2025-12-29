@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace Modules\Core\Service;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;

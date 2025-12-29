@@ -80,5 +80,13 @@ return [
     'public_key' => 'Јавен клуч',
     'secret_key' => 'Таен клуч',
     'tags' => 'Ознаки',
+    'choose' => 'Избери',
+    '2fa_enable' => 'Вклучи 2FA',
+    '2fa_disable' => 'Исклучи 2FA',
+    'dashboard' => 'Табла',
+    'profile_page' => 'Страница на профил',
+    'profile' => 'Профил',
+    'not_available' => 'Н/Д',
+    'replies_count' => 'Број на одговори',
 
 ];

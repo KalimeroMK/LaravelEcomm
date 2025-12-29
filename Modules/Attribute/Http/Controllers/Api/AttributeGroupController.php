@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Attribute\Actions\AttributeGroup\CreateAttributeGroupAction;
 use Modules\Attribute\Actions\AttributeGroup\DeleteAttributeGroupAction;
+use Modules\Attribute\Actions\AttributeGroup\FindAttributeGroupAction;
+use Modules\Attribute\Actions\AttributeGroup\GetAllAttributeGroupsAction;
 use Modules\Attribute\Actions\AttributeGroup\UpdateAttributeGroupAction;
 use Modules\Attribute\DTOs\AttributeGroupDTO;
 use Modules\Attribute\Http\Requests\Api\AttributeGroup\Store;
@@ -24,6 +26,8 @@ class AttributeGroupController extends CoreController
 {
     public function __construct(
         private readonly AttributeGroupRepository $repository,
+        private readonly GetAllAttributeGroupsAction $getAllAttributeGroupsAction,
+        private readonly FindAttributeGroupAction $findAttributeGroupAction,
         private readonly CreateAttributeGroupAction $createAction,
         private readonly UpdateAttributeGroupAction $updateAction,
         private readonly DeleteAttributeGroupAction $deleteAction
@@ -33,9 +37,9 @@ class AttributeGroupController extends CoreController
     {
         $this->authorize('viewAny', AttributeGroup::class);
 
-        return AttributeGroupResource::collection(
-            $this->repository->findAll()
-        );
+        $groups = $this->getAllAttributeGroupsAction->execute();
+
+        return AttributeGroupResource::collection($groups);
     }
 
     /**
@@ -59,7 +63,8 @@ class AttributeGroupController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $attributeGroup = $this->authorizeFromRepo(AttributeGroupRepository::class, 'view', $id);
+        $attributeGroup = $this->findAttributeGroupAction->execute($id);
+        $this->authorize('view', $attributeGroup);
 
         return $this
             ->setMessage(__('apiResponse.ok', [
@@ -89,7 +94,8 @@ class AttributeGroupController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->authorizeFromRepo(AttributeGroupRepository::class, 'delete', $id);
+        $attributeGroup = $this->findAttributeGroupAction->execute($id);
+        $this->authorize('delete', $attributeGroup);
 
         $this->deleteAction->execute($id);
 

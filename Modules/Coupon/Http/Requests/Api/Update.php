@@ -20,6 +20,7 @@ class Update extends CoreRequest
             'type' => 'nullable|in:fixed,percent',
             'value' => 'nullable|numeric',
             'status' => 'nullable|in:active,inactive',
+            'expires_at' => 'nullable|date|after:now',
         ];
     }
 }

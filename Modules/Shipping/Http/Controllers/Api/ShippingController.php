@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Shipping\Actions\DeleteShippingAction;
+use Modules\Shipping\Actions\FindShippingAction;
 use Modules\Shipping\Actions\GetAllShippingAction;
 use Modules\Shipping\Actions\StoreShippingAction;
 use Modules\Shipping\Actions\UpdateShippingAction;
@@ -23,18 +24,25 @@ class ShippingController extends CoreController
 {
     private readonly GetAllShippingAction $getAllAction;
 
+    private readonly FindShippingAction $findAction;
+
     private readonly StoreShippingAction $storeAction;
+
+    private readonly UpdateShippingAction $updateAction;
 
     private readonly DeleteShippingAction $deleteAction;
 
     public function __construct(
         GetAllShippingAction $getAllAction,
+        FindShippingAction $findAction,
         StoreShippingAction $storeAction,
         UpdateShippingAction $updateAction,
-        DeleteShippingAction $deleteAction,
+        DeleteShippingAction $deleteAction
     ) {
         $this->getAllAction = $getAllAction;
+        $this->findAction = $findAction;
         $this->storeAction = $storeAction;
+        $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
     }
 
@@ -60,7 +68,8 @@ class ShippingController extends CoreController
 
     public function show(int $id): JsonResponse
     {
-        $shipping = $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
+        $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
+        $shipping = $this->findAction->execute($id);
 
         return $this
             ->setMessage(__('apiResponse.ok', ['resource' => 'Shipping']))
@@ -69,9 +78,10 @@ class ShippingController extends CoreController
 
     public function update(Update $request, int $id): JsonResponse
     {
-        $existingProduct = $this->authorizeFromRepo(ShippingRepository::class, 'view', $id);
+        $existingShipping = $this->findAction->execute($id);
+        $this->authorize('update', $existingShipping);
 
-        $shipping = $this->storeAction->execute(ShippingDTO::fromRequest($request, $id, $existingProduct));
+        $shipping = $this->updateAction->execute($id, ShippingDTO::fromRequest($request, $id, $existingShipping));
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', ['resource' => 'Shipping']))

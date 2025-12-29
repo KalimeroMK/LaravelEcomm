@@ -25,6 +25,7 @@
                             <th>@lang('partials.type')</th>
                             <th>@lang('partials.value')</th>
                             <th>@lang('partials.status')</th>
+                            <th>Expires At</th>
                             <th>@lang('partials.action')</th>
                         </tr>
                         </thead>
@@ -35,6 +36,7 @@
                             <th>@lang('partials.type')</th>
                             <th>@lang('partials.value')</th>
                             <th>@lang('partials.status')</th>
+                            <th>Expires At</th>
                             <th>@lang('partials.action')</th>
                         </tr>
                         </tfoot>
@@ -61,6 +63,16 @@
                                         <span class="badge badge-success">{{$coupon->status}}</span>
                                     @else
                                         <span class="badge badge-warning">{{$coupon->status}}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($coupon->expires_at)
+                                        {{ \Carbon\Carbon::parse($coupon->expires_at)->format('Y-m-d H:i') }}
+                                        @if(\Carbon\Carbon::parse($coupon->expires_at)->isPast())
+                                            <span class="badge badge-danger">Expired</span>
+                                        @endif
+                                    @else
+                                        <span class="text-muted">N/A</span>
                                     @endif
                                 </td>
                                 <td>

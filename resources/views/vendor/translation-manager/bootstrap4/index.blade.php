@@ -1,6 +1,6 @@
 @extends(config('translation-manager.layout'))
 
-@php($controller='\Barryvdh\TranslationManager\Controller')
+@php($controller='\Kalimero\TranslationManager\Controller')
 
 @section('documentTitle')
 Translation Manager

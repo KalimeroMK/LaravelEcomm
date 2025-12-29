@@ -14,6 +14,9 @@ declare(strict_types=1);
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Billing\Http\Controllers\BillingController;
+use Modules\Billing\Http\Controllers\InvoiceController;
+use Modules\Billing\Http\Controllers\PaymentController;
 use Modules\Billing\Http\Controllers\PaypalController;
 use Modules\Billing\Http\Controllers\StripeController;
 use Modules\Billing\Http\Controllers\WishlistController;
@@ -32,3 +35,20 @@ Route::get('payment/success', [PaypalController::class, 'success'])->name('payme
 // Stripe
 Route::get('stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
 Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
+
+// Billing History (User)
+Route::middleware(['auth'])->group(function () {
+    Route::get('billing/history', [BillingController::class, 'history'])->name('billing.history');
+    Route::get('payments/history', [PaymentController::class, 'history'])->name('payments.history');
+});
+
+// Invoices (Admin & User)
+Route::middleware(['auth'])->group(function () {
+    Route::resource('invoices', InvoiceController::class);
+    Route::get('invoices/{invoice}/download', [InvoiceController::class, 'download'])->name('invoices.download');
+});
+
+// Payment Analytics (Admin only)
+Route::middleware(['auth'])->group(function () {
+    Route::get('admin/payments/analytics', [PaymentController::class, 'analytics'])->name('payments.analytics');
+});

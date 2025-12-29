@@ -7,17 +7,12 @@ namespace Modules\Tag\Actions;
 use Illuminate\Support\Collection;
 use Modules\Tag\Repository\TagRepository;
 
-class GetAllTagsAction
+readonly class GetAllTagsAction
 {
-    private TagRepository $tagRepository;
-
-    public function __construct(TagRepository $tagRepository)
-    {
-        $this->tagRepository = $tagRepository;
-    }
+    public function __construct(private TagRepository $repository) {}
 
     public function execute(): Collection
     {
-        return $this->tagRepository->findAll();
+        return $this->repository->findAll();
     }
 }

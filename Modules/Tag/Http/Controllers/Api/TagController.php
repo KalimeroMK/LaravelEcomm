@@ -12,6 +12,7 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Tag\Actions\CreateTagAction;
 use Modules\Tag\Actions\DeleteTagAction;
 use Modules\Tag\Actions\GetAllTagsAction;
+use Modules\Tag\Actions\ShowTagAction;
 use Modules\Tag\Actions\UpdateTagAction;
 use Modules\Tag\DTOs\TagDto;
 use Modules\Tag\Http\Requests\Api\Store;
@@ -23,24 +24,28 @@ use ReflectionException;
 
 class TagController extends CoreController
 {
-    private CreateTagAction $createTagAction;
+    private readonly CreateTagAction $createTagAction;
 
-    private UpdateTagAction $updateTagAction;
+    private readonly UpdateTagAction $updateTagAction;
 
-    private DeleteTagAction $deleteTagAction;
+    private readonly DeleteTagAction $deleteTagAction;
 
-    private GetAllTagsAction $getAllTagsAction;
+    private readonly GetAllTagsAction $getAllTagsAction;
+
+    private readonly ShowTagAction $showTagAction;
 
     public function __construct(
         CreateTagAction $createTagAction,
         UpdateTagAction $updateTagAction,
         DeleteTagAction $deleteTagAction,
         GetAllTagsAction $getAllTagsAction,
+        ShowTagAction $showTagAction
     ) {
         $this->createTagAction = $createTagAction;
         $this->updateTagAction = $updateTagAction;
         $this->deleteTagAction = $deleteTagAction;
         $this->getAllTagsAction = $getAllTagsAction;
+        $this->showTagAction = $showTagAction;
     }
 
     public function index(): ResourceCollection
@@ -56,7 +61,8 @@ class TagController extends CoreController
     public function store(Store $request): JsonResponse
     {
         $this->authorize('create', Tag::class);
-        $tag = $this->createTagAction->execute($request->validated());
+        $dto = TagDto::fromRequest($request);
+        $tag = $this->createTagAction->execute($dto);
 
         return $this
             ->setMessage(
@@ -75,7 +81,8 @@ class TagController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $tag = $this->authorizeFromRepo(TagRepository::class, 'view', $id);
+        $this->authorizeFromRepo(TagRepository::class, 'view', $id);
+        $tag = $this->showTagAction->execute($id);
 
         return $this
             ->setMessage(
@@ -94,9 +101,9 @@ class TagController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        $tag = $this->authorizeFromRepo(TagRepository::class, 'update', $id);
-        $dto = TagDto::fromRequest($request->validated());
-        $updatedTag = $this->updateTagAction->execute($tag, $dto);
+        $this->authorizeFromRepo(TagRepository::class, 'update', $id);
+        $dto = TagDto::fromRequest($request, $id);
+        $updatedTag = $this->updateTagAction->execute($dto);
 
         return $this
             ->setMessage(
@@ -115,15 +122,15 @@ class TagController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $tag = $this->authorizeFromRepo(TagRepository::class, 'delete', $id);
-        $this->deleteTagAction->execute($tag->id);
+        $this->authorizeFromRepo(TagRepository::class, 'delete', $id);
+        $this->deleteTagAction->execute($id);
 
         return $this
             ->setMessage(
                 __(
                     'apiResponse.deleteSuccess',
                     [
-                        'resource' => Helper::getResourceName($tag),
+                        'resource' => 'Tag',
                     ]
                 )
             )

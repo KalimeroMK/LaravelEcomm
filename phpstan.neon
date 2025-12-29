@@ -9,6 +9,6 @@ parameters:
     ignoreErrors:
         - '#should return Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany<.*> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany<.*>#'
         - '#should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<.*> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<.*>#'
-        - '#Type .* in generic type Illuminate\\Database\\Eloquent\\Factories\\HasFactory<.*> in PHPDoc tag @use is not subtype of template type TFactory.*#'
+        - '#Class .* uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types: TFactory#'
     excludePaths:
         # Add paths to exclude here, or remove this line if not needed

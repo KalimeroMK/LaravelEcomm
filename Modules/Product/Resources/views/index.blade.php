@@ -5,7 +5,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">@lang('partials.list')</h6>
-            <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
+            <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
                title="Add User">
                 <i class="fas fa-plus"></i> @lang('partials.create')
             </a>
@@ -76,10 +76,10 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('products.edit', $product['id']) }}"
+                                    <a href="{{ route('admin.products.edit', $product['id']) }}"
                                        class="btn btn-sm btn-primary" data-toggle="tooltip" title="Edit"><i
                                                 class="fas fa-edit"></i></a>
-                                    <form action="{{ route('products.destroy', $product['id']) }}" method="POST"
+                                    <form action="{{ route('admin.products.destroy', $product['id']) }}" method="POST"
                                           style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')

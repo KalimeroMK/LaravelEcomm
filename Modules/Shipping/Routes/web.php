@@ -14,6 +14,7 @@ declare(strict_types=1);
 */
 
 use Modules\Shipping\Http\Controllers\ShippingController;
+use Modules\Shipping\Http\Controllers\ShippingZoneController;
 
 Route::resource('shipping', ShippingController::class)->names([
     'index' => 'admin.shipping.index',
@@ -24,3 +25,14 @@ Route::resource('shipping', ShippingController::class)->names([
     'update' => 'admin.shipping.update',
     'destroy' => 'admin.shipping.destroy',
 ]);
+
+Route::prefix('shipping')->group(function () {
+    Route::resource('zones', ShippingZoneController::class)->names([
+        'index' => 'shipping.zones.index',
+        'create' => 'shipping.zones.create',
+        'store' => 'shipping.zones.store',
+        'edit' => 'shipping.zones.edit',
+        'update' => 'shipping.zones.update',
+        'destroy' => 'shipping.zones.destroy',
+    ])->parameters(['zones' => 'zone']);
+});

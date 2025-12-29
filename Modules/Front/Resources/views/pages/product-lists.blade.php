@@ -452,7 +452,7 @@
             const productIds = Array.from(document.querySelectorAll('.product-list-item'))
                 .map(el => el.dataset.productId);
             if (productIds.length > 0) {
-                fetch('/api/tracking/product-impressions', {
+                fetch('/api/v1/tracking/product-impressions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -468,7 +468,7 @@
         document.querySelectorAll('.product-list-item a').forEach(function(link) {
             link.addEventListener('click', function(e) {
                 const productId = this.closest('.product-list-item').dataset.productId;
-                fetch('/api/tracking/product-click', {
+                fetch('/api/v1/tracking/product-click', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

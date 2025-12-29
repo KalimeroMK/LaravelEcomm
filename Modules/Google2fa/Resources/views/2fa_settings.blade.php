@@ -12,9 +12,9 @@
                             referred to as factors) to verify your identity. Two factor authentication protects against
                             phishing, social engineering and password brute force attacks and secures your logins from
                             attackers exploiting weak or stolen credentials.</p>
-                        @if($user->loginSecurity == null)
+                        @if(!isset($user) || $user->loginSecurity == null)
                             {{-- Generate 2FA Secret --}}
-                            <form method="POST" action="{{ route('generate2faSecret') }}">
+                            <form method="POST" action="{{ route('admin.generate2faSecret') }}">
                                 {{ csrf_field() }}
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">
@@ -29,7 +29,7 @@
                             <img src="{{ $google2fa_url }}" alt="QR Code">
 
                             <p>2. Enter the pin from Google Authenticator app:</p>
-                            <form method="POST" action="{{ route('enable2fa') }}">
+                            <form method="POST" action="{{ route('admin.enable2fa') }}">
                                 {{ csrf_field() }}
                                 <div class="form-group{{ $errors->has('verify-code') ? ' has-error' : '' }}">
                                     <label for="secret" class="control-label">Authenticator Code</label>
@@ -50,9 +50,16 @@
                             <div class="alert alert-success">
                                 2FA is currently <strong>enabled</strong> on your account.
                             </div>
+                            
+                            <div class="mb-3">
+                                <a href="{{ route('admin.2fa.recovery-codes') }}" class="btn btn-info">
+                                    View Recovery Codes
+                                </a>
+                            </div>
+                            
                             <p>If you are looking to disable Two Factor Authentication. Please confirm your password and
                                 Click Disable 2FA Button.</p>
-                            <form method="POST" action="{{ route('disable2fa') }}">
+                            <form method="POST" action="{{ route('admin.google-disable2fa') }}">
                                 {{ csrf_field() }}
                                 <div class="form-group{{ $errors->has('current-password') ? ' has-error' : '' }}">
                                     <label for="current-password" class="control-label">Current Password</label>

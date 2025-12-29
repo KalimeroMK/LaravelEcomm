@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Banner\Actions\CreateBannerAction;
 use Modules\Banner\Actions\DeleteBannerAction;
+use Modules\Banner\Actions\FindBannerAction;
+use Modules\Banner\Actions\GetAllBannersAction;
 use Modules\Banner\Actions\UpdateBannerAction;
 use Modules\Banner\DTOs\BannerDTO;
 use Modules\Banner\Http\Requests\Api\Store;
@@ -24,6 +26,8 @@ class BannerController extends CoreController
 {
     public function __construct(
         private readonly BannerRepository $repository,
+        private readonly GetAllBannersAction $getAllBannersAction,
+        private readonly FindBannerAction $findBannerAction,
         private readonly CreateBannerAction $createAction,
         private readonly UpdateBannerAction $updateAction,
         private readonly DeleteBannerAction $deleteAction
@@ -33,7 +37,9 @@ class BannerController extends CoreController
     {
         $this->authorize('viewAny', Banner::class);
 
-        return BannerResource::collection($this->repository->all());
+        $banners = $this->getAllBannersAction->execute();
+
+        return BannerResource::collection($banners);
     }
 
     /**
@@ -60,7 +66,8 @@ class BannerController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $banner = $this->authorizeFromRepo(BannerRepository::class, 'view', $id);
+        $banner = $this->findBannerAction->execute($id);
+        $this->authorize('view', $banner);
 
         return $this
             ->setMessage(__('apiResponse.ok', [
@@ -94,7 +101,8 @@ class BannerController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->authorizeFromRepo(BannerRepository::class, 'delete', $id);
+        $banner = $this->findBannerAction->execute($id);
+        $this->authorize('delete', $banner);
 
         $this->deleteAction->execute($id);
 

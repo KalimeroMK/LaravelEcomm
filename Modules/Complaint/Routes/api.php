@@ -17,5 +17,8 @@ use Modules\Complaint\Http\Controllers\Api\ComplaintController;
 */
 
 // API Routes
-Route::resource('complaints', ComplaintController::class)->except('destroy', 'create');
-Route::get('complaints/create/{order_id}', [ComplaintController::class, 'create'])->name('complaints.create');
+// API Routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('complaints', ComplaintController::class)->except('destroy', 'create')->names('api.complaints');
+    Route::get('complaints/create/{order_id}', [ComplaintController::class, 'create'])->name('api.complaints.create');
+});

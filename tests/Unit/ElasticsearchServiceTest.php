@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\ClientInterface;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Mockery;
 use Mockery\MockInterface;
 use Modules\Product\Models\Product;
 use Modules\Product\Services\ElasticsearchService;
+use ReflectionClass;
 use Tests\TestCase;
 
 class ElasticsearchServiceTest extends TestCase
@@ -20,6 +21,7 @@ class ElasticsearchServiceTest extends TestCase
     use RefreshDatabase;
 
     protected MockInterface $clientMock;
+
     protected ElasticsearchService $service;
 
     protected function setUp(): void
@@ -31,7 +33,7 @@ class ElasticsearchServiceTest extends TestCase
         // Instead, we will inject the mock client into the service via reflection or by mocking the ClientBuilder.
         // However, since ClientBuilder is a static call in constructor, it's hard to mock without valid facade or dependency injection refactor.
         // For this test, we will refactor the service slightly to allow setting the client, OR we use Mockery to intercept.
-        
+
         // Simpler approach: We can extend the class or use Reflection to set the protected property.
     }
 
@@ -104,7 +106,7 @@ class ElasticsearchServiceTest extends TestCase
      */
     protected function setProtectedProperty($object, $property, $value)
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $reflection_property = $reflection->getProperty($property);
         $reflection_property->setAccessible(true);
         $reflection_property->setValue($object, $value);

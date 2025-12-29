@@ -39,4 +39,9 @@ class Store extends CoreRequest
             'price' => $product->price,
         ]);
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['slug' => $this->route('slug')]);
+    }
 }

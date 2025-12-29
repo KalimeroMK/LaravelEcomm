@@ -4,23 +4,31 @@ declare(strict_types=1);
 
 namespace Modules\Tenant\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Modules\Core\Http\Controllers\CoreController;
+use Modules\Tenant\Actions\CreateTenantAction;
+use Modules\Tenant\Actions\DeleteTenantAction;
+use Modules\Tenant\Actions\FindTenantAction;
+use Modules\Tenant\Actions\GetAllTenantsAction;
+use Modules\Tenant\Actions\UpdateTenantAction;
+use Modules\Tenant\DTOs\TenantDTO;
 use Modules\Tenant\Http\Requests\Store;
 use Modules\Tenant\Http\Requests\Update;
 use Modules\Tenant\Models\Tenant;
-use Modules\Tenant\Service\TenantService;
 
-class TenantController extends Controller
+class TenantController extends CoreController
 {
-    protected TenantService $tenantService;
-
-    public function __construct(TenantService $tenantService)
-    {
-        $this->tenantService = $tenantService;
+    public function __construct(
+        private readonly GetAllTenantsAction $getAllAction,
+        private readonly FindTenantAction $findAction,
+        private readonly CreateTenantAction $createAction,
+        private readonly UpdateTenantAction $updateAction,
+        private readonly DeleteTenantAction $deleteAction
+    ) {
+        $this->authorizeResource(Tenant::class, 'tenant');
     }
 
     /**
@@ -28,7 +36,7 @@ class TenantController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        return view('tenant::index', ['tenants' => $this->tenantService->getAll()]);
+        return view('tenant::index', ['tenants' => $this->getAllAction->execute()]);
     }
 
     /**
@@ -44,9 +52,10 @@ class TenantController extends Controller
      */
     public function store(Store $request): RedirectResponse
     {
-        $this->tenantService->create($request->validated());
+        $dto = TenantDTO::fromRequest($request);
+        $this->createAction->execute($dto);
 
-        return redirect()->route('tenant.index');
+        return redirect()->route('tenant.index')->with('status', __('messages.created_successfully', ['resource' => 'Tenant']));
     }
 
     /**
@@ -54,7 +63,7 @@ class TenantController extends Controller
      */
     public function edit(Tenant $tenant): View|Factory|Application
     {
-        $this->tenantService->findById($tenant->id);
+        $tenant = $this->findAction->execute($tenant->id);
 
         return view('tenant::edit', ['tenant' => $tenant]);
     }
@@ -64,9 +73,10 @@ class TenantController extends Controller
      */
     public function update(Update $request, Tenant $tenant): RedirectResponse
     {
-        $this->tenantService->update($tenant->id, $request->validated());
+        $dto = TenantDTO::fromRequest($request, $tenant->id, $tenant);
+        $this->updateAction->execute($tenant->id, $dto);
 
-        return redirect()->route('tenant.edit', $tenant);
+        return redirect()->route('tenant.edit', $tenant)->with('status', __('messages.updated_successfully', ['resource' => 'Tenant']));
     }
 
     /**
@@ -74,8 +84,8 @@ class TenantController extends Controller
      */
     public function destroy(Tenant $tenant): RedirectResponse
     {
-        $this->tenantService->delete($tenant->id);
+        $this->deleteAction->execute($tenant->id);
 
-        return redirect()->route('tenant.index');
+        return redirect()->route('tenant.index')->with('status', __('messages.deleted_successfully', ['resource' => 'Tenant']));
     }
 }

@@ -41,6 +41,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
+        // Public routes (no auth required)
+        Route::middleware(['web'])
+            ->group(function (): void {
+                Route::get('email/track/open', [\Modules\Newsletter\Http\Controllers\EmailTrackingController::class, 'trackOpen'])->name('email.track.open');
+                Route::get('email/track/click', [\Modules\Newsletter\Http\Controllers\EmailTrackingController::class, 'trackClick'])->name('email.track.click');
+                Route::get('email/unsubscribe', [\Modules\Newsletter\Http\Controllers\EmailTrackingController::class, 'unsubscribe'])->name('email.unsubscribe');
+            });
+
         Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class, 'activity', 'web'])
             ->prefix('admin')
             ->group(module_path('Newsletter', '/Routes/web.php'));

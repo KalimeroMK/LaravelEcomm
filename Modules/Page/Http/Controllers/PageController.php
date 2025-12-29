@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Page\Actions\CreatePageAction;
 use Modules\Page\Actions\DeletePageAction;
+use Modules\Page\Actions\FindPageAction;
 use Modules\Page\Actions\GetAllPagesAction;
 use Modules\Page\Actions\UpdatePageAction;
 use Modules\Page\DTOs\PageDTO;
@@ -18,10 +19,11 @@ use Modules\Page\Models\Page;
 class PageController extends Controller
 {
     public function __construct(
+        private readonly GetAllPagesAction $getAllPagesAction,
+        private readonly FindPageAction $findAction,
         private readonly CreatePageAction $createAction,
         private readonly UpdatePageAction $updateAction,
-        private readonly DeletePageAction $deleteAction,
-        private readonly GetAllPagesAction $getAllPagesAction
+        private readonly DeletePageAction $deleteAction
     ) {
         $this->authorizeResource(Page::class, 'page');
     }
@@ -47,6 +49,8 @@ class PageController extends Controller
 
     public function edit(Page $page): View
     {
+        $page = $this->findAction->execute($page->id);
+
         return view('page::edit', ['page' => $page]);
     }
 

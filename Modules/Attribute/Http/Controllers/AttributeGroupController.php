@@ -8,18 +8,20 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Modules\Attribute\Actions\AttributeGroup\CreateAttributeGroupAction;
 use Modules\Attribute\Actions\AttributeGroup\DeleteAttributeGroupAction;
+use Modules\Attribute\Actions\AttributeGroup\FindAttributeGroupAction;
+use Modules\Attribute\Actions\AttributeGroup\GetAllAttributeGroupsAction;
 use Modules\Attribute\Actions\AttributeGroup\UpdateAttributeGroupAction;
 use Modules\Attribute\DTOs\AttributeGroupDTO;
 use Modules\Attribute\Http\Requests\AttributeGroup\Store;
 use Modules\Attribute\Http\Requests\AttributeGroup\Update;
 use Modules\Attribute\Models\AttributeGroup;
-use Modules\Attribute\Repository\AttributeGroupRepository;
 use Modules\Core\Http\Controllers\CoreController;
 
 class AttributeGroupController extends CoreController
 {
     public function __construct(
-        private readonly AttributeGroupRepository $repository,
+        private readonly GetAllAttributeGroupsAction $getAllAttributeGroupsAction,
+        private readonly FindAttributeGroupAction $findAttributeGroupAction,
         private readonly CreateAttributeGroupAction $createAction,
         private readonly UpdateAttributeGroupAction $updateAction,
         private readonly DeleteAttributeGroupAction $deleteAction
@@ -30,7 +32,7 @@ class AttributeGroupController extends CoreController
     public function index(): View
     {
         return view('attribute::groups.index', [
-            'groups' => $this->repository->findAll(),
+            'groups' => $this->getAllAttributeGroupsAction->execute(),
         ]);
     }
 
@@ -53,7 +55,7 @@ class AttributeGroupController extends CoreController
     public function edit(AttributeGroup $attribute_group): View
     {
         return view('attribute::groups.edit', [
-            'group' => $this->repository->findById($attribute_group->id),
+            'group' => $this->findAttributeGroupAction->execute($attribute_group->id),
         ]);
     }
 

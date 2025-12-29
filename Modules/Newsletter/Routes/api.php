@@ -21,7 +21,7 @@ use Modules\Newsletter\Http\Controllers\Api\NewsletterController;
 */
 
 // API Routes
-Route::apiResource('newsletters', NewsletterController::class)->names('api.newsletters')->only(['index', 'store', 'destroy']);
+Route::apiResource('newsletters', NewsletterController::class)->names('api.newsletters');
 
 // Newsletter Analytics Routes
 Route::prefix('newsletter')->group(function (): void {

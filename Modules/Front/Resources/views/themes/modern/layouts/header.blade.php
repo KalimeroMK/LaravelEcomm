@@ -1,5 +1,8 @@
 <!-- header start -->
-<!-- classes:  -->
+<!-- "fixed": enables fixed navigation mode (sticky menu) e.g. class="header fixed clearfix" -->
+@php
+    use Modules\Core\Helpers\Helper;
+@endphp
 <!-- "fixed": enables fixed navigation mode (sticky menu) e.g. class="header fixed clearfix" -->
 <!-- "dark": dark version of header e.g. class="header dark clearfix" -->
 <!-- "full-width": mandatory class for the full-width menu layout -->
@@ -135,9 +138,9 @@
 
                             <!-- Cart dropdown -->
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <a href="#" class="dropdown-toggle cart-icon-container" data-toggle="dropdown">
+                                    <span class="badge" id="cart-count">{{ Helper::cartCount() }}</span>
                                     <i class="fa fa-shopping-cart"></i>
-                                    <span class="badge" id="cart-count">0</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
@@ -161,10 +164,10 @@
                                         <i class="fa fa-user"></i> {{ Auth::user()->name }}
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ route('user.dashboard') }}"><i class="fa fa-dashboard pr-10"></i>Dashboard</a></li>
-                                        <li><a href="{{ route('user.profile') }}"><i class="fa fa-user pr-10"></i>Profile</a></li>
-                                        <li><a href="{{ route('user.orders') }}"><i class="fa fa-shopping-bag pr-10"></i>Orders</a></li>
-                                        <li><a href="{{ route('user.wishlist') }}"><i class="fa fa-heart pr-10"></i>Wishlist</a></li>
+                                        <li><a href="{{ route('user-profile') }}"><i class="fa fa-dashboard pr-10"></i>Dashboard</a></li>
+                                        <li><a href="{{ route('user-profile') }}"><i class="fa fa-user pr-10"></i>Profile</a></li>
+                                        <li><a href="{{ route('orders.index') }}"><i class="fa fa-shopping-bag pr-10"></i>Orders</a></li>
+                                        <li><a href="{{ route('wishlist') }}"><i class="fa fa-heart pr-10"></i>Wishlist</a></li>
                                         <li class="divider"></li>
                                         <li>
                                             <a href="{{ route('logout') }}" 
@@ -203,3 +206,44 @@
 
 </header>
 <!-- header end -->
+
+@push('styles')
+<style>
+    .cart-icon-container {
+        display: inline-block !important;
+        width: auto !important;
+        white-space: nowrap !important;
+        vertical-align: middle !important;
+    }
+    /* Force children to float left to sit side-by-side */
+    .cart-icon-container .badge {
+        display: block !important; /* Block needed for float */
+        float: left !important;
+        position: static !important;
+        margin: 5px 5px 0 0 !important; /* Top margin to align with icon if needed */
+        
+        /* Badge styling */
+        background-color: #e74c3c;
+        color: #fff;
+        border-radius: 50%;
+        padding: 3px 6px;
+        font-size: 10px;
+        line-height: normal !important;
+        min-width: 18px;
+        text-align: center;
+        height: auto !important;
+    }
+    .cart-icon-container i {
+        display: block !important; /* Block needed for float */
+        float: left !important;
+        margin: 0 !important;
+        line-height: inherit !important;
+        padding-top: 2px !important; /* Optical adjustment */
+    }
+    /* Ensure no pseudo-elements interfere */
+    .cart-icon-container::after,
+    .cart-icon-container::before {
+        display: none !important;
+    }
+</style>
+@endpush

@@ -10,6 +10,7 @@ use Modules\Core\Http\Controllers\Api\CoreController;
 use Modules\Core\Support\Relations\SyncRelations;
 use Modules\Core\Traits\ApiResponses;
 use Modules\Role\Actions\DeleteRoleAction;
+use Modules\Role\Actions\FindRoleAction;
 use Modules\Role\Actions\GetAllPermissionsAction;
 use Modules\Role\Actions\GetAllRolesAction;
 use Modules\Role\Actions\StoreRoleAction;
@@ -27,6 +28,8 @@ class RoleController extends CoreController
 
     private readonly GetAllRolesAction $getAllAction;
 
+    private readonly FindRoleAction $findAction;
+
     private readonly StoreRoleAction $storeAction;
 
     private readonly UpdateRoleAction $updateAction;
@@ -37,12 +40,14 @@ class RoleController extends CoreController
 
     public function __construct(
         GetAllRolesAction $getAllAction,
+        FindRoleAction $findAction,
         StoreRoleAction $storeAction,
         UpdateRoleAction $updateAction,
         DeleteRoleAction $deleteAction,
         GetAllPermissionsAction $getAllPermissionsAction
     ) {
         $this->getAllAction = $getAllAction;
+        $this->findAction = $findAction;
         $this->storeAction = $storeAction;
         $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
@@ -66,7 +71,7 @@ class RoleController extends CoreController
 
         SyncRelations::execute(
             $role,
-            ['categories' => $dto->permissions]
+            ['permissions' => $dto->permissions]
         );
 
         return $this
@@ -76,21 +81,24 @@ class RoleController extends CoreController
 
     public function show(int $id): JsonResponse
     {
-        $role = $this->authorizeFromRepo(RoleRepository::class, 'view', $id);
+        $this->authorizeFromRepo(RoleRepository::class, 'view', $id);
+        $role = $this->findAction->execute($id);
 
-        return $this->setMessage(__('apiResponse.ok', ['resource' => 'Role']))->respond(new RoleResource($role));
+        return $this
+            ->setMessage(__('apiResponse.ok', ['resource' => 'Role']))
+            ->respond(new RoleResource($role->load('permissions')));
     }
 
     public function update(Update $request, int $id): JsonResponse
     {
-        $this->authorizeFromRepo(RoleRepository::class, 'update', $id);
+        $existingRole = $this->authorizeFromRepo(RoleRepository::class, 'update', $id);
 
-        $dto = RoleDTO::fromRequest($request, $id);
+        $dto = RoleDTO::fromRequest($request, $id, $existingRole);
         $role = $this->updateAction->execute($id, $dto);
 
         SyncRelations::execute(
             $role,
-            ['categories' => $dto->permissions]
+            ['permissions' => $dto->permissions]
         );
 
         return $this
@@ -103,6 +111,8 @@ class RoleController extends CoreController
         $this->authorizeFromRepo(RoleRepository::class, 'delete', $id);
         $this->deleteAction->execute($id);
 
-        return $this->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Role']))->respond(null);
+        return $this
+            ->setMessage(__('apiResponse.deleteSuccess', ['resource' => 'Role']))
+            ->respond(null);
     }
 }

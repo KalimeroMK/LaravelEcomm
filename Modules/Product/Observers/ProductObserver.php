@@ -22,7 +22,7 @@ class ProductObserver
     public function created(Product $product): void
     {
         if ($product->status === 'active') {
-             $this->elasticsearchService->indexProduct($product);
+            $this->elasticsearchService->indexProduct($product);
         }
     }
 

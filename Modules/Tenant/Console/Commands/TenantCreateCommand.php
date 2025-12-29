@@ -41,14 +41,22 @@ class TenantCreateCommand extends Command
             return;
         }
 
-        // Check if the database already exists
-        if ($this->databaseExists($database)) {
-            $this->error("Database {$database} already exists. Tenant not created.");
+        // For SQLite, we don't need to create separate databases
+        // Each tenant uses the same SQLite file but with different connection configuration
+        $driver = DB::connection('owner')->getDriverName();
 
-            return;
+        if ($driver !== 'sqlite') {
+            // Check if the database already exists (only for MySQL/MariaDB)
+            if ($this->databaseExists($database)) {
+                $this->error("Database {$database} already exists. Tenant not created.");
+
+                return;
+            }
+            // Create the database (only for MySQL/MariaDB)
+            $this->createDatabase($database);
+        } else {
+            $this->info('Using SQLite - database creation skipped. Tenant will use connection configuration.');
         }
-        // Create the database
-        $this->createDatabase($database);
 
         // Create tenant
         $tenant = Tenant::create([
@@ -67,6 +75,13 @@ class TenantCreateCommand extends Command
     {
         try {
             $ownerConnection = 'owner';
+            $driver = DB::connection($ownerConnection)->getDriverName();
+
+            // SQLite doesn't support SHOW DATABASES
+            if ($driver === 'sqlite') {
+                return false; // For SQLite, we don't check database existence
+            }
+
             $this->info("Using connection: {$ownerConnection}");
             $query = "SHOW DATABASES LIKE '{$database}'";
             $databaseExists = DB::connection($ownerConnection)->select($query);
@@ -86,6 +101,15 @@ class TenantCreateCommand extends Command
     {
         try {
             $ownerConnection = 'owner';
+            $driver = DB::connection($ownerConnection)->getDriverName();
+
+            // SQLite doesn't support CREATE DATABASE
+            if ($driver === 'sqlite') {
+                $this->info('SQLite detected - database creation not needed.');
+
+                return;
+            }
+
             $this->info("Creating database using connection: {$ownerConnection}");
             DB::connection($ownerConnection)->statement("CREATE DATABASE `{$database}`");
             $this->info("Database {$database} created successfully.");

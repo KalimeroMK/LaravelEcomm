@@ -10,7 +10,9 @@ namespace Modules\Google2fa\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Core\Models\Core;
+use Modules\Google2fa\Database\Factories\Google2faFactory;
 
 /**
  * Class LoginSecurity
@@ -36,20 +38,48 @@ use Modules\Core\Models\Core;
  */
 class Google2fa extends Core
 {
+    use HasFactory;
+
     protected $table = 'login_securities';
+
+    protected $hidden = [
+        'google2fa_secret',
+    ];
 
     protected $casts = [
         'user_id' => 'int',
         'google2fa_enable' => 'bool',
-    ];
-
-    protected $hidden = [
-        'google2fa_secret',
+        'recovery_codes' => 'array',
     ];
 
     protected $fillable = [
         'user_id',
         'google2fa_enable',
         'google2fa_secret',
+        'recovery_codes',
     ];
+
+    public function hasRecoveryCode(string $code): bool
+    {
+        if (! $this->recovery_codes || ! is_array($this->recovery_codes)) {
+            return false;
+        }
+
+        return in_array($code, $this->recovery_codes, true);
+    }
+
+    public function removeRecoveryCode(string $code): void
+    {
+        if (! $this->recovery_codes || ! is_array($this->recovery_codes)) {
+            return;
+        }
+
+        $this->recovery_codes = array_values(array_filter($this->recovery_codes, fn ($c) => $c !== $code));
+        $this->save();
+    }
+
+    protected static function newFactory(): Google2faFactory
+    {
+        return Google2faFactory::new();
+    }
 }

@@ -4,68 +4,45 @@ declare(strict_types=1);
 
 namespace Modules\Post\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Core\Support\Media\MediaUploader;
-use Modules\Core\Support\Relations\SyncRelations;
+use Modules\Core\Http\Controllers\CoreController;
 use Modules\Post\Actions\CreatePostAction;
 use Modules\Post\Actions\DeletePostAction;
+use Modules\Post\Actions\DeletePostMediaAction;
 use Modules\Post\Actions\GetAllCategoriesAction;
 use Modules\Post\Actions\GetAllPostsAction;
 use Modules\Post\Actions\GetAllTagsAction;
 use Modules\Post\Actions\GetAllUsersAction;
+use Modules\Post\Actions\ImportPostsAction;
 use Modules\Post\Actions\UpdatePostAction;
 use Modules\Post\DTOs\PostDTO;
 use Modules\Post\Export\PostExport;
 use Modules\Post\Http\Requests\ImportRequest;
 use Modules\Post\Http\Requests\Store;
 use Modules\Post\Http\Requests\Update;
-use Modules\Post\Import\PostImport;
 use Modules\Post\Models\Post;
 use Modules\Post\Repository\PostRepository;
 use PhpOffice\PhpSpreadsheet\Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class PostController extends Controller
+class PostController extends CoreController
 {
-    private readonly GetAllPostsAction $getAllAction;
-
-    private readonly CreatePostAction $createAction;
-
-    private readonly UpdatePostAction $updateAction;
-
-    private readonly DeletePostAction $deleteAction;
-
-    private readonly GetAllCategoriesAction $getAllCategoriesAction;
-
-    private readonly GetAllTagsAction $getAllTagsAction;
-
-    private readonly GetAllUsersAction $getAllUsersAction;
-
-    private readonly PostRepository $postRepository;
-
     public function __construct(
-        GetAllPostsAction $getAllAction,
-        CreatePostAction $createAction,
-        UpdatePostAction $updateAction,
-        DeletePostAction $deleteAction,
-        GetAllCategoriesAction $getAllCategoriesAction,
-        GetAllTagsAction $getAllTagsAction,
-        GetAllUsersAction $getAllUsersAction,
-        PostRepository $postRepository
+        private readonly GetAllPostsAction $getAllAction,
+        private readonly CreatePostAction $createAction,
+        private readonly UpdatePostAction $updateAction,
+        private readonly DeletePostAction $deleteAction,
+        private readonly DeletePostMediaAction $deletePostMediaAction,
+        private readonly ImportPostsAction $importPostsAction,
+        private readonly GetAllCategoriesAction $getAllCategoriesAction,
+        private readonly GetAllTagsAction $getAllTagsAction,
+        private readonly GetAllUsersAction $getAllUsersAction,
+        private readonly PostRepository $postRepository
     ) {
-        $this->getAllAction = $getAllAction;
-        $this->createAction = $createAction;
-        $this->updateAction = $updateAction;
-        $this->deleteAction = $deleteAction;
-        $this->getAllCategoriesAction = $getAllCategoriesAction;
-        $this->getAllTagsAction = $getAllTagsAction;
-        $this->getAllUsersAction = $getAllUsersAction;
-        $this->postRepository = $postRepository;
         $this->authorizeResource(Post::class, 'post');
     }
 
@@ -87,13 +64,7 @@ class PostController extends Controller
     public function store(Store $request): RedirectResponse
     {
         $dto = PostDTO::fromRequest($request);
-        $post = $this->createAction->execute($dto);
-
-        SyncRelations::execute($post, [
-            'categories' => $dto->categories,
-            'tags' => $dto->tags,
-        ]);
-        MediaUploader::uploadMultiple($post, ['images'], 'post');
+        $this->createAction->execute($dto);
 
         return redirect()->route('posts.index');
     }
@@ -121,6 +92,7 @@ class PostController extends Controller
      */
     public function edit(Post $post): View|Factory
     {
+        $post = $this->postRepository->findById($post->id);
         $categories = $this->getAllCategoriesAction->execute();
         $tags = $this->getAllTagsAction->execute();
         $users = $this->getAllUsersAction->execute();
@@ -135,11 +107,6 @@ class PostController extends Controller
     {
         $dto = PostDTO::fromRequest($request, $post->id);
         $this->updateAction->execute($dto);
-        SyncRelations::execute($post, [
-            'categories' => $dto->categories,
-            'tags' => $dto->tags,
-        ]);
-        MediaUploader::uploadMultiple($post, ['images'], 'post');
 
         return redirect()->route('posts.index');
     }
@@ -170,7 +137,6 @@ class PostController extends Controller
      */
     public function import(ImportRequest $request): RedirectResponse
     {
-        // Ensure there is a file and it is not an array of files
         $file = $request->file('file');
         if (! $file) {
             return back()->withErrors(['error' => 'Please upload a file.']);
@@ -181,19 +147,18 @@ class PostController extends Controller
         }
 
         try {
-            Excel::import(new PostImport, $file);
+            $this->importPostsAction->execute($file);
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'An error occurred during import: '.$e->getMessage()]);
         }
 
-        return redirect()->back()->with('success', 'Posts imported successfully.');
+        return redirect()->back()->with('success', __('messages.posts_imported_successfully'));
     }
 
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
-        $model = Post::findOrFail($modelId);
-        $model->media()->where('id', $mediaId)->first()->delete();
+        $this->deletePostMediaAction->execute($modelId, $mediaId);
 
-        return back()->with('success', 'Media deleted successfully.');
+        return back()->with('success', __('messages.media_deleted_successfully'));
     }
 }

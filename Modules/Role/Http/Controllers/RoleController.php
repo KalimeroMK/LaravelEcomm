@@ -5,20 +5,24 @@ declare(strict_types=1);
 namespace Modules\Role\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Role\Actions\DeleteRoleAction;
+use Modules\Role\Actions\FindRoleAction;
 use Modules\Role\Actions\GetAllPermissionsAction;
 use Modules\Role\Actions\GetAllRolesAction;
 use Modules\Role\Actions\StoreRoleAction;
 use Modules\Role\Actions\UpdateRoleAction;
 use Modules\Role\DTOs\RoleDTO;
+use Modules\Role\Http\Requests\Store;
+use Modules\Role\Http\Requests\Update;
 use Modules\Role\Models\Role;
 
 class RoleController extends CoreController
 {
     private readonly GetAllRolesAction $getAllAction;
+
+    private readonly FindRoleAction $findAction;
 
     private readonly StoreRoleAction $storeAction;
 
@@ -33,12 +37,14 @@ class RoleController extends CoreController
      */
     public function __construct(
         GetAllRolesAction $getAllAction,
+        FindRoleAction $findAction,
         StoreRoleAction $storeAction,
         UpdateRoleAction $updateAction,
         DeleteRoleAction $deleteAction,
         GetAllPermissionsAction $getAllPermissionsAction
     ) {
         $this->getAllAction = $getAllAction;
+        $this->findAction = $findAction;
         $this->storeAction = $storeAction;
         $this->updateAction = $updateAction;
         $this->deleteAction = $deleteAction;
@@ -69,9 +75,9 @@ class RoleController extends CoreController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Store $request): RedirectResponse
     {
-        $dto = RoleDTO::fromArray($request->all());
+        $dto = RoleDTO::fromRequest($request);
         $this->storeAction->execute($dto);
 
         return redirect()->route('roles.index');
@@ -82,6 +88,7 @@ class RoleController extends CoreController
      */
     public function edit(Role $role): View
     {
+        $role = $this->findAction->execute($role->id);
         $permissions = $this->getAllPermissionsAction->execute()->toArray();
         $roleDto = RoleDTO::fromArray($role->toArray());
 
@@ -94,9 +101,10 @@ class RoleController extends CoreController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role): RedirectResponse
+    public function update(Update $request, Role $role): RedirectResponse
     {
-        $this->updateAction->execute($role->id, $request->all());
+        $dto = RoleDTO::fromRequest($request, $role->id);
+        $this->updateAction->execute($role->id, $dto);
 
         return redirect()->route('roles.index');
     }

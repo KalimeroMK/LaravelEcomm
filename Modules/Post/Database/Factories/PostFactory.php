@@ -72,4 +72,29 @@ class PostFactory extends Factory
             $post->tags()->attach($tags);
         });
     }
+
+    /**
+     * Configure the factory to create a post with media image.
+     */
+    public function withMedia(): self
+    {
+        return $this->afterCreating(function (Model $model): void {
+            /** @var Post $post */
+            $post = $model;
+
+            $imageUrl = 'https://picsum.photos/1200/800?random='.rand(1, 10000);
+            $imageContents = @file_get_contents($imageUrl);
+
+            if ($imageContents !== false) {
+                $tempFile = tempnam(sys_get_temp_dir(), 'post_image');
+                file_put_contents($tempFile, $imageContents);
+
+                $post->addMedia($tempFile)
+                    ->preservingOriginal()
+                    ->toMediaCollection('post');
+
+                @unlink($tempFile);
+            }
+        });
+    }
 }

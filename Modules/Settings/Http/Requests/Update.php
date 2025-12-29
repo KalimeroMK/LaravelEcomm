@@ -10,6 +10,16 @@ class Update extends FormRequest
 {
     public function rules(): array
     {
+        // Check if this is a specific settings route (email, payment, shipping, seo)
+        // If so, skip validation as those controllers use Request::validate() directly
+        $path = $this->path();
+        if (str_contains($path, 'settings/email') || 
+            str_contains($path, 'settings/payment') || 
+            str_contains($path, 'settings/shipping') || 
+            str_contains($path, 'settings/seo')) {
+            return [];
+        }
+
         $availableThemes = $this->getAvailableThemes();
 
         return [

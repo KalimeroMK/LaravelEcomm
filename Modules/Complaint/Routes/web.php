@@ -16,5 +16,5 @@ use Modules\Complaint\Http\Controllers\ComplaintController;
 |
 */
 
-Route::resource('complaints', ComplaintController::class)->except('destroy', 'create');
-Route::get('complaints/create/{order_id}', [ComplaintController::class, 'create'])->name('complaints.create');
+Route::resource('complaints', ComplaintController::class)->except('destroy', 'create')->names('admin.complaints');
+Route::get('complaints/create/{order_id}', [ComplaintController::class, 'create'])->name('admin.complaints.create');

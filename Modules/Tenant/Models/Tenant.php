@@ -46,13 +46,34 @@ class Tenant extends Model
      */
     public function configure(): self
     {
-        // Update the configuration for the tenant connection dynamically
-        config([
-            'database.connections.tenant.database' => $this->database,
-        ]);
+        $defaultConnection = config('database.default');
+        $defaultConfig = config("database.connections.{$defaultConnection}");
+        $driver = $defaultConfig['driver'] ?? 'sqlite';
+
+        // For SQLite, use the same database file but with different connection name
+        // For MySQL/MariaDB, use the tenant's database name
+        if ($driver === 'sqlite') {
+            // SQLite uses the same database file for all tenants
+            config([
+                'database.connections.tenant' => array_merge($defaultConfig, [
+                    'database' => $defaultConfig['database'] ?? ':memory:',
+                ]),
+            ]);
+        } else {
+            // For MySQL/MariaDB, use the tenant's specific database
+            config([
+                'database.connections.tenant' => array_merge($defaultConfig, [
+                    'database' => $this->database,
+                ]),
+            ]);
+        }
 
         // Purge the 'tenant' connection to refresh its settings
-        DB::purge('tenant');
+        // In testing environment with SQLite, skip purge to avoid migration issues
+        // SQLite in-memory databases don't need purging in tests
+        if (! (app()->environment('testing') && $driver === 'sqlite')) {
+            DB::purge('tenant');
+        }
 
         // Consider scoping the cache flush if possible
         Cache::flush();

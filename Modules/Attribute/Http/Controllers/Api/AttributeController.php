@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Attribute\Actions\CreateAttributeAction;
 use Modules\Attribute\Actions\DeleteAttributeAction;
+use Modules\Attribute\Actions\FindAttributeAction;
+use Modules\Attribute\Actions\GetAllAttributesAction;
 use Modules\Attribute\Actions\UpdateAttributeAction;
 use Modules\Attribute\DTOs\AttributeDTO;
 use Modules\Attribute\Http\Requests\Attribute\Store;
@@ -23,6 +25,8 @@ class AttributeController extends CoreController
 {
     public function __construct(
         public readonly AttributeRepository $repository,
+        private readonly GetAllAttributesAction $getAllAttributesAction,
+        private readonly FindAttributeAction $findAttributeAction,
         private readonly CreateAttributeAction $createAction,
         private readonly UpdateAttributeAction $updateAction,
         private readonly DeleteAttributeAction $deleteAction
@@ -32,9 +36,9 @@ class AttributeController extends CoreController
     {
         $this->authorize('viewAny', Attribute::class);
 
-        return AttributeResource::collection(
-            $this->repository->findAll()
-        );
+        $attributes = $this->getAllAttributesAction->execute();
+
+        return AttributeResource::collection($attributes);
     }
 
     /**
@@ -57,7 +61,8 @@ class AttributeController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $attribute = $this->authorizeFromRepo(AttributeRepository::class, 'view', $id);
+        $attribute = $this->findAttributeAction->execute($id);
+        $this->authorize('view', $attribute);
 
         return $this
             ->setMessage(__('apiResponse.ok', [
@@ -90,7 +95,8 @@ class AttributeController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->authorizeFromRepo(AttributeRepository::class, 'delete', $id);
+        $attribute = $this->findAttributeAction->execute($id);
+        $this->authorize('delete', $attribute);
 
         $this->deleteAction->execute($id);
 

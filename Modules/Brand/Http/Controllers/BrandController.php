@@ -8,6 +8,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Modules\Brand\Actions\CreateBrandAction;
 use Modules\Brand\Actions\DeleteBrandAction;
+use Modules\Brand\Actions\FindBrandAction;
+use Modules\Brand\Actions\GetAllBrandsAction;
 use Modules\Brand\Actions\UpdateBrandAction;
 use Modules\Brand\DTOs\BrandDTO;
 use Modules\Brand\Http\Requests\Store;
@@ -20,6 +22,8 @@ class BrandController extends CoreController
 {
     public function __construct(
         private readonly BrandRepository $repository,
+        private readonly GetAllBrandsAction $getAllBrandsAction,
+        private readonly FindBrandAction $findBrandAction,
         private readonly CreateBrandAction $createAction,
         private readonly UpdateBrandAction $updateAction,
         private readonly DeleteBrandAction $deleteAction
@@ -30,7 +34,7 @@ class BrandController extends CoreController
     public function index(): View
     {
         return view('brand::index', [
-            'brands' => $this->repository->findAll(),
+            'brands' => $this->getAllBrandsAction->execute(),
         ]);
     }
 
@@ -56,7 +60,7 @@ class BrandController extends CoreController
     public function edit(Brand $brand): View
     {
         return view('brand::edit', [
-            'brand' => $brand,
+            'brand' => $this->findBrandAction->execute($brand->id),
         ]);
     }
 

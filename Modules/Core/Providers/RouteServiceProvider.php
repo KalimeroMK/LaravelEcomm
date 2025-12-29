@@ -48,6 +48,12 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['auth', 'web', 'activity'])
             ->namespace($this->moduleNamespace)
             ->group(module_path('Core', '/Routes/web.php'));
+
+        // Admin system routes
+        Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class, 'web'])
+            ->prefix('admin')
+            ->namespace($this->moduleNamespace)
+            ->group(module_path('Core', '/Routes/web.php'));
     }
 
     /**

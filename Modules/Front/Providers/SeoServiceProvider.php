@@ -32,6 +32,8 @@ class SeoServiceProvider extends ServiceProvider
             'front::pages.seo-product-detail',
             'front::pages.product_detail',
             'front::pages.bundle_detail',
+            'front::themes.modern.layouts.master',
+            'front::themes.default.layouts.master',
         ], SeoViewComposer::class);
 
         // Publish configuration

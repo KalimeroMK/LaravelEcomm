@@ -85,8 +85,18 @@ class Setting extends Core implements HasMedia
             'longitude',
             'latitude',
             'google_map_api_key',
-
+            'payment_settings',
+            'shipping_settings',
+            'email_settings',
+            'seo_settings',
         ];
+
+    protected $casts = [
+        'payment_settings' => 'array',
+        'shipping_settings' => 'array',
+        'email_settings' => 'array',
+        'seo_settings' => 'array',
+    ];
 
     public static function Factory(): SettingFactory
     {

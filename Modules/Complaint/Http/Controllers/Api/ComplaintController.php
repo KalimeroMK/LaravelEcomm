@@ -8,13 +8,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Complaint\Actions\CreateComplaintAction;
 use Modules\Complaint\Actions\DeleteComplaintAction;
+use Modules\Complaint\Actions\FindComplaintAction;
+use Modules\Complaint\Actions\GetAllComplaintsAction;
 use Modules\Complaint\Actions\UpdateComplaintAction;
 use Modules\Complaint\DTOs\ComplaintDTO;
 use Modules\Complaint\Http\Requests\Store;
 use Modules\Complaint\Http\Requests\Update;
 use Modules\Complaint\Http\Resources\ComplaintResource;
 use Modules\Complaint\Models\Complaint;
-use Modules\Complaint\Repository\ComplaintRepository;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
 use ReflectionException;
@@ -22,6 +23,8 @@ use ReflectionException;
 class ComplaintController extends CoreController
 {
     public function __construct(
+        private readonly GetAllComplaintsAction $getAllComplaintsAction,
+        private readonly FindComplaintAction $findComplaintAction,
         private readonly CreateComplaintAction $createAction,
         private readonly UpdateComplaintAction $updateAction,
         private readonly DeleteComplaintAction $deleteAction
@@ -33,9 +36,9 @@ class ComplaintController extends CoreController
     {
         $this->authorize('viewAny', Complaint::class);
 
-        return ComplaintResource::collection(
-            Complaint::where('user_id', auth()->id())->get()
-        );
+        $complaints = $this->getAllComplaintsAction->execute();
+
+        return ComplaintResource::collection($complaints);
     }
 
     public function create(int $orderId): JsonResponse
@@ -69,13 +72,14 @@ class ComplaintController extends CoreController
      */
     public function show(int $id): JsonResponse
     {
-        $complaint = $this->authorizeFromRepo(ComplaintRepository::class, 'view', $id);
+        $complaint = $this->findComplaintAction->execute($id);
+        $this->authorize('view', $complaint);
 
         return $this
             ->setMessage(__('apiResponse.ok', [
                 'resource' => Helper::getResourceName(Complaint::class),
             ]))
-            ->respond(new ComplaintResource($complaint));
+            ->respond(new ComplaintResource($complaint->load(['user', 'order'])));
     }
 
     /**
@@ -83,7 +87,8 @@ class ComplaintController extends CoreController
      */
     public function update(Update $request, int $id): JsonResponse
     {
-        $this->authorizeFromRepo(ComplaintRepository::class, 'update', $id);
+        $complaint = $this->findComplaintAction->execute($id);
+        $this->authorize('update', $complaint);
 
         $dto = ComplaintDTO::fromRequest($request, $id);
         $complaint = $this->updateAction->execute($dto);
@@ -92,7 +97,7 @@ class ComplaintController extends CoreController
             ->setMessage(__('apiResponse.updateSuccess', [
                 'resource' => Helper::getResourceName(Complaint::class),
             ]))
-            ->respond(new ComplaintResource($complaint));
+            ->respond(new ComplaintResource($complaint->load(['user', 'order'])));
     }
 
     /**
@@ -100,7 +105,8 @@ class ComplaintController extends CoreController
      */
     public function destroy(int $id): JsonResponse
     {
-        $this->authorizeFromRepo(ComplaintRepository::class, 'delete', $id);
+        $complaint = $this->findComplaintAction->execute($id);
+        $this->authorize('delete', $complaint);
 
         $this->deleteAction->execute($id);
 

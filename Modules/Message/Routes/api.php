@@ -18,3 +18,6 @@ use Modules\Message\Http\Controllers\Api\MessageController;
 
 // API Routes
 Route::apiResource('messages', MessageController::class)->names('api.messages');
+Route::put('messages/{message}/read', [MessageController::class, 'markAsRead'])->name('api.messages.markAsRead');
+Route::post('messages/{message}/reply', [MessageController::class, 'reply'])->name('api.messages.reply');
+Route::post('messages/mark-read', [MessageController::class, 'markMultipleAsRead'])->name('api.messages.markMultipleAsRead');

@@ -246,6 +246,7 @@
 					}
 				}
 			});
+/*
 			$('.slider-revolution-5-container .slider-banner-fullwidth-big-height').revolution({
 				sliderType:"standard",
 				sliderLayout:"fullwidth",
@@ -285,6 +286,7 @@
 					}
 				}
 			});
+*/
 			$('.slider-revolution-5-container .slider-banner-boxedwidth').revolution({
 				sliderType:"standard",
 				sliderLayout:"auto",

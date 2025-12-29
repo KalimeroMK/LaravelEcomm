@@ -107,6 +107,49 @@ class AnalyticsController extends Controller
     }
 
     /**
+     * Show abandoned carts page
+     */
+    public function abandonedCarts(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+    {
+        $abandonedCarts = \Modules\Cart\Models\AbandonedCart::with('user')
+            ->orderBy('last_activity', 'desc')
+            ->paginate(20);
+
+        $stats = $this->analyticsService->getMarketingAnalytics()['abandoned_carts'];
+
+        return view('admin::abandoned-carts', [
+            'abandonedCarts' => $abandonedCarts,
+            'stats' => $stats,
+        ]);
+    }
+
+    /**
+     * Get abandoned cart details (for modal)
+     */
+    public function abandonedCartDetails(int $id): JsonResponse
+    {
+        $cart = \Modules\Cart\Models\AbandonedCart::with('user')->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $cart->id,
+                'user_id' => $cart->user_id,
+                'email' => $cart->email,
+                'total_items' => $cart->total_items,
+                'total_amount' => $cart->total_amount,
+                'last_activity' => $cart->last_activity->format('Y-m-d H:i:s'),
+                'first_email_sent' => $cart->first_email_sent?->format('Y-m-d H:i:s'),
+                'second_email_sent' => $cart->second_email_sent?->format('Y-m-d H:i:s'),
+                'third_email_sent' => $cart->third_email_sent?->format('Y-m-d H:i:s'),
+                'converted' => $cart->converted,
+                'converted_at' => $cart->converted_at?->format('Y-m-d H:i:s'),
+                'cart_data' => $cart->cart_data,
+            ],
+        ]);
+    }
+
+    /**
      * Get performance metrics
      */
     public function performance(): JsonResponse

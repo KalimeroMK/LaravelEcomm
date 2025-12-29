@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Order\Http\Controllers;
 
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -14,7 +12,10 @@ use Illuminate\View\View;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Order\Actions\DeleteOrderAction;
 use Modules\Order\Actions\FindOrdersByUserAction;
+use Modules\Order\Actions\GenerateOrderPdfAction;
 use Modules\Order\Actions\GetAllOrdersAction;
+use Modules\Order\Actions\GetIncomeChartAction;
+use Modules\Order\Actions\ShowOrderAction;
 use Modules\Order\Actions\StoreOrderAction;
 use Modules\Order\Actions\UpdateOrderAction;
 use Modules\Order\DTOs\OrderDTO;
@@ -27,9 +28,12 @@ class OrderController extends CoreController
     public function __construct(
         private readonly GetAllOrdersAction $getAllAction,
         private readonly FindOrdersByUserAction $findByUserAction,
+        private readonly ShowOrderAction $showAction,
         private readonly DeleteOrderAction $deleteAction,
         private readonly StoreOrderAction $storeAction,
-        private readonly UpdateOrderAction $updateAction
+        private readonly UpdateOrderAction $updateAction,
+        private readonly GenerateOrderPdfAction $generatePdfAction,
+        private readonly GetIncomeChartAction $getIncomeChartAction
     ) {
         $this->authorizeResource(Order::class, 'order');
     }
@@ -63,11 +67,22 @@ class OrderController extends CoreController
         $dto = OrderDTO::fromRequest($request, $order->id);
         $this->updateAction->execute($dto);
 
+        // Update tracking if provided
+        if ($request->has('tracking_number')) {
+            $order->update([
+                'tracking_number' => $request->input('tracking_number'),
+                'tracking_carrier' => $request->input('tracking_carrier'),
+                'shipped_at' => $request->input('tracking_number') ? now() : null,
+            ]);
+        }
+
         return redirect()->route('orders.index');
     }
 
     public function show(Order $order): View
     {
+        $order = $this->showAction->execute($order->id);
+
         return view('order::show', ['order' => $order]);
     }
 
@@ -85,41 +100,17 @@ class OrderController extends CoreController
 
     public function pdf(int $id): Response
     {
-        $order = Order::findOrFail($id); // optional: authorize('view', $order)
+        $order = Order::findOrFail($id);
+        $this->authorize('view', $order);
 
-        $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
-        $pdf = Pdf::loadView('order::pdf', ['order' => $order]);
+        $pdf = $this->generatePdfAction->execute($id);
+        $file_name = $order->order_number.'-'.($order->user->name ?? $order->first_name ?? 'order').'.pdf';
 
         return $pdf->download($file_name);
     }
 
     public function incomeChart(): array
     {
-        $year = Carbon::now()->year;
-
-        $items = Order::with(['cart_info'])
-            ->whereYear('created_at', $year)
-            ->where('status', 'delivered')
-            ->get()
-            ->groupBy(fn ($d): string => Carbon::parse($d->created_at)->format('m'));
-
-        $result = [];
-
-        foreach ($items as $month => $orderGroup) {
-            foreach ($orderGroup as $order) {
-                $amount = $order->cart_info->sum('amount');
-                $m = (int) $month;
-                $result[$m] = ($result[$m] ?? 0) + $amount;
-            }
-        }
-
-        $data = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $timestamp = mktime(0, 0, 0, $i, 1);
-            $monthName = $timestamp === false ? 'Invalid' : date('F', $timestamp);
-            $data[$monthName] = isset($result[$i]) ? (float) number_format($result[$i], 2, '.', '') : 0.0;
-        }
-
-        return $data;
+        return $this->getIncomeChartAction->execute();
     }
 }

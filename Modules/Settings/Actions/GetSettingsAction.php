@@ -6,14 +6,11 @@ namespace Modules\Settings\Actions;
 
 use Modules\Settings\Repository\SettingsRepository;
 
-class GetSettingsAction
+readonly class GetSettingsAction
 {
-    private SettingsRepository $repository;
-
-    public function __construct(SettingsRepository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(
+        private SettingsRepository $repository
+    ) {}
 
     public function execute(): array
     {

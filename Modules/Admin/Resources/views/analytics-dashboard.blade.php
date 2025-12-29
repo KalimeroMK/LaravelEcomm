@@ -1,7 +1,7 @@
 @extends('admin::layouts.master')
 @section('title', 'Analytics Dashboard')
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid analytics-dashboard">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Analytics Dashboard</h1>
@@ -216,7 +216,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h5>Sales by Month</h5>
-                                    <div style="height: 300px; position: relative;">
+                                    <div class="chart-container">
                                         <canvas id="salesChart"></canvas>
                                     </div>
                                 </div>
@@ -377,40 +377,7 @@
 @endsection
 
 @push('styles')
-<style>
-    .chart-area {
-        position: relative;
-        height: 300px;
-    }
-    
-    .chart-pie {
-        position: relative;
-        height: 250px;
-    }
-    
-    .card {
-        transition: transform 0.2s;
-    }
-    
-    .card:hover {
-        transform: translateY(-2px);
-    }
-    
-    .nav-tabs .nav-link.active {
-        background-color: #4e73df;
-        color: white;
-        border-color: #4e73df;
-    }
-    
-    .table-responsive {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-    
-    .badge {
-        font-size: 0.8em;
-    }
-</style>
+    <link href="{{asset('backend/css/analytics.css')}}" rel="stylesheet">
 @endpush
 
 @push('scripts')

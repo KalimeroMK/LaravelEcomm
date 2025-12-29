@@ -25,7 +25,6 @@ use Modules\Page\Database\Seeders\PageSeeder;
 use Modules\Post\Models\Post;
 use Modules\Product\Database\Seeders\ProductReviewSeeder;
 use Modules\Product\Models\Product;
-use Modules\Settings\Models\Setting;
 use Modules\Tag\Models\Tag;
 use Modules\User\Database\Seeders\PermissionTableSeeder;
 
@@ -39,24 +38,25 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $this->call(PermissionTableSeeder::class);
         Category::factory()->count(10)->create();
-        Banner::factory()->count(5)->create();
+        Banner::factory()->count(5)->withMedia()->create();
         Brand::factory()->count(5)->create();
         $this->call(CouponSeeder::class);
         Tag::factory()->count(100)->create();
-        Post::factory()->count(200)->withCategoriesAndTags()->create();
+        Post::factory()->count(200)->withCategoriesAndTags()->withMedia()->create();
         Message::factory()->count(50)->create();
         $this->call(PageSeeder::class);
         $this->call(AttributeGroupSeeder::class);
         $this->call(AttributeSeeder::class);
         $this->call(AttributeValueSeeder::class);
         $this->call(AttributeOptionSeeder::class);
-        Product::factory()->count(400)->withCategoriesAndTags()->withAttributes()->create();
+        Product::factory()->count(400)->withCategoriesAndTags()->withAttributes()->withMedia(3)->create();
         Cart::factory()->count(200)->create();
         BundleProduct::factory()->count(50)->create();
         $this->call(ProductReviewSeeder::class);
         $this->call(EmailTemplateSeeder::class);
         Newsletter::factory()->count(20)->create();
-        Setting::factory()->create();
+        // Use seeder to ensure proper SEO settings
+        $this->call(\Modules\Settings\Database\Seeders\SettingsDatabaseSeeder::class);
         Complaint::factory()->count(50)->create();
         ComplaintReplaiesFactory::new()->count(50)->create();
         // Add Analytics Demo Data

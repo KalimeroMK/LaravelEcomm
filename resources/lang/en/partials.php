@@ -80,5 +80,13 @@ return [
     'public_key' => 'Public key',
     'secret_key' => 'Secret key',
     'tags' => 'Tags',
+    'choose' => 'Choose',
+    '2fa_enable' => 'Enable 2FA',
+    '2fa_disable' => 'Disable 2FA',
+    'dashboard' => 'Dashboard',
+    'profile_page' => 'Profile Page',
+    'profile' => 'Profile',
+    'not_available' => 'N/A',
+    'replies_count' => 'Replies Count',
 
 ];

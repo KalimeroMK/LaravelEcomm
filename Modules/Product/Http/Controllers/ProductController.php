@@ -4,55 +4,45 @@ declare(strict_types=1);
 
 namespace Modules\Product\Http\Controllers;
 
-use Exception;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Modules\Attribute\Models\Attribute;
-use Modules\Brand\Models\Brand;
-use Modules\Category\Models\Category;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\Core\Support\Media\MediaUploader;
-use Modules\Core\Support\Relations\SyncRelations;
-use Modules\OpenAI\Service\OpenAIService;
 use Modules\Product\Actions\DeleteProductAction;
+use Modules\Product\Actions\DeleteProductMediaAction;
+use Modules\Product\Actions\GenerateProductDescriptionAction;
 use Modules\Product\Actions\GetAllProductsAction;
+use Modules\Product\Actions\GetFeaturedProductsAction;
+use Modules\Product\Actions\GetProductFormDataAction;
 use Modules\Product\Actions\StoreProductAction;
-use Modules\Product\Actions\SyncProductAttributesAction;
 use Modules\Product\Actions\UpdateProductAction;
 use Modules\Product\DTOs\ProductDTO;
 use Modules\Product\Http\Requests\Store;
 use Modules\Product\Http\Requests\Update;
 use Modules\Product\Models\Product;
-use Modules\Tag\Models\Tag;
+use Modules\Product\Repository\ProductRepository;
 
 class ProductController extends CoreController
 {
-    private GetAllProductsAction $getAllProductsAction;
-
-    private StoreProductAction $storeProductAction;
-
-    private UpdateProductAction $updateProductAction;
-
-    private DeleteProductAction $deleteProductAction;
-
     public function __construct(
-        GetAllProductsAction $getAllProductsAction,
-        StoreProductAction $storeProductAction,
-        UpdateProductAction $updateProductAction,
-        DeleteProductAction $deleteProductAction
+        private readonly GetAllProductsAction $getAllProductsAction,
+        private readonly GetFeaturedProductsAction $getFeaturedProductsAction,
+        private readonly GetProductFormDataAction $getProductFormDataAction,
+        private readonly StoreProductAction $storeProductAction,
+        private readonly UpdateProductAction $updateProductAction,
+        private readonly DeleteProductAction $deleteProductAction,
+        private readonly DeleteProductMediaAction $deleteProductMediaAction,
+        private readonly GenerateProductDescriptionAction $generateDescriptionAction,
+        private readonly ProductRepository $productRepository
     ) {
-        $this->getAllProductsAction = $getAllProductsAction;
-        $this->storeProductAction = $storeProductAction;
-        $this->updateProductAction = $updateProductAction;
-        $this->deleteProductAction = $deleteProductAction;
         $this->authorizeResource(Product::class, 'product');
     }
 
     public function index(): Renderable
     {
         $productsDto = $this->getAllProductsAction->execute();
-        $hotProducts = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->where('is_featured', true)->get();
+        $hotProducts = $this->getFeaturedProductsAction->execute();
 
         return view('product::index', [
             'products' => $productsDto->products,
@@ -62,85 +52,53 @@ class ProductController extends CoreController
 
     public function create(): Renderable
     {
-        $attributes = Attribute::with('options')->get();
+        $formData = $this->getProductFormDataAction->execute();
 
-        return view('product::create', [
-            'brands' => Brand::get()->toArray(),
-            'categories' => Category::get()->toArray(),
-            'product' => [],
-            'tags' => Tag::get()->toArray(),
-            'attributes' => $attributes,
-        ]);
+        return view('product::create', array_merge($formData, ['product' => []]));
     }
 
-    /**
-     * @throws Exception
-     */
     public function store(Store $request): RedirectResponse
     {
         $dto = ProductDTO::fromRequest($request);
-        $product = $this->storeProductAction->execute($dto);
-        SyncRelations::execute($product, [
-            'categories' => $dto->categories,
-            'tags' => $dto->tags,
-            'brand' => $dto->brand_id,
-            'attributes' => $dto->attributes ?? [],
-        ]);
-        MediaUploader::uploadMultiple($product, ['images'], 'product');
-        SyncProductAttributesAction::execute($product, $dto->attributes ?? []);
+        $this->storeProductAction->execute($dto);
 
-        return redirect()->route('products.index');
+        return redirect()->route('admin.products.index');
     }
 
     public function edit(Product $product): Renderable
     {
-        $attributes = Attribute::with('options')->get();
-        $brands = Brand::get();
-        $categories = Category::get();
-        $tags = Tag::get();
+        $formData = $this->getProductFormDataAction->execute();
         $product->load(['attributeValues.attribute']);
 
-        return view('product::edit', ['brands' => $brands, 'categories' => $categories, 'product' => $product, 'tags' => $tags, 'attributes' => $attributes]);
+        return view('product::edit', array_merge($formData, ['product' => $product]));
     }
 
-    /**
-     * @throws Exception
-     */
     public function update(Update $request, Product $product): RedirectResponse
     {
         $dto = ProductDTO::fromRequest($request, $product->id);
         $this->updateProductAction->execute($product->id, $dto);
-        SyncRelations::execute($product, [
-            'categories' => $dto->categories,
-            'tags' => $dto->tags,
-            'brand' => $dto->brand_id,
-        ]);
-        // Save product attribute values
-        SyncProductAttributesAction::execute($product, $dto->attributes ?? []);
-        MediaUploader::uploadMultiple($product, ['images'], 'product');
 
-        return redirect()->route('products.index');
+        return redirect()->route('admin.products.index');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
         $this->deleteProductAction->execute($product->id);
 
-        return redirect()->route('products.index');
+        return redirect()->route('admin.products.index');
     }
 
     public function deleteMedia(int $modelId, int $mediaId): RedirectResponse
     {
-        $model = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])->findOrFail($modelId);
-        $model->media()->where('id', $mediaId)->first()->delete();
+        $this->deleteProductMediaAction->execute($modelId, $mediaId);
 
         return back()->with('success', 'Media deleted successfully.');
     }
 
-    public function generateDescription(Request $request)
+    public function generateDescription(Request $request): JsonResponse
     {
         $title = $request->title;
-        $description = (new OpenAIService)->generateProductDescription($title);
+        $description = $this->generateDescriptionAction->execute($title);
 
         return response()->json(['description' => $description]);
     }

@@ -19,3 +19,9 @@ use Modules\Cart\Http\Controllers\Api\CartController;
 // API Routes
 Route::apiResource('carts', CartController::class)
     ->names('api.carts');
+
+// Cart Additional Routes
+Route::prefix('carts')->group(function (): void {
+    Route::post('add/{slug}', [CartController::class, 'addToCart'])->name('api.carts.add');
+    Route::post('update-items', [CartController::class, 'updateCartItems'])->name('api.carts.update-items');
+});

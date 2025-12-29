@@ -19,8 +19,11 @@ class TenantServiceProviderTest extends TestCase
     {
         parent::setUp();
 
-        // Set up owner connection for testing
-        config(['database.connections.owner' => config('database.connections.mysql')]);
+        // Set up owner connection for testing using SQLite
+        $defaultConnection = config('database.default');
+        $defaultConfig = config("database.connections.{$defaultConnection}");
+
+        config(['database.connections.owner' => $defaultConfig]);
     }
 
     /** @test */
