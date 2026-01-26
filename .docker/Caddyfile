@@ -1,0 +1,29 @@
+{
+	auto_https off
+	admin localhost:2019
+}
+
+:80 {
+	root * /var/www/public
+
+	encode zstd br gzip
+
+	php_server {
+		try_files {path} {path}/ /index.php?{query}
+	}
+
+	@hidden {
+		path_regexp \/\..*
+		not path /.well-known/*
+	}
+	handle @hidden {
+		respond 404
+	}
+
+	file_server
+
+	log {
+		output stdout
+		format console
+	}
+}

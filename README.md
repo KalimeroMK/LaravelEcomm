@@ -303,7 +303,7 @@ php artisan seo:generate-sitemap
 2. **Install Laravel packages**: `docker exec e_comm_app composer install`
 3. **Configure environment**: Update `.env` file:
     ```env
-    DB_HOST=mysql
+    DB_HOST=db
     DB_DATABASE=homestead
     DB_USERNAME=homestead
     DB_PASSWORD=secret
@@ -323,11 +323,10 @@ php artisan seo:generate-sitemap
 
 #### Container Ports
 
--   **Nginx (Web)**: 90 → 80
+-   **FrankenPHP (Web)**: 90 → 80
 -   **MySQL**: 3311 → 3306
--   **Redis**: 6379 → 6379
+-   **Redis**: 6381 → 6379
 -   **Elasticsearch**: 9200 → 9200
--   **Elasticsearch (DB)**: 9200 → 9200
 
 #### Elasticsearch Setup
 

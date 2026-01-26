@@ -1,20 +1,18 @@
-# Stage 1: Build dependencies
-FROM php:8.4-fpm-alpine AS builder
+# Use FrankenPHP base image
+FROM dunglas/frankenphp:latest
 
-# Install system dependencies
-RUN apk add --no-cache \
-    git curl nano unzip bash zip \
-    libpng-dev libjpeg-turbo-dev freetype-dev \
-    libxml2-dev oniguruma-dev libzip-dev \
-    icu-dev g++ make autoconf libpng libjpeg freetype libzip \
-    redis  # Install Redis server (optional, if needed)
-
-# Install PHP extensions
-RUN docker-php-ext-configure gd --with-jpeg --with-freetype \
-    && docker-php-ext-install gd pdo_mysql mbstring exif pcntl bcmath zip intl
-
-# Install Redis extension
-RUN pecl install redis && docker-php-ext-enable redis
+# Install PHP extensions using the built-in installer
+RUN install-php-extensions \
+    pdo_mysql \
+    gd \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    zip \
+    intl \
+    opcache \
+    redis
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -22,24 +20,19 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Set user permissions (проверка дали `www-data` постои)
-RUN id -u www-data &>/dev/null || adduser -D -u 1000 -G www-data www-data
+# Create www-data user if not exists
+RUN set -x \
+    && addgroup -g 1000 -S www-data 2>/dev/null || true \
+    && adduser -u 1000 -D -S -G www-data www-data 2>/dev/null || true
 
-# Stage 2: Final image (Minimal)
-FROM php:8.4-fpm-alpine
+# Fix permissions for www-data
+RUN chown -R www-data:www-data /var/www
 
-# Install runtime dependencies (ова е клучно за правилно работење)
-RUN apk add --no-cache libpng libjpeg freetype libzip icu redis
+# Create data directory for Caddy with proper permissions
+RUN mkdir -p /data/caddy && chmod -R 777 /data/caddy || true
 
-# Copy built dependencies from builder
-COPY --from=builder /usr/local /usr/local
-COPY --from=builder /usr/bin/composer /usr/bin/composer
+# Note: FrankenPHP/Caddy needs to run as root to bind to port 80
+# The PHP processes will still run as www-data for security
 
-# Enable Redis PHP extension
-RUN docker-php-ext-enable redis
-
-# Set working directory
-WORKDIR /var/www
-
-# Set user
-USER www-data
+# Expose port 80 for FrankenPHP
+EXPOSE 80
