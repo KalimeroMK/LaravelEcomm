@@ -25,8 +25,71 @@ abstract class BaseRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
+     * Subclasses may override customValidationMessages() to add or override messages.
      */
     final public function messages(): array
+    {
+        return array_merge($this->defaultValidationMessages(), $this->customValidationMessages());
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     */
+    final public function attributes(): array
+    {
+        return [
+            'email' => 'email address',
+            'password' => 'password',
+            'password_confirmation' => 'password confirmation',
+            'name' => 'name',
+            'title' => 'title',
+            'description' => 'description',
+            'price' => 'price',
+            'quantity' => 'quantity',
+            'status' => 'status',
+            'slug' => 'slug',
+            'summary' => 'summary',
+            'sku' => 'SKU',
+            'stock' => 'stock',
+            'special_price' => 'special price',
+            'special_price_start' => 'special price start date',
+            'special_price_end' => 'special price end date',
+            'is_featured' => 'featured status',
+            'd_deal' => 'deal status',
+            'brand_id' => 'brand',
+            'category_id' => 'category',
+            'images' => 'images',
+            'meta_title' => 'meta title',
+            'meta_description' => 'meta description',
+            'meta_keywords' => 'meta keywords',
+            'phone' => 'phone number',
+            'address' => 'address',
+            'city' => 'city',
+            'country' => 'country',
+            'postal_code' => 'postal code',
+            'date_of_birth' => 'date of birth',
+            'gender' => 'gender',
+            'newsletter_subscription' => 'newsletter subscription',
+            'marketing_emails' => 'marketing emails',
+        ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    final public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator): void {
+            $this->additionalValidation($validator);
+        });
+    }
+
+    /**
+     * Default validation messages. Subclasses should override customValidationMessages() instead of messages().
+     *
+     * @return array<string, string>
+     */
+    protected function defaultValidationMessages(): array
     {
         return [
             'required' => 'The :attribute field is required.',
@@ -80,55 +143,13 @@ abstract class BaseRequest extends FormRequest
     }
 
     /**
-     * Get custom attributes for validator errors.
+     * Custom validation messages for subclasses. Override to add or override messages.
+     *
+     * @return array<string, string>
      */
-    final public function attributes(): array
+    protected function customValidationMessages(): array
     {
-        return [
-            'email' => 'email address',
-            'password' => 'password',
-            'password_confirmation' => 'password confirmation',
-            'name' => 'name',
-            'title' => 'title',
-            'description' => 'description',
-            'price' => 'price',
-            'quantity' => 'quantity',
-            'status' => 'status',
-            'slug' => 'slug',
-            'summary' => 'summary',
-            'sku' => 'SKU',
-            'stock' => 'stock',
-            'special_price' => 'special price',
-            'special_price_start' => 'special price start date',
-            'special_price_end' => 'special price end date',
-            'is_featured' => 'featured status',
-            'd_deal' => 'deal status',
-            'brand_id' => 'brand',
-            'category_id' => 'category',
-            'images' => 'images',
-            'meta_title' => 'meta title',
-            'meta_description' => 'meta description',
-            'meta_keywords' => 'meta keywords',
-            'phone' => 'phone number',
-            'address' => 'address',
-            'city' => 'city',
-            'country' => 'country',
-            'postal_code' => 'postal code',
-            'date_of_birth' => 'date of birth',
-            'gender' => 'gender',
-            'newsletter_subscription' => 'newsletter subscription',
-            'marketing_emails' => 'marketing emails',
-        ];
-    }
-
-    /**
-     * Configure the validator instance.
-     */
-    final public function withValidator(Validator $validator): void
-    {
-        $validator->after(function ($validator): void {
-            $this->additionalValidation($validator);
-        });
+        return [];
     }
 
     /**

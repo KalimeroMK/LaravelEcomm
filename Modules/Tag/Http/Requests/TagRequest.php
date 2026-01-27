@@ -69,21 +69,17 @@ class TagRequest extends BaseRequest
                 'string',
                 'max:100',
             ],
-            'image' => [
-                'nullable',
-                'image',
-                'mimes:jpeg,png,jpg,webp,svg',
-                'max:2048',
-            ],
         ], $this->getCommonRules());
     }
 
     /**
-     * Get custom messages for validator errors.
+     * Custom validation messages for Tag.
+     *
+     * @return array<string, string>
      */
-    public function messages(): array
+    protected function customValidationMessages(): array
     {
-        return array_merge(parent::messages(), [
+        return [
             'name.required' => 'Tag name is required.',
             'name.regex' => 'Tag name can only contain letters, numbers, spaces, hyphens, underscores, and dots.',
             'name.min' => 'Tag name must be at least 2 characters long.',
@@ -100,8 +96,7 @@ class TagRequest extends BaseRequest
             'meta_title.max' => 'Meta title should not exceed 60 characters for SEO.',
             'meta_description.max' => 'Meta description should not exceed 160 characters for SEO.',
             'icon.max' => 'Icon must not exceed 100 characters.',
-            'image.max' => 'Tag image must not be larger than 2MB.',
-        ]);
+        ];
     }
 
     /**
@@ -202,31 +197,6 @@ class TagRequest extends BaseRequest
                     'icon',
                     'Icon must not exceed 100 characters.'
                 );
-            }
-
-            // Validate image dimensions
-            if ($this->hasFile('image')) {
-                $image = $this->file('image');
-                $imageInfo = getimagesize($image->getPathname());
-
-                if ($imageInfo) {
-                    $width = $imageInfo[0];
-                    $height = $imageInfo[1];
-
-                    if ($width < 100 || $height < 100) {
-                        $validator->errors()->add(
-                            'image',
-                            'Tag image must be at least 100x100 pixels.'
-                        );
-                    }
-
-                    if ($width > 2000 || $height > 2000) {
-                        $validator->errors()->add(
-                            'image',
-                            'Tag image must not exceed 2000x2000 pixels.'
-                        );
-                    }
-                }
             }
 
             // Validate tag name uniqueness (case insensitive)
