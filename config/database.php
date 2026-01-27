@@ -115,7 +115,7 @@ return [
         ],
 
         'owner' => [
-            'driver' => env('OWNER_DB_CONNECTION', 'mysql'),
+            'driver' => env('OWNER_DB_DRIVER', 'mysql'),
             'host' => env('OWNER_DB_HOST', env('DB_HOST', '127.0.0.1')),
             'port' => env('OWNER_DB_PORT', env('DB_PORT', '3306')),
             'database' => env('OWNER_DB_DATABASE', env('DB_DATABASE', 'homestead')),
