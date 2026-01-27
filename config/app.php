@@ -58,6 +58,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | Set to '*' when behind Cloudflare (or similar) so X-Forwarded-Host,
+    | X-Forwarded-Proto, etc. are used and request()->getHost() matches the
+    | original domain. Leave unset or empty when not behind a reverse proxy.
+    |
+    */
+
+    'trusted_proxies' => env('TRUSTED_PROXIES'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
