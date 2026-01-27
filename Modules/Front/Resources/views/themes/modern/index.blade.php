@@ -45,7 +45,7 @@
                     @endforeach
                 @else
                     <div class="item active">
-                        <img src="{{ theme_asset('img/shop-slide-1.jpg') }}" alt="Default Banner" style="width:100%; height: 500px; object-fit: cover;">
+                        <img src="{{ route('front.placeholder.image', ['type' => 'banner', 'text' => $settings['site-name'] ?? 'E-commerce']) }}" alt="Welcome" style="width:100%; height: 500px; object-fit: cover;">
                         <div class="carousel-caption">
                             <h2 class="title text-white" style="color: #fff; font-size: 48px; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Welcome to {{ $settings['site-name'] ?? 'E-commerce' }}</h2>
                             <div class="separator-2 light"></div>

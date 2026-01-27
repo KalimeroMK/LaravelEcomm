@@ -17,6 +17,15 @@
         <textarea class="form-control" id="description" name="content">{{$page->content}}</textarea>
     </div>
     <div class="form-group">
+        <label for="featured_image" class="col-form-label">@lang('partials.featured_image')</label>
+        <input type="file" id="featured_image" name="featured_image" class="form-control" accept="image/jpeg,image/png,image/jpg,image/webp">
+        @if($page->exists && $page->featured_image_url)
+            <div class="mt-2">
+                <img src="{{ $page->featured_image_url }}" alt="Featured" class="img-thumbnail" style="max-height: 120px;">
+            </div>
+        @endif
+    </div>
+    <div class="form-group">
         <label for="status" class="col-form-label">@lang('partials.status') <span class="text-danger">*</span></label>
         <select name="status" class="form-control">
             <option @if($page->status =="active") selected @endif value="active">@lang('partials.active')</option>

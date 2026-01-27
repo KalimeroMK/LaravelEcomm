@@ -10,17 +10,28 @@ use Modules\Tenant\Models\Tenant;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    $driver = config('database.connections.'.config('database.default').'.driver');
+    if ($driver === 'sqlite') {
+        $this->markTestSkipped('Tenant model tests require MySQL or file-based SQLite (SQLite in-memory triggers VACUUM-in-transaction errors).');
+    }
+
     // Set up owner and tenant connections for testing using SQLite
     $defaultConnection = config('database.default');
     $defaultConfig = config("database.connections.{$defaultConnection}");
 
-    // Use SQLite for both owner and tenant in tests
+    // Use a unique SQLite file per test for tenant to avoid "migrations already exists"
+    $tenantDatabase = $defaultConfig['driver'] === 'sqlite'
+        ? (sys_get_temp_dir().'/tenant_test_'.getmypid().'_'.uniqid('', true).'.sqlite')
+        : ($defaultConfig['database'] ?? ':memory:');
+
     config([
         'database.connections.owner' => $defaultConfig,
         'database.connections.tenant' => array_merge($defaultConfig, [
-            'database' => ':memory:',
+            'database' => $tenantDatabase,
         ]),
     ]);
+
+    DB::purge('tenant');
 });
 
 test('it can create a tenant', function () {

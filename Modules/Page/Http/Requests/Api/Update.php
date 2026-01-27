@@ -21,6 +21,7 @@ class Update extends CoreRequest
             'content' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
             'user_id' => ['nullable', 'exists:users'],
+            'featured_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
         ];
     }
 }

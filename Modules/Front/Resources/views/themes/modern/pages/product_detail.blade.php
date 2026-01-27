@@ -46,7 +46,7 @@
                             @endif
                         </div>
                     @else
-                        <img src="https://placehold.co/600x600/eee/999?text=No+Image" class="img-responsive" alt="{{ $product_detail->title }}">
+                        <img src="{{ $product_detail->imageUrl }}" class="img-responsive" alt="{{ $product_detail->title }}">
                     @endif
                 </div>
             </div>

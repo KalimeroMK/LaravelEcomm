@@ -97,7 +97,10 @@ class Banner extends Core implements HasMedia
             return $mediaItem->getUrl();
         }
 
-        return 'https://placehold.co/600x400@2x.png';
+        return route('front.placeholder.image', [
+            'type' => 'banner',
+            'text' => \Illuminate\Support\Str::limit($this->title ?? 'Banner', 25),
+        ]);
     }
 
     /**

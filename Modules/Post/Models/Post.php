@@ -166,7 +166,10 @@ class Post extends Core implements HasMedia
             return $mediaItem->getUrl();
         }
 
-        return 'https://placehold.co/600x400@2x.png';
+        return route('front.placeholder.image', [
+            'type' => 'post',
+            'text' => \Illuminate\Support\Str::limit($this->title ?? 'Post', 15),
+        ]);
     }
 
     public function registerMediaConversions(?Media $media = null): void

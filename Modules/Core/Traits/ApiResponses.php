@@ -25,6 +25,11 @@ trait ApiResponses
         return $this;
     }
 
+    public function setStatusCode(int $code): static
+    {
+        return $this->setCode($code);
+    }
+
     /**
      * Set the message property.
      *

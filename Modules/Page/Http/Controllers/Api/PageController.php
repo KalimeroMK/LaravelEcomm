@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Core\Support\Media\MediaUploader;
 use Modules\Page\Actions\CreatePageAction;
 use Modules\Page\Actions\DeletePageAction;
 use Modules\Page\Actions\FindPageAction;
@@ -50,6 +51,7 @@ class PageController extends CoreController
 
         $dto = PageDTO::fromRequest($request);
         $page = $this->createAction->execute($dto);
+        MediaUploader::uploadSingle($page, 'featured_image', 'featured_image');
 
         return $this
             ->setMessage(__('apiResponse.storeSuccess', [
@@ -82,6 +84,9 @@ class PageController extends CoreController
 
         $dto = PageDTO::fromRequest($request, $id, $this->repository->findById($id));
         $page = $this->updateAction->execute($dto);
+        if ($request->hasFile('featured_image')) {
+            MediaUploader::clearAndUpload($page, ['featured_image'], 'featured_image');
+        }
 
         return $this
             ->setMessage(__('apiResponse.updateSuccess', [

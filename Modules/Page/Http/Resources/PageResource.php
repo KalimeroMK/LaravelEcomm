@@ -24,6 +24,7 @@ class PageResource extends JsonResource
             'slug' => $this->slug,
             'content' => $this->content,
             'is_active' => $this->is_active,
+            'featured_image_url' => $this->featured_image_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'user_id' => $this->user_id,

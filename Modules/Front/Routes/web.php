@@ -15,7 +15,9 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\Front\Http\Controllers\FrontController;
+use Modules\Front\Http\Controllers\PlaceholderImageController;
 
+Route::get('placeholder/image', PlaceholderImageController::class)->name('front.placeholder.image');
 Route::get('/', [FrontController::class, 'index'])->name('front.index');
 Route::get('/about-us', [FrontController::class, 'aboutUs'])->name('front.about-us');
 Route::get('/contact', [FrontController::class, 'contact'])->name('front.contact');

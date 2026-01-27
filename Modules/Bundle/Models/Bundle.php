@@ -85,13 +85,17 @@ class Bundle extends Core implements HasMedia
     {
         $mediaItem = $this->getFirstMedia('bundle');
 
-        return $mediaItem?->getUrl() ?? 'https://via.placeholder.com/640x480.png/003311?text=et';
+        return $mediaItem?->getUrl() ?? route('front.placeholder.image', [
+            'type' => 'bundle',
+            'text' => \Illuminate\Support\Str::limit($this->name ?? 'Bundle', 15),
+            'index' => $this->id ? ($this->id % 5) : 0,
+        ]);
     }
 
     public function getPreviewImageUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('bundle');
 
-        return $mediaItem?->getUrl('preview') ?? 'https://via.placeholder.com/300x300.png?text=preview';
+        return $mediaItem?->getUrl('preview') ?? $this->image_url;
     }
 }

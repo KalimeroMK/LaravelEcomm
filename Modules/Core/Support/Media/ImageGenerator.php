@@ -35,10 +35,16 @@ class ImageGenerator
         // Create image
         $image = $manager->create($width, $height)->fill($backgroundColor);
 
-        // Add text
-        $image->text($text, $width / 2, $height / 2, function ($font) use ($textColor, $width) {
-            $font->filename(public_path('frontend/themes/modern/fonts/OpenSans-Regular.ttf'));
-            $font->size(min($width / 10, 48));
+        // Add text – use first available font
+        $fontPath = public_path('frontend/themes/modern/fonts/OpenSans-Regular.ttf');
+        if (! is_file($fontPath)) {
+            $fontPath = public_path('frontend/themes/modern/fonts/font-awesome/fonts/fontawesome-webfont.ttf');
+        }
+        $image->text($text, $width / 2, $height / 2, function ($font) use ($textColor, $width, $fontPath) {
+            if (is_file($fontPath)) {
+                $font->filename($fontPath);
+            }
+            $font->size(min((int) ($width / 10), 48));
             $font->color($textColor);
             $font->align('center');
             $font->valign('middle');

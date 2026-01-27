@@ -7,6 +7,7 @@ namespace Modules\Page\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\Core\Support\Media\MediaUploader;
 use Modules\Page\Actions\CreatePageAction;
 use Modules\Page\Actions\DeletePageAction;
 use Modules\Page\Actions\FindPageAction;
@@ -42,7 +43,8 @@ class PageController extends Controller
 
     public function store(Store $request): RedirectResponse
     {
-        $this->createAction->execute($request->validated());
+        $page = $this->createAction->execute(PageDTO::fromRequest($request));
+        MediaUploader::uploadSingle($page, 'featured_image', 'featured_image');
 
         return redirect()->route('pages.index')->with('status', 'Page created successfully.');
     }
@@ -56,8 +58,11 @@ class PageController extends Controller
 
     public function update(Store $request, Page $page): RedirectResponse
     {
-        $dto = PageDTO::fromRequest($request, $page->id);
+        $dto = PageDTO::fromRequest($request, $page->id, $page);
         $this->updateAction->execute($dto);
+        if ($request->hasFile('featured_image')) {
+            MediaUploader::clearAndUpload($page, ['featured_image'], 'featured_image');
+        }
 
         return redirect()->route('pages.edit', $page)->with('status', 'Page updated successfully.');
     }

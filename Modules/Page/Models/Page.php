@@ -16,6 +16,9 @@ use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
 use Modules\Page\Database\Factories\PageFactory;
 use Modules\User\Models\User;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Page
@@ -29,6 +32,7 @@ use Modules\User\Models\User;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read User $user
+ * @property-read string|null $featured_image_url
  *
  * @method static Builder<static>|Page newModelQuery()
  * @method static Builder<static>|Page newQuery()
@@ -44,10 +48,11 @@ use Modules\User\Models\User;
  *
  * @mixin Eloquent
  */
-class Page extends Core
+class Page extends Core implements HasMedia
 {
     use HasFactory;
     use HasSlug;
+    use InteractsWithMedia;
 
     protected $table = 'pages';
 
@@ -74,5 +79,20 @@ class Page extends Core
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getFeaturedImageUrlAttribute(): ?string
+    {
+        $media = $this->getFirstMedia('featured_image');
+
+        return $media instanceof Media ? $media->getUrl() : null;
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('preview')
+            ->width(800)
+            ->height(450)
+            ->nonQueued();
     }
 }

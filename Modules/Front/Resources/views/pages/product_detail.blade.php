@@ -55,9 +55,9 @@
                                                 </li>
                                             @endforeach
                                         @else
-                                            <li data-thumb="https://placehold.co/600x400@2x.png"
+                                            <li data-thumb="{{ $product_detail->imageUrl }}"
                                                 rel="adjustX:10, adjustY:">
-                                                <img src="https://placehold.co/600x400@2x.png"
+                                                <img src="{{ $product_detail->imageUrl }}"
                                                      alt="{{ $product_detail->title }}">
                                             </li>
                                         @endif

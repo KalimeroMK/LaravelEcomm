@@ -215,18 +215,21 @@ class Product extends Core implements HasMedia
             return $mediaItem->getUrl();
         }
 
-        return 'https://placehold.co/600x400@2x.png';
+        return route('front.placeholder.image', [
+            'type' => 'product',
+            'text' => \Illuminate\Support\Str::limit($this->title ?? 'Product', 20),
+            'index' => $this->id ? ($this->id % 10) : 0,
+        ]);
     }
 
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
         if ($mediaItem instanceof Media) {
-            // Replace 'thumb' with your conversion name if needed
             return $mediaItem->getUrl('thumb');
         }
 
-        return 'https://placehold.co/600x400@2x.png';
+        return $this->image_url;
     }
 
     /**

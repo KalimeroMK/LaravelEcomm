@@ -54,49 +54,48 @@ test('user can apply valid coupon', function () {
     ]);
 
     $response = $this->actingAs($this->user)
-        ->post(route('coupon-store'), [
+        ->postJson(route('api.coupon.store'), [
             'code' => 'VALID10',
         ]);
 
-    $response->assertStatus(200);
+    $response->assertOk();
     $response->assertJsonStructure([
-        'success',
-        'data',
         'message',
+        'code',
+        'data' => [
+            'id',
+            'code',
+            'value',
+        ],
     ]);
 });
 
 test('user cannot apply expired coupon', function () {
-    $coupon = Coupon::factory()->create([
+    Coupon::factory()->create([
         'code' => 'EXPIRED10',
         'type' => 'percent',
         'value' => 10,
         'status' => 'active',
-        'expires_at' => now()->subDay(), // Expired yesterday
+        'expires_at' => now()->subDay(),
     ]);
 
     $response = $this->actingAs($this->user)
-        ->post(route('coupon-store'), [
+        ->postJson(route('api.coupon.store'), [
             'code' => 'EXPIRED10',
         ]);
 
     $response->assertStatus(422);
-    $response->assertJson([
-        'success' => false,
-    ]);
+    $response->assertJsonFragment(['message' => 'Coupon has expired']);
 });
 
 test('user cannot apply invalid coupon', function () {
     $response = $this->actingAs($this->user)
-        ->post(route('coupon-store'), [
+        ->postJson(route('api.coupon.store'), [
             'code' => 'INVALID',
         ]);
 
     $response->assertStatus(422);
-    $response->assertJson([
-        'success' => false,
-        'message' => 'Invalid coupon code, Please try again',
-    ]);
+    $response->assertJsonFragment(['message' => 'Invalid coupon code, Please try again']);
 });
 
 test('admin can deactivate coupon', function () {

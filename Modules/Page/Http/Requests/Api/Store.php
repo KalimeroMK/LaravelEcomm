@@ -21,6 +21,7 @@ class Store extends CoreRequest
             'content' => ['required'],
             'is_active' => ['boolean'],
             'user_id' => ['required', 'exists:users,id'],
+            'featured_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
         ];
     }
 }
