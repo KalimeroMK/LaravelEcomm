@@ -46,7 +46,7 @@ class AttributeOptionSeeder extends Seeder
                         'attribute_id' => $attribute->id,
                         'value' => $optionData['value'],
                     ], [
-                        'label' => $optionData['label'] ?? $optionData['value'],
+                        'label' => $optionData['label'],
                         'color_hex' => $optionData['color_hex'] ?? null,
                         'sort_order' => $index * 10,
                     ]);

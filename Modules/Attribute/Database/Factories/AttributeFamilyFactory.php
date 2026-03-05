@@ -17,7 +17,8 @@ class AttributeFamilyFactory extends Factory
 
     public function definition(): array
     {
-        $name = $this->faker->words(2, true);
+        $words = $this->faker->words(2, true);
+        $name = is_string($words) ? $words : implode(' ', $words);
 
         return [
             'name' => $name,
@@ -60,6 +61,9 @@ class AttributeFamilyFactory extends Factory
 
     /**
      * Attach specific attributes to the family
+     */
+    /**
+     * @param array<int> $attributeIds
      */
     public function withSpecificAttributes(array $attributeIds): self
     {

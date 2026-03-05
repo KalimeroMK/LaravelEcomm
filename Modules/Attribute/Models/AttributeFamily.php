@@ -81,6 +81,8 @@ class AttributeFamily extends Model
 
     /**
      * Get attribute groups with their attributes
+     *
+     * @return Collection<int, AttributeGroup>
      */
     public function groupsWithAttributes(): Collection
     {
@@ -97,6 +99,8 @@ class AttributeFamily extends Model
 
     /**
      * Get attributes by group
+     *
+     * @return Collection<int, Attribute>
      */
     public function attributesByGroup(AttributeGroup $group): Collection
     {
@@ -108,6 +112,9 @@ class AttributeFamily extends Model
 
     /**
      * Scope for active families
+     *
+     * @param Builder<AttributeFamily> $query
+     * @return Builder<AttributeFamily>
      */
     public function scopeActive(Builder $query): Builder
     {
@@ -119,10 +126,18 @@ class AttributeFamily extends Model
      */
     public function isAttributeRequired(Attribute $attribute): bool
     {
-        $pivot = $this->attributes()
+        /** @var Attribute|null $attr */
+        $attr = $this->attributes()
             ->where('attributes.id', $attribute->id)
-            ->first()?->pivot;
+            ->first();
 
-        return $pivot?->is_required ?? false;
+        if ($attr === null || $attr->pivot === null) {
+            return false;
+        }
+
+        /** @var bool $isRequired */
+        $isRequired = $attr->pivot->is_required;
+
+        return $isRequired;
     }
 }

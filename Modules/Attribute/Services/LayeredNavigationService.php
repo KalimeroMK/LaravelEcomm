@@ -93,6 +93,7 @@ readonly class LayeredNavigationService
                 'name' => $attribute->name,
                 'code' => $attribute->code,
                 'display' => $attribute->display,
+                'type' => $this->getFilterType($attribute),
                 'options' => $attribute->options_with_counts->map(function ($option) {
                     return [
                         'value' => $option->value,
@@ -171,9 +172,14 @@ readonly class LayeredNavigationService
 
     /**
      * Get active filters for display
+     *
+     * @param array|\Illuminate\Http\Request $params
      */
-    public function getActiveFilters(array $params): Collection
+    public function getActiveFilters(array|\Illuminate\Http\Request $params): Collection
     {
+        if ($params instanceof \Illuminate\Http\Request) {
+            $params = $params->all();
+        }
         $active = collect();
         $parsed = $this->parseFilters($params);
 
@@ -191,16 +197,30 @@ readonly class LayeredNavigationService
             $values = is_array($values) ? $values : [$values];
 
             foreach ($values as $value) {
+                $option = $attribute->options->firstWhere('value', $value);
                 $active->push([
                     'attribute_name' => $attribute->name,
                     'attribute_code' => $code,
                     'value' => $value,
-                    'label' => $attribute->options->firstWhere('value', $value)?->label ?? $value,
+                    'label' => $option !== null ? $option->label : $value,
                 ]);
             }
         }
 
         return $active;
+    }
+
+    /**
+     * Get filter type for display
+     */
+    public function getFilterType(Attribute $attribute): string
+    {
+        return match ($attribute->display) {
+            'color' => 'swatch',
+            'button' => 'button',
+            'multiselect', 'multi_select' => 'multiselect',
+            default => 'default',
+        };
     }
 
     /**

@@ -84,8 +84,6 @@ class AttributeValue extends Core
 
     /**
      * Get the parent attributable model (polymorphic).
-     *
-     * @return MorphTo<Model, AttributeValue>
      */
     public function attributable(): MorphTo
     {
@@ -131,6 +129,9 @@ class AttributeValue extends Core
 
     /**
      * Scope for specific model instance
+     *
+     * @param Builder<AttributeValue> $query
+     * @return Builder<AttributeValue>
      */
     public function scopeForModel(Builder $query, Model $model): Builder
     {

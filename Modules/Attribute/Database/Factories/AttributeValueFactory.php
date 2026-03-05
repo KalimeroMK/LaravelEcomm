@@ -62,7 +62,7 @@ class AttributeValueFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'attributable_type' => Product::class,
-            'attributable_id' => $product?->id ?? Product::factory(),
+            'attributable_id' => $product !== null ? $product->id : Product::factory(),
         ]);
     }
 
@@ -82,8 +82,9 @@ class AttributeValueFactory extends Factory
     public function withValue(mixed $value): self
     {
         return $this->state(function (array $attributes) use ($value) {
-            $attribute = Attribute::find($attributes['attribute_id']);
-            $type = $attribute?->type ?? 'text';
+            /** @var Attribute|null $attribute */
+            $attribute = Attribute::query()->find($attributes['attribute_id']);
+            $type = $attribute instanceof Attribute ? $attribute->type : 'text';
 
             $column = match ($type) {
                 'boolean' => 'boolean_value',
@@ -95,16 +96,18 @@ class AttributeValueFactory extends Factory
                 default => 'text_value',
             };
 
-            return [
-                $column => $value,
-                'text_value' => $column !== 'text_value' ? null : $attributes['text_value'] ?? null,
-                'boolean_value' => $column !== 'boolean_value' ? null : $attributes['boolean_value'] ?? null,
-                'date_value' => $column !== 'date_value' ? null : $attributes['date_value'] ?? null,
-                'integer_value' => $column !== 'integer_value' ? null : $attributes['integer_value'] ?? null,
-                'float_value' => $column !== 'float_value' ? null : $attributes['float_value'] ?? null,
-                'string_value' => $column !== 'string_value' ? null : $attributes['string_value'] ?? null,
-                'url_value' => $column !== 'url_value' ? null : $attributes['url_value'] ?? null,
+            $result = [
+                'text_value' => null,
+                'boolean_value' => null,
+                'date_value' => null,
+                'integer_value' => null,
+                'float_value' => null,
+                'string_value' => null,
+                'url_value' => null,
             ];
+            $result[$column] = $value;
+
+            return $result;
         });
     }
 }
