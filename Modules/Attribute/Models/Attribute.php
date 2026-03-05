@@ -152,6 +152,17 @@ class Attribute extends Core
     }
 
     /**
+     * Alias for values() relation
+     *
+     * @return HasMany<AttributeValue, Attribute>
+     */
+    public function attributeValues(): HasMany
+    {
+        /** @var HasMany<AttributeValue, Attribute> */
+        return $this->hasMany(AttributeValue::class, 'attribute_id');
+    }
+
+    /**
      * @return HasMany<AttributeOption, Attribute>
      */
     public function options(): HasMany

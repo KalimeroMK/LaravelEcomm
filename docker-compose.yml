@@ -11,7 +11,6 @@ services:
       - ./.docker/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - ./.docker/php/conf.d/performance.ini:/usr/local/etc/php/conf.d/performance.ini
-      - ./.docker/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data/caddy
     networks:
       - laravelapp

@@ -18,24 +18,93 @@ class AttributeValueFactory extends Factory
 
     public function definition(): array
     {
-        $type = $this->faker->randomElement(['text', 'boolean', 'date', 'integer', 'float']);
+        $type = $this->faker->randomElement(['text', 'boolean', 'date', 'integer', 'float', 'string', 'url']);
         $value = match ($type) {
             'text' => $this->faker->sentence(),
             'boolean' => $this->faker->boolean(),
             'date' => $this->faker->date(),
             'integer' => $this->faker->numberBetween(1, 100),
             'float' => $this->faker->randomFloat(2, 1, 100),
+            'string' => $this->faker->word(),
+            'url' => $this->faker->url(),
             default => null,
         };
 
         return [
-            'product_id' => Product::factory(),
             'attribute_id' => Attribute::factory(),
+            'attributable_id' => Product::factory(),
+            'attributable_type' => Product::class,
             'text_value' => $type === 'text' ? $value : null,
             'boolean_value' => $type === 'boolean' ? $value : null,
             'date_value' => $type === 'date' ? $value : null,
             'integer_value' => $type === 'integer' ? $value : null,
             'float_value' => $type === 'float' ? $value : null,
+            'string_value' => $type === 'string' ? $value : null,
+            'url_value' => $type === 'url' ? $value : null,
         ];
+    }
+
+    /**
+     * Set the attributable model (polymorphic relation)
+     */
+    public function forModel(string $modelClass, ?int $id = null): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'attributable_type' => $modelClass,
+            'attributable_id' => $id ?? $modelClass::factory(),
+        ]);
+    }
+
+    /**
+     * Create for a Product
+     */
+    public function forProduct(?Product $product = null): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'attributable_type' => Product::class,
+            'attributable_id' => $product?->id ?? Product::factory(),
+        ]);
+    }
+
+    /**
+     * Set the attribute type
+     */
+    public function withType(string $type): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'attribute_id' => Attribute::factory()->create(['type' => $type])->id,
+        ]);
+    }
+
+    /**
+     * Set a specific value
+     */
+    public function withValue(mixed $value): self
+    {
+        return $this->state(function (array $attributes) use ($value) {
+            $attribute = Attribute::find($attributes['attribute_id']);
+            $type = $attribute?->type ?? 'text';
+
+            $column = match ($type) {
+                'boolean' => 'boolean_value',
+                'date' => 'date_value',
+                'integer' => 'integer_value',
+                'float' => 'float_value',
+                'string' => 'string_value',
+                'url' => 'url_value',
+                default => 'text_value',
+            };
+
+            return [
+                $column => $value,
+                'text_value' => $column !== 'text_value' ? null : $attributes['text_value'] ?? null,
+                'boolean_value' => $column !== 'boolean_value' ? null : $attributes['boolean_value'] ?? null,
+                'date_value' => $column !== 'date_value' ? null : $attributes['date_value'] ?? null,
+                'integer_value' => $column !== 'integer_value' ? null : $attributes['integer_value'] ?? null,
+                'float_value' => $column !== 'float_value' ? null : $attributes['float_value'] ?? null,
+                'string_value' => $column !== 'string_value' ? null : $attributes['string_value'] ?? null,
+                'url_value' => $column !== 'url_value' ? null : $attributes['url_value'] ?? null,
+            ];
+        });
     }
 }

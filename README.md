@@ -164,6 +164,77 @@
 -   **PHPStan Compliance**: Fixed all PHPStan errors for better code quality
 -   **Code Reusability**: Action classes shared between web and API controllers for DRY principle
 
+### Advanced Attribute System (Bagisto-style)
+
+-   **Polymorphic Attributes**: Store attributes for Products, Bundles, and Categories using a single `attribute_values` table
+-   **Visual Swatches**: Color swatches, button swatches, and image swatches for frontend display
+-   **Attribute Families**: Group attributes into families (Clothing, Electronics, Furniture, etc.) and assign to categories
+-   **Configurable Products**: Create products with configurable attributes (e.g., T-Shirt with Color × Size variants)
+-   **Layered Navigation**: AJAX-powered filtering with real-time product counts
+-   **Typed Value Columns**: Type-safe storage (text, boolean, date, integer, float, decimal, string, url, hex)
+
+#### Attribute System Features
+
+| Feature | Description |
+|---------|-------------|
+| **Polymorphic Relations** | One table for all: Products, Bundles, Categories |
+| **Visual Swatches** | Color, Button, Image, and Select display types |
+| **Configurable Products** | Auto-generate variants from attribute combinations |
+| **Layered Navigation** | AJAX filtering with filter counts |
+| **Attribute Families** | Group and organize attributes by category type |
+| **Filterable Attributes** | Enable/disable filtering per attribute |
+| **Factory & Seeder Support** | Complete test coverage with factories |
+
+#### Quick Usage Examples
+
+```php
+// Create an attribute with options
+$color = Attribute::factory()->create([
+    'code' => 'color',
+    'type' => 'select',
+    'display' => 'color', // Visual swatch
+    'is_filterable' => true,
+    'is_configurable' => true,
+]);
+
+// Add color options
+$color->options()->create([
+    'value' => 'red',
+    'label' => 'Red',
+    'color_hex' => '#FF0000',
+]);
+
+// Create configurable product
+$product = Product::factory()->create([
+    'type' => Product::TYPE_CONFIGURABLE,
+]);
+$product->configurableAttributes()->attach($color);
+
+// Generate variants (Red × Size S, M, L)
+app(ConfigurableProductService::class)->generateVariants($product);
+
+// Assign attribute value to product
+$product->attributeValues()->create([
+    'attribute_id' => $color->id,
+    'text_value' => 'red',
+]);
+
+// Get layered navigation filters
+$filters = app(LayeredNavigationService::class)
+    ->getAvailableFilters($category);
+```
+
+#### Database Schema
+
+```
+attributes              - Attribute definitions (color, size, brand)
+attribute_options       - Options for select-type attributes
+attribute_families      - Attribute family groups
+attribute_family_attributes - Pivot: family ↔ attribute
+attribute_values        - Polymorphic values (products/bundles/categories)
+category_attribute_families - Pivot: category ↔ family
+```
+
 ### Modern Theme Implementation
 
 -   **Complete Modern Theme**: Full implementation of modern theme with 32+ view files

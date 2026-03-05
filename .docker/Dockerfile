@@ -36,3 +36,6 @@ RUN mkdir -p /data/caddy && chmod -R 777 /data/caddy || true
 
 # Expose port 80 for FrankenPHP
 EXPOSE 80
+
+# Start FrankenPHP with Caddy configuration
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

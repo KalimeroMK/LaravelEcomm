@@ -1,35 +1,35 @@
-<form class="form-horizontal" method="POST" action="{{ route('settings.update', $settings['id'] ?? null) }}"
+{{--
+    Settings Form - Single Record Approach
+    Settings always exist and can only be updated, never deleted.
+--}}
+<form class="form-horizontal" method="POST" 
+      action="{{ route('settings.update', $settings['id']) }}"
       enctype="multipart/form-data">
     @method('put')
     @csrf
 
-    <!-- Existing form fields -->
-
     <div class="form-group">
         <label for="inputTitle" class="col-form-label">Short info <span class="text-danger">*</span></label>
         <input id="inputTitle" type="text" name="short_des" placeholder="Short description"
-               value="{{ $settings['short_des'] ?? null }}"
+               value="{{ $settings['short_des'] ?? '' }}"
                class="form-control">
     </div>
     <div class="form-group">
-        <label for="inputTitle" class="col-form-label">@lang('partials.email') <span
-                    class="text-danger">*</span></label>
-        <input id="inputTitle" type="text" name="email" placeholder="Short description"
-               value="{{ $settings['email'] ?? null }}"
+        <label for="inputEmail" class="col-form-label">@lang('partials.email') <span class="text-danger">*</span></label>
+        <input id="inputEmail" type="email" name="email" placeholder="Email address"
+               value="{{ $settings['email'] ?? '' }}"
                class="form-control">
     </div>
     <div class="form-group">
-        <label for="inputTitle" class="col-form-label">@lang('partials.phone') <span
-                    class="text-danger">*</span></label>
-        <input id="inputTitle" type="text" name="phone" placeholder="Short description"
-               value="{{ $settings['phone'] ?? null }}"
+        <label for="inputPhone" class="col-form-label">@lang('partials.phone') <span class="text-danger">*</span></label>
+        <input id="inputPhone" type="text" name="phone" placeholder="Phone number"
+               value="{{ $settings['phone'] ?? '' }}"
                class="form-control">
     </div>
     <div class="form-group">
-        <label for="inputTitle" class="col-form-label">@lang('messages.address') <span
-                    class="text-danger">*</span></label>
-        <input id="inputTitle" type="text" name="address" placeholder="address"
-               value="{{ $settings['address'] ?? null }}"
+        <label for="inputAddress" class="col-form-label">@lang('messages.address') <span class="text-danger">*</span></label>
+        <input id="inputAddress" type="text" name="address" placeholder="Business address"
+               value="{{ $settings['address'] ?? '' }}"
                class="form-control">
     </div>
     
@@ -51,12 +51,17 @@
     </div>
     
     <div class="form-group">
-       <textarea class="form-control" id="description"
-                 name="description">{{ $settings['description'] ?? null }}</textarea>
+       <textarea class="form-control" id="description" name="description">
+           {{ $settings['description'] ?? '' }}
+       </textarea>
     </div>
+    
     <div class="form-group">
         <label for="inputImage">@lang('partials.logo')</label>
         <input type="file" class="form-control" id="inputImage" name="images[]" multiple>
+        @if(!empty($settings['logo']))
+            <small class="form-text text-muted">Current logo: {{ $settings['logo'] }}</small>
+        @endif
     </div>
 
     <!-- Google Map Section -->
@@ -76,8 +81,10 @@
 @push('styles')
     <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
 @endpush
+
 @push('scripts')
     <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+    
     <script>
         $(document).ready(function () {
             $('#description').summernote({
@@ -87,16 +94,11 @@
             });
         });
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ $settings['google_map_api_key'] ?? 'AIzaSyDhiON8B3SmouSxloPhI3AtdNl2Sovmi_8'}}"></script>
+    
+    @if(!empty($settings['google_map_api_key']))
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ $settings['google_map_api_key'] }}"></script>
     <script>
         $(document).ready(function () {
-            $('#description').summernote({
-                placeholder: "Write short description.....",
-                tabsize: 2,
-                height: 150
-            });
-
-            // Initialize Google Map
             let map;
             let marker;
            
@@ -107,7 +109,7 @@
             function initMap() {
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: initialLocation,
-                    zoom: 5 // Adjust zoom level for a wider view of Europe
+                    zoom: 5
                 });
 
                 marker = new google.maps.Marker({
@@ -116,22 +118,18 @@
                     draggable: true
                 });
 
-                // Update hidden inputs with marker's position
                 google.maps.event.addListener(marker, 'dragend', function (event) {
                     document.getElementById('latitude').value = event.latLng.lat();
                     document.getElementById('longitude').value = event.latLng.lng();
                 });
             }
 
-            // Ensure the map container is rendered before initializing the map
             google.maps.event.addDomListener(window, 'load', function () {
                 if (document.getElementById('map')) {
                     initMap();
-                } else {
-                    console.error('Map container not found.');
                 }
             });
         });
     </script>
-
+    @endif
 @endpush

@@ -5,15 +5,24 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
+use Modules\Attribute\Services\LayeredNavigationService;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
 use Modules\Product\Models\Product;
 
-class ProductGridsAction
+readonly class ProductGridsAction
 {
+    public function __construct(
+        private LayeredNavigationService $layeredNavigationService
+    ) {}
+
     public function __invoke(): array
     {
-        $queryParams = request()->only(['category', 'brand', 'price', 'show', 'sortBy']);
+        $queryParams = request()->only([
+            'category', 'brand', 'price', 'show', 'sortBy',
+            // Dynamic attribute filters
+            'color', 'size', 'material', 'weight', 'length', 'width', 'height',
+        ]);
 
         // Generate main cache key based on all parameters
         $mainCacheKey = 'product_grids_'.md5(json_encode($queryParams));
@@ -34,6 +43,9 @@ class ProductGridsAction
 
             $perPage = (int) ($queryParams['show'] ?? 9);
 
+            // Build attribute filters
+            $attributeFilters = $this->buildAttributeFilters($queryParams);
+
             // Get products with caching
             $productsCacheKey = 'products_grid_'.md5(json_encode([
                 'categoryIds' => $categoryIds,
@@ -43,15 +55,23 @@ class ProductGridsAction
                 'sortColumn' => $sortColumn,
                 'sortOrder' => $sortOrder,
                 'perPage' => $perPage,
+                'attributeFilters' => $attributeFilters,
             ]));
 
-            $products = Cache::remember($productsCacheKey, 900, function () use ($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder, $perPage) {
-                return Product::query()
+            $products = Cache::remember($productsCacheKey, 900, function () use ($categoryIds, $brandIds, $minPrice, $maxPrice, $sortColumn, $sortOrder, $perPage, $attributeFilters) {
+                $query = Product::query()
                     ->when($categoryIds, fn ($query) => $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds)))
                     ->when($brandIds, fn ($query) => $query->whereIn('brand_id', $brandIds))
                     ->when($minPrice || $maxPrice, fn ($query) => $query->whereBetween('price', [$minPrice, $maxPrice]))
                     ->where('status', 'active')
-                    ->orderBy($sortColumn, $sortOrder)
+                    ->whereNull('parent_id'); // Only show parent/simple products, not variants
+
+                // Apply attribute filters
+                if (! empty($attributeFilters)) {
+                    $query = $this->layeredNavigationService->applyFilters($query, $attributeFilters);
+                }
+
+                return $query->orderBy($sortColumn, $sortOrder)
                     ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
                     ->paginate($perPage);
             });
@@ -68,18 +88,51 @@ class ProductGridsAction
             $recentProductsCacheKey = 'recent_products_grid_3';
             $recent_products = Cache::remember($recentProductsCacheKey, 1800, function () {
                 return Product::where('status', 'active')
+                    ->whereNull('parent_id')
                     ->orderByDesc('id')
                     ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
                     ->take(3)
                     ->get();
             });
 
+            // Get layered navigation filters
+            $layeredFilters = $this->layeredNavigationService->getAvailableFilters(
+                $attributeFilters,
+                $categoryIds
+            );
+
+            // Get active filters for display
+            $activeFilters = $this->layeredNavigationService->getActiveFilters($queryParams);
+
             return [
                 'brands' => $brands,
                 'recent_products' => $recent_products,
                 'products' => $products,
+                'layered_filters' => $layeredFilters,
+                'active_filters' => $activeFilters,
+                'price_range' => ['min' => $minPrice, 'max' => $maxPrice],
             ];
         });
+    }
+
+    /**
+     * Build attribute filters from query params
+     */
+    private function buildAttributeFilters(array $params): array
+    {
+        $filters = [];
+
+        // Known attribute codes (can be extended dynamically)
+        $attributeCodes = ['color', 'size', 'material', 'weight', 'length', 'width', 'height', 'brand'];
+
+        foreach ($attributeCodes as $code) {
+            if (isset($params[$code]) && ! empty($params[$code])) {
+                $values = is_string($params[$code]) ? explode(',', $params[$code]) : $params[$code];
+                $filters[$code] = $values;
+            }
+        }
+
+        return $filters;
     }
 
     /**
@@ -87,7 +140,7 @@ class ProductGridsAction
      */
     private function getCachedCategoryIds(array $slugs): array
     {
-        if ($slugs === []) {
+        if ($slugs === [] || $slugs === ['']) {
             return [];
         }
 
@@ -106,7 +159,7 @@ class ProductGridsAction
      */
     private function getCachedBrandIds(array $slugs): array
     {
-        if ($slugs === []) {
+        if ($slugs === [] || $slugs === ['']) {
             return [];
         }
 

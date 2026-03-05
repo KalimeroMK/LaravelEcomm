@@ -59,7 +59,7 @@ class PermissionTableSeeder extends Seeder
         // Create permissions
         foreach ($resources as $resource) {
             foreach ($operations as $operation) {
-                Permission::create(['name' => "{$resource}-{$operation}"]);
+                Permission::firstOrCreate(['name' => "{$resource}-{$operation}"]);
             }
         }
 
@@ -84,7 +84,7 @@ class PermissionTableSeeder extends Seeder
         $this->createRoleWithPermissions('client', $clientPermissions, $operations);
 
         // Super-admin gets all permissions
-        $role3 = Role::create(['name' => 'super-admin']);
+        $role3 = Role::firstOrCreate(['name' => 'super-admin']);
         $role3->givePermissionTo(Permission::all());
 
         // Create demo users and assign roles
@@ -99,7 +99,7 @@ class PermissionTableSeeder extends Seeder
      */
     private function createRoleWithPermissions(string $roleName, array $resources, array $operations): void
     {
-        $role = Role::create(['name' => $roleName]);
+        $role = Role::firstOrCreate(['name' => $roleName]);
         foreach ($resources as $resource) {
             foreach ($operations as $operation) {
                 $role->givePermissionTo("{$resource}-{$operation}");
@@ -112,11 +112,13 @@ class PermissionTableSeeder extends Seeder
      */
     private function createUserWithRole(string $name, string $email, string $roleName): void
     {
-        $user = User::factory()->create([
-            'name' => $name,
-            'email' => $email,
-            'password' => bcrypt('password'),
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => $email],
+            [
+                'name' => $name,
+                'password' => bcrypt('password'),
+            ]
+        );
 
         if (! $user instanceof User) {
             throw new Exception('User creation did not return a User model instance.');

@@ -5,13 +5,14 @@
 
 :80 {
 	root * /var/www/public
-
 	encode zstd br gzip
 
+	# PHP files handling
 	php_server {
 		try_files {path} {path}/ /index.php?{query}
 	}
 
+	# Hidden files protection
 	@hidden {
 		path_regexp \/\..*
 		not path /.well-known/*
@@ -20,6 +21,7 @@
 		respond 404
 	}
 
+	# File server for static assets
 	file_server
 
 	log {

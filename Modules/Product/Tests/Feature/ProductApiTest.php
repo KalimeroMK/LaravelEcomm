@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Modules\Product\Models\Product;
 use Modules\User\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ProductApiTest extends TestCase
@@ -28,7 +29,7 @@ class ProductApiTest extends TestCase
         $this->token = $this->user->createToken('test-token')->plainTextToken;
     }
 
-    /** @test */
+    #[Test]
     public function user_can_view_all_products(): void
     {
         Product::factory()->count(5)->create([
@@ -46,7 +47,7 @@ class ProductApiTest extends TestCase
         $this->assertCount(5, $products);
     }
 
-    /** @test */
+    #[Test]
     public function user_can_view_specific_product(): void
     {
         $product = Product::factory()->create([
@@ -67,7 +68,7 @@ class ProductApiTest extends TestCase
         $this->assertEquals(99.99, $productData['price']);
     }
 
-    /** @test */
+    #[Test]
     public function user_can_search_products(): void
     {
         Product::factory()->create([
@@ -92,7 +93,7 @@ class ProductApiTest extends TestCase
         $this->assertEquals('iPhone 15 Pro', $products[0]['title']);
     }
 
-    /** @test */
+    #[Test]
     public function user_can_filter_products_by_status(): void
     {
         Product::factory()->create(['status' => 'active']);
@@ -114,7 +115,7 @@ class ProductApiTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function user_can_filter_products_by_price_range(): void
     {
         Product::factory()->create(['price' => 50.00, 'status' => 'active']);
@@ -133,7 +134,7 @@ class ProductApiTest extends TestCase
         $this->assertEquals(150.00, $products[0]['price']);
     }
 
-    /** @test */
+    #[Test]
     public function user_can_sort_products_by_price(): void
     {
         Product::factory()->create(['price' => 300.00, 'status' => 'active']);
@@ -153,7 +154,7 @@ class ProductApiTest extends TestCase
         $this->assertEquals(300.00, $products[2]['price']);
     }
 
-    /** @test */
+    #[Test]
     public function user_can_view_featured_products(): void
     {
         Product::factory()->create([
@@ -178,7 +179,7 @@ class ProductApiTest extends TestCase
         $this->assertTrue($products[0]['is_featured']);
     }
 
-    /** @test */
+    #[Test]
     public function user_can_view_products_with_categories(): void
     {
         $product = Product::factory()->create([
@@ -196,7 +197,7 @@ class ProductApiTest extends TestCase
         $this->assertArrayHasKey('categories', $productData);
     }
 
-    /** @test */
+    #[Test]
     public function user_cannot_view_inactive_products_by_default(): void
     {
         Product::factory()->create(['status' => 'active']);
@@ -214,7 +215,7 @@ class ProductApiTest extends TestCase
         $this->assertEquals('active', $products[0]['status']);
     }
 
-    /** @test */
+    #[Test]
     public function product_returns_correct_structure(): void
     {
         $product = Product::factory()->create([

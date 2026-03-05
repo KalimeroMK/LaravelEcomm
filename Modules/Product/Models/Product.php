@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Kalimeromk\Filterable\app\Traits\Filterable;
 use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\AttributeFamily;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Billing\Models\Wishlist;
 use Modules\Brand\Models\Brand;
@@ -35,6 +36,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * Class Product
  *
  * @property int $id
+ * @property string $type (simple, configurable, variant)
+ * @property int|null $parent_id
+ * @property array|null $configurable_attributes
+ * @property string|null $variant_name
+ * @property string|null $variant_sku_suffix
+ * @property int|null $attribute_family_id
  * @property string $title
  * @property string $slug
  * @property string $summary
@@ -52,42 +59,28 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon|null $special_price_start
  * @property Carbon|null $special_price_end
  * @property string|null $sku
- * @property-read Collection<int, AttributeValue>             $attributeValues
- * @property-read int|null                                    $attribute_values_count
- * @property-read Brand|null                                  $brand
- * @property-read Collection<int, Bundle>                     $bundles
- * @property-read int|null                                    $bundles_count
- * @property-read Collection<int, Cart>                       $carts
- * @property-read \Kalnoy\Nestedset\Collection<int, Category> $categories
- * @property-read MediaCollection<int, Media>                 $media
- * @property-read int|null                                    $media_count
- * @property-read Collection<int, ProductReview>              $product_reviews
- * @property-read Collection<int, Tag>                        $tags
- * @property-read int|null                                    $tags_count
- * @property-read Collection<int, Wishlist>                   $wishlists
+ * @property-read Collection<int, AttributeValue> $attributeValues
+ * @property-read Collection<int, AttributeValue> $allAttributeValues (including from family)
+ * @property-read Product|null $parent
+ * @property-read Collection<int, Product> $variants
+ * @property-read Product|null $defaultVariant
+ * @property-read AttributeFamily|null $attributeFamily
+ * @property-read Brand|null $brand
+ * @property-read Collection<int, Bundle> $bundles
+ * @property-read Collection<int, Cart> $carts
+ * @property-read Collection<int, Category> $categories
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read Collection<int, ProductReview> $product_reviews
+ * @property-read Collection<int, Tag> $tags
+ * @property-read Collection<int, Wishlist> $wishlists
  *
  * @method static Builder<static>|Product filter(array $filters = [])
- * @method static Builder<static>|Product newModelQuery()
- * @method static Builder<static>|Product newQuery()
- * @method static Builder<static>|Product query()
- * @method static Builder<static>|Product whereBrandId($value)
- * @method static Builder<static>|Product whereCreatedAt($value)
- * @method static Builder<static>|Product whereDDeal($value)
- * @method static Builder<static>|Product whereDescription($value)
- * @method static Builder<static>|Product whereDiscount($value)
- * @method static Builder<static>|Product whereId($value)
- * @method static Builder<static>|Product whereIsFeatured($value)
- * @method static Builder<static>|Product wherePrice($value)
- * @method static Builder<static>|Product whereSku($value)
- * @method static Builder<static>|Product whereSlug($value)
- * @method static Builder<static>|Product whereSpecialPrice($value)
- * @method static Builder<static>|Product whereSpecialPriceEnd($value)
- * @method static Builder<static>|Product whereSpecialPriceStart($value)
- * @method static Builder<static>|Product whereStatus($value)
- * @method static Builder<static>|Product whereStock($value)
- * @method static Builder<static>|Product whereSummary($value)
- * @method static Builder<static>|Product whereTitle($value)
- * @method static Builder<static>|Product whereUpdatedAt($value)
+ * @method static Builder<static>|Product simple()
+ * @method static Builder<static>|Product configurable()
+ * @method static Builder<static>|Product variants()
+ * @method static Builder<static>|Product filterByAttributes(array $attributes)
+ * @method static Builder<static>|Product whereType($value)
+ * @method static Builder<static>|Product whereParentId($value)
  *
  * @mixin Eloquent
  */
@@ -97,6 +90,12 @@ class Product extends Core implements HasMedia
     use HasFactory;
     use HasSlug;
     use InteractsWithMedia;
+
+    public const TYPE_SIMPLE = 'simple';
+
+    public const TYPE_CONFIGURABLE = 'configurable';
+
+    public const TYPE_VARIANT = 'variant';
 
     public const likeRows = [
         'title',
@@ -112,36 +111,43 @@ class Product extends Core implements HasMedia
 
     protected $table = 'products';
 
-    protected $casts
-        = [
-            'stock' => 'int',
-            'price' => 'float',
-            'discount' => 'float',
-            'is_featured' => 'bool',
-            'brand_id' => 'int',
-            'special_price_start' => 'date',
-            'special_price_end' => 'date',
-            'special_price' => 'float',
-        ];
+    protected $casts = [
+        'stock' => 'int',
+        'price' => 'float',
+        'discount' => 'float',
+        'is_featured' => 'bool',
+        'brand_id' => 'int',
+        'attribute_family_id' => 'int',
+        'parent_id' => 'int',
+        'special_price_start' => 'date',
+        'special_price_end' => 'date',
+        'special_price' => 'float',
+        'configurable_attributes' => 'array',
+    ];
 
-    protected $fillable
-        = [
-            'title',
-            'slug',
-            'sku',
-            'summary',
-            'description',
-            'stock',
-            'status',
-            'price',
-            'discount',
-            'is_featured',
-            'brand_id',
-            'special_price',
-            'special_price_start',
-            'special_price_end',
-            'd_deal',
-        ];
+    protected $fillable = [
+        'type',
+        'title',
+        'slug',
+        'sku',
+        'summary',
+        'description',
+        'stock',
+        'status',
+        'price',
+        'discount',
+        'is_featured',
+        'brand_id',
+        'attribute_family_id',
+        'special_price',
+        'special_price_start',
+        'special_price_end',
+        'd_deal',
+        'parent_id',
+        'configurable_attributes',
+        'variant_name',
+        'variant_sku_suffix',
+    ];
 
     public static function Factory(): ProductFactory
     {
@@ -167,17 +173,46 @@ class Product extends Core implements HasMedia
         return self::orderBy('created_at', 'desc')->limit(20)->get();
     }
 
-    /**
-     * Get size attribute with fallback to null.
-     */
     public function getSizeAttribute(): ?string
     {
         return $this->attributes['size'] ?? null;
     }
 
+    // ==================== RELATIONS ====================
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function attributeFamily(): BelongsTo
+    {
+        return $this->belongsTo(AttributeFamily::class);
+    }
+
+    /**
+     * Parent product (for variants)
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    /**
+     * Variants of a configurable product
+     */
+    public function variants(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id')
+            ->where('type', self::TYPE_VARIANT);
+    }
+
+    /**
+     * Default variant for configurable product
+     */
+    public function defaultVariant(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'default_variant_id');
     }
 
     public function carts(): HasMany
@@ -187,7 +222,14 @@ class Product extends Core implements HasMedia
 
     public function product_reviews(): HasMany
     {
-        return $this->hasMany(ProductReview::class);
+        return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')
+            ->where('status', 'active')
+            ->orderBy('id', 'DESC');
+    }
+
+    public function getReview(): HasMany
+    {
+        return $this->product_reviews();
     }
 
     public function wishlists(): HasMany
@@ -200,13 +242,242 @@ class Product extends Core implements HasMedia
         return $this->belongsToMany(Category::class);
     }
 
-    public function getReview(): HasMany
+    public function tags(): BelongsToMany
     {
-        return $this->hasMany(ProductReview::class, 'product_id', 'id')->with('user')->where(
-            'status',
-            'active'
-        )->orderBy('id', 'DESC');
+        return $this->belongsToMany(Tag::class);
     }
+
+    // ==================== ATTRIBUTE VALUES ====================
+
+    /**
+     * Attribute values for this product (polymorphic)
+     */
+    public function attributeValues(): HasMany
+    {
+        return $this->hasMany(AttributeValue::class, 'attributable_id')
+            ->where('attributable_type', self::class)
+            ->orWhere(function ($query) {
+                // Backward compatibility
+                $query->where('product_id', $this->id)
+                    ->whereNull('attributable_id');
+            });
+    }
+
+    /**
+     * Get attribute value by code
+     */
+    public function getAttributeValueByCode(string $attributeCode): mixed
+    {
+        $attributeValue = $this->attributeValues()
+            ->whereHas('attribute', function ($q) use ($attributeCode) {
+                $q->where('code', $attributeCode);
+            })
+            ->first();
+
+        return $attributeValue?->getValue();
+    }
+
+    /**
+     * Get the condition attribute value
+     */
+    public function getConditionAttribute(): ?string
+    {
+        return $this->getAttributeValueByCode('condition');
+    }
+
+    // ==================== CONFIGURABLE PRODUCT ====================
+
+    /**
+     * Check if this is a configurable product
+     */
+    public function isConfigurable(): bool
+    {
+        return $this->type === self::TYPE_CONFIGURABLE;
+    }
+
+    /**
+     * Check if this is a variant
+     */
+    public function isVariant(): bool
+    {
+        return $this->type === self::TYPE_VARIANT;
+    }
+
+    /**
+     * Check if this is a simple product
+     */
+    public function isSimple(): bool
+    {
+        return $this->type === self::TYPE_SIMPLE;
+    }
+
+    /**
+     * Get configurable attributes
+     */
+    public function getConfigurableAttributes(): Collection
+    {
+        if (! $this->isConfigurable() || empty($this->configurable_attributes)) {
+            return collect();
+        }
+
+        return Attribute::whereIn('code', $this->configurable_attributes)->get();
+    }
+
+    /**
+     * Get all possible variant combinations
+     */
+    public function getVariantCombinations(): Collection
+    {
+        if (! $this->isConfigurable()) {
+            return collect();
+        }
+
+        $attributes = $this->getConfigurableAttributes()->load('options');
+
+        if ($attributes->isEmpty()) {
+            return collect();
+        }
+
+        $combinations = collect([[]]);
+
+        foreach ($attributes as $attribute) {
+            $values = $attribute->options->pluck('value')->toArray();
+
+            if (empty($values)) {
+                continue;
+            }
+
+            $newCombinations = collect();
+            foreach ($combinations as $combination) {
+                foreach ($values as $value) {
+                    $newCombinations->push(array_merge($combination, [$attribute->code => $value]));
+                }
+            }
+            $combinations = $newCombinations;
+        }
+
+        return $combinations;
+    }
+
+    /**
+     * Get variant by attribute combination
+     */
+    public function getVariantByAttributes(array $attributes): ?self
+    {
+        foreach ($this->variants as $variant) {
+            $variantAttrs = [];
+            foreach ($variant->attributeValues as $av) {
+                $variantAttrs[$av->attribute->code] = $av->getValue();
+            }
+
+            if ($variantAttrs === $attributes) {
+                return $variant;
+            }
+        }
+
+        return null;
+    }
+
+    // ==================== SCOPES ====================
+
+    /**
+     * Scope for simple products only
+     */
+    public function scopeSimple(Builder $query): Builder
+    {
+        return $query->where('type', self::TYPE_SIMPLE);
+    }
+
+    /**
+     * Scope for configurable products only
+     */
+    public function scopeConfigurable(Builder $query): Builder
+    {
+        return $query->where('type', self::TYPE_CONFIGURABLE);
+    }
+
+    /**
+     * Scope for variants only
+     */
+    public function scopeVariants(Builder $query): Builder
+    {
+        return $query->where('type', self::TYPE_VARIANT);
+    }
+
+    /**
+     * Scope for non-variants (simple + configurable)
+     */
+    public function scopeParents(Builder $query): Builder
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    /**
+     * Filter by attributes (for layered navigation)
+     */
+    public function scopeFilterByAttributes(Builder $query, array $filters): Builder
+    {
+        foreach ($filters as $attributeCode => $values) {
+            if (empty($values)) {
+                continue;
+            }
+
+            $query->whereHas('attributeValues.attribute', function ($q) use ($attributeCode, $values) {
+                $q->where('code', $attributeCode);
+
+                if (is_array($values)) {
+                    $q->whereHas('values', function ($qv) use ($values) {
+                        $qv->whereIn('text_value', $values)
+                            ->orWhereIn('string_value', $values);
+                    });
+                } else {
+                    $q->whereHas('values', function ($qv) use ($values) {
+                        $qv->where('text_value', $values)
+                            ->orWhere('string_value', $values);
+                    });
+                }
+            });
+        }
+
+        return $query;
+    }
+
+    /**
+     * Filter by price range
+     */
+    public function scopeFilterByPrice(Builder $query, ?float $min = null, ?float $max = null): Builder
+    {
+        if ($min !== null) {
+            $query->where('price', '>=', $min);
+        }
+        if ($max !== null) {
+            $query->where('price', '<=', $max);
+        }
+
+        return $query;
+    }
+
+    // ==================== PRICING ====================
+
+    public function getCurrentPrice(): ?float
+    {
+        $today = now();
+
+        return $this->special_price && $today->between(
+            $this->special_price_start,
+            $this->special_price_end
+        ) ? $this->special_price : null;
+    }
+
+    /**
+     * Get final price (considering special price)
+     */
+    public function getFinalPrice(): float
+    {
+        return $this->getCurrentPrice() ?? $this->price;
+    }
+
+    // ==================== MEDIA ====================
 
     public function getImageUrlAttribute(): ?string
     {
@@ -232,9 +503,6 @@ class Product extends Core implements HasMedia
         return $this->image_url;
     }
 
-    /**
-     * Register media conversions for thumbnails.
-     */
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
@@ -243,24 +511,16 @@ class Product extends Core implements HasMedia
             ->sharpen(10);
     }
 
-    public function tags(): BelongsToMany
+    // ==================== STATS ====================
+
+    public function impressions(): HasMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->hasMany(ProductImpression::class, 'product_id');
     }
 
-    public function getCurrentPrice(): ?float
+    public function clicks(): HasMany
     {
-        $today = now();
-
-        return $this->special_price && $today->between(
-            $this->special_price_start,
-            $this->special_price_end
-        ) ? $this->special_price : null;
-    }
-
-    public function attributeValues(): self|Builder|HasMany
-    {
-        return $this->hasMany(AttributeValue::class, 'product_id', 'id');
+        return $this->hasMany(ProductClick::class, 'product_id');
     }
 
     public function bundles(): BelongsToMany
@@ -280,34 +540,17 @@ class Product extends Core implements HasMedia
         return Brand::whereIn('id', $productBrandIds)->get();
     }
 
-    public function impressions(): self|HasMany
-    {
-        return $this->hasMany(ProductImpression::class, 'product_id');
-    }
+    // ==================== BOOT ====================
 
-    public function clicks(): self|HasMany
+    protected static function boot(): void
     {
-        return $this->hasMany(ProductClick::class, 'product_id');
-    }
+        parent::boot();
 
-    /**
-     * Get the product's condition attribute value.
-     */
-    public function getConditionAttribute(): ?string
-    {
-        // Find the Attribute model with code 'condition'
-        $conditionAttribute = Attribute::where('code', 'condition')->first();
-        if (! $conditionAttribute) {
-            return null;
-        }
-        // Find the related AttributeValue for this product and the condition attribute
-        $conditionValue = $this->attributeValues()->where('attribute_id', $conditionAttribute->id)->first();
-        if (! $conditionValue) {
-            return null;
-        }
-        // Get the value depending on the attribute type
-        $column = $conditionAttribute->getValueColumnName();
-
-        return $conditionValue->$column ?? null;
+        // Auto-generate variant SKU
+        static::creating(function ($product) {
+            if ($product->isVariant() && $product->parent && $product->variant_sku_suffix) {
+                $product->sku = $product->parent->sku.$product->variant_sku_suffix;
+            }
+        });
     }
 }

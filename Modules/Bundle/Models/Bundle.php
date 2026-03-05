@@ -8,7 +8,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Modules\Attribute\Models\AttributeValue;
 use Modules\Bundle\Database\Factories\BundleFactory;
 use Modules\Core\Models\Core;
 use Modules\Product\Models\Product;
@@ -31,6 +33,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read int|null                    $media_count
  * @property-read Collection<int, Product>    $products
  * @property-read int|null                    $products_count
+ * @property-read Collection<int, AttributeValue> $attributeValues
  *
  * @method static Builder<static>|Bundle newModelQuery()
  * @method static Builder<static>|Bundle newQuery()
@@ -72,6 +75,31 @@ class Bundle extends Core implements HasMedia
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class)->withTimestamps();
+    }
+
+    /**
+     * Attribute values for this bundle (polymorphic)
+     *
+     * @return HasMany<AttributeValue, Bundle>
+     */
+    public function attributeValues(): HasMany
+    {
+        return $this->hasMany(AttributeValue::class, 'attributable_id')
+            ->where('attributable_type', self::class);
+    }
+
+    /**
+     * Get attribute value by code
+     */
+    public function getAttributeValueByCode(string $attributeCode): mixed
+    {
+        $attributeValue = $this->attributeValues()
+            ->whereHas('attribute', function ($q) use ($attributeCode) {
+                $q->where('code', $attributeCode);
+            })
+            ->first();
+
+        return $attributeValue?->getValue();
     }
 
     public function registerMediaConversions(?Media $media = null): void

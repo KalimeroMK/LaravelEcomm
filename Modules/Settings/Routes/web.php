@@ -19,30 +19,38 @@ use Modules\Settings\Http\Controllers\PaymentSettingsController;
 use Modules\Settings\Http\Controllers\SeoSettingsController;
 use Modules\Settings\Http\Controllers\SettingsController;
 use Modules\Settings\Http\Controllers\ShippingSettingsController;
+use Modules\Settings\Http\Middleware\EnsureSettingsExist;
 
-Route::resource('settings', SettingsController::class)->only('index', 'update');
+// Apply middleware to ensure settings always exist
+Route::middleware(EnsureSettingsExist::class)->group(function () {
 
-// Payment Settings
-Route::get('settings/payment', [PaymentSettingsController::class, 'index'])->name('settings.payment.index');
-Route::put('settings/payment/{setting}', [PaymentSettingsController::class, 'update'])->name('settings.payment.update');
+    // Settings use SINGLE RECORD approach - settings always exist and can only be edited
+    // No store/create/delete routes - only index (view) and update (edit)
+    Route::resource('settings', SettingsController::class)->only('index', 'update');
 
-// Shipping Settings
-Route::get('settings/shipping', [ShippingSettingsController::class, 'index'])->name('settings.shipping.index');
-Route::put('settings/shipping/{setting}', [ShippingSettingsController::class, 'update'])->name('settings.shipping.update');
+    // Payment Settings
+    Route::get('settings/payment', [PaymentSettingsController::class, 'index'])->name('settings.payment.index');
+    Route::put('settings/payment/{setting}', [PaymentSettingsController::class, 'update'])->name('settings.payment.update');
 
-// Email Settings
-Route::get('settings/email', [EmailSettingsController::class, 'index'])->name('settings.email.index');
-Route::put('settings/email/{setting}', [EmailSettingsController::class, 'update'])->name('settings.email.update');
+    // Shipping Settings
+    Route::get('settings/shipping', [ShippingSettingsController::class, 'index'])->name('settings.shipping.index');
+    Route::put('settings/shipping/{setting}', [ShippingSettingsController::class, 'update'])->name('settings.shipping.update');
 
-// SEO Settings
-Route::get('settings/seo', [SeoSettingsController::class, 'index'])->name('settings.seo.index');
-Route::put('settings/seo/{setting}', [SeoSettingsController::class, 'update'])->name('settings.seo.update');
+    // Email Settings
+    Route::get('settings/email', [EmailSettingsController::class, 'index'])->name('settings.email.index');
+    Route::put('settings/email/{setting}', [EmailSettingsController::class, 'update'])->name('settings.email.update');
 
-// Database Management (no migrations/seeds)
-Route::prefix('settings/database')->name('settings.database.')->group(function () {
-    Route::get('/', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'index'])->name('index');
-    Route::post('migrate', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'migrate'])->name('migrate');
-    Route::post('migrate-fresh', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'migrateFresh'])->name('migrate-fresh');
-    Route::post('seed', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'seed'])->name('seed');
-    Route::post('migrate-fresh-seed', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'migrateFreshSeed'])->name('migrate-fresh-seed');
-});
+    // SEO Settings
+    Route::get('settings/seo', [SeoSettingsController::class, 'index'])->name('settings.seo.index');
+    Route::put('settings/seo/{setting}', [SeoSettingsController::class, 'update'])->name('settings.seo.update');
+
+    // Database Management (no migrations/seeds)
+    Route::prefix('settings/database')->name('settings.database.')->group(function () {
+        Route::get('/', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'index'])->name('index');
+        Route::post('migrate', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'migrate'])->name('migrate');
+        Route::post('migrate-fresh', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'migrateFresh'])->name('migrate-fresh');
+        Route::post('seed', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'seed'])->name('seed');
+        Route::post('migrate-fresh-seed', [Modules\Settings\Http\Controllers\DatabaseManagementController::class, 'migrateFreshSeed'])->name('migrate-fresh-seed');
+    });
+
+}); // End of EnsureSettingsExist middleware group

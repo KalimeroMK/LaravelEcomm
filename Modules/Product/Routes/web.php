@@ -53,3 +53,15 @@ Route::post(
     'generate-description',
     [ProductController::class, 'generateDescription']
 )->name('products.generate-description');
+
+// Configurable Product Routes
+Route::prefix('admin/products')->middleware(['auth'])->group(function (): void {
+    Route::post('{product}/variants/generate', [ProductController::class, 'generateVariants'])
+        ->name('admin.products.variants.generate');
+    Route::put('{product}/variants', [ProductController::class, 'updateVariants'])
+        ->name('admin.products.variants.update');
+    Route::delete('{product}/variants', [ProductController::class, 'deleteVariants'])
+        ->name('admin.products.variants.delete');
+    Route::post('{product}/variant-by-attributes', [ProductController::class, 'getVariantByAttributes'])
+        ->name('admin.products.variant.by-attributes');
+});

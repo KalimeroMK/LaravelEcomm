@@ -16,5 +16,7 @@ use Modules\Attribute\Http\Controllers\AttributeGroupController;
 |
 */
 
-Route::resource('attributes', AttributeController::class)->except('shows');
-Route::resource('attribute_groups', AttributeGroupController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('attributes', AttributeController::class)->except('shows');
+    Route::resource('attribute_groups', AttributeGroupController::class);
+});
