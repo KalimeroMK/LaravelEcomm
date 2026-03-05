@@ -1,4 +1,8 @@
-@php use Modules\Core\Helpers\Helper; @endphp
+@php 
+use Modules\Core\Helpers\Helper;
+$user = Auth::user();
+$defaultAddress = $user?->defaultShippingAddress();
+@endphp
 @extends('front::layouts.master')
 
 @section('title','Checkout page')
@@ -38,7 +42,7 @@
                                     <div class="form-group">
                                         <label>First Name<span>*</span></label>
                                         <input type="text" name="first_name" placeholder=""
-                                               value="{{old('first_name')}}" value="{{old('first_name')}}">
+                                               value="{{old('first_name', $defaultAddress?->first_name)}}">
                                         @error('first_name')
                                         <span class='text-danger'>{{$message}}</span>
                                         @enderror
@@ -47,7 +51,7 @@
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Last Name<span>*</span></label>
-                                        <input type="text" name="last_name" placeholder="" value="{{old('lat_name')}}">
+                                        <input type="text" name="last_name" placeholder="" value="{{old('last_name', $defaultAddress?->last_name)}}">
                                         @error('last_name')
                                         <span class='text-danger'>{{$message}}</span>
                                         @enderror
@@ -56,7 +60,7 @@
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Email Address<span>*</span></label>
-                                        <input type="email" name="email" placeholder="" value="{{old('email')}}">
+                                        <input type="email" name="email" placeholder="" value="{{old('email', $defaultAddress?->email ?? $user?->email)}}">
                                         @error('email')
                                         <span class='text-danger'>{{$message}}</span>
                                         @enderror
@@ -66,7 +70,7 @@
                                     <div class="form-group">
                                         <label>Phone Number <span>*</span></label>
                                         <input type="number" name="phone" placeholder="" required
-                                               value="{{old('phone')}}">
+                                               value="{{old('phone', $defaultAddress?->phone)}}">
                                         @error('phone')
                                         <span class='text-danger'>{{$message}}</span>
                                         @enderror
@@ -76,7 +80,10 @@
                                     <div class="form-group">
                                         <label>Country<span>*</span></label>
                                         <select name="country" id="country">
-                                            <option value="AF">Afghanistan</option>
+                                            @php
+                                                $selectedCountry = old('country', $defaultAddress?->country ?? 'MK');
+                                            @endphp
+                                            <option value="AF" {{ $selectedCountry == 'AF' ? 'selected' : '' }}>Afghanistan</option>
                                             <option value="AX">Åland Islands</option>
                                             <option value="AL">Albania</option>
                                             <option value="DZ">Algeria</option>
@@ -227,7 +234,8 @@
                                             <option value="MM">Myanmar [Burma]</option>
                                             <option value="NA">Namibia</option>
                                             <option value="NR">Nauru</option>
-                                            <option value="NP" selected="selected">Nepal</option>
+                                            <option value="MK" {{ $selectedCountry == 'MK' ? 'selected' : '' }}>North Macedonia</option>
+                                            <option value="NP" {{ $selectedCountry == 'NP' ? 'selected' : '' }}>Nepal</option>
                                             <option value="NL">Netherlands</option>
                                             <option value="AN">Netherlands Antilles</option>
                                             <option value="NC">New Caledonia</option>
@@ -327,7 +335,7 @@
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Address Line 1<span>*</span></label>
-                                        <input type="text" name="address1" placeholder="" value="{{old('address1')}}">
+                                        <input type="text" name="address1" placeholder="" value="{{old('address1', $defaultAddress?->address1)}}">
                                         @error('address1')
                                         <span class='text-danger'>{{$message}}</span>
                                         @enderror
@@ -336,7 +344,7 @@
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Address Line 2</label>
-                                        <input type="text" name="address2" placeholder="" value="{{old('address2')}}">
+                                        <input type="text" name="address2" placeholder="" value="{{old('address2', $defaultAddress?->address2)}}">
                                         @error('address2')
                                         <span class='text-danger'>{{$message}}</span>
                                         @enderror
@@ -345,12 +353,31 @@
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Postal Code</label>
-                                        <input type="text" name="post_code" placeholder="" value="{{old('post_code')}}">
+                                        <input type="text" name="post_code" placeholder="" value="{{old('post_code', $defaultAddress?->post_code)}}">
                                         @error('post_code')
                                         <span class='text-danger'>{{$message}}</span>
                                         @enderror
                                     </div>
                                 </div>
+                                
+                                @if($user)
+                                <div class="col-lg-12 col-md-12 col-12">
+                                    <div class="form-group">
+                                        <label class="checkbox-inline" style="display: flex; align-items: center; gap: 10px;">
+                                            <input type="checkbox" name="save_address" value="1" style="width: auto;"> 
+                                            Save this address to my address book
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-12">
+                                    <div class="form-group">
+                                        <label class="checkbox-inline" style="display: flex; align-items: center; gap: 10px;">
+                                            <input type="checkbox" name="make_default_address" value="1" style="width: auto;"> 
+                                            Make this my default shipping address
+                                        </label>
+                                    </div>
+                                </div>
+                                @endif
 
                             </div>
                             <!--/ End Form -->

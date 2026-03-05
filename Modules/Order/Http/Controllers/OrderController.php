@@ -15,6 +15,7 @@ use Modules\Order\Actions\FindOrdersByUserAction;
 use Modules\Order\Actions\GenerateOrderPdfAction;
 use Modules\Order\Actions\GetAllOrdersAction;
 use Modules\Order\Actions\GetIncomeChartAction;
+use Modules\Order\Actions\ReorderAction;
 use Modules\Order\Actions\ShowOrderAction;
 use Modules\Order\Actions\StoreOrderAction;
 use Modules\Order\Actions\UpdateOrderAction;
@@ -33,7 +34,8 @@ class OrderController extends CoreController
         private readonly StoreOrderAction $storeAction,
         private readonly UpdateOrderAction $updateAction,
         private readonly GenerateOrderPdfAction $generatePdfAction,
-        private readonly GetIncomeChartAction $getIncomeChartAction
+        private readonly GetIncomeChartAction $getIncomeChartAction,
+        private readonly ReorderAction $reorderAction,
     ) {
         $this->authorizeResource(Order::class, 'order');
     }
@@ -112,5 +114,19 @@ class OrderController extends CoreController
     public function incomeChart(): array
     {
         return $this->getIncomeChartAction->execute();
+    }
+
+    /**
+     * Reorder a previous order.
+     */
+    public function reorder(Order $order): RedirectResponse
+    {
+        $result = $this->reorderAction->execute($order->id, auth()->id());
+        
+        if ($result['success']) {
+            return redirect()->route('cart-list')->with('success', $result['message']);
+        }
+        
+        return redirect()->back()->with('error', $result['message']);
     }
 }

@@ -57,8 +57,10 @@ use Modules\Tag\Models\Policies\TagPolicy;
 use Modules\Tag\Models\Tag;
 use Modules\Tenant\Models\Policy\TenantPolicy;
 use Modules\Tenant\Models\Tenant;
+use Modules\User\Models\Policies\UserAddressPolicy;
 use Modules\User\Models\Policies\UserPolicy;
 use Modules\User\Models\User;
+use Modules\User\Models\UserAddress;
 use Spatie\Permission\Models\Permission;
 
 class PolicyServiceProvider extends ServiceProvider
@@ -101,6 +103,7 @@ class PolicyServiceProvider extends ServiceProvider
         Gate::policy(ShippingZone::class, ShippingZonePolicy::class);
         Gate::policy(Tag::class, TagPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(UserAddress::class, UserAddressPolicy::class);
         Gate::policy(Tenant::class, TenantPolicy::class);
         Gate::policy(AttributeGroup::class, AttributeGroupPolicy::class);
 

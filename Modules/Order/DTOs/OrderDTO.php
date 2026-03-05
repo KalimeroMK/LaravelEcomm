@@ -23,6 +23,16 @@ readonly class OrderDTO
         public ?string $status,
         public ?int $payer_id,
         public ?string $transaction_reference,
+        public ?string $first_name = null,
+        public ?string $last_name = null,
+        public ?string $email = null,
+        public ?string $phone = null,
+        public ?string $country = null,
+        public ?string $city = null,
+        public ?string $state = null,
+        public ?string $address1 = null,
+        public ?string $address2 = null,
+        public ?string $post_code = null,
         public ?string $created_at = null,
     ) {}
 
@@ -43,6 +53,16 @@ readonly class OrderDTO
             status: $validated['status'] ?? $existing?->status,
             payer_id: isset($validated['payer_id']) ? (int) $validated['payer_id'] : $existing?->payer_id,
             transaction_reference: $validated['transaction_reference'] ?? $existing?->transaction_reference,
+            first_name: $validated['first_name'] ?? $existing?->first_name,
+            last_name: $validated['last_name'] ?? $existing?->last_name,
+            email: $validated['email'] ?? $existing?->email,
+            phone: $validated['phone'] ?? $existing?->phone,
+            country: $validated['country'] ?? $existing?->country,
+            city: $validated['city'] ?? $existing?->city,
+            state: $validated['state'] ?? $existing?->state,
+            address1: $validated['address1'] ?? $existing?->address1,
+            address2: $validated['address2'] ?? $existing?->address2,
+            post_code: $validated['post_code'] ?? $existing?->post_code,
             created_at: $validated['created_at'] ?? ($existing?->created_at?->format('Y-m-d H:i:s')),
         );
     }
@@ -82,6 +102,16 @@ readonly class OrderDTO
             'status' => $this->status,
             'payer_id' => $this->payer_id,
             'transaction_reference' => $this->transaction_reference,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'country' => $this->country,
+            'city' => $this->city,
+            'state' => $this->state,
+            'address1' => $this->address1,
+            'address2' => $this->address2,
+            'post_code' => $this->post_code,
         ], fn (float|int|string|null $v): bool => $v !== null);
     }
 }

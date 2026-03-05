@@ -38,6 +38,16 @@ use Modules\User\Models\User;
  * @property string $status
  * @property int|null $payer_id
  * @property string|null $transaction_reference
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $email
+ * @property string|null $phone
+ * @property string|null $country
+ * @property string|null $city
+ * @property string|null $state
+ * @property string|null $address1
+ * @property string|null $address2
+ * @property string|null $post_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Cart> $cart_info
@@ -130,6 +140,15 @@ class Order extends Core
             'tracking_number',
             'tracking_carrier',
             'shipped_at',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'country',
+            'city',
+            'state',
+            'address1',
+            'address2',
         ];
 
     public static function Factory(): OrderFactory

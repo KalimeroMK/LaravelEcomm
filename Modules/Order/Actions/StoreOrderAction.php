@@ -32,6 +32,16 @@ class StoreOrderAction
             'status' => $dto->status,
             'payer_id' => $dto->payer_id,
             'transaction_reference' => $dto->transaction_reference,
+            'first_name' => $dto->first_name,
+            'last_name' => $dto->last_name,
+            'email' => $dto->email,
+            'phone' => $dto->phone,
+            'country' => $dto->country,
+            'city' => $dto->city,
+            'state' => $dto->state,
+            'address1' => $dto->address1,
+            'address2' => $dto->address2,
+            'post_code' => $dto->post_code,
         ]);
 
         return $order;

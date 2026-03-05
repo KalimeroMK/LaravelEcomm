@@ -6,14 +6,19 @@ namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
 use Modules\Product\Models\Product;
+use Modules\Product\Services\RecentlyViewedService;
 
 class ProductDetailAction
 {
+    public function __construct(
+        private readonly RecentlyViewedService $recentlyViewedService
+    ) {}
+
     public function __invoke(string $slug): array
     {
         $cacheKey = 'productDetail_'.$slug;
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
+        $result = Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
             $product_detail = Product::getProductBySlug($slug);
 
             $related = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
@@ -30,5 +35,15 @@ class ProductDetailAction
                 'related' => $related,
             ];
         });
+        
+        // Track recently viewed product
+        if (isset($result['product_detail'])) {
+            $this->recentlyViewedService->addProduct(
+                $result['product_detail']->id,
+                auth()->id()
+            );
+        }
+        
+        return $result;
     }
 }

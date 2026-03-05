@@ -43,8 +43,14 @@ use Modules\Front\Actions\ProductGridsAction;
 use Modules\Front\Actions\ProductListsAction;
 use Modules\Front\Actions\ProductSearchAction;
 use Modules\Front\Http\Requests\ProductSearchRequest;
+use Modules\Order\Actions\ReorderAction;
+use Modules\Order\Actions\StoreOrderAction;
+use Modules\Order\DTOs\OrderDTO;
+use Modules\Order\Http\Requests\Store as OrderStoreRequest;
+use Modules\Order\Models\Order;
 use Modules\Message\Http\Requests\Store;
 use Modules\Product\Services\ElasticsearchService;
+use Modules\Product\Services\RecentlyViewedService;
 use Modules\Product\Services\RecommendationService;
 
 // theme_view() is loaded via composer autoload files
@@ -423,24 +429,108 @@ class FrontController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(OrderStoreRequest $request, StoreOrderAction $storeOrderAction): RedirectResponse
     {
+        $user = Auth::user();
+        
+        // Calculate cart totals
+        $cartItems = Helper::getAllProductFromCart($user?->id ?? '');
+        $subtotal = Helper::totalCartPrice($user?->id ?? '');
+        $quantity = $cartItems->sum('quantity');
+        
+        if ($cartItems->isEmpty()) {
+            return redirect()->back()->with('error', 'Your cart is empty.');
+        }
+        
+        // Get shipping cost
+        $shippingId = $request->input('shipping');
+        $shippingCost = 0;
+        if ($shippingId) {
+            $shipping = \Modules\Shipping\Models\Shipping::find($shippingId);
+            $shippingCost = $shipping?->price ?? 0;
+        }
+        
+        // Calculate total with coupon discount
+        $couponDiscount = session('coupon.value', 0);
+        $totalAmount = $subtotal + $shippingCost - $couponDiscount;
+        
+        // Create order DTO
+        $orderData = [
+            'order_number' => 'ORD-' . strtoupper(uniqid()),
+            'user_id' => $user?->id,
+            'sub_total' => $subtotal,
+            'shipping_id' => $shippingId,
+            'total_amount' => max(0, $totalAmount),
+            'quantity' => $quantity,
+            'payment_method' => $request->input('payment_method', 'cod'),
+            'payment_status' => 'pending',
+            'status' => 'pending',
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'country' => $request->input('country'),
+            'city' => $request->input('city'),
+            'address1' => $request->input('address1'),
+            'address2' => $request->input('address2'),
+            'post_code' => $request->input('post_code'),
+        ];
+        
         // Check if the payment method is PayPal and redirect to the payment route
-        if (Arr::get($request, 'payment_method') === 'paypal') {
+        if ($request->input('payment_method') === 'paypal') {
+            // Store order data in session for after PayPal payment
+            session()->put('pending_order', $orderData);
             return redirect()->route('payment');
         }
 
         // Check if the payment method is Stripe and redirect to the Stripe route with the user ID
-        if (Arr::get($request, 'payment_method') === 'stripe') {
+        if ($request->input('payment_method') === 'stripe') {
+            // Store order data in session for after Stripe payment
+            session()->put('pending_order', $orderData);
             return redirect()->route('stripe', Auth::id());
+        }
+
+        // For COD - create order immediately
+        $dto = OrderDTO::fromArray($orderData);
+        $order = $storeOrderAction->execute($dto);
+        
+        // Associate cart items with the order
+        foreach ($cartItems as $cartItem) {
+            $cartItem->update(['order_id' => $order->id]);
+        }
+        
+        // Save address to user's address book if logged in
+        if ($user && $request->has('save_address')) {
+            $this->saveUserAddress($user, $request);
         }
 
         // Clear the cart and coupon from the session
         session()->forget('cart');
         session()->forget('coupon');
+        session()->forget('pending_order');
 
-        // Redirect to the home page
-        return redirect()->route('front.index');
+        // Redirect to the home page with success message
+        return redirect()->route('front.index')->with('success', 'Order placed successfully! Order number: ' . $order->order_number);
+    }
+    
+    /**
+     * Save address to user's address book.
+     */
+    private function saveUserAddress($user, Request $request): void
+    {
+        $user->addresses()->create([
+            'type' => 'shipping',
+            'is_default' => $request->has('make_default_address'),
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'country' => $request->input('country'),
+            'city' => $request->input('city'),
+            'address1' => $request->input('address1'),
+            'address2' => $request->input('address2'),
+            'post_code' => $request->input('post_code'),
+        ]);
     }
 
     public function pages(string $slug, PageDetailAction $pageDetailAction): View
@@ -573,5 +663,59 @@ class FrontController extends Controller
         ];
 
         return $corrections[$query] ?? $query;
+    }
+
+    /**
+     * Display user's order history.
+     */
+    public function myOrders(): View|RedirectResponse
+    {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('front.login')->with('message', 'Please login to view your orders.');
+        }
+        
+        $orders = Order::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        return view(theme_view('pages.my-orders'), compact('orders'));
+    }
+
+    /**
+     * Display order detail.
+     */
+    public function orderDetail(Order $order): View|RedirectResponse
+    {
+        $user = Auth::user();
+        
+        if (!$user || $order->user_id !== $user->id) {
+            return redirect()->route('front.my-orders')->with('error', 'Order not found.');
+        }
+        
+        $order->load('carts.product');
+        
+        return view(theme_view('pages.order-detail'), compact('order'));
+    }
+
+    /**
+     * Reorder a previous order.
+     */
+    public function reorder(Order $order, ReorderAction $reorderAction): RedirectResponse
+    {
+        $user = Auth::user();
+        
+        if (!$user || $order->user_id !== $user->id) {
+            return redirect()->route('front.my-orders')->with('error', 'Order not found.');
+        }
+        
+        $result = $reorderAction->execute($order->id, $user->id);
+        
+        if ($result['success']) {
+            return redirect()->route('cart-list')->with('success', $result['message']);
+        }
+        
+        return redirect()->back()->with('error', $result['message']);
     }
 }

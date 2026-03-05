@@ -100,6 +100,17 @@
                                 <button type="submit" class="btn btn-success">@lang('partials.update')</button>
                             </div>
                         </div>
+                        
+                        <!-- Address Book Link -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <hr>
+                                <h6 class="font-weight-bold mb-3">Address Book</h6>
+                                <a href="{{ route('user.addresses.index') }}" class="btn btn-outline-primary btn-block">
+                                    <i class="fas fa-address-book"></i> Manage My Addresses
+                                </a>
+                            </div>
+                        </div>
 
                     </form>
 

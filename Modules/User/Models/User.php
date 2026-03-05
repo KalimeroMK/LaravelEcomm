@@ -31,6 +31,7 @@ use Modules\Post\Models\Post;
 use Modules\Post\Models\PostComment;
 use Modules\Product\Models\ProductReview;
 use Modules\User\Database\Factories\UserFactory;
+use Modules\User\Models\UserAddress;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Models\Permission;
@@ -187,5 +188,35 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Notification::class, 'notifiable_id')
             ->whereNull('read_at')
             ->where('notifiable_type', get_class($this));
+    }
+
+    /**
+     * Get user's saved addresses.
+     */
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(UserAddress::class);
+    }
+
+    /**
+     * Get user's default shipping address.
+     */
+    public function defaultShippingAddress(): ?UserAddress
+    {
+        return $this->addresses()
+            ->shipping()
+            ->default()
+            ->first();
+    }
+
+    /**
+     * Get user's default billing address.
+     */
+    public function defaultBillingAddress(): ?UserAddress
+    {
+        return $this->addresses()
+            ->billing()
+            ->default()
+            ->first();
     }
 }

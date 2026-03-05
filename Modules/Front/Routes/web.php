@@ -47,6 +47,16 @@ Route::get('/bundle', [FrontController::class, 'bundles'])->name('front.bundles'
 Route::get('/bundle/{slug}', [FrontController::class, 'bundleDetail'])->name('front.bundle-detail');
 Route::get('/page/{slug}', [FrontController::class, 'pages'])->name('front.pages');
 
+// User Orders
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-orders', [FrontController::class, 'myOrders'])->name('front.my-orders');
+    Route::get('/my-orders/{order}', [FrontController::class, 'orderDetail'])->name('front.order-detail');
+    Route::post('/my-orders/{order}/reorder', [FrontController::class, 'reorder'])->name('front.reorder');
+});
+
+// Recently Viewed Products
+Route::get('/recently-viewed', [FrontController::class, 'recentlyViewed'])->name('front.recently-viewed');
+
 // Advanced Search and Recommendations Routes
 Route::get('/advanced-search', [FrontController::class, 'advancedSearch'])->name('front.advanced-search');
 Route::get('/search-suggestions', [FrontController::class, 'searchSuggestions'])->name('front.search-suggestions');
