@@ -27,6 +27,8 @@
 ### Frontend
 
 -   **Responsive Layout** with modern UI/UX design
+-   **Multi-Language Support**: URL prefix strategy (/en/, /mk/, /de/) with automatic locale detection
+-   **GeoIP Localization**: Auto-detect country, currency, and timezone
 -   **Advanced Search** with Elasticsearch integration
 -   **Shopping Cart & Wishlist** with real-time updates
 -   **Product Reviews & Ratings** system
@@ -166,6 +168,137 @@
 -   **Test Suite Improvements**: 503 tests passing (up from 500) with comprehensive API test coverage
 -   **PHPStan Compliance**: Fixed all PHPStan errors for better code quality
 -   **Code Reusability**: Action classes shared between web and API controllers for DRY principle
+
+### Multi-Language, Reporting & GeoLocalization (Latest)
+
+-   **Multi-Language System**:
+    -   URL prefix strategy: `/en/`, `/mk/`, `/de/`, `/sq/`
+    -   Dynamic language management via database
+    -   Translation support for Product, Category, Page, Post models
+    -   HasTranslations trait for reusable localization
+    -   Automatic fallback to default language
+    -   Admin UI for language CRUD operations
+
+-   **Advanced Reporting Module**:
+    -   8 Report types: Sales, Products, Customers, Inventory, Orders, Coupons, Revenue, Tax
+    -   Scheduled reports with email delivery
+    -   Export formats: CSV, Excel, PDF
+    -   Report execution history and tracking
+    -   Dynamic date ranges and filters
+    -   API endpoints for report generation
+
+-   **GeoLocalization Module**:
+    -   GeoIP detection from IP address
+    -   Automatic currency detection by country
+    -   Real-time exchange rates (20+ currencies)
+    -   Currency conversion API
+    -   EU country detection for GDPR compliance
+    -   Timezone detection
+
+#### Multi-Language API Examples
+
+```bash
+# List active languages
+GET /api/languages
+
+# Get current locale info
+GET /api/languages/current
+X-Locale: mk
+
+# Response:
+{
+    "locale": "mk",
+    "language": {
+        "code": "mk",
+        "name": "Macedonian",
+        "flag": "🇲🇰"
+    }
+}
+```
+
+#### Reporting API Examples
+
+```bash
+# List available report types
+GET /api/admin/report-types
+
+# Create a sales report
+POST /api/admin/reports
+{
+    "name": "Monthly Sales Report",
+    "type": "sales",
+    "format": "excel",
+    "filters": {
+        "date_from": "2026-01-01",
+        "date_to": "2026-01-31"
+    }
+}
+
+# Generate report
+POST /api/admin/reports/{id}/generate
+
+# Export report
+POST /api/admin/reports/{id}/export
+{
+    "format": "csv"
+}
+
+# Schedule report
+POST /api/admin/report-schedules
+{
+    "report_id": 1,
+    "frequency": "weekly",
+    "day_of_week": "monday",
+    "time": "08:00",
+    "recipients": ["admin@example.com"]
+}
+```
+
+#### GeoLocalization API Examples
+
+```bash
+# Get location from current IP
+GET /api/geolocation
+
+# Response:
+{
+    "ip": "127.0.0.1",
+    "country_code": "US",
+    "country_name": "United States",
+    "city": "New York",
+    "currency": "USD",
+    "timezone": "America/New_York",
+    "is_eu": false
+}
+
+# Convert currency
+POST /api/currency/convert
+{
+    "amount": 100,
+    "from": "USD",
+    "to": "EUR"
+}
+
+# Response:
+{
+    "original_amount": 100,
+    "converted_amount": 85.00,
+    "formatted": "€85.00"
+}
+
+# Get exchange rates
+GET /api/exchange-rates
+
+# Response:
+{
+    "base": "USD",
+    "rates": {
+        "EUR": 0.85,
+        "GBP": 0.73,
+        "MKD": 51.5
+    }
+}
+```
 
 ### Advanced Attribute System (Bagisto-style)
 
@@ -622,12 +755,19 @@ The application provides comprehensive RESTful API endpoints for all modules:
 -   **Google2FA API**: `/api/v1/admin/2fa/*` - Two-factor authentication management
 -   **OpenAI API**: `/api/v1/openai/*` - AI-powered text generation and chat completion
 -   **Product Stats API**: `/api/v1/product-stats/*` - Product analytics and tracking
+-   **Languages API**: `/api/languages/*` - Multi-language management and locale switching
+-   **Reporting API**: `/api/admin/reports/*` - Business intelligence reports and scheduled exports
+-   **GeoLocalization API**: `/api/geolocation/*` - GeoIP detection and location services
+-   **Currency API**: `/api/currency/*` - Currency conversion and exchange rates
 -   **And many more...**: Complete API documentation available in Postman collection
 
 **Postman Collection**: Import `LaravelEcomm.postman_collection.json` for complete API documentation
 
 ### Key Features Overview
 
+-   ✅ **Multi-Language**: URL-based localization with dynamic language management
+-   ✅ **Reporting & BI**: Scheduled reports with export (CSV, Excel, PDF)
+-   ✅ **GeoLocalization**: Auto-detect location, currency, and timezone
 -   ✅ **Email Marketing**: Complete abandoned cart recovery and newsletter system
 -   ✅ **SEO Optimization**: Dynamic meta tags, structured data, and XML sitemaps
 -   ✅ **Analytics Dashboard**: Real-time analytics with interactive charts
