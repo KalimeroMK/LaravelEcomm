@@ -116,7 +116,7 @@ class MultiLanguageTest extends TestCase
     #[Test]
     public function test_language_switcher_component_renders(): void
     {
-        $response = $this->get('/');
+        $response = $this->followingRedirects()->get('/');
 
         $response->assertStatus(200);
         // The component should be available for use in views
@@ -126,7 +126,7 @@ class MultiLanguageTest extends TestCase
     #[Test]
     public function test_rtl_support_component_renders(): void
     {
-        $response = $this->get('/');
+        $response = $this->followingRedirects()->get('/');
 
         $response->assertStatus(200);
         // The component should be available for use in views

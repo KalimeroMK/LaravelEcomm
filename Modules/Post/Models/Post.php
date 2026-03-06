@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
+use Modules\Core\Traits\HasTranslations;
 use Modules\Post\Database\Factories\PostFactory;
 use Modules\Tag\Models\Tag;
 use Modules\User\Models\User;
@@ -70,6 +71,7 @@ class Post extends Core implements HasMedia
 {
     use HasFactory;
     use HasSlug;
+    use HasTranslations;
     use InteractsWithMedia;
 
     public const likeRows
@@ -182,5 +184,25 @@ class Post extends Core implements HasMedia
     public function post_comments(): HasMany
     {
         return $this->hasMany(PostComment::class);
+    }
+
+    // ==================== TRANSLATIONS ====================
+
+    public function getTranslationRelation(): string
+    {
+        return PostTranslation::class;
+    }
+
+    public function getTranslatableFields(): array
+    {
+        return [
+            'title',
+            'slug',
+            'summary',
+            'content',
+            'meta_title',
+            'meta_description',
+            'meta_keywords',
+        ];
     }
 }

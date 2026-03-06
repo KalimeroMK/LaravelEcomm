@@ -19,6 +19,7 @@ use Modules\Attribute\Models\AttributeValue;
 use Modules\Category\Database\Factories\CategoryFactory;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
+use Modules\Core\Traits\HasTranslations;
 use Modules\Post\Models\Post;
 use Modules\Product\Models\Product;
 
@@ -117,6 +118,7 @@ use Modules\Product\Models\Product;
 class Category extends Core
 {
     use HasSlug;
+    use HasTranslations;
     use NodeTrait;
     use SoftDeletes;
 
@@ -233,5 +235,24 @@ class Category extends Core
     public function hasAttributeFamily(): bool
     {
         return array_key_exists('attribute_family_id', $this->attributes) && $this->attributes['attribute_family_id'] !== null;
+    }
+
+    // ==================== TRANSLATIONS ====================
+
+    public function getTranslationRelation(): string
+    {
+        return CategoryTranslation::class;
+    }
+
+    public function getTranslatableFields(): array
+    {
+        return [
+            'title',
+            'slug',
+            'summary',
+            'description',
+            'meta_title',
+            'meta_description',
+        ];
     }
 }

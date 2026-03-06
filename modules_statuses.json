@@ -27,5 +27,7 @@
     "Tag": true,
     "Tenant": true,
     "User": true,
-    "Language": true
+    "Language": true,
+    "Reporting": true,
+    "GeoLocalization": true
 }

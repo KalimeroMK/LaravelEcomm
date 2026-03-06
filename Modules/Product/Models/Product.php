@@ -23,6 +23,7 @@ use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
+use Modules\Core\Traits\HasTranslations;
 use Modules\Product\Database\Factories\ProductFactory;
 use Modules\ProductStats\Models\ProductClick;
 use Modules\ProductStats\Models\ProductImpression;
@@ -89,6 +90,7 @@ class Product extends Core implements HasMedia
     use Filterable;
     use HasFactory;
     use HasSlug;
+    use HasTranslations;
     use InteractsWithMedia;
 
     public const TYPE_SIMPLE = 'simple';
@@ -600,6 +602,25 @@ class Product extends Core implements HasMedia
         $productBrandIds = self::search($searchTerm)->get()->pluck('brand_id')->unique();
 
         return Brand::whereIn('id', $productBrandIds)->get();
+    }
+
+    // ==================== TRANSLATIONS ====================
+
+    public function getTranslationRelation(): string
+    {
+        return ProductTranslation::class;
+    }
+
+    public function getTranslatableFields(): array
+    {
+        return [
+            'name',
+            'summary',
+            'description',
+            'slug',
+            'meta_title',
+            'meta_description',
+        ];
     }
 
     // ==================== BOOT ====================

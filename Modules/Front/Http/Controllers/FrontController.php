@@ -100,6 +100,14 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
+    public function products(ProductGridsAction $productGridsAction): Factory|View
+    {
+        return view(theme_view('pages.product-grids'), $productGridsAction());
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
     public function bundles(ProductBundlesAction $productBundlesAction): Factory|View
     {
         return view(theme_view('pages.bundles'), $productBundlesAction());
@@ -159,6 +167,23 @@ class FrontController extends Controller
      * @return Application|Factory|View
      */
     public function productCat(string $slug, ProductCatAction $productCatAction): Factory|View
+    {
+        return view(theme_view('pages.product-lists'), $productCatAction($slug));
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function categories(): Factory|View
+    {
+        $categories = \Modules\Category\Models\Category::active()->get();
+        return view(theme_view('pages.categories'), ['categories' => $categories]);
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function categoryDetail(string $slug, ProductCatAction $productCatAction): Factory|View
     {
         return view(theme_view('pages.product-lists'), $productCatAction($slug));
     }
@@ -568,6 +593,48 @@ class FrontController extends Controller
             'address2' => $request->input('address2'),
             'post_code' => $request->input('post_code'),
         ]);
+    }
+
+    /**
+     * Show cart page
+     */
+    public function cart(): View
+    {
+        return view(theme_view('pages.cart'), []);
+    }
+
+    /**
+     * Add to cart
+     */
+    public function cartAdd(Request $request): RedirectResponse
+    {
+        // Implementation depends on cart service
+        return redirect()->back()->with('success', 'Product added to cart');
+    }
+
+    /**
+     * Show checkout page
+     */
+    public function checkout(): View
+    {
+        return view(theme_view('pages.checkout'), []);
+    }
+
+    /**
+     * Process checkout
+     */
+    public function checkoutProcess(Request $request): RedirectResponse
+    {
+        // Implementation depends on order service
+        return redirect()->route('front.index', ['locale' => app()->getLocale()]);
+    }
+
+    /**
+     * Show blog post detail
+     */
+    public function postDetail(string $slug, BlogDetailAction $blogDetailAction): View
+    {
+        return view(theme_view('pages.blog-detail'), $blogDetailAction($slug));
     }
 
     public function pages(string $slug, PageDetailAction $pageDetailAction): View

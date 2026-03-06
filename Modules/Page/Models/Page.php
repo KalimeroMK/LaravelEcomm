@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Models\Core;
 use Modules\Core\Traits\HasSlug;
+use Modules\Core\Traits\HasTranslations;
 use Modules\Page\Database\Factories\PageFactory;
 use Modules\User\Models\User;
 use Spatie\MediaLibrary\HasMedia;
@@ -52,6 +53,7 @@ class Page extends Core implements HasMedia
 {
     use HasFactory;
     use HasSlug;
+    use HasTranslations;
     use InteractsWithMedia;
 
     protected $table = 'pages';
@@ -94,5 +96,24 @@ class Page extends Core implements HasMedia
             ->width(800)
             ->height(450)
             ->nonQueued();
+    }
+
+    // ==================== TRANSLATIONS ====================
+
+    public function getTranslationRelation(): string
+    {
+        return PageTranslation::class;
+    }
+
+    public function getTranslatableFields(): array
+    {
+        return [
+            'title',
+            'slug',
+            'description',
+            'meta_title',
+            'meta_description',
+            'meta_keywords',
+        ];
     }
 }

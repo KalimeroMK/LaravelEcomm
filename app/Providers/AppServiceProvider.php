@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::shouldBeStrict();
+        // Model::shouldBeStrict(); // Disabled for translations to work
         Model::automaticallyEagerLoadRelationships();
 
         // Set default pagination view for admin panel

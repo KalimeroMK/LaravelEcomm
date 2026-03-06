@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http;
 
+use App\Http\Middleware\ApiLocaleMiddleware;
+use App\Http\Middleware\LocaleMiddleware;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\TrustProxies;
 use Illuminate\Auth\Middleware\Authenticate;
@@ -112,6 +114,8 @@ class Kernel extends HttpKernel
             'api.cache' => ApiCacheMiddleware::class,
             'rate.limit' => \Modules\Core\Http\Middleware\CustomRateLimiter::class,
             'admin' => Middleware\AdminMiddleware::class,
+            'locale' => LocaleMiddleware::class,
+            'api.locale' => ApiLocaleMiddleware::class,
 
         ];
 }
