@@ -30,7 +30,7 @@
 -   **Advanced Search** with Elasticsearch integration
 -   **Shopping Cart & Wishlist** with real-time updates
 -   **Product Reviews & Ratings** system
--   **Coupons & Discounts** management
+-   **Advanced Coupons & Promotions**: Fixed, percentage, free shipping with usage limits and restrictions
 -   **Product Attributes**: cost price, promotion price, stock, size, variants
 -   **Blog System**: categories, tags, content management
 -   **Module/Extension System**: Shipping, payment, discount modules
@@ -115,7 +115,10 @@
 -   **Comment Management**: Moderate and manage comments
 -   **Profile Settings**: Update personal information and preferences
 -   **Wishlist Management**: Save and organize favorite products
--   **Address Book**: Manage shipping and billing addresses
+-   **Address Book**: Manage multiple shipping and billing addresses with defaults
+-   **Order Reorder**: Quick reorder from order history
+-   **Recently Viewed**: Track and view browsing history
+-   **Digital Downloads**: Access purchased downloadable products
 -   **Account Security**: Password management and security settings
 
 ### Security & Performance
@@ -275,7 +278,7 @@ category_attribute_families - Pivot: category ↔ family
 
 ### Technical Improvements
 
--   **503 Tests Passing**: Comprehensive test suite with 503 passing tests
+-   **540+ Tests Passing**: Comprehensive test suite with 540+ passing tests
 -   **Code Quality**: Enhanced error handling, validation, and documentation
 -   **Database Optimization**: Improved migrations with proper indexing
 -   **Service Architecture**: Better separation of concerns and modularity
@@ -597,15 +600,21 @@ Generate description button will SHOW in product CRUD page.
 -   **SEO Optimization Guide**: `SEO_OPTIMIZATION_GUIDE.md` - Complete guide for SEO features
 -   **Analytics Dashboard Guide**: `ANALYTICS_DASHBOARD_GUIDE.md` - Analytics setup and usage
 -   **Performance Optimization**: `PERFORMANCE_OPTIMIZATION.md` - Performance tuning guidelines
+-   **Product Types Analysis**: `PRODUCT_TYPES_ANALYSIS.md` - Downloadable & Virtual products documentation
+-   **Downloadable Products**: `DOWNLOADABLE_VIRTUAL_PRODUCTS.md` - Implementation details
+-   **Promotion Engine Analysis**: `PROMOTION_ENGINE_ANALYSIS.md` - Coupon and promotion features
 
 ### API Endpoints
 
 The application provides comprehensive RESTful API endpoints for all modules:
 
 -   **Products API**: `/api/v1/products/*` - Complete product CRUD, reviews, comparison, import/export
--   **Orders API**: `/api/v1/orders/*` - Order management, tracking, PDF generation
+-   **Orders API**: `/api/v1/orders/*` - Order management, tracking, PDF generation, reorder
 -   **Categories API**: `/api/v1/categories/*` - Category management with tree structure
 -   **Users API**: `/api/v1/users/*` - User management with roles and permissions
+-   **User Addresses API**: `/api/v1/user/addresses/*` - Address book management
+-   **Coupons API**: `/api/v1/coupons/*` - Advanced coupon management with validation
+-   **Downloads API**: `/api/v1/downloads/*` - Digital product downloads
 -   **Settings API**: `/api/v1/settings/*` - General, email, payment, shipping, SEO settings
 -   **Analytics API**: `/api/v1/admin/analytics/*` - Analytics data endpoints
 -   **Email Marketing API**: `/api/v1/newsletter/*` - Newsletter and email management
@@ -615,7 +624,7 @@ The application provides comprehensive RESTful API endpoints for all modules:
 -   **Product Stats API**: `/api/v1/product-stats/*` - Product analytics and tracking
 -   **And many more...**: Complete API documentation available in Postman collection
 
-**Postman Collection**: Import `LaravelEcomm_Product_API.postman_collection.json` for complete API documentation
+**Postman Collection**: Import `LaravelEcomm.postman_collection.json` for complete API documentation
 
 ### Key Features Overview
 
@@ -624,7 +633,10 @@ The application provides comprehensive RESTful API endpoints for all modules:
 -   ✅ **Analytics Dashboard**: Real-time analytics with interactive charts
 -   ✅ **User Behavior Tracking**: Comprehensive user interaction monitoring
 -   ✅ **Performance Optimization**: Caching, compression, and optimization middleware
--   ✅ **Test Coverage**: 100% passing test suite with comprehensive coverage
+-   ✅ **Test Coverage**: 540+ passing tests with comprehensive coverage
+-   ✅ **Downloadable Products**: Sell digital files with secure downloads
+-   ✅ **Advanced Coupons**: Usage limits, restrictions, and stackable coupons
+-   ✅ **Customer Features**: Address book, reorder, recently viewed
 
 ## Getting Started
 
