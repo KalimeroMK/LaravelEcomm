@@ -81,4 +81,53 @@ return [
     'secret_key' => 'Secret key',
     'tags' => 'Tags',
 
+    // Product Types
+    'product_type' => 'Tipo de Producto',
+    'product_type_simple' => 'Producto Simple',
+    'product_type_configurable' => 'Producto Configurable',
+    'product_type_downloadable' => 'Producto Descargable',
+    'product_type_virtual' => 'Producto Virtual',
+
+    // Downloadable Products
+    'downloadable_files' => 'Archivos Descargables',
+    'downloads' => 'Descargas',
+    'download_limit' => 'Límite de Descargas',
+    'download_expiry' => 'Expiración de Descarga',
+    'max_downloads' => 'Máximo de Descargas',
+    'expiry_days' => 'Días de Expiración',
+    'file' => 'Archivo',
+    'upload_file' => 'Subir Archivo',
+    'download' => 'Descargar',
+    'download_history' => 'Historial de Descargas',
+    'download_count' => 'Conteo de Descargas',
+    'expires_at' => 'Expira el',
+    'no_downloads' => 'No hay descargas disponibles',
+    'download_expired' => 'Descarga expirada',
+    'download_limit_reached' => 'Límite de descargas alcanzado',
+
+    // Virtual Products
+    'virtual_product' => 'Producto Virtual',
+    'service_duration' => 'Duración del Servicio (minutos)',
+    'service_starts_at' => 'El Servicio Comienza',
+    'service_ends_at' => 'El Servicio Termina',
+
+    // General
+    'select' => 'Seleccionar',
+    'quantity' => 'Cantidad',
+
+    // Configurable Product
+    'settings' => 'Configuración',
+    'select_configurable_attributes' => 'Seleccionar Atributos Configurables',
+    'configurable_attributes_info' => 'Seleccione atributos que definirán las variantes de su producto (ej., Color, Tamaño)',
+    'options' => 'opciones',
+    'auto_generate_variants' => 'Generar variantes automáticamente basado en atributos seleccionados',
+    'regenerate_variants' => 'Regenerar todas las variantes (eliminará las variantes existentes)',
+    'existing_variants' => 'Variantes Existentes',
+    'variant' => 'Variante',
+
+    // Download Messages
+    'payment_required' => 'Pago Requerido',
+    'downloads_available_after_payment' => 'Las descargas están disponibles después de confirmar el pago.',
+    'max_downloads_info' => 'Máximo :count descargas por archivo.',
+    'links_expire_info' => 'Los enlaces expiran después de :days días.',
 ];

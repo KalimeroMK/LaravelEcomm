@@ -135,13 +135,31 @@
                                class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="status">Status</label>
+                        <label for="type">@lang('partials.product_type')</label>
+                        <select name="type" id="type" class="form-control" required>
+                            <option value="simple" {{ old('type', $product['type'] ?? 'simple') == 'simple' ? 'selected' : '' }}>
+                                @lang('partials.product_type_simple')
+                            </option>
+                            <option value="configurable" {{ old('type', $product['type'] ?? '') == 'configurable' ? 'selected' : '' }}>
+                                @lang('partials.product_type_configurable')
+                            </option>
+                            <option value="downloadable" {{ old('type', $product['type'] ?? '') == 'downloadable' ? 'selected' : '' }}>
+                                @lang('partials.product_type_downloadable')
+                            </option>
+                            <option value="virtual" {{ old('type', $product['type'] ?? '') == 'virtual' ? 'selected' : '' }}>
+                                @lang('partials.product_type_virtual')
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">@lang('partials.status')</label>
                         <select name="status" class="form-control" required>
                             <option value="active" {{ old('status', $product['status'] ?? '') == 'active' ? 'selected' : '' }}>
-                                Active
+                                @lang('partials.active')
                             </option>
                             <option value="inactive" {{ old('status', $product['status'] ?? '') == 'inactive' ? 'selected' : '' }}>
-                                Inactive
+                                @lang('partials.inactive')
                             </option>
                         </select>
                     </div>
@@ -188,8 +206,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="stock">Quantity</label>
-                        <input id="stock" type="number" name="stock" min="0" placeholder="Enter quantity"
+                        <label for="stock">@lang('partials.quantity')</label>
+                        <input id="stock" type="number" name="stock" min="0" placeholder="@lang('partials.quantity')"
                                value="{{ old('stock', $product['stock'] ?? '') }}" class="form-control">
                     </div>
                 </div>

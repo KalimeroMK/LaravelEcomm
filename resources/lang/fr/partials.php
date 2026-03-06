@@ -81,4 +81,53 @@ return [
     'secret_key' => 'Secret key',
     'tags' => 'Tags',
 
+    // Product Types
+    'product_type' => 'Type de Produit',
+    'product_type_simple' => 'Produit Simple',
+    'product_type_configurable' => 'Produit Configurable',
+    'product_type_downloadable' => 'Produit Téléchargeable',
+    'product_type_virtual' => 'Produit Virtuel',
+
+    // Downloadable Products
+    'downloadable_files' => 'Fichiers Téléchargeables',
+    'downloads' => 'Téléchargements',
+    'download_limit' => 'Limite de Téléchargement',
+    'download_expiry' => 'Expiration du Téléchargement',
+    'max_downloads' => 'Téléchargements Max',
+    'expiry_days' => 'Jours d\'Expiration',
+    'file' => 'Fichier',
+    'upload_file' => 'Télécharger le Fichier',
+    'download' => 'Télécharger',
+    'download_history' => 'Historique des Téléchargements',
+    'download_count' => 'Nombre de Téléchargements',
+    'expires_at' => 'Expire le',
+    'no_downloads' => 'Aucun téléchargement disponible',
+    'download_expired' => 'Téléchargement expiré',
+    'download_limit_reached' => 'Limite de téléchargement atteinte',
+
+    // Virtual Products
+    'virtual_product' => 'Produit Virtuel',
+    'service_duration' => 'Durée du Service (minutes)',
+    'service_starts_at' => 'Le Service Commence',
+    'service_ends_at' => 'Le Service Termine',
+
+    // General
+    'select' => 'Sélectionner',
+    'quantity' => 'Quantité',
+
+    // Configurable Product
+    'settings' => 'Paramètres',
+    'select_configurable_attributes' => 'Sélectionner les Attributs Configurables',
+    'configurable_attributes_info' => 'Sélectionnez les attributs qui définiront vos variantes de produit (ex., Couleur, Taille)',
+    'options' => 'options',
+    'auto_generate_variants' => 'Générer automatiquement les variantes basées sur les attributs sélectionnés',
+    'regenerate_variants' => 'Régénérer toutes les variantes (supprimera les variantes existantes)',
+    'existing_variants' => 'Variantes Existantes',
+    'variant' => 'Variante',
+
+    // Download Messages
+    'payment_required' => 'Paiement Requis',
+    'downloads_available_after_payment' => 'Les téléchargements sont disponibles après confirmation du paiement.',
+    'max_downloads_info' => 'Maximum :count téléchargements par fichier.',
+    'links_expire_info' => 'Les liens expirent après :days jours.',
 ];

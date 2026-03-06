@@ -81,4 +81,53 @@ return [
     'secret_key' => 'Secret key',
     'tags' => 'Tags',
 
+    // Product Types
+    'product_type' => 'Tipo di Prodotto',
+    'product_type_simple' => 'Prodotto Semplice',
+    'product_type_configurable' => 'Prodotto Configurabile',
+    'product_type_downloadable' => 'Prodotto Scaricabile',
+    'product_type_virtual' => 'Prodotto Virtuale',
+
+    // Downloadable Products
+    'downloadable_files' => 'File Scaricabili',
+    'downloads' => 'Download',
+    'download_limit' => 'Limite di Download',
+    'download_expiry' => 'Scadenza Download',
+    'max_downloads' => 'Download Massimi',
+    'expiry_days' => 'Giorni di Scadenza',
+    'file' => 'File',
+    'upload_file' => 'Carica File',
+    'download' => 'Scarica',
+    'download_history' => 'Cronologia Download',
+    'download_count' => 'Conteggio Download',
+    'expires_at' => 'Scade il',
+    'no_downloads' => 'Nessun download disponibile',
+    'download_expired' => 'Download scaduto',
+    'download_limit_reached' => 'Limite di download raggiunto',
+
+    // Virtual Products
+    'virtual_product' => 'Prodotto Virtuale',
+    'service_duration' => 'Durata Servizio (minuti)',
+    'service_starts_at' => 'Il Servizio Inizia',
+    'service_ends_at' => 'Il Servizio Termina',
+
+    // General
+    'select' => 'Seleziona',
+    'quantity' => 'Quantità',
+
+    // Configurable Product
+    'settings' => 'Impostazioni',
+    'select_configurable_attributes' => 'Seleziona Attributi Configurabili',
+    'configurable_attributes_info' => 'Seleziona gli attributi che definiranno le varianti del tuo prodotto (es., Colore, Taglia)',
+    'options' => 'opzioni',
+    'auto_generate_variants' => 'Genera automaticamente varianti basate sugli attributi selezionati',
+    'regenerate_variants' => 'Rigenera tutte le varianti (eliminerà le varianti esistenti)',
+    'existing_variants' => 'Varianti Esistenti',
+    'variant' => 'Variante',
+
+    // Download Messages
+    'payment_required' => 'Pagamento Richiesto',
+    'downloads_available_after_payment' => 'I download sono disponibili dopo la conferma del pagamento.',
+    'max_downloads_info' => 'Massimo :count download per file.',
+    'links_expire_info' => 'I link scadono dopo :days giorni.',
 ];

@@ -89,4 +89,53 @@ return [
     'not_available' => 'N/A',
     'replies_count' => 'Replies Count',
 
+    // Product Types
+    'product_type' => 'Product Type',
+    'product_type_simple' => 'Simple Product',
+    'product_type_configurable' => 'Configurable Product',
+    'product_type_downloadable' => 'Downloadable Product',
+    'product_type_virtual' => 'Virtual Product',
+
+    // Downloadable Products
+    'downloadable_files' => 'Downloadable Files',
+    'downloads' => 'Downloads',
+    'download_limit' => 'Download Limit',
+    'download_expiry' => 'Download Expiry',
+    'max_downloads' => 'Max Downloads',
+    'expiry_days' => 'Expiry Days',
+    'file' => 'File',
+    'upload_file' => 'Upload File',
+    'download' => 'Download',
+    'download_history' => 'Download History',
+    'download_count' => 'Download Count',
+    'expires_at' => 'Expires At',
+    'no_downloads' => 'No downloads available',
+    'download_expired' => 'Download expired',
+    'download_limit_reached' => 'Download limit reached',
+
+    // Virtual Products
+    'virtual_product' => 'Virtual Product',
+    'service_duration' => 'Service Duration (minutes)',
+    'service_starts_at' => 'Service Starts At',
+    'service_ends_at' => 'Service Ends At',
+
+    // General
+    'select' => 'Select',
+    'quantity' => 'Quantity',
+
+    // Configurable Product
+    'settings' => 'Settings',
+    'select_configurable_attributes' => 'Select Configurable Attributes',
+    'configurable_attributes_info' => 'Select attributes that will define your product variants (e.g., Color, Size)',
+    'options' => 'options',
+    'auto_generate_variants' => 'Auto-generate variants based on selected attributes',
+    'regenerate_variants' => 'Regenerate all variants (will delete existing variants)',
+    'existing_variants' => 'Existing Variants',
+    'variant' => 'Variant',
+
+    // Download Messages
+    'payment_required' => 'Payment Required',
+    'downloads_available_after_payment' => 'Downloads are available after payment is confirmed.',
+    'max_downloads_info' => 'Maximum :count downloads per file.',
+    'links_expire_info' => 'Links expire after :days days.',
 ];

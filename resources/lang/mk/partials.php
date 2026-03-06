@@ -89,4 +89,53 @@ return [
     'not_available' => 'Н/Д',
     'replies_count' => 'Број на одговори',
 
+    // Product Types
+    'product_type' => 'Тип на продукт',
+    'product_type_simple' => 'Едноставен продукт',
+    'product_type_configurable' => 'Конфигурабилен продукт',
+    'product_type_downloadable' => 'Производ за преземање',
+    'product_type_virtual' => 'Виртуелен продукт',
+
+    // Downloadable Products
+    'downloadable_files' => 'Датотеки за преземање',
+    'downloads' => 'Преземања',
+    'download_limit' => 'Лимит на преземања',
+    'download_expiry' => 'Истек на преземање',
+    'max_downloads' => 'Максимум преземања',
+    'expiry_days' => 'Денови до истек',
+    'file' => 'Датотека',
+    'upload_file' => 'Прикачи датотека',
+    'download' => 'Преземи',
+    'download_history' => 'Историја на преземања',
+    'download_count' => 'Број на преземања',
+    'expires_at' => 'Истекува на',
+    'no_downloads' => 'Нема достапни преземања',
+    'download_expired' => 'Преземањето истече',
+    'download_limit_reached' => 'Достигнат лимит на преземања',
+
+    // Virtual Products
+    'virtual_product' => 'Виртуелен продукт',
+    'service_duration' => 'Времетраење на услуга (минути)',
+    'service_starts_at' => 'Услугата започнува на',
+    'service_ends_at' => 'Услугата завршува на',
+
+    // General
+    'select' => 'Избери',
+    'quantity' => 'Количина',
+
+    // Configurable Product
+    'settings' => 'Поставки',
+    'select_configurable_attributes' => 'Избери конфигурабилни атрибути',
+    'configurable_attributes_info' => 'Избери атрибути кои ќе ги дефинираат варијантите на продуктот (на пр., Боја, Големина)',
+    'options' => 'опции',
+    'auto_generate_variants' => 'Автоматски генерирај варијанти врз основа на избраните атрибути',
+    'regenerate_variants' => 'Регенерирај ги сите варијанти (ќе ги избрише постоечките)',
+    'existing_variants' => 'Постоечки варијанти',
+    'variant' => 'Варијанта',
+
+    // Download Messages
+    'payment_required' => 'Потребна е уплата',
+    'downloads_available_after_payment' => 'Преземањата се достапни откако ќе се потврди уплатата.',
+    'max_downloads_info' => 'Максимум :count преземања по датотека.',
+    'links_expire_info' => 'Линковите истекуваат по :days дена.',
 ];

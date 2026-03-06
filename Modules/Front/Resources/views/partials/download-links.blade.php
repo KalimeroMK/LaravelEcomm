@@ -16,7 +16,7 @@ $hasDownloads = false;
 @if($hasDownloads)
     <div class="card mb-4 border-primary">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="ti-download"></i> Digital Downloads</h5>
+            <h5 class="mb-0"><i class="ti-download"></i> @lang('partials.downloadable_files')</h5>
         </div>
         <div class="card-body">
             @foreach($order->carts as $cartItem)
@@ -61,26 +61,26 @@ $hasDownloads = false;
                             </div>
                             <div>
                                 @if($order->payment_status !== 'paid')
-                                    <span class="badge badge-warning">Payment Required</span>
+                                    <span class="badge badge-warning">@lang('partials.payment_required')</span>
                                 @elseif($orderDownload->isExpired())
-                                    <span class="badge badge-danger">Expired</span>
+                                    <span class="badge badge-danger">@lang('partials.download_expired')</span>
                                 @elseif($orderDownload->isLimitReached())
-                                    <span class="badge badge-danger">Limit Reached</span>
+                                    <span class="badge badge-danger">@lang('partials.download_limit_reached')</span>
                                 @else
                                     <a href="{{ $download->getDownloadUrl($order->id, $user->id) }}" 
                                        class="btn btn-sm btn-primary">
-                                        <i class="ti-download"></i> Download
+                                        <i class="ti-download"></i> @lang('partials.download')
                                     </a>
                                 @endif
                             </div>
                         </div>
                         <div class="small text-muted">
-                            Downloads: {{ $orderDownload->downloads_count }} 
+                            @lang('partials.downloads'): {{ $orderDownload->downloads_count }} 
                             @if($product->max_downloads)
                                 / {{ $product->max_downloads }}
                             @endif
                             @if($orderDownload->expires_at)
-                                | Expires: {{ $orderDownload->expires_at->format('M d, Y') }}
+                                | @lang('partials.expires_at'): {{ $orderDownload->expires_at->format('M d, Y') }}
                             @endif
                         </div>
                     @endforeach
@@ -90,12 +90,12 @@ $hasDownloads = false;
             <div class="alert alert-info mt-3 mb-0">
                 <small>
                     <i class="ti-info-alt"></i> 
-                    Downloads are available after payment is confirmed. 
+                    @lang('partials.downloads_available_after_payment')
                     @if($product->max_downloads)
-                        Maximum {{ $product->max_downloads }} downloads per file.
+                        @lang('partials.max_downloads_info', ['count' => $product->max_downloads])
                     @endif
                     @if($product->download_expiry_days)
-                        Links expire after {{ $product->download_expiry_days }} days.
+                        @lang('partials.links_expire_info', ['days' => $product->download_expiry_days])
                     @endif
                 </small>
             </div>

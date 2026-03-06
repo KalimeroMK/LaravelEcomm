@@ -98,4 +98,53 @@ return [
     'password_confirmation' => 'Passwort bestätigen',
     'not_available' => 'N/V',
 
+    // Product Types
+    'product_type' => 'Produkttyp',
+    'product_type_simple' => 'Einfaches Produkt',
+    'product_type_configurable' => 'Konfigurierbares Produkt',
+    'product_type_downloadable' => 'Herunterladbares Produkt',
+    'product_type_virtual' => 'Virtuelles Produkt',
+
+    // Downloadable Products
+    'downloadable_files' => 'Herunterladbare Dateien',
+    'downloads' => 'Downloads',
+    'download_limit' => 'Download-Limit',
+    'download_expiry' => 'Download-Ablauf',
+    'max_downloads' => 'Max. Downloads',
+    'expiry_days' => 'Ablauftage',
+    'file' => 'Datei',
+    'upload_file' => 'Datei hochladen',
+    'download' => 'Herunterladen',
+    'download_history' => 'Download-Verlauf',
+    'download_count' => 'Download-Anzahl',
+    'expires_at' => 'Läuft ab am',
+    'no_downloads' => 'Keine Downloads verfügbar',
+    'download_expired' => 'Download abgelaufen',
+    'download_limit_reached' => 'Download-Limit erreicht',
+
+    // Virtual Products
+    'virtual_product' => 'Virtuelles Produkt',
+    'service_duration' => 'Servicedauer (Minuten)',
+    'service_starts_at' => 'Service beginnt am',
+    'service_ends_at' => 'Service endet am',
+
+    // General
+    'select' => 'Auswählen',
+    'quantity' => 'Menge',
+
+    // Configurable Product
+    'settings' => 'Einstellungen',
+    'select_configurable_attributes' => 'Konfigurierbare Attribute auswählen',
+    'configurable_attributes_info' => 'Wählen Sie Attribute, die Ihre Produktvarianten definieren (z.B. Farbe, Größe)',
+    'options' => 'Optionen',
+    'auto_generate_variants' => 'Varianten basierend auf ausgewählten Attributen automatisch generieren',
+    'regenerate_variants' => 'Alle Varianten neu generieren (löscht bestehende Varianten)',
+    'existing_variants' => 'Bestehende Varianten',
+    'variant' => 'Variante',
+
+    // Download Messages
+    'payment_required' => 'Zahlung Erforderlich',
+    'downloads_available_after_payment' => 'Downloads sind nach Bestätigung der Zahlung verfügbar.',
+    'max_downloads_info' => 'Maximal :count Downloads pro Datei.',
+    'links_expire_info' => 'Links laufen nach :days Tagen ab.',
 ];

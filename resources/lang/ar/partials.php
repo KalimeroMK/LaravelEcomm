@@ -81,4 +81,53 @@ return [
     'secret_key' => 'Secret key',
     'tags' => 'Tags',
 
+    // Product Types
+    'product_type' => 'نوع المنتج',
+    'product_type_simple' => 'منتج بسيط',
+    'product_type_configurable' => 'منتج قابل للتكوين',
+    'product_type_downloadable' => 'منتج قابل للتنزيل',
+    'product_type_virtual' => 'منتج افتراضي',
+
+    // Downloadable Products
+    'downloadable_files' => 'الملفات القابلة للتنزيل',
+    'downloads' => 'التنزيلات',
+    'download_limit' => 'حد التنزيل',
+    'download_expiry' => 'انتهاء صلاحية التنزيل',
+    'max_downloads' => 'الحد الأقصى للتنزيلات',
+    'expiry_days' => 'أيام انتهاء الصلاحية',
+    'file' => 'ملف',
+    'upload_file' => 'رفع ملف',
+    'download' => 'تنزيل',
+    'download_history' => 'سجل التنزيلات',
+    'download_count' => 'عدد التنزيلات',
+    'expires_at' => 'ينتهي في',
+    'no_downloads' => 'لا توجد تنزيلات متاحة',
+    'download_expired' => 'انتهت صلاحية التنزيل',
+    'download_limit_reached' => 'تم الوصول إلى حد التنزيل',
+
+    // Virtual Products
+    'virtual_product' => 'منتج افتراضي',
+    'service_duration' => 'مدة الخدمة (بالدقائق)',
+    'service_starts_at' => 'الخدمة تبدأ في',
+    'service_ends_at' => 'الخدمة تنتهي في',
+
+    // General
+    'select' => 'اختيار',
+    'quantity' => 'الكمية',
+
+    // Configurable Product
+    'settings' => 'الإعدادات',
+    'select_configurable_attributes' => 'اختيار السمات القابلة للتكوين',
+    'configurable_attributes_info' => 'حدد السمات التي ستحدد متغيرات منتجك (مثال، اللون، الحجم)',
+    'options' => 'خيارات',
+    'auto_generate_variants' => 'إنشاء المتغيرات تلقائيًا بناءً على السمات المحددة',
+    'regenerate_variants' => 'إعادة إنشاء جميع المتغيرات (ستحذف المتغيرات الموجودة)',
+    'existing_variants' => 'المتغيرات الموجودة',
+    'variant' => 'متغير',
+
+    // Download Messages
+    'payment_required' => 'الدفع مطلوب',
+    'downloads_available_after_payment' => 'التنزيلات متاحة بعد تأكيد الدفع.',
+    'max_downloads_info' => 'الحد الأقصى :count تنزيلات لكل ملف.',
+    'links_expire_info' => 'تنتهي الروابط بعد :days أيام.',
 ];
