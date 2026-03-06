@@ -19,7 +19,8 @@ use Modules\Front\Actions\BlogDetailAction;
 use Modules\Front\Actions\BlogFilterAction;
 use Modules\Front\Actions\BlogSearchAction;
 use Modules\Front\Actions\BundleDetailAction;
-use Modules\Front\Actions\CouponStoreAction;
+use Modules\Coupon\Actions\ApplyCouponAction;
+use Illuminate\Support\Facades\Auth;
 use Modules\Front\Actions\IndexAction;
 use Modules\Front\Actions\MessageStoreAction;
 use Modules\Front\Actions\NewsletterDeleteAction;
@@ -151,20 +152,35 @@ class FrontController extends CoreController
             ->respond($blogByTagAction($slug));
     }
 
-    public function couponStore(Request $request, CouponStoreAction $couponStoreAction): JsonResponse
+    public function couponStore(Request $request, ApplyCouponAction $applyCouponAction): JsonResponse
     {
         try {
-            $couponData = $couponStoreAction->execute($request->code);
+            $user = Auth::user();
+            $result = $applyCouponAction->execute(
+                $request->code,
+                $user?->id ?? 0,
+                session()->getId(),
+                $user?->customer_group_id ?? null
+            );
 
             return $this
-                ->setMessage('Coupon successfully applied.')
-                ->respond($couponData);
+                ->setMessage($result['message'])
+                ->respond($result);
         } catch (InvalidArgumentException $e) {
             return $this
                 ->setMessage($e->getMessage())
                 ->setStatusCode(422)
                 ->respond(null);
         }
+    }
+
+    public function couponRemove(ApplyCouponAction $applyCouponAction): JsonResponse
+    {
+        $result = $applyCouponAction->remove();
+        
+        return $this
+            ->setMessage($result['message'])
+            ->respond($result);
     }
 
     public function subscribe(NewsletterStoreRequest $request, NewsletterSubscribeAction $newsletterSubscribeAction): JsonResponse

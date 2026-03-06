@@ -39,4 +39,20 @@ return [
     'please_login_first' => 'Please login first',
     'cart_is_empty' => 'Cart is empty',
     'discount' => 'Discount',
+
+    // Coupon Messages
+    'coupon' => [
+        'invalid_code' => 'Invalid coupon code. Please try again.',
+        'expired_or_inactive' => 'This coupon has expired or is not active.',
+        'usage_limit_reached' => 'This coupon has reached its usage limit.',
+        'usage_limit_per_user_reached' => 'You have already used this coupon the maximum number of times.',
+        'not_applicable_to_customer' => 'This coupon is not applicable to your account.',
+        'minimum_amount_not_met' => 'Minimum order amount of $:amount is required to use this coupon.',
+        'no_applicable_products' => 'None of the items in your cart are eligible for this coupon.',
+        'cart_empty' => 'Your cart is empty.',
+        'no_discount_applicable' => 'This coupon cannot be applied to your current cart.',
+        'applied_successfully' => 'Coupon ":code" applied successfully!',
+        'no_coupon_applied' => 'No coupon is currently applied.',
+        'removed_successfully' => 'Coupon removed successfully.',
+    ],
 ];

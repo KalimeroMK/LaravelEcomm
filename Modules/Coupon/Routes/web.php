@@ -28,3 +28,4 @@ Route::prefix('admin')->middleware(['auth'])->group(function (): void {
     ]);
 });
 Route::post('/coupons-store', [FrontController::class, 'couponStore'])->name('coupon-store');
+Route::delete('/coupons-remove', [FrontController::class, 'couponRemove'])->name('coupon-remove');

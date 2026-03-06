@@ -26,7 +26,7 @@ use Modules\Front\Actions\BlogDetailAction;
 use Modules\Front\Actions\BlogFilterAction;
 use Modules\Front\Actions\BlogSearchAction;
 use Modules\Front\Actions\BundleDetailAction;
-use Modules\Front\Actions\CouponStoreAction;
+use Modules\Coupon\Actions\ApplyCouponAction;
 use Modules\Front\Actions\IndexAction;
 use Modules\Front\Actions\MessageStoreAction;
 use Modules\Front\Actions\NewsletterDeleteAction;
@@ -211,15 +211,28 @@ class FrontController extends Controller
         return view(theme_view('pages.blog'), $blogByTagAction($slug));
     }
 
-    public function couponStore(Request $request, CouponStoreAction $couponStoreAction): RedirectResponse
+    public function couponStore(Request $request, ApplyCouponAction $applyCouponAction): RedirectResponse
     {
         try {
-            $couponData = $couponStoreAction->execute($request->code);
-            request()->session()->flash('success', 'Coupon successfully applied');
+            $user = Auth::user();
+            $result = $applyCouponAction->execute(
+                $request->code,
+                $user?->id ?? 0,
+                session()->getId(),
+                $user?->customer_group_id ?? null
+            );
+            request()->session()->flash('success', $result['message']);
         } catch (InvalidArgumentException $e) {
             request()->session()->flash('error', $e->getMessage());
         }
 
+        return redirect()->back();
+    }
+
+    public function couponRemove(ApplyCouponAction $applyCouponAction): RedirectResponse
+    {
+        $result = $applyCouponAction->remove();
+        request()->session()->flash($result['success'] ? 'success' : 'info', $result['message']);
         return redirect()->back();
     }
 
@@ -429,7 +442,7 @@ class FrontController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OrderStoreRequest $request, StoreOrderAction $storeOrderAction): RedirectResponse
+    public function store(OrderStoreRequest $request, StoreOrderAction $storeOrderAction, ApplyCouponAction $applyCouponAction): RedirectResponse
     {
         $user = Auth::user();
         
@@ -455,7 +468,16 @@ class FrontController extends Controller
         }
         
         // Calculate total with coupon discount
-        $couponDiscount = session('coupon.value', 0);
+        $couponData = session('coupon');
+        $couponDiscount = $couponData['discount'] ?? 0;
+        $couponId = $couponData['id'] ?? null;
+        $freeShipping = $couponData['free_shipping'] ?? false;
+        
+        // Apply free shipping discount
+        if ($freeShipping && $couponDiscount === 0) {
+            $couponDiscount = $shippingCost;
+        }
+        
         $totalAmount = $subtotal + $shippingCost - $couponDiscount;
         
         // Create order DTO
@@ -506,6 +528,17 @@ class FrontController extends Controller
         // Save address to user's address book if logged in
         if ($user && $request->has('save_address')) {
             $this->saveUserAddress($user, $request);
+        }
+
+        // Record coupon usage if coupon was applied
+        if ($couponId) {
+            $applyCouponAction->recordUsage(
+                $couponId,
+                $order->id,
+                $user?->id,
+                session()->getId(),
+                $couponDiscount
+            );
         }
 
         // Clear the cart and coupon from the session
