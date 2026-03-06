@@ -442,12 +442,16 @@ class FrontController extends Controller
             return redirect()->back()->with('error', 'Your cart is empty.');
         }
         
-        // Get shipping cost
-        $shippingId = $request->input('shipping');
+        // Get shipping cost (skip for virtual/downloadable products)
+        $shippingId = null;
         $shippingCost = 0;
-        if ($shippingId) {
-            $shipping = \Modules\Shipping\Models\Shipping::find($shippingId);
-            $shippingCost = $shipping?->price ?? 0;
+        
+        if (\Modules\Core\Helpers\Helper::cartRequiresShipping()) {
+            $shippingId = $request->input('shipping');
+            if ($shippingId) {
+                $shipping = \Modules\Shipping\Models\Shipping::find($shippingId);
+                $shippingCost = $shipping?->price ?? 0;
+            }
         }
         
         // Calculate total with coupon discount

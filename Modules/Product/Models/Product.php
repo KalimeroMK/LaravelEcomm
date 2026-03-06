@@ -97,6 +97,10 @@ class Product extends Core implements HasMedia
 
     public const TYPE_VARIANT = 'variant';
 
+    public const TYPE_DOWNLOADABLE = 'downloadable';
+
+    public const TYPE_VIRTUAL = 'virtual';
+
     public const likeRows = [
         'title',
         'slug',
@@ -116,12 +120,19 @@ class Product extends Core implements HasMedia
         'price' => 'float',
         'discount' => 'float',
         'is_featured' => 'bool',
+        'is_virtual' => 'bool',
+        'is_downloadable' => 'bool',
         'brand_id' => 'int',
         'attribute_family_id' => 'int',
         'parent_id' => 'int',
         'special_price_start' => 'date',
         'special_price_end' => 'date',
         'special_price' => 'float',
+        'service_starts_at' => 'datetime',
+        'service_ends_at' => 'datetime',
+        'service_duration_minutes' => 'int',
+        'max_downloads' => 'int',
+        'download_expiry_days' => 'int',
         'configurable_attributes' => 'array',
     ];
 
@@ -137,6 +148,8 @@ class Product extends Core implements HasMedia
         'price',
         'discount',
         'is_featured',
+        'is_virtual',
+        'is_downloadable',
         'brand_id',
         'attribute_family_id',
         'special_price',
@@ -147,6 +160,11 @@ class Product extends Core implements HasMedia
         'configurable_attributes',
         'variant_name',
         'variant_sku_suffix',
+        'service_starts_at',
+        'service_ends_at',
+        'service_duration_minutes',
+        'max_downloads',
+        'download_expiry_days',
     ];
 
     public static function Factory(): ProductFactory
@@ -526,6 +544,50 @@ class Product extends Core implements HasMedia
     public function bundles(): BelongsToMany
     {
         return $this->belongsToMany(Bundle::class)->withTimestamps();
+    }
+
+    // ==================== DOWNLOADABLE PRODUCTS ====================
+
+    /**
+     * Downloadable files for this product
+     */
+    public function downloads(): HasMany
+    {
+        return $this->hasMany(ProductDownload::class);
+    }
+
+    /**
+     * Active downloadable files
+     */
+    public function activeDownloads(): HasMany
+    {
+        return $this->hasMany(ProductDownload::class)->where('is_active', true)->orderBy('sort_order');
+    }
+
+    /**
+     * Check if this is a downloadable product
+     */
+    public function isDownloadable(): bool
+    {
+        return $this->type === self::TYPE_DOWNLOADABLE || $this->is_downloadable;
+    }
+
+    // ==================== VIRTUAL PRODUCTS ====================
+
+    /**
+     * Check if this is a virtual product (no shipping)
+     */
+    public function isVirtual(): bool
+    {
+        return $this->type === self::TYPE_VIRTUAL || $this->is_virtual;
+    }
+
+    /**
+     * Check if product requires shipping
+     */
+    public function requiresShipping(): bool
+    {
+        return !$this->isVirtual() && !$this->isDownloadable();
     }
 
     public function makeAllSearchableUsing(Builder $query): Builder

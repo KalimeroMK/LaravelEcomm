@@ -394,6 +394,7 @@ $defaultAddress = $user?->defaultShippingAddress();
                                             data-price="{{Helper::totalCartPrice()}}">Cart
                                             Subtotal<span>${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </li>
+                                        @if(Helper::cartRequiresShipping())
                                         <li class="shipping">
                                             Shipping Cost
                                             @if(count(Helper::shipping())>0 && Helper::cartCount()>0)
@@ -409,6 +410,7 @@ $defaultAddress = $user?->defaultShippingAddress();
                                                 <span>Free</span>
                                             @endif
                                         </li>
+                                        @endif
 
                                         @if(session('coupon'))
                                             <li class="coupon_price" data-price="{{session('coupon')['value']}}">You
@@ -621,12 +623,14 @@ $defaultAddress = $user?->defaultShippingAddress();
                 let cost = parseFloat($(this).find('option:selected').data('price')) || 0;
                 let subtotal = parseFloat($('.order_subtotal').data('price'));
                 let coupon = parseFloat($('.coupon_price').data('price')) || 0;
-                // alert(coupon);
                 $('#order_total_price span').text('$' + (subtotal + cost - coupon).toFixed(2));
             });
 
+            @if(!Helper::cartRequiresShipping())
+            // For virtual/downloadable products, set shipping cost to 0
+            $('#order_total_price span').text('$' + (parseFloat($('.order_subtotal').data('price')) - (parseFloat($('.coupon_price').data('price')) || 0)).toFixed(2));
+            @endif
         });
-
     </script>
 
 @endpush

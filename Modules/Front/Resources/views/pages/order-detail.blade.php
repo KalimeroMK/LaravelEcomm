@@ -34,6 +34,9 @@
                         <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
                     
+                    <!-- Download Links for Digital Products -->
+                    @include('front::partials.download-links')
+                    
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">Order #{{ $order->order_number ?? $order->id }}</h4>

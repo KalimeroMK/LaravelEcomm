@@ -13,6 +13,7 @@ declare(strict_types=1);
 |
  */
 
+use Modules\Product\Http\Controllers\DownloadController;
 use Modules\Product\Http\Controllers\ProductComparisonController;
 use Modules\Product\Http\Controllers\ProductController;
 use Modules\Product\Http\Controllers\ProductImportExportController;
@@ -64,4 +65,13 @@ Route::prefix('admin/products')->middleware(['auth'])->group(function (): void {
         ->name('admin.products.variants.delete');
     Route::post('{product}/variant-by-attributes', [ProductController::class, 'getVariantByAttributes'])
         ->name('admin.products.variant.by-attributes');
+});
+
+// Downloadable Product Routes
+Route::middleware(['auth'])->group(function (): void {
+    Route::get('downloads', [DownloadController::class, 'history'])->name('product.downloads.history');
+    Route::get('downloads/{download}/{order}', [DownloadController::class, 'download'])
+        ->name('product.download');
+    Route::get('order/{order}/downloads', [DownloadController::class, 'orderDownloads'])
+        ->name('product.order.downloads');
 });

@@ -106,6 +106,42 @@ class Helper
             ->get();
     }
 
+    /**
+     * Check if cart contains only virtual/downloadable products (no shipping required)
+     */
+    public static function cartRequiresShipping(string $user_id = ''): bool
+    {
+        $cartItems = self::getAllProductFromCart($user_id);
+        
+        if ($cartItems->isEmpty()) {
+            return true; // Default to requiring shipping if cart is empty
+        }
+
+        foreach ($cartItems as $item) {
+            if ($item->product && $item->product->requiresShipping()) {
+                return true;
+            }
+        }
+
+        return false; // All products are virtual/downloadable
+    }
+
+    /**
+     * Check if cart contains downloadable products
+     */
+    public static function cartHasDownloadable(string $user_id = ''): bool
+    {
+        $cartItems = self::getAllProductFromCart($user_id);
+        
+        foreach ($cartItems as $item) {
+            if ($item->product && $item->product->isDownloadable()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static function getUserId(int|string $user_id = ''): string|int
     {
         if (Auth::check()) {
