@@ -36,6 +36,11 @@ class ProductDownload extends Model
 {
     use HasFactory;
 
+    protected static function newFactory(): \Modules\Product\Database\Factories\ProductDownloadFactory
+    {
+        return \Modules\Product\Database\Factories\ProductDownloadFactory::new();
+    }
+
     protected $fillable = [
         'product_id',
         'file_name',

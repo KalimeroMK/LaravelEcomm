@@ -22,6 +22,7 @@ class ProductResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'type' => $this->type,
             'title' => $this->title,
             'slug' => $this->slug,
             'summary' => $this->summary,
@@ -31,6 +32,23 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'discount' => $this->discount,
             'is_featured' => $this->is_featured,
+            'is_virtual' => $this->is_virtual,
+            'is_downloadable' => $this->is_downloadable,
+            'requires_shipping' => $this->requiresShipping(),
+            'service_starts_at' => $this->service_starts_at,
+            'service_ends_at' => $this->service_ends_at,
+            'service_duration_minutes' => $this->service_duration_minutes,
+            'max_downloads' => $this->max_downloads,
+            'download_expiry_days' => $this->download_expiry_days,
+            'downloads' => $this->when($this->isDownloadable() && $this->relationLoaded('downloads'), function () {
+                return $this->activeDownloads->map(function ($download) {
+                    return [
+                        'id' => $download->id,
+                        'file_name' => $download->file_name,
+                        'file_size' => $download->formatted_file_size,
+                    ];
+                });
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'd_deal' => $this->d_deal,

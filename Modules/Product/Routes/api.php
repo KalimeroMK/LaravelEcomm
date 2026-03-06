@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\Product\Http\Controllers\Api\AdvancedSearchController;
+use Modules\Product\Http\Controllers\Api\DownloadController;
 use Modules\Product\Http\Controllers\Api\ProductComparisonController;
 use Modules\Product\Http\Controllers\Api\ProductController;
 use Modules\Product\Http\Controllers\Api\ProductImportExportController;
@@ -68,4 +69,12 @@ Route::prefix('search')->group(function (): void {
 Route::prefix('recommendations')->group(function (): void {
     Route::get('/', [AdvancedSearchController::class, 'recommendations'])->name('recommendations.index');
     Route::get('/related/{productId}', [AdvancedSearchController::class, 'relatedProducts'])->name('recommendations.related');
+});
+
+// Download Routes (for downloadable products)
+Route::prefix('downloads')->middleware(['auth:sanctum'])->group(function (): void {
+    Route::get('/', [DownloadController::class, 'index'])->name('api.downloads.index');
+    Route::get('history', [DownloadController::class, 'history'])->name('api.downloads.history');
+    Route::get('order/{orderId}', [DownloadController::class, 'orderDownloads'])->name('api.downloads.order');
+    Route::get('verify/{download}/{order}', [DownloadController::class, 'verify'])->name('api.downloads.verify');
 });
