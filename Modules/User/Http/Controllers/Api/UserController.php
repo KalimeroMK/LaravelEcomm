@@ -18,7 +18,7 @@ use Modules\User\Actions\UpdateUserAction;
 use Modules\User\DTOs\UserDTO;
 use Modules\User\Http\Requests\Api\Store;
 use Modules\User\Http\Requests\Api\Update;
-use Modules\User\Http\Resource\UserResource;
+use Modules\User\Http\Resources\UserResource;
 use Modules\User\Models\User;
 use Modules\User\Repository\UserRepository;
 

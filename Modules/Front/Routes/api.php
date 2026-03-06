@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\Front\Http\Controllers\Api\FrontController;
 use Modules\Front\Http\Controllers\Api\ProductFilterController;
 
 // use Modules\Front\Http\Controllers\Api\CartController;
@@ -44,3 +45,7 @@ Route::prefix('products')->group(function () {
 // Route::prefix('wishlist')->middleware('auth')->group(function () {
 //     Route::get('/', [WishlistController::class, 'index'])->name('front.api.wishlist.index');
 // });
+
+// Recently Viewed Products API
+Route::get('recently-viewed', [FrontController::class, 'recentlyViewed'])
+    ->name('front.api.recently-viewed');

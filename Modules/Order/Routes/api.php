@@ -31,4 +31,5 @@ Route::prefix('user/orders')->group(function (): void {
     Route::get('history', [UserOrderController::class, 'history'])->name('api.user.orders.history');
     Route::get('{id}/detail', [UserOrderController::class, 'detail'])->name('api.user.orders.detail');
     Route::get('{id}/track', [UserOrderController::class, 'track'])->name('api.user.orders.track');
+    Route::post('{id}/reorder', [OrderController::class, 'reorder'])->name('api.user.orders.reorder');
 });

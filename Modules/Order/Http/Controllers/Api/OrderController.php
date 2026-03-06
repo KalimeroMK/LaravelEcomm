@@ -13,6 +13,7 @@ use Modules\Order\Actions\FindOrdersByUserAction;
 use Modules\Order\Actions\GenerateOrderPdfAction;
 use Modules\Order\Actions\GetAllOrdersAction;
 use Modules\Order\Actions\GetIncomeChartAction;
+use Modules\Order\Actions\ReorderAction;
 use Modules\Order\Actions\ShowOrderAction;
 use Modules\Order\Actions\StoreOrderAction;
 use Modules\Order\Actions\UpdateOrderAction;
@@ -35,7 +36,8 @@ class OrderController extends CoreController
         private readonly UpdateOrderAction $updateAction,
         private readonly DeleteOrderAction $deleteAction,
         private readonly GenerateOrderPdfAction $generatePdfAction,
-        private readonly GetIncomeChartAction $getIncomeChartAction
+        private readonly GetIncomeChartAction $getIncomeChartAction,
+        private readonly ReorderAction $reorderAction,
     ) {}
 
     public function index(Search $request): ResourceCollection
@@ -122,5 +124,35 @@ class OrderController extends CoreController
         return $this
             ->setMessage('Income chart data retrieved successfully.')
             ->respond($data);
+    }
+
+    /**
+     * Reorder a previous order.
+     */
+    public function reorder(int $id): JsonResponse
+    {
+        $order = $this->showAction->execute($id);
+        $this->authorize('view', $order);
+
+        // Ensure user can only reorder their own orders
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access to this order.');
+        }
+
+        $result = $this->reorderAction->execute($id, auth()->id());
+
+        if ($result['success']) {
+            return $this
+                ->setMessage($result['message'])
+                ->respond([
+                    'added_items' => $result['added_items'],
+                    'skipped_items' => $result['skipped_items'],
+                ]);
+        }
+
+        return $this
+            ->setMessage($result['message'])
+            ->setStatusCode(422)
+            ->respond(null);
     }
 }

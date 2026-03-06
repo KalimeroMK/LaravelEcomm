@@ -38,6 +38,7 @@ use Modules\Front\Actions\ProductSearchAction;
 use Modules\Message\Http\Requests\Api\Store;
 use Modules\Newsletter\Http\Requests\Store as NewsletterStoreRequest;
 use Modules\Product\Services\ElasticsearchService;
+use Modules\Product\Services\RecentlyViewedService;
 use Modules\Product\Services\RecommendationService;
 
 class FrontController extends CoreController
@@ -271,6 +272,21 @@ class FrontController extends CoreController
         return $this
             ->setMessage('Banner impression recorded successfully.')
             ->respond(['banner_id' => $id]);
+    }
+
+    /**
+     * Get recently viewed products.
+     */
+    public function recentlyViewed(RecentlyViewedService $recentlyViewedService): JsonResponse
+    {
+        $products = $recentlyViewedService->getForCurrentUser(12);
+
+        return $this
+            ->setMessage('Recently viewed products retrieved successfully.')
+            ->respond([
+                'products' => $products,
+                'count' => count($products),
+            ]);
     }
 
     public function advancedSearch(Request $request, ElasticsearchService $elasticsearchService): JsonResponse
