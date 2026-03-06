@@ -14,8 +14,10 @@ if (! function_exists('theme_asset')) {
                 if (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
                     $theme = 'default';
                 } else {
-                    $setting = Modules\Settings\Models\Setting::first();
-                    $theme = $setting->active_template ?? 'default';
+                    $setting = app('settings');
+                    $theme = ($setting instanceof \Modules\Settings\Models\Setting) 
+                        ? ($setting->active_template ?? 'default') 
+                        : 'default';
                 }
             } catch (Exception $e) {
                 $theme = 'default';
@@ -37,8 +39,10 @@ if (! function_exists('theme_view')) {
             if (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
                 $activeTheme = 'default';
             } else {
-                $setting = Modules\Settings\Models\Setting::first();
-                $activeTheme = $setting->active_template ?? 'default';
+                $setting = app('settings');
+                $activeTheme = ($setting instanceof \Modules\Settings\Models\Setting) 
+                    ? ($setting->active_template ?? 'default') 
+                    : 'default';
             }
         } catch (Exception $e) {
             $activeTheme = 'default';

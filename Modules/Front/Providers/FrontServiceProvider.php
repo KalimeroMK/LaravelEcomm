@@ -182,9 +182,11 @@ class FrontServiceProvider extends ServiceProvider
     private function getActiveTheme(): string
     {
         try {
-            $setting = \Modules\Settings\Models\Setting::first();
+            $setting = app('settings');
 
-            return $setting->active_template ?? 'default';
+            return ($setting instanceof \Modules\Settings\Models\Setting) 
+                ? ($setting->active_template ?? 'default') 
+                : 'default';
         } catch (Exception $e) {
             return 'default';
         }

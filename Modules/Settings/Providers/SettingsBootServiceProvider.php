@@ -24,8 +24,8 @@ class SettingsBootServiceProvider extends ServiceProvider
     protected function applyEmailSettings(): void
     {
         try {
-            $setting = \Modules\Settings\Models\Setting::first();
-            if (! $setting || ! $setting->email_settings) {
+            $setting = app('settings');
+            if (! $setting || $setting instanceof \Illuminate\Support\Collection || ! $setting->email_settings) {
                 return;
             }
 

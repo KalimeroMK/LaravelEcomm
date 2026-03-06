@@ -26,9 +26,11 @@ class SeoViewComposer
 
     private function generateSeoData(array $data): array
     {
-        // Get SEO settings from database
-        $settings = \Modules\Settings\Models\Setting::first();
-        $seoSettings = $settings?->seo_settings ?? [];
+        // Get SEO settings from cached singleton
+        $settings = app('settings');
+        $seoSettings = ($settings instanceof \Modules\Settings\Models\Setting) 
+            ? ($settings->seo_settings ?? []) 
+            : [];
 
         $seoData = [
             'title' => $seoSettings['meta_title'] ?? config('app.name'),

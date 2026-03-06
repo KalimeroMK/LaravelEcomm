@@ -8,8 +8,9 @@
 <head>
     <meta charset="utf-8">
     @php
-        $settings = \Modules\Settings\Models\Setting::first();
-        $seoSettings = $settings?->seo_settings ?? [];
+        // Use $settings from SettingsViewComposer (cached), or get from app container
+        $settings = $settings ?? app('settings');
+        $seoSettings = ($settings instanceof \Modules\Settings\Models\Setting) ? ($settings->seo_settings ?? []) : [];
         // Use $seo from SeoViewComposer if available, otherwise use settings from database
         $seoTitle = isset($seo) ? ($seo['title'] ?? null) : ($seoSettings['meta_title'] ?? config('app.name', 'E-commerce Store'));
         $seoDescription = isset($seo) ? ($seo['description'] ?? null) : ($seoSettings['meta_description'] ?? 'Shop online for quality products with fast delivery and secure payment. Best deals and discounts available.');

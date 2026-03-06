@@ -11,21 +11,8 @@ class SettingsViewComposer
 {
     public function compose(View $view): void
     {
-        try {
-            $settings = app('settings');
-            // If settings is null, try to get from database
-            if ($settings === null) {
-                $settings = \Modules\Settings\Models\Setting::first();
-            }
-        } catch (Exception $e) {
-            // If settings service is not available, try to get from database
-            try {
-                $settings = \Modules\Settings\Models\Setting::first();
-            } catch (Exception $e2) {
-                // If database is not available, create empty collection
-                $settings = collect([]);
-            }
-        }
+        // Use singleton from app container (cached)
+        $settings = app('settings');
 
         // Views expect settings to be iterable (collection or array)
         // If it's a single model, wrap it in a collection

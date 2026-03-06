@@ -47,8 +47,16 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->singleton(CacheService::class);
         }
 
+        // Register settings as cached singleton to avoid N+1 queries
         $this->app->singleton('settings', function () {
-            return Setting::first();
+            return \Illuminate\Support\Facades\Cache::remember('app.settings', 3600, function () {
+                try {
+                    $setting = Setting::first();
+                    return $setting ?? collect([]);
+                } catch (\Exception $e) {
+                    return collect([]);
+                }
+            });
         });
     }
 

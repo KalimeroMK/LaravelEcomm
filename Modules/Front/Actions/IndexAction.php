@@ -16,7 +16,7 @@ class IndexAction
         // Featured Products with better caching and eager loading
         $featuredProductsCacheKey = 'featured_products_'.md5('active_price_desc_4');
         $featured_products = Cache::remember($featuredProductsCacheKey, 3600, function () {
-            return Product::with(['categories', 'brand', 'tags'])
+            return Product::with(['categories', 'brand', 'tags', 'media'])
                 ->where('status', 'active')
                 ->where('is_featured', true)
                 ->orderBy('price', 'desc')
@@ -27,7 +27,7 @@ class IndexAction
         // Latest Products with better caching and eager loading
         $latestProductsCacheKey = 'latest_products_'.md5('active_created_desc_4');
         $latest_products = Cache::remember($latestProductsCacheKey, 1800, function () {
-            return Product::with(['categories', 'brand', 'tags'])
+            return Product::with(['categories', 'brand', 'tags', 'media'])
                 ->where('status', 'active')
                 ->orderBy('id', 'desc')
                 ->limit(4)
@@ -37,7 +37,8 @@ class IndexAction
         // Posts with caching
         $postsCacheKey = 'active_posts_'.md5('active_created_desc_3');
         $posts = Cache::remember($postsCacheKey, 3600, function () {
-            return Post::where('status', 'active')
+            return Post::with(['media'])
+                ->where('status', 'active')
                 ->orderBy('id', 'desc')
                 ->limit(3)
                 ->get();
@@ -46,7 +47,7 @@ class IndexAction
         // Banners with caching
         $bannersCacheKey = 'active_banners_with_categories';
         $banners = Cache::remember($bannersCacheKey, 7200, function () {
-            return Banner::with('categories')
+            return Banner::with(['categories', 'media'])
                 ->get()
                 ->filter(fn ($b): bool => $b->isActive());
         });
@@ -54,7 +55,7 @@ class IndexAction
         // Hot products (next 4 after latest) with eager loading
         $hotProductsCacheKey = 'hot_products_'.md5('active_created_desc_4_8');
         $hot_products = Cache::remember($hotProductsCacheKey, 1800, function () {
-            return Product::with(['categories', 'brand', 'tags'])
+            return Product::with(['categories', 'brand', 'tags', 'media'])
                 ->where('status', 'active')
                 ->orderBy('id', 'desc')
                 ->offset(4)

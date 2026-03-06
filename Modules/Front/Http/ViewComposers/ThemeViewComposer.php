@@ -30,9 +30,11 @@ class ThemeViewComposer
     private function getActiveTheme(): string
     {
         try {
-            $setting = Setting::first();
-
-            return $setting->active_template ?? 'default';
+            $setting = app('settings');
+            
+            return ($setting instanceof Setting) 
+                ? ($setting->active_template ?? 'default') 
+                : 'default';
         } catch (Exception $e) {
             return 'default';
         }

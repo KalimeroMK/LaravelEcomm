@@ -72,7 +72,7 @@ readonly class ProductGridsAction
                 }
 
                 return $query->orderBy($sortColumn, $sortOrder)
-                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
+                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
                     ->paginate($perPage);
             });
 
@@ -90,7 +90,7 @@ readonly class ProductGridsAction
                 return Product::where('status', 'active')
                     ->whereNull('parent_id')
                     ->orderByDesc('id')
-                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
+                    ->with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
                     ->take(3)
                     ->get();
             });
