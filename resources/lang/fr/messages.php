@@ -77,4 +77,19 @@ return [
     'import' => 'Import data',
     'select' => 'Select file',
 
+    // Coupon Messages
+    'coupon' => [
+        'invalid_code' => 'Code de coupon invalide. Veuillez réessayer.',
+        'expired_or_inactive' => 'Ce coupon a expiré ou n\'est pas actif.',
+        'usage_limit_reached' => 'Ce coupon a atteint sa limite d\'utilisation.',
+        'usage_limit_per_user_reached' => 'Vous avez déjà utilisé ce coupon le nombre maximal de fois.',
+        'not_applicable_to_customer' => 'Ce coupon n\'est pas applicable à votre compte.',
+        'minimum_amount_not_met' => 'Un montant minimum de commande de $:amount est requis.',
+        'no_applicable_products' => 'Aucun des articles dans votre panier n\'est éligible pour ce coupon.',
+        'cart_empty' => 'Votre panier est vide.',
+        'no_discount_applicable' => 'Ce coupon ne peut pas être appliqué à votre panier actuel.',
+        'applied_successfully' => 'Coupon ":code" appliqué avec succès!',
+        'no_coupon_applied' => 'Aucun coupon n\'est actuellement appliqué.',
+        'removed_successfully' => 'Coupon supprimé avec succès.',
+    ],
 ];

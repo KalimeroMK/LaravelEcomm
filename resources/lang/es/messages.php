@@ -77,4 +77,19 @@ return [
     'import' => 'Import data',
     'select' => 'Select file',
 
+    // Coupon Messages
+    'coupon' => [
+        'invalid_code' => 'Código de cupón inválido. Por favor, inténtelo de nuevo.',
+        'expired_or_inactive' => 'Este cupón ha expirado o no está activo.',
+        'usage_limit_reached' => 'Este cupón ha alcanzado su límite de uso.',
+        'usage_limit_per_user_reached' => 'Ya ha utilizado este cupón el número máximo de veces.',
+        'not_applicable_to_customer' => 'Este cupón no es aplicable a su cuenta.',
+        'minimum_amount_not_met' => 'Se requiere un monto mínimo de pedido de $:amount.',
+        'no_applicable_products' => 'Ninguno de los artículos en su carrito es elegible para este cupón.',
+        'cart_empty' => 'Su carrito está vacío.',
+        'no_discount_applicable' => 'Este cupón no puede aplicarse a su carrito actual.',
+        'applied_successfully' => '¡Cupón ":code" aplicado exitosamente!',
+        'no_coupon_applied' => 'No hay cupón aplicado actualmente.',
+        'removed_successfully' => 'Cupón eliminado exitosamente.',
+    ],
 ];

@@ -77,4 +77,19 @@ return [
     'import' => 'Import data',
     'select' => 'Select file',
 
+    // Coupon Messages
+    'coupon' => [
+        'invalid_code' => 'رمز الكوبون غير صالح. يرجى المحاولة مرة أخرى.',
+        'expired_or_inactive' => 'هذا الكوبون منتهي الصلاحية أو غير نشط.',
+        'usage_limit_reached' => 'لقد وصل هذا الكوبون إلى حد الاستخدام.',
+        'usage_limit_per_user_reached' => 'لقد استخدمت هذا الكوبون بالفعل الحد الأقصى من المرات.',
+        'not_applicable_to_customer' => 'هذا الكوبون لا ينطبق على حسابك.',
+        'minimum_amount_not_met' => 'مطلوب حد أدنى لمبلغ الطلب بقيمة $:amount.',
+        'no_applicable_products' => 'لا يوجد أي من العناصر في سلة التسوق مؤهل لهذا الكوبون.',
+        'cart_empty' => 'سلة التسوق فارغة.',
+        'no_discount_applicable' => 'لا يمكن تطبيق هذا الكوبون على سلة التسوق الحالية.',
+        'applied_successfully' => 'تم تطبيق الكوبون ":code" بنجاح!',
+        'no_coupon_applied' => 'لا يوجد كوبون مطبق حالياً.',
+        'removed_successfully' => 'تمت إزالة الكوبون بنجاح.',
+    ],
 ];

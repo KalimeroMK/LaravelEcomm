@@ -39,4 +39,20 @@ return [
     'please_login_first' => 'Bitte melden Sie sich zuerst an',
     'cart_is_empty' => 'Warenkorb ist leer',
     'discount' => 'Rabatt',
+
+    // Coupon Messages
+    'coupon' => [
+        'invalid_code' => 'Ungültiger Gutscheincode. Bitte versuchen Sie es erneut.',
+        'expired_or_inactive' => 'Dieser Gutschein ist abgelaufen oder nicht aktiv.',
+        'usage_limit_reached' => 'Dieser Gutschein hat die Nutzungsgrenze erreicht.',
+        'usage_limit_per_user_reached' => 'Sie haben diesen Gutschein bereits die maximal zulässige Anzahl verwendet.',
+        'not_applicable_to_customer' => 'Dieser Gutschein gilt nicht für Ihr Konto.',
+        'minimum_amount_not_met' => 'Mindestbestellwert von $:amount ist erforderlich.',
+        'no_applicable_products' => 'Keines der Artikel in Ihrem Warenkorb ist für diesen Gutschein geeignet.',
+        'cart_empty' => 'Ihr Warenkorb ist leer.',
+        'no_discount_applicable' => 'Dieser Gutschein kann auf Ihren aktuellen Warenkorb nicht angewendet werden.',
+        'applied_successfully' => 'Gutschein ":code" erfolgreich angewendet!',
+        'no_coupon_applied' => 'Derzeit ist kein Gutschein angewendet.',
+        'removed_successfully' => 'Gutschein erfolgreich entfernt.',
+    ],
 ];

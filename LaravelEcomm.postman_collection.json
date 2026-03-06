@@ -2,9 +2,9 @@
 	"info": {
 		"_postman_id": "laravel-ecomm-api-collection",
 		"name": "Laravel Ecomm - Complete API",
-		"description": "Complete API endpoints for Laravel E-commerce including Products, Orders, Categories, Attributes, Banners, Brands, Bundles, Carts, Complaints, Coupons, Front (Home, Products, Blog, Search, Recommendations), Google2FA, Messages, Newsletters, OpenAI, Pages, Permissions, Posts, Product Stats, Product Tracking, Roles, Settings (General, Email, Payment, Shipping, SEO), Shipping Methods and Calculation, Tags, Tenants, Users, Wishlist, Admin Analytics, System, Translations, Reviews, Import/Export, and Comparison. Updated with all new endpoints including Downloads, User Addresses, Recently Viewed Products, and Reorder.\n\nBase URL: {{base_url}}\n\nAll endpoints require Bearer token authentication except Product Comparison, Front endpoints, Product Tracking endpoints, and Wishlist endpoints which work with or without authentication.",
+		"description": "Complete API endpoints for Laravel E-commerce including Products, Orders, Categories, Attributes, Banners, Brands, Bundles, Carts, Complaints, Coupons, Front (Home, Products, Blog, Search, Recommendations), Google2FA, Messages, Newsletters, OpenAI, Pages, Permissions, Posts, Product Stats, Product Tracking, Roles, Settings (General, Email, Payment, Shipping, SEO), Shipping Methods and Calculation, Tags, Tenants, Users, Wishlist, Admin Analytics, System, Translations, Reviews, Import/Export, and Comparison. Updated with all new endpoints including Downloads, Coupons, User Addresses, Recently Viewed Products, and Reorder. Includes enhanced coupon system with usage limits, product restrictions, and validation.\n\nBase URL: {{base_url}}\n\nAll endpoints require Bearer token authentication except Product Comparison, Front endpoints, Product Tracking endpoints, and Wishlist endpoints which work with or without authentication.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"version": "2.25.0"
+		"version": "2.26.0"
 	},
 	"auth": {
 		"type": "bearer",
@@ -1044,6 +1044,240 @@
 								},
 								{
 									"key": "order",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Coupons",
+			"item": [
+				{
+					"name": "Get All Coupons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/coupons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Coupon by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/coupons/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Coupon",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"SAVE20\",\n  \"name\": \"Winter Sale 2024\",\n  \"description\": \"Get 20% off your order\",\n  \"type\": \"percent\",\n  \"value\": 20,\n  \"minimum_amount\": 50.00,\n  \"maximum_discount\": 100.00,\n  \"usage_limit\": 100,\n  \"usage_limit_per_user\": 1,\n  \"starts_at\": \"2024-01-01T00:00:00\",\n  \"expires_at\": \"2024-12-31T23:59:59\",\n  \"status\": \"active\",\n  \"is_public\": true,\n  \"is_stackable\": false,\n  \"free_shipping\": false,\n  \"applicable_products\": [],\n  \"applicable_categories\": [],\n  \"excluded_products\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/coupons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Coupon",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"SAVE25\",\n  \"name\": \"Updated Sale\",\n  \"type\": \"percent\",\n  \"value\": 25,\n  \"status\": \"active\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/coupons/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Coupon",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/coupons/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Validate Coupon",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"SAVE20\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/coupons/validate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								"validate"
+							]
+						}
+					}
+				},
+				{
+					"name": "Apply Coupon to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"SAVE20\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/coupons/apply",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								"apply"
+							]
+						}
+					}
+				},
+				{
+					"name": "Remove Coupon from Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/coupons/remove",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								"remove"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Applied Coupon",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/coupons/applied",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								"applied"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Coupon Usage Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/coupons/:id/usage",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"coupons",
+								":id",
+								"usage"
+							],
+							"variable": [
+								{
+									"key": "id",
 									"value": "1"
 								}
 							]
