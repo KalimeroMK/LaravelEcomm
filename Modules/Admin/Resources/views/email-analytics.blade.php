@@ -190,7 +190,7 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('backend/vendor/chart.js/chart.umd.js') }}"></script>
 <script>
 let emailPerformanceChart, campaignTypesChart;
 

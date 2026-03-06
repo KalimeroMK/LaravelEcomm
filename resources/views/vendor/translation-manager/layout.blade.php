@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     @break
     @case('bootstrap5')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyTz4lA4B8kDKL3P6vZ6U8g8T" crossorigin="anonymous">
+    <link href="{{ asset('backend/vendor/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     @break
     @default
     @endswitch
@@ -47,7 +47,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
         @break
         @case('bootstrap5')
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qm7BO+8d0nQbW8sELpAo0P5PLf4KJIp4jOSAmhpN6wXNjZzGDZCBo2xAg9q4CPHT" crossorigin="anonymous"></script>
+        <script src="{{ asset('backend/vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
         @break
         @default
         @endswitch

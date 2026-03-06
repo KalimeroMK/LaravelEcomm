@@ -1,5 +1,5 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js" integrity="sha512-wS6VWtjvRcylhyoArkahZUkzZFeKB7ch/MHukprGSh1XIidNvHG1rxPhyFnL73M0FC1YXPIXLRDAoOyRJNni/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://code.jquery.com/jquery-3.6.3.slim.js" integrity="sha256-DKU1CmJ8kBuEwumaLuh9Tl/6ZB6jzGOBV/5YpNE2BWc=" crossorigin="anonymous"></script>
+<script src="{{ asset('backend/vendor/axios/axios.min.js') }}"></script>
+<script src="{{ asset('backend/vendor/jquery/jquery.slim.min.js') }}"></script>
 <script type="text/javascript">
     // Script for submitting the livesearch via axios
   $( "#live_search_button" ).on( "click", function() {

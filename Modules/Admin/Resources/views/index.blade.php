@@ -127,7 +127,7 @@
     </div>
 @endsection
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('backend/vendor/chart.js/chart.umd.js') }}"></script>
     <script>
         const ordersCtx = document.getElementById('ordersChart').getContext('2d');
 
