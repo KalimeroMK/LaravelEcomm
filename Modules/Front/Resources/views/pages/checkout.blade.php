@@ -334,6 +334,15 @@ $defaultAddress = $user?->defaultShippingAddress();
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
+                                        <label>City<span>*</span></label>
+                                        <input type="text" name="city" placeholder="" value="{{old('city', $defaultAddress?->city)}}">
+                                        @error('city')
+                                        <span class='text-danger'>{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="form-group">
                                         <label>Address Line 1<span>*</span></label>
                                         <input type="text" name="address1" placeholder="" value="{{old('address1', $defaultAddress?->address1)}}">
                                         @error('address1')

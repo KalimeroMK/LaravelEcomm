@@ -34,12 +34,18 @@ Route::get('blog-cat/{slug}', [FrontController::class, 'blogByCategory'])->name(
 Route::get('blog-tag/{slug}', [FrontController::class, 'blogByTag'])->name('front.blog-by-tag');
 Route::get('/product/deal', [FrontController::class, 'productDeal'])->name('front.product-deal');
 Route::post('cart/order', [FrontController::class, 'store'])->name('front.cart.order');
-Route::get('/cart', function () {
-    return redirect()->route('cart-list');
-})->name('front.cart');
-Route::get('/checkout', function () {
-    return redirect()->route('checkout');
-})->name('front.checkout');
+// Auth protected routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', function () {
+        return redirect()->route('cart-list');
+    })->name('front.cart');
+    Route::get('/cart-list', function () {
+        return view(theme_view('pages.cart'));
+    })->name('cart-list');
+    Route::get('/checkout', [\Modules\Cart\Http\Controllers\CartController::class, 'checkout'])->name('checkout');
+    Route::get('cart-delete/{id}', [\Modules\Cart\Http\Controllers\CartController::class, 'cartDelete'])->name('cart-delete');
+    Route::post('cart-update', [\Modules\Cart\Http\Controllers\CartController::class, 'cartUpdate'])->name('cart-update');
+});
 Route::match(['get', 'post'], '/filter', [FrontController::class, 'productFilter'])->name('front.product-filter');
 Route::get('/product-lists', [FrontController::class, 'productLists'])->name('front.product-lists');
 Route::get('/product-grids', [FrontController::class, 'productGrids'])->name('front.product-grids');

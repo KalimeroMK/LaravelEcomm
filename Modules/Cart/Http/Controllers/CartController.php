@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Actions\CreateCartAction;
 use Modules\Cart\Actions\DeleteCartAction;
-use Modules\Cart\Actions\GetUserCartAction;
+use Modules\Core\Helpers\Helper;
 use Modules\Cart\Actions\UpdateCartItemsAction;
 use Modules\Cart\DTOs\CartDTO;
 use Modules\Cart\Http\Requests\AddToCartSingle;
@@ -29,8 +29,7 @@ class CartController extends CoreController
         private readonly FindProductBySlugAction $findProductBySlugAction,
         private readonly CreateCartAction $createAction,
         private readonly UpdateCartItemsAction $updateCartItemsAction,
-        private readonly DeleteCartAction $deleteAction,
-        private readonly GetUserCartAction $getUserCartAction
+        private readonly DeleteCartAction $deleteAction
     ) {
         $this->authorizeResource(Cart::class, 'cart');
     }
@@ -115,11 +114,11 @@ class CartController extends CoreController
 
     public function checkout(): View|Factory|RedirectResponse|Application
     {
-        $cart = $this->getUserCartAction->execute();
-        if (! $cart instanceof Collection || $cart->isEmpty()) {
+        $cart = Helper::getAllProductFromCart();
+        
+        if ($cart->isEmpty()) {
             session()->flash('error', __('messages.cart_is_empty'));
-
-            return back();
+            return redirect()->route('cart-list');
         }
 
         return view(theme_view('pages.checkout'));
