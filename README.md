@@ -1,231 +1,252 @@
 # Advanced E-commerce Platform in Laravel 12
 
-### Demo page: https://e-comm.mk
+### 🌐 Demo: https://e-comm.mk
 
-## 📋 Table of Contents
+---
 
--   [🚀 Features](#features)
-    -   [Frontend](#frontend)
-    -   [Admin Dashboard](#admin-dashboard)
-    -   [User Dashboard](#user-dashboard)
-    -   [Security & Performance](#security--performance)
-    -   [AI & Automation](#ai--automation)
--   [🆕 Recent Enhancements](#recent-enhancements)
--   [📸 Screenshots](#screenshots)
--   [🚀 Installation & Setup](#installation--setup)
--   [🐳 Docker Setup](#docker-setup)
--   [🛠️ Management Commands](#management-commands)
--   [🏢 Multi-Tenant Functionality](#multi-tenant-functionality)
--   [🤖 OpenAI Integration](#openai-integration)
--   [📚 Documentation & Guides](#documentation--guides)
--   [🎯 Getting Started](#getting-started)
--   [🤝 Contributing](#contributing)
--   [📄 License](#license)
+## 📑 Table of Contents
 
-## Features
+- [🚀 Quick Start](#-quick-start)
+- [✨ Features Overview](#-features-overview)
+- [📸 Screenshots](#-screenshots)
+- [📚 Documentation](#-documentation)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-### Frontend
+---
 
--   **Responsive Layout** with modern UI/UX design
--   **Multi-Language Support**: URL prefix strategy (/en/, /mk/, /de/) with automatic locale detection
--   **GeoIP Localization**: Auto-detect country, currency, and timezone
--   **Advanced Search** with Elasticsearch integration
--   **Shopping Cart & Wishlist** with real-time updates
--   **Product Reviews & Ratings** system
--   **Advanced Coupons & Promotions**: Fixed, percentage, free shipping with usage limits and restrictions
--   **Product Attributes**: cost price, promotion price, stock, size, variants
--   **Blog System**: categories, tags, content management
--   **Module/Extension System**: Shipping, payment, discount modules
--   **Media Manager**: banner, images, file uploads
--   **Bundles Module** for product grouping
--   **Advanced SEO Support**:
-    -   Dynamic meta tags and Open Graph
-    -   Structured data (Schema.org)
-    -   XML sitemaps generation
-    -   SEO-friendly URLs
-    -   Performance optimization
--   **Email Marketing Integration**:
-    -   Newsletter campaigns with segmentation
-    -   Abandoned cart email sequences (3-email automation)
-    -   Email analytics tracking (opens, clicks, bounces)
-    -   Automated email processing
--   **Contact Forms** with real-time notifications (Laravel Pusher)
--   **AI-Powered Recommendations** system
--   **Advanced Product Search** with filters
--   **Social Media Integration**:
-    -   Laravel Socialite (Facebook, Google, Twitter)
-    -   Social login and sharing
-    -   Social media product sharing
--   **Payment Integration**: PayPal, Stripe, Casys
--   **Multi-level Comment System**
--   **User Behavior Tracking** and analytics
--   **Performance Monitoring** and optimization
+## 🚀 Quick Start
 
-### Admin Dashboard
-
--   **Advanced Analytics Dashboard**:
-    -   Interactive charts and graphs (Chart.js)
-    -   Sales reports and revenue tracking
-    -   User behavior analytics
-    -   Real-time performance monitoring
-    -   Export functionality for reports
--   **User & Role Management**:
-    -   Admin roles and permissions
-    -   User management with advanced filtering
-    -   Role-based access control
-    -   User impersonation
--   **Product Management**:
-    -   Comprehensive product manager
-    -   Product attributes and variants
-    -   Product reviews and ratings
-    -   Product clicks and impressions tracking
-    -   AI-powered product descriptions
--   **Content Management**:
-    -   Media manager using Unisharp Laravel File Manager
-    -   Banner manager with click and impression tracking
-    -   Blog, Category & Tag management
-    -   SEO content optimization
--   **Order Management**:
-    -   Complete order lifecycle management
-    -   Order statuses: Complete, Pending, Processing, On hold, Cancelled, Refunded, Failed
-    -   PDF order generation
-    -   Order analytics and reporting
--   **Marketing Tools**:
-    -   Email marketing campaigns
-    -   Newsletter management with segmentation
-    -   Abandoned cart email automation
-    -   Coupon and discount management
-    -   Email analytics dashboard
--   **System Configuration**:
-    -   Email settings and SMTP configuration
-    -   Shop information management
-    -   Maintenance mode settings
-    -   SEO configuration
-    -   Performance optimization settings
--   **Advanced Features**:
-    -   Real-time messaging and notifications
-    -   Translation manager
-    -   Activity logging and audit trails
-    -   IP blocking and security management
-    -   Profile settings and preferences
-    -   Multi-tenant support
-
-### User Dashboard
-
--   **Order Management**: Track orders, view order history, download invoices
--   **Review & Rating Management**: Manage product reviews and ratings
--   **Comment Management**: Moderate and manage comments
--   **Profile Settings**: Update personal information and preferences
--   **Wishlist Management**: Save and organize favorite products
--   **Address Book**: Manage multiple shipping and billing addresses with defaults
--   **Order Reorder**: Quick reorder from order history
--   **Recently Viewed**: Track and view browsing history
--   **Digital Downloads**: Access purchased downloadable products
--   **Account Security**: Password management and security settings
-
-### Security & Performance
-
--   **Security Features**:
-    -   Google 2FA (Two-Factor Authentication)
-    -   Role-based access control
-    -   IP blocking and security management
-    -   Activity logging and audit trails
-    -   Secure password policies
--   **Performance Optimization**:
-    -   Redis caching for improved performance
-    -   Database query optimization
-    -   Image optimization and lazy loading
-    -   CDN support for static assets
-    -   Gzip compression
-    -   Browser caching headers
-
-### AI & Automation
-
--   **OpenAI Integration**:
-    -   AI-powered product description generation
-    -   Automated content creation
-    -   Smart product recommendations
-    -   Natural language processing for search
--   **Email Automation**:
-    -   Abandoned cart email sequences
-    -   Welcome email automation
-    -   Newsletter campaign automation
-    -   Behavioral trigger emails
--   **Analytics & Insights**:
-    -   User behavior tracking
-    -   Conversion funnel analysis
-    -   A/B testing capabilities
-    -   Performance monitoring
-
-## Recent Enhancements
-
-### API Refactoring & Architecture Improvements (Latest)
-
--   **Action-Based Architecture**: Complete refactoring of all web and API controllers to use reusable Action classes
--   **API Controller Alignment**: All API controllers now fully aligned with their web counterparts
--   **Comprehensive API Coverage**: Complete API endpoints for all modules (Products, Orders, Categories, Settings, Users, etc.)
--   **Postman Collection**: Fully updated Postman collection with all API endpoints documented
--   **Test Suite Improvements**: 503 tests passing (up from 500) with comprehensive API test coverage
--   **PHPStan Compliance**: Fixed all PHPStan errors for better code quality
--   **Code Reusability**: Action classes shared between web and API controllers for DRY principle
-
-### Multi-Language, Reporting & GeoLocalization (Latest)
-
--   **Multi-Language System**:
-    -   URL prefix strategy: `/en/`, `/mk/`, `/de/`, `/sq/`
-    -   Dynamic language management via database
-    -   Translation support for Product, Category, Page, Post models
-    -   HasTranslations trait for reusable localization
-    -   Automatic fallback to default language
-    -   Admin UI for language CRUD operations
-
--   **Advanced Reporting Module**:
-    -   8 Report types: Sales, Products, Customers, Inventory, Orders, Coupons, Revenue, Tax
-    -   Scheduled reports with email delivery
-    -   Export formats: CSV, Excel, PDF
-    -   Report execution history and tracking
-    -   Dynamic date ranges and filters
-    -   API endpoints for report generation
-
--   **GeoLocalization Module**:
-    -   GeoIP detection from IP address
-    -   Automatic currency detection by country
-    -   Real-time exchange rates (20+ currencies)
-    -   Currency conversion API
-    -   EU country detection for GDPR compliance
-    -   Timezone detection
-
-#### Multi-Language API Examples
+### Option 1: Docker (Recommended)
 
 ```bash
-# List active languages
-GET /api/languages
+# 1. Clone and start
+git clone https://github.com/KalimeroMK/LaravelEcomm.git
+cd LaravelEcomm
+docker-compose up -d
 
-# Get current locale info
-GET /api/languages/current
-X-Locale: mk
+# 2. Install dependencies
+docker exec e_comm_app composer install
 
-# Response:
+# 3. Setup environment
+cp .env.example .env
+docker exec e_comm_app php artisan key:generate
+
+# 4. Configure database in .env
+DB_HOST=db
+DB_DATABASE=homestead
+DB_USERNAME=homestead
+DB_PASSWORD=secret
+
+# 5. Run migrations and seeders
+docker exec e_comm_app php artisan migrate:fresh --seed
+
+# 6. Create storage link
+docker exec e_comm_app php artisan storage:link
+
+# 7. Access the application
+# Frontend: http://localhost:90
+# Admin:    http://localhost:90/admin
+# API:      http://localhost:90/api/v1
+```
+
+### Option 2: Local Development
+
+```bash
+# 1. Clone and install
+git clone https://github.com/KalimeroMK/LaravelEcomm.git
+cd LaravelEcomm
+composer install
+cp .env.example .env
+
+# 2. Configure environment
+php artisan key:generate
+# Edit .env with your database credentials
+
+# 3. Setup database
+php artisan migrate:fresh --seed
+
+# 4. Install frontend assets
+npm install && npm run build
+
+# 5. Create storage link
+php artisan storage:link
+
+# 6. Start server
+php artisan serve
+# Visit: http://localhost:8000
+```
+
+### Default Credentials
+
+| Role | URL | Email | Password |
+|------|-----|-------|----------|
+| **Admin** | `/admin` | `superadmin@mail.com` | `password` |
+| **Client** | `/login` | `client@mail.com` | `password` |
+
+---
+
+## ✨ Features Overview
+
+### 🎨 Frontend Features
+- **Multi-Theme Support**: Default & Modern themes with easy switching
+- **Responsive Design**: Mobile-first, modern UI/UX
+- **Multi-Language**: URL prefix strategy (`/en/`, `/mk/`, `/de/`)
+- **GeoIP Localization**: Auto-detect country, currency, timezone
+- **Advanced Search**: Elasticsearch integration with filters
+- **Shopping Cart**: Real-time updates, wishlist, saved carts
+- **Product Reviews**: Rating system with comments
+- **Coupons & Promotions**: Fixed, percentage, free shipping
+- **Payment Methods**: PayPal, Stripe, Cash on Delivery
+- **Blog System**: Categories, tags, SEO-friendly URLs
+- **User Dashboard**: Orders, addresses, wishlist, reviews
+
+### ⚙️ Admin Dashboard
+- **Analytics**: Interactive charts, sales reports, user behavior
+- **Product Management**: Attributes, variants, stock, media
+- **Order Management**: Full lifecycle, PDF invoices, statuses
+- **Content Management**: Blog, banners, pages, SEO
+- **Marketing Tools**: Email campaigns, newsletters, abandoned cart
+- **User Management**: Roles, permissions, impersonation
+- **System Settings**: Email, payment, SEO configuration
+
+### 🔐 Security & Performance
+- **Two-Factor Authentication**: Google 2FA
+- **Role-Based Access**: Granular permissions
+- **Redis Caching**: Performance optimization
+- **Security**: IP blocking, activity logging, audit trails
+
+### 🤖 AI & Automation
+- **OpenAI Integration**: Product descriptions, content generation
+- **Email Automation**: Abandoned cart, welcome sequences
+- **Smart Recommendations**: AI-powered product suggestions
+
+---
+
+## 📸 Screenshots
+
+<details>
+<summary>Click to view screenshots</summary>
+
+![Admin Dashboard](https://user-images.githubusercontent.com/29488275/90719413-13b82200-e2d4-11ea-8ca0-f0e5551c4c9d.png)
+![Category Management](https://user-images.githubusercontent.com/29488275/90719470-3813fe80-e2d4-11ea-8f63-e6001855a945.png)
+![Product Management](https://user-images.githubusercontent.com/29488275/90719534-61348f00-e2d4-11ea-8a81-409daee0ad94.png)
+![Order Details](https://user-images.githubusercontent.com/29488275/90719557-71e50500-e2d4-11ea-97cf-befb1d525643.png)
+![User Profile](https://user-images.githubusercontent.com/29488275/90719563-7a3d4000-e2d4-11ea-9e6a-56caac13b146.png)
+![Blog Management](https://user-images.githubusercontent.com/29488275/90719572-81644e00-e2d4-11ea-9fe5-3325ab427f88.png)
+![Frontend](https://user-images.githubusercontent.com/29488275/90719631-a1940d00-e2d4-11ea-89a3-eb36960d687d.png)
+
+</details>
+
+---
+
+## 📚 Documentation
+
+### Table of Contents
+
+1. [Installation Guides](#installation-guides)
+2. [API Documentation](#api-documentation)
+3. [Module Documentation](#module-documentation)
+4. [Command Reference](#command-reference)
+5. [Testing](#testing)
+6. [Recent Enhancements](#recent-enhancements)
+
+---
+
+### Installation Guides
+
+#### Docker Detailed Setup
+
+**Prerequisites:** Docker & Docker Compose
+
+**Step-by-step:**
+
+```bash
+# Start all containers
+docker-compose up -d
+
+# Container access
+docker exec -it e_comm_app sh      # App container
+docker exec -it e_comm_mysql mysql -u homestead -p  # Database
+docker exec -it e_comm_redis redis-cli               # Redis
+
+# Useful commands
+docker exec e_comm_app php artisan cache:clear
+docker exec e_comm_app php artisan view:clear
+docker exec e_comm_app php artisan migrate
+
+# Container ports:
+# - Web (FrankenPHP):  90 → 80
+# - MySQL:            3311 → 3306
+# - Redis:            6381 → 6379
+# - Elasticsearch:    9200 → 9200
+```
+
+#### Email Configuration
+
+```bash
+# Configure in .env
+MAIL_MAILER=smtp
+MAIL_HOST=your-smtp-host
+MAIL_PORT=587
+MAIL_USERNAME=your-email
+MAIL_PASSWORD=your-password
+MAIL_ENCRYPTION=tls
+
+# Process abandoned cart emails
+php artisan cart:process-abandoned-emails
+```
+
+#### Elasticsearch Setup
+
+```bash
+# Index products
+docker-compose exec app php artisan product:index
+
+# Rebuild from scratch
+docker-compose exec app php artisan product:index --fresh
+```
+
+---
+
+### API Documentation
+
+**Postman Collection:** `LaravelEcomm.postman_collection.json`
+
+**Base URL:** `http://localhost:90/api/v1`
+
+#### Authentication
+
+```bash
+# Login
+POST /api/v1/auth/login
 {
-    "locale": "mk",
-    "language": {
-        "code": "mk",
-        "name": "Macedonian",
-        "flag": "🇲🇰"
-    }
+    "email": "client@mail.com",
+    "password": "password"
 }
 ```
 
-#### Reporting API Examples
+#### Multi-Language API
 
 ```bash
-# List available report types
+# List languages
+GET /api/languages
+
+# Get current locale
+GET /api/languages/current
+X-Locale: mk
+```
+
+#### Reporting API
+
+```bash
+# List report types
 GET /api/admin/report-types
 
-# Create a sales report
+# Create report
 POST /api/admin/reports
 {
-    "name": "Monthly Sales Report",
+    "name": "Monthly Sales",
     "type": "sales",
     "format": "excel",
     "filters": {
@@ -234,42 +255,17 @@ POST /api/admin/reports
     }
 }
 
-# Generate report
+# Generate & Export
 POST /api/admin/reports/{id}/generate
-
-# Export report
 POST /api/admin/reports/{id}/export
-{
-    "format": "csv"
-}
-
-# Schedule report
-POST /api/admin/report-schedules
-{
-    "report_id": 1,
-    "frequency": "weekly",
-    "day_of_week": "monday",
-    "time": "08:00",
-    "recipients": ["admin@example.com"]
-}
+{ "format": "csv" }
 ```
 
-#### GeoLocalization API Examples
+#### GeoLocalization API
 
 ```bash
-# Get location from current IP
+# Get location from IP
 GET /api/geolocation
-
-# Response:
-{
-    "ip": "127.0.0.1",
-    "country_code": "US",
-    "country_name": "United States",
-    "city": "New York",
-    "currency": "USD",
-    "timezone": "America/New_York",
-    "is_eu": false
-}
 
 # Convert currency
 POST /api/currency/convert
@@ -278,62 +274,23 @@ POST /api/currency/convert
     "from": "USD",
     "to": "EUR"
 }
-
-# Response:
-{
-    "original_amount": 100,
-    "converted_amount": 85.00,
-    "formatted": "€85.00"
-}
-
-# Get exchange rates
-GET /api/exchange-rates
-
-# Response:
-{
-    "base": "USD",
-    "rates": {
-        "EUR": 0.85,
-        "GBP": 0.73,
-        "MKD": 51.5
-    }
-}
 ```
 
-### Advanced Attribute System (Bagisto-style)
+---
 
--   **Polymorphic Attributes**: Store attributes for Products, Bundles, and Categories using a single `attribute_values` table
--   **Visual Swatches**: Color swatches, button swatches, and image swatches for frontend display
--   **Attribute Families**: Group attributes into families (Clothing, Electronics, Furniture, etc.) and assign to categories
--   **Configurable Products**: Create products with configurable attributes (e.g., T-Shirt with Color × Size variants)
--   **Layered Navigation**: AJAX-powered filtering with real-time product counts
--   **Typed Value Columns**: Type-safe storage (text, boolean, date, integer, float, decimal, string, url, hex)
+### Module Documentation
 
-#### Attribute System Features
-
-| Feature | Description |
-|---------|-------------|
-| **Polymorphic Relations** | One table for all: Products, Bundles, Categories |
-| **Visual Swatches** | Color, Button, Image, and Select display types |
-| **Configurable Products** | Auto-generate variants from attribute combinations |
-| **Layered Navigation** | AJAX filtering with filter counts |
-| **Attribute Families** | Group and organize attributes by category type |
-| **Filterable Attributes** | Enable/disable filtering per attribute |
-| **Factory & Seeder Support** | Complete test coverage with factories |
-
-#### Quick Usage Examples
+#### Attribute System
 
 ```php
-// Create an attribute with options
+// Create attribute with options
 $color = Attribute::factory()->create([
     'code' => 'color',
     'type' => 'select',
-    'display' => 'color', // Visual swatch
+    'display' => 'color',
     'is_filterable' => true,
-    'is_configurable' => true,
 ]);
 
-// Add color options
 $color->options()->create([
     'value' => 'red',
     'label' => 'Red',
@@ -346,455 +303,152 @@ $product = Product::factory()->create([
 ]);
 $product->configurableAttributes()->attach($color);
 
-// Generate variants (Red × Size S, M, L)
+// Generate variants
 app(ConfigurableProductService::class)->generateVariants($product);
-
-// Assign attribute value to product
-$product->attributeValues()->create([
-    'attribute_id' => $color->id,
-    'text_value' => 'red',
-]);
-
-// Get layered navigation filters
-$filters = app(LayeredNavigationService::class)
-    ->getAvailableFilters($category);
-```
-
-#### Database Schema
-
-```
-attributes              - Attribute definitions (color, size, brand)
-attribute_options       - Options for select-type attributes
-attribute_families      - Attribute family groups
-attribute_family_attributes - Pivot: family ↔ attribute
-attribute_values        - Polymorphic values (products/bundles/categories)
-category_attribute_families - Pivot: category ↔ family
-```
-
-### Modern Theme Implementation
-
--   **Complete Modern Theme**: Full implementation of modern theme with 32+ view files
--   **Theme Components**: Advanced navigation, layouts, and page templates
--   **Responsive Design**: Modern, responsive UI/UX with comprehensive page coverage
--   **Theme Switching**: Easy theme switching through settings configuration
--   **Email Templates**: Modern newsletter and email templates included
-
-### Elasticsearch Integration
-
--   **Advanced Search**: Elasticsearch service integration for powerful product search
--   **Indexing Commands**: Automated product indexing with console commands
--   **Observer Pattern**: Product observer for automatic index updates
--   **Search Performance**: Optimized search queries and results
-
-### Email Marketing & Automation
-
--   **Abandoned Cart Recovery**: 3-email sequence automation to recover lost sales
--   **Email Analytics**: Track opens, clicks, bounces, and unsubscribes
--   **Newsletter Segmentation**: Advanced targeting and personalization
--   **Automated Email Processing**: Console commands for scheduled email campaigns
-
-### SEO & Performance Optimization
-
--   **Dynamic SEO**: Auto-generated meta tags, Open Graph, and Twitter Cards
--   **Structured Data**: Schema.org markup for better search engine understanding
--   **XML Sitemaps**: Automated generation for products, categories, brands, and posts
--   **Performance Middleware**: Runtime optimizations for faster page loads
--   **SEO Configuration**: Centralized SEO settings and management
-
-### Analytics & User Behavior Tracking
-
--   **Advanced Analytics Dashboard**: Interactive charts with Chart.js integration
--   **User Behavior Tracking**: Page views, clicks, scrolls, and form interactions
--   **Real-time Analytics**: Live data updates and performance monitoring
--   **Export Functionality**: Download reports in various formats
--   **Conversion Funnels**: Track user journey and optimize conversion rates
-
-### Technical Improvements
-
--   **540+ Tests Passing**: Comprehensive test suite with 540+ passing tests
--   **Code Quality**: Enhanced error handling, validation, and documentation
--   **Database Optimization**: Improved migrations with proper indexing
--   **Service Architecture**: Better separation of concerns and modularity
--   **Performance Monitoring**: Real-time performance tracking and optimization
-
-## Screenshots
-
-![screencapture-e-shop-loc-admin-2020-08-15-15_47_37](https://user-images.githubusercontent.com/29488275/90719413-13b82200-e2d4-11ea-8ca0-f0e5551c4c9d.png)
-
-![screencapture-e-shop-loc-admin-category-2020-08-14-19_45_55](https://user-images.githubusercontent.com/29488275/90719470-3813fe80-e2d4-11ea-8f63-e6001855a945.png)
-
-![screencapture-e-shop-loc-admin-product-2020-08-14-19_44_49](https://user-images.githubusercontent.com/29488275/90719534-61348f00-e2d4-11ea-8a81-409daee0ad94.png)
-
-![screencapture-e-shop-loc-user-order-show-1-2020-08-14-18_57_06](https://user-images.githubusercontent.com/29488275/90719557-71e50500-e2d4-11ea-97cf-befb1d525643.png)
-
-![screencapture-e-shop-loc-user-profile-2020-08-14-18_58_06](https://user-images.githubusercontent.com/29488275/90719563-7a3d4000-e2d4-11ea-9e6a-56caac13b146.png)
-
-![screencapture-e-shop-loc-admin-post-2020-08-14-16_00_07](https://user-images.githubusercontent.com/29488275/90719572-81644e00-e2d4-11ea-9fe5-3325ab427f88.png)
-
-![screencapture-e-shop-loc-2020-08-14-18_19_46](https://user-images.githubusercontent.com/29488275/90719631-a1940d00-e2d4-11ea-89a3-eb36960d687d.png)
-
-![screencapture-e-shop-loc-blog-2020-08-14-18_36_21](https://user-images.githubusercontent.com/29488275/90719648-a8228480-e2d4-11ea-9c57-5ed7aef50e26.png)
-
-![screencapture-e-shop-loc-blog-detail-where-can-i-get-some-2020-08-14-18_43_01](https://user-images.githubusercontent.com/29488275/90719658-ace73880-e2d4-11ea-9cb2-13f2b3b0c4d2.png)
-
-![screencapture-e-shop-loc-product-track-2020-08-14-18_51_07](https://user-images.githubusercontent.com/29488275/90719682-bbcdeb00-e2d4-11ea-8e4e-7d6bfab1c421.png)
-
-## Installation & Setup
-
-### Quick Start
-
-1. **Clone the repository** and navigate to the project directory
-2. **Install dependencies**: `composer install`
-3. **Environment setup**: Copy `.env.example` to `.env`
-4. **Generate application key**: `php artisan key:generate`
-5. **Database configuration**: Set your database credentials in `.env`
-6. **Payment setup**: Configure Braintree credentials for PayPal integration
-7. **Run migrations**: `php artisan migrate:fresh --seed`
-8. **Install frontend dependencies**: `npm install && npm run watch`
-9. **Create storage link**: `php artisan storage:link`
-10. **Configure application**: Remove `APP_URL` from `.env` file
-11. **Start the server**: `php artisan serve` or use virtual host
-12. **Access the application**: Visit `localhost:8000` in your browser
-
-### Default Login Credentials
-
--   **Admin Panel**: `/admin`
-    -   Email: `superadmin@mail.com`
-    -   Password: `password`
--   **User Account**:
-    -   Email: `client@mail.com`
-    -   Password: `password`
-
-### Additional Configuration
-
-#### Email Marketing Setup
-
-```bash
-# Configure email settings in .env
-MAIL_MAILER=smtp
-MAIL_HOST=your-smtp-host
-MAIL_PORT=587
-MAIL_USERNAME=your-email
-MAIL_PASSWORD=your-password
-MAIL_ENCRYPTION=tls
-
-# Run abandoned cart email processing
-php artisan cart:process-abandoned-emails
 ```
 
 #### SEO Configuration
 
 ```bash
-# Generate XML sitemaps
+# Generate sitemaps
 php artisan seo:generate-sitemap
 
-# Configure SEO settings in config/seo.php
+# Configuration in config/seo.php
 ```
-
-#### Analytics Setup
-
-```bash
-# Enable user behavior tracking
-# Analytics dashboard available at /admin/analytics
-```
-
-## Docker Setup
-
-#### Prerequisites
-
--   **Docker** and **Docker Compose** installed on your system
-
-#### Quick Docker Setup
-
-1. **Start containers**: `docker-compose up -d`
-2. **Install Laravel packages**: `docker exec e_comm_app composer install`
-3. **Configure environment**: Update `.env` file:
-    ```env
-    DB_HOST=db
-    DB_DATABASE=homestead
-    DB_USERNAME=homestead
-    DB_PASSWORD=secret
-    ```
-4. **Run migrations**: `docker exec e_comm_app php artisan migrate:fresh --seed`
-5. **Create storage link**: `docker exec e_comm_app php artisan storage:link`
-6. **Access the application**:
-    - **Frontend**: http://localhost:90
-    - **Admin Panel**: http://localhost:90/admin
-    - **API**: http://localhost:90/api/v1
-
-#### Docker Container Access
-
--   **App container**: `docker exec -it e_comm_app sh`
--   **Database**: `docker exec -it e_comm_mysql mysql -u homestead -p`
--   **Redis**: `docker exec -it e_comm_redis redis-cli`
-
-#### Container Ports
-
--   **FrankenPHP (Web)**: 90 → 80
--   **MySQL**: 3311 → 3306
--   **Redis**: 6381 → 6379
--   **Elasticsearch**: 9200 → 9200
-
-#### Elasticsearch Setup
-
-1. **Ensure container is running**: `docker ps | grep elasticsearch`
-2. **Index products**: `docker-compose exec app php artisan product:index`
-    - Use `--fresh` flag to rebuild index from scratch: `php artisan product:index --fresh`
-
-## Management Commands
-
-#### User Management
-
--   **Create user**: `php artisan user:create`
-
-#### Email Marketing
-
--   **Process abandoned cart emails**: `php artisan cart:process-abandoned-emails`
--   **Send newsletter campaigns**: `php artisan newsletter:send`
-
-#### SEO & Performance
-
--   **Generate XML sitemaps**: `php artisan seo:generate-sitemap`
--   **Clear application cache**: `php artisan cache:clear`
--   **Optimize application**: `php artisan optimize`
--   **Index products in Elasticsearch**: `php artisan product:index`
-
-#### Analytics & Reports
-
--   **Generate analytics reports**: `php artisan analytics:generate-reports`
--   **Export user behavior data**: `php artisan analytics:export-behavior`
-
-#### System Maintenance
-
--   **Run database migrations**: `php artisan migrate`
--   **Seed database**: `php artisan db:seed`
--   **Clear and rebuild cache**: `php artisan cache:clear && php artisan config:cache`
-
-## Multi-Tenant Functionality
-
-This Laravel ecommerce application includes comprehensive multi-tenancy support, allowing you to run multiple independent instances of the application with separate databases for each tenant.
-
-#### Features
-
--   **Database Isolation**: Each tenant has its own database
--   **Domain-based Tenant Detection**: Automatic tenant switching based on domain
--   **Queue Awareness**: Jobs are tenant-aware and execute in the correct context
--   **Session Isolation**: Optional tenant-specific session handling
--   **Admin Management**: Full CRUD operations for tenant management
--   **Command Line Tools**: Easy tenant creation and migration management
-
-#### Configuration
-
-1. **Enable Multi-Tenancy**:
-
-    Update your `.env` file to enable multi-tenancy:
-
-    ```env
-    MULTI_TENANT_ENABLED=true
-    TENANT_MAIN_DOMAIN=yourdomain.com
-    TENANT_OWNER_CONNECTION=owner
-    TENANT_DEFAULT_CONNECTION=tenant
-    ```
-
-2. **Database Configuration**:
-
-    Add owner database connection to your `config/database.php`:
-
-    ```php
-    'connections' => [
-        'owner' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('OWNER_DB_DATABASE', 'owner_db'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-        ],
-        'tenant' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('TENANT_DB_DATABASE', 'tenant_db'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-        ],
-    ],
-    ```
-
-#### Setup Commands
-
-1. **Initialize Multi-Tenant Database**:
-
-    ```bash
-    php artisan tenants:init
-    ```
-
-2. **Create a New Tenant**:
-
-    ```bash
-    php artisan tenants:create
-    ```
-
-    You'll be prompted for:
-
-    - Tenant name
-    - Domain (e.g., `tenant1.yourdomain.com`)
-    - Database name (e.g., `tenant1_db`)
-
-3. **Migrate Tenant Databases**:
-
-    ```bash
-    # Migrate all tenants
-    php artisan tenants:migrate
-
-    # Migrate specific tenant
-    php artisan tenants:migrate 1
-
-    # Fresh migration with seeding
-    php artisan tenants:migrate --fresh --seed
-    ```
-
-#### Admin Management
-
-Access tenant management through the admin panel at `/admin/tenants` (requires admin role):
-
--   **View Tenants**: List all tenants with their domains and databases
--   **Create Tenant**: Add new tenants through the web interface
--   **Edit Tenant**: Update tenant information
--   **Delete Tenant**: Remove tenants (with proper cleanup)
-
-#### Tenant Detection
-
-The application automatically detects tenants based on the incoming domain:
-
--   `tenant1.yourdomain.com` → Tenant 1 database
--   `tenant2.yourdomain.com` → Tenant 2 database
--   `yourdomain.com` → Main application
-
-#### Security Features
-
--   **Admin-only Access**: Only users with admin/super-admin roles can manage tenants
--   **Database Isolation**: Complete separation of tenant data
--   **Session Isolation**: Optional tenant-specific sessions
--   **Queue Isolation**: Jobs run in the correct tenant context
-
-#### Testing
-
-Run the tenant-specific tests:
-
-```bash
-# Run all tenant tests
-php artisan test tests/Feature/Tenant/
-
-# Run specific tenant test
-php artisan test tests/Feature/Tenant/TenantModelTest.php
-```
-
-#### Troubleshooting
-
-1. **Tenant Not Found**: Ensure the domain is registered in the tenants table
-2. **Database Connection Issues**: Verify tenant database exists and is accessible
-3. **Permission Denied**: Ensure you have admin role for tenant management
-4. **Migration Issues**: Check that tenant databases are properly configured
-
-#### Advanced Configuration
-
-The tenant system supports extensive configuration through `config/tenant.php`:
-
--   Cache isolation
--   Session isolation
--   Storage isolation
--   Security settings
--   Middleware configuration
-
-## OpenAI Integration
-
-To enable and configure the OpenAI functionality in your application, follow these steps:
-
-1. **Add OpenAI Configuration**:
-
-    Update your `.env` file to include the OpenAI configuration:
-
-    ```env
-    OPENAI_API_KEY=YOUR_API_KEY
-    ENABLE_OPENAI=true
-    ```
-
-Generate description button will SHOW in product CRUD page.
-
-## Documentation & Guides
-
-### Available Documentation
-
--   **SEO Optimization Guide**: `SEO_OPTIMIZATION_GUIDE.md` - Complete guide for SEO features
--   **Analytics Dashboard Guide**: `ANALYTICS_DASHBOARD_GUIDE.md` - Analytics setup and usage
--   **Performance Optimization**: `PERFORMANCE_OPTIMIZATION.md` - Performance tuning guidelines
--   **Product Types Analysis**: `PRODUCT_TYPES_ANALYSIS.md` - Downloadable & Virtual products documentation
--   **Downloadable Products**: `DOWNLOADABLE_VIRTUAL_PRODUCTS.md` - Implementation details
--   **Promotion Engine Analysis**: `PROMOTION_ENGINE_ANALYSIS.md` - Coupon and promotion features
-
-### API Endpoints
-
-The application provides comprehensive RESTful API endpoints for all modules:
-
--   **Products API**: `/api/v1/products/*` - Complete product CRUD, reviews, comparison, import/export
--   **Orders API**: `/api/v1/orders/*` - Order management, tracking, PDF generation, reorder
--   **Categories API**: `/api/v1/categories/*` - Category management with tree structure
--   **Users API**: `/api/v1/users/*` - User management with roles and permissions
--   **User Addresses API**: `/api/v1/user/addresses/*` - Address book management
--   **Coupons API**: `/api/v1/coupons/*` - Advanced coupon management with validation
--   **Downloads API**: `/api/v1/downloads/*` - Digital product downloads
--   **Settings API**: `/api/v1/settings/*` - General, email, payment, shipping, SEO settings
--   **Analytics API**: `/api/v1/admin/analytics/*` - Analytics data endpoints
--   **Email Marketing API**: `/api/v1/newsletter/*` - Newsletter and email management
--   **User Behavior API**: `/api/v1/admin/analytics/behavior/*` - User tracking endpoints
--   **Google2FA API**: `/api/v1/admin/2fa/*` - Two-factor authentication management
--   **OpenAI API**: `/api/v1/openai/*` - AI-powered text generation and chat completion
--   **Product Stats API**: `/api/v1/product-stats/*` - Product analytics and tracking
--   **Languages API**: `/api/languages/*` - Multi-language management and locale switching
--   **Reporting API**: `/api/admin/reports/*` - Business intelligence reports and scheduled exports
--   **GeoLocalization API**: `/api/geolocation/*` - GeoIP detection and location services
--   **Currency API**: `/api/currency/*` - Currency conversion and exchange rates
--   **And many more...**: Complete API documentation available in Postman collection
-
-**Postman Collection**: Import `LaravelEcomm.postman_collection.json` for complete API documentation
-
-### Key Features Overview
-
--   ✅ **Multi-Language**: URL-based localization with dynamic language management
--   ✅ **Reporting & BI**: Scheduled reports with export (CSV, Excel, PDF)
--   ✅ **GeoLocalization**: Auto-detect location, currency, and timezone
--   ✅ **Email Marketing**: Complete abandoned cart recovery and newsletter system
--   ✅ **SEO Optimization**: Dynamic meta tags, structured data, and XML sitemaps
--   ✅ **Analytics Dashboard**: Real-time analytics with interactive charts
--   ✅ **User Behavior Tracking**: Comprehensive user interaction monitoring
--   ✅ **Performance Optimization**: Caching, compression, and optimization middleware
--   ✅ **Test Coverage**: 540+ passing tests with comprehensive coverage
--   ✅ **Downloadable Products**: Sell digital files with secure downloads
--   ✅ **Advanced Coupons**: Usage limits, restrictions, and stackable coupons
--   ✅ **Customer Features**: Address book, reorder, recently viewed
-
-## Getting Started
-
-1. **Follow the installation steps** above
-2. **Configure your email settings** for marketing features
-3. **Set up SEO configuration** in `config/seo.php`
-4. **Access the analytics dashboard** at `/admin/analytics`
-5. **Run the console commands** to set up automated features
-
-## Contributing
-
-We welcome contributions! Please feel free to submit issues and enhancement requests.
-
-## License
-
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ---
 
-<p style="text-align:center">🚀 **Advanced E-commerce Platform** - Built with Laravel 12</p>
-<p style="text-align:center">Thank You so much for your time !!!</p>
+### Command Reference
+
+#### Cache Management
+
+```bash
+php artisan cache:clear          # Clear application cache
+php artisan config:clear         # Clear config cache
+php artisan view:clear           # Clear compiled views
+php artisan route:clear          # Clear route cache
+```
+
+#### Database & Seeding
+
+```bash
+php artisan migrate:fresh --seed     # Fresh database with seeders
+php artisan db:seed --class=DatabaseSeeder  # Run specific seeder
+```
+
+#### Product Management
+
+```bash
+php artisan product:index          # Index products in Elasticsearch
+php artisan product:index --fresh  # Rebuild index
+```
+
+#### Email & Marketing
+
+```bash
+php artisan cart:process-abandoned-emails  # Process abandoned carts
+php artisan newsletter:send-campaigns      # Send newsletter campaigns
+```
+
+#### Analytics & Reports
+
+```bash
+php artisan analytics:aggregate    # Aggregate analytics data
+php artisan reports:generate       # Generate scheduled reports
+```
+
+---
+
+### Testing
+
+#### Running Tests
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test suite
+php artisan test --filter=OrderTest
+
+# Run with coverage
+php artisan test --coverage
+
+# Run E2E tests (requires Playwright)
+npx playwright test
+```
+
+#### Test Accounts
+
+```
+Admin:    superadmin@mail.com / password
+Client:   client@mail.com / password
+```
+
+---
+
+### Recent Enhancements
+
+<details>
+<summary>Click to expand recent updates</summary>
+
+#### Latest: Cart/Checkout & Payment Fixes
+- ✅ Modern theme views for cart, checkout, my-orders
+- ✅ Fixed payment workflows (Stripe, PayPal, COD)
+- ✅ Client orders access fixed
+- ✅ E2E tests with Playwright
+
+#### API Refactoring & Architecture
+- Action-based architecture for all controllers
+- Complete API coverage for all modules
+- 540+ tests passing
+- PHPStan compliance
+
+#### Multi-Language, Reporting & GeoLocalization
+- URL prefix strategy (`/en/`, `/mk/`, `/de/`)
+- 8 Report types with scheduling
+- GeoIP detection with currency conversion
+- Real-time exchange rates
+
+#### Modern Theme Implementation
+- 32+ view files for modern theme
+- Responsive design with comprehensive coverage
+- Easy theme switching via settings
+
+#### Attribute System (Bagisto-style)
+- Polymorphic attributes for Products, Bundles, Categories
+- Visual swatches (color, image, button)
+- Configurable products with auto-variant generation
+- Layered navigation with AJAX filtering
+
+</details>
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 🔗 Quick Links
+
+| Resource | URL |
+|----------|-----|
+| **Demo** | https://e-comm.mk |
+| **Admin** | http://localhost:90/admin |
+| **API Docs** | `LaravelEcomm.postman_collection.json` |
+| **Frontend** | http://localhost:90 |
+
+---
+
+<p align="center">Built with ❤️ using Laravel 12</p>
