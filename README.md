@@ -89,37 +89,274 @@ php artisan serve
 ## ✨ Features Overview
 
 ### 🎨 Frontend Features
-- **Multi-Theme Support**: Default & Modern themes with easy switching
-- **Responsive Design**: Mobile-first, modern UI/UX
-- **Multi-Language**: URL prefix strategy (`/en/`, `/mk/`, `/de/`)
-- **GeoIP Localization**: Auto-detect country, currency, timezone
-- **Advanced Search**: Elasticsearch integration with filters
-- **Shopping Cart**: Real-time updates, wishlist, saved carts
-- **Product Reviews**: Rating system with comments
-- **Coupons & Promotions**: Fixed, percentage, free shipping
-- **Payment Methods**: PayPal, Stripe, Cash on Delivery
-- **Blog System**: Categories, tags, SEO-friendly URLs
-- **User Dashboard**: Orders, addresses, wishlist, reviews
+
+#### Multi-Theme System
+- **Two Complete Themes**: Default theme (classic e-commerce) & Modern theme (contemporary design)
+- **Easy Theme Switching**: Change active theme via admin settings (no code changes)
+- **Theme Assets**: Organized CSS, JS, images per theme (`public/frontend/themes/{theme}/`)
+- **View Fallback**: Automatic fallback to default theme if view missing in active theme
+- **32+ Theme Views**: Complete page coverage (homepage, products, cart, checkout, user pages)
+
+#### Internationalization (i18n)
+- **URL Prefix Strategy**: `/en/`, `/mk/`, `/de/`, `/sq/` for language switching
+- **Auto Locale Detection**: Detects browser language and redirects automatically
+- **Database-Driven Languages**: Add/remove languages via admin without code changes
+- **Translation Management**: Admin UI for managing translations
+- **Model Translations**: Product, Category, Page, Post models support translations via `HasTranslations` trait
+- **Automatic Fallback**: Falls back to default language if translation missing
+- **RTL Support**: Right-to-left language support built-in
+
+#### GeoLocalization & Currency
+- **GeoIP Detection**: Auto-detect user country from IP address
+- **Automatic Currency**: Detects and sets currency based on country
+- **Real-Time Exchange Rates**: 20+ currencies with live rates
+- **Currency Conversion API**: Convert prices between currencies on-the-fly
+- **EU Detection**: GDPR compliance helpers for EU countries
+- **Timezone Detection**: Auto-set timezone based on location
+
+#### Product Catalog
+- **Product Types**: Simple, Configurable, Bundle, Downloadable products
+- **Advanced Attributes**: Bagisto-style attribute system (color, size, material swatches)
+- **Visual Swatches**: Color swatches, button swatches, image swatches
+- **Configurable Products**: Auto-generate variants from attribute combinations (e.g., T-Shirt: Red × S, M, L)
+- **Layered Navigation**: AJAX-powered filtering with real-time product counts
+- **Product Variants**: Manage stock, price, images per variant
+- **Product Reviews**: Star ratings, review text, helpfulness voting
+- **Wishlist**: Save products for later, share wishlist
+- **Recently Viewed**: Track and display browsing history
+- **Product Comparison**: Compare up to 4 products side-by-side
+- **Stock Management**: Track inventory, low stock alerts, out-of-stock handling
+- **Digital Downloads**: Support for downloadable products with secure links
+
+#### Shopping Experience
+- **Shopping Cart**: AJAX add/remove, quantity updates, mini-cart dropdown
+- **Saved Carts**: Save cart for later, restore cart
+- **Guest Checkout**: Checkout without registration
+- **Multiple Addresses**: Save multiple shipping/billing addresses
+- **Address Book**: Default addresses, address management
+- **Order Tracking**: Track order status, shipping information
+- **Order History**: View all orders, reorder previous orders
+- **Coupon System**: Apply coupons in cart, see discount breakdown
+- **Shipping Estimation**: Calculate shipping costs before checkout
+
+#### Search & Discovery
+- **Elasticsearch Integration**: Full-text search, fuzzy matching, suggestions
+- **Advanced Filters**: Filter by price, brand, attributes, ratings
+- **Auto-Complete**: Search suggestions as you type
+- **Search Analytics**: Track popular searches, no-results queries
+- **Category Navigation**: Multi-level categories, category tree
+- **Breadcrumbs**: Navigation trail for easy back-tracking
+- **Related Products**: AI-powered or manual related products
+- **Up-Sells & Cross-Sells**: Product recommendations
+
+#### Content Management (Frontend)
+- **Blog System**: Categories, tags, featured images, SEO meta
+- **CMS Pages**: Create custom pages (About, Contact, FAQ) via admin
+- **Banners**: Homepage banners, promotional banners with click tracking
+- **Menus**: Dynamic menu management, nested menus
+- **Newsletter**: Subscribe form, double opt-in confirmation
+
+#### User Account Features
+- **User Dashboard**: Overview of orders, addresses, account info
+- **Profile Management**: Update name, email, password, avatar
+- **Order Management**: View orders, download invoices, track shipments
+- **Address Book**: Multiple addresses, default shipping/billing
+- **Wishlist Management**: Add/remove, move to cart
+- **Review Management**: Edit/delete own reviews
+- **Comment Management**: Manage blog comments
+- **Social Login**: Login with Facebook, Google, Twitter, GitHub
+
+#### Payment & Checkout
+- **Payment Gateways**:
+  - **Stripe**: Credit card payments (tested with Stripe Elements)
+  - **PayPal**: Express checkout, sandbox support
+  - **Cash on Delivery (COD)**: Pay on delivery option
+- **Secure Checkout**: SSL support, PCI compliance helpers
+- **Multi-Step Checkout**: Shipping, payment, review steps
+- **Order Confirmation**: Email confirmation, PDF invoice
+- **Failed Payment Handling**: Retry payment, cancel order
+
+#### Marketing & Engagement
+- **Product Sharing**: Share on social media (Facebook, Twitter, Pinterest)
+- **Social Login**: One-click registration/login
+- **Newsletter Subscription**: Footer signup, popup option
+- **Abandoned Cart Recovery**: Automated email reminders
+- **Product Recommendations**: AI-powered suggestions based on behavior
+- **Promotional Banners**: Targeted banners based on user segment
+
+#### SEO Features
+- **Dynamic Meta Tags**: Auto-generated title, description per page
+- **Open Graph**: Facebook sharing optimization
+- **Twitter Cards**: Twitter sharing optimization
+- **Structured Data**: Schema.org markup (Product, Organization, BreadcrumbList)
+- **XML Sitemaps**: Auto-generated for products, categories, posts
+- **SEO-Friendly URLs**: Slug-based URLs (`/product/nike-air-max`)
+- **Canonical URLs**: Prevent duplicate content issues
+- **Robots.txt**: Auto-generated with sitemap reference
+- **Alt Tags**: Image SEO with automatic alt text
+
+---
 
 ### ⚙️ Admin Dashboard
-- **Analytics**: Interactive charts, sales reports, user behavior
-- **Product Management**: Attributes, variants, stock, media
-- **Order Management**: Full lifecycle, PDF invoices, statuses
-- **Content Management**: Blog, banners, pages, SEO
-- **Marketing Tools**: Email campaigns, newsletters, abandoned cart
-- **User Management**: Roles, permissions, impersonation
-- **System Settings**: Email, payment, SEO configuration
+
+#### Dashboard & Analytics
+- **Overview Dashboard**: Sales today, orders, users, revenue charts
+- **Interactive Charts**: Chart.js integration (line, bar, pie charts)
+- **Sales Reports**: Daily, weekly, monthly, yearly sales data
+- **Revenue Tracking**: Total revenue, average order value
+- **User Analytics**: New users, active users, user growth
+- **Product Analytics**: Best sellers, low stock, views/clicks
+- **Order Analytics**: Order statuses, payment methods, shipping methods
+- **Export Reports**: Download reports as CSV, Excel, PDF
+- **Real-time Updates**: Live data refresh for key metrics
+
+#### Product Management
+- **Product Grid**: Advanced filtering, sorting, bulk actions
+- **Product Creation**: Wizard for creating products step-by-step
+- **Attribute Management**: Create attributes, options, families
+- **Variant Management**: Manage product variants (stock, price, images)
+- **Media Manager**: Upload images, videos, documents (Unisharp File Manager)
+- **Category Assignment**: Multi-category products, primary category
+- **SEO Management**: Meta title, description, keywords per product
+- **Stock Management**: Quantity, low stock threshold, backorders
+- **Pricing**: Base price, sale price, cost price, tier pricing
+- **Product Reviews**: Approve/reject reviews, reply to reviews
+- **Product Import/Export**: Bulk import via CSV
+
+#### Order Management
+- **Order Grid**: Filter by status, date, customer, payment
+- **Order Lifecycle**: 
+  - Statuses: Pending, Processing, On Hold, Shipped, Delivered, Cancelled, Refunded, Failed
+  - Payment Statuses: Pending, Paid, Failed, Refunded
+- **Order Details**: Products, customer info, shipping, payment
+- **Invoice Generation**: PDF invoices with customizable template
+- **Shipment Tracking**: Add tracking numbers, shipping carriers
+- **Refund Processing**: Partial/full refunds, store credit
+- **Order Notes**: Internal notes, customer-visible notes
+- **Print Order**: Print-friendly order page
+- **Resend Email**: Resend order confirmation, invoice
+
+#### Customer Management
+- **Customer Grid**: Search, filter, export customers
+- **Customer Profile**: Orders, addresses, activity history
+- **Customer Groups**: Create groups (VIP, Wholesale, etc.)
+- **Customer Segmentation**: Based on purchase history, location
+- **Impersonation**: Login as customer to help troubleshoot
+- **Address Management**: View/edit customer addresses
+
+#### Content Management
+- **Blog Posts**: Create, edit, schedule posts
+- **Categories**: Hierarchical categories, SEO settings
+- **Tags**: Tag management, tag cloud
+- **Pages**: CMS pages (About, Contact, Terms, etc.)
+- **Banners**: Homepage sliders, promotional banners
+  - Click tracking
+  - Impression tracking
+  - Start/end dates
+  - Target URLs
+- **Media Library**: Central file management, image optimization
+- **Menu Builder**: Drag-drop menu creation
+
+#### Marketing Tools
+- **Email Campaigns**: Create and send newsletter campaigns
+- **Email Templates**: Customizable templates for all emails
+- **Newsletter Management**: Subscribers, segments, send history
+- **Abandoned Cart Emails**: 3-email sequence automation
+  - Email 1: 1 hour after abandonment
+  - Email 2: 24 hours after abandonment  
+  - Email 3: 72 hours after abandonment
+- **Coupon Management**:
+  - Types: Percentage, Fixed amount, Free shipping
+  - Restrictions: Minimum purchase, category restrictions, user restrictions
+  - Usage limits: Per coupon, per user
+  - Expiry dates
+- **Promotions**: Catalog price rules, cart price rules
+
+#### Email Marketing & Automation
+- **Campaign Analytics**: Open rates, click rates, bounce rates, unsubscribes
+- **Email Templates**: HTML templates with dynamic variables
+- **Automated Emails**: Welcome series, birthday emails, re-engagement
+- **Email Scheduling**: Schedule campaigns for future dates
+- **A/B Testing**: Test different subject lines, content
+- **Segmentation**: Target specific customer groups
+
+#### User & Role Management
+- **Admin Users**: Create/edit admin accounts
+- **Roles**: Define roles (Super Admin, Admin, Editor, etc.)
+- **Permissions**: Granular permissions per role
+- **Permission Matrix**: Visual permission assignment
+- **Activity Log**: Track admin actions, login history
+
+#### System Configuration
+- **General Settings**: Store name, logo, address, contact info
+- **Currency Settings**: Default currency, exchange rates, formatting
+- **Language Settings**: Active languages, default language
+- **Email Settings**: SMTP configuration, email templates
+- **Payment Settings**: Enable/disable gateways, sandbox mode
+- **Shipping Settings**: Methods, zones, rates
+- **Tax Settings**: Tax rates, tax classes, display options
+- **SEO Settings**: Default meta tags, sitemap settings
+- **Social Settings**: Social media links, API keys
+- **Maintenance Mode**: Enable/disable with custom message
+
+#### Reporting Module
+- **8 Report Types**: Sales, Products, Customers, Inventory, Orders, Coupons, Revenue, Tax
+- **Scheduled Reports**: Auto-generate and email reports
+- **Custom Date Ranges**: Flexible reporting periods
+- **Export Formats**: CSV, Excel, PDF
+- **Report History**: Track generated reports
+- **Visual Charts**: Graphical representation of data
+
+---
 
 ### 🔐 Security & Performance
-- **Two-Factor Authentication**: Google 2FA
-- **Role-Based Access**: Granular permissions
-- **Redis Caching**: Performance optimization
-- **Security**: IP blocking, activity logging, audit trails
+
+#### Security Features
+- **Two-Factor Authentication (2FA)**: Google Authenticator integration
+- **Role-Based Access Control (RBAC)**: Granular permissions
+- **IP Blocking**: Block specific IP addresses or ranges
+- **Login Attempt Limiting**: Prevent brute force attacks
+- **Secure Password Policies**: Enforce strong passwords
+- **Activity Logging**: Track all admin actions
+- **Audit Trails**: Complete history of data changes
+- **CSRF Protection**: Built-in Laravel CSRF tokens
+- **XSS Protection**: Output escaping, Content Security Policy
+- **SQL Injection Protection**: Parameterized queries
+
+#### Performance Optimization
+- **Redis Caching**: Application caching, session storage
+- **Query Optimization**: Eager loading, query caching
+- **Image Optimization**: Automatic image compression, WebP support
+- **Lazy Loading**: Images load as user scrolls
+- **CDN Support**: Serve static assets from CDN
+- **Gzip Compression**: Compress responses
+- **Browser Caching**: Cache headers for static assets
+- **Database Indexing**: Optimized indexes for fast queries
+- **Full-Page Caching**: Cache rendered pages for guests
+
+---
 
 ### 🤖 AI & Automation
-- **OpenAI Integration**: Product descriptions, content generation
-- **Email Automation**: Abandoned cart, welcome sequences
-- **Smart Recommendations**: AI-powered product suggestions
+
+#### OpenAI Integration
+- **Product Description Generator**: AI-generated product descriptions
+- **Content Creation**: Blog post ideas, content suggestions
+- **SEO Optimization**: Meta description generation
+- **Translation Assistance**: AI-powered translation suggestions
+
+#### Email Automation
+- **Abandoned Cart Recovery**: 3-email sequence
+- **Welcome Series**: Onboarding emails for new users
+- **Post-Purchase Follow-up**: Request reviews, cross-sell
+- **Re-engagement Campaigns**: Win back inactive customers
+- **Birthday Emails**: Automated birthday wishes with coupon
+
+#### Smart Recommendations
+- **AI-Powered Suggestions**: Product recommendations based on behavior
+- **Related Products**: Smart matching of related items
+- **Frequently Bought Together**: Amazon-style recommendations
+- **Recently Viewed**: Personalized browsing history
+- **Trending Products**: Popular items in user's category
 
 ---
 
