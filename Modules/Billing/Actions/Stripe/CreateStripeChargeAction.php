@@ -12,7 +12,7 @@ readonly class CreateStripeChargeAction
 {
     public function execute(StripeDTO $dto): void
     {
-        Stripe::setApiKey(config('stripe.sandbox.client_secret'));
+        Stripe::setApiKey(env('STRIPE_SECRET')); // Use env directly for reliability
         Charge::create([
             'amount' => $dto->amount * 100,
             'currency' => $dto->currency,

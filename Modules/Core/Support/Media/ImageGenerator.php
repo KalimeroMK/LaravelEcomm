@@ -86,6 +86,22 @@ class ImageGenerator
     }
 
     /**
+     * Generate a category image.
+     */
+    public static function generateCategoryImage(string $categoryName, int $index = 0): string
+    {
+        $colors = [
+            '#E74C3C', '#3498DB', '#2ECC71', '#F39C12', '#9B59B6',
+            '#1ABC9C', '#E67E22', '#34495E', '#16A085', '#C0392B',
+        ];
+
+        $color = $colors[$index % count($colors)];
+        $text = mb_substr($categoryName, 0, 25);
+
+        return self::generatePlaceholder(600, 400, $text, $color);
+    }
+
+    /**
      * Generate a user avatar image.
      */
     public static function generateAvatarImage(string $userName): string

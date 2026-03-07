@@ -146,6 +146,14 @@ class Category extends Core
     }
 
     /**
+     * Scope for active categories
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    /**
      * Count active categories
      */
     public static function countActiveCategory(): int

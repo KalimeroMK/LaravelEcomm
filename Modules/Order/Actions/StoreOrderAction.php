@@ -21,8 +21,8 @@ class StoreOrderAction
     {
         /** @var Order $order */
         $order = $this->repository->create([
-            'order_number' => $dto->order_number,
-            'user_id' => $dto->user_id,
+            'order_number' => $dto->order_number ?? $this->generateOrderNumber(),
+            'user_id' => $dto->user_id ?? auth()->id(),
             'sub_total' => $dto->sub_total,
             'shipping_id' => $dto->shipping_id,
             'total_amount' => $dto->total_amount,
@@ -45,5 +45,10 @@ class StoreOrderAction
         ]);
 
         return $order;
+    }
+
+    private function generateOrderNumber(): string
+    {
+        return 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid());
     }
 }

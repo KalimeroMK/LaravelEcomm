@@ -26,6 +26,7 @@ class PlaceholderImageController extends Controller
             'banner' => ImageGenerator::generateBannerImage($label),
             'product' => ImageGenerator::generateProductImage($label, $index),
             'post', 'blog' => ImageGenerator::generateBlogImage($label),
+            'category' => ImageGenerator::generateCategoryImage($label, $index),
             'bundle' => ImageGenerator::generateBundleImage($label, $index),
             default => ImageGenerator::generateProductImage($label, $index),
         };

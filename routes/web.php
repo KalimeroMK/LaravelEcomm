@@ -47,6 +47,9 @@ Route::get('/', function () {
     return redirect('/' . \Modules\Language\Models\Language::getDefaultCode());
 });
 
+// Set default locale for URL generation
+URL::defaults(['locale' => \Modules\Language\Models\Language::getDefaultCode()]);
+
 // Localized routes with locale prefix: /en/, /mk/, /de/
 Route::group([
     'prefix' => '{locale}',

@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Cart\Http\Resources\CartResource;
 use Modules\Order\Models\Order;
 use Modules\Shipping\Http\Resources\ShippingResource;
-use Modules\User\Http\Resource\UserResource;
+use Modules\User\Http\Resources\UserResource;
 
 /** @mixin Order */
 class OrderResource extends JsonResource
