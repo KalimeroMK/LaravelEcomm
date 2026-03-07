@@ -29,7 +29,7 @@ class UserOrderController extends Controller
     {
         $orders = $this->findByUserAction->execute(Auth::id());
 
-        return view('order::user.history', ['orders' => $orders]);
+        return view(theme_view('pages.my-orders'), ['orders' => $orders]);
     }
 
     /**
@@ -44,7 +44,7 @@ class UserOrderController extends Controller
 
         $order->load(['user', 'carts.product', 'shipping']);
 
-        return view('order::user.detail', ['order' => $order]);
+        return view(theme_view('pages.order-detail'), ['order' => $order]);
     }
 
     /**
@@ -59,6 +59,6 @@ class UserOrderController extends Controller
 
         $order->load(['user', 'carts.product', 'shipping']);
 
-        return view('order::user.track', ['order' => $order]);
+        return view(theme_view('pages.order-track'), ['order' => $order]);
     }
 }

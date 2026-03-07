@@ -37,7 +37,18 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $this->call(PermissionTableSeeder::class);
-        Category::factory()->count(10)->create();
+        // Create parent categories first
+        $parentCategories = Category::factory()->count(5)->active()->create([
+            'parent_id' => null,
+        ]);
+        
+        // Create subcategories for each parent
+        foreach ($parentCategories as $parent) {
+            Category::factory()->count(3)->active()->subcategory($parent)->create();
+        }
+        
+        // Create a few more top-level categories
+        Category::factory()->count(3)->active()->create(['parent_id' => null]);
         Banner::factory()->count(5)->withMedia()->create();
         Brand::factory()->count(5)->create();
         $this->call(CouponSeeder::class);

@@ -24,6 +24,7 @@ Route::get('/contact', [FrontController::class, 'contact'])->name('front.contact
 Route::post('/contact/message', [FrontController::class, 'messageStore'])->name('front.store-message');
 Route::get('product-detail/{slug}', [FrontController::class, 'productDetail'])->name('front.product-detail');
 Route::post('/product/search', [FrontController::class, 'productSearch'])->name('front.product-search');
+Route::get('/categories', [FrontController::class, 'categories'])->name('front.categories');
 Route::get('/product-cat/{slug}', [FrontController::class, 'productCat'])->name('front.product-cat');
 Route::get('/product-brand/{slug}', [FrontController::class, 'productBrand'])->name('front.product-brand');
 Route::get('/blog', [FrontController::class, 'blog'])->name('front.blog');

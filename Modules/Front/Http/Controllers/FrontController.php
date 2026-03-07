@@ -42,6 +42,7 @@ use Modules\Front\Actions\ProductFilterAction;
 use Modules\Front\Actions\ProductGridsAction;
 use Modules\Front\Actions\ProductListsAction;
 use Modules\Front\Actions\ProductSearchAction;
+use Modules\Core\Helpers\Helper;
 use Modules\Front\Http\Requests\ProductSearchRequest;
 use Modules\Order\Actions\ReorderAction;
 use Modules\Order\Actions\StoreOrderAction;
@@ -168,7 +169,7 @@ class FrontController extends Controller
      */
     public function productCat(string $slug, ProductCatAction $productCatAction): Factory|View
     {
-        return view(theme_view('pages.product-lists'), $productCatAction($slug));
+        return view(theme_view('pages.category-detail'), $productCatAction($slug));
     }
 
     /**
@@ -176,7 +177,12 @@ class FrontController extends Controller
      */
     public function categories(): Factory|View
     {
-        $categories = \Modules\Category\Models\Category::active()->get();
+        // Get only parent categories (top-level) with their children count
+        $categories = \Modules\Category\Models\Category::active()
+            ->whereNull('parent_id')
+            ->withCount('children')
+            ->get();
+        
         return view(theme_view('pages.categories'), ['categories' => $categories]);
     }
 
@@ -472,8 +478,8 @@ class FrontController extends Controller
         $user = Auth::user();
         
         // Calculate cart totals
-        $cartItems = Helper::getAllProductFromCart($user?->id ?? '');
-        $subtotal = Helper::totalCartPrice($user?->id ?? '');
+        $cartItems = Helper::getAllProductFromCart((string) ($user?->id ?? ''));
+        $subtotal = Helper::totalCartPrice((string) ($user?->id ?? ''));
         $quantity = $cartItems->sum('quantity');
         
         if ($cartItems->isEmpty()) {
