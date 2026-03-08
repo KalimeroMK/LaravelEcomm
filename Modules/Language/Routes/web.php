@@ -20,7 +20,5 @@ Route::group([
     ]);
 });
 
-// Language switch route (for frontend)
-Route::get('language/{lang}', [LanguageController::class, 'switchLang'])
-    ->name('language.switch')
-    ->where('lang', '[a-zA-Z]{2}');
+// Note: Language switch route is defined in routes/web.php
+// Route::get('language/{lang}', [LanguageController::class, 'switchLang'])->name('language.switch');

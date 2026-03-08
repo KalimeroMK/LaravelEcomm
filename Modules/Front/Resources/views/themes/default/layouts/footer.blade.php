@@ -13,7 +13,7 @@
                         <p class="text">@foreach($settings as $data)
                                 {{$data->short_des}}
                             @endforeach</p>
-                        <p class="call">Got Question? Call us 24/7<span><a
+                        <p class="call">@lang('frontend.call_us_24/7')<span><a
                                         href="tel:123456789">@foreach($settings as $data)
                                         {{$data->phone}}
                                     @endforeach</a></span>
@@ -24,10 +24,10 @@
                 <div class="col-lg-2 col-md-6 col-12">
                     <!-- Single Widget -->
                     <div class="single-footer links">
-                        <h4>Information</h4>
+                        <h4>@lang('frontend.information')</h4>
                         <ul>
-                            <li><a href="{{route('front.about-us')}}">About Us</a></li>
-                            <li><a href="{{route('front.contact')}}">Contact Us</a></li>
+                            <li><a href="{{route('front.about-us')}}">@lang('frontend.about_us')</a></li>
+                            <li><a href="{{route('front.contact')}}">@lang('frontend.contact_us')</a></li>
                             @foreach($pageList as $page)
                                 <li><a href="{{ route('front.pages', $page['slug']) }}">{{ $page['title'] }}</a></li>
                             @endforeach                        </ul>
@@ -37,13 +37,13 @@
                 <div class="col-lg-2 col-md-6 col-12">
                     <!-- Single Widget -->
                     <div class="single-footer links">
-                        <h4>Customer Service</h4>
+                        <h4>@lang('frontend.customer_service')</h4>
                         <ul>
-                            <li><a href="#">Payment Methods</a></li>
-                            <li><a href="#">Money-back</a></li>
-                            <li><a href="#">Returns</a></li>
-                            <li><a href="#">Shipping</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">@lang('frontend.payment_methods')</a></li>
+                            <li><a href="#">@lang('frontend.money_back')</a></li>
+                            <li><a href="#">@lang('frontend.returns')</a></li>
+                            <li><a href="#">@lang('frontend.shipping')</a></li>
+                            <li><a href="#">@lang('frontend.privacy_policy')</a></li>
                         </ul>
                     </div>
                     <!-- End Single Widget -->
@@ -51,7 +51,7 @@
                 <div class="col-lg-3 col-md-6 col-12">
                     <!-- Single Widget -->
                     <div class="single-footer social">
-                        <h4>Get In Tuch</h4>
+                        <h4>@lang('frontend.get_in_touch')</h4>
                         <!-- Single Widget -->
                         <div class="contact">
                             <ul>
@@ -77,8 +77,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-12">
                         <div class="left">
-                            <p>Copyright © {{date('Y')}} <a href="https://github.com/KalimeroMK" target="_blank">KalimeroMK</a>
-                                - All Rights Reserved.</p>
+                            <p>@lang('frontend.copyright', ['year' => date('Y'), 'name' => 'KalimeroMK'])</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-12">

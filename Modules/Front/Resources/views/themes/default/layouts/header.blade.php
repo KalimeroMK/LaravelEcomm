@@ -20,28 +20,27 @@
                     <!-- Top Right -->
                     <div class="right-content">
                         <ul class="list-main">
-                            <li><i class="ti-alarm-clock"></i> <a href="{{ route('front.product-deal') }}">Daily
-                                    deal</a></li>
+                            <li><i class="ti-alarm-clock"></i> <a href="{{ route('front.product-deal') }}">@lang('frontend.daily_deal')</a></li>
                             @auth
                                 @if(Auth::user()->hasRole('super-admin'))
                                     <li><i class="ti-user"></i> <a href="{{route('admin')}}"
-                                                                   target="_blank">Dashboard</a></li>
+                                                                   target="_blank">@lang('frontend.dashboard')</a></li>
                                 @else
                                     <li><i class="ti-user"></i> <a href="{{route('user-profile')}}"
-                                                                   target="_blank">Dashboard</a></li>
+                                                                   target="_blank">@lang('frontend.dashboard')</a></li>
                                 @endif
                                 <li>
                                     <i class="ti-power-off"></i>
                                     <a href="#"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">@lang('frontend.logout')</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                           style="display: none;">
                                         @csrf
                                     </form>
                                 </li>
                             @else
-                                <li><i class="ti-power-off"></i><a href="{{route('login')}}">Login /</a> <a
-                                            href="{{route('register')}}">Register</a></li>
+                                <li><i class="ti-power-off"></i><a href="{{route('login')}}">@lang('frontend.login') /</a> <a
+                                            href="{{route('register')}}">@lang('frontend.register')</a></li>
                             @endauth
                         </ul>
                     </div>
@@ -68,7 +67,7 @@
                         <!-- Search Form -->
                         <div class="search-top">
                             <form class="search-form">
-                                <input type="text" placeholder="Search here..." name="search">
+                                <input type="text" placeholder="@lang('frontend.search_here')" name="search">
                                 <button value="search" type="submit"><i class="ti-search"></i></button>
                             </form>
                         </div>
@@ -82,7 +81,7 @@
                         <div class="search-bar">
                             <form method="POST" action="{{route('front.product-search')}}">
                                 @csrf
-                                <input name="search" placeholder="Search Products Here....." type="search">
+                                <input name="search" placeholder="@lang('frontend.search_products')" type="search">
                                 <button class="btnn" type="submit"><i class="ti-search"></i></button>
                             </form>
                         </div>
@@ -111,8 +110,8 @@
                             @auth
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>{{count(Helper::getAllProductFromWishlist())}} Items</span>
-                                        <a href="{{route('wishlist')}}">View Wishlist</a>
+                                        <span>{{count(Helper::getAllProductFromWishlist())}} @lang('frontend.items')</span>
+                                        <a href="{{route('wishlist')}}">@lang('frontend.view_wishlist')</a>
                                     </div>
                                     <ul class="shopping-list">
                                         @foreach(Helper::getAllProductFromWishlist() as $data)
@@ -121,7 +120,7 @@
                                             @endphp
                                             <li>
                                                 <a href="{{route('wishlist-delete',$data->id)}}" class="remove"
-                                                   title="Remove this item"><i class="fa fa-remove"></i></a>
+                                                   title="@lang('frontend.remove_this_item')"><i class="fa fa-remove"></i></a>
                                                 <a class="cart-img" href="#"><img src="{{$photo[0]}}"
                                                                                   alt="{{$photo[0]}}"></a>
                                                 <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
@@ -133,11 +132,11 @@
                                     </ul>
                                     <div class="bottom">
                                         <div class="total">
-                                            <span>Total</span>
+                                            <span>@lang('frontend.total')</span>
                                             <span
                                                     class="total-amount">${{number_format(Helper::totalWishlistPrice(),2)}}</span>
                                         </div>
-                                        <a href="{{route('cart-list')}}" class="btn animate">Cart</a>
+                                        <a href="{{route('cart-list')}}" class="btn animate">@lang('frontend.cart')</a>
                                     </div>
                                 </div>
                             @endauth
@@ -151,8 +150,8 @@
                             @auth
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>{{count(Helper::getAllProductFromCart())}} Items</span>
-                                        <a href="{{route('cart-list')}}">View Cart</a>
+                                        <span>{{count(Helper::getAllProductFromCart())}} @lang('frontend.items')</span>
+                                        <a href="{{route('cart-list')}}">@lang('frontend.view_cart')</a>
                                     </div>
                                     <ul class="shopping-list">
                                         @foreach(Helper::getAllProductFromCart() as $data)
@@ -161,7 +160,7 @@
                                             @endphp
                                             <li>
                                                 <a href="{{route('cart-delete',$data->id)}}" class="remove"
-                                                   title="Remove this item"><i class="fa fa-remove"></i></a>
+                                                   title="@lang('frontend.remove_this_item')"><i class="fa fa-remove"></i></a>
                                                 <a class="cart-img" href="#"><img src="{{$photo[0]}}"
                                                                                   alt="{{$photo[0]}}"></a>
                                                 <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
@@ -173,18 +172,18 @@
                                     </ul>
                                     <div class="bottom">
                                         <div class="total">
-                                            <span>Total</span>
+                                            <span>@lang('frontend.total')</span>
                                             <span
                                                     class="total-amount">${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </div>
-                                        <a href="{{route('front.checkout')}}" class="btn animate">Checkout</a>
+                                        <a href="{{route('front.checkout')}}" class="btn animate">@lang('frontend.checkout')</a>
                                     </div>
                                 </div>
                             @endauth
                             <!--/ End Shopping Item -->
                             <div class="compare-bar" style="position: relative; display: inline-block;">
                                 <a href="{{ route('products.compare.show') }}" class="single-icon ml-2 compare-icon"
-                                   title="Compare">
+                                   title="@lang('frontend.compare')">
                                     <i class="fa fa-balance-scale"></i>
                                     @php $compareCount = count(session('compare.products', [])); @endphp
                                     @if($compareCount > 0)
@@ -194,12 +193,11 @@
                                 <div class="shopping-item compare-dropdown"
                                      style="display: none; position: absolute; right: 0; top: 100%; z-index: 100; min-width: 220px;">
                                     <div class="dropdown-cart-header">
-                                        <span>{{ $compareCount }} Items</span>
-                                        <a href="{{ route('products.compare.show') }}">View Comparison</a>
+                                        <span>{{ $compareCount }} @lang('frontend.items')</span>
+                                        <a href="{{ route('products.compare.show') }}">@lang('frontend.view_comparison')</a>
                                     </div>
                                     <div class="bottom">
-                                        <a href="{{ route('products.compare.show') }}" class="btn animate">Go to
-                                            Comparison</a>
+                                        <a href="{{ route('products.compare.show') }}" class="btn animate">@lang('frontend.go_to_comparison')</a>
                                     </div>
                                 </div>
                                 <script>
@@ -228,7 +226,7 @@
                 <div class="row">
                     @if (Request::path() == '/')
                         <div class="all-category">
-                            <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>CATEGORIES</h3>
+                            <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>@lang('frontend.categories')</h3>
                             <ul class="main-category">
                                 @foreach ($categories as $category)
                                     <li>
@@ -240,7 +238,7 @@
                                         @if($category->childrenCategories->isNotEmpty())
                                             <ul class="sub-category">
                                                 @foreach ($category->childrenCategories as $childCategory)
-                                                    @include($themePath . '.layouts.child_category', ['child_category' => $childCategory])
+                                                    @include('front::layouts.child_category', ['child_category' => $childCategory])
                                                 @endforeach
                                             </ul>
                                         @endif
@@ -253,7 +251,7 @@
                         <div class="col-lg-9 col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
-                                @include($themePath . '.layouts.menu')
+                                @include('front::layouts.menu')
                                 <!--/ End Main Menu -->
                             </div>
                         </div>
@@ -261,7 +259,7 @@
                         <div class="col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
-                                @include($themePath . '.layouts.menu')
+                                @include('front::layouts.menu')
                                 <!--/ End Main Menu -->
                             </div>
                         </div>

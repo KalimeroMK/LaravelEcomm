@@ -828,4 +828,14 @@ class FrontController extends Controller
         
         return redirect()->back()->with('error', $result['message']);
     }
+
+    /**
+     * Display recently viewed products page.
+     */
+    public function recentlyViewed(RecentlyViewedService $recentlyViewedService): View
+    {
+        $products = $recentlyViewedService->getForCurrentUser(12);
+        
+        return view('front::pages.recently-viewed', compact('products'));
+    }
 }

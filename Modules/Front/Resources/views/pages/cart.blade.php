@@ -1,6 +1,6 @@
 @php use Modules\Core\Helpers\Helper; @endphp
 @extends('front::layouts.master')
-@section('title','Cart Page')
+@section('title', __('frontend.cart_page'))
 @section('content')
     <!-- Breadcrumbs -->
     <div class="breadcrumbs">
@@ -9,8 +9,8 @@
                 <div class="col-12">
                     <div class="bread-inner">
                         <ul class="bread-list">
-                            <li><a href="{{('home')}}">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="">Cart</a></li>
+                            <li><a href="{{('home')}}">@lang('frontend.home')<i class="ti-arrow-right"></i></a></li>
+                            <li class="active"><a href="">@lang('frontend.cart')</a></li>
                         </ul>
                     </div>
                 </div>
@@ -28,11 +28,11 @@
                     <table class="table shopping-summery">
                         <thead>
                         <tr class="main-hading">
-                            <th>@lang('partials.product')</th>
-                            <th>@lang('partials.name')</th>
-                            <th class="text-center">UNIT PRICE</th>
-                            <th class="text-center">QUANTITY</th>
-                            <th class="text-center">TOTAL</th>
+                            <th>@lang('frontend.product')</th>
+                            <th>@lang('frontend.name')</th>
+                            <th class="text-center">@lang('frontend.unit_price')</th>
+                            <th class="text-center">@lang('frontend.quantity')</th>
+                            <th class="text-center">@lang('frontend.total')</th>
                             <th class="text-center"><i class="ti-trash remove-icon"></i></th>
                         </tr>
                         </thead>
@@ -47,15 +47,15 @@
                                         @endphp
                                         <td class="image" data-title="No"><img src="{{$photo[0]}}" alt="{{$photo[0]}}">
                                         </td>
-                                        <td class="product-des" data-title="Description">
+                                        <td class="product-des" data-title="@lang('frontend.description')">
                                             <p class="product-name"><a
                                                         href="{{route('front.product-detail',$cart->product['slug'])}}"
                                                         target="_blank">{{$cart->product['title']}}</a></p>
                                             <p class="product-des">{!!($cart['summary']) !!}</p>
                                         </td>
-                                        <td class="price" data-title="Price">
+                                        <td class="price" data-title="@lang('frontend.price')">
                                             <span>${{number_format($cart['price'],2)}}</span></td>
-                                        <td class="qty" data-title="Qty"><!-- Input Order -->
+                                        <td class="qty" data-title="@lang('frontend.quantity')"><!-- Input Order -->
                                             <div class="input-group">
                                                 <div class="button minus">
                                                     <button type="button" class="btn btn-primary btn-number"
@@ -76,10 +76,10 @@
                                             </div>
                                             <!--/ End Input Order -->
                                         </td>
-                                        <td class="total-amount cart_single_price" data-title="Total"><span
+                                        <td class="total-amount cart_single_price" data-title="@lang('frontend.total')"><span
                                                     class="money">${{$cart['amount']}}</span></td>
 
-                                        <td class="action" data-title="Remove"><a
+                                        <td class="action" data-title="@lang('frontend.remove_this_item')"><a
                                                     href="{{route('cart-delete',$cart->id)}}"><i
                                                         class="ti-trash remove-icon"></i></a></td>
                                     </tr>
@@ -91,14 +91,14 @@
                                 <td></td>
                                 <td></td>
                                 <td class="float-right">
-                                    <button class="btn float-right" type="submit">Update</button>
+                                    <button class="btn float-right" type="submit">@lang('frontend.update')</button>
                                 </td>
                                 </track>
                             @else
                                 <tr>
                                     <td class="text-center">
-                                        There are no any carts available. <a href="{{route('front.product-grids')}}"
-                                                                             style="color:blue;">Continue shopping</a>
+                                        @lang('frontend.there_are_no_carts_available') <a href="{{route('front.product-grids')}}"
+                                                                             style="color:blue;">@lang('frontend.continue_shopping')</a>
 
                                     </td>
                                 </tr>
@@ -120,16 +120,10 @@
                                     <div class="coupon">
                                         <form action="{{route('coupon-store')}}" method="POST">
                                             @csrf
-                                            <input name="code" placeholder="Enter Your Coupon">
-                                            <button class="btn">Apply</button>
+                                            <input name="code" placeholder="@lang('frontend.enter_your_coupon')">
+                                            <button class="btn">@lang('frontend.apply')</button>
                                         </form>
                                     </div>
-                                    {{-- <div class="checkbox">`
-                                        @php
-                                            $shipping=DB::table('shippings')->where('status','active')->limit(1)->get();
-                                        @endphp
-                                        <label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox" onchange="showMe('shipping');"> Shipping</label>
-                                    </div> --}}
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-7 col-12">
@@ -137,34 +131,11 @@
                                     <ul>
                                         <li class="order_subtotal"
                                             data-price="{{Helper::totalCartPrice()}}">
-                                            Cart
-                                            Subtotal<span>${{number_format(Helper::totalCartPrice(),2)}}</span>
+                                            @lang('frontend.cart_subtotal')<span>${{number_format(Helper::totalCartPrice(),2)}}</span>
                                         </li>
-                                        {{-- <div id="shipping" style="display:none;">
-                                            <li class="shipping">
-                                                Shipping {{session('shipping_price')}}
-                                                @if(count(\App\Helpers\Helper::shipping())>0 && \App\Helpers\Helper::cartCount()>0)
-                                                    <div class="form-select">
-                                                        <select name="shipping" class="nice-select">
-                                                            <option value="">Select</option>
-                                                            @foreach(\App\Helpers\Helper::shipping() as $shipping)
-                                                            <option value="{{$shipping->id}}" class="shippingOption" data-price="{{$shipping->price}}">{{$shipping->type}}: ${{$shipping->price}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                @else
-                                                    <div class="form-select">
-                                                        <span>Free</span>
-                                                    </div>
-                                                @endif
-                                            </li>
-                                        </div>
-                                         --}}
-                                        {{-- {{dd(Session::get('coupon')['value'])}} --}}
                                         @if(session()->has('coupon'))
                                             <li class="coupon_price" data-price="{{Session::get('coupon')['value']}}">
-                                                You
-                                                Save<span>${{number_format(Session::get('coupon')['value'],2)}}</span>
+                                                @lang('frontend.you_save')<span>${{number_format(Session::get('coupon')['value'],2)}}</span>
                                             </li>
                                         @endif
                                         @php
@@ -174,16 +145,14 @@
                                             }
                                         @endphp
                                         @if(session()->has('coupon'))
-                                            <li class="last" id="order_total_price">You
-                                                Pay<span>${{number_format($total_amount,2)}}</span></li>
+                                            <li class="last" id="order_total_price">@lang('frontend.you_pay')<span>${{number_format($total_amount,2)}}</span></li>
                                         @else
-                                            <li class="last" id="order_total_price">You
-                                                Pay<span>${{number_format($total_amount,2)}}</span></li>
+                                            <li class="last" id="order_total_price">@lang('frontend.you_pay')<span>${{number_format($total_amount,2)}}</span></li>
                                         @endif
                                     </ul>
                                     <div class="button5">
-                                        <a href="{{route('front.checkout')}}" class="btn">Checkout</a>
-                                        <a href="{{route('front.product-grids')}}" class="btn">Continue shopping</a>
+                                        <a href="{{route('front.checkout')}}" class="btn">@lang('frontend.checkout')</a>
+                                        <a href="{{route('front.product-grids')}}" class="btn">@lang('frontend.continue_shopping')</a>
                                     </div>
                                 </div>
                             </div>
@@ -204,8 +173,8 @@
                     <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-rocket"></i>
-                        <h4>Free shiping</h4>
-                        <p>Orders over $100</p>
+                        <h4>@lang('frontend.free_shipping')</h4>
+                        <p>@lang('frontend.orders_over_100')</p>
                     </div>
                     <!-- End Single Service -->
                 </div>
@@ -213,8 +182,8 @@
                     <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-reload"></i>
-                        <h4>Free Return</h4>
-                        <p>Within 30 days returns</p>
+                        <h4>@lang('frontend.free_return')</h4>
+                        <p>@lang('frontend.within_30_days')</p>
                     </div>
                     <!-- End Single Service -->
                 </div>
@@ -222,8 +191,8 @@
                     <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-lock"></i>
-                        <h4>Sucure Payment</h4>
-                        <p>100% secure payment</p>
+                        <h4>@lang('frontend.secure_payment')</h4>
+                        <p>@lang('frontend.secure_payment_desc')</p>
                     </div>
                     <!-- End Single Service -->
                 </div>
@@ -231,8 +200,8 @@
                     <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-tag"></i>
-                        <h4>Best Peice</h4>
-                        <p>Guaranteed price</p>
+                        <h4>@lang('frontend.best_price')</h4>
+                        <p>@lang('frontend.guaranteed_price')</p>
                     </div>
                     <!-- End Single Service -->
                 </div>
@@ -290,10 +259,10 @@
                                             <i class="yellow fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                         </div>
-                                        <a href="#"> (1 customer review)</a>
+                                        <a href="#"> (1 @lang('frontend.customer_review'))</a>
                                     </div>
                                     <div class="quickview-stock">
-                                        <span><i class="fa fa-check-circle-o"></i> in stock</span>
+                                        <span><i class="fa fa-check-circle-o"></i> @lang('frontend.in_stock')</span>
                                     </div>
                                 </div>
                                 <h3>$29.00</h3>
@@ -305,7 +274,7 @@
                                 <div class="size">
                                     <div class="row">
                                         <div class="col-lg-6 col-12">
-                                            <h5 class="title">Size</h5>
+                                            <h5 class="title">@lang('frontend.size')</h5>
                                             <select>
                                                 <option selected="selected">s</option>
                                                 <option>m</option>
@@ -314,7 +283,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-6 col-12">
-                                            <h5 class="title">Color</h5>
+                                            <h5 class="title">@lang('frontend.color')</h5>
                                             <select>
                                                 <option selected="selected">orange</option>
                                                 <option>purple</option>
@@ -345,12 +314,12 @@
                                     <!--/ End Input Order -->
                                 </div>
                                 <div class="add-to-cart">
-                                    <a href="#" class="btn">Add to cart</a>
+                                    <a href="#" class="btn">@lang('frontend.add_to_cart')</a>
                                     <a href="#" class="btn min"><i class="ti-heart"></i></a>
                                     <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
                                 </div>
                                 <div class="default-social">
-                                    <h4 class="share-now">Share:</h4>
+                                    <h4 class="share-now">@lang('frontend.share_now'):</h4>
                                     <ul>
                                         <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
                                         <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>

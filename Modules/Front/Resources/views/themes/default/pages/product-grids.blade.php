@@ -1,6 +1,6 @@
-@extends($themePath . '.layouts.master')
+@extends('front::layouts.master')
 
-@section('title','E-SHOP || PRODUCT PAGE')
+@section('title', __('frontend.meta_title'))
 
 @section('content')
     <!-- Breadcrumbs -->
@@ -10,8 +10,8 @@
                 <div class="col-12">
                     <div class="bread-inner">
                         <ul class="bread-list">
-                            <li><a href="/">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="/">Shop Grid</a></li>
+                            <li><a href="/">@lang('frontend.home')<i class="ti-arrow-right"></i></a></li>
+                            <li class="active"><a href="/">@lang('frontend.shop_grid')</a></li>
                         </ul>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                         <div class="shop-sidebar">
                             <!-- Single Widget -->
                             <div class="single-widget category">
-                                <h3 class="title">Categories</h3>
+                                <h3 class="title">@lang('frontend.categories')</h3>
                                 <ul class="categor-list">
                                     <ul class="categor-list">
                                         @foreach ($categories as $category)
@@ -39,7 +39,7 @@
                                                 }}</a>
                                                 <ul>
                                                     @foreach ($category->childrenCategories as $childCategory)
-                                                        @include($themePath . '.layouts.child_category', ['child_category' => $childCategory])
+                                                        @include('front::layouts.child_category', ['child_category' => $childCategory])
                                                     @endforeach
                                                 </ul>
                                             </li>
@@ -51,14 +51,14 @@
                             <!--/ End Single Widget -->
                             <!-- Shop By Price -->
                             <div class="single-widget range">
-                                <h3 class="title">Shop by Price</h3>
+                                <h3 class="title">@lang('frontend.shop_by_price')</h3>
                                 <div class="price-filter">
                                     <div class="price-filter-inner">
                                         <div id="slider-range" data-min="0" data-max="{{$max}}"></div>
                                         <div class="product_filter">
-                                            <button type="submit" class="filter_button">Filter</button>
+                                            <button type="submit" class="filter_button">@lang('frontend.filter')</button>
                                             <div class="label-input">
-                                                <span>Range:</span>
+                                                <span>@lang('frontend.range'):</span>
                                                 <input style="" type="text" id="amount" readonly/>
                                                 <input type="hidden" name="price_range" id="price_range"
                                                        value="@if(!empty($_GET['price'])){{$_GET['price']}}@endif"/>
@@ -87,7 +87,7 @@
                             <!--/ End Shop By Price -->
                             <!-- Single Widget -->
                             <div class="single-widget recent-post">
-                                <h3 class="title">Recent post</h3>
+                                <h3 class="title">@lang('frontend.recent_post')</h3>
                                 @foreach($products as $product)
                                     <div class="single-post first">
                                         <div class="image">
@@ -112,7 +112,7 @@
                             <!--/ End Single Widget -->
                             <!-- Single Widget -->
                             <div class="single-widget category">
-                                <h3 class="title">Brands</h3>
+                                <h3 class="title">@lang('frontend.brands')</h3>
                                 <ul class="categor-list">
                                     @foreach($brands as $brand)
                                         <li>
@@ -131,9 +131,9 @@
                                 <div class="shop-top">
                                     <div class="shop-shorter">
                                         <div class="single-shorter">
-                                            <label>Show :</label>
+                                            <label>@lang('frontend.show') :</label>
                                             <select class="show" name="show" onchange="this.form.submit();">
-                                                <option value="">Default</option>
+                                                <option value="">@lang('frontend.default')</option>
                                                 <option value="9"
                                                         @if(!empty($_GET['show']) && $_GET['show']=='9') selected @endif>
                                                     09
@@ -153,24 +153,24 @@
                                             </select>
                                         </div>
                                         <div class="single-shorter">
-                                            <label>Sort By :</label>
+                                            <label>@lang('frontend.sort_by') :</label>
                                             <select class='sortBy' name='sortBy' onchange="this.form.submit();">
-                                                <option value="">Default</option>
+                                                <option value="">@lang('frontend.default')</option>
                                                 <option value="title"
                                                         @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='title') selected @endif>
-                                                    Name
+                                                    @lang('frontend.name')
                                                 </option>
                                                 <option value="price"
                                                         @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='price') selected @endif>
-                                                    Price
+                                                    @lang('frontend.price')
                                                 </option>
                                                 <option value="category"
                                                         @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='category') selected @endif>
-                                                    Category
+                                                    @lang('frontend.category')
                                                 </option>
                                                 <option value="brand"
                                                         @if(!empty($_GET['sortBy']) && $_GET['sortBy']=='brand') selected @endif>
-                                                    Brand
+                                                    @lang('frontend.brand')
                                                 </option>
                                             </select>
                                         </div>
@@ -196,7 +196,7 @@
                                                     <img class="default-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
 <img class="hover-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
                                                     @if($product->discount)
-                                                        <span class="price-dec">{{$product->discount}} % Off</span>
+                                                        <span class="price-dec">{{$product->discount}} % @lang('frontend.off')</span>
                                                     @endif
                                                     {{-- Display product condition --}}
                                                     @if($product->condition)
@@ -205,17 +205,17 @@
                                                 </a>
                                                 <div class="button-head">
                                                     <div class="product-action">
-                                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="@lang('frontend.quick_view')" href="#"><i class=" ti-eye"></i><span>@lang('frontend.quick_shop')</span></a>
+                                                        <a title="@lang('frontend.wishlist')" href="{{route('add-to-wishlist',$product->slug)}}"><i class=" ti-heart "></i><span>@lang('frontend.add_to_wishlist')</span></a>
                                                         <form method="POST" action="{{ route('products.compare.add', $product->id) }}" style="display:inline">
                                                             @csrf
-                                                            <button type="submit" class="btn btn-outline-primary btn-xs p-1" style="font-size:12px;line-height:1.1;" title="Add to Compare">
+                                                            <button type="submit" class="btn btn-outline-primary btn-xs p-1" style="font-size:12px;line-height:1.1;" title="@lang('frontend.add_to_compare')">
                                                                 <i class="fa fa-balance-scale"></i>
                                                             </button>
                                                         </form>
                                                     </div>
                                                     <div class="product-action-2">
-                                                        <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Add to cart</a>
+                                                        <a title="@lang('frontend.add_to_cart')" href="{{route('add-to-cart',$product->slug)}}">@lang('frontend.add_to_cart')</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -234,7 +234,7 @@
                                     </div>
                                 @endforeach
                             @else
-                                <h4 class="text-warning" style="margin:100px auto;">There are no products.</h4>
+                                <h4 class="text-warning" style="margin:100px auto;">@lang('frontend.there_are_no_products')</h4>
                             @endif
 
 
@@ -302,13 +302,13 @@
                                                         @endif
                                                     @endfor
                                                 </div>
-                                                <a href="#"> ({{$rate_count}} customer review)</a>
+                                                <a href="#"> ({{$rate_count}} @lang('frontend.customer_review'))</a>
                                             </div>
                                             <div class="quickview-stock">
                                                 @if($product->stock >0)
-                                                    <span><i class="fa fa-check-circle-o"></i> {{$product->stock}} in stock</span>
+                                                    <span><i class="fa fa-check-circle-o"></i> {{$product->stock}} @lang('frontend.in_stock')</span>
                                                 @else
-                                                    <span><i class="fa fa-times-circle-o text-danger"></i> {{$product->stock}} out stock</span>
+                                                    <span><i class="fa fa-times-circle-o text-danger"></i> {{$product->stock}} @lang('frontend.out_stock')</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -330,7 +330,7 @@
                                         @endphp
                                         @if(!empty($sizes))
                                             <div class="size">
-                                                <h4>Size</h4>
+                                                <h4>@lang('frontend.size')</h4>
                                                 <ul>
                                                     @foreach($sizes as $size)
                                                         <li><a href="#" class="one">{{$size}}</a></li>
@@ -341,7 +341,7 @@
                                         <div class="size">
                                             <div class="row">
                                                 <div class="col-lg-6 col-12">
-                                                    <h5 class="title">Size</h5>
+                                                    <h5 class="title">@lang('frontend.size')</h5>
                                                     <select>
                                                         @php
                                                             $sizes = collect($product->attributeValues ?? [])
@@ -356,7 +356,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6 col-12">
-                                                    <h5 class="title">Color</h5>
+                                                    <h5 class="title">@lang('frontend.color')</h5>
                                                     <select>
                                                         <option selected="selected">orange</option>
                                                         <option>purple</option>
@@ -392,7 +392,7 @@
                                                 <!--/ End Input Order -->
                                             </div>
                                             <div class="add-to-cart">
-                                                <button type="submit" class="btn">Add to cart</button>
+                                                <button type="submit" class="btn">@lang('frontend.add_to_cart')</button>
                                                 <a href="{{route('add-to-wishlist',$product->slug)}}" class="btn min"><i
                                                             class="ti-heart"></i></a>
                                             </div>

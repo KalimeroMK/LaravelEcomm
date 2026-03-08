@@ -82,7 +82,59 @@ class LanguageController extends CoreController
         }
 
         session()->put('locale', $lang);
+        app()->setLocale($lang);
 
-        return redirect()->back();
+        // Store in user preferences if user is authenticated
+        if (auth()->check()) {
+            auth()->user()->update(['locale' => $lang]);
+        }
+
+        // Get the previous URL and replace locale
+        $previousUrl = url()->previous();
+        $newUrl = $this->replaceLocaleInUrl($previousUrl, $lang);
+
+        return redirect()->to($newUrl);
+    }
+
+    /**
+     * Replace locale in URL with new locale
+     */
+    private function replaceLocaleInUrl(string $url, string $newLocale): string
+    {
+        $parsedUrl = parse_url($url);
+        $path = $parsedUrl['path'] ?? '/';
+        
+        // Get active language codes
+        $activeLocales = Language::getActiveCodes();
+        
+        // Build pattern to match any active locale at the start of path
+        $localePattern = '/^\/(' . implode('|', array_map('preg_quote', $activeLocales)) . ')(\/|$)/i';
+        
+        // Replace existing locale or prepend new locale
+        if (preg_match($localePattern, $path, $matches)) {
+            $newPath = preg_replace($localePattern, '/' . $newLocale . '$2', $path, 1);
+        } else {
+            // No locale in path, prepend it
+            $newPath = $path === '/' ? '/' . $newLocale : '/' . $newLocale . $path;
+        }
+        
+        // Rebuild URL
+        $newUrl = ($parsedUrl['scheme'] ?? 'http') . '://' . $parsedUrl['host'];
+        
+        if (isset($parsedUrl['port'])) {
+            $newUrl .= ':' . $parsedUrl['port'];
+        }
+        
+        $newUrl .= $newPath;
+        
+        if (isset($parsedUrl['query'])) {
+            $newUrl .= '?' . $parsedUrl['query'];
+        }
+        
+        if (isset($parsedUrl['fragment'])) {
+            $newUrl .= '#' . $parsedUrl['fragment'];
+        }
+        
+        return $newUrl;
     }
 }

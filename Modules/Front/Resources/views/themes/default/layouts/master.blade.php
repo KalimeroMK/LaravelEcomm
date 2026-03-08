@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <!-- Title Tag  -->
 <head>
     <meta charset="utf-8">
@@ -7,12 +7,12 @@
     @if (Request::path() == '/')
         <title></title>
         <meta charset="utf-8">
-        <title>E-commerce Website - Buy and Sell Products Online</title>
+        <title>@lang('frontend.meta_title')</title>
         <meta name="robots" content="index, follow">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="profile" href="http://gmpg.org/xfn/11">
         <link type="text/plain" rel="author" href="http://yourwebsite.com/humans.txt"/>
-        <meta property="og:title" content="E-commerce Website - Buy and Sell Products Online"/>
+        <meta property="og:title" content="@lang('frontend.meta_title')"/>
         <meta property="article:author" content="https://www.facebook.com/YourEcommercePage"/>
         <meta property="og:site_name" content="E-commerce Website"/>
         <meta property="fb:app_id" content="YourFacebookAppID"/>
@@ -20,13 +20,13 @@
         <meta property="og:type" content="website"/>
         <meta property="og:image" content="http://yourwebsite.com/assets/img/logo/logo.jpg"/>
         <meta property="article:tag"
-              content="e-commerce, online shopping, products, buy and sell, shopping website, online marketplace"/>
+              content="@lang('frontend.meta_keywords')"/>
         <meta property="og:description"
-              content="Shop for a wide range of products on our e-commerce website. Explore our selection of high-quality items and enjoy secure online shopping."/>
+              content="@lang('frontend.meta_description')"/>
         <meta name="description"
-              content="Shop for a wide range of products on our e-commerce website. Explore our selection of high-quality items and enjoy secure online shopping."/>
+              content="@lang('frontend.meta_description')"/>
         <meta name="keywords"
-              content="e-commerce, online shopping, products, buy and sell, shopping website, online marketplace, deals, discounts"/>
+              content="@lang('frontend.meta_keywords')"/>
         <meta name="author" content="Zoran Shefot Bogoevski">
     @endif
     <!-- Mobile Meta -->
@@ -52,8 +52,26 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/img/favicon.ico">
-    @include($themePath . '.layouts.head')
-    {!! $schema ?? '' !!}
+    @include('front::layouts.head')
+    {!! $schema !!}
+    
+    <!-- RTL Support for Arabic -->
+    @if(app()->getLocale() == 'ar')
+        <style>
+            body {
+                direction: rtl;
+                text-align: right;
+            }
+            .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6,
+            .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12,
+            .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
+            .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
+            .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6,
+            .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+                float: right;
+            }
+        </style>
+    @endif
 </head>
 <body class="js">
 <!-- Preloader -->
@@ -66,13 +84,13 @@
     </div>
 </div>
 <!-- End Preloader -->
-@include($themePath . '.layouts.notification')
+@include('front::layouts.notification')
 <!-- Header -->
-@include($themePath . '.layouts.header')
+@include('front::layouts.header')
 <!--/ End Header -->
 @yield('content')
 
-@include($themePath . '.layouts.footer')
+@include('front::layouts.footer')
 
 </body>
 </html>

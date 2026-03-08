@@ -1,249 +1,272 @@
-<!-- header start -->
-<!-- "fixed": enables fixed navigation mode (sticky menu) e.g. class="header fixed clearfix" -->
-@php
-    use Modules\Core\Helpers\Helper;
-@endphp
-<!-- "fixed": enables fixed navigation mode (sticky menu) e.g. class="header fixed clearfix" -->
-<!-- "dark": dark version of header e.g. class="header dark clearfix" -->
-<!-- "full-width": mandatory class for the full-width menu layout -->
-<!-- "centered": mandatory class for the centered logo layout -->
-<!-- ================ --> 
-<header class="header fixed full-width clearfix">
-    
-    <!-- header-second start -->
-    <!-- ================ -->
-    <div class="header-second clearfix">
-        
-        <!-- main-navigation start -->
-        <!-- classes: -->
-        <!-- "onclick": Makes the dropdowns open on click, this the default bootstrap behavior e.g. class="main-navigation onclick" -->
-        <!-- "animated": Enables animations on dropdowns opening e.g. class="main-navigation animated" -->
-        <!-- "with-dropdown-buttons": Mandatory class that adds extra space, to the main navigation, for the search and cart dropdowns -->
-        <!-- ================ -->
-        <div class="main-navigation animated with-dropdown-buttons">
-
-            <!-- navbar start -->
-            <!-- ================ -->
-            <nav class="navbar navbar-default" role="navigation">
-                <div class="container-fluid">
-
-                    <!-- Toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        
-                        <!-- header-first start -->
-                        <!-- ================ -->
-                        <div class="header-first clearfix">
-
-                            <!-- logo -->
-                            <div id="logo-mobile" class="logo">
-                                <a href="{{ route('front.index') }}">
-                                    <img id="logo-img-mobile" src="{{ theme_asset('img/logo_light_blue.png') }}" alt="{{ $settings['site-name'] ?? 'E-commerce' }}">
-                                </a>
-                            </div>
-
-                            <!-- name-and-slogan -->
-                            <div class="site-slogan hidden-xs">
-                                {{ $settings['short_des'] ?? 'Modern E-commerce Website' }}
-                            </div>
-
-                        </div>
-                        <!-- header-first end -->
-                        
-                    </div>
-
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                        <!-- main-menu -->
-                        <ul class="nav navbar-nav navbar-right">
-
-                            <!-- Home -->
-                            <li class="{{ request()->routeIs('front.index') ? 'active' : '' }}">
-                                <a href="{{ route('front.index') }}">Home</a>
-                            </li>
-
-                            <!-- Products -->
-                            <li class="dropdown {{ request()->routeIs('front.product*') ? 'active' : '' }}">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Products</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ route('front.product-grids') }}"><i class="icon-basket-1 pr-10"></i>All Products</a></li>
-                                    <li><a href="{{ route('front.product-lists') }}"><i class="icon-list pr-10"></i>Product Lists</a></li>
-                                </ul>
-                            </li>
-
-                            <!-- Categories -->
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories</a>
-                                <ul class="dropdown-menu">
-                                    @if(isset($categories) && $categories->count() > 0)
-                                        @foreach($categories->take(10) as $category)
-                                            <li><a href="{{ route('front.product-cat', $category->slug) }}">{{ $category->title }}</a></li>
-                                        @endforeach
-                                    @else
-                                        <li><a href="#">No categories available</a></li>
-                                    @endif
-                                </ul>
-                            </li>
-
-                            <!-- Brands -->
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Brands</a>
-                                <ul class="dropdown-menu">
-                                    @if(isset($brands) && $brands->count() > 0)
-                                        @foreach($brands->take(10) as $brand)
-                                            <li><a href="{{ route('front.product-brand', $brand->slug) }}">{{ $brand->title }}</a></li>
-                                        @endforeach
-                                    @else
-                                        <li><a href="#">No brands available</a></li>
-                                    @endif
-                                </ul>
-                            </li>
-
-                            <!-- Blog -->
-                            <li class="{{ request()->routeIs('front.blog*') ? 'active' : '' }}">
-                                <a href="{{ route('front.blog') }}">Blog</a>
-                            </li>
-
-                            <!-- About -->
-                            <li class="{{ request()->routeIs('front.about') ? 'active' : '' }}">
-                                <a href="{{ route('front.about-us') }}">About</a>
-                            </li>
-
-                            <!-- Contact -->
-                            <li class="{{ request()->routeIs('front.contact') ? 'active' : '' }}">
-                                <a href="{{ route('front.contact') }}">Contact</a>
-                            </li>
-
-                            <!-- Search dropdown -->
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-search"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <form class="navbar-form" role="search" action="{{ route('front.product-search') }}" method="GET">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Search products..." name="search" value="{{ request('search') }}">
-                                            </div>
-                                            <button type="submit" class="btn btn-default">Search</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <!-- Cart dropdown -->
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle cart-icon-container" data-toggle="dropdown">
-                                    <span class="badge" id="cart-count">{{ Helper::cartCount() }}</span>
-                                    <i class="fa fa-shopping-cart"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="cart-preview">
-                                            <div id="cart-items">
-                                                <p class="text-center">Your cart is empty</p>
-                                            </div>
-                                            <div class="cart-actions">
-                                                <a href="{{ route('cart-list') }}" class="btn btn-primary btn-sm">View Cart</a>
-                                                <a href="{{ route('front.checkout') }}" class="btn btn-success btn-sm">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <!-- User Account -->
-                            @auth
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-user"></i> {{ Auth::user()->name }}
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ route('user-profile') }}"><i class="fa fa-dashboard pr-10"></i>Dashboard</a></li>
-                                        <li><a href="{{ route('user-profile') }}"><i class="fa fa-user pr-10"></i>Profile</a></li>
-                                        <li><a href="{{ route('orders.index') }}"><i class="fa fa-shopping-bag pr-10"></i>Orders</a></li>
-                                        <li><a href="{{ route('wishlist') }}"><i class="fa fa-heart pr-10"></i>Wishlist</a></li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a href="{{ route('logout') }}" 
-                                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                <i class="fa fa-sign-out pr-10"></i>Logout
-                                            </a>
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                                @csrf
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </li>
-                            @else
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-user"></i> Account
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="{{ route('login') }}"><i class="fa fa-sign-in pr-10"></i>Login</a></li>
-                                        <li><a href="{{ route('register') }}"><i class="fa fa-user-plus pr-10"></i>Register</a></li>
-                                    </ul>
-                                </li>
-                            @endauth
-
+@php use Modules\Core\Helpers\Helper; @endphp
+<header class="header shop">
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-12">
+                    <!-- Top Left -->
+                    <div class="top-left">
+                        <ul class="list-main">
+                            @foreach($settings as $data)
+                                <li><i class="ti-headphone-alt"></i>{{$data->phone}}</li>
+                                <li><i class="ti-email"></i> {{$data->email}} </li>
+                            @endforeach
                         </ul>
                     </div>
+                    <!--/ End Top Left -->
                 </div>
-            </nav>
-            <!-- navbar end -->
-
+                <div class="col-lg-6 col-md-12 col-12">
+                    <!-- Top Right -->
+                    <div class="right-content">
+                        <ul class="list-main">
+                            <li><i class="ti-alarm-clock"></i> <a href="{{ route('front.product-deal') }}">@lang('frontend.daily_deal')</a></li>
+                            @auth
+                                @if(Auth::user()->hasRole('super-admin'))
+                                    <li><i class="ti-user"></i> <a href="{{route('admin')}}"
+                                                                   target="_blank">@lang('frontend.dashboard')</a></li>
+                                @else
+                                    <li><i class="ti-user"></i> <a href="{{route('user-profile')}}"
+                                                                   target="_blank">@lang('frontend.dashboard')</a></li>
+                                @endif
+                                <li>
+                                    <i class="ti-power-off"></i>
+                                    <a href="#"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">@lang('frontend.logout')</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                          style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
+                            @else
+                                <li><i class="ti-power-off"></i><a href="{{route('login')}}">@lang('frontend.login') /</a> <a
+                                            href="{{route('register')}}">@lang('frontend.register')</a></li>
+                            @endauth
+                        </ul>
+                    </div>
+                    <!-- End Top Right -->
+                </div>
+            </div>
         </div>
-        <!-- main-navigation end -->
-
     </div>
-    <!-- header-second end -->
+    <!-- End Topbar -->
+    <div class="middle-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-12">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="{{route('front.index')}}"><img
+                                    src="@foreach($settings as $data) {{$data->logo}} @endforeach"
+                                    alt="logo"></a>
+                    </div>
+                    <!--/ End Logo -->
+                    <!-- Search Form -->
+                    <div class="search-top">
+                        <div class="top-search"><a href="#0"><i class="ti-search"></i></a></div>
+                        <!-- Search Form -->
+                        <div class="search-top">
+                            <form class="search-form">
+                                <input type="text" placeholder="@lang('frontend.search_here')" name="search">
+                                <button value="search" type="submit"><i class="ti-search"></i></button>
+                            </form>
+                        </div>
+                        <!--/ End Search Form -->
+                    </div>
+                    <!--/ End Search Form -->
+                    <div class="mobile-nav"></div>
+                </div>
+                <div class="col-lg-8 col-md-7 col-12">
+                    <div class="search-bar-top">
+                        <div class="search-bar">
+                            <form method="POST" action="{{route('front.product-search')}}">
+                                @csrf
+                                <input name="search" placeholder="@lang('frontend.search_products')" type="search">
+                                <button class="btnn" type="submit"><i class="ti-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-12">
+                    <div class="right-bar float-right">
+                        <!-- Search Form -->
+                        <div class="sinlge-bar shopping">
+                            @php
+                                $total_prod=0;
+                                $total_amount=0;
+                            @endphp
+                            @if(session('wishlist'))
+                                @foreach(session('wishlist') as $wishlist_items)
+                                    @php
+                                        $total_prod+=$wishlist_items['quantity'];
+                                        $total_amount+=$wishlist_items['amount'];
+                                    @endphp
+                                @endforeach
+                            @endif
+                            <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o"></i> <span
+                                        class="total-count">{{Modules\Core\Helpers\Helper::wishlistCount()}}</span></a>
 
+                            <!-- Shopping Item -->
+                            @auth
+                                <div class="shopping-item">
+                                    <div class="dropdown-cart-header">
+                                        <span>{{count(Helper::getAllProductFromWishlist())}} @lang('frontend.items')</span>
+                                        <a href="{{route('wishlist')}}">@lang('frontend.view_wishlist')</a>
+                                    </div>
+                                    <ul class="shopping-list">
+                                        @foreach(Helper::getAllProductFromWishlist() as $data)
+                                            @php
+                                                $photo=explode(',',$data->product['photo']);
+                                            @endphp
+                                            <li>
+                                                <a href="{{route('wishlist-delete',$data->id)}}" class="remove"
+                                                   title="@lang('frontend.remove_this_item')"><i class="fa fa-remove"></i></a>
+                                                <a class="cart-img" href="#"><img src="{{$photo[0]}}"
+                                                                                  alt="{{$photo[0]}}"></a>
+                                                <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
+                                                       target="_blank">{{$data->product['title']}}</a></h4>
+                                                <p class="quantity">{{$data->quantity}} x - <span
+                                                            class="amount">${{number_format($data->price,2)}}</span></p>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    <div class="bottom">
+                                        <div class="total">
+                                            <span>@lang('frontend.total')</span>
+                                            <span
+                                                    class="total-amount">${{number_format(Helper::totalWishlistPrice(),2)}}</span>
+                                        </div>
+                                        <a href="{{route('cart-list')}}" class="btn animate">@lang('frontend.cart')</a>
+                                    </div>
+                                </div>
+                            @endauth
+
+                            <!--/ End Shopping Item -->
+                        </div>
+                        <div class="sinlge-bar shopping">
+                            <a href="{{route('cart-list')}}" class="single-icon"><i class="ti-bag"></i> <span
+                                        class="total-count">{{Helper::cartCount()}}</span></a>
+                            <!-- Shopping Item -->
+                            @auth
+                                <div class="shopping-item">
+                                    <div class="dropdown-cart-header">
+                                        <span>{{count(Helper::getAllProductFromCart())}} @lang('frontend.items')</span>
+                                        <a href="{{route('cart-list')}}">@lang('frontend.view_cart')</a>
+                                    </div>
+                                    <ul class="shopping-list">
+                                        @foreach(Helper::getAllProductFromCart() as $data)
+                                            @php
+                                                $photo=explode(',',$data->product['photo']);
+                                            @endphp
+                                            <li>
+                                                <a href="{{route('cart-delete',$data->id)}}" class="remove"
+                                                   title="@lang('frontend.remove_this_item')"><i class="fa fa-remove"></i></a>
+                                                <a class="cart-img" href="#"><img src="{{$photo[0]}}"
+                                                                                  alt="{{$photo[0]}}"></a>
+                                                <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
+                                                       target="_blank">{{$data->product['title']}}</a></h4>
+                                                <p class="quantity">{{$data->quantity}} x - <span
+                                                            class="amount">${{number_format($data->price,2)}}</span></p>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    <div class="bottom">
+                                        <div class="total">
+                                            <span>@lang('frontend.total')</span>
+                                            <span
+                                                    class="total-amount">${{number_format(Helper::totalCartPrice(),2)}}</span>
+                                        </div>
+                                        <a href="{{route('front.checkout')}}" class="btn animate">@lang('frontend.checkout')</a>
+                                    </div>
+                                </div>
+                            @endauth
+                            <!--/ End Shopping Item -->
+                            <div class="compare-bar" style="position: relative; display: inline-block;">
+                                <a href="{{ route('products.compare.show') }}" class="single-icon ml-2 compare-icon"
+                                   title="@lang('frontend.compare')">
+                                    <i class="fa fa-balance-scale"></i>
+                                    @php $compareCount = count(session('compare.products', [])); @endphp
+                                    @if($compareCount > 0)
+                                        <span class="total-count">{{$compareCount}}</span>
+                                    @endif
+                                </a>
+                                <div class="shopping-item compare-dropdown"
+                                     style="display: none; position: absolute; right: 0; top: 100%; z-index: 100; min-width: 220px;">
+                                    <div class="dropdown-cart-header">
+                                        <span>{{ $compareCount }} @lang('frontend.items')</span>
+                                        <a href="{{ route('products.compare.show') }}">@lang('frontend.view_comparison')</a>
+                                    </div>
+                                    <div class="bottom">
+                                        <a href="{{ route('products.compare.show') }}" class="btn animate">@lang('frontend.go_to_comparison')</a>
+                                    </div>
+                                </div>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var compareBar = document.querySelector('.compare-bar');
+                                        var dropdown = compareBar.querySelector('.compare-dropdown');
+                                        compareBar.addEventListener('mouseenter', function () {
+                                            dropdown.style.display = 'block';
+                                        });
+                                        compareBar.addEventListener('mouseleave', function () {
+                                            dropdown.style.display = 'none';
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header Inner -->
+    <div class="header-inner">
+        <div class="container">
+            <div class="cat-nav-head">
+                <div class="row">
+                    @if (Request::path() == '/')
+                        <div class="all-category">
+                            <h3 class="cat-heading"><i class="fa fa-bars" aria-hidden="true"></i>@lang('frontend.categories')</h3>
+                            <ul class="main-category">
+                                @foreach ($categories as $category)
+                                    <li>
+                                        <a href="{{ route('front.product-cat', $category->slug) }}">{{ $category->title }}
+                                            @if($category->childrenCategories->isNotEmpty())
+                                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                            @endif
+                                        </a>
+                                        @if($category->childrenCategories->isNotEmpty())
+                                            <ul class="sub-category">
+                                                @foreach ($category->childrenCategories as $childCategory)
+                                                    @include('front::layouts.child_category', ['child_category' => $childCategory])
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+
+                        <div class="col-lg-9 col-12">
+                            <div class="menu-area">
+                                <!-- Main Menu -->
+                                @include('front::layouts.menu')
+                                <!--/ End Main Menu -->
+                            </div>
+                        </div>
+                    @else
+                        <div class="col-12">
+                            <div class="menu-area">
+                                <!-- Main Menu -->
+                                @include('front::layouts.menu')
+                                <!--/ End Main Menu -->
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ End Header Inner -->
 </header>
-<!-- header end -->
-
-@push('styles')
-<style>
-    .cart-icon-container {
-        display: inline-block !important;
-        width: auto !important;
-        white-space: nowrap !important;
-        vertical-align: middle !important;
-    }
-    /* Force children to float left to sit side-by-side */
-    .cart-icon-container .badge {
-        display: block !important; /* Block needed for float */
-        float: left !important;
-        position: static !important;
-        margin: 5px 5px 0 0 !important; /* Top margin to align with icon if needed */
-        
-        /* Badge styling */
-        background-color: #e74c3c;
-        color: #fff;
-        border-radius: 50%;
-        padding: 3px 6px;
-        font-size: 10px;
-        line-height: normal !important;
-        min-width: 18px;
-        text-align: center;
-        height: auto !important;
-    }
-    .cart-icon-container i {
-        display: block !important; /* Block needed for float */
-        float: left !important;
-        margin: 0 !important;
-        line-height: inherit !important;
-        padding-top: 2px !important; /* Optical adjustment */
-    }
-    /* Ensure no pseudo-elements interfere */
-    .cart-icon-container::after,
-    .cart-icon-container::before {
-        display: none !important;
-    }
-</style>
-@endpush
