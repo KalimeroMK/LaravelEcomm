@@ -76,9 +76,9 @@ class UserController extends CoreController
 
     public function show(User $user): Factory|View
     {
-        $userDto = $this->findUserAction->execute($user->id);
+        $userModel = $this->findUserAction->execute($user->id);
 
-        return view('user::edit', ['user' => $userDto->user]);
+        return view('user::edit', ['user' => $userModel]);
     }
 
     public function edit(User $user): Factory|View
@@ -108,6 +108,11 @@ class UserController extends CoreController
     public function profile(): Factory|View
     {
         $user = auth()->user();
+        
+        if ($user === null) {
+            abort(401, 'Unauthorized');
+        }
+        
         $userDto = $this->findUserAction->execute($user->id);
 
         return view('user::profile', ['profile' => $userDto]);

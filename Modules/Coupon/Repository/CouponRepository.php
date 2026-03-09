@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Coupon\Repository;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Core\Interfaces\EloquentRepositoryInterface;
 use Modules\Core\Repositories\EloquentRepository;
 use Modules\Coupon\Models\Coupon;
@@ -18,9 +18,11 @@ class CouponRepository extends EloquentRepository implements EloquentRepositoryI
 
     /**
      * Get all coupons.
+     *
+     * @return Collection<int, Coupon>
      */
     public function findAll(): Collection
     {
-        return (new $this->modelClass)->orderBy('id', 'desc')->get();
+        return Coupon::orderBy('id', 'desc')->get();
     }
 }

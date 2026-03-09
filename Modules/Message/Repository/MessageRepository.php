@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Message\Repository;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Core\Interfaces\EloquentRepositoryInterface;
 use Modules\Core\Repositories\EloquentRepository;
 use Modules\Message\Models\Message;
@@ -17,10 +17,12 @@ class MessageRepository extends EloquentRepository implements EloquentRepository
     }
 
     /**
-     * Get all messages with user relationship.
+     * Get all messages.
+     *
+     * @return Collection<int, Message>
      */
     public function findAll(): Collection
     {
-        return (new $this->modelClass)->with('user')->orderBy('id', 'desc')->get();
+        return Message::orderBy('id', 'desc')->get();
     }
 }

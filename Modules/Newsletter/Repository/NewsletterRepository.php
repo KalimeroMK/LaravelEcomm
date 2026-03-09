@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Newsletter\Repository;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Core\Interfaces\EloquentRepositoryInterface;
 use Modules\Core\Repositories\EloquentRepository;
 use Modules\Newsletter\Models\Newsletter;
@@ -18,9 +18,11 @@ class NewsletterRepository extends EloquentRepository implements EloquentReposit
 
     /**
      * Get all newsletter entries.
+     *
+     * @return Collection<int, Newsletter>
      */
     public function findAll(): Collection
     {
-        return (new $this->modelClass)->orderBy('id', 'desc')->get();
+        return Newsletter::orderBy('id', 'desc')->get();
     }
 }

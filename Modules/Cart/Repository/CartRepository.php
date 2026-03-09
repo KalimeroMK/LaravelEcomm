@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Cart\Repository;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Interfaces\EloquentRepositoryInterface;
@@ -19,19 +19,22 @@ class CartRepository extends EloquentRepository implements EloquentRepositoryInt
 
     /**
      * Get all cart entries.
+     *
+     * @return Collection<int, Cart>
      */
     public function findAll(): Collection
     {
-        return (new $this->modelClass)->with(['product', 'product.media', 'user'])->get();
+        return Cart::with(['product', 'product.media', 'user'])->get();
     }
 
     /**
      * Get cart entries for the currently authenticated user.
+     *
+     * @return Collection<int, Cart>
      */
     public function show(): Collection
     {
-        return (new $this->modelClass)
-            ->with(['product', 'product.media'])
+        return Cart::with(['product', 'product.media'])
             ->where('user_id', Auth::id())
             ->get();
     }
