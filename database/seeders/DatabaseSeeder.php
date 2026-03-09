@@ -26,6 +26,7 @@ use Modules\Post\Models\Post;
 use Modules\Product\Database\Seeders\ProductReviewSeeder;
 use Modules\Product\Models\Product;
 use Modules\Tag\Models\Tag;
+use Modules\Language\Database\Seeders\LanguageDatabaseSeeder;
 use Modules\User\Database\Seeders\PermissionTableSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        $this->call(LanguageDatabaseSeeder::class);
         $this->call(PermissionTableSeeder::class);
         // Create parent categories first
         $parentCategories = Category::factory()->count(5)->active()->create([
