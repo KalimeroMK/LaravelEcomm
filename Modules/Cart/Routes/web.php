@@ -27,5 +27,5 @@ Route::group(['middleware' => 'auth'], function (): void {
     Route::get('/cart-list', function (): Illuminate\Contracts\View\Factory|Illuminate\Contracts\View\View {
         return view(theme_view('pages.cart'));
     })->name('cart-list');
-    Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
 });

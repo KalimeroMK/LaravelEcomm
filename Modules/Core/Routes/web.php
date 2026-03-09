@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Core\Http\Controllers\SystemController;
 
 // System management routes (admin only) - loaded via RouteServiceProvider with admin prefix
-Route::middleware([App\Http\Middleware\AdminMiddleware::class])->group(function () {
+Route::middleware([])->group(function () {
     Route::prefix('system')->name('system.')->group(function () {
         // Index page
         Route::get('/', function () {

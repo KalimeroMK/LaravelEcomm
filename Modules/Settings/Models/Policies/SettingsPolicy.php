@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Settings\Models\Polices;
+namespace Modules\Settings\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Settings\Models\Setting;

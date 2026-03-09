@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Complaint\Models\Polices;
+namespace Modules\Complaint\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Complaint\Models\Complaint;

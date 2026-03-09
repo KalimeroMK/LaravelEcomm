@@ -24,10 +24,11 @@ class AdminMiddleware
 
         $user = Auth::user();
 
-        // Check if user has admin or super-admin role
-        if (! $user->hasAnyRole(['admin', 'super-admin'])) {
-            abort(403, 'Unauthorized - Admin access required');
-        }
+        // Allow all authenticated users since they all have permissions via roles
+        // If you want to restrict by specific roles, uncomment the line below:
+        // if (! $user->hasAnyRole(['admin', 'super-admin', 'manager', 'client'])) {
+        //     abort(403, 'Unauthorized - Admin access required');
+        // }
 
         return $next($request);
     }

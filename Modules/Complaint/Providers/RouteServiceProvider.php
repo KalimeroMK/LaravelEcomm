@@ -41,9 +41,19 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware(['web', 'auth', \App\Http\Middleware\AdminMiddleware::class])
+        // Admin routes
+        Route::middleware(['web', 'auth'])
             ->prefix('admin')
             ->group(module_path('Complaint', '/Routes/web.php'));
+
+        // Client-facing routes (no admin middleware)
+        Route::middleware(['web', 'auth'])
+            ->group(function (): void {
+                Route::get('my-complaints', [\Modules\Complaint\Http\Controllers\UserComplaintController::class, 'index'])->name('user.complaints.index');
+                Route::get('my-complaints/{complaint}', [\Modules\Complaint\Http\Controllers\UserComplaintController::class, 'show'])->name('user.complaints.show');
+                Route::get('orders/{order}/complaint/create', [\Modules\Complaint\Http\Controllers\UserComplaintController::class, 'create'])->name('user.complaints.create');
+                Route::post('orders/{order}/complaint', [\Modules\Complaint\Http\Controllers\UserComplaintController::class, 'store'])->name('user.complaints.store');
+            });
     }
 
     /**

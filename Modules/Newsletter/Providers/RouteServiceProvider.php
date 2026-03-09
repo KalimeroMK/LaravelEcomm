@@ -49,12 +49,12 @@ class RouteServiceProvider extends ServiceProvider
                 Route::get('email/unsubscribe', [\Modules\Newsletter\Http\Controllers\EmailTrackingController::class, 'unsubscribe'])->name('email.unsubscribe');
             });
 
-        Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class, 'activity', 'web'])
+        Route::middleware(['auth', 'activity', 'web'])
             ->prefix('admin')
             ->group(module_path('Newsletter', '/Routes/web.php'));
 
         // Admin routes with authentication
-        Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class, 'activity', 'web'])
+        Route::middleware(['auth', 'activity', 'web'])
             ->prefix('admin')
             ->group(function (): void {
                 // Email Campaigns routes

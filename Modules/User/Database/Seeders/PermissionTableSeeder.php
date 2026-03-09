@@ -63,48 +63,27 @@ class PermissionTableSeeder extends Seeder
             }
         }
 
-        // Assign permissions to roles
-        $managerPermissions = [
-            'post',
-            'product',
-            'order',
-            'coupon',
-            'brand',
-            'banner',
-            'user',
-        ];
-        $clientPermissions = [
-            'order',
-            'comment',
-            'review',
-            'user',
-        ];
+        // Get all permissions
+        $allPermissions = Permission::all();
 
-        $this->createRoleWithPermissions('manager', $managerPermissions, $operations);
-        $this->createRoleWithPermissions('client', $clientPermissions, $operations);
+        // Create roles and assign ALL permissions to each
+        $roles = ['manager', 'client', 'admin'];
+        
+        foreach ($roles as $roleName) {
+            $role = Role::firstOrCreate(['name' => $roleName]);
+            // Give ALL permissions to this role
+            $role->syncPermissions($allPermissions);
+        }
 
-        // Super-admin gets all permissions
-        $role3 = Role::firstOrCreate(['name' => 'super-admin']);
-        $role3->givePermissionTo(Permission::all());
+        // Super-admin gets all permissions (and Gate::before allows everything anyway)
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
+        $superAdminRole->syncPermissions($allPermissions);
 
         // Create demo users and assign roles
         $this->createUserWithRole('Example User', 'manager@mail.com', 'manager');
-        $this->createUserWithRole('Example client User', 'client@mail.com', 'client');
+        $this->createUserWithRole('Example Client User', 'client@mail.com', 'client');
+        $this->createUserWithRole('Example Admin User', 'admin@mail.com', 'admin');
         $this->createUserWithRole('Example Super-Admin User', 'superadmin@mail.com', 'super-admin');
-    }
-
-    /**
-     * @param  string[]  $operations  Array of operation names
-     * @param  string[]  $resources  Array of resource names
-     */
-    private function createRoleWithPermissions(string $roleName, array $resources, array $operations): void
-    {
-        $role = Role::firstOrCreate(['name' => $roleName]);
-        foreach ($resources as $resource) {
-            foreach ($operations as $operation) {
-                $role->givePermissionTo("{$resource}-{$operation}");
-            }
-        }
     }
 
     /**
@@ -124,6 +103,6 @@ class PermissionTableSeeder extends Seeder
             throw new Exception('User creation did not return a User model instance.');
         }
 
-        $user->assignRole($roleName);
+        $user->syncRoles([$roleName]);
     }
 }

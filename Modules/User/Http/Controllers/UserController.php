@@ -40,7 +40,10 @@ class UserController extends CoreController
         private readonly ImpersonateUserAction $impersonateUserAction,
         private readonly LeaveImpersonationAction $leaveImpersonationAction
     ) {
-        $this->authorizeResource(User::class, 'user');
+        // Only apply authorizeResource to resource methods, not profile methods
+        $this->authorizeResource(User::class, 'user', [
+            'except' => ['profile', 'profileUpdate'],
+        ]);
     }
 
     public function index(Request $request): View|Factory|Application
@@ -134,6 +137,11 @@ class UserController extends CoreController
 
     public function profileUpdate(Request $request, User $user): RedirectResponse
     {
+        // Ensure user can only update their own profile
+        if ($user->id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $dto = UserDTO::fromRequest($request, $user->id);
         $status = $this->profileUpdateAction->execute($user, $dto);
 

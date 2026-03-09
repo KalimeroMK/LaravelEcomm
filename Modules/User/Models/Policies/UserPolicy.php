@@ -16,8 +16,13 @@ class UserPolicy
         return $user->can('user-list');
     }
 
-    public function view(User $user): bool
+    public function view(User $user, ?User $model = null): bool
     {
+        // Allow users to view their own profile, or if they have user-list permission
+        if ($model && $user->id === $model->id) {
+            return true;
+        }
+
         return $user->can('user-list');
     }
 
@@ -28,6 +33,11 @@ class UserPolicy
 
     public function update(User $user, User $model): bool
     {
+        // Allow users to update their own profile, or if they have user-update permission
+        if ($user->id === $model->id) {
+            return true;
+        }
+
         return $user->can('user-update');
     }
 

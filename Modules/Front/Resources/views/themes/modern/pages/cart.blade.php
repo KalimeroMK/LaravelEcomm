@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="{{route('checkout')}}" class="btn btn-default">
+                                <a href="{{route('front.checkout')}}" class="btn btn-default">
                                     Checkout <i class="icon-right-open-big"></i>
                                 </a>
                             </div>
