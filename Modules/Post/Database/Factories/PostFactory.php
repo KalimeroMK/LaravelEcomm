@@ -9,12 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Modules\Category\Models\Category;
+use Modules\Core\Database\Factories\Traits\HasTranslationsFactory;
 use Modules\Post\Models\Post;
 use Modules\Tag\Models\Tag;
 use Modules\User\Models\User;
 
 class PostFactory extends Factory
 {
+    use HasTranslationsFactory;
+
     protected $model = Post::class;
 
     public function definition(): array
@@ -27,7 +30,7 @@ class PostFactory extends Factory
             'status' => $this->faker->randomElement(['active', 'inactive']),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'user_id' => User::factory()->create()->id,
+            'user_id' => User::first()?->id ?? 1,
         ];
     }
 
@@ -94,6 +97,55 @@ class PostFactory extends Factory
                     ->toMediaCollection('post');
 
                 @unlink($tempFile);
+            }
+        });
+    }
+
+    /**
+     * Configure the factory to create post with translations.
+     * Creates translations for all configured locales.
+     */
+    public function withTranslations(?array $locales = null): self
+    {
+        return $this->afterCreating(function (Model $model) use ($locales): void {
+            /** @var Post $post */
+            $post = $model;
+            
+            $localesToUse = $locales ?? $this->translationLocales;
+            
+            foreach ($localesToUse as $locale) {
+                $localeSuffix = $locale === 'en' ? '' : ' (' . strtoupper($locale) . ')';
+                
+                $post->translations()->create([
+                    'locale' => $locale,
+                    'title' => $this->faker->words(4, true) . $localeSuffix,
+                    'slug' => $this->faker->slug() . ($locale === 'en' ? '' : '-' . $locale),
+                    'summary' => $this->faker->sentence(15) . $localeSuffix,
+                    'content' => $this->faker->paragraphs(5, true) . $localeSuffix,
+                    'meta_title' => $this->faker->words(6, true) . $localeSuffix,
+                    'meta_description' => $this->faker->sentence(12) . $localeSuffix,
+                    'meta_keywords' => $this->faker->words(5, true) . $localeSuffix,
+                ]);
+            }
+        });
+    }
+
+    /**
+     * Configure the factory to create post with specific translation data.
+     *
+     * @param array<string, array<string, mixed>> $translations Locale => fields mapping
+     */
+    public function withTranslationData(array $translations): self
+    {
+        return $this->afterCreating(function (Model $model) use ($translations): void {
+            /** @var Post $post */
+            $post = $model;
+            
+            foreach ($translations as $locale => $fields) {
+                $post->translations()->create([
+                    'locale' => $locale,
+                    ...$fields,
+                ]);
             }
         });
     }

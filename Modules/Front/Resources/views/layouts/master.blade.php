@@ -53,7 +53,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/img/favicon.ico">
     @include('front::layouts.head')
-    {!! $schema !!}
+    {!! $schema ?? '' !!}
     
     <!-- RTL Support for Arabic -->
     @if(app()->getLocale() == 'ar')

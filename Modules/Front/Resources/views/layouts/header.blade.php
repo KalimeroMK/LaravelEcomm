@@ -42,6 +42,9 @@
                                 <li><i class="ti-power-off"></i><a href="{{route('login')}}">@lang('frontend.login') /</a> <a
                                             href="{{route('register')}}">@lang('frontend.register')</a></li>
                             @endauth
+                            <li class="language-switcher-item">
+                                @include('core::components.language-switcher')
+                            </li>
                         </ul>
                     </div>
                     <!-- End Top Right -->

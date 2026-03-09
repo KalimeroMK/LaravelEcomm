@@ -12,12 +12,15 @@ use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\Brand\Models\Brand;
 use Modules\Category\Models\Category;
+use Modules\Core\Database\Factories\Traits\HasTranslationsFactory;
 use Modules\Product\Models\Product;
 use Modules\Tag\Models\Tag;
 
 /** @extends Factory<Product> */
 class ProductFactory extends Factory
 {
+    use HasTranslationsFactory;
+
     protected $model = Product::class;
 
     public function definition(): array
@@ -142,6 +145,54 @@ class ProductFactory extends Factory
 
                     @unlink($tempFile);
                 }
+            }
+        });
+    }
+
+    /**
+     * Configure the factory to create product with translations.
+     * Creates translations for all configured locales.
+     */
+    public function withTranslations(?array $locales = null): self
+    {
+        return $this->afterCreating(function (Model $model) use ($locales): void {
+            /** @var Product $product */
+            $product = $model;
+            
+            $localesToUse = $locales ?? $this->translationLocales;
+            
+            foreach ($localesToUse as $locale) {
+                $localeSuffix = $locale === 'en' ? '' : ' (' . strtoupper($locale) . ')';
+                
+                $product->translations()->create([
+                    'locale' => $locale,
+                    'name' => $this->faker->words(3, true) . $localeSuffix,
+                    'summary' => $this->faker->sentence(10) . $localeSuffix,
+                    'description' => $this->faker->paragraphs(3, true) . $localeSuffix,
+                    'slug' => $this->faker->slug() . ($locale === 'en' ? '' : '-' . $locale),
+                    'meta_title' => $this->faker->words(5, true) . $localeSuffix,
+                    'meta_description' => $this->faker->sentence(15) . $localeSuffix,
+                ]);
+            }
+        });
+    }
+
+    /**
+     * Configure the factory to create product with specific translation data.
+     *
+     * @param array<string, array<string, mixed>> $translations Locale => fields mapping
+     */
+    public function withTranslationData(array $translations): self
+    {
+        return $this->afterCreating(function (Model $model) use ($translations): void {
+            /** @var Product $product */
+            $product = $model;
+            
+            foreach ($translations as $locale => $fields) {
+                $product->translations()->create([
+                    'locale' => $locale,
+                    ...$fields,
+                ]);
             }
         });
     }

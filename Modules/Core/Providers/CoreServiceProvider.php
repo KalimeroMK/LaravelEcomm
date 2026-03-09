@@ -6,7 +6,9 @@ namespace Modules\Core\Providers;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 use Modules\Core\Services\CacheService;
+use Modules\Core\View\Components\LanguageSwitcher;
 use Modules\Front\Providers\RouteServiceProvider;
 use Modules\Settings\Models\Setting;
 
@@ -25,6 +27,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        $this->registerViewComponents();
 
         // Register commands
         if ($this->app->runningInConsole()) {
@@ -112,6 +115,14 @@ class CoreServiceProvider extends ServiceProvider
             module_path($this->moduleName, 'Config/config.php'),
             $this->moduleNameLower
         );
+    }
+
+    /**
+     * Register view components.
+     */
+    protected function registerViewComponents(): void
+    {
+        Blade::component('core::language-switcher', LanguageSwitcher::class);
     }
 
     /**
