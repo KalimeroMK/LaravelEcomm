@@ -15,7 +15,7 @@ use Modules\User\Actions\LoginUserAction;
 use Modules\User\Actions\RegisterUserAction;
 use Modules\User\DTOs\UserDTO;
 use Modules\User\Http\Requests\Store;
-use Modules\User\Http\Resource\UserResource;
+use Modules\User\Http\Resources\UserResource;
 use Modules\User\Repository\UserRepository;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\Response;

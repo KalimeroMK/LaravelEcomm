@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Complaint\Models\Complaint;
 use Modules\Order\Http\Resources\OrderResource;
-use Modules\User\Http\Resource\UserResource;
+use Modules\User\Http\Resources\UserResource;
 
 /** @mixin Complaint */
 class ComplaintResource extends JsonResource

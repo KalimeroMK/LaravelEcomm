@@ -7,7 +7,7 @@ namespace Modules\Product\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Product\Models\ProductReview;
-use Modules\User\Http\Resource\UserResource;
+use Modules\User\Http\Resources\UserResource;
 
 /** @mixin ProductReview */
 class ProductReviewResource extends JsonResource

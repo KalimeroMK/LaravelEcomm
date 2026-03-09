@@ -6,7 +6,7 @@ namespace Modules\Product\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Brand\Http\Resource\BrandResource;
+use Modules\Brand\Http\Resources\BrandResource;
 use Modules\Category\Http\Resources\CategoryResource;
 use Modules\Product\Models\Product;
 

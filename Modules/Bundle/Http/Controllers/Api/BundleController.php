@@ -15,7 +15,7 @@ use Modules\Bundle\Actions\UpdateBundleAction;
 use Modules\Bundle\DTOs\BundleDTO;
 use Modules\Bundle\Http\Requests\Api\Store;
 use Modules\Bundle\Http\Requests\Api\Update;
-use Modules\Bundle\Http\Resource\BundleResource;
+use Modules\Bundle\Http\Resources\BundleResource;
 use Modules\Bundle\Models\Bundle;
 use Modules\Bundle\Repository\BundleRepository;
 use Modules\Core\Helpers\Helper;

@@ -14,7 +14,7 @@ use Modules\Banner\Actions\UpdateBannerAction;
 use Modules\Banner\DTOs\BannerDTO;
 use Modules\Banner\Http\Requests\Api\Store;
 use Modules\Banner\Http\Requests\Api\Update;
-use Modules\Banner\Http\Resource\BannerResource;
+use Modules\Banner\Http\Resources\BannerResource;
 use Modules\Banner\Models\Banner;
 use Modules\Banner\Repository\BannerRepository;
 use Modules\Core\Helpers\Helper;

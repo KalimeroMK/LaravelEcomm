@@ -15,7 +15,7 @@ use Modules\Brand\Actions\UpdateBrandAction;
 use Modules\Brand\DTOs\BrandDTO;
 use Modules\Brand\Http\Requests\Api\Store;
 use Modules\Brand\Http\Requests\Api\Update;
-use Modules\Brand\Http\Resource\BrandResource;
+use Modules\Brand\Http\Resources\BrandResource;
 use Modules\Brand\Models\Brand;
 use Modules\Brand\Repository\BrandRepository;
 use Modules\Core\Helpers\Helper;

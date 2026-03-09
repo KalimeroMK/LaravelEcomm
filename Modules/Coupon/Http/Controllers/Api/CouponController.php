@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Coupon\DTOs\CouponDTO;
 use Modules\Coupon\Http\Requests\Api\Store;
 use Modules\Coupon\Http\Requests\Api\Update;
-use Modules\Coupon\Http\Resource\CouponResource;
+use Modules\Coupon\Http\Resources\CouponResource;
 use Modules\Coupon\Models\Coupon;
 use Modules\Coupon\Repository\CouponRepository;
 use ReflectionException;
