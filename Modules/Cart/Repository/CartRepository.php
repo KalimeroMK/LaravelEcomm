@@ -22,7 +22,7 @@ class CartRepository extends EloquentRepository implements EloquentRepositoryInt
      */
     public function findAll(): Collection
     {
-        return (new $this->modelClass)->get();
+        return (new $this->modelClass)->with(['product', 'product.media', 'user'])->get();
     }
 
     /**
@@ -31,6 +31,7 @@ class CartRepository extends EloquentRepository implements EloquentRepositoryInt
     public function show(): Collection
     {
         return (new $this->modelClass)
+            ->with(['product', 'product.media'])
             ->where('user_id', Auth::id())
             ->get();
     }

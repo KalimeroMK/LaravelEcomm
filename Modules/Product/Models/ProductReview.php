@@ -79,7 +79,7 @@ class ProductReview extends Model
      */
     public static function getAllUserReview(): Collection
     {
-        return self::where('user_id', auth()->id())->get();
+        return self::with('product', 'user')->where('user_id', auth()->id())->get();
     }
 
     public function product(): BelongsTo

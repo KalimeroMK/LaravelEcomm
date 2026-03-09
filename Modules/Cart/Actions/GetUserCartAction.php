@@ -12,7 +12,8 @@ readonly class GetUserCartAction
 {
     public function execute(): Collection
     {
-        return Cart::whereUserId(Auth::id())
+        return Cart::with(['product', 'product.media'])
+            ->whereUserId(Auth::id())
             ->whereOrderId(null)
             ->get();
     }

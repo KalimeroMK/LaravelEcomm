@@ -21,6 +21,6 @@ class NewsletterRepository extends EloquentRepository implements EloquentReposit
      */
     public function findAll(): Collection
     {
-        return (new $this->modelClass)->get();
+        return (new $this->modelClass)->orderBy('id', 'desc')->get();
     }
 }

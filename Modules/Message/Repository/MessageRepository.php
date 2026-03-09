@@ -17,10 +17,10 @@ class MessageRepository extends EloquentRepository implements EloquentRepository
     }
 
     /**
-     * Get all messages.
+     * Get all messages with user relationship.
      */
     public function findAll(): Collection
     {
-        return (new $this->modelClass)->get();
+        return (new $this->modelClass)->with('user')->orderBy('id', 'desc')->get();
     }
 }
