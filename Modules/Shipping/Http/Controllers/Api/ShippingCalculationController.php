@@ -13,7 +13,9 @@ class ShippingCalculationController extends CoreController
 {
     public function __construct(
         private readonly CalculateShippingAction $calculateAction
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     public function calculate(Request $request): JsonResponse
     {

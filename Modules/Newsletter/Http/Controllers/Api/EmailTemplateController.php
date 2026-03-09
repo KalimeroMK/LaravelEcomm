@@ -13,6 +13,11 @@ use Modules\Newsletter\Models\EmailTemplate;
 
 class EmailTemplateController extends CoreController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
+
     public function index(): ResourceCollection
     {
         $templates = EmailTemplate::orderBy('template_type')

@@ -17,6 +17,7 @@ class StripeController extends CoreController
 
     public function __construct(CreateStripeChargeAction $createAction)
     {
+        $this->middleware('auth:sanctum');
         $this->createAction = $createAction;
     }
 

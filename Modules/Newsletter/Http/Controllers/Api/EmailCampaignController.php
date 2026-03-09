@@ -17,7 +17,9 @@ class EmailCampaignController extends CoreController
 {
     public function __construct(
         private readonly NewsletterService $newsletterService
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     public function index(): JsonResponse
     {

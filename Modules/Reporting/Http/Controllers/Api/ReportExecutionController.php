@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportExecutionController extends CoreController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
+
     public function index(Request $request): JsonResponse
     {
         $executions = ReportExecution::query()

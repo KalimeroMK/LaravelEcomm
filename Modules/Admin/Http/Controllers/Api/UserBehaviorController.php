@@ -14,7 +14,9 @@ class UserBehaviorController extends Controller
 {
     public function __construct(
         private readonly UserBehaviorService $userBehaviorService
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     /**
      * Track user behavior event

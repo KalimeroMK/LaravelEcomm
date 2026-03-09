@@ -16,7 +16,9 @@ class ReportScheduleController extends CoreController
 {
     public function __construct(
         private readonly ScheduleReportAction $scheduleAction,
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     public function index(Request $request): JsonResponse
     {

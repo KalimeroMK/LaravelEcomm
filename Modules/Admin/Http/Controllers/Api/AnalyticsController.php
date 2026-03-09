@@ -15,7 +15,9 @@ class AnalyticsController extends Controller
 {
     public function __construct(
         private readonly AnalyticsService $analyticsService
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     /**
      * Get comprehensive dashboard analytics

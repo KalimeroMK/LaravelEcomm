@@ -20,7 +20,9 @@ class LanguageController extends CoreController
         private readonly CreateLanguageAction $createAction,
         private readonly UpdateLanguageAction $updateAction,
         private readonly DeleteLanguageAction $deleteAction,
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     public function index(): JsonResponse
     {

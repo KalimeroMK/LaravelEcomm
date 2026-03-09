@@ -16,7 +16,9 @@ class ProductTrackingController extends CoreController
     public function __construct(
         private readonly StoreProductImpressionAction $storeImpressionAction,
         private readonly StoreProductClickAction $storeClickAction
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     public function storeImpressions(StoreImpressionsRequest $request): JsonResponse
     {

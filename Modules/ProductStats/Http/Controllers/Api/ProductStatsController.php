@@ -15,7 +15,9 @@ class ProductStatsController extends CoreController
     public function __construct(
         private readonly GetAllProductStatsAction $getAllAction,
         private readonly GetProductDetailStatsAction $getDetailAction
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     /**
      * Get all product stats with filters

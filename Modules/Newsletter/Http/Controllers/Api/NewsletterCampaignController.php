@@ -15,7 +15,9 @@ class NewsletterCampaignController extends Controller
 {
     public function __construct(
         private readonly NewsletterService $newsletterService
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     /**
      * Send newsletter to all subscribers

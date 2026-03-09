@@ -18,7 +18,9 @@ class OpenAIController extends CoreController
         private readonly GenerateTextAction $generateTextAction,
         private readonly ChatCompletionAction $chatCompletionAction,
         private readonly TextCompletionAction $textCompletionAction
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     /**
      * Generate text from prompt

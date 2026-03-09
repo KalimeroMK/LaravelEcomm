@@ -22,7 +22,9 @@ class ReportController extends CoreController
         private readonly UpdateReportAction $updateAction,
         private readonly GenerateReportAction $generateAction,
         private readonly ExportReportAction $exportAction,
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     public function index(Request $request): JsonResponse
     {

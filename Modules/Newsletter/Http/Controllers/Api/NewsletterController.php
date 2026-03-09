@@ -29,7 +29,9 @@ class NewsletterController extends CoreController
         private readonly CreateNewsletterAction $createAction,
         private readonly UpdateNewsletterAction $updateAction,
         private readonly DeleteNewsletterAction $deleteAction
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     public function index(): ResourceCollection
     {

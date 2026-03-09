@@ -18,7 +18,9 @@ class NewsletterAnalyticsController extends Controller
 {
     public function __construct(
         private readonly NewsletterService $newsletterService
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     /**
      * Get newsletter analytics

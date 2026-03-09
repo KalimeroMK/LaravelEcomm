@@ -28,7 +28,9 @@ class Google2faController extends CoreController
         private readonly Verify2FAAction $verify2FAAction,
         private readonly GenerateRecoveryCodesAction $generateRecoveryCodesAction,
         private readonly VerifyRecoveryCodeAction $verifyRecoveryCodeAction
-    ) {}
+    ) {
+        $this->middleware('auth:sanctum');
+    }
 
     /**
      * Get 2FA status and QR code if secret exists.
