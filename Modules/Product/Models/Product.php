@@ -513,6 +513,14 @@ class Product extends Core implements HasMedia
         ]);
     }
 
+    /**
+     * Alias for image_url to support legacy templates using $product->photo
+     */
+    public function getPhotoAttribute(): ?string
+    {
+        return $this->image_url;
+    }
+
     public function getImageThumbUrlAttribute(): ?string
     {
         $mediaItem = $this->getFirstMedia('product');
