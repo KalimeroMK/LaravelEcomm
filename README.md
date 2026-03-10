@@ -10,6 +10,7 @@
 - [✨ Features Overview](#-features-overview)
 - [📸 Screenshots](#-screenshots)
 - [📚 Documentation](#-documentation)
+- [⚡ Blaze Template Engine](#-blaze-template-engine-custom-fork)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 
@@ -336,6 +337,44 @@ php artisan serve
 
 ---
 
+### ⚡ Blaze Template Engine (Custom Fork)
+
+This project uses a **custom fork** of the Blaze template engine optimization package with enhanced features for Laravel Blade:
+
+#### Features
+- **View Component Support**: Full support for Laravel View Components with proper rendering
+- **Blade Share Compatibility**: Works seamlessly with `View::share()` and view composers
+- **Theme-Aware Optimization**: Per-theme optimization strategies (compile, memo, fold)
+- **Multi-Theme Support**: Different optimization settings per theme (default vs modern)
+- **Debug Overlay**: Built-in performance profiler showing render times per view
+- **Cache Warming**: Pre-compiles views on deployment for faster first load
+
+#### Configuration (`config/blaze.php`)
+```php
+'themes' => [
+    'enabled' => true,
+    'paths' => [
+        'default' => base_path('Modules/Front/Resources/views/themes/default'),
+        'modern' => base_path('Modules/Front/Resources/views/themes/modern'),
+    ],
+    'strategies' => [
+        'default' => ['compile' => true, 'memo' => true, 'fold' => false],
+        'modern' => ['compile' => true, 'memo' => true, 'fold' => false],
+    ],
+],
+```
+
+#### Environment Variables
+```env
+BLAZE_ENABLED=true          # Enable/disable Blaze optimization
+BLAZE_DEBUG=true            # Show debug overlay with render times
+BLAZE_CACHE_WARM=true       # Pre-compile views on cache warm
+```
+
+> **Note**: This project uses a fork at `KalimeroMK/blaze` (dev-main) which includes critical fixes for View Components and Blade Share support that are not available in the upstream package.
+
+---
+
 ### 🤖 AI & Automation
 
 #### OpenAI Integration
@@ -374,6 +413,126 @@ php artisan serve
 ![Frontend](https://user-images.githubusercontent.com/29488275/90719631-a1940d00-e2d4-11ea-89a3-eb36960d687d.png)
 
 </details>
+
+---
+
+## 🧪 Testing
+
+The project has comprehensive test coverage with **220+ unit test files** covering all Action classes.
+
+### Test Coverage
+
+| Module | Action Classes | Test Files |
+|--------|---------------|------------|
+| **User** | 14 | 9 |
+| **Product** | 23 | 16 |
+| **Order** | 11 | 7 |
+| **Cart** | 6 | 4 |
+| **Category** | 7 | 7 |
+| **Brand** | 6 | 5 |
+| **Banner** | 5 | 5 |
+| **Message** | 8 | 7 |
+| **Newsletter** | 5 | 5 |
+| **Coupon** | 6 | 6 |
+| **Shipping** | 6 | 6 |
+| **Page** | 5 | 5 |
+| **Post** | 10 | 10 |
+| **Role** | 6 | 6 |
+| **Settings** | 8 | 8 |
+| **Billing** | 9 | 9 |
+| **Attribute** | 10 | 10 |
+| **Core** | 3 | 3 |
+| **Google2FA** | 10 | 10 |
+| **Bundle** | 7 | 7 |
+| **ProductStats** | 5 | 5 |
+| **Permission** | 5 | 5 |
+| **Language** | 3 | 3 |
+| **Reporting** | 5 | 5 |
+| **OpenAI** | 3 | 3 |
+| **Front** | 23 | 23 |
+| **Tenant** | 5 | 5 |
+| **Complaint** | 5 | 5 |
+| **Other** | 4 | 4 |
+| **TOTAL** | **220** | **220** |
+
+### Running Tests
+
+```bash
+# Run all tests
+./vendor/bin/phpunit
+
+# Run unit tests only
+./vendor/bin/phpunit tests/Unit
+
+# Run tests for specific module
+./vendor/bin/phpunit tests/Unit/Actions/Product
+./vendor/bin/phpunit tests/Unit/Actions/User
+./vendor/bin/phpunit tests/Unit/Actions/Order
+
+# Run with coverage report
+./vendor/bin/phpunit --coverage-html coverage
+```
+
+### Test Structure
+
+Tests are organized following the Action pattern:
+
+```
+tests/Unit/Actions/
+├── ActionTestCase.php              # Base test class with RefreshDatabase
+├── User/
+│   ├── LoginUserActionTest.php
+│   ├── RegisterUserActionTest.php
+│   ├── UpdateUserActionTest.php
+│   └── ...
+├── Product/
+│   ├── CreateProductActionTest.php
+│   ├── UpdateProductActionTest.php
+│   ├── DeleteProductActionTest.php
+│   └── ...
+└── [Module]/
+    └── [Action]Test.php
+```
+
+### Writing New Tests
+
+All Action tests should:
+1. Extend `ActionTestCase` (provides `RefreshDatabase` and language seeding)
+2. Use factories for model creation
+3. Test happy paths and edge cases
+4. Verify database state changes
+5. Mock external services (OpenAI, Payment gateways)
+
+Example:
+```php
+<?php
+declare(strict_types=1);
+
+namespace Tests\Unit\Actions\Product;
+
+use Modules\Product\Actions\StoreProductAction;
+use Modules\Product\DTOs\ProductDTO;
+use Modules\Product\Models\Product;
+use Tests\Unit\Actions\ActionTestCase;
+
+class CreateProductActionTest extends ActionTestCase
+{
+    public function testExecuteCreatesProductSuccessfully(): void
+    {
+        $dto = new ProductDTO(
+            id: null,
+            title: 'Test Product',
+            // ... other fields
+        );
+
+        $action = app(StoreProductAction::class);
+        $result = $action->execute($dto);
+
+        $this->assertInstanceOf(Product::class, $result);
+        $this->assertDatabaseHas('products', ['title' => 'Test Product']);
+    }
+}
+```
 
 ---
 
