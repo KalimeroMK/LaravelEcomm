@@ -12,7 +12,9 @@ use Modules\Attribute\Database\Seeders\AttributeSeeder;
 use Modules\Attribute\Database\Seeders\AttributeValueSeeder;
 use Modules\Banner\Models\Banner;
 use Modules\Brand\Models\Brand;
+use Modules\Bundle\Models\Bundle;
 use Modules\Bundle\Models\BundleProduct;
+use Modules\Bundle\Database\Seeders\BundleDatabaseSeeder;
 use Modules\Cart\Models\Cart;
 use Modules\Category\Models\Category;
 use Modules\Complaint\Database\Factories\ComplaintReplaiesFactory;
@@ -65,6 +67,7 @@ class DatabaseSeeder extends Seeder
         Product::factory()->count(400)->withCategoriesAndTags()->withAttributes()->withMedia(3)->create();
         Cart::factory()->count(200)->create();
         BundleProduct::factory()->count(50)->create();
+        $this->call(BundleDatabaseSeeder::class);
         $this->call(ProductReviewSeeder::class);
         $this->call(EmailTemplateSeeder::class);
         Newsletter::factory()->count(20)->create();
