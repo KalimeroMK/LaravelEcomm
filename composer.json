@@ -31,6 +31,7 @@
     "laravel/tinker": "^2.10.1",
     "laravel/ui": "*",
     "league/omnipay": "*",
+    "livewire/blaze": "dev-main",
     "maatwebsite/excel": "*",
     "nwidart/laravel-modules": "*",
     "omnipay/paypal": "*",
@@ -123,5 +124,10 @@
     }
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "repositories": [{
+    "name": "blaze",
+    "type": "vcs",
+    "url": "https://github.com/KalimeroMK/blaze"
+  }]
 }

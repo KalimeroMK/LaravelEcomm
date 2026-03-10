@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63ac3247e4c6bd5187a3e6cf0d03d2cc",
+    "content-hash": "b14492c0e64c14f194a6bdb438e377f1",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -4851,6 +4851,73 @@
                 }
             ],
             "time": "2026-01-15T06:54:53+00:00"
+        },
+        {
+            "name": "livewire/blaze",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KalimeroMK/blaze.git",
+                "reference": "9fdb8d1d3785b4f3b4bbe85e554ec9a99e9ebd15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KalimeroMK/blaze/zipball/9fdb8d1d3785b4f3b4bbe85e554ec9a99e9ebd15",
+                "reference": "9fdb8d1d3785b4f3b4bbe85e554ec9a99e9ebd15",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0|^12.0",
+                "illuminate/view": "^10.0|^11.0|^12.0",
+                "nikic/php-parser": "^5.0",
+                "php": "^8.1"
+            },
+            "conflict": {
+                "livewire/flux": "<2.12.1"
+            },
+            "require-dev": {
+                "livewire/flux": "dev-main",
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Livewire\\Blaze\\BlazeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Livewire\\Blaze\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Livewire\\Blaze\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/pest"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Caleb Porzio"
+                }
+            ],
+            "description": "A tool for optimizing Blade component performance by folding them into parent templates",
+            "support": {
+                "source": "https://github.com/KalimeroMK/blaze/tree/main"
+            },
+            "time": "2026-02-27T21:25:02+00:00"
         },
         {
             "name": "maatwebsite/excel",
@@ -17513,7 +17580,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "livewire/blaze": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

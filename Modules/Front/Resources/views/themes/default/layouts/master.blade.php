@@ -51,7 +51,7 @@
     <meta name="theme-color" content="#ffffff">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+    <link rel="shortcut icon" href="{{asset('frontend/img/favicon.png')}}">
     @include('front::layouts.head')
     {!! $schema ?? '' !!}
     

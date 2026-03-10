@@ -10,8 +10,12 @@ if (! function_exists('theme_asset')) {
     {
         if ($theme === null) {
             try {
-                // Safeguard for tests or when table doesn't exist yet
-                if (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                // First check config (allows env-based theme switching)
+                $configTheme = config('front.active_template');
+                if ($configTheme && $configTheme !== 'default') {
+                    $theme = $configTheme;
+                } elseif (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                    // Safeguard for tests or when table doesn't exist yet
                     $theme = 'default';
                 } else {
                     $setting = app('settings');
@@ -35,8 +39,12 @@ if (! function_exists('theme_view')) {
     function theme_view(string $view): string
     {
         try {
-            // Safeguard for tests
-            if (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
+            // First check config (allows env-based theme switching)
+            $configTheme = config('front.active_template');
+            if ($configTheme && $configTheme !== 'default') {
+                $activeTheme = $configTheme;
+            } elseif (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                // Safeguard for tests
                 $activeTheme = 'default';
             } else {
                 $setting = app('settings');
