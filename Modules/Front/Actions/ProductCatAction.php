@@ -23,7 +23,13 @@ class ProductCatAction
                 ->first();
             
             if (! $category) {
-                return 'Category not found';
+                return [
+                    'category' => null,
+                    'childCategories' => collect(),
+                    'products' => collect(),
+                    'recentProducts' => collect(),
+                    'error' => 'Category not found',
+                ];
             }
 
             // Get child categories (subcategories)
