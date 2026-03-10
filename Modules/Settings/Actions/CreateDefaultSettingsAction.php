@@ -23,14 +23,14 @@ readonly class CreateDefaultSettingsAction
     public function execute(): Setting
     {
         $defaults = [
+            'description' => 'Modern e-commerce platform with quality products and fast delivery.',
             'short_des' => 'Quality products, fast delivery, best prices',
             'email' => 'info@example.com',
             'phone' => '+1 (555) 123-4567',
             'address' => '123 Main Street, City, Country',
+            'site-name' => 'E-Shop',
+            'logo' => 'default-logo.png',
             'active_template' => 'default',
-            'logo' => null,
-            'og_image' => null,
-            'twitter_image' => null,
             // Payment settings
             'stripe_status' => 'inactive',
             'stripe_key' => null,

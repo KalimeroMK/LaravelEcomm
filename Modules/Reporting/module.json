@@ -1,0 +1,14 @@
+{
+    "name": "Reporting",
+    "alias": "reporting",
+    "description": "Reporting and analytics module for the e-commerce platform",
+    "keywords": ["reporting", "analytics", "reports"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Reporting\\Providers\\ReportingServiceProvider",
+        "Modules\\Reporting\\Providers\\RouteServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -20,7 +20,7 @@ readonly class GetUsersForIndexAction
         if (Auth::user() && Auth::user()->isSuperAdmin()) {
             $usersDto = $this->getAllUsersAction->execute();
 
-            return $usersDto->users;
+            return $usersDto->users->toArray();
         }
         if (! is_numeric($userId)) {
             abort(404, 'User not found.');

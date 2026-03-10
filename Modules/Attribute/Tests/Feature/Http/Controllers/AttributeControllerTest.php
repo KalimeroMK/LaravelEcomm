@@ -19,7 +19,9 @@ class AttributeControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->adminUser = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->adminUser = $user;
         $this->adminUser->givePermissionTo(['attribute-list', 'attribute-create', 'attribute-update', 'attribute-delete']);
     }
 

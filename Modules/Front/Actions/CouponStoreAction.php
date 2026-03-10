@@ -36,7 +36,7 @@ class CouponStoreAction
         $couponData = [
             'id' => $coupon->id,
             'code' => $coupon->code,
-            'value' => $coupon->discount($total_price),
+            'value' => $coupon->calculateDiscount($total_price),
         ];
 
         session()->put('coupon', $couponData);

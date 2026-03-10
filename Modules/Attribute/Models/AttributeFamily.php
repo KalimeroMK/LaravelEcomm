@@ -131,13 +131,16 @@ class AttributeFamily extends Model
             ->where('attributes.id', $attribute->id)
             ->first();
 
-        if ($attr === null || $attr->pivot === null) {
+        if ($attr === null) {
             return false;
         }
 
-        /** @var bool $isRequired */
-        $isRequired = $attr->pivot->is_required;
+        /** @var \stdClass|null $pivot */
+        $pivot = $attr->getAttribute('pivot');
+        if ($pivot === null) {
+            return false;
+        }
 
-        return $isRequired;
+        return (bool) ($pivot->is_required ?? false);
     }
 }

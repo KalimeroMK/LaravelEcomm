@@ -5,41 +5,42 @@ declare(strict_types=1);
 namespace Tests\Unit\Actions\Product;
 
 use Modules\Product\Actions\GetAllProductsAction;
-use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Product\Models\Product;
 use Tests\Unit\Actions\ActionTestCase;
 
 class GetAllProductsActionTest extends ActionTestCase
 {
-    public function testExecuteReturnsCollectionOfProducts(): void
+    public function testExecuteReturnsProductListDTO(): void
     {
         Product::factory()->count(5)->create();
 
         $action = app(GetAllProductsAction::class);
         $result = $action->execute();
 
-        $this->assertCount(5, $result);
-        $this->assertInstanceOf(Product::class, $result->first());
+        $this->assertInstanceOf(\Modules\Product\DTOs\ProductListDTO::class, $result);
+        $this->assertIsArray($result->products);
+        $this->assertCount(5, $result->products);
     }
 
-    public function testExecuteReturnsEmptyCollectionWhenNoProducts(): void
+    public function testExecuteReturnsEmptyArrayWhenNoProducts(): void
     {
         $action = app(GetAllProductsAction::class);
         $result = $action->execute();
 
-        $this->assertCount(0, $result);
-        $this->assertTrue($result->isEmpty());
+        $this->assertIsArray($result->products);
+        $this->assertCount(0, $result->products);
+        $this->assertEmpty($result->products);
     }
 
-    public function testExecuteEagerLoadsRelations(): void
+    public function testExecuteContainsProductData(): void
     {
-        Product::factory()->create();
+        Product::factory()->create(['title' => 'Test Product']);
 
         $action = app(GetAllProductsAction::class);
         $result = $action->execute();
 
-        $product = $result->first();
-        $this->assertTrue($product->relationLoaded('brand'));
-        $this->assertTrue($product->relationLoaded('categories'));
+        $this->assertCount(1, $result->products);
+        // Products are converted to arrays in ProductListDTO
+        $this->assertEquals('Test Product', $result->products[0]['title']);
     }
 }

@@ -11,7 +11,7 @@ readonly class GetCategoryTreeAction
 {
     public function execute(): Collection
     {
-        $tree = Category::getTree();
+        $tree = Category::all()->toTree();
 
         // Convert array to Collection
         return collect($tree);

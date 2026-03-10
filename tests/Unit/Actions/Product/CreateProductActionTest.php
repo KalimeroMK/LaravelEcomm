@@ -19,6 +19,7 @@ class CreateProductActionTest extends ActionTestCase
         $category = Category::factory()->create();
         
         $dto = new ProductDTO(
+            id: null,
             title: 'Test Product',
             slug: 'test-product',
             summary: 'Test summary',
@@ -31,9 +32,11 @@ class CreateProductActionTest extends ActionTestCase
             tags: [],
             status: 'active',
             is_featured: false,
+            d_deal: 0,
             sku: 'TEST-001',
-            meta_title: 'Test Product',
-            meta_description: 'Test description',
+            special_price: null,
+            special_price_start: null,
+            special_price_end: null,
         );
 
         $action = app(StoreProductAction::class);
@@ -50,6 +53,7 @@ class CreateProductActionTest extends ActionTestCase
         $brand = Brand::factory()->create();
         
         $dto = new ProductDTO(
+            id: null,
             title: 'Another Test Product',
             slug: null,
             summary: 'Test summary',
@@ -62,9 +66,11 @@ class CreateProductActionTest extends ActionTestCase
             tags: [],
             status: 'active',
             is_featured: false,
+            d_deal: 0,
             sku: 'TEST-002',
-            meta_title: null,
-            meta_description: null,
+            special_price: null,
+            special_price_start: null,
+            special_price_end: null,
         );
 
         $action = app(StoreProductAction::class);
@@ -80,6 +86,7 @@ class CreateProductActionTest extends ActionTestCase
         $categories = Category::factory()->count(2)->create();
         
         $dto = new ProductDTO(
+            id: null,
             title: 'Categorized Product',
             slug: 'categorized-product',
             summary: 'Test summary',
@@ -92,9 +99,11 @@ class CreateProductActionTest extends ActionTestCase
             tags: [],
             status: 'active',
             is_featured: false,
+            d_deal: 0,
             sku: 'TEST-003',
-            meta_title: null,
-            meta_description: null,
+            special_price: null,
+            special_price_start: null,
+            special_price_end: null,
         );
 
         $action = app(StoreProductAction::class);

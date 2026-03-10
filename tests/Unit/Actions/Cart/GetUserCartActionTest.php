@@ -6,23 +6,32 @@ namespace Tests\Unit\Actions\Cart;
 
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Actions\GetUserCartAction;
-use Modules\Cart\Models\Cart;
-use Modules\Product\Database\Factories\ProductFactory;
-use Modules\User\Database\Factories\UserFactory;
+use Modules\Product\Models\Product;
+use Modules\User\Models\User;
 use Tests\Unit\Actions\ActionTestCase;
 
 class GetUserCartActionTest extends ActionTestCase
 {
     public function testExecuteReturnsUserCartItems(): void
     {
-        $user = UserFactory::new()->create();
-        $product = ProductFactory::new()->create();
+        $user = User::factory()->create();
+        $product = Product::factory()->create();
         
-        Cart::factory()->count(3)->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'order_id' => null,
-        ]);
+        // Create cart items using raw insert
+        for ($i = 0; $i < 3; $i++) {
+            \DB::table('carts')->insert([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'price' => 100,
+                'quantity' => 1,
+                'amount' => 100,
+                'order_id' => null,
+                'session_id' => 'test-session-' . $i,
+                'status' => 'new',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         Auth::login($user);
         
@@ -35,18 +44,49 @@ class GetUserCartActionTest extends ActionTestCase
 
     public function testExecuteDoesNotReturnOrderedItems(): void
     {
-        $user = UserFactory::new()->create();
+        $user = User::factory()->create();
+        $product = Product::factory()->create();
         
-        // Cart item with order
-        Cart::factory()->create([
+        // First create a real order to satisfy FK
+        $orderId = \DB::table('orders')->insertGetId([
+            'order_number' => 'ORD-TEST-001',
             'user_id' => $user->id,
-            'order_id' => 1,
+            'sub_total' => 100,
+            'total_amount' => 100,
+            'quantity' => 1,
+            'payment_method' => 'cash',
+            'payment_status' => 'paid',
+            'status' => 'completed',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        // Cart item with the real order_id
+        \DB::table('carts')->insert([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'price' => 100,
+            'quantity' => 1,
+            'amount' => 100,
+            'order_id' => $orderId,
+            'session_id' => 'test-session-1',
+            'status' => 'new',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         
         // Cart item without order
-        Cart::factory()->create([
+        \DB::table('carts')->insert([
             'user_id' => $user->id,
+            'product_id' => $product->id,
+            'price' => 50,
+            'quantity' => 2,
+            'amount' => 100,
             'order_id' => null,
+            'session_id' => 'test-session-2',
+            'status' => 'new',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         Auth::login($user);
@@ -54,6 +94,7 @@ class GetUserCartActionTest extends ActionTestCase
         $action = app(GetUserCartAction::class);
         $result = $action->execute();
 
+        // The action should only return items without order_id
         $this->assertCount(1, $result);
         $this->assertNull($result->first()->order_id);
     }

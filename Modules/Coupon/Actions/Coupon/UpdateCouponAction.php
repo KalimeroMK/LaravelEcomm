@@ -25,7 +25,7 @@ readonly class UpdateCouponAction
             'type' => $dto->type,
             'value' => $dto->value,
             'status' => $dto->status,
-            'expires_at' => $dto->expires_at,
+            'expires_at' => $dto->expiresAt,
         ], fn ($value) => $value !== null);
 
         $coupon->update($updateData);

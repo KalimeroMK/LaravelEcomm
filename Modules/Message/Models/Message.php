@@ -79,6 +79,11 @@ class Message extends Core implements HasMedia
             'parent_id',
         ];
 
+    protected $casts
+        = [
+            'is_read' => 'boolean',
+        ];
+
     public static function Factory(): MessageFactory
     {
         return MessageFactory::new();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Modules\Language\Models\Language;
 use Modules\User\Http\Controllers\Api\AuthController;
 use Modules\User\Http\Controllers\MagicLoginController;
 use Spatie\Feed\Http\FeedController;
@@ -41,10 +42,24 @@ Route::get('/login/{social}/callback', [AuthController::class, 'handleProviderCa
 // Language switch route (for frontend)
 Route::get('language/{lang}', [LanguageController::class, 'switchLang'])->name('language.switch');
 
+/**
+ * Safely get the default language code, handling database unavailability (e.g., during testing)
+ */
+if (!function_exists('getSafeDefaultLocale')) {
+    function getSafeDefaultLocale(): string
+    {
+        try {
+            return Language::getDefaultCode();
+        } catch (\Illuminate\Database\QueryException) {
+            return config('app.locale', 'en');
+        }
+    }
+}
+
 // Redirect root to default locale
 Route::get('/', function () {
-    return redirect('/' . \Modules\Language\Models\Language::getDefaultCode());
+    return redirect('/' . getSafeDefaultLocale());
 });
 
 // Set default locale for URL generation
-URL::defaults(['locale' => \Modules\Language\Models\Language::getDefaultCode()]);
+URL::defaults(['locale' => getSafeDefaultLocale()]);

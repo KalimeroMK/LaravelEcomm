@@ -17,7 +17,7 @@ class ProductReviewFactory extends Factory
         return [
             'rate' => $this->faker->numberBetween(1, 5),
             'review' => $this->faker->word(),
-            'status' => $this->faker->word(),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'user_id' => $this->faker->numberBetween(1, 3),

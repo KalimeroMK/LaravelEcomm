@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Language\Database\Seeders\LanguageDatabaseSeeder;
 use Modules\User\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -13,6 +14,9 @@ class TestDataSeeder extends Seeder
 {
     public function run(): void
     {
+        // Seed languages first (required for most operations)
+        $this->call(LanguageDatabaseSeeder::class);
+        
         // Create roles
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $clientRole = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'web']);

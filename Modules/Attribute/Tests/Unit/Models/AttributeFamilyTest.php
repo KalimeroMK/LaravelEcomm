@@ -127,7 +127,9 @@ class AttributeFamilyTest extends TestCase
         $activeFamilies = AttributeFamily::active()->get();
 
         $this->assertCount(1, $activeFamilies);
-        $this->assertEquals('active', $activeFamilies->first()->code);
+        $firstFamily = $activeFamilies->first();
+        $this->assertNotNull($firstFamily);
+        $this->assertEquals('active', $firstFamily->code);
     }
 
     #[Test]
@@ -138,7 +140,7 @@ class AttributeFamilyTest extends TestCase
 
         $default = AttributeFamily::getDefault();
 
-        $this->assertNotNull($default);
+        $this->assertInstanceOf(AttributeFamily::class, $default);
         $this->assertEquals('default', $default->code);
         $this->assertDatabaseHas('attribute_families', ['code' => 'default']);
     }

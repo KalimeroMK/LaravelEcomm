@@ -84,6 +84,8 @@ class AttributeValue extends Core
 
     /**
      * Get the parent attributable model (polymorphic).
+     *
+     * @return MorphTo<\Illuminate\Database\Eloquent\Model, $this>
      */
     public function attributable(): MorphTo
     {
@@ -141,12 +143,15 @@ class AttributeValue extends Core
 
     /**
      * Scope for products (backward compatibility)
+     *
+     * @param Builder<AttributeValue> $query
+     * @return Builder<AttributeValue>
      */
     public function scopeForProduct(Builder $query, int $productId): Builder
     {
-        return $query->where(function ($q) use ($productId) {
+        return $query->where(function (Builder $q) use ($productId) {
             $q->where('product_id', $productId)
-                ->orWhere(function ($q2) use ($productId) {
+                ->orWhere(function (Builder $q2) use ($productId) {
                     $q2->where('attributable_type', 'Modules\\Product\\Models\\Product')
                         ->where('attributable_id', $productId);
                 });

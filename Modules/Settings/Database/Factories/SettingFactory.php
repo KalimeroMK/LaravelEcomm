@@ -25,7 +25,7 @@ class SettingFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'email' => $this->faker->unique()->safeEmail(),
             'site-name' => $appName,
-            'active_template' => 'default',
+
             'keywords' => 'online shopping, ecommerce, products, deals, discounts',
             'google-site-verification' => '',
             'longitude' => null,

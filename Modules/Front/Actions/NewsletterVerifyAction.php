@@ -12,7 +12,7 @@ class NewsletterVerifyAction
     {
         $newsletter = Newsletter::where('token', $token)->first();
         if ($newsletter !== null) {
-            $newsletter->is_verified = true;
+            $newsletter->is_validated = true;
             $newsletter->save();
 
             return true;

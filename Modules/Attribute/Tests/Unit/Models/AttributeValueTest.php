@@ -18,9 +18,11 @@ class AttributeValueTest extends TestCase
     #[Test]
     public function it_can_create_typed_values(): void
     {
+        /** @var Product $product */
         $product = Product::factory()->create();
 
         // Test text value
+        /** @var Attribute $textAttr */
         $textAttr = Attribute::factory()->create(['type' => 'text']);
         $textValue = AttributeValue::create([
             'attribute_id' => $textAttr->id,
@@ -32,6 +34,7 @@ class AttributeValueTest extends TestCase
         $this->assertEquals('Sample text', $textValue->getValue());
 
         // Test boolean value
+        /** @var Attribute $boolAttr */
         $boolAttr = Attribute::factory()->create(['type' => 'boolean']);
         $boolValue = AttributeValue::create([
             'attribute_id' => $boolAttr->id,
@@ -43,6 +46,7 @@ class AttributeValueTest extends TestCase
         $this->assertTrue($boolValue->getValue());
 
         // Test integer value
+        /** @var Attribute $intAttr */
         $intAttr = Attribute::factory()->create(['type' => 'integer']);
         $intValue = AttributeValue::create([
             'attribute_id' => $intAttr->id,
@@ -57,7 +61,9 @@ class AttributeValueTest extends TestCase
     #[Test]
     public function it_has_polymorphic_relation(): void
     {
+        /** @var Product $product */
         $product = Product::factory()->create();
+        /** @var Attribute $attribute */
         $attribute = Attribute::factory()->create();
 
         $value = AttributeValue::create([
@@ -68,13 +74,17 @@ class AttributeValueTest extends TestCase
         ]);
 
         $this->assertInstanceOf(Product::class, $value->attributable);
-        $this->assertEquals($product->id, $value->attributable->id);
+        /** @var Product $attributable */
+        $attributable = $value->attributable;
+        $this->assertEquals($product->id, $attributable->id);
     }
 
     #[Test]
     public function it_can_set_and_get_value_dynamically(): void
     {
+        /** @var Attribute $attribute */
         $attribute = Attribute::factory()->create(['type' => 'string']);
+        /** @var Product $product */
         $product = Product::factory()->create();
 
         $value = new AttributeValue([
@@ -86,13 +96,17 @@ class AttributeValueTest extends TestCase
         $value->setValue('Dynamic string');
         $value->save();
 
-        $this->assertEquals('Dynamic string', $value->fresh()->getValue());
+        $freshValue = $value->fresh();
+        $this->assertNotNull($freshValue);
+        $this->assertEquals('Dynamic string', $freshValue->getValue());
     }
 
     #[Test]
     public function it_belongs_to_attribute(): void
     {
+        /** @var Attribute $attribute */
         $attribute = Attribute::factory()->create(['name' => 'Test Attribute']);
+        /** @var Product $product */
         $product = Product::factory()->create();
 
         $value = AttributeValue::create([
@@ -109,7 +123,9 @@ class AttributeValueTest extends TestCase
     #[Test]
     public function it_can_get_value_by_code(): void
     {
+        /** @var Product $product */
         $product = Product::factory()->create();
+        /** @var Attribute $attribute */
         $attribute = Attribute::factory()->create(['code' => 'color', 'type' => 'string']);
 
         AttributeValue::create([

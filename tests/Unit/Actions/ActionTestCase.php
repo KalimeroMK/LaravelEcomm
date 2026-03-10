@@ -6,6 +6,7 @@ namespace Tests\Unit\Actions;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Language\Database\Seeders\LanguageDatabaseSeeder;
+use Modules\User\Database\Seeders\PermissionTableSeeder;
 use Tests\TestCase;
 
 abstract class ActionTestCase extends TestCase
@@ -18,5 +19,10 @@ abstract class ActionTestCase extends TestCase
         
         // Seed languages first (required for most operations)
         $this->seed(LanguageDatabaseSeeder::class);
+    }
+
+    protected function seedPermissions(): void
+    {
+        $this->seed(PermissionTableSeeder::class);
     }
 }

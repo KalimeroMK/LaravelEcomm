@@ -55,6 +55,9 @@ readonly class SyncProductAttributesAction
 
             $product->attributeValues()->create([
                 'attribute_id' => $attribute->id,
+                'product_id' => $product->id,
+                'attributable_id' => $product->id,
+                'attributable_type' => Product::class,
                 $column => $castedValue,
             ]);
         }
