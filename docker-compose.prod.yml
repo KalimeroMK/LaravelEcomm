@@ -1,8 +1,11 @@
 # =============================================================================
-# DOCKER COMPOSE - LOCAL DEVELOPMENT
+# DOCKER COMPOSE - PRODUCTION
 # =============================================================================
-# Овој фајл е за локален развој. За продукција користи:
+# Овој фајл е за продукција. Користи:
 # docker-compose -f docker-compose.prod.yml up -d
+#
+# Напомена: Cloudflare тунелот е ЦЕНТРАЛИЗИРАН во /root/cloudflare-tunnel/
+# и веќе е поврзан со e-comm_laravelapp мрежата.
 # =============================================================================
 
 services:
@@ -16,12 +19,13 @@ services:
     volumes:
       - ./:/var/www
       - ./.docker/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
-      - ./.docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - ./.docker/php/conf.d/performance.ini:/usr/local/etc/php/conf.d/performance.ini
     networks:
       - laravelapp
-    ports:
-      - "90:80"
+    # Во продукција не expose-ираме порти надвор - само преку Cloudflare тунел
+    # Тунелот е во /root/cloudflare-tunnel/ и е поврзан на e-comm_laravelapp мрежа
+    # ports:
+    #   - "90:80"
     healthcheck:
       test: [ "CMD", "php", "artisan", "--version" ]
       interval: 30s
@@ -35,11 +39,20 @@ services:
         condition: service_healthy
     environment:
       - SERVER_NAME=:80
-      - PHP_OPCACHE_ENABLE=0
+      - PHP_OPCACHE_ENABLE=1
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=128
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=4000
+      - PHP_OPCACHE_REVALIDATE_FREQ=2
       - DB_HOST=db
       - DB_PORT=3306
       - REDIS_HOST=redis
       - ELASTICSEARCH_HOST=elasticsearch
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
 
   db:
     image: mariadb:11.4
@@ -52,33 +65,42 @@ services:
       MYSQL_ROOT_PASSWORD: secret
       MARIADB_AUTO_UPGRADE: 1
     command: >
-      --innodb-buffer-pool-size=256M
-      --innodb-log-file-size=64M
+      --innodb-buffer-pool-size=512M
+      --innodb-log-file-size=128M
       --innodb-flush-log-at-trx-commit=2
+      --max-connections=200
     volumes:
       - mysql_data:/var/lib/mysql
       - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
       - ./.docker/mysql/init:/docker-entrypoint-initdb.d
     networks:
       - laravelapp
-    ports:
-      - "3311:3306"
+    # Само интерно - не expose надвор
+    # ports:
+    #   - "3311:3306"
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 30s
       retries: 3
       start_period: 30s
       timeout: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 256M
 
   redis:
     image: redis:alpine
     container_name: e_comm_redis
     restart: unless-stopped
-    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     networks:
       - laravelapp
-    ports:
-      - "6381:6379"
+    # Само интерно
+    # ports:
+    #   - "6381:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -95,7 +117,7 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
       - bootstrap.memory_lock=true
     ulimits:
       memlock:
@@ -105,31 +127,31 @@ services:
       - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
       - laravelapp
-    ports:
-      - "9200:9200"
+    # Само интерно
+    # ports:
+    #   - "9200:9200"
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
       interval: 30s
       retries: 3
       start_period: 60s
       timeout: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
 
-  # Mailpit за тестирање мејлови локално
-  mailpit:
-    image: axllent/mailpit:latest
-    container_name: e_comm_mailpit
-    restart: unless-stopped
-    ports:
-      - "1025:1025"  # SMTP
-      - "8025:8025"  # Web UI
-    networks:
-      - laravelapp
-    volumes:
-      - mailpit_data:/data
+  # ⚠️ ВАЖНО: Cloudflare тунелот е ЦЕНТРАЛИЗИРАН во /root/cloudflare-tunnel/
+  # Не додавај cloudflared сервис овде!
+  # Тунелот е веќе поврзан со e-comm_laravelapp мрежата.
 
 networks:
   laravelapp:
     driver: bridge
+    # Оваа мрежа е external за централниот cloudflared тунел
+    # name: e-comm_laravelapp
 
 volumes:
   mysql_data:
@@ -137,6 +159,4 @@ volumes:
   redis_data:
     driver: local
   elasticsearch_data:
-    driver: local
-  mailpit_data:
     driver: local
