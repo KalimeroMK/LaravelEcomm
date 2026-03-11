@@ -94,6 +94,9 @@
 
 <!-- Jquery -->
 <script src="{{asset('frontend/js/all_front.min.js')}}"></script>
+<!-- jQuery UI for price slider -->
+<script src="{{asset('frontend/js/jquery-ui.min.js')}}"></script>
+<link rel="stylesheet" href="{{asset('frontend/css/jquery-ui.css')}}">
 
 
 @stack('scripts')

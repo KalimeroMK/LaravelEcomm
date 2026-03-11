@@ -38,10 +38,14 @@ class ProductDetailAction
         
         // Track recently viewed product
         if (isset($result['product_detail'])) {
-            $this->recentlyViewedService->addProduct(
-                $result['product_detail']->id,
-                auth()->id()
-            );
+            try {
+                $this->recentlyViewedService->addProduct(
+                    $result['product_detail']->id,
+                    auth()->id()
+                );
+            } catch (Exception $e) {
+                // Silently fail if session not available
+            }
         }
         
         return $result;

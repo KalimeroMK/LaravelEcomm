@@ -60,7 +60,7 @@
                     <!-- Logo -->
                     <div class="logo">
                         <a href="{{route('front.index')}}"><img
-                                    src="@foreach($settings as $data) {{$data->logo}} @endforeach"
+                                    src="{{ $settings->first()?->getFirstMediaUrl('settings') ?: asset('frontend/img/logo.png') }}"
                                     alt="logo"></a>
                     </div>
                     <!--/ End Logo -->

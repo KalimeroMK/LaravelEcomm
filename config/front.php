@@ -12,19 +12,12 @@ declare(strict_types=1);
  */
 
 return [
-    'name' => 'Front',
-    
     /**
      * Active theme template.
      * Set to null to use database value from settings table.
      * Set to specific theme name to override database (useful for dev).
-     * 
-     * Examples:
-     * - 'default' - Force default theme
-     * - 'modern' - Force modern theme
-     * - null - Use value from database
      */
-    'active_template' => env('FRONT_ACTIVE_TEMPLATE', env('ACTIVE_TEMPLATE', null)),
+    'active_template' => env('FRONT_ACTIVE_TEMPLATE', null),
     
     /**
      * Available themes cache time in seconds.

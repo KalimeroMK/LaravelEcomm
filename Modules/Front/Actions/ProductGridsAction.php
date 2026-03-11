@@ -104,13 +104,31 @@ readonly class ProductGridsAction
             // Get active filters for display
             $activeFilters = $this->layeredNavigationService->getActiveFilters($queryParams);
 
+            // Get categories with caching
+            $categoriesCacheKey = 'active_categories_grid';
+            $categories = Cache::remember($categoriesCacheKey, 3600, function () {
+                return Category::where('status', 'active')
+                    ->whereNull('parent_id')
+                    ->with('childrenCategories')
+                    ->orderBy('title')
+                    ->get();
+            });
+
+            // Get max price for price slider
+            $maxPriceCacheKey = 'max_product_price_grid';
+            $max = Cache::remember($maxPriceCacheKey, 3600, function () {
+                return Product::where('status', 'active')->max('price') ?? 1000;
+            });
+
             return [
                 'brands' => $brands,
+                'categories' => $categories,
                 'recent_products' => $recent_products,
                 'products' => $products,
                 'layered_filters' => $layeredFilters,
                 'active_filters' => $activeFilters,
                 'price_range' => ['min' => $minPrice, 'max' => $maxPrice],
+                'max' => $max,
             ];
         });
     }

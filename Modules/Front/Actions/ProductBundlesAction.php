@@ -12,11 +12,12 @@ class ProductBundlesAction
     public function __invoke(): array
     {
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-        $products = Bundle::query()->paginate(request('show', 6));
+        $bundles = Bundle::query()->paginate(request('show', 6));
 
         return [
             'recent_products' => $recent_products,
-            'products' => $products,
+            'bundles' => $bundles,
+            'products' => $bundles, // For backward compatibility with default theme
         ];
     }
 }

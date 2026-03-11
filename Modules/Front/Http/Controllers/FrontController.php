@@ -85,9 +85,15 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productDetail(string $slug, ProductDetailAction $productDetailAction): Factory|View
+    public function productDetail(string $locale, string $slug, ProductDetailAction $productDetailAction): Factory|View
     {
-        return view(theme_view('pages.product_detail'), $productDetailAction($slug));
+        try {
+            $data = $productDetailAction($slug);
+            return view(theme_view('pages.product_detail'), $data);
+        } catch (\Exception $e) {
+            \Log::error('productDetail error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     /**
@@ -114,7 +120,7 @@ class FrontController extends Controller
         return view(theme_view('pages.bundles'), $productBundlesAction());
     }
 
-    public function bundleDetail(string $slug, BundleDetailAction $bundleDetailAction): Factory|View
+    public function bundleDetail(string $locale, string $slug, BundleDetailAction $bundleDetailAction): Factory|View
     {
         return view(theme_view('pages.bundle_detail'), $bundleDetailAction($slug));
     }
@@ -155,7 +161,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productBrand(string $slug, ProductBrandAction $productBrandAction): Factory|View
+    public function productBrand(string $locale, string $slug, ProductBrandAction $productBrandAction): Factory|View
     {
         if (request()->is('e-shop.loc/product-grids')) {
             return view(theme_view('pages.product-grids'), $productBrandAction($slug));
@@ -167,7 +173,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function productCat(string $slug, ProductCatAction $productCatAction): Factory|View
+    public function productCat(string $locale, string $slug, ProductCatAction $productCatAction): Factory|View
     {
         return view(theme_view('pages.category-detail'), $productCatAction($slug));
     }
@@ -189,7 +195,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function categoryDetail(string $slug, ProductCatAction $productCatAction): Factory|View
+    public function categoryDetail(string $locale, string $slug, ProductCatAction $productCatAction): Factory|View
     {
         return view(theme_view('pages.product-lists'), $productCatAction($slug));
     }
@@ -205,7 +211,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function blogDetail(string $slug, BlogDetailAction $blogDetailAction): Factory|View
+    public function blogDetail(string $locale, string $slug, BlogDetailAction $blogDetailAction): Factory|View
     {
         return view(theme_view('pages.blog-detail'), $blogDetailAction($slug));
     }
@@ -226,7 +232,7 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function blogByCategory(string $slug, BlogByCategoryAction $blogByCategoryAction): Factory|View
+    public function blogByCategory(string $locale, string $slug, BlogByCategoryAction $blogByCategoryAction): Factory|View
     {
         return view(theme_view('pages.blog'), $blogByCategoryAction($slug));
     }
@@ -237,7 +243,7 @@ class FrontController extends Controller
      * @param  string  $slug  The tag slug to filter blog posts by.
      * @return View The view displaying the filtered blog posts.
      */
-    public function blogByTag(string $slug, BlogByTagAction $blogByTagAction): View
+    public function blogByTag(string $locale, string $slug, BlogByTagAction $blogByTagAction): View
     {
         return view(theme_view('pages.blog'), $blogByTagAction($slug));
     }
@@ -426,7 +432,7 @@ class FrontController extends Controller
     /**
      * Get related products for a specific product
      */
-    public function relatedProducts(string $slug, Request $request, RecommendationService $recommendationService): View
+    public function relatedProducts(string $locale, string $slug, Request $request, RecommendationService $recommendationService): View
     {
         $product = \Modules\Product\Models\Product::where('slug', $slug)->firstOrFail();
         $limit = min($request->input('limit', 8), 20);
@@ -638,12 +644,12 @@ class FrontController extends Controller
     /**
      * Show blog post detail
      */
-    public function postDetail(string $slug, BlogDetailAction $blogDetailAction): View
+    public function postDetail(string $locale, string $slug, BlogDetailAction $blogDetailAction): View
     {
         return view(theme_view('pages.blog-detail'), $blogDetailAction($slug));
     }
 
-    public function pages(string $slug, PageDetailAction $pageDetailAction): View
+    public function pages(string $locale, string $slug, PageDetailAction $pageDetailAction): View
     {
         return view(theme_view('pages.page'), $pageDetailAction($slug));
     }

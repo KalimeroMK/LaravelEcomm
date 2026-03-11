@@ -16,6 +16,10 @@ readonly class UpdateSettingsAction
     public function execute(int $id, array $data): Setting
     {
         $setting = $this->repository->findById($id);
+        
+        // Check if theme is being changed
+        $oldTheme = $setting->active_template;
+        $newTheme = $data['active_template'] ?? $oldTheme;
 
         // Handle file uploads if present
         if (isset($data['images']) && is_array($data['images'])) {
@@ -35,6 +39,11 @@ readonly class UpdateSettingsAction
         // Update setting fields
         $setting->fill($filteredData);
         $setting->save();
+        
+        // Clear theme cache if theme was changed
+        if ($oldTheme !== $newTheme && function_exists('clear_theme_cache')) {
+            clear_theme_cache();
+        }
 
         return $setting->fresh();
     }

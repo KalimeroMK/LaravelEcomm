@@ -2,33 +2,92 @@
 
 declare(strict_types=1);
 
+if (! function_exists('active_theme')) {
+    /**
+     * Get the currently active theme.
+     * Priority: env > database > default
+     */
+    function active_theme(): string
+    {
+        static $cachedTheme = null;
+        
+        // Return cached theme if available
+        if ($cachedTheme !== null) {
+            return $cachedTheme;
+        }
+        
+        try {
+            // Priority 1: Environment/Config override (for dev/testing)
+            $envTheme = config('front.active_template');
+            if ($envTheme && is_string($envTheme)) {
+                // Verify theme exists
+                $themePath = module_path('Front', "Resources/views/themes/{$envTheme}");
+                if (is_dir($themePath)) {
+                    $cachedTheme = $envTheme;
+                    return $cachedTheme;
+                }
+            }
+            
+            // Priority 2: Database (for production)
+            if (! app()->runningInConsole() || Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                $setting = app('settings');
+                if ($setting instanceof \Modules\Settings\Models\Setting) {
+                    $dbTheme = $setting->active_template ?? 'default';
+                    $themePath = module_path('Front', "Resources/views/themes/{$dbTheme}");
+                    if (is_dir($themePath)) {
+                        $cachedTheme = $dbTheme;
+                        return $cachedTheme;
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            // Silently fall through to default
+        }
+        
+        // Priority 3: Default fallback
+        $cachedTheme = 'default';
+        return $cachedTheme;
+    }
+}
+
+if (! function_exists('clear_theme_cache')) {
+    /**
+     * Clear theme-related caches.
+     */
+    function clear_theme_cache(): void
+    {
+        // Clear view cache
+        Illuminate\Support\Facades\Artisan::call('view:clear');
+        
+        // Clear application cache
+        Illuminate\Support\Facades\Artisan::call('cache:clear');
+        
+        // Clear static theme cache
+        \Illuminate\Support\Facades\Cache::forget('active_theme');
+    }
+}
+
 if (! function_exists('theme_asset')) {
     /**
      * Generate a URL for a theme asset.
      */
     function theme_asset(string $path, ?string $theme = null): string
     {
-        if ($theme === null) {
-            try {
-                // First check config (allows env-based theme switching)
-                $configTheme = config('front.active_template');
-                if ($configTheme && $configTheme !== 'default') {
-                    $theme = $configTheme;
-                } elseif (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
-                    // Safeguard for tests or when table doesn't exist yet
-                    $theme = 'default';
-                } else {
-                    $setting = app('settings');
-                    $theme = ($setting instanceof \Modules\Settings\Models\Setting) 
-                        ? ($setting->active_template ?? 'default') 
-                        : 'default';
+        $theme = $theme ?? active_theme();
+        $assetPath = "frontend/themes/{$theme}/{$path}";
+        
+        // Check if asset exists, fallback to default theme if configured
+        if (config('front.assets.fallback_to_default', true) && $theme !== 'default') {
+            $fullPath = public_path($assetPath);
+            if (! file_exists($fullPath)) {
+                $fallbackPath = "frontend/themes/default/{$path}";
+                if (file_exists(public_path($fallbackPath))) {
+                    return asset($fallbackPath);
                 }
-            } catch (Exception $e) {
-                $theme = 'default';
             }
         }
-
-        return asset("frontend/themes/{$theme}/{$path}");
+        
+        return asset($assetPath);
     }
 }
 
@@ -38,28 +97,12 @@ if (! function_exists('theme_view')) {
      */
     function theme_view(string $view): string
     {
-        try {
-            // First check config (allows env-based theme switching)
-            $configTheme = config('front.active_template');
-            if ($configTheme && $configTheme !== 'default') {
-                $activeTheme = $configTheme;
-            } elseif (app()->runningInConsole() && ! Illuminate\Support\Facades\Schema::hasTable('settings')) {
-                // Safeguard for tests
-                $activeTheme = 'default';
-            } else {
-                $setting = app('settings');
-                $activeTheme = ($setting instanceof \Modules\Settings\Models\Setting) 
-                    ? ($setting->active_template ?? 'default') 
-                    : 'default';
-            }
-        } catch (Exception $e) {
-            $activeTheme = 'default';
-        }
-
-        // Try different view path formats
+        $activeTheme = active_theme();
+        
+        // Try different view path formats (pages subdirectory first)
         $viewFormats = [
-            "front::themes.{$activeTheme}.{$view}",
             "front::themes.{$activeTheme}.pages.{$view}",
+            "front::themes.{$activeTheme}.{$view}",
         ];
 
         // Check if view exists in active theme
@@ -69,11 +112,11 @@ if (! function_exists('theme_view')) {
             }
         }
 
-        // Fallback to default theme
-        if ($activeTheme !== 'default') {
+        // Fallback to default theme if configured and theme is not default
+        if (config('front.views.fallback_to_default', true) && $activeTheme !== 'default') {
             $defaultFormats = [
-                "front::themes.default.{$view}",
                 "front::themes.default.pages.{$view}",
+                "front::themes.default.{$view}",
             ];
 
             foreach ($defaultFormats as $defaultView) {
@@ -83,7 +126,7 @@ if (! function_exists('theme_view')) {
             }
         }
 
-        // Return the first format as default (will show error if view doesn't exist)
+        // Return the first format (will show error if view doesn't exist)
         return $viewFormats[0];
     }
 }
