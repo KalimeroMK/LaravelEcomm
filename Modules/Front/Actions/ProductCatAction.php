@@ -5,55 +5,43 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Category\Models\Category;
-use Modules\Product\Models\Product;
+use Modules\Category\Repository\CategoryRepository;
+use Modules\Product\Repository\ProductRepository;
 
 class ProductCatAction
 {
-    public function __invoke(string $slug): array|string
+    public function __construct(
+        private readonly CategoryRepository $categoryRepository,
+        private readonly ProductRepository $productRepository,
+    ) {}
+
+    public function __invoke(string $slug): array
     {
-        $cacheKey = 'productCat_'.$slug;
+        $category = $this->categoryRepository->findBySlug($slug);
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): string|array {
-            $category = Category::whereSlug($slug)
-                ->with(['children' => function ($query) {
-                    $query->where('status', 1)->withCount('products');
-                }])
-                ->withCount('products')
-                ->first();
-            
-            if (! $category) {
-                return [
-                    'category' => null,
-                    'childCategories' => collect(),
-                    'products' => collect(),
-                    'recentProducts' => collect(),
-                    'error' => 'Category not found',
-                ];
-            }
-
-            // Get child categories (subcategories)
-            $childCategories = $category->children;
-
-            // If no children, show products from this category
-            if ($childCategories->isEmpty()) {
-                $products = $category->products()->where('status', 'active')->paginate(12);
-            } else {
-                $products = collect(); // Empty collection
-            }
-
-            // Get recent products for sidebar
-            $recentProducts = Product::where('status', 'active')
-                ->orderBy('id', 'desc')
-                ->take(4)
-                ->get();
-
+        if (! $category) {
             return [
-                'category' => $category,
-                'childCategories' => $childCategories,
-                'products' => $products,
-                'recentProducts' => $recentProducts,
+                'category'        => null,
+                'childCategories' => collect(),
+                'products'        => collect(),
+                'recentProducts'  => collect(),
+                'error'           => 'Category not found',
             ];
-        });
+        }
+
+        $childCategories = $category->children;
+
+        $products = $childCategories->isEmpty()
+            ? $category->products()->where('status', 'active')->with(['brand', 'media'])->paginate(12)
+            : collect();
+
+        $recentProducts = Cache::remember('recent_products_sidebar', 1800, fn () => $this->productRepository->getRecent(4));
+
+        return [
+            'category'        => $category,
+            'childCategories' => $childCategories,
+            'products'        => $products,
+            'recentProducts'  => $recentProducts,
+        ];
     }
 }

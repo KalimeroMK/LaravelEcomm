@@ -96,6 +96,88 @@ class PostRepository extends EloquentRepository implements EloquentRepositoryInt
     }
 
     /**
+     * Find a post by slug with full relations.
+     */
+    public function findBySlug(string $slug): ?Post
+    {
+        return Post::with(['author', 'categories', 'tags', 'media'])
+            ->whereSlug($slug)
+            ->first();
+    }
+
+    /**
+     * Get active paginated posts for the blog listing page.
+     */
+    public function getActivePaginated(int $perPage = 9): LengthAwarePaginator
+    {
+        return Post::with(['author', 'media'])
+            ->whereStatus('active')
+            ->orderByDesc('id')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Get a small number of recent active posts (for sidebars).
+     */
+    public function getRecent(int $limit = 3): Collection
+    {
+        return Post::with(['author', 'media'])
+            ->whereStatus('active')
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get active posts filtered by category slug.
+     */
+    public function getByCategory(string $categorySlug, int $perPage = 10): LengthAwarePaginator
+    {
+        return Post::with(['author', 'media'])
+            ->whereHas('categories', fn ($q) => $q->whereSlug($categorySlug))
+            ->paginate($perPage);
+    }
+
+    /**
+     * Get active posts filtered by tag slug.
+     */
+    public function getByTag(string $tagSlug, int $perPage = 10): LengthAwarePaginator
+    {
+        return Post::with(['author', 'tags', 'media'])
+            ->whereHas('tags', fn ($q) => $q->where('slug', $tagSlug))
+            ->paginate($perPage);
+    }
+
+    /**
+     * Search posts by title term (front-facing).
+     */
+    public function searchByTerm(string $term, int $perPage = 10): LengthAwarePaginator
+    {
+        return Post::with(['author', 'media'])
+            ->whereStatus('active')
+            ->where('title', 'like', "%{$term}%")
+            ->paginate($perPage);
+    }
+
+    /**
+     * Get active posts filtered by multiple conditions (category, search term).
+     */
+    public function filter(array $data, int $perPage = 10): LengthAwarePaginator
+    {
+        $query = Post::with(['author', 'media'])->whereStatus('active');
+
+        if (! empty($data['search'])) {
+            $query->where('title', 'like', '%'.$data['search'].'%');
+        }
+
+        if (! empty($data['category'])) {
+            $query->whereHas('categories', fn ($q) => $q->where('slug', $data['category']));
+        }
+
+        return $query->paginate($perPage);
+    }
+
+    /**
      * Apply ordering and pagination.
      *
      * @param  array<string, mixed>  $data

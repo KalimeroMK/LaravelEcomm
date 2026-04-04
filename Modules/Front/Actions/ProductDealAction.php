@@ -5,26 +5,28 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Brand\Models\Brand;
-use Modules\Product\Models\Product;
+use Modules\Brand\Repository\BrandRepository;
+use Modules\Product\Repository\ProductRepository;
 
 class ProductDealAction
 {
+    public function __construct(
+        private readonly ProductRepository $productRepository,
+        private readonly BrandRepository $brandRepository,
+    ) {}
+
     public function __invoke(): array
     {
-        return Cache::remember('productDeal', 24 * 60, function (): array {
-            $recent_products = Product::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
-            $products = Product::with('categories')
-                ->where('d_deal', true)
-                ->orderBy('id', 'DESC')
-                ->paginate(9);
-            $brands = Brand::with('products')->get();
+        $products = Cache::remember('deal_products', 1440, fn () => $this->productRepository->getDeals(9));
 
-            return [
-                'recent_products' => $recent_products,
-                'products' => $products,
-                'brands' => $brands,
-            ];
-        });
+        $recent_products = Cache::remember('recent_products_sidebar', 1800, fn () => $this->productRepository->getRecent(3));
+
+        $brands = Cache::remember('active_brands_list', 3600, fn () => $this->brandRepository->getActive());
+
+        return [
+            'recent_products' => $recent_products,
+            'products'        => $products,
+            'brands'          => $brands,
+        ];
     }
 }

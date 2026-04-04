@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Bundle\Repository;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Modules\Bundle\Models\Bundle;
@@ -32,6 +33,14 @@ class BundleRepository extends EloquentRepository implements EloquentRepositoryI
     public function findById(int $id): ?Model
     {
         return (new $this->modelClass)->with('media')->findOrFail($id);
+    }
+
+    /**
+     * Paginate bundles with products and media eager-loaded.
+     */
+    public function paginate(int $perPage = 6): LengthAwarePaginator
+    {
+        return (new $this->modelClass)->with(['products', 'media'])->paginate($perPage);
     }
 
     /**

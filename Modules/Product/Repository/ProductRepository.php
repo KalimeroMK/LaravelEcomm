@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Product\Repository;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -21,47 +22,27 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
     }
 
     /**
-     * Search for products based on given data.
+     * Search products — admin-facing, NO caching (admin always needs fresh data).
      *
      * @param  array<string, mixed>  $data
      */
     public function search(array $data): mixed
     {
-        // Generation counter increments on every product create/update/delete,
-        // so stale search results are invalidated immediately instead of waiting 24 h.
-        $generation = (int) Cache::get('product_search_generation', 0);
-        $cacheKey = 'search_'.$generation.'_'.md5(json_encode($data));
+        $query = (new $this->modelClass)->newQuery();
 
-        return Cache::remember($cacheKey, 3600, function () use ($data) {
-            $query = (new $this->modelClass)->newQuery();
+        $searchableFields = ['title', 'summary', 'description', 'color', 'stock', 'brand_id', 'price', 'discount', 'status'];
 
-            $searchableFields = [
-                'title',
-                'summary',
-                'description',
-                'color',
-                'stock',
-                'brand_id',
-                'price',
-                'discount',
-                'status',
-            ];
-
-            foreach ($searchableFields as $field) {
-                if (Arr::has($data, $field)) {
-                    $query->where($field, 'like', '%'.Arr::get($data, $field).'%');
-                }
+        foreach ($searchableFields as $field) {
+            if (Arr::has($data, $field)) {
+                $query->where($field, 'like', '%'.Arr::get($data, $field).'%');
             }
+        }
 
-            $query->orderBy(
-                Arr::get($data, 'order_by', 'id'),
-                Arr::get($data, 'sort', 'desc')
-            );
+        $query->orderBy(Arr::get($data, 'order_by', 'id'), Arr::get($data, 'sort', 'desc'));
 
-            return $query->with($this->withRelations())->paginate(
-                Arr::get($data, 'per_page', (new $this->modelClass)->getPerPage())
-            );
-        });
+        return $query->with($this->withRelations())->paginate(
+            Arr::get($data, 'per_page', (new $this->modelClass)->getPerPage())
+        );
     }
 
     /**
@@ -78,6 +59,115 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
     public function findById(int $id): ?Model
     {
         return (new $this->modelClass)->with($this->withRelations())->find($id);
+    }
+
+    /**
+     * Find a product by slug with full relations for the detail page.
+     */
+    public function findBySlug(string $slug): ?Product
+    {
+        return Product::with(['getReview', 'categories', 'attributeValues.attribute', 'brand', 'tags', 'media'])
+            ->whereSlug($slug)
+            ->first();
+    }
+
+    /**
+     * Get featured active products.
+     */
+    public function getFeatured(int $limit = 4): Collection
+    {
+        return Product::with(['categories', 'brand', 'tags', 'media'])
+            ->where('status', 'active')
+            ->where('is_featured', true)
+            ->orderByDesc('price')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get latest active products, optionally with offset.
+     */
+    public function getLatest(int $limit = 4, int $offset = 0): Collection
+    {
+        return Product::with(['categories', 'brand', 'tags', 'media'])
+            ->where('status', 'active')
+            ->orderByDesc('id')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get a small set of recent active products for sidebars.
+     */
+    public function getRecent(int $limit = 3): Collection
+    {
+        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+            ->where('status', 'active')
+            ->whereNull('parent_id')
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get products related to a product via shared category IDs.
+     * Uses category IDs (already loaded) — no extra query for names.
+     *
+     * @param  array<int>  $categoryIds
+     */
+    public function getRelatedByCategoryIds(array $categoryIds, int $excludeId, int $limit = 8): Collection
+    {
+        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+            ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
+            ->where('id', '!=', $excludeId)
+            ->where('status', 'active')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get deal products (d_deal = true).
+     */
+    public function getDeals(int $perPage = 9): LengthAwarePaginator
+    {
+        return Product::with(['categories', 'brand', 'media'])
+            ->where('d_deal', true)
+            ->orderByDesc('id')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Search products by text term for front-facing search.
+     */
+    public function searchByTerm(string $term, int $perPage = 9): LengthAwarePaginator
+    {
+        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+            ->where('status', 'active')
+            ->where(fn ($q) => $q
+                ->where('title', 'like', "%{$term}%")
+                ->orWhere('description', 'like', "%{$term}%")
+            )
+            ->orderByDesc('id')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Get products by brand slug.
+     */
+    public function getByBrand(string $brandSlug, int $perPage = 9): LengthAwarePaginator
+    {
+        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+            ->whereHas('brand', fn ($q) => $q->where('slug', $brandSlug))
+            ->paginate($perPage);
+    }
+
+    /**
+     * Get the maximum active product price (for price-range slider).
+     */
+    public function getMaxPrice(): float
+    {
+        return (float) (Product::where('status', 'active')->max('price') ?? 1000);
     }
 
     /**
@@ -108,7 +198,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
     }
 
     /**
-     * Relations to eager load with product.
+     * Relations to eager load with product (admin / full detail).
      *
      * @return array<int, string>
      */
@@ -122,16 +212,16 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     private function clearProductCache(): void
     {
-        // Bump generation so all existing search_* cache keys become orphaned
-        // and new searches build fresh results immediately.
+        // Bump generation so all existing search_* cache keys become orphaned.
         Cache::increment('product_search_generation');
 
         $keys = [
-            'latest_products',
             'featured_products',
-            'all_products',
+            'latest_products',
             'hot_products',
+            'all_products',
             'active_banners_with_categories',
+            'recent_products',
         ];
 
         foreach ($keys as $key) {

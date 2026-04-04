@@ -23,4 +23,12 @@ class TagRepository extends EloquentRepository implements EloquentRepositoryInte
     {
         return (new $this->modelClass)->orderBy('id', 'desc')->get();
     }
+
+    /**
+     * Get tags that have at least one post (for blog tag cloud).
+     */
+    public function getWithPosts(int $limit = 50): Collection
+    {
+        return Tag::whereHas('posts')->take($limit)->get();
+    }
 }

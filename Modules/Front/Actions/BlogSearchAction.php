@@ -4,21 +4,24 @@ declare(strict_types=1);
 
 namespace Modules\Front\Actions;
 
-use Modules\Post\Models\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Modules\Post\Repository\PostRepository;
 
 class BlogSearchAction
 {
-    public function __invoke($request): array
+    public function __construct(private readonly PostRepository $postRepository) {}
+
+    public function __invoke(Request $request): array
     {
-        $searchTerm = $request->input('search', '');
-        $posts = Post::with('author')
-            ->where('title', 'like', '%'.$searchTerm.'%')
-            ->paginate(10);
-        $recantPosts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
+        $term  = $request->input('search', '');
+        $posts = $this->postRepository->searchByTerm($term, 10);
+
+        $recentPosts = Cache::remember('recent_posts_sidebar', 3600, fn () => $this->postRepository->getRecent(3));
 
         return [
-            'posts' => $posts,
-            'recantPosts' => $recantPosts,
+            'posts'       => $posts,
+            'recantPosts' => $recentPosts,
         ];
     }
 }

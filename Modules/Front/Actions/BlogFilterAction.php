@@ -4,27 +4,21 @@ declare(strict_types=1);
 
 namespace Modules\Front\Actions;
 
-use Modules\Post\Models\Post;
+use Illuminate\Support\Facades\Cache;
+use Modules\Post\Repository\PostRepository;
 
 class BlogFilterAction
 {
+    public function __construct(private readonly PostRepository $postRepository) {}
+
     public function __invoke(array $data): array
     {
-        $query = Post::with('author')->whereStatus('active');
-        if (! empty($data['search'])) {
-            $query->where('title', 'like', '%'.$data['search'].'%');
-        }
-        if (! empty($data['category'])) {
-            $query->whereHas('categories', function ($q) use ($data): void {
-                $q->where('slug', $data['category']);
-            });
-        }
-        $posts = $query->paginate(10);
-        $recantPosts = Post::whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
+        $posts       = $this->postRepository->filter($data, 10);
+        $recentPosts = Cache::remember('recent_posts_sidebar', 3600, fn () => $this->postRepository->getRecent(3));
 
         return [
-            'posts' => $posts,
-            'recantPosts' => $recantPosts,
+            'posts'       => $posts,
+            'recantPosts' => $recentPosts,
         ];
     }
 }

@@ -5,26 +5,20 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Post\Models\Post;
+use Modules\Post\Repository\PostRepository;
 
 class BlogByTagAction
 {
+    public function __construct(private readonly PostRepository $postRepository) {}
+
     public function __invoke(string $slug): array
     {
-        $cacheKey = 'blogByTag_'.$slug;
+        $posts        = $this->postRepository->getByTag($slug, 10);
+        $recent_posts = Cache::remember('recent_posts_sidebar', 3600, fn () => $this->postRepository->getRecent(3));
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
-            $posts = Post::with(['author', 'tags'])
-                ->whereHas('tags', function ($q) use ($slug): void {
-                    $q->where('slug', $slug);
-                })
-                ->paginate(10);
-            $recent_posts = Post::with('author')->where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-
-            return [
-                'posts' => $posts,
-                'recent_posts' => $recent_posts,
-            ];
-        });
+        return [
+            'posts'        => $posts,
+            'recent_posts' => $recent_posts,
+        ];
     }
 }

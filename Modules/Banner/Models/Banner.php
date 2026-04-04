@@ -112,6 +112,32 @@ class Banner extends Core implements HasMedia
     }
 
     /**
+     * Scope: only banners that are currently active.
+     * Filters at DB level to avoid loading all banners and filtering in PHP (N+1 / memory waste).
+     * Conditions that require runtime counters (max_clicks, max_impressions) are still checked
+     * at DB level using column comparisons.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        $now = now();
+
+        return $query
+            ->where('status', 'active')
+            ->where(function (Builder $q) use ($now): void {
+                $q->whereNull('active_from')->orWhere('active_from', '<=', $now);
+            })
+            ->where(function (Builder $q) use ($now): void {
+                $q->whereNull('active_to')->orWhere('active_to', '>=', $now);
+            })
+            ->where(function (Builder $q): void {
+                $q->whereNull('max_clicks')->orWhereColumn('current_clicks', '<', 'max_clicks');
+            })
+            ->where(function (Builder $q): void {
+                $q->whereNull('max_impressions')->orWhereColumn('current_impressions', '<', 'max_impressions');
+            });
+    }
+
+    /**
      * Check if the banner is currently active (by date, clicks, impressions, status).
      */
     public function isActive(): bool

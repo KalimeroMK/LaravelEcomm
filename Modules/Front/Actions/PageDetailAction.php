@@ -5,20 +5,16 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Page\Models\Page;
+use Modules\Page\Repository\PageRepository;
 
 class PageDetailAction
 {
+    public function __construct(private readonly PageRepository $pageRepository) {}
+
     public function __invoke(string $slug): array
     {
-        $cacheKey = 'page_'.$slug;
+        $page = Cache::remember("page_{$slug}", 86400, fn () => $this->pageRepository->findBySlug($slug));
 
-        return Cache::remember($cacheKey, 86400, function () use ($slug): array {
-            $page = Page::where('slug', $slug)->first();
-
-            return [
-                'page' => $page,
-            ];
-        });
+        return ['page' => $page];
     }
 }

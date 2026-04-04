@@ -5,25 +5,28 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Post\Models\Post;
-use Modules\Tag\Models\Tag;
+use Modules\Post\Repository\PostRepository;
+use Modules\Tag\Repository\TagRepository;
 
 class BlogDetailAction
 {
-    public function __invoke(string $slug): array|string
+    public function __construct(
+        private readonly PostRepository $postRepository,
+        private readonly TagRepository $tagRepository,
+    ) {}
+
+    public function __invoke(string $slug): array
     {
-        $cacheKey = 'blogDetail_'.$slug;
+        $post = $this->postRepository->findBySlug($slug);
 
-        return Cache::remember($cacheKey, 24 * 60, function () use ($slug): array {
-            $post = Post::with(['author', 'categories'])->whereSlug($slug)->firstOrFail();
-            $recentPosts = Post::with('author')->whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get();
-            $tags = Tag::whereHas('posts')->take(50)->get();
+        $recentPosts = Cache::remember('recent_posts_sidebar', 3600, fn () => $this->postRepository->getRecent(3));
 
-            return [
-                'post' => $post,
-                'recantPosts' => $recentPosts,
-                'tags' => $tags,
-            ];
-        });
+        $tags = Cache::remember('blog_tag_cloud', 3600, fn () => $this->tagRepository->getWithPosts(50));
+
+        return [
+            'post'        => $post,
+            'recantPosts' => $recentPosts,
+            'tags'        => $tags,
+        ];
     }
 }

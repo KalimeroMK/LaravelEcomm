@@ -14,4 +14,9 @@ class PageRepository extends EloquentRepository implements EloquentRepositoryInt
     {
         parent::__construct(Page::class);
     }
+
+    public function findBySlug(string $slug): ?Page
+    {
+        return Page::where('slug', $slug)->first();
+    }
 }

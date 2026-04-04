@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Illuminate\Support\Facades\Cache;
-use Modules\Post\Models\Post;
+use Modules\Post\Repository\PostRepository;
 
 class BlogAction
 {
+    public function __construct(private readonly PostRepository $postRepository) {}
+
     public function __invoke(): array
     {
-        return Cache::remember('blog', 24 * 60, function (): array {
-            return [
-                'posts' => Post::with(['author'])->whereStatus('active')->orderBy('id', 'DESC')->paginate(9),
-                'recantPosts' => Post::with(['author'])->whereStatus('active')->orderBy('id', 'DESC')->limit(3)->get(),
-            ];
-        });
+        $posts      = $this->postRepository->getActivePaginated(9);
+        $recentPosts = Cache::remember('recent_posts_sidebar', 3600, fn () => $this->postRepository->getRecent(3));
+
+        return [
+            'posts'       => $posts,
+            'recantPosts' => $recentPosts,
+        ];
     }
 }

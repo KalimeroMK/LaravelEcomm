@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Brand\Repository;
 
+use Illuminate\Support\Collection;
 use Modules\Brand\Models\Brand;
 use Modules\Core\Interfaces\EloquentRepositoryInterface;
 use Modules\Core\Interfaces\SearchInterface;
@@ -40,5 +41,45 @@ class BrandRepository extends EloquentRepository implements EloquentRepositoryIn
         $perPage = (new $this->modelClass)->getPerPage();
 
         return $query->orderBy($orderBy, $sort)->paginate($perPage);
+    }
+
+    /**
+     * Get active brands ordered by title (for front navigation/filters).
+     */
+    public function getActive(): Collection
+    {
+        return Brand::where('status', 'active')
+            ->withCount('products')
+            ->orderBy('title')
+            ->get();
+    }
+
+    /**
+     * Get IDs for a list of brand slugs (used for product filtering).
+     *
+     * @param  array<string>  $slugs
+     * @return array<int>
+     */
+    public function getIdsBySlugs(array $slugs): array
+    {
+        if ($slugs === [] || $slugs === ['']) {
+            return [];
+        }
+
+        return Brand::whereIn('slug', $slugs)
+            ->where('status', 'active')
+            ->pluck('id')
+            ->toArray();
+    }
+
+    /**
+     * Search brands by title term (for front search).
+     */
+    public function searchByTerm(string $term): Collection
+    {
+        return Brand::where('status', 'active')
+            ->where('title', 'like', "%{$term}%")
+            ->orderBy('title')
+            ->get();
     }
 }
