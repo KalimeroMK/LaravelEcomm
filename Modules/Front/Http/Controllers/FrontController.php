@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Front\Http\Controllers;
 
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,12 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use InvalidArgumentException;
-use Log;
-use Modules\Banner\Models\Banner;
 use Modules\Billing\Services\WishlistService;
 use Modules\Front\Actions\BlogAction;
 use Modules\Front\Actions\BlogByCategoryAction;
@@ -26,13 +20,17 @@ use Modules\Front\Actions\BlogDetailAction;
 use Modules\Front\Actions\BlogFilterAction;
 use Modules\Front\Actions\BlogSearchAction;
 use Modules\Front\Actions\BundleDetailAction;
-use Modules\Coupon\Actions\ApplyCouponAction;
+use Modules\Front\Actions\GetAdvancedSearchAction;
+use Modules\Front\Actions\GetBannersAction;
+use Modules\Front\Actions\GetCategoriesAction;
+use Modules\Front\Actions\GetSearchSuggestionsAction;
 use Modules\Front\Actions\IndexAction;
 use Modules\Front\Actions\MessageStoreAction;
 use Modules\Front\Actions\NewsletterDeleteAction;
 use Modules\Front\Actions\NewsletterSubscribeAction;
 use Modules\Front\Actions\NewsletterVerifyAction;
 use Modules\Front\Actions\PageDetailAction;
+use Modules\Front\Actions\ProcessCheckoutAction;
 use Modules\Front\Actions\ProductBrandAction;
 use Modules\Front\Actions\ProductBundlesAction;
 use Modules\Front\Actions\ProductCatAction;
@@ -42,15 +40,11 @@ use Modules\Front\Actions\ProductFilterAction;
 use Modules\Front\Actions\ProductGridsAction;
 use Modules\Front\Actions\ProductListsAction;
 use Modules\Front\Actions\ProductSearchAction;
-use Modules\Core\Helpers\Helper;
 use Modules\Front\Http\Requests\ProductSearchRequest;
 use Modules\Order\Actions\ReorderAction;
-use Modules\Order\Actions\StoreOrderAction;
-use Modules\Order\DTOs\OrderDTO;
 use Modules\Order\Http\Requests\Store as OrderStoreRequest;
 use Modules\Order\Models\Order;
 use Modules\Message\Http\Requests\Store;
-use Modules\Product\Services\ElasticsearchService;
 use Modules\Product\Services\RecentlyViewedService;
 use Modules\Product\Services\RecommendationService;
 
@@ -181,15 +175,9 @@ class FrontController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function categories(): Factory|View
+    public function categories(GetCategoriesAction $getCategoriesAction): Factory|View
     {
-        // Get only parent categories (top-level) with their children count
-        $categories = \Modules\Category\Models\Category::active()
-            ->whereNull('parent_id')
-            ->withCount('children')
-            ->get();
-        
-        return view(theme_view('pages.categories'), ['categories' => $categories]);
+        return view(theme_view('pages.categories'), $getCategoriesAction());
     }
 
     /**
@@ -318,55 +306,15 @@ class FrontController extends Controller
     /**
      * Advanced search with Elasticsearch
      */
-    public function advancedSearch(Request $request, ElasticsearchService $elasticsearchService): View
+    public function advancedSearch(Request $request, GetAdvancedSearchAction $getAdvancedSearchAction): View
     {
-        $query = $request->input('query', '');
-        $filters = $request->only([
-            'price_min',
-            'price_max',
-            'brand',
-            'categories',
-            'status',
-            'in_stock',
-            'sort_by',
-        ]);
-
-        $products = collect();
-        $totalResults = 0;
-        $searchPerformed = false;
-
-        if ($query) {
-            $searchPerformed = true;
-
-            // Try Elasticsearch first, fallback to SQL if it fails
-            $products = $elasticsearchService->search($query, $filters);
-
-            if ($products === null) {
-                // Elasticsearch failed, use SQL fallback with proper relationships
-                Log::warning('Elasticsearch unavailable, falling back to SQL search');
-                $products = $elasticsearchService->searchFallback($query, $filters);
-            }
-
-            $totalResults = $products ? $products->count() : 0;
-        }
-
-        // Get available filters
-        $availableFilters = $this->getAvailableFilters($query);
-
-        return view(theme_view('pages.advanced-search'), [
-            'products' => $products,
-            'query' => $query,
-            'filters' => $filters,
-            'availableFilters' => $availableFilters,
-            'totalResults' => $totalResults,
-            'searchPerformed' => $searchPerformed,
-        ]);
+        return view(theme_view('pages.advanced-search'), $getAdvancedSearchAction(
+            $request->input('query', ''),
+            $request->only(['price_min', 'price_max', 'brand', 'categories', 'status', 'in_stock', 'sort_by'])
+        ));
     }
 
-    /**
-     * Get search suggestions for autocomplete
-     */
-    public function searchSuggestions(Request $request): JsonResponse
+    public function searchSuggestions(Request $request, GetSearchSuggestionsAction $getSearchSuggestionsAction): JsonResponse
     {
         $query = $request->input('query', '');
 
@@ -374,9 +322,7 @@ class FrontController extends Controller
             return response()->json(['suggestions' => []]);
         }
 
-        $suggestions = $this->getSearchSuggestions($query);
-
-        return response()->json($suggestions);
+        return response()->json($getSearchSuggestionsAction($query));
     }
 
     /**
@@ -435,14 +381,14 @@ class FrontController extends Controller
     public function relatedProducts(string $locale, string $slug, Request $request, RecommendationService $recommendationService): View
     {
         $product = \Modules\Product\Models\Product::where('slug', $slug)->firstOrFail();
-        $limit = min($request->input('limit', 8), 20);
+        $limit   = min($request->input('limit', 8), 20);
 
         $relatedProducts = $recommendationService->getContentBasedRecommendations($product, $limit);
 
         return view(theme_view('pages.related-products'), [
-            'product' => $product,
+            'product'         => $product,
             'relatedProducts' => $relatedProducts,
-            'totalCount' => $relatedProducts->count(),
+            'totalCount'      => $relatedProducts->count(),
         ]);
     }
 
@@ -477,134 +423,12 @@ class FrontController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created order in storage.
+     * All business logic is delegated to ProcessCheckoutAction.
      */
-    public function store(OrderStoreRequest $request, StoreOrderAction $storeOrderAction, ApplyCouponAction $applyCouponAction): RedirectResponse
+    public function store(OrderStoreRequest $request, ProcessCheckoutAction $processCheckoutAction): RedirectResponse
     {
-        $user = Auth::user();
-        
-        // Calculate cart totals
-        $cartItems = Helper::getAllProductFromCart((string) ($user?->id ?? ''));
-        $subtotal = Helper::totalCartPrice((string) ($user?->id ?? ''));
-        $quantity = $cartItems->sum('quantity');
-        
-        if ($cartItems->isEmpty()) {
-            return redirect()->back()->with('error', 'Your cart is empty.');
-        }
-        
-        // Get shipping cost (skip for virtual/downloadable products)
-        $shippingId = null;
-        $shippingCost = 0;
-        
-        if (\Modules\Core\Helpers\Helper::cartRequiresShipping()) {
-            $shippingId = $request->input('shipping');
-            if ($shippingId) {
-                $shipping = \Modules\Shipping\Models\Shipping::find($shippingId);
-                $shippingCost = $shipping?->price ?? 0;
-            }
-        }
-        
-        // Calculate total with coupon discount
-        $couponData = session('coupon');
-        $couponDiscount = $couponData['discount'] ?? 0;
-        $couponId = $couponData['id'] ?? null;
-        $freeShipping = $couponData['free_shipping'] ?? false;
-        
-        // Apply free shipping discount
-        if ($freeShipping && $couponDiscount === 0) {
-            $couponDiscount = $shippingCost;
-        }
-        
-        $totalAmount = $subtotal + $shippingCost - $couponDiscount;
-        
-        // Create order DTO
-        $orderData = [
-            'order_number' => 'ORD-' . strtoupper(uniqid()),
-            'user_id' => $user?->id,
-            'sub_total' => $subtotal,
-            'shipping_id' => $shippingId,
-            'total_amount' => max(0, $totalAmount),
-            'quantity' => $quantity,
-            'payment_method' => $request->input('payment_method', 'cod'),
-            'payment_status' => 'pending',
-            'status' => 'pending',
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'country' => $request->input('country'),
-            'city' => $request->input('city'),
-            'address1' => $request->input('address1'),
-            'address2' => $request->input('address2'),
-            'post_code' => $request->input('post_code'),
-        ];
-        
-        // Check if the payment method is PayPal and redirect to the payment route
-        if ($request->input('payment_method') === 'paypal') {
-            // Store order data in session for after PayPal payment
-            session()->put('pending_order', $orderData);
-            return redirect()->route('payment');
-        }
-
-        // Check if the payment method is Stripe and redirect to the Stripe route with the user ID
-        if ($request->input('payment_method') === 'stripe') {
-            // Store order data in session for after Stripe payment
-            session()->put('pending_order', $orderData);
-            return redirect()->route('stripe', Auth::id());
-        }
-
-        // For COD - create order immediately
-        $dto = OrderDTO::fromArray($orderData);
-        $order = $storeOrderAction->execute($dto);
-        
-        // Associate cart items with the order
-        foreach ($cartItems as $cartItem) {
-            $cartItem->update(['order_id' => $order->id]);
-        }
-        
-        // Save address to user's address book if logged in
-        if ($user && $request->has('save_address')) {
-            $this->saveUserAddress($user, $request);
-        }
-
-        // Record coupon usage if coupon was applied
-        if ($couponId) {
-            $applyCouponAction->recordUsage(
-                $couponId,
-                $order->id,
-                $user?->id,
-                session()->getId(),
-                $couponDiscount
-            );
-        }
-
-        // Clear the cart and coupon from the session
-        session()->forget('cart');
-        session()->forget('coupon');
-        session()->forget('pending_order');
-
-        // Redirect to the home page with success message
-        return redirect()->route('front.index')->with('success', 'Order placed successfully! Order number: ' . $order->order_number);
-    }
-    
-    /**
-     * Save address to user's address book.
-     */
-    private function saveUserAddress($user, Request $request): void
-    {
-        $user->addresses()->create([
-            'type' => 'shipping',
-            'is_default' => $request->has('make_default_address'),
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'country' => $request->input('country'),
-            'city' => $request->input('city'),
-            'address1' => $request->input('address1'),
-            'address2' => $request->input('address2'),
-            'post_code' => $request->input('post_code'),
-        ]);
+        return $processCheckoutAction->execute($request);
     }
 
     /**
@@ -657,145 +481,34 @@ class FrontController extends Controller
     /**
      * Show banners on frontend (filtered by active status and optionally by category).
      */
-    public function banners(Request $request): View
+    public function banners(Request $request, GetBannersAction $getBannersAction): View
     {
-        $categoryId = $request->query('category');
-        $query = Banner::with('categories');
-        if ($categoryId) {
-            $query->whereHas('categories', function ($q) use ($categoryId): void {
-                $q->where('categories.id', $categoryId);
-            });
-        }
-        $banners = $query->get()->filter(fn ($b): bool => $b->isActive());
+        $categoryId = $request->query('category') ? (int) $request->query('category') : null;
 
-        return view(theme_view('banner'), ['banners' => $banners]);
+        return view(theme_view('banner'), $getBannersAction($categoryId));
     }
 
-    /**
-     * Track banner impression (AJAX).
-     */
-    public function bannerImpression($id): JsonResponse
+    public function bannerImpression(int $id): JsonResponse
     {
-        $banner = Banner::findOrFail($id);
+        $banner = \Modules\Banner\Models\Banner::findOrFail($id);
         $banner->incrementImpression();
 
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Get available filters for search
-     */
-    private function getAvailableFilters(?string $query): array
-    {
-        $cacheKey = 'front_search_filters_'.md5(json_encode(['query' => $query]));
-
-        return Cache::remember($cacheKey, 3600, function () use ($query) {
-            $baseQuery = \Modules\Product\Models\Product::query();
-
-            if ($query) {
-                $baseQuery->where(function ($q) use ($query): void {
-                    $q->where('title', 'like', "%{$query}%")
-                        ->orWhere('summary', 'like', "%{$query}%")
-                        ->orWhere('description', 'like', "%{$query}%");
-                });
-            }
-
-            $baseQuery->where('status', 'active');
-
-            // Get price range
-            $priceRange = $baseQuery->selectRaw('MIN(price) as min_price, MAX(price) as max_price')->first();
-
-            // Get available brands
-            // Clone query to avoid modifying the base query for subsequent calls if any (though here we build new ones)
-            $brandsQuery = clone $baseQuery;
-            $brands = $brandsQuery->join('brands', 'products.brand_id', '=', 'brands.id')
-                ->select('brands.id', 'brands.name')
-                ->distinct()
-                ->get();
-
-            // Get available categories
-            $categoriesQuery = clone $baseQuery;
-            $categories = $categoriesQuery->join('category_product', 'products.id', '=', 'category_product.product_id')
-                ->join('categories', 'category_product.category_id', '=', 'categories.id')
-                ->select('categories.id', 'categories.name')
-                ->distinct()
-                ->get();
-
-            return [
-                'price_range' => [
-                    'min' => $priceRange->min_price ?? 0,
-                    'max' => $priceRange->max_price ?? 1000,
-                ],
-                'brands' => $brands,
-                'categories' => $categories,
-                'statuses' => ['active', 'inactive'],
-                'stock_options' => ['in_stock', 'out_of_stock'],
-            ];
-        });
-    }
-
-    /**
-     * Get search suggestions
-     */
-    private function getSearchSuggestions(string $query): array
-    {
-        // Get popular search terms
-        $popularTerms = \Modules\Product\Models\Product::where('title', 'like', "%{$query}%")
-            ->orWhere('summary', 'like', "%{$query}%")
-            ->pluck('title')
-            ->take(5)
-            ->toArray();
-
-        // Get category suggestions
-        $categorySuggestions = \Modules\Category\Models\Category::where('name', 'like', "%{$query}%")
-            ->pluck('name')
-            ->take(3)
-            ->toArray();
-
-        // Get brand suggestions
-        $brandSuggestions = \Modules\Brand\Models\Brand::where('name', 'like', "%{$query}%")
-            ->pluck('name')
-            ->take(3)
-            ->toArray();
-
-        return [
-            'popular_terms' => $popularTerms,
-            'categories' => $categorySuggestions,
-            'brands' => $brandSuggestions,
-            'suggested_query' => $this->generateSuggestedQuery($query),
-        ];
-    }
-
-    /**
-     * Generate suggested search query
-     */
-    private function generateSuggestedQuery(string $query): string
-    {
-        $corrections = [
-            'laptop' => 'laptop computer',
-            'phone' => 'smartphone',
-            'tv' => 'television',
-            'pc' => 'personal computer',
-        ];
-
-        return $corrections[$query] ?? $query;
-    }
-
-    /**
-     * Display user's order history.
-     */
     public function myOrders(): View|RedirectResponse
     {
         $user = Auth::user();
-        
-        if (!$user) {
+
+        if (! $user) {
             return redirect()->route('front.login')->with('message', 'Please login to view your orders.');
         }
-        
+
         $orders = Order::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
+            ->with(['carts.product', 'shipping'])
+            ->orderByDesc('created_at')
             ->paginate(10);
-        
+
         return view(theme_view('pages.my-orders'), compact('orders'));
     }
 

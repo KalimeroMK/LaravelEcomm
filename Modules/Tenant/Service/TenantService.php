@@ -4,60 +4,47 @@ declare(strict_types=1);
 
 namespace Modules\Tenant\Service;
 
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Core\Service\CoreService;
 use Modules\Tenant\Models\Tenant;
+use Modules\Tenant\Repository\TenantRepository;
 
 class TenantService extends CoreService
 {
-    public function __construct() {}
+    public function __construct(private readonly TenantRepository $repository) {}
 
-    /**
-     * Get all tenants.
-     */
-    public function getAll()
+    public function getAll(): Collection
     {
-        return Tenant::all();
+        return $this->repository->all();
     }
 
-    /**
-     * Create a new tenant.
-     */
     public function create(array $data): Tenant
     {
-        return Tenant::create($data);
+        /** @var Tenant */
+        return $this->repository->create($data);
     }
 
-    /**
-     * Find tenant by ID.
-     */
     public function findById(int $id): ?Tenant
     {
-        return Tenant::find($id);
+        /** @var Tenant|null */
+        return $this->repository->find($id);
     }
 
-    /**
-     * Update tenant.
-     */
     public function update(int $id, array $data): bool
     {
-        $tenant = Tenant::find($id);
-        if (! $tenant) {
+        if (! $this->repository->exists($id)) {
             return false;
         }
 
-        return $tenant->update($data);
+        return $this->repository->update($id, $data);
     }
 
-    /**
-     * Delete tenant.
-     */
     public function delete(int $id): bool
     {
-        $tenant = Tenant::find($id);
-        if (! $tenant) {
+        if (! $this->repository->exists($id)) {
             return false;
         }
 
-        return $tenant->delete();
+        return $this->repository->delete($id);
     }
 }
