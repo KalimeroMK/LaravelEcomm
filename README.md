@@ -334,6 +334,9 @@ php artisan serve
 - **Browser Caching**: Cache headers for static assets
 - **Database Indexing**: Optimized indexes for fast queries
 - **Full-Page Caching**: Cache rendered pages for guests
+- **Tenant Cache Isolation**: Per-tenant cache prefix prevents cross-tenant cache pollution
+- **Search Generation Counter**: Instant search cache invalidation on product changes (no stale results)
+- **Helper Caching**: Shipping methods, post tags, post categories cached at 1 h TTL
 
 ---
 
@@ -782,12 +785,42 @@ Client:   client@mail.com / password
 
 ---
 
+### 🏢 Multi-Tenancy (Optional)
+
+Multi-tenancy is **disabled by default** — the application runs as a standard single-store e-commerce platform with no extra config needed.
+
+To enable database-per-tenant mode, set in `.env`:
+
+```env
+MULTI_TENANT_ENABLED=true
+TENANT_MAIN_DOMAIN=yourdomain.com
+```
+
+When enabled, each tenant is identified by subdomain and gets its own isolated MySQL database. Cache is automatically prefixed per-tenant (`laravel_t1_`, `laravel_t2_`, ...) so tenants never share cached data.
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `MULTI_TENANT_ENABLED` | `false` | Enable database-per-tenant isolation |
+| `TENANT_MAIN_DOMAIN` | `localhost` | Root domain for subdomain detection |
+| `TENANT_DB_PREFIX` | `tenant_` | Database name prefix for tenant DBs |
+| `TENANT_ISOLATE_USERS` | `true` | Keep user accounts per-tenant |
+
+---
+
 ### Recent Enhancements
 
 <details>
 <summary>Click to expand recent updates</summary>
 
-#### Latest: Cart/Checkout & Payment Fixes
+#### Latest: Cache & Performance Fixes
+- ✅ Tenant cache isolation via per-tenant prefix (no more `Cache::flush()` on switch)
+- ✅ Search cache invalidation via generation counter (instant, not 24 h stale)
+- ✅ Multi-tenancy off by default — works as normal ecom, opt-in to multi-tenant
+- ✅ Theme resolution via `Cache::remember()` — safe for FrankenPHP/Octane workers
+- ✅ Replaced all `Artisan::call()` in web requests with direct filesystem ops
+- ✅ `Helper::shipping()`, `postTagList()`, `postCategoryList()` now cached at 1 h TTL
+
+#### Previous: Cart/Checkout & Payment Fixes
 - ✅ Modern theme views for cart, checkout, my-orders
 - ✅ Fixed payment workflows (Stripe, PayPal, COD)
 - ✅ Client orders access fixed
