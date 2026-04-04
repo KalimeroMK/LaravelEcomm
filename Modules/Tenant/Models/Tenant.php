@@ -75,8 +75,10 @@ class Tenant extends Model
             DB::purge('tenant');
         }
 
-        // Consider scoping the cache flush if possible
-        Cache::flush();
+        // Scope all cache operations to this tenant by changing the prefix.
+        // This replaces Cache::flush() which nuked the entire shared cache.
+        $basePrefix = rtrim(config('cache.prefix', 'laravel'), '_');
+        config(['cache.prefix' => $basePrefix . '_t' . $this->id]);
 
         return $this;
     }

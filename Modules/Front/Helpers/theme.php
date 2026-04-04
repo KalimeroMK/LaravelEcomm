@@ -6,64 +6,68 @@ if (! function_exists('active_theme')) {
     /**
      * Get the currently active theme.
      * Priority: env > database > default
+     *
+     * Uses Cache::remember() instead of a static variable so that
+     * long-running worker processes (FrankenPHP / Octane) and
+     * multi-tenant setups (each tenant has its own cache prefix)
+     * always resolve the correct theme per request context.
      */
     function active_theme(): string
     {
-        static $cachedTheme = null;
-        
-        // Return cached theme if available
-        if ($cachedTheme !== null) {
-            return $cachedTheme;
-        }
-        
         try {
             // Priority 1: Environment/Config override (for dev/testing)
             $envTheme = config('front.active_template');
             if ($envTheme && is_string($envTheme)) {
-                // Verify theme exists
                 $themePath = module_path('Front', "Resources/views/themes/{$envTheme}");
                 if (is_dir($themePath)) {
-                    $cachedTheme = $envTheme;
-                    return $cachedTheme;
+                    return $envTheme;
                 }
             }
-            
-            // Priority 2: Database (for production)
-            if (! app()->runningInConsole() || Illuminate\Support\Facades\Schema::hasTable('settings')) {
-                $setting = app('settings');
-                if ($setting instanceof \Modules\Settings\Models\Setting) {
-                    $dbTheme = $setting->active_template ?? 'default';
-                    $themePath = module_path('Front', "Resources/views/themes/{$dbTheme}");
-                    if (is_dir($themePath)) {
-                        $cachedTheme = $dbTheme;
-                        return $cachedTheme;
+
+            // Priority 2: Database — cached for 60 s so admin theme-switches
+            // take effect within a minute without hammering the DB on every request.
+            return \Illuminate\Support\Facades\Cache::remember('active_theme', 60, function () {
+                if (! app()->runningInConsole() || \Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                    $setting = app('settings');
+                    if ($setting instanceof \Modules\Settings\Models\Setting) {
+                        $dbTheme = $setting->active_template ?? 'default';
+                        $themePath = module_path('Front', "Resources/views/themes/{$dbTheme}");
+                        if (is_dir($themePath)) {
+                            return $dbTheme;
+                        }
                     }
                 }
-            }
+
+                return 'default';
+            });
         } catch (\Exception $e) {
-            // Silently fall through to default
+            return 'default';
         }
-        
-        // Priority 3: Default fallback
-        $cachedTheme = 'default';
-        return $cachedTheme;
     }
 }
 
 if (! function_exists('clear_theme_cache')) {
     /**
      * Clear theme-related caches.
+     * Uses direct File/Cache operations instead of Artisan::call()
+     * to avoid the overhead of bootstrapping the full Artisan kernel
+     * inside a web request.
      */
     function clear_theme_cache(): void
     {
-        // Clear view cache
-        Illuminate\Support\Facades\Artisan::call('view:clear');
-        
-        // Clear application cache
-        Illuminate\Support\Facades\Artisan::call('cache:clear');
-        
-        // Clear static theme cache
+        // Clear compiled Blade views
+        $compiledPath = config('view.compiled');
+        if ($compiledPath && is_dir($compiledPath)) {
+            \Illuminate\Support\Facades\File::cleanDirectory($compiledPath);
+        }
+
+        // Clear only theme-related cache keys, not the whole cache store
         \Illuminate\Support\Facades\Cache::forget('active_theme');
+
+        // Clear product display caches that depend on the active theme
+        foreach (['featured_products', 'latest_products', 'hot_products', 'all_products', 'active_banners_with_categories'] as $key) {
+            \Illuminate\Support\Facades\Cache::forget($key);
+        }
     }
 }
 

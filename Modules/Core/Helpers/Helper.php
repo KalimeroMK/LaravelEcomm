@@ -74,15 +74,19 @@ class Helper
 
     public static function shipping(): Collection
     {
-        return Shipping::orderBy('id', 'DESC')->get();
+        return Cache::remember('shipping_list', 3600, function () {
+            return Shipping::orderBy('id', 'DESC')->get();
+        });
     }
 
     public static function postTagList(): Collection
     {
-        return Tag::withCount('posts')
-            ->orderBy('posts_count', 'desc')
-            ->take(20)
-            ->get();
+        return Cache::remember('post_tag_list', 3600, function () {
+            return Tag::withCount('posts')
+                ->orderBy('posts_count', 'desc')
+                ->take(20)
+                ->get();
+        });
     }
 
     /**
@@ -100,10 +104,12 @@ class Helper
 
     public static function postCategoryList(): Collection
     {
-        return Category::withCount('posts')
-            ->orderBy('posts_count', 'desc')
-            ->take(10)
-            ->get();
+        return Cache::remember('post_category_list', 3600, function () {
+            return Category::withCount('posts')
+                ->orderBy('posts_count', 'desc')
+                ->take(10)
+                ->get();
+        });
     }
 
     /**

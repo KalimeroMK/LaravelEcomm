@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Front\Services\Theme;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Livewire\Blaze\Blaze;
@@ -186,10 +185,16 @@ class ThemeManager implements ThemeManagerInterface
     public function clearBlazeCache(?string $theme = null): array
     {
         $theme = $theme ?? $this->activeTheme;
-        Artisan::call('view:clear');
-        
+
+        // Use direct filesystem operation instead of Artisan::call('view:clear')
+        // to avoid bootstrapping the full Artisan kernel inside a web request.
+        $compiledPath = config('view.compiled');
+        if ($compiledPath && is_dir($compiledPath)) {
+            \Illuminate\Support\Facades\File::cleanDirectory($compiledPath);
+        }
+
         if (config('blaze.cache_warming.enabled')) {
-            Artisan::call('cache:clear');
+            \Illuminate\Support\Facades\Cache::forget('active_theme');
         }
 
         return [
@@ -215,7 +220,10 @@ class ThemeManager implements ThemeManagerInterface
 
     private function reconfigureBlaze(): void
     {
-        Artisan::call('view:clear');
+        $compiledPath = config('view.compiled');
+        if ($compiledPath && is_dir($compiledPath)) {
+            \Illuminate\Support\Facades\File::cleanDirectory($compiledPath);
+        }
     }
 
     private function resolveActiveTheme(): string

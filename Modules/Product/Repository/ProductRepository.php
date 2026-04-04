@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\Product\Repository;
 
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -28,9 +27,12 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function search(array $data): mixed
     {
-        $cacheKey = 'search_'.md5(json_encode($data));
+        // Generation counter increments on every product create/update/delete,
+        // so stale search results are invalidated immediately instead of waiting 24 h.
+        $generation = (int) Cache::get('product_search_generation', 0);
+        $cacheKey = 'search_'.$generation.'_'.md5(json_encode($data));
 
-        return Cache::remember($cacheKey, 86400, function () use ($data) {
+        return Cache::remember($cacheKey, 3600, function () use ($data) {
             $query = (new $this->modelClass)->newQuery();
 
             $searchableFields = [
@@ -100,15 +102,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
         $item->fill($data)->save();
 
         $this->clearProductCache();
-        try {
-            if (config('cache.default') === 'redis' && Cache::getStore() instanceof \Illuminate\Cache\RedisStore) {
-                Cache::store('redis')->forget("product_{$id}");
-            } else {
-                Cache::forget("product_{$id}");
-            }
-        } catch (Exception $e) {
-            Cache::forget("product_{$id}");
-        }
+        Cache::forget("product_{$id}");
 
         return $item->fresh();
     }
@@ -128,23 +122,20 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     private function clearProductCache(): void
     {
-        try {
-            // Try to use Redis if available, otherwise use default cache
-            if (config('cache.default') === 'redis' && Cache::getStore() instanceof \Illuminate\Cache\RedisStore) {
-                Cache::store('redis')->forget('latest_products');
-                Cache::store('redis')->forget('featured_products');
-                Cache::store('redis')->forget('all_products');
-            } else {
-                // Use default cache driver (works with array driver in tests)
-                Cache::forget('latest_products');
-                Cache::forget('featured_products');
-                Cache::forget('all_products');
-            }
-        } catch (Exception $e) {
-            // If Redis is not available, use default cache
-            Cache::forget('latest_products');
-            Cache::forget('featured_products');
-            Cache::forget('all_products');
+        // Bump generation so all existing search_* cache keys become orphaned
+        // and new searches build fresh results immediately.
+        Cache::increment('product_search_generation');
+
+        $keys = [
+            'latest_products',
+            'featured_products',
+            'all_products',
+            'hot_products',
+            'active_banners_with_categories',
+        ];
+
+        foreach ($keys as $key) {
+            Cache::forget($key);
         }
     }
 }

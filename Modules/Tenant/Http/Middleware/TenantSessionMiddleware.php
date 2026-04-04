@@ -15,13 +15,24 @@ class TenantSessionMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip when multi-tenancy is disabled (normal single-tenant ecom mode)
+        if (! config('tenant.multi_tenant.enabled') || ! app()->bound('tenant')) {
+            return $next($request);
+        }
+
+        $tenant = app('tenant');
+
+        if (! $tenant) {
+            return $next($request);
+        }
+
         if (! $request->session()->has('tenant_id')) {
-            $request->session()->put('tenant_id', app('tenant')->id);
+            $request->session()->put('tenant_id', $tenant->id);
 
             return $next($request);
         }
 
-        if ($request->session()->get('tenant_id') !== app('tenant')->id) {
+        if ($request->session()->get('tenant_id') !== $tenant->id) {
             abort(401);
         }
 
