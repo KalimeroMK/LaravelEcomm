@@ -44,9 +44,9 @@ class OrderController extends CoreController
     {
         $this->authorize('viewAny', Order::class);
 
-        $orders = auth()->user()->hasRole('super-admin')
+        $orders = $request->user()?->hasRole('super-admin')
             ? $this->getAllAction->execute()
-            : $this->findByUserAction->execute($request['user_id'] ?? auth()->id());
+            : $this->findByUserAction->execute($request['user_id'] ?? $request->user()?->getAuthIdentifier());
 
         return OrderResource::collection($orders);
     }
@@ -107,7 +107,7 @@ class OrderController extends CoreController
         $this->authorize('view', $order);
 
         $pdf = $this->generatePdfAction->execute($id);
-        $file_name = $order->order_number.'-'.($order->user->name ?? $order->first_name ?? 'order').'.pdf';
+        $file_name = preg_replace('/[^a-zA-Z0-9\-_]/', '', $order->order_number ?? 'order').'.pdf';
 
         return $pdf->download($file_name);
     }
@@ -135,11 +135,12 @@ class OrderController extends CoreController
         $this->authorize('view', $order);
 
         // Ensure user can only reorder their own orders
-        if ($order->user_id !== auth()->id()) {
+        $userId = request()->user()?->getAuthIdentifier();
+        if ($order->user_id !== $userId) {
             abort(403, 'Unauthorized access to this order.');
         }
 
-        $result = $this->reorderAction->execute($id, auth()->id());
+        $result = $this->reorderAction->execute($id, $userId);
 
         if ($result['success']) {
             return $this

@@ -17,6 +17,13 @@ class DatabaseManagementController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            if (! auth()->user()?->hasRole('super-admin')) {
+                abort(403, 'Unauthorized - Super admin access required');
+            }
+
+            return $next($request);
+        });
     }
 
     /**

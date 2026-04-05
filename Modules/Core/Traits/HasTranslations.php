@@ -234,20 +234,6 @@ trait HasTranslations
     }
 
     /**
-     * Magic getter for translated attributes
-     * 
-     * DISABLED: Using explicit getTranslatedAttribute() method instead
-     * to avoid lazy loading issues and infinite loops
-     */
-    // public function getAttribute($key): mixed
-    // {
-    //     if (in_array($key, $this->getTranslatableFields(), true)) {
-    //         return $this->getTranslation($key, $this->getLocale()) ?? parent::getAttribute($key);
-    //     }
-    //     return parent::getAttribute($key);
-    // }
-    
-    /**
      * Get translated attribute explicitly
      */
     public function getTranslatedAttribute(string $key, ?string $locale = null): mixed
@@ -258,20 +244,6 @@ trait HasTranslations
         return $this->getAttribute($key);
     }
 
-    /**
-     * Magic setter for translated attributes
-     * 
-     * DISABLED: Use setTranslatedAttribute() instead
-     */
-    // public function setAttribute($key, $value): static
-    // {
-    //     if (in_array($key, $this->getTranslatableFields(), true)) {
-    //         $this->setTranslation($key, $this->getLocale(), $value);
-    //         return $this;
-    //     }
-    //     return parent::setAttribute($key, $value);
-    // }
-    
     /**
      * Set translated attribute explicitly
      */

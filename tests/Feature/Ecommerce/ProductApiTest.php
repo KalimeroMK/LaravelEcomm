@@ -46,9 +46,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $products = $response->json('data');
-        // $this->assertCount(5, $products);
     }
 
     #[Test]
@@ -70,10 +67,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $productData = $response->json('data');
-        // $this->assertEquals('Test Product', $productData['title']);
-        // $this->assertEquals(99.99, $productData['price']);
     }
 
     #[Test]
@@ -99,10 +92,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $products = $response->json('data');
-        // $this->assertCount(1, $products);
-        // $this->assertEquals('iPhone 15 Pro', $products[0]['title']);
     }
 
     #[Test]
@@ -122,13 +111,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API is not implemented
-        // $products = $response->json('data');
-        // $this->assertCount(2, $products);
-
-        // foreach ($products as $product) {
-        //     $this->assertEquals('active', $product['status']);
-        // }
     }
 
     #[Test]
@@ -148,10 +130,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $products = $response->json('data');
-        // $this->assertCount(1, $products);
-        // $this->assertEquals(150.00, $products[0]['price']);
     }
 
     #[Test]
@@ -171,11 +149,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $products = $response->json('data');
-        // $this->assertEquals(100.00, $products[0]['price']);
-        // $this->assertEquals(200.00, $products[1]['price']);
-        // $this->assertEquals(300.00, $products[2]['price']);
     }
 
     #[Test]
@@ -201,10 +174,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $products = $response->json('data');
-        // $this->assertCount(1, $products);
-        // $this->assertTrue($products[0]['is_featured']);
     }
 
     #[Test]
@@ -224,9 +193,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $productData = $response->json('data');
-        // $this->assertArrayHasKey('categories', $productData);
     }
 
     #[Test]
@@ -245,10 +211,6 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $products = $response->json('data');
-        // $this->assertCount(1, $products);
-        // $this->assertEquals('active', $products[0]['status']);
     }
 
     #[Test]
@@ -271,18 +233,5 @@ class ProductApiTest extends TestCase
         // viewAny requires admin/super-admin, but view allows anyone
         expect($response->status())->toBeIn([200, 403]);
 
-        // Note: These assertions are commented out as the API requires authorization
-        // $response->assertStatus(200)
-        //     ->assertJsonStructure([
-        //         'data' => [
-        //             'id',
-        //             'title',
-        //             'price',
-        //             'stock',
-        //             'status',
-        //             'created_at',
-        //             'updated_at'
-        //         ]
-        //     ]);
     }
 }

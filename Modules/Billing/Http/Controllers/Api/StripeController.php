@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Billing\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Modules\Billing\Actions\Stripe\CreateStripeChargeAction;
 use Modules\Billing\DTOs\StripeDTO;
 use Modules\Billing\Http\Requests\Api\Stripe as StripeData;
@@ -27,29 +28,38 @@ class StripeController extends CoreController
     public function stripe(StripeData $request): JsonResponse
     {
         $dto = StripeDTO::fromRequest($request);
-        
+
         try {
-            $this->createAction->execute($dto);
-            
-            // Update order if order_id is provided
-            if ($request->has('order_id')) {
-                $order = Order::find($request->input('order_id'));
-                if ($order) {
-                    $order->update([
-                        'payment_status' => 'paid',
-                        'status' => 'processing',
-                        'transaction_reference' => 'stripe_' . uniqid(),
-                    ]);
+            $transactionId = DB::transaction(function () use ($dto, $request): string {
+                // Execute charge first — throws on failure
+                $this->createAction->execute($dto);
+
+                $txId = 'stripe_'.uniqid();
+
+                if ($request->has('order_id')) {
+                    $order = Order::lockForUpdate()->find($request->input('order_id'));
+                    if ($order) {
+                        if ($order->payment_status === 'paid') {
+                            throw new \RuntimeException('Order already paid');
+                        }
+                        $order->update([
+                            'payment_status'        => 'paid',
+                            'status'                => 'processing',
+                            'transaction_reference' => $txId,
+                        ]);
+                    }
                 }
-            }
-            
+
+                return $txId;
+            });
+
             return $this
                 ->setMessage('Payment successful')
-                ->respond(['transaction_id' => 'stripe_' . uniqid()]);
-                
+                ->respond(['transaction_id' => $transactionId]);
+
         } catch (\Exception $e) {
             return $this
-                ->setMessage('Payment failed: ' . $e->getMessage())
+                ->setMessage('Payment failed: '.$e->getMessage())
                 ->setStatusCode(400)
                 ->respond(null);
         }

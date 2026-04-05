@@ -135,6 +135,13 @@ class User extends Authenticatable implements HasMedia
             'locale',
         ];
 
+    protected static function booted(): void
+    {
+        static::creating(static function (User $user): void {
+            $user->email = strtolower($user->email);
+        });
+    }
+
     public static function Factory(): UserFactory
     {
         return UserFactory::new();
@@ -185,7 +192,7 @@ class User extends Authenticatable implements HasMedia
 
     public function unreadNotifications(): HasMany
     {
-        return $this->hasMany(Notification::class, 'notifiable_id')
+        return $this->hasMany(DatabaseNotification::class, 'notifiable_id')
             ->whereNull('read_at')
             ->where('notifiable_type', get_class($this));
     }

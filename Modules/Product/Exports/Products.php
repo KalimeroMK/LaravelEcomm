@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\Product\Exports;
 
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Modules\Product\Models\Product;
 
-class Products implements FromCollection, WithHeadings, WithMapping
+class Products implements FromQuery, WithHeadings, WithMapping
 {
     /**
      * Get the headers for the export.
@@ -38,13 +38,11 @@ class Products implements FromCollection, WithHeadings, WithMapping
     }
 
     /**
-     * Get the collection of products for the export.
-     *
-     * @return Collection<int, Product>
+     * Return the query for chunked export — avoids loading all rows into memory.
      */
-    public function collection(): Collection
+    public function query(): Builder
     {
-        return Product::all();
+        return Product::query();
     }
 
     /**

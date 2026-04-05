@@ -82,9 +82,6 @@ readonly class ConfigurableProductService
             'summary' => $parent->summary,
         ]);
 
-        // Copy media from parent (optional)
-        // $this->copyMediaFromParent($parent, $variant);
-
         // Create attribute values for this variant
         foreach ($combination as $attributeCode => $value) {
             $attribute = Attribute::where('code', $attributeCode)->first();
@@ -279,7 +276,7 @@ readonly class ConfigurableProductService
     private function generateVariantName(array $combination): string
     {
         return collect($combination)
-            ->map(fn ($value, $code) => ucfirst($value))
+            ->map(fn ($value) => ucfirst($value))
             ->join(' / ');
     }
 
@@ -289,7 +286,7 @@ readonly class ConfigurableProductService
     private function generateSkuSuffix(array $combination): string
     {
         $suffix = collect($combination)
-            ->map(fn ($value, $code) => mb_strtoupper(mb_substr($value, 0, 3)))
+            ->map(fn ($value) => mb_strtoupper(mb_substr($value, 0, 3)))
             ->join('-');
 
         return '-'.$suffix;
@@ -309,13 +306,4 @@ readonly class ConfigurableProductService
         };
     }
 
-    /**
-     * Copy media from parent to variant
-     */
-    private function copyMediaFromParent(Product $parent, Product $variant): void
-    {
-        foreach ($parent->getMedia('product') as $media) {
-            $media->copy($variant, 'product');
-        }
-    }
 }

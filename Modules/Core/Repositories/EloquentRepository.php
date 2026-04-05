@@ -7,6 +7,7 @@ namespace Modules\Core\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Modules\Core\Interfaces\EloquentRepositoryInterface;
 
 class EloquentRepository implements EloquentRepositoryInterface
@@ -16,6 +17,11 @@ class EloquentRepository implements EloquentRepositoryInterface
     public function findAll(): Collection
     {
         return (new $this->modelClass)->all();
+    }
+
+    public function cursor(): LazyCollection
+    {
+        return (new $this->modelClass)->query()->cursor();
     }
 
     public function findById(int $id): ?Model

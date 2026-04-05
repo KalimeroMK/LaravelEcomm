@@ -34,18 +34,23 @@ class MagicLoginController extends Controller
         return back()->with('magic_link_sent', 'We have emailed you a magic link!');
     }
 
-    public function login($token): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+    public function login(string $token): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
     {
-        $user = User::whereMagicToken($token)
-            ->where('token_expires_at', '>', Carbon::now())
-            ->firstOrFail();
+        $user = \Illuminate\Support\Facades\DB::transaction(function () use ($token): User {
+            $user = User::whereMagicToken($token)
+                ->where('token_expires_at', '>', Carbon::now())
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        auth()->login($user);
+            $user->magic_token = null;
+            $user->token_expires_at = null;
+            $user->save();
 
-        $user->magic_token = null; // Invalidate the token
-        $user->token_expires_at = null;
-        $user->save();
+            return $user;
+        });
 
-        return redirect('/admin'); // Or wherever you want to redirect users after login
+        \Illuminate\Support\Facades\Auth::login($user);
+
+        return redirect('/admin');
     }
 }

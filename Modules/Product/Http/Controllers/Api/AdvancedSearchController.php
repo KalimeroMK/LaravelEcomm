@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Modules\Product\Services\ElasticsearchService;
 use Modules\Product\Services\RecommendationService;
 
@@ -214,21 +214,23 @@ class AdvancedSearchController extends Controller
      */
     protected function getSearchSuggestions(string $query): array
     {
+        $safe = str_replace(['%', '_'], ['\%', '\_'], $query);
+
         // Get popular search terms
-        $popularTerms = \Modules\Product\Models\Product::where('title', 'like', "%{$query}%")
-            ->orWhere('summary', 'like', "%{$query}%")
+        $popularTerms = \Modules\Product\Models\Product::where('title', 'like', "%{$safe}%")
+            ->orWhere('summary', 'like', "%{$safe}%")
             ->pluck('title')
             ->take(5)
             ->toArray();
 
         // Get category suggestions
-        $categorySuggestions = \Modules\Category\Models\Category::where('title', 'like', "%{$query}%")
+        $categorySuggestions = \Modules\Category\Models\Category::where('title', 'like', "%{$safe}%")
             ->pluck('title')
             ->take(3)
             ->toArray();
 
         // Get brand suggestions
-        $brandSuggestions = \Modules\Brand\Models\Brand::where('title', 'like', "%{$query}%")
+        $brandSuggestions = \Modules\Brand\Models\Brand::where('title', 'like', "%{$safe}%")
             ->pluck('title')
             ->take(3)
             ->toArray();
@@ -279,14 +281,14 @@ class AdvancedSearchController extends Controller
 
         // Get available brands
         $brands = $baseQuery->join('brands', 'products.brand_id', '=', 'brands.id')
-            ->select('brands.id', 'brands.title as name')
+            ->select(['brands.id', 'brands.title as name'])
             ->distinct()
             ->get();
 
         // Get available categories
         $categories = $baseQuery->join('category_product', 'products.id', '=', 'category_product.product_id')
             ->join('categories', 'category_product.category_id', '=', 'categories.id')
-            ->select('categories.id', 'categories.name')
+            ->select(['categories.id', 'categories.name'])
             ->distinct()
             ->get();
 

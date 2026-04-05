@@ -117,11 +117,18 @@ class CartController extends CoreController
                 ->respond(null);
         }
 
+        if (($product->stock ?? 0) < 1) {
+            return $this
+                ->setMessage('Product is out of stock.')
+                ->setStatusCode(422)
+                ->respond(null);
+        }
+
         $dto = new CartDTO(
             id: null,
             product_id: $product->id,
             quantity: 1,
-            user_id: auth()->id(),
+            user_id: request()->user()?->getAuthIdentifier(),
             price: $product->price,
             session_id: session()->getId(),
             amount: $product->price,

@@ -161,8 +161,6 @@ class BusinessLogicValidationTest extends TestCase
             'quantity' => 7,
         ]);
 
-        // Future implementation should validate stock before allowing cart creation
-        // $this->assertLessThanOrEqual($product->stock, $cart->quantity);
     }
 
     #[Test]
