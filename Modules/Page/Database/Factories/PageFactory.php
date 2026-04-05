@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Modules\Core\Database\Factories\Traits\HasTranslationsFactory;
 use Modules\Page\Models\Page;
+use Modules\User\Models\User;
 
 class PageFactory extends Factory
 {
@@ -23,7 +24,7 @@ class PageFactory extends Factory
             'slug' => $this->faker->slug(),
             'content' => $this->faker->word(),
             'is_active' => $this->faker->boolean(),
-            'user_id' => $this->faker->randomNumber(),
+            'user_id' => User::factory(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

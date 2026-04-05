@@ -22,7 +22,7 @@ class CategoryRepository extends EloquentRepository implements EloquentRepositor
     public function findBySlug(string $slug): ?Category
     {
         return Category::whereSlug($slug)
-            ->with(['children' => fn ($q) => $q->where('status', 1)->withCount('products')])
+            ->with(['children' => fn ($q) => $q->where('status', 'active')->withCount('products')])
             ->withCount('products')
             ->first();
     }
@@ -40,7 +40,7 @@ class CategoryRepository extends EloquentRepository implements EloquentRepositor
         }
 
         return Category::whereIn('slug', $slugs)
-            ->where('status', 'active')
+            ->active()
             ->pluck('id')
             ->toArray();
     }
@@ -50,7 +50,7 @@ class CategoryRepository extends EloquentRepository implements EloquentRepositor
      */
     public function getActive(): Collection
     {
-        return Category::where('status', 'active')
+        return Category::active()
             ->whereNull('parent_id')
             ->with('childrenCategories')
             ->orderBy('title')

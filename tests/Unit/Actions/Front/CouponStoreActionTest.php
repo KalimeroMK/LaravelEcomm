@@ -231,12 +231,13 @@ class CouponStoreActionTest extends ActionTestCase
             'order_id' => null,
         ]);
 
-        // Create coupon directly with free shipping type
+        // Create coupon with free_shipping flag (TYPE_FREE_SHIPPING is not in DB enum)
         $coupon = new Coupon([
             'code' => 'FREESHIP',
-            'type' => Coupon::TYPE_FREE_SHIPPING,
+            'type' => Coupon::TYPE_FIXED,
             'value' => 0.00,
             'status' => Coupon::STATUS_ACTIVE,
+            'free_shipping' => true,
         ]);
         $coupon->save();
 

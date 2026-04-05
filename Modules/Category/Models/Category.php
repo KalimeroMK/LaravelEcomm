@@ -135,7 +135,6 @@ class Category extends Core
         ];
 
     protected $casts = [
-        'status' => 'int',
         'parent_id' => 'int',
         'attribute_family_id' => 'int',
     ];
@@ -150,7 +149,7 @@ class Category extends Core
      */
     public function scopeActive($query)
     {
-        return $query->where('status', 1);
+        return $query->where('status', 'active');
     }
 
     /**
@@ -158,7 +157,7 @@ class Category extends Core
      */
     public static function countActiveCategory(): int
     {
-        return self::where('status', 1)->count();
+        return self::where('status', 'active')->count();
     }
 
     public function posts(): BelongsToMany

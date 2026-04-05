@@ -142,7 +142,7 @@ class ProductDetailActionTest extends ActionTestCase
             ->method('addProduct')
             ->with($product->id, $user->id);
 
-        $action = new ProductDetailAction($service);
+        $action = new ProductDetailAction(app(\Modules\Product\Repository\ProductRepository::class), $service);
 
         // Act
         $action('trackable-product');

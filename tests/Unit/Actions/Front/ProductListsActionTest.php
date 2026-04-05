@@ -66,10 +66,8 @@ class ProductListsActionTest extends ActionTestCase
             'slug' => 'electronics',
             'status' => 'active',
         ]);
-        Product::factory()->create([
-            'status' => 'active',
-            'cat_id' => $category->id,
-        ]);
+        $product = Product::factory()->create(['status' => 'active']);
+        $category->products()->attach($product->id);
         Product::factory()->count(3)->create(['status' => 'active']);
 
         request()->merge(['category' => 'electronics']);

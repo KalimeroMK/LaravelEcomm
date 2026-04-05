@@ -31,7 +31,7 @@ class ProductListsAction
             if (! empty($queryParams['category'])) {
                 $catIds = $this->categoryRepository->getIdsBySlugs(explode(',', $queryParams['category']));
                 if ($catIds !== []) {
-                    $query->whereIn('cat_id', $catIds);
+                    $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $catIds));
                 }
             }
 

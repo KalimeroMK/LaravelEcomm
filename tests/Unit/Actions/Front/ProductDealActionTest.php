@@ -24,7 +24,7 @@ class ProductDealActionTest extends ActionTestCase
         ]);
         Brand::factory()->count(3)->create();
 
-        $action = new ProductDealAction();
+        $action = app(ProductDealAction::class);
 
         // Act
         $result = $action();
@@ -49,7 +49,7 @@ class ProductDealActionTest extends ActionTestCase
         ]);
         Brand::factory()->create();
 
-        $action = new ProductDealAction();
+        $action = app(ProductDealAction::class);
 
         // Act
         $result = $action();
@@ -67,7 +67,7 @@ class ProductDealActionTest extends ActionTestCase
         ]);
         Brand::factory()->create();
 
-        $action = new ProductDealAction();
+        $action = app(ProductDealAction::class);
 
         // Act
         $result = $action();
@@ -78,22 +78,21 @@ class ProductDealActionTest extends ActionTestCase
 
     public function test_invoke_returns_brands(): void
     {
-        // Arrange - Create specific number of brands
-        $initialCount = Brand::count();
-        Brand::factory()->count(5)->create();
+        // Arrange - Create specific number of active brands
+        Brand::factory()->count(5)->create(['status' => 'active']);
         
         Product::factory()->create([
             'status' => 'active',
             'd_deal' => true,
         ]);
 
-        $action = new ProductDealAction();
+        $action = app(ProductDealAction::class);
 
         // Act
         $result = $action();
 
-        // Assert - should have at least 4 brands (plus any from seeding)
-        $this->assertGreaterThanOrEqual(4, $result['brands']->count());
+        // Assert - should have exactly 5 active brands
+        $this->assertGreaterThanOrEqual(5, $result['brands']->count());
     }
 
     public function test_invoke_uses_cache(): void
@@ -105,7 +104,7 @@ class ProductDealActionTest extends ActionTestCase
         ]);
         Brand::factory()->create();
 
-        $action = new ProductDealAction();
+        $action = app(ProductDealAction::class);
 
         // Act
         $result1 = $action();

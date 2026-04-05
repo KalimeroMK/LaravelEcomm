@@ -16,11 +16,11 @@ class ProductCatActionTest extends ActionTestCase
         // Arrange
         $parent = Category::factory()->create([
             'slug' => 'electronics',
-            'status' => 1,
+            'status' => 'active',
         ]);
         $child = Category::factory()->create([
             'parent_id' => $parent->id,
-            'status' => 1,
+            'status' => 'active',
         ]);
 
         $action = app(ProductCatAction::class);
@@ -42,7 +42,7 @@ class ProductCatActionTest extends ActionTestCase
         // Arrange
         $category = Category::factory()->create([
             'slug' => 'phones',
-            'status' => 1,
+            'status' => 'active',
         ]);
         $product = Product::factory()->create(['status' => 'active']);
         $category->products()->attach($product->id);
@@ -61,11 +61,11 @@ class ProductCatActionTest extends ActionTestCase
         // Arrange
         $parent = Category::factory()->create([
             'slug' => 'parent-cat',
-            'status' => 1,
+            'status' => 'active',
         ]);
         Category::factory()->create([
             'parent_id' => $parent->id,
-            'status' => 1,
+            'status' => 'active',
         ]);
 
         $action = app(ProductCatAction::class);
@@ -86,7 +86,9 @@ class ProductCatActionTest extends ActionTestCase
         $result = $action('nonexistent-category');
 
         // Assert
-        $this->assertEquals('Category not found', $result);
+        $this->assertIsArray($result);
+        $this->assertNull($result['category']);
+        $this->assertEquals('Category not found', $result['error']);
     }
 
     public function test_invoke_returns_recent_products(): void
@@ -94,7 +96,7 @@ class ProductCatActionTest extends ActionTestCase
         // Arrange
         $category = Category::factory()->create([
             'slug' => 'test-cat',
-            'status' => 1,
+            'status' => 'active',
         ]);
         Product::factory()->count(5)->create(['status' => 'active']);
 
@@ -112,7 +114,7 @@ class ProductCatActionTest extends ActionTestCase
         // Arrange
         Category::factory()->create([
             'slug' => 'cached-cat',
-            'status' => 1,
+            'status' => 'active',
         ]);
 
         $action = app(ProductCatAction::class);

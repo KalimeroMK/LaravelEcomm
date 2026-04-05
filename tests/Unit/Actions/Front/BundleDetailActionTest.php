@@ -15,7 +15,7 @@ class BundleDetailActionTest extends ActionTestCase
     public function test_invoke_returns_bundle_detail(): void
     {
         // Arrange
-        $bundle = Bundle::factory()->create(['slug' => 'summer-bundle']);
+        $bundle = Bundle::factory()->create(['name' => 'Summer Bundle']);
         $product = Product::factory()->create(['status' => 'active']);
         $bundle->products()->attach($product->id);
 
@@ -23,7 +23,7 @@ class BundleDetailActionTest extends ActionTestCase
         $action = new BundleDetailAction($repository);
 
         // Act
-        $result = $action('summer-bundle');
+        $result = $action($bundle->slug);
 
         // Assert
         $this->assertIsArray($result);
@@ -50,7 +50,7 @@ class BundleDetailActionTest extends ActionTestCase
     public function test_invoke_loads_products_relationship(): void
     {
         // Arrange
-        $bundle = Bundle::factory()->create(['slug' => 'test-bundle']);
+        $bundle = Bundle::factory()->create(['name' => 'Test Bundle']);
         $product1 = Product::factory()->create(['status' => 'active']);
         $product2 = Product::factory()->create(['status' => 'active']);
         $bundle->products()->attach([$product1->id, $product2->id]);
@@ -59,7 +59,7 @@ class BundleDetailActionTest extends ActionTestCase
         $action = new BundleDetailAction($repository);
 
         // Act
-        $result = $action('test-bundle');
+        $result = $action($bundle->slug);
 
         // Assert
         $this->assertTrue($result['bundle']->relationLoaded('products'));
@@ -69,7 +69,7 @@ class BundleDetailActionTest extends ActionTestCase
     public function test_invoke_returns_related_products(): void
     {
         // Arrange
-        $bundle = Bundle::factory()->create(['slug' => 'test-bundle']);
+        $bundle = Bundle::factory()->create(['name' => 'Test Bundle']);
         $bundleProduct = Product::factory()->create(['status' => 'active']);
         $bundle->products()->attach($bundleProduct->id);
 
@@ -80,7 +80,7 @@ class BundleDetailActionTest extends ActionTestCase
         $action = new BundleDetailAction($repository);
 
         // Act
-        $result = $action('test-bundle');
+        $result = $action($bundle->slug);
 
         // Assert
         $this->assertLessThanOrEqual(8, $result['related']->count());
@@ -90,7 +90,7 @@ class BundleDetailActionTest extends ActionTestCase
     public function test_invoke_only_returns_active_related_products(): void
     {
         // Arrange
-        $bundle = Bundle::factory()->create(['slug' => 'test-bundle']);
+        $bundle = Bundle::factory()->create(['name' => 'Active Bundle']);
         $bundleProduct = Product::factory()->create(['status' => 'active']);
         $bundle->products()->attach($bundleProduct->id);
 
@@ -101,7 +101,7 @@ class BundleDetailActionTest extends ActionTestCase
         $action = new BundleDetailAction($repository);
 
         // Act
-        $result = $action('test-bundle');
+        $result = $action($bundle->slug);
 
         // Assert
         foreach ($result['related'] as $product) {

@@ -26,7 +26,7 @@ class ProductGridsActionTest extends ActionTestCase
         Product::factory()->count(5)->create(['status' => 'active']);
         Brand::factory()->count(3)->create(['status' => 'active']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();
@@ -47,7 +47,7 @@ class ProductGridsActionTest extends ActionTestCase
         Brand::factory()->count(3)->create(['status' => 'active']);
         Brand::factory()->count(2)->create(['status' => 'inactive']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();
@@ -63,7 +63,7 @@ class ProductGridsActionTest extends ActionTestCase
         // Arrange
         Product::factory()->count(5)->create(['status' => 'active']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();
@@ -86,7 +86,7 @@ class ProductGridsActionTest extends ActionTestCase
 
         request()->merge(['category' => 'electronics']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();
@@ -113,7 +113,7 @@ class ProductGridsActionTest extends ActionTestCase
 
         request()->merge(['brand' => 'nike']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();
@@ -132,7 +132,7 @@ class ProductGridsActionTest extends ActionTestCase
 
         request()->merge(['price' => '100-200']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();
@@ -150,7 +150,7 @@ class ProductGridsActionTest extends ActionTestCase
 
         request()->merge(['sortBy' => 'price']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();
@@ -164,7 +164,7 @@ class ProductGridsActionTest extends ActionTestCase
         // Arrange
         Product::factory()->count(3)->create(['status' => 'active']);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result1 = $action();
@@ -183,7 +183,7 @@ class ProductGridsActionTest extends ActionTestCase
             'parent_id' => $parent->id,
         ]);
 
-        $action = new ProductGridsAction(app(\Modules\Attribute\Services\LayeredNavigationService::class));
+        $action = app(ProductGridsAction::class);
 
         // Act
         $result = $action();

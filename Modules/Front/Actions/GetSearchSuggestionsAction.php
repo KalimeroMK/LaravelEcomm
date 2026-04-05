@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Front\Actions;
 
 use Modules\Brand\Repository\BrandRepository;
+use Modules\Category\Models\Category;
 use Modules\Category\Repository\CategoryRepository;
 use Modules\Product\Repository\ProductRepository;
 
@@ -27,13 +28,13 @@ class GetSearchSuggestionsAction
     {
         $products = $this->productRepository->searchByTerm($query, 5);
 
-        $categories = $this->categoryRepository->findBy('name', "%{$query}%") ?? collect();
+        $categories = Category::where('title', 'like', "%{$query}%")->active()->get() ?? collect();
 
         $brands = $this->brandRepository->searchByTerm($query);
 
         return [
             'popular_terms'  => $products->pluck('title')->take(5)->toArray(),
-            'categories'     => $categories->pluck('name')->take(3)->toArray(),
+            'categories'     => $categories->pluck('title')->take(3)->toArray(),
             'brands'         => $brands->pluck('title')->take(3)->toArray(),
             'suggested_query' => self::QUERY_CORRECTIONS[$query] ?? $query,
         ];

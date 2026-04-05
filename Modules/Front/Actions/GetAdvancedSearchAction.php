@@ -58,13 +58,13 @@ class GetAdvancedSearchAction
         $cacheKey = 'search_filters_'.md5((string) $query);
 
         return Cache::remember($cacheKey, 3600, function () use ($query) {
-            $baseQuery = Product::where('status', 'active');
+            $baseQuery = Product::where('products.status', 'active');
 
             if ($query) {
                 $baseQuery->where(fn ($q) => $q
-                    ->where('title', 'like', "%{$query}%")
-                    ->orWhere('summary', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%")
+                    ->where('products.title', 'like', "%{$query}%")
+                    ->orWhere('products.summary', 'like', "%{$query}%")
+                    ->orWhere('products.description', 'like', "%{$query}%")
                 );
             }
 
@@ -74,14 +74,14 @@ class GetAdvancedSearchAction
 
             $brands = (clone $baseQuery)
                 ->join('brands', 'products.brand_id', '=', 'brands.id')
-                ->select('brands.id', 'brands.name')
+                ->select('brands.id', 'brands.title')
                 ->distinct()
                 ->get();
 
             $categories = (clone $baseQuery)
                 ->join('category_product', 'products.id', '=', 'category_product.product_id')
                 ->join('categories', 'category_product.category_id', '=', 'categories.id')
-                ->select('categories.id', 'categories.name')
+                ->select('categories.id', 'categories.title')
                 ->distinct()
                 ->get();
 

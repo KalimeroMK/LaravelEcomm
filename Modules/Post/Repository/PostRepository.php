@@ -98,11 +98,11 @@ class PostRepository extends EloquentRepository implements EloquentRepositoryInt
     /**
      * Find a post by slug with full relations.
      */
-    public function findBySlug(string $slug): ?Post
+    public function findBySlug(string $slug): Post
     {
         return Post::with(['author', 'categories', 'tags', 'media'])
             ->whereSlug($slug)
-            ->first();
+            ->firstOrFail();
     }
 
     /**
