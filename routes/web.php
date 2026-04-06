@@ -25,6 +25,7 @@ Route::get('sw.js', function () {
 });
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use Modules\Language\Models\Language;
 use Modules\User\Http\Controllers\Api\AuthController;
 use Modules\User\Http\Controllers\MagicLoginController;
@@ -39,6 +40,27 @@ use Spatie\Feed\Http\FeedController;
 | locale prefix are defined in Modules/Front/Routes/web.php
 |
 */
+
+// Service Worker - serve from root for any path
+Route::get('{any}/sw.js', function () {
+    $path = public_path('sw.js');
+    if (file_exists($path)) {
+        return response(file_get_contents($path), 200, [
+            'Content-Type' => 'application/javascript',
+        ]);
+    }
+    return response('Not found', 404);
+})->where('any', '.*');
+
+Route::get('sw.js', function () {
+    $path = public_path('sw.js');
+    if (file_exists($path)) {
+        return response(file_get_contents($path), 200, [
+            'Content-Type' => 'application/javascript',
+        ]);
+    }
+    return response('Not found', 404);
+});
 
 // Non-localized routes (must be before localized routes)
 Route::get('feed', FeedController::class)->name('feeds.main');
