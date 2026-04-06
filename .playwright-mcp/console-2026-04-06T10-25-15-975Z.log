@@ -1,5 +1,0 @@
-[     194ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:90/_boost/browser-logs @ http://localhost:90/en/product-cat/inventore-animi-vcAJn:77
-[     227ms] [LOG] JQMIGRATE: Migrate is installed, version 3.0.0 @ http://localhost:90/en/product-cat/inventore-animi-vcAJn:136
-[     285ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:90/frontend/img/logo.png (Resource size is not correct - typo in the Manifest?) @ http://localhost:90/en/product-cat/inventore-animi-vcAJn:0
-[     605ms] [ERROR] A bad HTTP response code (500) was received when fetching the script. @ :0
-[     606ms] Failed to register a ServiceWorker for scope ('http://localhost:90/en/product-cat/') with script ('http://localhost:90/en/product-cat/sw.js'): A bad HTTP response code (500) was received when fetching the script.
