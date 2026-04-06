@@ -346,7 +346,8 @@ This project uses a **custom fork** of the Blaze template engine optimization pa
 
 #### Features
 - **View Component Support**: Full support for Laravel View Components with proper rendering
-- **Blade Share Compatibility**: Works seamlessly with `View::share()` and view composers
+- **View::share() Support**: Auto-injects shared view variables with zero performance overhead
+- **View Composer Support**: Trigger composers via `@blaze(name: 'view.name')` directive
 - **Theme-Aware Optimization**: Per-theme optimization strategies (compile, memo, fold)
 - **Multi-Theme Support**: Different optimization settings per theme (default vs modern)
 - **Debug Overlay**: Built-in performance profiler showing render times per view
@@ -374,7 +375,11 @@ BLAZE_DEBUG=true            # Show debug overlay with render times
 BLAZE_CACHE_WARM=true       # Pre-compile views on cache warm
 ```
 
-> **Note**: This project uses a fork at `KalimeroMK/blaze` (dev-main) which includes critical fixes for View Components and Blade Share support that are not available in the upstream package.
+> **Note**: This project uses a fork at `KalimeroMK/blaze` (dev-main) which includes:
+> - View::share() auto-injection (upstream: not supported)
+> - View::composer() support via `@blaze(name: ...)` directive
+> - @extends template support
+> - All upstream Blaze features and performance optimizations
 
 ---
 
