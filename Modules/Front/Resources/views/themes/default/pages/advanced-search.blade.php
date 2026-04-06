@@ -1,4 +1,4 @@
-@extends($themePath . '.layouts.app')
+@extends($themePath . '.layouts.master')
 
 @section('title', 'Advanced Search - ' . config('app.name'))
 

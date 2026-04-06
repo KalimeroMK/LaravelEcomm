@@ -1,4 +1,4 @@
-@extends($themePath . '.layouts.app')
+@extends($themePath . '.layouts.master')
 
 @section('title', 'Product Recommendations - ' . config('app.name'))
 
