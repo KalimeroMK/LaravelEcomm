@@ -4858,17 +4858,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KalimeroMK/blaze.git",
-                "reference": "9fdb8d1d3785b4f3b4bbe85e554ec9a99e9ebd15"
+                "reference": "e3595763f2a92bfb2ac2fc1278b223b89e44ea75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KalimeroMK/blaze/zipball/9fdb8d1d3785b4f3b4bbe85e554ec9a99e9ebd15",
-                "reference": "9fdb8d1d3785b4f3b4bbe85e554ec9a99e9ebd15",
+                "url": "https://api.github.com/repos/KalimeroMK/blaze/zipball/e3595763f2a92bfb2ac2fc1278b223b89e44ea75",
+                "reference": "e3595763f2a92bfb2ac2fc1278b223b89e44ea75",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "illuminate/view": "^10.0|^11.0|^12.0",
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/view": "^10.0|^11.0|^12.0|^13.0",
                 "nikic/php-parser": "^5.0",
                 "php": "^8.1"
             },
@@ -4877,9 +4877,9 @@
             },
             "require-dev": {
                 "livewire/flux": "dev-main",
-                "orchestra/testbench": "^8.0|^9.0|^10.0",
-                "pestphp/pest": "^2.0|^3.0",
-                "pestphp/pest-plugin-laravel": "^2.0|^3.0"
+                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0|^4.0"
             },
             "default-branch": true,
             "type": "library",
@@ -4897,12 +4897,19 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Livewire\\Blaze\\Tests\\": "tests/"
+                    "Livewire\\Blaze\\Tests\\": "tests/",
+                    "App\\": "workbench/app/"
                 }
             },
             "scripts": {
                 "test": [
                     "vendor/bin/pest"
+                ],
+                "benchmark": [
+                    "vendor/bin/testbench benchmark"
+                ],
+                "benchmark:snapshot": [
+                    "vendor/bin/testbench benchmark --snapshot"
                 ]
             },
             "license": [
@@ -4917,7 +4924,7 @@
             "support": {
                 "source": "https://github.com/KalimeroMK/blaze/tree/main"
             },
-            "time": "2026-02-27T21:25:02+00:00"
+            "time": "2026-04-06T10:17:09+00:00"
         },
         {
             "name": "maatwebsite/excel",

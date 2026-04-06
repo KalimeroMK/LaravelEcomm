@@ -1,0 +1,524 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e7]:
+    - generic [ref=e10]:
+      - list [ref=e13]:
+        - listitem [ref=e14]:
+          - generic [ref=e15]: 
+          - text: +1 (555) 123-4567
+        - listitem [ref=e16]:
+          - generic [ref=e17]: 
+          - text: info@example.com
+      - list [ref=e20]:
+        - listitem [ref=e21]:
+          - generic [ref=e22]: 
+          - link "Daily Deal" [ref=e23] [cursor=pointer]:
+            - /url: http://localhost:90/en/product/deal
+        - listitem [ref=e24]:
+          - generic [ref=e25]: 
+          - link "Login /" [ref=e26] [cursor=pointer]:
+            - /url: http://localhost:90/login
+          - link "Register" [ref=e27] [cursor=pointer]:
+            - /url: http://localhost:90/register
+        - listitem [ref=e28]:
+          - button "🇺🇸 English ▼" [ref=e31] [cursor=pointer]:
+            - generic [ref=e32]: 🇺🇸
+            - generic [ref=e33]: English
+            - generic [ref=e34]: ▼
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - link "logo" [ref=e40] [cursor=pointer]:
+          - /url: http://localhost:90/en
+          - img "logo" [ref=e41]
+        - text: 
+      - generic [ref=e45]:
+        - searchbox "Search Products Here..." [ref=e46]
+        - button "" [ref=e47] [cursor=pointer]:
+          - generic [ref=e48]: 
+      - generic [ref=e50]:
+        - link " 0" [ref=e52] [cursor=pointer]:
+          - /url: http://localhost:90/wishlist
+          - generic [ref=e53]: 
+          - generic [ref=e54]: "0"
+        - generic [ref=e55]:
+          - link " 0" [ref=e56] [cursor=pointer]:
+            - /url: http://localhost:90/cart-list
+            - generic [ref=e57]: 
+            - generic [ref=e58]: "0"
+          - link "" [ref=e60] [cursor=pointer]:
+            - /url: http://localhost:90/products/compare
+            - generic [ref=e61]: 
+    - navigation [ref=e68]:
+      - list [ref=e71]:
+        - listitem [ref=e72]:
+          - link "Home" [ref=e73] [cursor=pointer]:
+            - /url: http://localhost:90/en
+        - listitem [ref=e74]:
+          - link "About Us" [ref=e75] [cursor=pointer]:
+            - /url: http://localhost:90/en/about-us
+        - listitem [ref=e76]:
+          - link "Products" [ref=e77] [cursor=pointer]:
+            - /url: http://localhost:90/en/product-grids
+          - generic [ref=e78]: New
+        - listitem [ref=e79]:
+          - link "Bundles" [ref=e80] [cursor=pointer]:
+            - /url: http://localhost:90/en/bundle
+          - generic [ref=e81]: Hot
+        - listitem [ref=e82]:
+          - link "Blog" [ref=e83] [cursor=pointer]:
+            - /url: http://localhost:90/en/blog
+        - listitem [ref=e84]:
+          - link "Contact Us" [ref=e85] [cursor=pointer]:
+            - /url: http://localhost:90/en/contact
+  - list [ref=e91]:
+    - listitem [ref=e92]:
+      - link "Home" [ref=e93] [cursor=pointer]:
+        - /url: http://localhost:90/en
+        - text: Home
+        - generic [ref=e94]: 
+    - listitem [ref=e95]:
+      - link "Inventore Animi" [ref=e96] [cursor=pointer]:
+        - /url: http://localhost:90/en/product-cat/inventore-animi-vcAJn
+  - generic [ref=e99]:
+    - heading "Inventore Animi" [level=3] [ref=e103]
+    - generic [ref=e104]:
+      - generic [ref=e107]:
+        - generic [ref=e108]:
+          - generic [ref=e109]:
+            - generic [ref=e110]: "Show :"
+            - generic [ref=e111] [cursor=pointer]:
+              - text: "09"
+              - list:
+                - listitem: "09"
+                - listitem: "15"
+                - listitem: "25"
+                - listitem: "30"
+          - generic [ref=e112]:
+            - generic [ref=e113]: "Sort By :"
+            - generic [ref=e114] [cursor=pointer]:
+              - text: Name
+              - list:
+                - listitem: Name
+                - listitem: Price
+                - listitem: Size
+        - list [ref=e115]:
+          - listitem [ref=e116]:
+            - link "" [ref=e117] [cursor=pointer]:
+              - /url: http://localhost:90/en/product-grids
+              - generic [ref=e118]: 
+          - listitem [ref=e119]:
+            - link "" [ref=e120] [cursor=pointer]:
+              - /url: http://localhost:90/en/product-lists
+              - generic [ref=e121]: 
+      - generic [ref=e122]:
+        - generic [ref=e125]:
+          - generic [ref=e127]:
+            - img "maiores" [ref=e128]
+            - generic [ref=e129]:
+              - link "" [ref=e130] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/quia-et-sapiente-totam-consequuntur
+                - generic [ref=e131]: 
+              - link "" [ref=e132] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e133]: 
+          - generic [ref=e135]:
+            - heading "maiores" [level=4] [ref=e136]:
+              - link "maiores" [ref=e137] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/quia-et-sapiente-totam-consequuntur
+            - paragraph [ref=e138]: $707.95 $-4,286.71
+            - paragraph [ref=e139]: Harum natus qui vel possimus repudiandae quis placeat. Sunt voluptas velit saepe inventore facere ipsum eum. Aspernatur ea architecto minus aut. Hic t...
+            - generic [ref=e140]:
+              - generic [ref=e141]:
+                - link " Quick Shop" [ref=e142] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e143]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e144] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e145]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e146] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/quia-et-sapiente-totam-consequuntur
+        - generic [ref=e149]:
+          - generic [ref=e151]:
+            - img "excepturi" [ref=e152]
+            - generic [ref=e153]:
+              - link "" [ref=e154] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/eum-aliquid-qui-aut-modi-a-sapiente-est
+                - generic [ref=e155]: 
+              - link "" [ref=e156] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e157]: 
+          - generic [ref=e159]:
+            - heading "excepturi" [level=4] [ref=e160]:
+              - link "excepturi" [ref=e161] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/eum-aliquid-qui-aut-modi-a-sapiente-est
+            - paragraph [ref=e162]: $5,475.19 $-9,969.77
+            - paragraph [ref=e163]: Sunt corporis omnis reiciendis ex autem. Eius quam voluptatibus non omnis aut id quaerat. Quia eligendi error ea tempora ut odio doloremque aut.
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - link " Quick Shop" [ref=e166] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e167]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e168] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e169]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e170] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/eum-aliquid-qui-aut-modi-a-sapiente-est
+        - generic [ref=e173]:
+          - generic [ref=e175]:
+            - img "impedit" [ref=e176]
+            - generic [ref=e177]:
+              - link "" [ref=e178] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/corrupti-quidem-ipsum-ut-consequuntur
+                - generic [ref=e179]: 
+              - link "" [ref=e180] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e181]: 
+          - generic [ref=e183]:
+            - heading "impedit" [level=4] [ref=e184]:
+              - link "impedit" [ref=e185] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/corrupti-quidem-ipsum-ut-consequuntur
+            - paragraph [ref=e186]: $6,309.97 $-16,342.19
+            - paragraph [ref=e187]: Architecto sapiente dolorem rem non voluptas ipsum qui est. Eum impedit nihil ullam adipisci. Aliquam quia et aut rem.
+            - generic [ref=e188]:
+              - generic [ref=e189]:
+                - link " Quick Shop" [ref=e190] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e191]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e192] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e193]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e194] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/corrupti-quidem-ipsum-ut-consequuntur
+        - generic [ref=e197]:
+          - generic [ref=e199]:
+            - img "molestiae" [ref=e200]
+            - generic [ref=e201]:
+              - link "" [ref=e202] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/cum-ut-libero-vel-et-dicta-error
+                - generic [ref=e203]: 
+              - link "" [ref=e204] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e205]: 
+          - generic [ref=e207]:
+            - heading "molestiae" [level=4] [ref=e208]:
+              - link "molestiae" [ref=e209] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/cum-ut-libero-vel-et-dicta-error
+            - paragraph [ref=e210]: $8,444.04 $-26,585.22
+            - paragraph [ref=e211]: Illum quam nemo laboriosam. Sit ducimus quidem nobis non nobis. Porro eos esse omnis non eveniet nemo et. Temporibus doloribus dicta itaque vero.
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - link " Quick Shop" [ref=e214] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e215]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e216] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e217]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e218] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/cum-ut-libero-vel-et-dicta-error
+        - generic [ref=e221]:
+          - generic [ref=e223]:
+            - img "et" [ref=e224]
+            - generic [ref=e225]:
+              - link "" [ref=e226] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/praesentium-quasi-et-molestiae-ut-exercitationem-dolor-perspiciatis
+                - generic [ref=e227]: 
+              - link "" [ref=e228] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e229]: 
+          - generic [ref=e231]:
+            - heading "et" [level=4] [ref=e232]:
+              - link "et" [ref=e233] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/praesentium-quasi-et-molestiae-ut-exercitationem-dolor-perspiciatis
+            - paragraph [ref=e234]: $6,156.53 $-24,113.90
+            - paragraph [ref=e235]: Explicabo qui dolore velit eius et maxime libero esse. Vel dolorem fugiat aut ea ea dolores. Magni tempore cumque esse id est est quaerat. Minima est...
+            - generic [ref=e236]:
+              - generic [ref=e237]:
+                - link " Quick Shop" [ref=e238] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e239]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e240] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e241]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e242] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/praesentium-quasi-et-molestiae-ut-exercitationem-dolor-perspiciatis
+        - generic [ref=e245]:
+          - generic [ref=e247]:
+            - img "quae" [ref=e248]
+            - generic [ref=e249]:
+              - link "" [ref=e250] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/repudiandae-deserunt-saepe-non-quibusdam-similique-eligendi-earum
+                - generic [ref=e251]: 
+              - link "" [ref=e252] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e253]: 
+          - generic [ref=e255]:
+            - heading "quae" [level=4] [ref=e256]:
+              - link "quae" [ref=e257] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/repudiandae-deserunt-saepe-non-quibusdam-similique-eligendi-earum
+            - paragraph [ref=e258]: $9,293.53 $-78,687.39
+            - paragraph [ref=e259]: Hic numquam ea quo similique. Atque sunt maiores eveniet qui sed consequatur debitis. Est ut sit quasi voluptatum.
+            - generic [ref=e260]:
+              - generic [ref=e261]:
+                - link " Quick Shop" [ref=e262] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e263]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e264] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e265]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e266] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/repudiandae-deserunt-saepe-non-quibusdam-similique-eligendi-earum
+        - generic [ref=e269]:
+          - generic [ref=e271]:
+            - img "id" [ref=e272]
+            - generic [ref=e273]:
+              - link "" [ref=e274] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/perspiciatis-odio-est-neque-sit-quos-repellendus
+                - generic [ref=e275]: 
+              - link "" [ref=e276] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e277]: 
+          - generic [ref=e279]:
+            - heading "id" [level=4] [ref=e280]:
+              - link "id" [ref=e281] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/perspiciatis-odio-est-neque-sit-quos-repellendus
+            - paragraph [ref=e282]: $7,944.22 $788.07
+            - paragraph [ref=e283]: Omnis consectetur aspernatur qui tenetur quo labore cumque. Aut corrupti molestiae consectetur omnis.
+            - generic [ref=e284]:
+              - generic [ref=e285]:
+                - link " Quick Shop" [ref=e286] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e287]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e288] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e289]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e290] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/perspiciatis-odio-est-neque-sit-quos-repellendus
+        - generic [ref=e293]:
+          - generic [ref=e295]:
+            - img "veritatis" [ref=e296]
+            - generic [ref=e297]:
+              - link "" [ref=e298] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/fugiat-nulla-rerum-consectetur-numquam-fuga-aut
+                - generic [ref=e299]: 
+              - link "" [ref=e300] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e301]: 
+          - generic [ref=e303]:
+            - heading "veritatis" [level=4] [ref=e304]:
+              - link "veritatis" [ref=e305] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/fugiat-nulla-rerum-consectetur-numquam-fuga-aut
+            - paragraph [ref=e306]: $7,992.43 $-48,693.88
+            - paragraph [ref=e307]: Non non similique voluptatem dolor consequatur voluptatibus sint. Eum distinctio eos et eum facere quisquam sapiente nobis. Et et qui quae doloremque...
+            - generic [ref=e308]:
+              - generic [ref=e309]:
+                - link " Quick Shop" [ref=e310] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e311]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e312] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e313]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e314] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/fugiat-nulla-rerum-consectetur-numquam-fuga-aut
+        - generic [ref=e317]:
+          - generic [ref=e319]:
+            - img "sit" [ref=e320]
+            - generic [ref=e321]:
+              - link "" [ref=e322] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/delectus-facere-et-autem-voluptatem-tempora-ab-excepturi-nihil
+                - generic [ref=e323]: 
+              - link "" [ref=e324] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e325]: 
+          - generic [ref=e327]:
+            - heading "sit" [level=4] [ref=e328]:
+              - link "sit" [ref=e329] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/delectus-facere-et-autem-voluptatem-tempora-ab-excepturi-nihil
+            - paragraph [ref=e330]: $186.08 $-1,502.28
+            - paragraph [ref=e331]: Fugiat blanditiis autem consequatur ad. Id consequuntur rerum architecto soluta eligendi in nulla. Corrupti libero praesentium velit sed rem. Ullam qu...
+            - generic [ref=e332]:
+              - generic [ref=e333]:
+                - link " Quick Shop" [ref=e334] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e335]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e336] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e337]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e338] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/delectus-facere-et-autem-voluptatem-tempora-ab-excepturi-nihil
+        - generic [ref=e341]:
+          - generic [ref=e343]:
+            - img "sed" [ref=e344]
+            - generic [ref=e345]:
+              - link "" [ref=e346] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/est-aut-magni-dicta-asperiores-reiciendis
+                - generic [ref=e347]: 
+              - link "" [ref=e348] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e349]: 
+          - generic [ref=e351]:
+            - heading "sed" [level=4] [ref=e352]:
+              - link "sed" [ref=e353] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/est-aut-magni-dicta-asperiores-reiciendis
+            - paragraph [ref=e354]: $9,022.21 $7,985.56
+            - paragraph [ref=e355]: Enim nihil molestiae dolores in magni. In dolore dignissimos aliquam voluptatem. Ut cum perspiciatis cum ea dolor qui aut.
+            - generic [ref=e356]:
+              - generic [ref=e357]:
+                - link " Quick Shop" [ref=e358] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e359]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e360] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e361]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e362] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/est-aut-magni-dicta-asperiores-reiciendis
+        - generic [ref=e365]:
+          - generic [ref=e367]:
+            - img "earum" [ref=e368]
+            - generic [ref=e369]:
+              - link "" [ref=e370] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/ut-odio-sit-nostrum
+                - generic [ref=e371]: 
+              - link "" [ref=e372] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e373]: 
+          - generic [ref=e375]:
+            - heading "earum" [level=4] [ref=e376]:
+              - link "earum" [ref=e377] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/ut-odio-sit-nostrum
+            - paragraph [ref=e378]: $234.97 $-170.82
+            - paragraph [ref=e379]: Est voluptas totam atque laborum dolorem error impedit est. Est tenetur impedit similique qui dolor id quaerat et. Fugiat quisquam voluptatem magnam c...
+            - generic [ref=e380]:
+              - generic [ref=e381]:
+                - link " Quick Shop" [ref=e382] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e383]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e384] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e385]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e386] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/ut-odio-sit-nostrum
+        - generic [ref=e389]:
+          - generic [ref=e391]:
+            - img "impedit" [ref=e392]
+            - generic [ref=e393]:
+              - link "" [ref=e394] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/voluptatem-eaque-labore-sed-in
+                - generic [ref=e395]: 
+              - link "" [ref=e396] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e397]: 
+          - generic [ref=e399]:
+            - heading "impedit" [level=4] [ref=e400]:
+              - link "impedit" [ref=e401] [cursor=pointer]:
+                - /url: http://localhost:90/en/product-detail/voluptatem-eaque-labore-sed-in
+            - paragraph [ref=e402]: $899.63 $-3,676.97
+            - paragraph [ref=e403]: Et quia rerum optio molestiae dolor velit sit. Nihil rerum enim aspernatur aut hic. Eaque aliquid asperiores impedit eaque quidem. Et doloribus sequi...
+            - generic [ref=e404]:
+              - generic [ref=e405]:
+                - link " Quick Shop" [ref=e406] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e407]: 
+                  - text: Quick Shop
+                - link " Add to Wishlist" [ref=e408] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e409]: 
+                  - text: Add to Wishlist
+              - link "Add to cart" [ref=e410] [cursor=pointer]:
+                - /url: http://localhost:90/add-to-cart/voluptatem-eaque-labore-sed-in
+      - navigation [ref=e413]:
+        - list [ref=e414]:
+          - listitem "« Previous" [ref=e415]:
+            - generic: ‹
+          - listitem [ref=e416]:
+            - generic [ref=e417]: "1"
+          - listitem [ref=e418]:
+            - link "2" [ref=e419] [cursor=pointer]:
+              - /url: http://localhost:90/en/product-cat/inventore-animi-vcAJn?page=2
+          - listitem [ref=e420]:
+            - link "Next »" [ref=e421] [cursor=pointer]:
+              - /url: http://localhost:90/en/product-cat/inventore-animi-vcAJn?page=2
+              - text: ›
+  - contentinfo [ref=e422]:
+    - generic [ref=e425]:
+      - generic [ref=e427]:
+        - link "#" [ref=e429] [cursor=pointer]:
+          - /url: /
+          - img "#" [ref=e430]
+        - paragraph [ref=e431]: Quality products, fast delivery, best prices
+        - paragraph [ref=e432]:
+          - text: Got Question? Call us 24/7
+          - link "+1 (555) 123-4567" [ref=e434] [cursor=pointer]:
+            - /url: tel:123456789
+      - generic [ref=e436]:
+        - heading "Information" [level=4] [ref=e437]
+        - list [ref=e438]:
+          - listitem [ref=e439]:
+            - link "About Us" [ref=e440] [cursor=pointer]:
+              - /url: http://localhost:90/en/about-us
+          - listitem [ref=e441]:
+            - link "Contact Us" [ref=e442] [cursor=pointer]:
+              - /url: http://localhost:90/en/contact
+          - listitem [ref=e443]:
+            - link "Privacy Policy" [ref=e444] [cursor=pointer]:
+              - /url: http://localhost:90/en/page/privacy-policy
+          - listitem [ref=e445]:
+            - link "Shipping Policy" [ref=e446] [cursor=pointer]:
+              - /url: http://localhost:90/en/page/shipping-policy
+          - listitem [ref=e447]:
+            - link "Payment Policy" [ref=e448] [cursor=pointer]:
+              - /url: http://localhost:90/en/page/payment-policy
+          - listitem [ref=e449]:
+            - link "Terms & Conditions" [ref=e450] [cursor=pointer]:
+              - /url: http://localhost:90/en/page/terms-conditions
+          - listitem [ref=e451]:
+            - link "Refund Policy" [ref=e452] [cursor=pointer]:
+              - /url: http://localhost:90/en/page/refund-policy
+      - generic [ref=e454]:
+        - heading "Customer Service" [level=4] [ref=e455]
+        - list [ref=e456]:
+          - listitem [ref=e457]:
+            - link "Payment Methods" [ref=e458] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e459]:
+            - link "Money-back" [ref=e460] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e461]:
+            - link "Returns" [ref=e462] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e463]:
+            - link "Shipping" [ref=e464] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e465]:
+            - link "Privacy Policy" [ref=e466] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e468]:
+        - heading "Get In Touch" [level=4] [ref=e469]
+        - list [ref=e471]:
+          - listitem [ref=e472]: 123 Main Street, City, Country
+          - listitem [ref=e473]: info@example.com
+          - listitem [ref=e474]: +1 (555) 123-4567
+    - generic [ref=e478]:
+      - paragraph [ref=e481]: Copyright © 2026 KalimeroMK - All Rights Reserved.
+      - img "#" [ref=e484]
+  - text: 
