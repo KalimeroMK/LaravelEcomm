@@ -3,26 +3,6 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\LanguageController;
-
-// Service Worker - serve from root for any path
-Route::get('{any}/sw.js', function () {
-    $path = public_path('sw.js');
-    if (file_exists($path)) {
-        return response(file_get_contents($path), 200, [
-            'Content-Type' => 'application/javascript',
-        ]);
-    }
-    return response('Not found', 404);
-})->where('any', '.*');
-Route::get('sw.js', function () {
-    $path = public_path('sw.js');
-    if (file_exists($path)) {
-        return response(file_get_contents($path), 200, [
-            'Content-Type' => 'application/javascript',
-        ]);
-    }
-    return response('Not found', 404);
-});
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
