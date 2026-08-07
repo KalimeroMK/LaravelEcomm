@@ -47,8 +47,15 @@ Route::get('feed', FeedController::class)->name('feeds.main');
 Auth::routes();
 
 // Magic Login
-Route::post('/magic/send', [MagicLoginController::class, 'sendToken'])->name('magic.send');
-Route::get('/magic/login/{token}', [MagicLoginController::class, 'login'])->name('magic.login');
+// sendToken mails a login link to whatever address is posted. Unlimited, that
+// is a spam relay; the token consumer is limited too so the 50-char token
+// cannot be brute-forced.
+Route::post('/magic/send', [MagicLoginController::class, 'sendToken'])
+    ->middleware('throttle:auth-email')
+    ->name('magic.send');
+Route::get('/magic/login/{token}', [MagicLoginController::class, 'login'])
+    ->middleware('throttle:auth')
+    ->name('magic.login');
 Route::get('/magic/generate', [MagicLoginController::class, 'showLoginForm'])->name('magic-login.show-login-form');
 
 // Socialite

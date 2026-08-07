@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
         App\Providers\ActivityLoggerServiceProvider::class,
     ])
     ->withMiddleware(function (Middleware $middleware) {
+        // Applies `throttle:api` to the api group. Laravel 11 stopped doing this
+        // by default, so every API route was unlimited.
+        $middleware->throttleApi();
+
         // spatie/laravel-permission v6+ no longer registers these aliases itself.
         // Without them any route using `role:`/`permission:` fails with
         // "Target class [role] does not exist" instead of authorizing.

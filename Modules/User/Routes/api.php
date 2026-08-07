@@ -19,8 +19,11 @@ use Modules\User\Http\Controllers\Api\UserController;
 */
 // API Routes
 // Public routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login'])->name('api.login');
+// Credential endpoints get a tighter limit than the general `api` one:
+// unlimited attempts here means unlimited password guessing and unlimited
+// account creation.
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:auth');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:auth')->name('api.login');
 
 // Protected routes
 Route::middleware(['auth:sanctum'])->group(function (): void {
