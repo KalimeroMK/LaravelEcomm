@@ -21,6 +21,7 @@ class StoreUserActionTest extends ActionTestCase
             email_verified_at: now()->toDateTimeString(),
             created_at: now()->toDateTimeString(),
             updated_at: now()->toDateTimeString(),
+            password: 'test-password-123',
         );
 
         $action = app(StoreUserAction::class);
@@ -44,6 +45,7 @@ class StoreUserActionTest extends ActionTestCase
             email_verified_at: null,
             created_at: null,
             updated_at: null,
+            password: 'test-password-123',
         );
 
         $action = app(StoreUserAction::class);
@@ -63,6 +65,7 @@ class StoreUserActionTest extends ActionTestCase
             email_verified_at: null,
             created_at: null,
             updated_at: null,
+            password: 'test-password-123',
         );
 
         $action = app(StoreUserAction::class);
@@ -70,7 +73,26 @@ class StoreUserActionTest extends ActionTestCase
 
         $this->assertNotNull($result->password);
         // Password should be hashed (not plain text)
-        $this->assertNotEquals('password', $result->password);
+        $this->assertNotEquals('test-password-123', $result->password);
+        $this->assertTrue(password_verify('test-password-123', $result->password));
+        // Regression: creation used to ignore the DTO and hardcode 'password'.
+        $this->assertFalse(password_verify('password', $result->password));
+    }
+
+    public function testExecuteRejectsAMissingPassword(): void
+    {
+        $dto = new UserDTO(
+            id: null,
+            name: 'No Password User',
+            email: 'nopassword@example.com',
+            email_verified_at: null,
+            created_at: null,
+            updated_at: null,
+            password: null,
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        app(StoreUserAction::class)->execute($dto);
     }
 
     public function testExecuteThrowsExceptionForDuplicateEmail(): void
@@ -84,6 +106,7 @@ class StoreUserActionTest extends ActionTestCase
             email_verified_at: null,
             created_at: null,
             updated_at: null,
+            password: 'test-password-123',
         );
 
         $action = app(StoreUserAction::class);
@@ -101,6 +124,7 @@ class StoreUserActionTest extends ActionTestCase
             email_verified_at: null,
             created_at: null,
             updated_at: null,
+            password: 'test-password-123',
         );
 
         $dto2 = new UserDTO(
@@ -110,6 +134,7 @@ class StoreUserActionTest extends ActionTestCase
             email_verified_at: null,
             created_at: null,
             updated_at: null,
+            password: 'test-password-123',
         );
 
         $action = app(StoreUserAction::class);
@@ -133,6 +158,7 @@ class StoreUserActionTest extends ActionTestCase
             email_verified_at: null,
             created_at: null,
             updated_at: null,
+            password: 'test-password-123',
         );
 
         $action = app(StoreUserAction::class);
