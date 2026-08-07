@@ -64,7 +64,9 @@
     </div>
     <div class="content">
         <p><span class="highlight">Complaint ID:</span> {{ $complaint->id }}</p>
-        <p><span class="highlight">Complaint:</span> {!! $complaint->description !!}</p>
+        {{-- description is customer-supplied and was rendered raw, injecting
+             arbitrary HTML into the notification mail staff receive. --}}
+        <p><span class="highlight">Complaint:</span> {!! nl2br(e($complaint->description)) !!}</p>
         <p><span class="highlight">Status:</span> {{ ucfirst($complaint->status) }}</p>
 
         @if($recipientType === 'admin')

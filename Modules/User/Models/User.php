@@ -142,6 +142,30 @@ class User extends Authenticatable implements HasMedia
         });
     }
 
+    /**
+     * Who may impersonate somebody else.
+     *
+     * lab404/laravel-impersonate defaults both of these to true. Left
+     * unoverridden, and with /admin/{user}/impersonate carrying only the `auth`
+     * middleware, any authenticated customer could take over any account with a
+     * single GET request.
+     */
+    public function canImpersonate(): bool
+    {
+        return $this->hasAnyRole(['admin', 'super-admin']);
+    }
+
+    /**
+     * Who may be impersonated.
+     *
+     * Super-admins are excluded so that impersonation cannot be used as a
+     * privilege-escalation path by an admin.
+     */
+    public function canBeImpersonated(): bool
+    {
+        return ! $this->hasRole('super-admin');
+    }
+
     public static function Factory(): UserFactory
     {
         return UserFactory::new();
