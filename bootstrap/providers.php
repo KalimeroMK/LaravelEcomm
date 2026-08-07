@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Providers\AppServiceProvider;
 use App\Providers\PolicyServiceProvider;
-use Barryvdh\TranslationManager\ManagerServiceProvider;
 use Kalimeromk\Filterable\FilterableServiceProvider;
 use Lab404\Impersonate\ImpersonateServiceProvider;
 use Laravel\Socialite\SocialiteServiceProvider;
@@ -60,7 +59,9 @@ return [
     FrontServiceProvider::class,
     Google2faServiceProvider::class,
     ImpersonateServiceProvider::class,
-    ManagerServiceProvider::class,
+    // The translation manager registers itself through package discovery as
+    // Kalimero\TranslationManager\ManagerServiceProvider. The Barryvdh\ entry
+    // that used to sit here named a class that does not exist in this package.
     MessageServiceProvider::class,
     NewsletterServiceProvider::class,
     OpenAIServiceProvider::class,

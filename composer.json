@@ -18,6 +18,7 @@
     "intervention/image": "*",
     "jeremykenedy/laravel-logger": "*",
     "kalimeromk/filterable": "*",
+    "kalimeromk/laravel-translation-manager": "^2.1",
     "kalnoy/nestedset": "*",
     "lab404/laravel-impersonate": "*",
     "laravel/framework": "^13.0",
