@@ -53,8 +53,10 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix('admin')
             ->group(module_path('Newsletter', '/Routes/web.php'));
 
-        // Admin routes with authentication
-        Route::middleware(['auth', 'activity', 'web'])
+        // Admin routes. EmailCampaignController and EmailTemplateController do no
+        // authorization of their own, so the gate has to live here - otherwise any
+        // authenticated customer could rewrite the templates used for outgoing mail.
+        Route::middleware(['auth', 'activity', 'web', 'role_or_permission:admin|super-admin|newsletter-update'])
             ->prefix('admin')
             ->group(function (): void {
                 // Email Campaigns routes

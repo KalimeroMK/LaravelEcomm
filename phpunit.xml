@@ -29,6 +29,11 @@
                <env name="APP_ENV" value="testing"/>
                <env name="APP_KEY" value="base64:VGVzdEFwcEtleUZvclRlc3RpbmdQdXJwb3Nlc09ubHk="/>
                <env name="BCRYPT_ROUNDS" value="4"/>
+               <!-- Laravel 11 renamed CACHE_DRIVER to CACHE_STORE. With only the
+                    old name set, config/cache.php fell back to the `file` store and
+                    tests shared a cache that persisted on disk between runs, making
+                    cached endpoints pass or fail depending on run history. -->
+               <env name="CACHE_STORE" value="array"/>
                <env name="CACHE_DRIVER" value="array"/>
                <env name="DB_CONNECTION" value="sqlite"/>
                <env name="DB_DATABASE" value=":memory:"/>

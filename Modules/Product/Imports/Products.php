@@ -11,7 +11,7 @@ use Modules\Product\Models\Product;
 
 class Products implements ToCollection, WithHeadingRow
 {
-    public function collection(Collection $collection): string
+    public function collection(Collection $collection): void
     {
         foreach ($collection as $item) {
             Product::create([
@@ -29,7 +29,5 @@ class Products implements ToCollection, WithHeadingRow
                 'special_price_end' => $item['special_price_end'] ?? null,
             ]);
         }
-
-        return 'Update done ';
     }
 }

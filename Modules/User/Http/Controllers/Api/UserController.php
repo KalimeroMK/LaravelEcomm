@@ -54,9 +54,11 @@ class UserController extends CoreController
         $dto = UserDTO::fromRequest($request);
         $user = $this->storeAction->execute($dto);
 
-        // Sync roles if provided
+        // Sync roles if provided. Role assignment is a separate ability from
+        // creating a user, so it is authorized separately.
         if ($request->has('roles')) {
-            SyncRelations::execute($user, ['roles' => $request->input('roles')]);
+            $this->authorize('assignRoles', User::class);
+            SyncRelations::execute($user, ['roles' => $request->validated('roles')]);
         }
 
         return $this
@@ -88,9 +90,12 @@ class UserController extends CoreController
         $dto = UserDTO::fromRequest($request, $id);
         $user = $this->updateAction->execute($id, $dto);
 
-        // Sync roles if provided
+        // Sync roles if provided. authorize('update') above permits self-service
+        // profile edits, so role changes MUST be authorized independently here -
+        // otherwise any authenticated user could grant themselves super-admin.
         if ($request->has('roles')) {
-            SyncRelations::execute($user, ['roles' => $request->input('roles')]);
+            $this->authorize('assignRoles', $existingUser);
+            SyncRelations::execute($user, ['roles' => $request->validated('roles')]);
         }
 
         return $this

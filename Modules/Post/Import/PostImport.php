@@ -12,10 +12,7 @@ use Throwable;
 
 class PostImport implements ToModel, WithHeadingRow
 {
-    /**
-     * @return Post|null
-     */
-    public function model(array $row)
+    public function model(array $row): ?Post
     {
         try {
             return new Post([

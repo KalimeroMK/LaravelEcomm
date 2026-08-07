@@ -15,17 +15,26 @@ readonly class UserDTO
         public ?string $email_verified_at = null,
         public ?string $created_at = null,
         public ?string $updated_at = null,
+        /**
+         * Plain-text password as submitted. Never persist this directly -
+         * hash it at the point of write.
+         */
+        public ?string $password = null,
     ) {}
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['id'] ?? null,
-            $data['name'] ?? null,
-            $data['email'] ?? null,
-            $data['email_verified_at'] ?? null,
-            $data['created_at'] ?? null,
-            $data['updated_at'] ?? null,
+            id: $data['id'] ?? null,
+            name: $data['name'] ?? null,
+            email: $data['email'] ?? null,
+            email_verified_at: $data['email_verified_at'] ?? null,
+            created_at: $data['created_at'] ?? null,
+            updated_at: $data['updated_at'] ?? null,
+            password: $data['password'] ?? null,
         );
     }
 
@@ -38,6 +47,7 @@ readonly class UserDTO
             'name' => $validated['name'] ?? null,
             'email' => $validated['email'] ?? null,
             'email_verified_at' => $validated['email_verified_at'] ?? null,
+            'password' => $validated['password'] ?? null,
         ]);
     }
 }

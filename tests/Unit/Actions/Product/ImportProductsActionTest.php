@@ -8,7 +8,7 @@ use Illuminate\Http\UploadedFile;
 use InvalidArgumentException;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Product\Actions\ImportProductsAction;
-use Modules\Product\Exports\Products;
+use Modules\Product\Imports\Products;
 use RuntimeException;
 use Tests\Unit\Actions\ActionTestCase;
 

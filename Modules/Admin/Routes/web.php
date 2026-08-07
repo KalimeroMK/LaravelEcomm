@@ -17,13 +17,27 @@ use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\AdminController;
 use Modules\Admin\Http\Controllers\AnalyticsController;
 
-Route::get('/', [AdminController::class, 'index'])->name('admin');
-Route::get('/analytics', function (): Illuminate\Contracts\View\View|Illuminate\Contracts\View\Factory {
-    return view('admin::analytics-dashboard');
-})->name('admin.analytics');
+/*
+ * These routes inherit only `auth` from the module RouteServiceProvider, and
+ * AdminController/AnalyticsController do no authorization of their own. Without
+ * the gates below any authenticated customer could open the back-office
+ * dashboard and read revenue, customer and abandoned-cart data.
+ */
 
-// Analytics API Routes for web interface (temporarily without auth for testing)
-Route::prefix('analytics')->group(function (): void {
+// Dashboard: any back-office user.
+Route::middleware('role:admin|manager|super-admin')->group(function (): void {
+    Route::get('/', [AdminController::class, 'index'])->name('admin');
+    Route::get('/messages/five', [AdminController::class, 'messageFive'])->name('messages.five');
+});
+
+// Analytics: revenue and customer figures, admins only.
+Route::middleware('role:admin|super-admin')->group(function (): void {
+    Route::get('/analytics', function (): Illuminate\Contracts\View\View|Illuminate\Contracts\View\Factory {
+        return view('admin::analytics-dashboard');
+    })->name('admin.analytics');
+});
+
+Route::prefix('analytics')->middleware('role:admin|super-admin')->group(function (): void {
     Route::get('dashboard', [AnalyticsController::class, 'dashboard'])->name('admin.analytics.dashboard');
     Route::get('overview', [AnalyticsController::class, 'overview'])->name('admin.analytics.overview');
     Route::get('sales', [AnalyticsController::class, 'sales'])->name('admin.analytics.sales');
@@ -38,5 +52,3 @@ Route::prefix('analytics')->group(function (): void {
     Route::get('abandoned-carts', [AnalyticsController::class, 'abandonedCarts'])->name('admin.analytics.abandoned-carts');
     Route::get('abandoned-carts/{id}', [AnalyticsController::class, 'abandonedCartDetails'])->name('admin.analytics.abandoned-carts.details');
 });
-
-Route::get('/messages/five', [AdminController::class, 'messageFive'])->name('messages.five');

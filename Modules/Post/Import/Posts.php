@@ -12,9 +12,8 @@ use Modules\Post\Models\Post;
 
 class Posts implements ToCollection, WithHeadingRow
 {
-    public function collection(
-        Collection $collection
-    ): string {
+    public function collection(Collection $collection): void
+    {
         Schema::disableForeignKeyConstraints();
         foreach ($collection as $item) {
             Post::Create([
@@ -28,7 +27,5 @@ class Posts implements ToCollection, WithHeadingRow
             ]);
         }
         Schema::enableForeignKeyConstraints();
-
-        return 'Update done ';
     }
 }

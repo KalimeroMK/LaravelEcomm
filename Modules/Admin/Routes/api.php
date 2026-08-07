@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\Api\AnalyticsController;
 use Modules\Admin\Http\Controllers\Api\UserBehaviorController;
 
@@ -22,8 +23,10 @@ Route::middleware('auth:api')->get('/admin', function (Request $request) {
     return $request->user();
 });
 
-// Analytics API Routes
-Route::prefix('admin/analytics')->middleware(['auth:sanctum'])->group(function (): void {
+// Analytics API Routes. These expose revenue, customer and marketing figures,
+// so authentication alone is not enough - any registered customer would
+// otherwise be able to read them.
+Route::prefix('admin/analytics')->middleware(['auth:sanctum', 'role:admin|super-admin'])->group(function (): void {
     Route::get('dashboard', [AnalyticsController::class, 'dashboard'])->name('admin.analytics.dashboard');
     Route::get('overview', [AnalyticsController::class, 'overview'])->name('admin.analytics.overview');
     Route::get('sales', [AnalyticsController::class, 'sales'])->name('admin.analytics.sales');
@@ -37,14 +40,23 @@ Route::prefix('admin/analytics')->middleware(['auth:sanctum'])->group(function (
     Route::post('export', [AnalyticsController::class, 'export'])->name('admin.analytics.export');
 });
 
-// User Behavior Tracking Routes
+// Behaviour *collection* is public by design - the storefront posts tracking
+// beacons for anonymous visitors.
 Route::prefix('admin/analytics')->group(function (): void {
     Route::post('track', [UserBehaviorController::class, 'track'])->name('admin.analytics.track');
-    Route::get('behavior', [UserBehaviorController::class, 'analytics'])->name('admin.analytics.behavior');
-    Route::get('page-views', [UserBehaviorController::class, 'pageViews'])->name('admin.analytics.page-views');
-    Route::get('engagement', [UserBehaviorController::class, 'engagement'])->name('admin.analytics.engagement');
-    Route::get('popular-pages', [UserBehaviorController::class, 'popularPages'])->name('admin.analytics.popular-pages');
-    Route::get('sessions', [UserBehaviorController::class, 'sessions'])->name('admin.analytics.sessions');
-    Route::get('devices', [UserBehaviorController::class, 'devices'])->name('admin.analytics.devices');
-    Route::get('geographic', [UserBehaviorController::class, 'geographic'])->name('admin.analytics.geographic');
 });
+
+// Behaviour *reporting* exposes visitor sessions, devices and geographic data.
+// This group previously had no middleware at all, making that data readable by
+// anyone on the internet.
+Route::prefix('admin/analytics')
+    ->middleware(['auth:sanctum', 'role:admin|super-admin'])
+    ->group(function (): void {
+        Route::get('behavior', [UserBehaviorController::class, 'analytics'])->name('admin.analytics.behavior');
+        Route::get('page-views', [UserBehaviorController::class, 'pageViews'])->name('admin.analytics.page-views');
+        Route::get('engagement', [UserBehaviorController::class, 'engagement'])->name('admin.analytics.engagement');
+        Route::get('popular-pages', [UserBehaviorController::class, 'popularPages'])->name('admin.analytics.popular-pages');
+        Route::get('sessions', [UserBehaviorController::class, 'sessions'])->name('admin.analytics.sessions');
+        Route::get('devices', [UserBehaviorController::class, 'devices'])->name('admin.analytics.devices');
+        Route::get('geographic', [UserBehaviorController::class, 'geographic'])->name('admin.analytics.geographic');
+    });

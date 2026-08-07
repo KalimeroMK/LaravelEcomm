@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Modules\User\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\User\Rules\AssignableRole;
 
 class Update extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
@@ -22,7 +23,7 @@ class Update extends FormRequest
             'email' => 'sometimes|required|email|unique:users,email,'.$userId,
             'password' => 'nullable|string|min:8',
             'roles' => 'sometimes|required|array',
-            'roles.*' => 'exists:roles,id',
+            'roles.*' => ['exists:roles,id', new AssignableRole],
             'photo' => 'nullable|image|max:2048',
         ];
     }
