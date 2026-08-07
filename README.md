@@ -1,4 +1,4 @@
-# Advanced E-commerce Platform in Laravel 12
+# Advanced E-commerce Platform in Laravel 13
 
 ### 🌐 Demo: https://e-comm.mk
 
@@ -17,6 +17,16 @@
 ---
 
 ## 🚀 Quick Start
+
+### Requirements
+
+| | |
+|---|---|
+| **PHP** | 8.4 |
+| **Laravel** | 13.x |
+| **Node** | for the frontend build |
+
+> **PHP 8.4, not 8.5.** `maatwebsite/excel` 3.x depends on `phpoffice/phpspreadsheet` 1.x, which declares `php >=7.4 <8.5`. `composer.json` pins `config.platform.php` to 8.4 so the lock file always resolves for the deployment runtime, and the Docker image is pinned to `dunglas/frankenphp:1-php8.4`. On PHP 8.5 `composer install` will refuse, and Excel import/export emits deprecations.
 
 ### Option 1: Docker (Recommended)
 
@@ -885,4 +895,4 @@ This project is licensed under the MIT License.
 
 ---
 
-<p align="center">Built with ❤️ using Laravel 12</p>
+<p align="center">Built with ❤️ using Laravel 13</p>
