@@ -19,7 +19,12 @@ use Modules\User\Http\Controllers\UserAddressController;
 
 Route::prefix('admin')->middleware(['auth'])->group(function (): void {
     Route::resource('users', UserController::class);
-    Route::get('/{user}/impersonate', [UserController::class, 'impersonate'])->name('users.impersonate');
+    // Defence in depth alongside User::canImpersonate(). This route previously
+    // carried nothing but `auth`, and UserController::impersonate() is not a
+    // resource method so authorizeResource() never covered it.
+    Route::get('/{user}/impersonate', [UserController::class, 'impersonate'])
+        ->middleware('role:admin|super-admin')
+        ->name('users.impersonate');
     Route::get('/leave-impersonate', [UserController::class, 'leaveImpersonate'])->name('users.leave-impersonate');
 });
 Route::prefix('user')->middleware(['auth'])->group(function (): void {

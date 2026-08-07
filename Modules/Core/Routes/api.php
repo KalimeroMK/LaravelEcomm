@@ -8,8 +8,15 @@ use Modules\Core\Http\Controllers\TranslationController;
 
 // System API routes
 Route::prefix('system')->name('api.system.')->group(function () {
+    // Public: returns status strings only, for external monitoring.
     Route::get('health', [SystemController::class, 'health'])->name('health');
-    Route::get('version', [SystemController::class, 'version'])->name('version');
+
+    // Authenticated: reports the exact Laravel and PHP versions plus the
+    // environment name, which is free reconnaissance for anyone matching the
+    // deployment against known CVEs.
+    Route::get('version', [SystemController::class, 'version'])
+        ->middleware('auth:sanctum')
+        ->name('version');
 });
 
 Route::prefix('api/v1')
