@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Modules\User\Http\Requests\Api;
 
 use Modules\Core\Http\Requests\CoreRequest;
+use Modules\User\Rules\AssignableRole;
 
 class Store extends CoreRequest
 {
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
@@ -20,7 +21,7 @@ class Store extends CoreRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
             'roles' => 'nullable|array',
-            'roles.*' => 'exists:roles,id',
+            'roles.*' => ['exists:roles,id', new AssignableRole],
             'photo' => 'nullable|image|max:2048',
         ];
     }
