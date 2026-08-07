@@ -6,7 +6,7 @@ namespace Modules\Product\Actions;
 
 use InvalidArgumentException;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Product\Exports\Products;
+use Modules\Product\Imports\Products;
 use RuntimeException;
 use Throwable;
 
