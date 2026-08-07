@@ -2943,16 +2943,16 @@
         },
         {
             "name": "kalimeromk/laravel-translation-manager",
-            "version": "v2.1",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KalimeroMK/lang-manager.git",
-                "reference": "33d6adc545efc3ead80254f0547a677e556dd29f"
+                "reference": "ee806f253bafbc928f8ab3b94f8ca2cb4000c1d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KalimeroMK/lang-manager/zipball/33d6adc545efc3ead80254f0547a677e556dd29f",
-                "reference": "33d6adc545efc3ead80254f0547a677e556dd29f",
+                "url": "https://api.github.com/repos/KalimeroMK/lang-manager/zipball/ee806f253bafbc928f8ab3b94f8ca2cb4000c1d2",
+                "reference": "ee806f253bafbc928f8ab3b94f8ca2cb4000c1d2",
                 "shasum": ""
             },
             "require": {
@@ -3011,9 +3011,9 @@
             ],
             "support": {
                 "issues": "https://github.com/KalimeroMK/lang-manager/issues",
-                "source": "https://github.com/KalimeroMK/lang-manager/tree/v2.1"
+                "source": "https://github.com/KalimeroMK/lang-manager/tree/v2.1.1"
             },
-            "time": "2026-08-07T16:27:50+00:00"
+            "time": "2026-08-07T16:33:39+00:00"
         },
         {
             "name": "kalnoy/nestedset",
