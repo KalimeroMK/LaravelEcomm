@@ -38,9 +38,13 @@ test('product detail page loads', function () {
 });
 
 test('product search works', function () {
+    // ProductFactory randomises status between active/inactive, and
+    // searchByTerm() only returns active products - without pinning it this
+    // assertion is a coin flip.
     $product = Product::factory()->withCategories()->create([
         'title' => 'Test Product',
         'brand_id' => $this->brand->id,
+        'status' => 'active',
     ]);
 
     $response = $this->post(route('front.product-search'), ['search' => 'Test']);
