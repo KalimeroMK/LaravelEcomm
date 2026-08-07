@@ -18,7 +18,10 @@ use Modules\Newsletter\Http\Controllers\NewsletterController;
 
 Route::resource('newsletters', NewsletterController::class)->except('show');
 
-// Newsletter Analytics
-Route::get('newsletters/analytics', [NewsletterAnalyticsController::class, 'index'])->name('newsletters.analytics');
+// Newsletter Analytics. NewsletterAnalyticsController does no authorization of
+// its own and this view exposes subscriber data, so it is gated here.
+Route::get('newsletters/analytics', [NewsletterAnalyticsController::class, 'index'])
+    ->middleware('role_or_permission:admin|super-admin|newsletter-list')
+    ->name('newsletters.analytics');
 
 // Email Template and Campaign Routes are handled in RouteServiceProvider to avoid conflicts

@@ -61,8 +61,13 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix('admin')
             ->group(module_path('Admin', '/Routes/web.php'));
 
-        // Analytics routes with proper authentication
-        Route::middleware(['auth', 'web'])
+        /*
+         * NOTE: this duplicates the analytics group already declared in
+         * Routes/web.php. The duplicate registers the same URIs, so gating only
+         * one of the two leaves the endpoints reachable through the other -
+         * both must carry the role check.
+         */
+        Route::middleware(['auth', 'web', 'role:admin|super-admin'])
             ->prefix('admin')
             ->group(function (): void {
                 Route::prefix('analytics')->group(function (): void {
