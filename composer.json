@@ -31,7 +31,7 @@
     "laravel/ui": "*",
     "league/omnipay": "*",
     "livewire/blaze": "dev-main",
-    "maatwebsite/excel": "*",
+    "maatwebsite/excel": "^3.1.69",
     "nwidart/laravel-modules": "*",
     "omnipay/paypal": "*",
     "openai-php/laravel": "^0.20.0",
@@ -116,6 +116,9 @@
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true,
+    "platform": {
+      "php": "8.4.0"
+    },
     "allow-plugins": {
       "pestphp/pest-plugin": true,
       "php-http/discovery": true,

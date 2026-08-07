@@ -1,5 +1,8 @@
-# Use FrankenPHP base image
-FROM dunglas/frankenphp:latest
+# Use FrankenPHP base image.
+# Pinned to PHP 8.4: phpoffice/phpspreadsheet 1.x (required by the stable
+# maatwebsite/excel 3.x line) declares php >=7.4 <8.5. `latest` tracks the
+# newest PHP and would force the unreleased excel 4.x branch.
+FROM dunglas/frankenphp:1-php8.4
 
 # Install PHP extensions using the built-in installer
 RUN install-php-extensions \
