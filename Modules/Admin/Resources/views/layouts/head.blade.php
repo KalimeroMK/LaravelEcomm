@@ -15,7 +15,7 @@
     <!-- Custom styles for this template-->
     <link href="{{asset('backend/css/all.min.css')}}" rel="stylesheet">
     <link href="{{asset('backend/css/custom.css')}}" rel="stylesheet">
-    <link href="{{asset('backend/css/pagination.css')}}" rel="stylesheet">
+    <link href="{{ asset('backend/css/pagination.css') }}?v={{ @filemtime(public_path('backend/css/pagination.css')) ?: 1 }}" rel="stylesheet">
     @stack('styles')
 
 </head>

@@ -60,16 +60,23 @@
 
 <!-- Page level plugins -->
 <script>
-    $('#data-table').DataTable({
-        "ordering": true,
-        "paging": true,
-        "pageLength": 25,
-        "lengthMenu": [
-            [25, 50, 75, 100, -1],
-            [25, 50, 75, 100, 'All'],
-        ],
-
-    });
+    // Tables that are paginated server-side (Laravel paginator below the
+    // table) opt out of DataTables' own pager via data-server-paginated.
+    (function () {
+        const $dt = $('#data-table');
+        if (!$dt.length) return;
+        const serverPaginated = $dt.is('[data-server-paginated]');
+        $dt.DataTable({
+            "ordering": true,
+            "paging": !serverPaginated,
+            "info": !serverPaginated,
+            "pageLength": 25,
+            "lengthMenu": [
+                [25, 50, 75, 100, -1],
+                [25, 50, 75, 100, 'All'],
+            ],
+        });
+    })();
 </script>
 <script>
     $(document).ready(function () {

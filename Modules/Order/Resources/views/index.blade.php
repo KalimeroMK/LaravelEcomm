@@ -10,7 +10,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 @if(!$orders->isEmpty())
-                    <table class="table table-bordered" id="data-table">
+                    <table class="table table-bordered" id="data-table" data-server-paginated>
                         <thead>
                         <tr>
                             <th>@lang('partials.s_n')</th>
