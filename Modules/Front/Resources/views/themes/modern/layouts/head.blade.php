@@ -10,7 +10,10 @@
 @include('feed::links')
 
 <!-- StyleSheet -->
+{{-- Theme-specific styles first, then the base all_front CSS that styles the
+     shared header/footer/menu markup (it wins conflicts, matching the reference design) --}}
 <link rel="stylesheet" href="{{asset('frontend/themes/modern/css/style.css')}}">
+<link rel="stylesheet" href="{{asset('frontend/css/all_front.min.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/css/font-awesome.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/css/themify-icons.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/themes/modern/css/animate.css')}}">

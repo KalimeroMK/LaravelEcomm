@@ -1,5 +1,5 @@
 @php use Modules\Core\Helpers\Helper; @endphp
-@extends('front::layouts.master')
+@extends('front::themes.default.layouts.master')
 @section('title', __('frontend.cart_page'))
 @section('content')
     <!-- Breadcrumbs -->
@@ -211,7 +211,7 @@
     <!-- End Shop Newsletter -->
 
     <!-- Start Shop Newsletter  -->
-    @include('front::layouts.newsletter')
+    @include('front::themes.default.layouts.newsletter')
     <!-- End Shop Newsletter -->
 
 

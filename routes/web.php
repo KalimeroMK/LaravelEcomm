@@ -92,3 +92,4 @@ Route::get('/', function () {
 
 // Set default locale for URL generation
 URL::defaults(['locale' => getSafeDefaultLocale()]);
+

@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends('front::themes.default.layouts.master')
 
 @section('title','Order Details - ' . ($order->order_number ?? $order->id))
 

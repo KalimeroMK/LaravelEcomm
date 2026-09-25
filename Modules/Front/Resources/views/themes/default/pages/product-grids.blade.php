@@ -1,4 +1,4 @@
-@extends('front::layouts.master')
+@extends('front::themes.default.layouts.master')
 
 @section('title', __('frontend.meta_title'))
 
@@ -39,7 +39,7 @@
                                                 }}</a>
                                                 <ul>
                                                     @foreach ($category->childrenCategories as $childCategory)
-                                                        @include('front::layouts.child_category', ['child_category' => $childCategory])
+                                                        @include('front::themes.default.layouts.child_category', ['child_category' => $childCategory])
                                                     @endforeach
                                                 </ul>
                                             </li>
