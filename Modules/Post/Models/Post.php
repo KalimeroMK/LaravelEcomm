@@ -174,6 +174,19 @@ class Post extends Core implements HasMedia
         ]);
     }
 
+    /**
+     * Small preview image (300x300 conversion) for sidebars and listings.
+     */
+    public function getImagePreviewUrlAttribute(): ?string
+    {
+        $mediaItem = $this->getFirstMedia('post');
+        if ($mediaItem instanceof Media) {
+            return $mediaItem->getUrl('preview');
+        }
+
+        return $this->image_url;
+    }
+
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')

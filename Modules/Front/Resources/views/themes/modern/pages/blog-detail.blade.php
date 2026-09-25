@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="image">
-                                    <img src="{{$post->imageUrl}}" alt="{{$post->title}}">
+                                    <img src="{{ $post->image_preview_url }}" alt="{{$post->title}}">
                                 </div>
                                 <div class="blog-detail">
                                     <h2 class="blog-title">{{$post->title}}</h2>
@@ -159,7 +159,6 @@
                                 @endforeach
                             </ul>
                         </div>
-                    </div>
                     <!--/ End Single Widget -->
                     <!-- Single Widget -->
                     <div class="single-widget recent-post">
@@ -168,10 +167,10 @@
                             <!-- Single Post -->
                             <div class="single-post">
                                 <div class="image">
-                                    <img src="{{$post->imageUrl}}" alt="{{$post->title}}">
+                                    <img src="{{ $post->image_preview_url }}" alt="{{$post->title}}">
                                 </div>
                                 <div class="content">
-                                    <h5><a href="#">{{$post->title}}</a></h5>
+                                    <h5><a href="{{ route('front.blog-detail', $post->slug) }}">{{$post->title}}</a></h5>
                                     <ul class="comment">
                                         <li><i class="fa fa-calendar"
                                                aria-hidden="true"></i>{{$post->created_at->format('d M, y')}}</li>
@@ -212,6 +211,7 @@
                         </div>
                     </div>
                     <!--/ End Single Widget -->
+                    </div>
                 </div>
             </div>
         </div>
