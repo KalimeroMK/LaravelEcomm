@@ -300,13 +300,13 @@ $(document).ready(function() {
     // Track product impressions
     const productIds = $('.product-list-item').map(function() { return $(this).data('product-id'); }).get();
     if (productIds.length > 0) {
-        $.post('/api/v1/tracking/product-impressions', { product_ids: productIds, _token: '{{ csrf_token() }}' });
+        $.post('/api/v1/product-tracking/impressions', { product_ids: productIds, _token: '{{ csrf_token() }}' });
     }
 
     // Track product clicks
     $('.product-list-item a').click(function() {
         const productId = $(this).closest('.product-list-item').data('product-id');
-        $.post('/api/v1/tracking/product-click', { product_id: productId, _token: '{{ csrf_token() }}' });
+        $.post('/api/v1/product-tracking/click', { product_id: productId, _token: '{{ csrf_token() }}' });
     });
 
     // Quantity buttons

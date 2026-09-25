@@ -17,7 +17,10 @@ class ProductTrackingController extends CoreController
         private readonly StoreProductImpressionAction $storeImpressionAction,
         private readonly StoreProductClickAction $storeClickAction
     ) {
-        $this->middleware('auth:sanctum');
+        // Intentionally no auth middleware: impression/click tracking must work
+        // for anonymous storefront visitors (user_id is nullable, IP is stored,
+        // and the `api` group's throttle applies). The old auth:sanctum here
+        // 401'd every tracking call, so no stats were ever recorded.
     }
 
     public function storeImpressions(StoreImpressionsRequest $request): JsonResponse
