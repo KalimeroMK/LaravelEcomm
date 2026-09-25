@@ -52,7 +52,7 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/img/favicon.ico">
-    @include('front::layouts.head')
+    @include('front::themes.modern.layouts.head')
     {!! $schema ?? '' !!}
     
     <!-- RTL Support for Arabic -->
@@ -84,13 +84,13 @@
     </div>
 </div>
 <!-- End Preloader -->
-@include('front::layouts.notification')
+@include('front::themes.modern.layouts.notification')
 <!-- Header -->
-@include('front::layouts.header')
+@include('front::themes.modern.layouts.header')
 <!--/ End Header -->
 @yield('content')
 
-@include('front::layouts.footer')
+@include('front::themes.modern.layouts.footer')
 
 </body>
 </html>

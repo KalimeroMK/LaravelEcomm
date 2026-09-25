@@ -28,8 +28,8 @@ class MagicLoginController extends Controller
         $user->token_expires_at = Carbon::now()->addMinutes(15);
         $user->save();
 
-        // Send the magic link. Implement this in your Mail class.
-        Mail::to($user->email)->send(new MagicLoginLink($user));
+        // Send the magic link off the request path.
+        Mail::to($user->email)->queue(new MagicLoginLink($user));
 
         return back()->with('magic_link_sent', 'We have emailed you a magic link!');
     }

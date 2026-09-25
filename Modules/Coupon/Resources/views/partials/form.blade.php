@@ -1,3 +1,10 @@
+@php
+    // Loaded once with narrow selects — these dropdowns only need id + title,
+    // and the form previously ran each of these queries twice via Model::all().
+    $couponFormProducts = \Modules\Product\Models\Product::query()->select('id', 'title')->orderBy('title')->get();
+    $couponFormCategories = \Modules\Category\Models\Category::query()->select('id', 'title')->orderBy('title')->get();
+    $couponFormBrands = \Modules\Brand\Models\Brand::query()->select('id', 'title')->orderBy('title')->get();
+@endphp
 <form method="POST"
       action="{{ route($coupon->exists ? 'coupons.update' : 'coupons.store', $coupon->exists ? $coupon->id : null) }}"
       enctype="multipart/form-data">
@@ -154,7 +161,7 @@
             <div class="form-group">
                 <label for="applicable_products">@lang('coupon.applicable_products')</label>
                 <select name="applicable_products[]" id="applicable_products" class="form-control select2" multiple>
-                    @foreach(\Modules\Product\Models\Product::all() as $product)
+                    @foreach($couponFormProducts as $product)
                         <option value="{{ $product->id }}" 
                             {{ in_array($product->id, old('applicable_products', $coupon->applicable_products ?? [])) ? 'selected' : '' }}>
                             {{ $product->title }}
@@ -167,7 +174,7 @@
             <div class="form-group">
                 <label for="applicable_categories">@lang('coupon.applicable_categories')</label>
                 <select name="applicable_categories[]" id="applicable_categories" class="form-control select2" multiple>
-                    @foreach(\Modules\Category\Models\Category::all() as $category)
+                    @foreach($couponFormCategories as $category)
                         <option value="{{ $category->id }}" 
                             {{ in_array($category->id, old('applicable_categories', $coupon->applicable_categories ?? [])) ? 'selected' : '' }}>
                             {{ $category->title }}
@@ -179,7 +186,7 @@
             <div class="form-group">
                 <label for="applicable_brands">@lang('coupon.applicable_brands')</label>
                 <select name="applicable_brands[]" id="applicable_brands" class="form-control select2" multiple>
-                    @foreach(\Modules\Brand\Models\Brand::all() as $brand)
+                    @foreach($couponFormBrands as $brand)
                         <option value="{{ $brand->id }}" 
                             {{ in_array($brand->id, old('applicable_brands', $coupon->applicable_brands ?? [])) ? 'selected' : '' }}>
                             {{ $brand->title }}
@@ -196,7 +203,7 @@
             <div class="form-group">
                 <label for="excluded_products">@lang('coupon.excluded_products')</label>
                 <select name="excluded_products[]" id="excluded_products" class="form-control select2" multiple>
-                    @foreach(\Modules\Product\Models\Product::all() as $product)
+                    @foreach($couponFormProducts as $product)
                         <option value="{{ $product->id }}" 
                             {{ in_array($product->id, old('excluded_products', $coupon->excluded_products ?? [])) ? 'selected' : '' }}>
                             {{ $product->title }}
@@ -208,7 +215,7 @@
             <div class="form-group">
                 <label for="excluded_categories">@lang('coupon.excluded_categories')</label>
                 <select name="excluded_categories[]" id="excluded_categories" class="form-control select2" multiple>
-                    @foreach(\Modules\Category\Models\Category::all() as $category)
+                    @foreach($couponFormCategories as $category)
                         <option value="{{ $category->id }}" 
                             {{ in_array($category->id, old('excluded_categories', $coupon->excluded_categories ?? [])) ? 'selected' : '' }}>
                             {{ $category->title }}
@@ -220,7 +227,7 @@
             <div class="form-group">
                 <label for="excluded_brands">@lang('coupon.excluded_brands')</label>
                 <select name="excluded_brands[]" id="excluded_brands" class="form-control select2" multiple>
-                    @foreach(\Modules\Brand\Models\Brand::all() as $brand)
+                    @foreach($couponFormBrands as $brand)
                         <option value="{{ $brand->id }}" 
                             {{ in_array($brand->id, old('excluded_brands', $coupon->excluded_brands ?? [])) ? 'selected' : '' }}>
                             {{ $brand->title }}

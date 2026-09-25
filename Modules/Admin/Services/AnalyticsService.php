@@ -23,7 +23,9 @@ class AnalyticsService
      */
     public function getDashboardAnalytics(): array
     {
-        return [
+        // The dashboard aggregates dozens of queries — cache it briefly so
+        // refreshes and concurrent admins don't recompute everything.
+        return \Illuminate\Support\Facades\Cache::remember('admin_dashboard_analytics', 300, fn (): array => [
             'overview' => $this->getOverviewStats(),
             'sales' => $this->getSalesAnalytics(),
             'users' => $this->getUserAnalytics(),
@@ -31,7 +33,7 @@ class AnalyticsService
             'content' => $this->getContentAnalytics(),
             'marketing' => $this->getMarketingAnalytics(),
             'performance' => $this->getPerformanceMetrics(),
-        ];
+        ]);
     }
 
     /**
@@ -335,11 +337,16 @@ class AnalyticsService
      */
     private function getUserRegistrations(): array
     {
+        // One GROUP BY query instead of 30 whereDate() counts.
+        $counts = User::selectRaw('DATE(created_at) as day, COUNT(*) as total')
+            ->where('created_at', '>=', Carbon::today()->subDays(29))
+            ->groupBy('day')
+            ->pluck('total', 'day');
+
         $registrations = [];
         for ($i = 29; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i)->format('Y-m-d');
-            $count = User::whereDate('created_at', $date)->count();
-            $registrations[$date] = $count;
+            $registrations[$date] = (int) ($counts[$date] ?? 0);
         }
 
         return $registrations;
@@ -386,14 +393,18 @@ class AnalyticsService
      */
     private function getCustomerLifetimeValue(): array
     {
-        $customersWithOrders = User::whereHas('orders')->with('orders')->get();
+        // Aggregate in SQL — loading every customer with all their orders does
+        // not scale and the numbers are identical.
+        $totalLifetimeValue = (float) Order::where('payment_status', 'paid')
+            ->whereNotNull('user_id')
+            ->sum('total_amount');
 
-        $totalLifetimeValue = $customersWithOrders->sum(function ($user) {
-            return $user->orders->where('payment_status', 'paid')->sum('total_amount');
-        });
+        $customersWithOrders = (int) Order::whereNotNull('user_id')
+            ->distinct()
+            ->count('user_id');
 
-        $averageLifetimeValue = $customersWithOrders->count() > 0
-            ? $totalLifetimeValue / $customersWithOrders->count()
+        $averageLifetimeValue = $customersWithOrders > 0
+            ? $totalLifetimeValue / $customersWithOrders
             : 0;
 
         return [
@@ -407,11 +418,18 @@ class AnalyticsService
      */
     private function getProductPerformance(): array
     {
-        $products = Product::with(['clicks', 'impressions'])->get();
+        // Counted in SQL — previously every click/impression row was hydrated
+        // into PHP just to compute the top 10.
+        $products = Product::query()
+            ->select(['id', 'title'])
+            ->withCount(['clicks', 'impressions'])
+            ->orderByDesc('clicks_count')
+            ->limit(10)
+            ->get();
 
         return $products->map(function ($product): array {
-            $clicks = $product->clicks->count();
-            $impressions = $product->impressions->count();
+            $clicks = (int) $product->clicks_count;
+            $impressions = (int) $product->impressions_count;
             $ctr = $impressions > 0 ? round(($clicks / $impressions) * 100, 2) : 0;
 
             return [
@@ -422,7 +440,7 @@ class AnalyticsService
                 'ctr' => $ctr,
                 'views' => $impressions, // Assuming impressions = views
             ];
-        })->sortByDesc('clicks')->take(10)->values()->toArray();
+        })->toArray();
     }
 
     /**

@@ -85,6 +85,11 @@
                         @endforeach
                         </tbody>
                     </table>
+                    @if($orders instanceof \Illuminate\Contracts\Pagination\Paginator)
+                        <div class="d-flex justify-content-center">
+                            {{ $orders->links() }}
+                        </div>
+                    @endif
                 @else
                     <h6 class="text-center">@lang('partials.no_records_found')</h6>
                 @endif

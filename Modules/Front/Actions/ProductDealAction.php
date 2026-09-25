@@ -17,7 +17,9 @@ class ProductDealAction
 
     public function __invoke(): array
     {
-        $products = Cache::remember('deal_products', 1440, fn () => $this->productRepository->getDeals(9));
+        $page = max(1, (int) request()->input('page', 1));
+        $generation = (int) Cache::get('product_listing_generation', 1);
+        $products = Cache::remember("deal_products_{$generation}_page{$page}", 1800, fn () => $this->productRepository->getDeals(9));
 
         $recent_products = Cache::remember('recent_products_sidebar', 1800, fn () => $this->productRepository->getRecent(3));
 
@@ -25,8 +27,8 @@ class ProductDealAction
 
         return [
             'recent_products' => $recent_products,
-            'products'        => $products,
-            'brands'          => $brands,
+            'products' => $products,
+            'brands' => $brands,
         ];
     }
 }

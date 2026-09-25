@@ -68,7 +68,7 @@
                         @if($index >= 1 && $index <= 3 )
                             <div class="col-lg-4 col-md-6 col-12">
                                 <div class="single-banner">
-                                    <img src="{{ $featured_product->imageUrl }}"
+                                    <img src="{{ $featured_product->image_thumb_url }}"
                                          alt="{{ $featured_product->imageUrl }}">
                                     <div class="content">
                                         <p> @foreach($featured_product->categories as $category)
@@ -105,9 +105,9 @@
                             <div class="single-product">
                                 <div class="product-img">
                                     <a href="{{route('front.product-detail',$product->slug)}}">
-                                        <img class="default-img" src="{{ $product->imageUrl }}"
+                                        <img class="default-img" src="{{ $product->image_thumb_url }}"
                                              alt="{{$product->imageUrl}}">
-                                        <img class="hover-img" src="{{$product->imageUrl}}"
+                                        <img class="hover-img" src="{{ $product->image_thumb_url }}"
                                              alt="{{$product->imageUrl}}">
                                         {{-- <span class="out-of-stock">Hot</span> --}}
                                     </a>
@@ -162,7 +162,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-12 padding-right">
                                 <div class="image">
-                                    <img src="{{$featured_product->imageUrl}}" alt="{{$featured_product->imageUrl}}">
+                                    <img src="{{ $featured_product->image_thumb_url }}" alt="{{$featured_product->imageUrl}}">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-12 padding-left">
@@ -287,7 +287,7 @@
                                             <div class="product-gallery">
                                                 <div class="quickview-slider-active">
                                                     <div class="single-slider">
-                                                        <img src="{{$product->imageUrl}}" alt="{{$product->imageUrl}}">
+                                                        <img src="{{ $product->image_thumb_url }}" alt="{{$product->imageUrl}}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -305,8 +305,8 @@
                                                             <i class="yellow fa fa-star"></i>
                                                             <i class="fa fa-star"></i> --}}
                                                             @php
-                                                                $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
-                                                                $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
+                                                                $rate = $product->reviews_avg ?? 0;
+                                                                $rate_count = $product->reviews_count ?? 0;
                                                             @endphp
                                                             @for($i=1; $i<=5; $i++)
                                                                 @if($rate>=$i)

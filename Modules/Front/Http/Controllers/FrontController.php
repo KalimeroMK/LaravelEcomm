@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Front\Http\Controllers;
 
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,7 +13,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use InvalidArgumentException;
+use Log;
 use Modules\Billing\Services\WishlistService;
+use Modules\Coupon\Actions\ApplyCouponAction;
 use Modules\Front\Actions\BlogAction;
 use Modules\Front\Actions\BlogByCategoryAction;
 use Modules\Front\Actions\BlogByTagAction;
@@ -41,10 +45,10 @@ use Modules\Front\Actions\ProductGridsAction;
 use Modules\Front\Actions\ProductListsAction;
 use Modules\Front\Actions\ProductSearchAction;
 use Modules\Front\Http\Requests\ProductSearchRequest;
+use Modules\Message\Http\Requests\Store;
 use Modules\Order\Actions\ReorderAction;
 use Modules\Order\Http\Requests\Store as OrderStoreRequest;
 use Modules\Order\Models\Order;
-use Modules\Message\Http\Requests\Store;
 use Modules\Product\Services\RecentlyViewedService;
 use Modules\Product\Services\RecommendationService;
 
@@ -83,9 +87,10 @@ class FrontController extends Controller
     {
         try {
             $data = $productDetailAction($slug);
+
             return view(theme_view('pages.product_detail'), $data);
-        } catch (\Exception $e) {
-            \Log::error('productDetail error: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Log::error('productDetail error: '.$e->getMessage());
             throw $e;
         }
     }
@@ -258,6 +263,7 @@ class FrontController extends Controller
     {
         $result = $applyCouponAction->remove();
         request()->session()->flash($result['success'] ? 'success' : 'info', $result['message']);
+
         return redirect()->back();
     }
 
@@ -331,41 +337,39 @@ class FrontController extends Controller
     public function recommendations(Request $request, RecommendationService $recommendationService): View
     {
         $user = Auth::user();
-        $type = $request->input('type', 'ai');
+        // Trending by default — the AI variant makes a synchronous OpenAI call
+        // and stays opt-in via ?type=ai.
+        $type = $request->input('type', 'trending');
         $limit = min($request->input('limit', 12), 50);
 
-        $recommendations = collect();
-        $recommendationType = 'trending';
+        $recommendationType = match (true) {
+            $user && $type === 'ai' => 'AI-powered',
+            $user && $type === 'collaborative' => 'Based on similar users',
+            default => 'Trending now',
+        };
 
-        if ($user) {
-            try {
-                switch ($type) {
-                    case 'ai':
-                        $recommendations = $recommendationService->getAIRecommendations($user, $limit);
-                        $recommendationType = 'AI-powered';
+        $cacheKey = sprintf('recommendations_%s_%s_%d', $type, $user?->id ?? 'guest', $limit);
 
-                        break;
-                    case 'collaborative':
-                        $recommendations = $recommendationService->getCollaborativeRecommendations($user, $limit);
-                        $recommendationType = 'Based on similar users';
-
-                        break;
-                    case 'trending':
-                        $recommendations = $recommendationService->getTrendingProducts($limit);
-                        $recommendationType = 'Trending now';
-
-                        break;
+        $recommendations = \Illuminate\Support\Facades\Cache::remember(
+            $cacheKey,
+            900,
+            function () use ($user, $type, $limit, $recommendationService) {
+                if ($user) {
+                    try {
+                        switch ($type) {
+                            case 'ai':
+                                return $recommendationService->getAIRecommendations($user, $limit);
+                            case 'collaborative':
+                                return $recommendationService->getCollaborativeRecommendations($user, $limit);
+                        }
+                    } catch (Exception $e) {
+                        // Fall through to trending products
+                    }
                 }
-            } catch (Exception $e) {
-                // Fallback to trending products
-                $recommendations = $recommendationService->getTrendingProducts($limit);
-                $recommendationType = 'Trending now';
+
+                return $recommendationService->getTrendingProducts($limit);
             }
-        } else {
-            // For non-authenticated users, show trending products
-            $recommendations = $recommendationService->getTrendingProducts($limit);
-            $recommendationType = 'Trending now';
-        }
+        );
 
         return view(theme_view('pages.recommendations'), [
             'recommendations' => $recommendations,
@@ -381,14 +385,14 @@ class FrontController extends Controller
     public function relatedProducts(string $locale, string $slug, Request $request, RecommendationService $recommendationService): View
     {
         $product = \Modules\Product\Models\Product::where('slug', $slug)->firstOrFail();
-        $limit   = min($request->input('limit', 8), 20);
+        $limit = min($request->input('limit', 8), 20);
 
         $relatedProducts = $recommendationService->getContentBasedRecommendations($product, $limit);
 
         return view(theme_view('pages.related-products'), [
-            'product'         => $product,
+            'product' => $product,
             'relatedProducts' => $relatedProducts,
-            'totalCount'      => $relatedProducts->count(),
+            'totalCount' => $relatedProducts->count(),
         ]);
     }
 
@@ -411,8 +415,8 @@ class FrontController extends Controller
             $wishlist = $wishlistService->getUserWishlist($user);
         }
 
-        $stats = $wishlistService->getWishlistStats($user);
-        $recommendations = $wishlistService->getWishlistRecommendations($user, 6);
+        $stats = $wishlistService->getWishlistStats($user, $wishlist);
+        $recommendations = $wishlistService->getWishlistRecommendations($user, 6, $wishlist);
 
         return view(theme_view('pages.enhanced-wishlist'), [
             'wishlist' => $wishlist,
@@ -518,13 +522,13 @@ class FrontController extends Controller
     public function orderDetail(Order $order): View|RedirectResponse
     {
         $user = Auth::user();
-        
-        if (!$user || $order->user_id !== $user->id) {
+
+        if (! $user || $order->user_id !== $user->id) {
             return redirect()->route('front.my-orders')->with('error', 'Order not found.');
         }
-        
+
         $order->load('carts.product');
-        
+
         return view(theme_view('pages.order-detail'), compact('order'));
     }
 
@@ -534,17 +538,17 @@ class FrontController extends Controller
     public function reorder(Order $order, ReorderAction $reorderAction): RedirectResponse
     {
         $user = Auth::user();
-        
-        if (!$user || $order->user_id !== $user->id) {
+
+        if (! $user || $order->user_id !== $user->id) {
             return redirect()->route('front.my-orders')->with('error', 'Order not found.');
         }
-        
+
         $result = $reorderAction->execute($order->id, $user->id);
-        
+
         if ($result['success']) {
             return redirect()->route('cart-list')->with('success', $result['message']);
         }
-        
+
         return redirect()->back()->with('error', $result['message']);
     }
 
@@ -554,7 +558,7 @@ class FrontController extends Controller
     public function recentlyViewed(RecentlyViewedService $recentlyViewedService): View
     {
         $products = $recentlyViewedService->getForCurrentUser(12);
-        
+
         return view('front::pages.recently-viewed', compact('products'));
     }
 }

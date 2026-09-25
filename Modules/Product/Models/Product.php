@@ -275,12 +275,7 @@ class Product extends Core implements HasMedia
     public function attributeValues(): HasMany
     {
         return $this->hasMany(AttributeValue::class, 'attributable_id')
-            ->where('attributable_type', self::class)
-            ->orWhere(function ($query) {
-                // Backward compatibility
-                $query->where('product_id', $this->id)
-                    ->whereNull('attributable_id');
-            });
+            ->where('attributable_type', self::class);
     }
 
     /**
@@ -302,6 +297,16 @@ class Product extends Core implements HasMedia
      */
     public function getConditionAttribute(): ?string
     {
+        // Avoid a query per product when attributeValues.attribute is eager loaded
+        // (all front listing queries load it).
+        if ($this->relationLoaded('attributeValues')) {
+            $value = $this->attributeValues->first(
+                fn ($av) => ($av->attribute?->code ?? null) === 'condition'
+            );
+
+            return $value?->getValue();
+        }
+
         return $this->getAttributeValueByCode('condition');
     }
 
@@ -597,7 +602,7 @@ class Product extends Core implements HasMedia
      */
     public function requiresShipping(): bool
     {
-        return !$this->isVirtual() && !$this->isDownloadable();
+        return ! $this->isVirtual() && ! $this->isDownloadable();
     }
 
     public function makeAllSearchableUsing(Builder $query): Builder

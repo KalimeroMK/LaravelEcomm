@@ -87,8 +87,8 @@
                 @foreach($recommendations as $product)
                     <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                         <div class="relative">
-                            @if($product->getFirstMediaUrl('images'))
-                                <img src="{{ $product->getFirstMediaUrl('images') }}" 
+                            @if($product->getFirstMediaUrl('product', 'thumb'))
+                                <img src="{{ $product->getFirstMediaUrl('product', 'thumb') }}" 
                                      alt="{{ $product->title }}"
                                      class="w-full h-48 object-cover">
                             @else
@@ -151,8 +151,8 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                         <div class="flex items-center space-x-4">
                             <div class="flex-shrink-0">
-                                @if($product->getFirstMediaUrl('images'))
-                                    <img src="{{ $product->getFirstMediaUrl('images') }}" 
+                                @if($product->getFirstMediaUrl('product', 'thumb'))
+                                    <img src="{{ $product->getFirstMediaUrl('product', 'thumb') }}" 
                                          alt="{{ $product->title }}"
                                          class="w-24 h-24 object-cover rounded-lg">
                                 @else

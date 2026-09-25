@@ -3,7 +3,7 @@ use Modules\Core\Helpers\Helper;
 $user = Auth::user();
 $defaultAddress = $user?->defaultShippingAddress();
 @endphp
-@extends('front::layouts.master')
+@extends('front::themes.default.layouts.master')
 
 @section('title','Checkout page')
 

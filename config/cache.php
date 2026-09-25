@@ -17,7 +17,9 @@ return [
     |
     */
 
-    'default' => env('CACHE_STORE', 'file'),
+    // CACHE_DRIVER is the legacy name this project's env files have always
+    // shipped; honour it so deployments actually get the Redis store.
+    'default' => env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
 
     /*
     |--------------------------------------------------------------------------

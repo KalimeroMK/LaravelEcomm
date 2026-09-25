@@ -26,16 +26,25 @@ readonly class ProductGridsAction
             'category', 'brand', 'price', 'show', 'sortBy',
             'color', 'size', 'material', 'weight', 'length', 'width', 'height',
         ]);
+        $page = max(1, (int) request()->input('page', 1));
 
-        $cacheKey = 'product_grids_'.md5(json_encode($queryParams));
+        // Generation is bumped on product writes so all listing keys invalidate.
+        $generation = (int) Cache::get('product_listing_generation', 1);
+        $cacheKey = 'product_grids_'.$generation.'_'.md5(json_encode($queryParams).'_page'.$page);
 
         return Cache::remember($cacheKey, 1800, function () use ($queryParams): array {
-            $categoryIds     = $this->categoryRepository->getIdsBySlugs(explode(',', $queryParams['category'] ?? ''));
-            $brandIds        = $this->brandRepository->getIdsBySlugs(explode(',', $queryParams['brand'] ?? ''));
+            $categoryIds = $this->categoryRepository->getIdsBySlugs(explode(',', $queryParams['category'] ?? ''));
+            $brandIds = $this->brandRepository->getIdsBySlugs(explode(',', $queryParams['brand'] ?? ''));
             [$minPrice, $maxPrice] = $this->parsePriceRange($queryParams['price'] ?? '');
             [$sortColumn, $sortOrder] = $this->parseSorting($queryParams['sortBy'] ?? 'created_at');
-            $perPage         = (int) ($queryParams['show'] ?? 9);
+            $perPage = min(60, max(1, (int) ($queryParams['show'] ?? 9)));
             $attributeFilters = $this->buildAttributeFilters($queryParams);
+
+            // ?brand= carries brand SLUGS when it resolved to brand IDs; only
+            // treat it as a layered-navigation attribute value otherwise.
+            if ($brandIds !== []) {
+                unset($attributeFilters['brand']);
+            }
 
             $products = Product::query()
                 ->when($categoryIds, fn ($q) => $q->whereHas('categories', fn ($sq) => $sq->whereIn('categories.id', $categoryIds)))
@@ -46,25 +55,27 @@ readonly class ProductGridsAction
                 ->when(! empty($attributeFilters), fn ($q) => $this->layeredNavigationService->applyFilters($q, $attributeFilters))
                 ->orderBy($sortColumn, $sortOrder)
                 ->with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+                ->withAvg('getReview as reviews_avg', 'rate')
+                ->withCount('getReview as reviews_count')
                 ->paginate($perPage);
 
-            $brands     = Cache::remember('active_brands_list', 3600, fn () => $this->brandRepository->getActive());
+            $brands = Cache::remember('active_brands_list', 3600, fn () => $this->brandRepository->getActive());
             $categories = Cache::remember('active_categories_grid', 3600, fn () => $this->categoryRepository->getActive());
             $recent_products = Cache::remember('recent_products_sidebar', 1800, fn () => $this->productRepository->getRecent(3));
-            $max        = Cache::remember('max_product_price', 3600, fn () => $this->productRepository->getMaxPrice());
+            $max = Cache::remember('max_product_price', 3600, fn () => $this->productRepository->getMaxPrice());
 
             $layeredFilters = $this->layeredNavigationService->getAvailableFilters($attributeFilters, $categoryIds);
-            $activeFilters  = $this->layeredNavigationService->getActiveFilters($queryParams);
+            $activeFilters = $this->layeredNavigationService->getActiveFilters($queryParams);
 
             return [
-                'brands'          => $brands,
-                'categories'      => $categories,
+                'brands' => $brands,
+                'categories' => $categories,
                 'recent_products' => $recent_products,
-                'products'        => $products,
+                'products' => $products,
                 'layered_filters' => $layeredFilters,
-                'active_filters'  => $activeFilters,
-                'price_range'     => ['min' => $minPrice, 'max' => $maxPrice],
-                'max'             => $max,
+                'active_filters' => $activeFilters,
+                'price_range' => ['min' => $minPrice, 'max' => $maxPrice],
+                'max' => $max,
             ];
         });
     }
@@ -93,8 +104,10 @@ readonly class ProductGridsAction
 
     private function parseSorting(?string $sortBy): array
     {
-        $col   = $sortBy ?? 'created_at';
-        $order = in_array($col, ['title', 'price']) ? 'asc' : 'desc';
+        // Whitelist sortable columns; anything else (e.g. sortBy=brand from the
+        // legacy dropdown) falls back to created_at instead of erroring.
+        $col = in_array($sortBy, ['title', 'price', 'created_at', 'id'], true) ? $sortBy : 'created_at';
+        $order = in_array($col, ['title', 'price'], true) ? 'asc' : 'desc';
 
         return [$col, $order];
     }

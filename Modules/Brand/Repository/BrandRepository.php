@@ -27,7 +27,8 @@ class BrandRepository extends EloquentRepository implements EloquentRepositoryIn
         $query = (new $this->modelClass)->newQuery();
 
         if ($data === [] || ! empty($data['all_included'])) {
-            return $query->with('products')->get();
+            // Count instead of hydrating every product of every brand.
+            return $query->withCount('products')->get();
         }
 
         foreach (['title', 'slug', 'status'] as $field) {

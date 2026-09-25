@@ -20,23 +20,27 @@ class NewsletterService
      */
     public function sendNewsletterToAll(array $posts = [], array $products = []): array
     {
-        $subscribers = Newsletter::where('is_validated', true)->get();
         $results = [
             'sent' => 0,
             'failed' => 0,
             'errors' => [],
         ];
 
-        foreach ($subscribers as $subscriber) {
-            try {
-                $this->sendNewsletterToSubscriber($subscriber, $posts, $products);
-                $results['sent']++;
-            } catch (Exception $e) {
-                $results['failed']++;
-                $results['errors'][] = $e->getMessage();
-                Log::error('Failed to send newsletter to '.$subscriber->email.': '.$e->getMessage());
-            }
-        }
+        // Chunked so a large subscriber list never gets hydrated at once; the
+        // actual email is a queued job per subscriber.
+        Newsletter::where('is_validated', true)
+            ->chunkById(200, function ($subscribers) use ($posts, $products, &$results): void {
+                foreach ($subscribers as $subscriber) {
+                    try {
+                        $this->sendNewsletterToSubscriber($subscriber, $posts, $products);
+                        $results['sent']++;
+                    } catch (Exception $e) {
+                        $results['failed']++;
+                        $results['errors'][] = $e->getMessage();
+                        Log::error('Failed to send newsletter to '.$subscriber->email.': '.$e->getMessage());
+                    }
+                }
+            });
 
         return $results;
     }
@@ -166,12 +170,18 @@ class NewsletterService
      */
     public function getAllCampaignsAnalytics(): array
     {
-        $analytics = EmailAnalytics::all();
+        // One aggregate query — the table grows with every email ever sent.
+        $totals = EmailAnalytics::selectRaw('
+            COUNT(*) as total_sent,
+            SUM(opened_at IS NOT NULL) as total_opened,
+            SUM(clicked_at IS NOT NULL) as total_clicked,
+            SUM(bounced = 1) as total_bounced
+        ')->first();
 
-        $totalSent = $analytics->count();
-        $totalOpened = $analytics->where('opened_at', '!=', null)->count();
-        $totalClicked = $analytics->where('clicked_at', '!=', null)->count();
-        $totalBounced = $analytics->where('bounced', true)->count();
+        $totalSent = (int) ($totals->total_sent ?? 0);
+        $totalOpened = (int) ($totals->total_opened ?? 0);
+        $totalClicked = (int) ($totals->total_clicked ?? 0);
+        $totalBounced = (int) ($totals->total_bounced ?? 0);
 
         return [
             'total_sent' => $totalSent,

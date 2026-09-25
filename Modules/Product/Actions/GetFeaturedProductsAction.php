@@ -13,6 +13,7 @@ readonly class GetFeaturedProductsAction
 
     public function execute(): Collection
     {
-        return $this->repository->findAll()->filter(fn ($product) => $product->is_featured);
+        // Filter in SQL instead of loading the whole catalog and filtering in PHP.
+        return $this->repository->findFeatured();
     }
 }

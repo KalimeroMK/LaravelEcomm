@@ -14,7 +14,7 @@ class MenuViewComposer
     public function compose(View $view): void
     {
         try {
-            $categories = Cache::remember('categories_with_children', 24 * 60, function () {
+            $categories = Cache::remember('categories_with_children', 24 * 60 * 60, function () {
                 return Category::whereNull('parent_id')->with(['childrenCategories.childrenCategories'])->get();
             });
             $view->with('categories', $categories);

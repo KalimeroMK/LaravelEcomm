@@ -33,7 +33,7 @@ class ImageGenerator
         }
 
         // Create image
-        $image = $manager->create($width, $height)->fill($backgroundColor);
+        $image = $manager->createImage($width, $height)->fill($backgroundColor);
 
         // Add text – use first available font
         $fontPath = public_path('frontend/themes/modern/fonts/OpenSans-Regular.ttf');
@@ -46,13 +46,15 @@ class ImageGenerator
             }
             $font->size(min((int) ($width / 10), 48));
             $font->color($textColor);
-            $font->align('center');
-            $font->valign('middle');
+            $font->align('center', 'center');
         });
 
-        // Save to temporary file
-        $tempPath = tempnam(sys_get_temp_dir(), 'img_').'.jpg';
-        $image->toJpeg(85)->save($tempPath);
+        // Save to temporary file (drop the extension-less tempnam artifact,
+        // which used to be left behind on every call)
+        $tempBase = tempnam(sys_get_temp_dir(), 'img_');
+        $tempPath = $tempBase.'.jpg';
+        $image->encodeUsingMediaType('image/jpeg', quality: 85)->save($tempPath);
+        @unlink($tempBase);
 
         return $tempPath;
     }

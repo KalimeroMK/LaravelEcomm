@@ -40,7 +40,7 @@ class RecommendationService
         // Get products liked by similar users
         $recommendedProductIds = $this->getProductsFromSimilarUsers($similarUsers, $user);
 
-        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute', 'media'])
             ->whereIn('id', $recommendedProductIds)
             ->where('status', 'active')
             ->where('stock', '>', 0)
@@ -53,7 +53,7 @@ class RecommendationService
      */
     public function getContentBasedRecommendations(Product $product, int $limit = 10): Collection
     {
-        $query = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+        $query = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute', 'media'])
             ->where('id', '!=', $product->id)
             ->where('status', 'active')
             ->where('stock', '>', 0);
@@ -83,7 +83,7 @@ class RecommendationService
 
         // If no related products found, return random products
         if ($results->isEmpty()) {
-            $results = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+            $results = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute', 'media'])
                 ->where('id', '!=', $product->id)
                 ->where('status', 'active')
                 ->where('stock', '>', 0)
@@ -107,7 +107,7 @@ class RecommendationService
             ->limit($limit)
             ->pluck('product_id');
 
-        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+        return Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute', 'media'])
             ->whereIn('id', $trendingProductIds)
             ->where('status', 'active')
             ->where('stock', '>', 0)
@@ -119,16 +119,18 @@ class RecommendationService
      */
     protected function analyzeUserBehavior(User $user): array
     {
+        // Bounded window with categories eager-loaded (no per-click lazy loads);
+        // impressions/cart/wishlist are only counted, so count them in SQL.
         $clicks = ProductClick::where('user_id', $user->id)
-            ->with('product')
+            ->where('created_at', '>=', now()->subDays(90))
+            ->with('product.categories')
+            ->latest()
+            ->limit(500)
             ->get();
 
-        $impressions = ProductImpression::where('user_id', $user->id)
-            ->with('product')
-            ->get();
-
-        $cartItems = $user->carts()->with('product')->get();
-        $wishlistItems = $user->wishlists()->with('product')->get();
+        $impressionCount = ProductImpression::where('user_id', $user->id)->count();
+        $cartAddCount = $user->carts()->count();
+        $wishlistAddCount = $user->wishlists()->count();
 
         // Get categories from products (many-to-many relationship)
         $viewedCategories = $clicks->flatMap(function ($click) {
@@ -145,9 +147,9 @@ class RecommendationService
             ],
             'interaction_patterns' => [
                 'clicks' => $clicks->count(),
-                'impressions' => $impressions->count(),
-                'cart_adds' => $cartItems->count(),
-                'wishlist_adds' => $wishlistItems->count(),
+                'impressions' => $impressionCount,
+                'cart_adds' => $cartAddCount,
+                'wishlist_adds' => $wishlistAddCount,
             ],
         ];
     }
@@ -244,7 +246,7 @@ class RecommendationService
      */
     protected function getRecommendedProducts(array $recommendations, int $limit): Collection
     {
-        $query = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+        $query = Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute', 'media'])
             ->where('status', 'active')
             ->where('stock', '>', 0);
 
@@ -298,12 +300,14 @@ class RecommendationService
      */
     protected function getProductsFromSimilarUsers(Collection $similarUsers, User $currentUser): array
     {
-        $excludeProductIds = $currentUser->carts()->pluck('product_id')->toArray();
+        $excludeProductIds = $currentUser->carts()->pluck('product_id');
 
-        return $similarUsers->flatMap(function ($user) use ($excludeProductIds) {
-            return $user->carts()
-                ->whereNotIn('product_id', $excludeProductIds)
-                ->pluck('product_id');
-        })->unique()->take(20)->toArray();
+        // One query for all similar users instead of one per user.
+        return \Modules\Cart\Models\Cart::whereIn('user_id', $similarUsers->pluck('id'))
+            ->whereNotIn('product_id', $excludeProductIds)
+            ->distinct()
+            ->limit(20)
+            ->pluck('product_id')
+            ->toArray();
     }
 }

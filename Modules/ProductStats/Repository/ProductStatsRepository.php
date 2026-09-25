@@ -7,8 +7,6 @@ namespace Modules\ProductStats\Repository;
 use Illuminate\Support\Collection;
 use Modules\Product\Models\Product;
 use Modules\ProductStats\DTOs\ProductStatsDTO;
-use Modules\ProductStats\Models\ProductClick;
-use Modules\ProductStats\Models\ProductImpression;
 
 class ProductStatsRepository
 {
@@ -40,12 +38,15 @@ class ProductStatsRepository
 
         $query->orderBy($orderBy, $sort);
 
+        // Two withCount subqueries instead of two COUNT queries per product.
+        $query->withCount(['clicks', 'impressions']);
+
         /** @var Collection $products */
         $products = $query->get();
 
         return $products->map(function (Product $product): ProductStatsDTO {
-            $clicks = ProductClick::where('product_id', $product->id)->count();
-            $impressions = ProductImpression::where('product_id', $product->id)->count();
+            $clicks = (int) $product->clicks_count;
+            $impressions = (int) $product->impressions_count;
             $ctr = $impressions > 0 ? round($clicks / $impressions, 4) : 0;
 
             return new ProductStatsDTO($product, $impressions, $clicks, $ctr);

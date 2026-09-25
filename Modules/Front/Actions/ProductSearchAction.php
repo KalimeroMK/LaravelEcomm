@@ -19,10 +19,12 @@ class ProductSearchAction
     public function __invoke(array $data): array
     {
         $searchTerm = Arr::get($data, 'search', '');
-        $perPage    = (int) Arr::get($data, 'per_page', 9);
+        $perPage = min(60, max(1, (int) Arr::get($data, 'per_page', 9)));
+        $page = max(1, (int) request()->input('page', 1));
+        $generation = (int) Cache::get('product_listing_generation', 1);
 
         $products = Cache::remember(
-            'search_products_'.md5($searchTerm.'_'.$perPage),
+            'search_products_'.$generation.'_'.md5($searchTerm.'_'.$perPage.'_page'.$page),
             900,
             fn () => $this->productRepository->searchByTerm($searchTerm, $perPage)
         );
@@ -41,8 +43,8 @@ class ProductSearchAction
 
         return [
             'recent_products' => $recent_products,
-            'products'        => $products,
-            'brands'          => $brands,
+            'products' => $products,
+            'brands' => $brands,
         ];
     }
 }

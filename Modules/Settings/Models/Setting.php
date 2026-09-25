@@ -102,4 +102,18 @@ class Setting extends Core implements HasMedia
     {
         return SettingFactory::new();
     }
+
+    protected static function booted(): void
+    {
+        // The settings row is cached for an hour (app.settings singleton) and
+        // the resolved theme for a minute — invalidate both on any change so
+        // admin edits (including theme switches) take effect immediately.
+        $flush = static function (): void {
+            \Illuminate\Support\Facades\Cache::forget('app.settings');
+            \Illuminate\Support\Facades\Cache::forget('active_theme');
+        };
+
+        static::saved($flush);
+        static::deleted($flush);
+    }
 }

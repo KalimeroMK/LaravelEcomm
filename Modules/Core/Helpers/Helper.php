@@ -20,56 +20,66 @@ class Helper
 {
     public static function messageList()
     {
+        // Header dropdown shows at most a handful; never load every unread row.
         return Cache::remember('unread_messages', 30, function () {
-            return Message::where('read_at', null)->orderBy('created_at', 'desc')->get();
+            return Message::whereNull('read_at')->orderByDesc('created_at')->limit(6)->get();
         });
     }
 
     public static function cartCount(string $user_id = ''): int
     {
-        $user_id = self::getUserId($user_id);
-
-        return $user_id !== 0 ? (int) Cart::whereUserId($user_id)->whereOrderId(null)->sum('quantity') : 0;
+        return (int) self::getAllProductFromCart($user_id)->sum('quantity');
     }
 
+    /**
+     * Memoized per request (once) — the header calls this and the derived
+     * count/total helpers several times on every page.
+     */
     public static function getAllProductFromWishlist(string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
 
-        return $user_id !== 0
-            ? Wishlist::with('product')->where('user_id', $user_id)->where('cart_id', null)->get()
-            : collect(); // Return an empty collection instead of 0
+        if ($user_id === 0) {
+            return collect();
+        }
+
+        return once(fn (): Collection => Wishlist::with('product.media')
+            ->where('user_id', $user_id)
+            ->where('cart_id', null)
+            ->get());
     }
 
+    /**
+     * Memoized per request (once) — see getAllProductFromWishlist().
+     */
     public static function getAllProductFromCart(string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
 
-        return $user_id !== 0
-            ? Cart::with('product')->where('user_id', $user_id)->where('order_id', null)->get()
-            : collect(); // Return an empty collection instead of 0
+        if ($user_id === 0) {
+            return collect();
+        }
+
+        return once(fn (): Collection => Cart::with('product.media')
+            ->where('user_id', $user_id)
+            ->where('order_id', null)
+            ->get());
     }
 
     // Total amount cart
     public static function totalCartPrice(string $user_id = ''): float|int
     {
-        $user_id = self::getUserId($user_id);
-
-        return $user_id !== 0 ? Cart::whereUserId($user_id)->where('order_id', null)->sum('amount') : 0;
+        return (float) self::getAllProductFromCart($user_id)->sum('amount');
     }
 
     public static function wishlistCount(string $user_id = ''): int
     {
-        $user_id = self::getUserId($user_id);
-
-        return $user_id !== 0 ? Wishlist::whereUserId($user_id)->where('cart_id', null)->sum('quantity') : 0;
+        return (int) self::getAllProductFromWishlist($user_id)->sum('quantity');
     }
 
     public static function totalWishlistPrice(string $user_id = ''): float|int
     {
-        $user_id = self::getUserId($user_id);
-
-        return $user_id !== 0 ? Wishlist::whereUserId($user_id)->where('cart_id', null)->sum('amount') : 0;
+        return (float) self::getAllProductFromWishlist($user_id)->sum('amount');
     }
 
     public static function shipping(): Collection
@@ -118,7 +128,7 @@ class Helper
     public static function cartRequiresShipping(string $user_id = ''): bool
     {
         $cartItems = self::getAllProductFromCart($user_id);
-        
+
         if ($cartItems->isEmpty()) {
             return true; // Default to requiring shipping if cart is empty
         }
@@ -138,7 +148,7 @@ class Helper
     public static function cartHasDownloadable(string $user_id = ''): bool
     {
         $cartItems = self::getAllProductFromCart($user_id);
-        
+
         foreach ($cartItems as $item) {
             if ($item->product && $item->product->isDownloadable()) {
                 return true;

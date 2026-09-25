@@ -22,18 +22,31 @@ class PlaceholderImageController extends Controller
         $index = (int) $request->query('index', 0);
         $label = mb_substr((string) $text, 0, 50) ?: 'Image';
 
-        $path = match ($type) {
-            'banner' => ImageGenerator::generateBannerImage($label),
-            'product' => ImageGenerator::generateProductImage($label, $index),
-            'post', 'blog' => ImageGenerator::generateBlogImage($label),
-            'category' => ImageGenerator::generateCategoryImage($label, $index),
-            'bundle' => ImageGenerator::generateBundleImage($label, $index),
-            default => ImageGenerator::generateProductImage($label, $index),
-        };
+        // Generate each unique placeholder once and reuse the file — a GD
+        // render (plus an orphaned temp file) per request does not scale.
+        $cacheDir = storage_path('app/public/placeholders');
+        $cachedPath = $cacheDir.'/'.md5("{$type}|{$label}|{$index}").'.jpg';
 
-        return response()->file($path, [
+        if (! is_file($cachedPath)) {
+            if (! is_dir($cacheDir)) {
+                mkdir($cacheDir, 0755, true);
+            }
+
+            $tempPath = match ($type) {
+                'banner' => ImageGenerator::generateBannerImage($label),
+                'product' => ImageGenerator::generateProductImage($label, $index),
+                'post', 'blog' => ImageGenerator::generateBlogImage($label),
+                'category' => ImageGenerator::generateCategoryImage($label, $index),
+                'bundle' => ImageGenerator::generateBundleImage($label, $index),
+                default => ImageGenerator::generateProductImage($label, $index),
+            };
+
+            rename($tempPath, $cachedPath);
+        }
+
+        return response()->file($cachedPath, [
             'Content-Type' => 'image/jpeg',
-            'Cache-Control' => 'public, max-age=3600',
+            'Cache-Control' => 'public, max-age=604800, immutable',
         ]);
     }
 }

@@ -4,25 +4,18 @@ declare(strict_types=1);
 
 namespace Modules\Product\Observers;
 
+use Modules\Product\Jobs\SyncProductToElasticsearch;
 use Modules\Product\Models\Product;
-use Modules\Product\Services\ElasticsearchService;
 
 class ProductObserver
 {
-    protected ElasticsearchService $elasticsearchService;
-
-    public function __construct(ElasticsearchService $elasticsearchService)
-    {
-        $this->elasticsearchService = $elasticsearchService;
-    }
-
     /**
      * Handle the Product "created" event.
      */
     public function created(Product $product): void
     {
         if ($product->status === 'active') {
-            $this->elasticsearchService->indexProduct($product);
+            SyncProductToElasticsearch::dispatch($product->id)->afterCommit();
         }
     }
 
@@ -31,12 +24,8 @@ class ProductObserver
      */
     public function updated(Product $product): void
     {
-        if ($product->status === 'active') {
-            $this->elasticsearchService->indexProduct($product);
-        } else {
-            // If status changed to inactive, remove from index
-            $this->elasticsearchService->deleteProduct($product->id);
-        }
+        // The job re-checks status and indexes or removes accordingly.
+        SyncProductToElasticsearch::dispatch($product->id)->afterCommit();
     }
 
     /**
@@ -44,6 +33,6 @@ class ProductObserver
      */
     public function deleted(Product $product): void
     {
-        $this->elasticsearchService->deleteProduct($product->id);
+        SyncProductToElasticsearch::dispatch($product->id, remove: true)->afterCommit();
     }
 }

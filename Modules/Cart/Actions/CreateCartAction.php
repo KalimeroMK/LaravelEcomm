@@ -14,6 +14,21 @@ readonly class CreateCartAction
 
     public function execute(CartDTO $dto): Cart
     {
+        // Merge into an existing open line for the same product instead of
+        // inserting a duplicate row on every add-to-cart click.
+        $existing = Cart::where('user_id', $dto->user_id)
+            ->where('product_id', $dto->product_id)
+            ->whereNull('order_id')
+            ->first();
+
+        if ($existing instanceof Cart) {
+            $existing->quantity += max(1, (int) $dto->quantity);
+            $existing->amount = $existing->price * $existing->quantity;
+            $existing->save();
+
+            return $existing;
+        }
+
         return $this->repository->create([
             'product_id' => $dto->product_id,
             'quantity' => $dto->quantity,
