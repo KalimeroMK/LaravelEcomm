@@ -2,15 +2,7 @@
 @section('title','E-SHOP || PRODUCT LIST')
 @section('content')
 {{-- Same structure as product-grids but with list layout --}}
-<section class="page-header page-header-dark bg-secondary">
-    <div class="container"><div class="row"><div class="col-md-12">
-        <h1>Products - List View</h1>
-        <ol class="breadcrumb">
-            <li><a href="{{ route('front.index') }}">Home</a></li>
-            <li class="active">Products</li>
-        </ol>
-    </div></div></div>
-</section>
+@include($themePath . '.layouts.breadcrumbs', ['title' => 'Products'])
 
 <form action="{{ route('front.product-filter') }}" method="POST">
 @csrf

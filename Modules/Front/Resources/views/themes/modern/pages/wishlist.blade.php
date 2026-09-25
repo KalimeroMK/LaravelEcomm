@@ -2,15 +2,7 @@
 @extends($themePath . '.layouts.master')
 @section('title','Wishlist Page')
 @section('content')
-<section class="page-header page-header-dark bg-secondary">
-    <div class="container"><div class="row"><div class="col-md-12">
-        <h1>Wishlist</h1>
-        <ol class="breadcrumb">
-            <li><a href="{{ route('front.index') }}">Home</a></li>
-            <li class="active">Wishlist</li>
-        </ol>
-    </div></div></div>
-</section>
+@include($themePath . '.layouts.breadcrumbs', ['title' => 'Wishlist'])
 
 <section class="main-container">
     <div class="container">

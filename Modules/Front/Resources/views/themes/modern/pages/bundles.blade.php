@@ -1,15 +1,7 @@
 @extends($themePath . '.layouts.master')
 @section('title','E-SHOP || Bundles')
 @section('content')
-<section class="page-header page-header-dark bg-secondary">
-    <div class="container"><div class="row"><div class="col-md-12">
-        <h1>Product Bundles</h1>
-        <ol class="breadcrumb">
-            <li><a href="{{ route('front.index') }}">Home</a></li>
-            <li class="active">Bundles</li>
-        </ol>
-    </div></div></div>
-</section>
+@include($themePath . '.layouts.breadcrumbs', ['title' => 'Bundles'])
 
 <section class="main-container">
     <div class="container">
