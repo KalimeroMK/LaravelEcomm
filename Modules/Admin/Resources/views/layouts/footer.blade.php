@@ -75,6 +75,10 @@
                 [25, 50, 75, 100, -1],
                 [25, 50, 75, 100, 'All'],
             ],
+            // Same arrows as the Laravel paginator used elsewhere in admin
+            "language": {
+                "paginate": { "previous": "«", "next": "»" }
+            },
         });
     })();
 </script>
