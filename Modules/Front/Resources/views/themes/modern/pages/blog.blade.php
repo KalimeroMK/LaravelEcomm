@@ -4,82 +4,109 @@
 @section('content')
 @include($themePath . '.layouts.breadcrumbs', ['title' => 'Blog'])
 
-<section class="main-container">
+<section class="blog-single shop-blog grid section">
     <div class="container">
         <div class="row">
-            <div class="col-md-9">
-                <div class="row grid-space-20">
-                    @foreach($posts as $post)
-                    <div class="col-md-6">
-                        <div class="blog-post-item">
-                            <div class="blog-post-img">
+            {{-- Posts --}}
+            <div class="col-lg-9 col-md-8 col-12">
+                <div class="row">
+                    @forelse($posts as $post)
+                        <div class="col-lg-6 col-md-12 col-12">
+                            <div class="shop-single-blog">
                                 <a href="{{ route('front.blog-detail', $post->slug) }}">
-                                    <img src="{{ $post->imageUrl }}" alt="{{ $post->title }}" class="img-responsive">
+                                    <img src="{{ $post->image_preview_url }}" alt="{{ $post->title }}">
                                 </a>
-                            </div>
-                            <div class="blog-post-content">
-                                <h3 class="blog-post-title"><a href="{{ route('front.blog-detail', $post->slug) }}">{{ $post->title }}</a></h3>
-                                <p class="blog-post-meta">
-                                    <span><i class="fa fa-calendar"></i> {{ $post->created_at->format('d M, Y') }}</span>
-                                    <span><i class="fa fa-user"></i> {{ $post->author->name ?? 'Anonymous' }}</span>
-                                </p>
-                                <p>{!! html_entity_decode($post->summary) !!}</p>
-                                <a href="{{ route('front.blog-detail', $post->slug) }}" class="btn btn-default btn-sm">Read More</a>
+                                <div class="content">
+                                    <p class="date">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        {{ $post->created_at->format('d M, Y') }}
+                                        <span class="float-right">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            {{ $post->author->name ?? 'Anonymous' }}
+                                        </span>
+                                    </p>
+                                    <a href="{{ route('front.blog-detail', $post->slug) }}" class="title">{{ $post->title }}</a>
+                                    <p>{!! html_entity_decode($post->summary) !!}</p>
+                                    <a href="{{ route('front.blog-detail', $post->slug) }}" class="more-btn">Continue Reading</a>
+                                </div>
                             </div>
                         </div>
+                    @empty
+                        <div class="col-12 text-center" style="padding:80px 20px;">
+                            <h4 class="text-warning">No blog posts yet.</h4>
+                        </div>
+                    @endforelse
+
+                    <div class="col-12">
+                        {{ $posts->appends(request()->query())->links('vendor.pagination.bootstrap-4') }}
                     </div>
-                    @endforeach
                 </div>
-                <div class="row"><div class="col-md-12 text-center">
-                    {{ $posts->appends($_GET)->links('vendor.pagination.bootstrap-4') }}
-                </div></div>
             </div>
-            <div class="col-md-3">
-                <aside class="sidebar">
-                    <div class="block clearfix">
-                        <h3 class="title">Search</h3>
-                        <form action="{{ route('front.blog-search') }}" method="GET">
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
+
+            {{-- Sidebar --}}
+            <div class="col-lg-3 col-md-4 col-12">
+                <div class="main-sidebar">
+                    {{-- Search --}}
+                    <div class="single-widget search">
+                        <form class="form" method="GET" action="{{ route('front.blog-search') }}">
+                            <input type="text" placeholder="Search Here..." name="search">
+                            <button class="button" type="submit"><i class="fa fa-search"></i></button>
                         </form>
                     </div>
-                    <div class="block clearfix">
+
+                    {{-- Categories --}}
+                    <div class="single-widget side-tags">
                         <h3 class="title">Categories</h3>
-                        <ul class="list-unstyled">
+                        <ul class="tag">
                             @foreach(Helper::postCategoryList() as $cat)
-                            <li><a href="{{ route('front.blog-by-category', $cat->slug) }}">{{ $cat->title }}</a></li>
+                                <li><a href="{{ route('front.blog-by-category', $cat->slug) }}">{{ $cat->title }}</a></li>
                             @endforeach
                         </ul>
                     </div>
-                    <div class="block clearfix">
+
+                    {{-- Recent Posts --}}
+                    <div class="single-widget recent-post">
                         <h3 class="title">Recent Posts</h3>
-                        @foreach($posts->take(3) as $post)
-                        <div class="media">
-                            <a class="pull-left" href="{{ route('front.blog-detail', $post->slug) }}">
-                                <img class="media-object" src="{{ $post->imageUrl }}" alt="{{ $post->title }}" style="width:80px;">
-                            </a>
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="{{ route('front.blog-detail', $post->slug) }}">{{ $post->title }}</a></h5>
-                                <p class="small"><i class="fa fa-calendar"></i> {{ $post->created_at->format('d M, y') }}</p>
+                        @foreach(($recantPosts ?? $posts->take(3)) as $recent)
+                            <div class="single-post">
+                                <div class="image">
+                                    <img src="{{ $recent->image_preview_url }}" alt="{{ $recent->title }}">
+                                </div>
+                                <div class="content">
+                                    <h5><a href="{{ route('front.blog-detail', $recent->slug) }}">{{ $recent->title }}</a></h5>
+                                    <ul class="comment">
+                                        <li><i class="fa fa-calendar" aria-hidden="true"></i>{{ $recent->created_at->format('d M, y') }}</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
                         @endforeach
                     </div>
-                    <div class="block clearfix">
-                        <h3 class="title">Newsletter</h3>
-                        <form method="POST" action="{{ route('subscribe') }}">
-                            @csrf
-                            <div class="form-group">
-                                <input type="email" name="email" class="form-control" placeholder="Your email">
-                            </div>
-                            <button type="submit" class="btn btn-default btn-block">Subscribe</button>
-                        </form>
+
+                    {{-- Tags --}}
+                    <div class="single-widget side-tags">
+                        <h3 class="title">Tags</h3>
+                        <ul class="tag">
+                            @foreach(Helper::postTagList() as $tag)
+                                <li><a href="{{ route('front.blog-by-tag', $tag->slug) }}">{{ $tag->title }}</a></li>
+                            @endforeach
+                        </ul>
                     </div>
-                </aside>
+
+                    {{-- Newsletter --}}
+                    <div class="single-widget newsletter">
+                        <h3 class="title">Newsletter</h3>
+                        <div class="letter-inner">
+                            <h4>Subscribe & get news <br> latest updates.</h4>
+                            <form action="{{ route('subscribe') }}" method="POST">
+                                @csrf
+                                <div class="form-inner">
+                                    <input type="email" name="email" placeholder="Enter your email">
+                                    <button type="submit" class="btn mt-2">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
