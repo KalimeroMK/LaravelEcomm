@@ -24,7 +24,7 @@
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ request()->url() }}">
         <meta property="og:site_name" content="{{ config('app.name') }}">
-        <meta property="og:image" content="{{ $seo['og_settings']['og_image'] ?? config('app.url').'/assets/img/logo/logo.png' }}">
+        <meta property="og:image" content="{{ $seo['og_settings']['og_image'] ?? config('app.url').'/frontend/img/logo.png' }}">
     @endif
 
     <!-- Twitter Card Meta Tags -->
@@ -36,7 +36,7 @@
         <meta name="twitter:card" content="{{ $seo['twitter_settings']['twitter_card'] ?? 'summary_large_image' }}">
         <meta name="twitter:title" content="{{ $seo['title'] ?? config('app.name') }}">
         <meta name="twitter:description" content="{{ $seo['description'] ?? 'Online shopping store with quality products and fast delivery.' }}">
-        <meta name="twitter:image" content="{{ config('app.url') }}/assets/img/logo/logo.png">
+        <meta name="twitter:image" content="{{ config('app.url') }}/frontend/img/logo.png">
         @if(!empty($seo['twitter_settings']['twitter_site']))
             <meta name="twitter:site" content="{{ $seo['twitter_settings']['twitter_site'] }}">
         @endif

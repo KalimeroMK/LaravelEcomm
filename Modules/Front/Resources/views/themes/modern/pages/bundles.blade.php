@@ -18,7 +18,7 @@
             <div class="col-md-4 col-sm-6 isotope-item">
                 <div class="product-item">
                     <div class="product-item-img">
-                        <a href="{{ route('front.bundle_detail', $bundle->slug) }}">
+                        <a href="{{ route('front.bundle-detail', $bundle->slug) }}">
                             <img src="{{ $bundle->imageUrl }}" alt="{{ $bundle->title }}" class="img-responsive">
                         </a>
                         @if($bundle->discount)
@@ -26,7 +26,7 @@
                         @endif
                     </div>
                     <div class="product-item-title">
-                        <a href="{{ route('front.bundle_detail', $bundle->slug) }}">{{ $bundle->title }}</a>
+                        <a href="{{ route('front.bundle-detail', $bundle->slug) }}">{{ $bundle->title }}</a>
                     </div>
                     <div class="product-item-price">
                         @php $after_discount = ($bundle->price - ($bundle->price * $bundle->discount) / 100); @endphp

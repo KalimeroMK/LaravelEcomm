@@ -168,7 +168,6 @@ use Modules\Core\Helpers\Helper;
                                                 <!-- Product Actions -->
                                                 <div class="product-actions" style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
                                                     <div class="action-links" style="display: flex; gap: 15px;">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#" style="display: inline-flex; align-items: center; color: #333; text-decoration: none;">
                                                             <i class="ti-eye" style="margin-right: 5px;"></i> Quick Shop
                                                         </a>
                                                         <a title="Wishlist" href="#" style="display: inline-flex; align-items: center; color: #333; text-decoration: none;">

@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        @include('front::pages.comment', ['comments' => $comment->replies, 'depth' => $dep])
+        @include('front::themes.modern.pages.comment', ['comments' => $comment->replies, 'depth' => $dep])
 
     </div>
 @endforeach

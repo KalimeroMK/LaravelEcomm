@@ -18,7 +18,7 @@
         <meta property="fb:app_id" content="YourFacebookAppID"/>
         <meta name="google-site-verification" content="YourGoogleVerificationCode"/>
         <meta property="og:type" content="website"/>
-        <meta property="og:image" content="http://yourwebsite.com/assets/img/logo/logo.jpg"/>
+        <meta property="og:image" content="{{ config('app.url') }}/frontend/img/logo.png"/>
         <meta property="article:tag"
               content="@lang('frontend.meta_keywords')"/>
         <meta property="og:description"
