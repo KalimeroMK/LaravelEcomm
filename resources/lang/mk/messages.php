@@ -55,4 +55,20 @@ return [
         'no_coupon_applied' => 'Нема применето купон.',
         'removed_successfully' => 'Купонот е успешно отстранет.',
     ],
+
+    // Common admin labels
+    'address' => 'Адреса',
+    'categories' => 'Категории',
+    'complaint_already_exists' => 'Веќе постои жалба за оваа нарачка',
+    'country' => 'Држава',
+    'dashboard' => 'Контролна табла',
+    'home' => 'Почетна',
+    'import' => 'Увоз',
+    'pages' => 'Страни',
+    'permission' => 'Дозвола',
+    'role' => 'Улога',
+    'save' => 'Зачувај',
+    'settings' => 'Поставки',
+    'type' => 'Тип',
+    'users' => 'Корисници',
 ];

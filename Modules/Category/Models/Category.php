@@ -175,6 +175,21 @@ class Category extends Core
         return $this->belongsTo(self::class, 'parent_id');
     }
 
+    /**
+     * Ancestor titles as a breadcrumb string ("Parent > Child"), or null for
+     * a root category. Used by the admin form's parent selector label.
+     */
+    public function getParentsNames(): ?string
+    {
+        if (! $this->exists || $this->parent_id === null) {
+            return null;
+        }
+
+        $names = $this->ancestors()->orderBy('_lft')->pluck('title');
+
+        return $names->isNotEmpty() ? $names->implode(' > ') : null;
+    }
+
     public function categories(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');

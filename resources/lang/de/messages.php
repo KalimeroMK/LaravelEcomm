@@ -55,4 +55,20 @@ return [
         'no_coupon_applied' => 'Derzeit ist kein Gutschein angewendet.',
         'removed_successfully' => 'Gutschein erfolgreich entfernt.',
     ],
+
+    // Common admin labels
+    'address' => 'Adresse',
+    'categories' => 'Kategorien',
+    'complaint_already_exists' => 'Für diese Bestellung existiert bereits eine Beschwerde',
+    'country' => 'Land',
+    'dashboard' => 'Dashboard',
+    'home' => 'Startseite',
+    'import' => 'Importieren',
+    'pages' => 'Seiten',
+    'permission' => 'Berechtigung',
+    'role' => 'Rolle',
+    'save' => 'Speichern',
+    'settings' => 'Einstellungen',
+    'type' => 'Typ',
+    'users' => 'Benutzer',
 ];

@@ -55,4 +55,20 @@ return [
         'no_coupon_applied' => 'No coupon is currently applied.',
         'removed_successfully' => 'Coupon removed successfully.',
     ],
+
+    // Common admin labels
+    'address' => 'Address',
+    'categories' => 'Categories',
+    'complaint_already_exists' => 'A complaint for this order already exists',
+    'country' => 'Country',
+    'dashboard' => 'Dashboard',
+    'home' => 'Home',
+    'import' => 'Import',
+    'pages' => 'Pages',
+    'permission' => 'Permission',
+    'role' => 'Role',
+    'save' => 'Save',
+    'settings' => 'Settings',
+    'type' => 'Type',
+    'users' => 'Users',
 ];

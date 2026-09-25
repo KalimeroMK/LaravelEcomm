@@ -92,4 +92,10 @@ return [
         'no_coupon_applied' => 'لا يوجد كوبون مطبق حالياً.',
         'removed_successfully' => 'تمت إزالة الكوبون بنجاح.',
     ],
+
+    // Common admin labels
+    'categories' => 'الفئات',
+    'complaint_already_exists' => 'توجد شكوى لهذا الطلب بالفعل',
+    'pages' => 'الصفحات',
+    'settings' => 'الإعدادات',
 ];
