@@ -81,4 +81,11 @@ return [
     'generate_sitemap' => 'Sitemap generieren',
     'meta_tags' => 'Meta-Tags',
 
+
+    // Settings sections
+    'payment_settings' => 'Zahlungseinstellungen',
+    'shipping_settings' => 'Versandeinstellungen',
+    'email_settings' => 'E-Mail-Einstellungen',
+    'seo_settings' => 'SEO-Einstellungen',
+    'tags_options' => 'Tag-Optionen',
 ];

@@ -81,4 +81,11 @@ return [
     'generate_sitemap' => 'Генерирај Sitemap',
     'meta_tags' => 'Meta тагови',
 
+
+    // Settings sections
+    'payment_settings' => 'Поставки за плаќање',
+    'shipping_settings' => 'Поставки за достава',
+    'email_settings' => 'Поставки за е-пошта',
+    'seo_settings' => 'SEO поставки',
+    'tags_options' => 'Опции за тагови',
 ];

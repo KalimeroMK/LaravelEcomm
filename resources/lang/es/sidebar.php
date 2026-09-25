@@ -56,4 +56,11 @@ return [
     'complaints' => 'Complaints',
     'attribute_groups' => 'Attribute groups',
 
+
+    // Settings sections
+    'payment_settings' => 'Configuración de pagos',
+    'shipping_settings' => 'Configuración de envío',
+    'email_settings' => 'Configuración de correo',
+    'seo_settings' => 'Configuración SEO',
+    'tags_options' => 'Opciones de etiquetas',
 ];

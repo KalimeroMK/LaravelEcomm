@@ -81,4 +81,11 @@ return [
     'generate_sitemap' => 'Generate Sitemap',
     'meta_tags' => 'Meta Tags',
 
+
+    // Settings sections
+    'payment_settings' => 'Payment Settings',
+    'shipping_settings' => 'Shipping Settings',
+    'email_settings' => 'Email Settings',
+    'seo_settings' => 'SEO Settings',
+    'tags_options' => 'Tags Options',
 ];

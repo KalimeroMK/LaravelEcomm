@@ -92,4 +92,10 @@ return [
         'no_coupon_applied' => 'No hay cupón aplicado actualmente.',
         'removed_successfully' => 'Cupón eliminado exitosamente.',
     ],
+
+    // Common admin labels
+    'categories' => 'Categorías',
+    'complaint_already_exists' => 'Ya existe una reclamación para este pedido',
+    'pages' => 'Páginas',
+    'settings' => 'Configuración',
 ];
