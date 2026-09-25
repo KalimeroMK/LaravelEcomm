@@ -99,18 +99,18 @@
                         
                         <div class="form-group" style="display: flex; align-items: center;">
                             <label style="margin-right: 15px; margin-bottom: 0;">Quantity:</label>
-                            <div class="input-group" style="width: 140px;">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quantity">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </span>
-                                <input type="text" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100" style="width: 60px; padding: 0; color: #555; background-color: #fff;">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quantity">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </span>
+                            {{-- One flex row: [-] [value] [+] --}}
+                            <div class="quantity-selector" style="display: inline-flex; align-items: stretch;">
+                                <button type="button" class="btn-number" data-type="minus" data-field="quantity"
+                                        style="width: 40px; height: 40px; border: 1px solid #ddd; background: #f6f6f6; cursor: pointer;">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <input type="text" name="quantity" class="input-number text-center" value="1" min="1" max="100"
+                                       style="width: 56px; height: 40px; border: 1px solid #ddd; border-left: 0; border-right: 0; padding: 0; text-align: center; color: #555; background: #fff;">
+                                <button type="button" class="btn-number" data-type="plus" data-field="quantity"
+                                        style="width: 40px; height: 40px; border: 1px solid #ddd; background: #f6f6f6; cursor: pointer;">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -131,9 +131,9 @@
         {{-- Product Tabs --}}
         <div class="row mt-50">
             <div class="col-md-12">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#description">Description</a></li>
-                    <li><a data-toggle="tab" href="#reviews">Reviews ({{ $reviewCount }})</a></li>
+                <ul class="nav nav-tabs product-tabs">
+                    <li class="active"><a href="#description">Description</a></li>
+                    <li><a href="#reviews">Reviews ({{ $reviewCount }})</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -263,9 +263,15 @@
 .rating-input input:checked ~ label { color: #FFD700; }
 .product-item { transition: all 0.3s; }
 .product-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-/* Quantity Input Alignment Fixes */
-.btn-number { margin-top: 0 !important; height: 36px; line-height: 22px; }
-.input-number { height: 36px !important; margin-top: 0 !important; vertical-align: top; }
+/* Quantity selector */
+.quantity-selector .btn-number:hover { background: #e8e8e8 !important; }
+.quantity-selector .input-number:focus { outline: none; }
+/* Description / Reviews tabs */
+.product-tabs { display: flex; gap: 6px; list-style: none; padding: 0; margin: 40px 0 0; border-bottom: 2px solid #eee; }
+.product-tabs li a { display: inline-block; padding: 12px 24px; color: #666; font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.product-tabs li.active a { color: #2c2d3f; border-bottom-color: #F7941D; }
+.product-tabs + .tab-content .tab-pane { display: none; }
+.product-tabs + .tab-content .tab-pane.active { display: block; }
 
 </style>
 @endpush
@@ -273,11 +279,21 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Description / Reviews tab switching (no bootstrap tab JS in this theme)
+    $('.product-tabs a').click(function(e) {
+        e.preventDefault();
+        const target = $(this).attr('href');
+        $('.product-tabs li').removeClass('active');
+        $(this).parent().addClass('active');
+        $('.product-tabs + .tab-content .tab-pane').removeClass('active');
+        $(target).addClass('active');
+    });
+
     // Quantity buttons
     $('.btn-number').click(function(e) {
         e.preventDefault();
         const type = $(this).attr('data-type');
-        const input = $(this).closest('.input-group').find('.input-number');
+        const input = $(this).closest('.quantity-selector').find('.input-number');
         let currentVal = parseInt(input.val()) || 1;
         
         if(type == 'minus') {
