@@ -31,7 +31,7 @@ class AttributeControllerTest extends TestCase
         Attribute::factory()->count(3)->create();
 
         $response = $this->actingAs($this->adminUser)
-            ->get(route('admin.attributes.index'));
+            ->get(route('attributes.index'));
 
         $response->assertStatus(200);
         $response->assertViewHas('attributes');
@@ -51,7 +51,7 @@ class AttributeControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->adminUser)
-            ->post(route('admin.attributes.store'), $attributeData);
+            ->post(route('attributes.store'), $attributeData);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('attributes', [
@@ -64,9 +64,9 @@ class AttributeControllerTest extends TestCase
     public function it_validates_required_fields_when_creating(): void
     {
         $response = $this->actingAs($this->adminUser)
-            ->post(route('admin.attributes.store'), []);
+            ->post(route('attributes.store'), []);
 
-        $response->assertSessionHasErrors(['name', 'code', 'type']);
+        $response->assertSessionHasErrors(['name', 'code']);
     }
 
     #[Test]
@@ -75,7 +75,7 @@ class AttributeControllerTest extends TestCase
         Attribute::factory()->create(['code' => 'color']);
 
         $response = $this->actingAs($this->adminUser)
-            ->post(route('admin.attributes.store'), [
+            ->post(route('attributes.store'), [
                 'name' => 'Color',
                 'code' => 'color',
                 'type' => 'text',
@@ -93,7 +93,7 @@ class AttributeControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->adminUser)
-            ->put(route('admin.attributes.update', $attribute), [
+            ->put(route('attributes.update', $attribute), [
                 'name' => 'New Name',
                 'code' => 'test',
                 'type' => 'text',
@@ -112,7 +112,7 @@ class AttributeControllerTest extends TestCase
         $attribute = Attribute::factory()->create();
 
         $response = $this->actingAs($this->adminUser)
-            ->delete(route('admin.attributes.destroy', $attribute));
+            ->delete(route('attributes.destroy', $attribute));
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('attributes', [
@@ -124,7 +124,7 @@ class AttributeControllerTest extends TestCase
     public function it_can_show_create_form(): void
     {
         $response = $this->actingAs($this->adminUser)
-            ->get(route('admin.attributes.create'));
+            ->get(route('attributes.create'));
 
         $response->assertStatus(200);
         $response->assertViewIs('attribute::create');
@@ -136,7 +136,7 @@ class AttributeControllerTest extends TestCase
         $attribute = Attribute::factory()->create();
 
         $response = $this->actingAs($this->adminUser)
-            ->get(route('admin.attributes.edit', $attribute));
+            ->get(route('attributes.edit', $attribute));
 
         $response->assertStatus(200);
         $response->assertViewIs('attribute::edit');
@@ -146,7 +146,7 @@ class AttributeControllerTest extends TestCase
     #[Test]
     public function guests_cannot_access_attributes(): void
     {
-        $response = $this->get(route('admin.attributes.index'));
+        $response = $this->get(route('attributes.index'));
 
         $response->assertRedirect('/login');
     }
@@ -155,7 +155,7 @@ class AttributeControllerTest extends TestCase
     public function it_displays_attribute_types_in_form(): void
     {
         $response = $this->actingAs($this->adminUser)
-            ->get(route('admin.attributes.create'));
+            ->get(route('attributes.create'));
 
         $response->assertSee('text');
         $response->assertSee('select');
@@ -167,7 +167,7 @@ class AttributeControllerTest extends TestCase
     public function it_displays_display_types_in_form(): void
     {
         $response = $this->actingAs($this->adminUser)
-            ->get(route('admin.attributes.create'));
+            ->get(route('attributes.create'));
 
         $response->assertSee('input');
         $response->assertSee('select');

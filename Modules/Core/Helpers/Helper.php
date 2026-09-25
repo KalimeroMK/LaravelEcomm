@@ -26,7 +26,7 @@ class Helper
         });
     }
 
-    public static function cartCount(string $user_id = ''): int
+    public static function cartCount(int|string $user_id = ''): int
     {
         return (int) self::getAllProductFromCart($user_id)->sum('quantity');
     }
@@ -35,7 +35,7 @@ class Helper
      * Memoized per request (once) — the header calls this and the derived
      * count/total helpers several times on every page.
      */
-    public static function getAllProductFromWishlist(string $user_id = ''): Collection
+    public static function getAllProductFromWishlist(int|string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
 
@@ -52,7 +52,7 @@ class Helper
     /**
      * Memoized per request (once) — see getAllProductFromWishlist().
      */
-    public static function getAllProductFromCart(string $user_id = ''): Collection
+    public static function getAllProductFromCart(int|string $user_id = ''): Collection
     {
         $user_id = self::getUserId($user_id);
 
@@ -67,17 +67,17 @@ class Helper
     }
 
     // Total amount cart
-    public static function totalCartPrice(string $user_id = ''): float|int
+    public static function totalCartPrice(int|string $user_id = ''): float|int
     {
         return (float) self::getAllProductFromCart($user_id)->sum('amount');
     }
 
-    public static function wishlistCount(string $user_id = ''): int
+    public static function wishlistCount(int|string $user_id = ''): int
     {
         return (int) self::getAllProductFromWishlist($user_id)->sum('quantity');
     }
 
-    public static function totalWishlistPrice(string $user_id = ''): float|int
+    public static function totalWishlistPrice(int|string $user_id = ''): float|int
     {
         return (float) self::getAllProductFromWishlist($user_id)->sum('amount');
     }
@@ -125,7 +125,7 @@ class Helper
     /**
      * Check if cart contains only virtual/downloadable products (no shipping required)
      */
-    public static function cartRequiresShipping(string $user_id = ''): bool
+    public static function cartRequiresShipping(int|string $user_id = ''): bool
     {
         $cartItems = self::getAllProductFromCart($user_id);
 
@@ -145,7 +145,7 @@ class Helper
     /**
      * Check if cart contains downloadable products
      */
-    public static function cartHasDownloadable(string $user_id = ''): bool
+    public static function cartHasDownloadable(int|string $user_id = ''): bool
     {
         $cartItems = self::getAllProductFromCart($user_id);
 
@@ -160,10 +160,12 @@ class Helper
 
     private static function getUserId(int|string $user_id = ''): string|int
     {
-        if (Auth::check()) {
-            return $user_id ?: Auth::id();
+        // An explicitly supplied id wins - callers like checkout actions and
+        // queue jobs pass it without an authenticated web session.
+        if ($user_id !== '' && $user_id !== 0) {
+            return $user_id;
         }
 
-        return 0;
+        return Auth::check() ? Auth::id() : 0;
     }
 }

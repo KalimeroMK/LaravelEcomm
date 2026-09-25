@@ -18,7 +18,7 @@ test('blog listing page loads', function () {
         'status' => 'active',
     ]);
 
-    $response = $this->get('/blog');
+    $response = $this->get('/en/blog');
 
     $response->assertStatus(200);
     $response->assertSee('Blog');
@@ -123,7 +123,7 @@ test('only published posts show on blog', function () {
         'status' => 'draft',
     ]);
 
-    $response = $this->get('/blog');
+    $response = $this->get('/en/blog');
 
     $response->assertStatus(200);
 });
@@ -162,7 +162,7 @@ test('post search works', function () {
         'status' => 'active',
     ]);
 
-    $response = $this->get(route('front.blog-search', ['q' => 'Laravel']));
+    $response = $this->get(route('front.blog-search', ['locale' => 'en', 'q' => 'Laravel']));
 
     $response->assertStatus(200);
 });

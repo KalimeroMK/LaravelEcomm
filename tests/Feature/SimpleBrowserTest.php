@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 test('homepage loads successfully', function () {
-    $response = $this->get('/');
+    $this->get('/')->assertRedirect();
+
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
     // Just verify page loads - don't check for specific text as it depends on theme
@@ -34,13 +36,13 @@ test('products page loads', function () {
 });
 
 test('about page loads', function () {
-    $response = $this->get('/about-us');
+    $response = $this->get('/en/about-us');
 
     $response->assertStatus(200);
 });
 
 test('contact page loads', function () {
-    $response = $this->get('/contact');
+    $response = $this->get('/en/contact');
 
     $response->assertStatus(200);
 });

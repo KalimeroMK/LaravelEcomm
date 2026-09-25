@@ -17,6 +17,9 @@ class Store extends CoreRequest
     {
         return [
             'title' => 'required|string|unique:products,title|max:50',
+            'type' => 'sometimes|in:simple,configurable,variant,downloadable,virtual',
+            'configurable_attributes' => 'sometimes|array',
+            'configurable_attributes.*' => 'string',
             'summary' => 'required|string',
             'description' => 'nullable|string',
             'sku' => 'nullable|string|unique:products,sku',

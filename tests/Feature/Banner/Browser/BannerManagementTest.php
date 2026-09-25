@@ -95,7 +95,7 @@ test('active banners display on homepage', function () {
         'status' => 'inactive',
     ]);
 
-    $response = $this->get('/');
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
 });
@@ -115,7 +115,7 @@ test('banners respect date range', function () {
         'active_to' => now()->subDay(),
     ]);
 
-    $response = $this->get('/');
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
 });
@@ -131,7 +131,7 @@ test('banners display in correct positions', function () {
         'status' => 'active',
     ]);
 
-    $response = $this->get('/');
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
 });

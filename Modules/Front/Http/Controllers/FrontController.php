@@ -533,6 +533,24 @@ class FrontController extends Controller
     }
 
     /**
+     * Look up one of the user's orders by order number and show its tracking.
+     */
+    public function orderTrackSubmit(Request $request): RedirectResponse
+    {
+        $request->validate(['order_number' => 'required|string']);
+
+        $order = Order::where('user_id', Auth::id())
+            ->where('order_number', $request->input('order_number'))
+            ->first();
+
+        if (! $order) {
+            return back()->with('error', 'No order found with that order number.');
+        }
+
+        return redirect()->route('user.orders.track', $order);
+    }
+
+    /**
      * Reorder a previous order.
      */
     public function reorder(Order $order, ReorderAction $reorderAction): RedirectResponse

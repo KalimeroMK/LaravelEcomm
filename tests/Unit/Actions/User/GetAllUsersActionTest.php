@@ -13,6 +13,8 @@ class GetAllUsersActionTest extends ActionTestCase
 {
     public function testExecuteReturnsUserListDTO(): void
     {
+        $seeded = User::count();
+
         // Create 3 new users
         User::factory()->count(3)->create();
 
@@ -20,8 +22,8 @@ class GetAllUsersActionTest extends ActionTestCase
         $result = $action->execute();
 
         $this->assertInstanceOf(UserListDTO::class, $result);
-        // LanguageDatabaseSeeder creates 2 users + 3 created users = 5
-        $this->assertCount(5, $result->users);
+        // Seeded users (count varies with the seeders) + 3 created users
+        $this->assertCount($seeded + 3, $result->users);
     }
 
     public function testExecuteReturnsListWithSeededUsers(): void
@@ -62,12 +64,14 @@ class GetAllUsersActionTest extends ActionTestCase
 
     public function testExecuteReturnsCorrectUserCount(): void
     {
+        $seeded = User::count();
+
         User::factory()->count(5)->create();
 
         $action = app(GetAllUsersAction::class);
         $result = $action->execute();
 
-        // 2 seeded users + 5 created users = 7
-        $this->assertCount(7, $result->users);
+        // Seeded users (count varies with the seeders) + 5 created users
+        $this->assertCount($seeded + 5, $result->users);
     }
 }

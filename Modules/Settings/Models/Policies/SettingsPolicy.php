@@ -49,8 +49,10 @@ class SettingsPolicy
     /**
      * Only admins can update settings
      */
-    public function update(User $user, Setting $setting): bool
+    public function update(User $user, ?Setting $setting = null): bool
     {
+        // Settings are a singleton row, so callers may authorize against the
+        // class (no instance) - keep the model argument optional.
         return $user->hasAnyRole(['admin', 'super-admin']);
     }
 

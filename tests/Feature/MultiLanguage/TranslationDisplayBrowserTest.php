@@ -16,7 +16,7 @@ beforeEach(function () {
 test('French translations are displayed correctly', function () {
     $this->get('/language/fr');
 
-    $response = $this->get('/');
+    $response = $this->get('/fr');
 
     $response->assertStatus(200);
     // Translations may not be fully implemented, just verify page loads
@@ -25,7 +25,7 @@ test('French translations are displayed correctly', function () {
 test('German translations are displayed correctly', function () {
     $this->get('/language/de');
 
-    $response = $this->get('/');
+    $response = $this->get('/de');
 
     $response->assertStatus(200);
     // Translations may not be fully implemented, just verify page loads
@@ -34,7 +34,7 @@ test('German translations are displayed correctly', function () {
 test('Macedonian translations are displayed correctly', function () {
     $this->get('/language/mk');
 
-    $response = $this->get('/');
+    $response = $this->get('/mk');
 
     $response->assertStatus(200);
     // Translations may not be fully implemented, just verify page loads
@@ -43,7 +43,7 @@ test('Macedonian translations are displayed correctly', function () {
 test('Arabic translations are displayed correctly', function () {
     $this->get('/language/ar');
 
-    $response = $this->get('/');
+    $response = $this->get('/ar');
 
     $response->assertStatus(200);
     // Translations may not be fully implemented, just verify page loads
@@ -53,7 +53,7 @@ test('translation fallback works when translation is missing', function () {
     // Switch to a language that might have missing translations
     $this->get('/language/es');
 
-    $response = $this->get('/');
+    $response = $this->get('/es');
 
     $response->assertStatus(200);
     // Translations may not be fully implemented, just verify page loads
@@ -62,7 +62,7 @@ test('translation fallback works when translation is missing', function () {
 test('translation keys are properly resolved', function () {
     $this->get('/language/fr');
 
-    $response = $this->get('/');
+    $response = $this->get('/fr');
 
     $response->assertStatus(200);
     // Translations may not be fully implemented, just verify page loads
@@ -138,7 +138,7 @@ test('translation works with different HTTP methods', function () {
     $this->get(route('language.switch', 'fr'));
 
     // Test GET request
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 
     // Test POST request
@@ -161,7 +161,7 @@ test('translation persists across multiple requests', function () {
     $this->get('/contact');
 
     // Check that page loads
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 });
 
@@ -171,7 +171,7 @@ test('translation works with AJAX requests', function () {
     $response = $this->withHeaders([
         'X-Requested-With' => 'XMLHttpRequest',
         'Accept' => 'application/json',
-    ])->get('/');
+    ])->get('/fr');
 
     $response->assertStatus(200);
 });
@@ -180,7 +180,7 @@ test('translation works with different content types', function () {
     $this->get(route('language.switch', 'fr'));
 
     // Test HTML response
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 
     // Test JSON response - API route may not exist, skip if 404
@@ -195,11 +195,11 @@ test('translation works with cached responses', function () {
     $this->get('/language/fr');
 
     // First request
-    $response1 = $this->get('/');
+    $response1 = $this->get('/fr');
     $response1->assertStatus(200);
 
     // Second request (might be cached)
-    $response2 = $this->get('/');
+    $response2 = $this->get('/fr');
     $response2->assertStatus(200);
 });
 
@@ -210,11 +210,11 @@ test('translation works with different user roles', function () {
     $this->get('/language/fr');
 
     // Test as guest
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 
     // Test as authenticated user
-    $response = $this->actingAs($this->user)->get('/');
+    $response = $this->actingAs($this->user)->get('/en');
     $response->assertStatus(200);
 
     // Test as admin
@@ -231,28 +231,28 @@ test('translation works with different timezones', function () {
     foreach ($timezones as $timezone) {
         config(['app.timezone' => $timezone]);
 
-        $response = $this->get('/');
+        $response = $this->get('/en');
         $response->assertStatus(200);
     }
 });
 
 test('translation works with different locales in same session', function () {
     // Start with English
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 
     // Switch to French
     $this->get('/language/fr');
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 
     // Switch to German
     $this->get('/language/de');
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 
     // Switch to Macedonian
     $this->get('/language/mk');
-    $response = $this->get('/');
+    $response = $this->get('/en');
     $response->assertStatus(200);
 });

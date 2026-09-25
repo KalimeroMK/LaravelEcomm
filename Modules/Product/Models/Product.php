@@ -272,10 +272,12 @@ class Product extends Core implements HasMedia
     /**
      * Attribute values for this product (polymorphic)
      */
-    public function attributeValues(): HasMany
+    public function attributeValues(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
-        return $this->hasMany(AttributeValue::class, 'attributable_id')
-            ->where('attributable_type', self::class);
+        // A real MorphMany so creates fill attributable_type as well
+        // (the hand-rolled HasMany left it null and broke the NOT NULL
+        // product_id backfill in AttributeValue::boot()).
+        return $this->morphMany(AttributeValue::class, 'attributable');
     }
 
     /**
@@ -646,6 +648,15 @@ class Product extends Core implements HasMedia
         static::creating(function ($product) {
             if ($product->isVariant() && $product->parent && $product->variant_sku_suffix) {
                 $product->sku = $product->parent->sku.$product->variant_sku_suffix;
+            }
+
+            // Variants inherit unset details from their configurable parent.
+            if ($product->isVariant() && $product->parent) {
+                foreach (['summary', 'description', 'brand_id', 'price', 'stock', 'status', 'discount'] as $field) {
+                    if ($product->{$field} === null) {
+                        $product->{$field} = $product->parent->{$field};
+                    }
+                }
             }
         });
     }

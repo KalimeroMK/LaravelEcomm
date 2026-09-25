@@ -187,29 +187,29 @@ class OrderDownloadTest extends ProductTestCase
     public function test_valid_scope(): void
     {
         $user = User::factory()->create();
-        $order = Order::factory()->create(['user_id' => $user->id]);
         $product = Product::factory()->create(['type' => Product::TYPE_DOWNLOADABLE]);
         $download = ProductDownload::factory()->create(['product_id' => $product->id]);
-        
+
+        // (order_id, product_download_id) is unique - use a distinct order per row.
         // Valid - not expired
         OrderDownload::create([
-            'order_id' => $order->id,
+            'order_id' => Order::factory()->create(['user_id' => $user->id])->id,
             'product_download_id' => $download->id,
             'user_id' => $user->id,
             'expires_at' => now()->addDay(),
         ]);
-        
+
         // Valid - never expires
         OrderDownload::create([
-            'order_id' => $order->id,
+            'order_id' => Order::factory()->create(['user_id' => $user->id])->id,
             'product_download_id' => $download->id,
             'user_id' => $user->id,
             'expires_at' => null,
         ]);
-        
+
         // Invalid - expired
         OrderDownload::create([
-            'order_id' => $order->id,
+            'order_id' => Order::factory()->create(['user_id' => $user->id])->id,
             'product_download_id' => $download->id,
             'user_id' => $user->id,
             'expires_at' => now()->subDay(),

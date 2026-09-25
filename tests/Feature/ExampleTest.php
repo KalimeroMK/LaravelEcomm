@@ -19,7 +19,7 @@ class ExampleTest extends TestCase
         \Modules\Settings\Models\Setting::factory()->create();
 
         // The root route '/' exists and returns 200
-        $response = $this->get('/');
+        $response = $this->get('/en');
 
         if ($response->status() !== 200) {
             dump('Response status: '.$response->status());

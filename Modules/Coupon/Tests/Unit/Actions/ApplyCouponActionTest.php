@@ -37,6 +37,7 @@ class ApplyCouponActionTest extends CouponTestCase
             'user_id' => $user->id,
             'product_id' => $product->id,
             'price' => $product->price,
+            'amount' => $product->price,
             'quantity' => 1,
         ]);
 
@@ -69,14 +70,15 @@ class ApplyCouponActionTest extends CouponTestCase
             'user_id' => $user->id,
             'product_id' => $product->id,
             'price' => $product->price,
+            'amount' => $product->price,
             'quantity' => 1,
         ]);
 
         // First apply the coupon
         $this->action->execute('PERCENT10', $user->id);
 
-        // Then record usage
-        $orderId = 999; // Mock order ID
+        // Then record usage (coupon_usage.order_id has a real FK constraint)
+        $orderId = \Modules\Order\Models\Order::factory()->create(['user_id' => $user->id])->id;
         $usage = $this->action->recordUsage($coupon->id, $orderId, $user->id, null, 10.00);
 
         $this->assertDatabaseHas('coupon_usage', [
@@ -154,6 +156,7 @@ class ApplyCouponActionTest extends CouponTestCase
             'user_id' => $user->id,
             'product_id' => $product->id,
             'price' => $product->price,
+            'amount' => $product->price,
             'quantity' => 1,
         ]);
 
@@ -176,6 +179,7 @@ class ApplyCouponActionTest extends CouponTestCase
             'user_id' => $user->id,
             'product_id' => $product->id,
             'price' => $product->price,
+            'amount' => $product->price,
             'quantity' => 1,
         ]);
 

@@ -14,7 +14,7 @@ beforeEach(function () {
 });
 
 test('language switcher component exists', function () {
-    $response = $this->get('/');
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
     // Check if language switcher component class exists
@@ -54,7 +54,8 @@ test('invalid language does not change locale', function () {
 
     $response = $this->get('/language/invalid');
 
-    $response->assertRedirect();
+    // Unknown languages 404 instead of silently redirecting.
+    $response->assertNotFound();
     $this->assertEquals($originalLocale, app()->getLocale());
 });
 
@@ -139,7 +140,7 @@ test('language switcher shows correct current language', function () {
     // Set French as current language
     $this->get('/language/fr');
 
-    $response = $this->get('/');
+    $response = $this->get('/fr');
 
     $response->assertStatus(200);
     // Check that French locale is set in session
@@ -148,7 +149,7 @@ test('language switcher shows correct current language', function () {
 });
 
 test('language switcher shows all available languages', function () {
-    $response = $this->get('/');
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
 

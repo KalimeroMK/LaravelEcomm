@@ -16,10 +16,12 @@ beforeEach(function () {
 });
 
 test('homepage loads successfully', function () {
-    $response = $this->get('/');
+    $this->get('/')->assertRedirect();
+
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
-    $response->assertSee('E-commerce Website');
+    $response->assertSee('Hot Item');
 });
 
 test('product grid page loads', function () {
@@ -29,7 +31,7 @@ test('product grid page loads', function () {
         $product->categories()->attach($this->category->id);
     });
 
-    $response = $this->get('/product-grids');
+    $response = $this->get('/en/product-grids');
 
     $response->assertStatus(200);
     $response->assertSee('Products');
@@ -42,7 +44,7 @@ test('search functionality works', function () {
     ]);
     $product->categories()->attach($this->category->id);
 
-    $response = $this->post('/product/search', ['search' => 'Test']);
+    $response = $this->post('/en/product/search', ['search' => 'Test']);
 
     $response->assertStatus(200);
 });
@@ -54,7 +56,7 @@ test('category page displays products', function () {
         $product->categories()->attach($this->category->id);
     });
 
-    $response = $this->get("/product-cat/{$this->category->slug}");
+    $response = $this->get("/en/product-cat/{$this->category->slug}");
 
     $response->assertStatus(200);
 });
@@ -66,7 +68,7 @@ test('brand page displays products', function () {
         $product->categories()->attach($this->category->id);
     });
 
-    $response = $this->get("/product-brand/{$this->brand->slug}");
+    $response = $this->get("/en/product-brand/{$this->brand->slug}");
 
     $response->assertStatus(200);
 });
@@ -74,7 +76,7 @@ test('brand page displays products', function () {
 test('blog page loads', function () {
     Post::factory()->count(5)->create();
 
-    $response = $this->get('/blog');
+    $response = $this->get('/en/blog');
 
     $response->assertStatus(200);
     $response->assertSee('Blog');
@@ -83,20 +85,20 @@ test('blog page loads', function () {
 test('blog post detail loads', function () {
     $post = Post::factory()->create();
 
-    $response = $this->get("/blog-detail/{$post->slug}");
+    $response = $this->get("/en/blog-detail/{$post->slug}");
 
     $response->assertStatus(200);
 });
 
 test('contact page loads', function () {
-    $response = $this->get('/contact');
+    $response = $this->get('/en/contact');
 
     $response->assertStatus(200);
     $response->assertSee('Contact');
 });
 
 test('about page loads', function () {
-    $response = $this->get('/about-us');
+    $response = $this->get('/en/about-us');
 
     $response->assertStatus(200);
     $response->assertSee('About');

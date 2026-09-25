@@ -16,7 +16,11 @@ class TestDataSeeder extends Seeder
     {
         // Seed languages first (required for most operations)
         $this->call(LanguageDatabaseSeeder::class);
-        
+
+        // Real application permissions/roles ({resource}-{list|show|create|update|delete},
+        // admin/super-admin/client roles) - module tests grant these directly.
+        $this->call(\Modules\User\Database\Seeders\PermissionTableSeeder::class);
+
         // Create roles
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $clientRole = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'web']);

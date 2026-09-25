@@ -25,8 +25,10 @@ readonly class StoreProductAction
             'status' => $dto->status,
             'price' => $dto->price,
             'discount' => $dto->discount,
-            'is_featured' => $dto->is_featured,
-            'd_deal' => $dto->d_deal,
+            'is_featured' => $dto->is_featured ?? false,
+            'd_deal' => $dto->d_deal ?? 0,
+            'type' => $dto->type ?? Product::TYPE_SIMPLE,
+            'configurable_attributes' => $dto->configurable_attributes,
             'brand_id' => $dto->brand_id,
 
             'sku' => $dto->sku,

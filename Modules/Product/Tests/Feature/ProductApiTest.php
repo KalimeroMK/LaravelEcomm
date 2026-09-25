@@ -24,6 +24,8 @@ class ProductApiTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
+        // The product API index is admin-only (ProductPolicy::viewAny).
+        $this->user->assignRole('admin');
         $this->actingAs($this->user);
 
         $this->token = $this->user->createToken('test-token')->plainTextToken;

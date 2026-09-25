@@ -181,6 +181,10 @@ class LayeredNavigationServiceTest extends TestCase
     #[Test]
     public function it_returns_active_filters_from_request(): void
     {
+        // Filters only resolve for attributes that actually exist.
+        Attribute::factory()->create(['code' => 'color', 'name' => 'Color']);
+        Attribute::factory()->create(['code' => 'size', 'name' => 'Size']);
+
         $request = new \Illuminate\Http\Request([
             'color' => 'red,blue',
             'size' => 'm',
@@ -190,7 +194,12 @@ class LayeredNavigationServiceTest extends TestCase
         $activeFilters = $this->service->getActiveFilters($request);
 
         $this->assertInstanceOf(\Illuminate\Support\Collection::class, $activeFilters);
-        $this->assertCount(2, $activeFilters); // color and size, not sort
+        // One entry per selected value (red, blue, m); sort is excluded.
+        $this->assertCount(3, $activeFilters);
+        $this->assertEqualsCanonicalizing(
+            ['color', 'size'],
+            $activeFilters->pluck('attribute_code')->unique()->values()->all()
+        );
     }
 
     #[Test]
@@ -201,7 +210,7 @@ class LayeredNavigationServiceTest extends TestCase
         /** @var Attribute $buttonAttr */
         $buttonAttr = Attribute::factory()->create(['display' => 'button']);
         /** @var Attribute $selectAttr */
-        $selectAttr = Attribute::factory()->create(['display' => 'select', 'type' => 'multiselect']);
+        $selectAttr = Attribute::factory()->create(['display' => 'multiselect']);
         /** @var Attribute $defaultAttr */
         $defaultAttr = Attribute::factory()->create(['display' => 'text']);
 

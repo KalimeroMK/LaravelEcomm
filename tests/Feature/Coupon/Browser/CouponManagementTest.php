@@ -3,12 +3,28 @@
 declare(strict_types=1);
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Modules\Cart\Models\Cart;
 use Modules\Coupon\Models\Coupon;
+use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 
 require_once __DIR__.'/../../../TestHelpers.php';
 
 uses(RefreshDatabase::class);
+
+
+function addCartItemFor($user, float $price = 200.00): void
+{
+    $product = Product::factory()->create(['price' => $price, 'status' => 'active']);
+
+    Cart::create([
+        'user_id' => $user->id,
+        'product_id' => $product->id,
+        'price' => $price,
+        'amount' => $price,
+        'quantity' => 1,
+    ]);
+}
 
 beforeEach(function () {
     $this->admin = createAdminUser();
@@ -53,8 +69,10 @@ test('user can apply valid coupon', function () {
         'status' => 'active',
     ]);
 
+    addCartItemFor($this->user);
+
     $response = $this->actingAs($this->user)
-        ->postJson(route('api.coupon.store'), [
+        ->postJson(route('api.coupons.apply'), [
             'code' => 'VALID10',
         ]);
 
@@ -63,9 +81,13 @@ test('user can apply valid coupon', function () {
         'message',
         'code',
         'data' => [
-            'id',
-            'code',
-            'value',
+            'success',
+            'coupon' => [
+                'id',
+                'code',
+                'value',
+            ],
+            'discount',
         ],
     ]);
 });
@@ -79,8 +101,10 @@ test('user cannot apply expired coupon', function () {
         'expires_at' => now()->subDay(),
     ]);
 
+    addCartItemFor($this->user);
+
     $response = $this->actingAs($this->user)
-        ->postJson(route('api.coupon.store'), [
+        ->postJson(route('api.coupons.apply'), [
             'code' => 'EXPIRED10',
         ]);
 
@@ -89,8 +113,10 @@ test('user cannot apply expired coupon', function () {
 });
 
 test('user cannot apply invalid coupon', function () {
+    addCartItemFor($this->user);
+
     $response = $this->actingAs($this->user)
-        ->postJson(route('api.coupon.store'), [
+        ->postJson(route('api.coupons.apply'), [
             'code' => 'INVALID',
         ]);
 

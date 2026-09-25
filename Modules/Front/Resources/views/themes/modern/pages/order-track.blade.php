@@ -44,12 +44,16 @@ $themePath = 'front::themes.' . $activeTheme;
                                 <h4>Tracking Information</h4>
                                 <div class="space-bottom"></div>
                                 
+                                @if($order->tracking_number)
+                                    <p><strong>Tracking Number:</strong> {{ $order->tracking_number }}
+                                        @if($order->tracking_carrier)
+                                            ({{ $order->tracking_carrier }})
+                                        @endif
+                                    </p>
+                                @endif
                                 @if($order->shipping)
                                     <p><strong>Shipping Method:</strong> {{ $order->shipping->type }}</p>
-                                    @if($order->shipping->tracking_number)
-                                        <p><strong>Tracking Number:</strong> {{ $order->shipping->tracking_number }}</p>
-                                    @endif
-                                @else
+                                @elseif(! $order->tracking_number)
                                     <p>No shipping information available yet.</p>
                                 @endif
                                 

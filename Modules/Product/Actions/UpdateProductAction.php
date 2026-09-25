@@ -16,7 +16,14 @@ readonly class UpdateProductAction
 
     public function execute(int $id, ProductDTO $dto): Model
     {
-        $product = $this->repository->update($id, [
+        // Only touch type/configurable_attributes when actually supplied -
+        // a null here would overwrite the stored value on every edit.
+        $typeFields = array_filter([
+            'type' => $dto->type,
+            'configurable_attributes' => $dto->configurable_attributes,
+        ], static fn ($value): bool => $value !== null);
+
+        $product = $this->repository->update($id, $typeFields + [
             'title' => $dto->title,
             'slug' => $dto->slug,
             'summary' => $dto->summary,
@@ -25,8 +32,8 @@ readonly class UpdateProductAction
             'status' => $dto->status,
             'price' => $dto->price,
             'discount' => $dto->discount,
-            'is_featured' => $dto->is_featured,
-            'd_deal' => $dto->d_deal,
+            'is_featured' => $dto->is_featured ?? false,
+            'd_deal' => $dto->d_deal ?? 0,
             'brand_id' => $dto->brand_id,
             'sku' => $dto->sku,
             'special_price' => $dto->special_price,

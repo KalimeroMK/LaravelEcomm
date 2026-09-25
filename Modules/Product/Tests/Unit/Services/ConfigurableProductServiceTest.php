@@ -75,8 +75,8 @@ class ConfigurableProductServiceTest extends TestCase
             'label' => 'M',
         ]);
 
-        // Attach attributes to product
-        $product->configurableAttributes()->attach([$colorAttr->id, $sizeAttr->id]);
+        // Configurable attributes are stored as an array of codes on the product
+        $product->update(['configurable_attributes' => ['color', 'size']]);
 
         // Generate variants
         $this->service->generateVariants($product);
@@ -103,14 +103,15 @@ class ConfigurableProductServiceTest extends TestCase
 
         $colorAttr = Attribute::factory()->create([
             'code' => 'color',
+            'type' => 'text', // value lives in text_value
             'is_configurable' => true,
         ]);
 
-        $product->configurableAttributes()->attach($colorAttr->id);
+        $product->update(['configurable_attributes' => ['color']]);
 
         // Create variant
         $variant = Product::factory()->create([
-            'type' => Product::TYPE_SIMPLE,
+            'type' => Product::TYPE_VARIANT,
             'parent_id' => $product->id,
             'sku' => 'CONFIG-SHOES-BLACK',
         ]);
@@ -121,7 +122,7 @@ class ConfigurableProductServiceTest extends TestCase
         ]);
 
         // Test finding variant
-        $found = $this->service->getVariantByAttributes($product, ['color' => 'black']);
+        $found = $this->service->findVariantByAttributes($product, ['color' => 'black']);
 
         $this->assertNotNull($found);
         $this->assertEquals($variant->id, $found->id);
@@ -135,6 +136,7 @@ class ConfigurableProductServiceTest extends TestCase
         ]);
 
         $variant = Product::factory()->create([
+            'type' => Product::TYPE_VARIANT,
             'parent_id' => $product->id,
             'price' => 10.00,
         ]);
@@ -154,6 +156,7 @@ class ConfigurableProductServiceTest extends TestCase
         ]);
 
         Product::factory()->count(3)->create([
+            'type' => Product::TYPE_VARIANT,
             'parent_id' => $product->id,
         ]);
 
@@ -171,9 +174,9 @@ class ConfigurableProductServiceTest extends TestCase
             'type' => Product::TYPE_CONFIGURABLE,
         ]);
 
-        Product::factory()->create(['parent_id' => $product->id, 'price' => 10.00]);
-        Product::factory()->create(['parent_id' => $product->id, 'price' => 20.00]);
-        Product::factory()->create(['parent_id' => $product->id, 'price' => 30.00]);
+        Product::factory()->create(['type' => Product::TYPE_VARIANT, 'parent_id' => $product->id, 'price' => 10.00]);
+        Product::factory()->create(['type' => Product::TYPE_VARIANT, 'parent_id' => $product->id, 'price' => 20.00]);
+        Product::factory()->create(['type' => Product::TYPE_VARIANT, 'parent_id' => $product->id, 'price' => 30.00]);
 
         $range = $this->service->getPriceRange($product);
 

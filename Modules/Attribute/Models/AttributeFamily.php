@@ -86,15 +86,26 @@ class AttributeFamily extends Model
      */
     public function groupsWithAttributes(): Collection
     {
-        return AttributeGroup::whereHas('attributes', function ($query) {
-            $query->whereIn('attributes.id', $this->attributes->pluck('id'));
-        })
-            ->with(['attributes' => function ($query) {
-                $query->whereIn('attributes.id', $this->attributes->pluck('id'))
-                    ->orderBy('attribute_family_attributes.position');
-            }])
+        // The family pivot (attribute_family_attributes.attribute_group_id) is
+        // the source of truth for which group each family attribute belongs to.
+        $familyAttributes = $this->attributes()->get();
+
+        $groupIds = $familyAttributes
+            ->pluck('pivot.attribute_group_id')
+            ->filter()
+            ->unique();
+
+        return AttributeGroup::whereIn('id', $groupIds)
             ->orderBy('id')
-            ->get();
+            ->get()
+            ->each(function (AttributeGroup $group) use ($familyAttributes): void {
+                $group->setRelation(
+                    'attributes',
+                    $familyAttributes
+                        ->filter(fn ($attribute) => (int) $attribute->pivot->attribute_group_id === (int) $group->id)
+                        ->values()
+                );
+            });
     }
 
     /**

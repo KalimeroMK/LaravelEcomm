@@ -111,6 +111,10 @@ class Setting extends Core implements HasMedia
         $flush = static function (): void {
             \Illuminate\Support\Facades\Cache::forget('app.settings');
             \Illuminate\Support\Facades\Cache::forget('active_theme');
+            // Drop the already-resolved container singleton so the next
+            // app('settings') re-reads the fresh row (long-running workers,
+            // and same-process updates such as tests).
+            app()->forgetInstance('settings');
         };
 
         static::saved($flush);

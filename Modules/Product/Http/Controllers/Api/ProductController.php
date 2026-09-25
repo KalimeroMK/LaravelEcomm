@@ -36,7 +36,7 @@ class ProductController extends CoreController
     public function index(Search $request): ResourceCollection
     {
         $this->authorize('viewAny', Product::class);
-        $products = $this->repository->findAll();
+        $products = $this->repository->findAllFiltered($request->query());
 
         return ProductResource::collection($products);
     }

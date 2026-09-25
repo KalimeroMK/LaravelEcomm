@@ -107,8 +107,9 @@ class ProductDownloadTest extends ProductTestCase
         
         $url = $download->getDownloadUrl(123, 456);
         
-        $this->assertStringContainsString('download=' . $download->id, $url);
-        $this->assertStringContainsString('order=123', $url);
+        // download/order are route path segments (/downloads/{download}/{order}),
+        // the signature travels as a query parameter.
+        $this->assertStringContainsString('/downloads/' . $download->id . '/123', $url);
         $this->assertStringContainsString('signature=', $url);
     }
 

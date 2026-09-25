@@ -187,8 +187,8 @@ readonly class ApplyCouponAction
         return [
             'has_coupon' => true,
             'code' => $coupon['code'],
-            'name' => $coupon['name'],
-            'type' => $coupon['type'],
+            'name' => $coupon['name'] ?? $coupon['code'],
+            'type' => $coupon['type'] ?? null,
             'discount' => $coupon['discount'] ?? 0,
             'shipping_discount' => $shippingDiscount,
             'total_discount' => ($coupon['discount'] ?? 0) + $shippingDiscount,

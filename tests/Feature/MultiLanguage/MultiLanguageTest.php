@@ -44,7 +44,8 @@ class MultiLanguageTest extends TestCase
 
         $response = $this->get('/language/invalid');
 
-        $response->assertRedirect();
+        // Unknown languages 404 instead of silently redirecting.
+        $response->assertNotFound();
         $this->assertEquals($originalLocale, App::getLocale());
     }
 

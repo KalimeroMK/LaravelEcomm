@@ -7,35 +7,38 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('homepage loads successfully', function () {
-    $response = $this->get('/');
+    // The bare root redirects to the default locale.
+    $this->get('/')->assertRedirect();
+
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
-    $response->assertSee('E-commerce Website');
+    $response->assertSee('Hot Item');
 });
 
 test('about page loads', function () {
-    $response = $this->get('/about-us');
+    $response = $this->get('/en/about-us');
 
     $response->assertStatus(200);
     $response->assertSee('About');
 });
 
 test('contact page loads', function () {
-    $response = $this->get('/contact');
+    $response = $this->get('/en/contact');
 
     $response->assertStatus(200);
     $response->assertSee('Contact');
 });
 
 test('product grids page loads', function () {
-    $response = $this->get('/product-grids');
+    $response = $this->get('/en/product-grids');
 
     $response->assertStatus(200);
     $response->assertSee('Products');
 });
 
 test('blog page loads', function () {
-    $response = $this->get('/blog');
+    $response = $this->get('/en/blog');
 
     $response->assertStatus(200);
     $response->assertSee('Blog');

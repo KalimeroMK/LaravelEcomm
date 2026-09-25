@@ -24,7 +24,7 @@ test('user can send contact message', function () {
         'phone' => '1234567890',
     ];
 
-    $response = $this->post('/contact/message', $messageData);
+    $response = $this->post('/en/contact/message', $messageData);
 
     $response->assertRedirect();
     $this->assertDatabaseHas('messages', [
@@ -138,7 +138,7 @@ test('admin can filter messages by status', function () {
 });
 
 test('message validation works', function () {
-    $response = $this->post('/contact/message', [
+    $response = $this->post('/en/contact/message', [
         'name' => '',
         'email' => 'invalid-email',
         'subject' => '',

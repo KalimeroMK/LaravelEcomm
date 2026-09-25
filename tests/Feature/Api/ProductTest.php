@@ -69,7 +69,7 @@ class ProductTest extends TestCase
             'stock' => $this->faker->numberBetween(0, 100),
             'status' => $this->faker->randomElement(['active', 'inactive']),
             'price' => $this->faker->randomFloat(2, 10, 9999),
-            'discount' => $this->faker->randomFloat(2, 0, 1000),
+            'discount' => $this->faker->randomFloat(2, 0, 70), // percent, capped at 100
             'is_featured' => $this->faker->boolean(),
             'd_deal' => $this->faker->numberBetween(0, 1),
             'sku' => 'SKU-'.mb_strtoupper(Str::random(10)),

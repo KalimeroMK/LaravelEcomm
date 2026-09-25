@@ -204,7 +204,8 @@ test('database migrations can be run', function () {
         Artisan::call('up');
     }
 
-    $response = $this->actingAs($this->admin)
+    // Database management routes require the super-admin role.
+    $response = $this->actingAs(createSuperAdminUser())
         ->post('/admin/settings/database/migrate');
 
     // Either redirect or 503 if maintenance mode is on
@@ -213,7 +214,7 @@ test('database migrations can be run', function () {
 
 test('database seeders can be run', function () {
     // Seeding might fail in test environment, but route should be accessible
-    $response = $this->actingAs($this->admin)
+    $response = $this->actingAs(createSuperAdminUser())
         ->post('/admin/settings/database/seed');
 
     // Either redirect with success or error (503 if maintenance mode is on)

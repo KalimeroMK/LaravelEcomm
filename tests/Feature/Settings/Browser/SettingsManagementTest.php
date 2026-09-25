@@ -202,7 +202,7 @@ test('settings are applied to frontend', function () {
         ]);
     }
 
-    $response = $this->get('/');
+    $response = $this->get('/en');
 
     $response->assertStatus(200);
     // Settings might be cached or not directly visible in HTML

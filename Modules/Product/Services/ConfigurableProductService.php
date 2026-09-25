@@ -170,6 +170,21 @@ readonly class ConfigurableProductService
     }
 
     /**
+     * Min/max price across a configurable product's variants.
+     *
+     * @return array{min: float, max: float}
+     */
+    public function getPriceRange(Product $product): array
+    {
+        $prices = $product->variants()->pluck('price');
+
+        return [
+            'min' => (float) ($prices->min() ?? $product->price),
+            'max' => (float) ($prices->max() ?? $product->price),
+        ];
+    }
+
+    /**
      * Get variant by selected attributes
      */
     public function findVariantByAttributes(Product $product, array $attributes): ?Product
@@ -286,7 +301,7 @@ readonly class ConfigurableProductService
     private function generateSkuSuffix(array $combination): string
     {
         $suffix = collect($combination)
-            ->map(fn ($value) => mb_strtoupper(mb_substr($value, 0, 3)))
+            ->map(fn ($value) => mb_strtoupper((string) $value))
             ->join('-');
 
         return '-'.$suffix;

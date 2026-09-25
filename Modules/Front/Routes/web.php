@@ -53,10 +53,11 @@ Route::group([
     
     // Blog Routes
     Route::get('/blog', [FrontController::class, 'blog'])->name('front.blog');
-    Route::get('/blog/{slug}', [FrontController::class, 'postDetail'])->name('front.post.detail');
-    Route::get('/blog-detail/{slug}', [FrontController::class, 'blogDetail'])->name('front.blog-detail'); // Alias
+    // Static /blog/* routes must come before the catch-all /blog/{slug}
     Route::get('/blog/search', [FrontController::class, 'blogSearch'])->name('front.blog-search');
     Route::post('/blog/filter', [FrontController::class, 'blogFilter'])->name('front.blog-filter');
+    Route::get('/blog/{slug}', [FrontController::class, 'postDetail'])->name('front.post.detail');
+    Route::get('/blog-detail/{slug}', [FrontController::class, 'blogDetail'])->name('front.blog-detail'); // Alias
     Route::get('/blog-cat/{slug}', [FrontController::class, 'blogByCategory'])->name('front.blog-by-category');
     Route::get('/blog-tag/{slug}', [FrontController::class, 'blogByTag'])->name('front.blog-by-tag');
     
@@ -96,6 +97,9 @@ Route::group([
     Route::middleware(['auth'])->group(function () {
         // Checkout Process
         Route::post('/checkout', [FrontController::class, 'checkoutProcess'])->name('front.checkout.process');
+
+        // Track an order by its order number (the order-track page form)
+        Route::post('/order/track', [FrontController::class, 'orderTrackSubmit'])->name('front.order.track');
         
         // User Orders
         Route::get('/my-orders', [FrontController::class, 'myOrders'])->name('front.my-orders');

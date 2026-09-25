@@ -31,6 +31,8 @@ readonly class ProductDTO
         public ?array $categories = null,
         public ?array $tags = null,
         public ?array $attributes = null,
+        public ?string $type = null,
+        public ?array $configurable_attributes = null,
     ) {}
 
     public static function fromRequest(Request $request, ?int $id = null, ?Product $existing = null): self
@@ -80,6 +82,8 @@ readonly class ProductDTO
             categories: $data['category'] ?? [],
             tags: $data['tag'] ?? [],
             attributes: $normalizedAttributes,
+            type: $data['type'] ?? $existing?->type,
+            configurable_attributes: $data['configurable_attributes'] ?? $existing?->configurable_attributes,
         );
     }
 
@@ -112,6 +116,8 @@ readonly class ProductDTO
             categories: $data['category'] ?? [],
             tags: $data['tag'] ?? [],
             attributes: $data['attributes'] ?? [],
+            type: $data['type'] ?? null,
+            configurable_attributes: $data['configurable_attributes'] ?? null,
         );
     }
 }

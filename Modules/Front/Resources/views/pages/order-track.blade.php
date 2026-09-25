@@ -22,10 +22,23 @@
     <section class="tracking_box_area section_gap py-5">
         <div class="container">
             <div class="tracking_box_inner">
+                @isset($order)
+                    <div class="tracking_result mb-4">
+                        <h4>Order #{{ $order->order_number }}</h4>
+                        <p>Status: <strong>{{ ucfirst($order->status) }}</strong></p>
+                        @if($order->tracking_number)
+                            <p>Tracking number: <strong>{{ $order->tracking_number }}</strong>
+                                @if($order->tracking_carrier)
+                                    ({{ $order->tracking_carrier }})
+                                @endif
+                            </p>
+                        @endif
+                    </div>
+                @endisset
                 <p>To track your order please enter your Order ID in the box below and press the "Track" button. This
                     was given
                     to you on your receipt and in the confirmation email you should have received.</p>
-                <form class="row tracking_form my-4" action="{{route('product.track.order')}}" method="post"
+                <form class="row tracking_form my-4" action="{{route('front.order.track')}}" method="post"
                       novalidate="novalidate">
                     @csrf
                     <div class="col-md-8 form-group">

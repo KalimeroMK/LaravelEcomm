@@ -54,6 +54,45 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
     }
 
     /**
+     * API listing with query-string filters. Only active products are
+     * returned unless a status is explicitly requested.
+     *
+     * @param  array<string, mixed>  $params
+     */
+    public function findAllFiltered(array $params = []): Collection
+    {
+        $query = (new $this->modelClass)->newQuery()->with($this->withRelations());
+
+        $query->where('status', $params['status'] ?? 'active');
+
+        if (! empty($params['search'])) {
+            $term = (string) $params['search'];
+            $query->where(fn ($q) => $q
+                ->where('title', 'like', "%{$term}%")
+                ->orWhere('description', 'like', "%{$term}%"));
+        }
+
+        if (isset($params['min_price']) && is_numeric($params['min_price'])) {
+            $query->where('price', '>=', (float) $params['min_price']);
+        }
+
+        if (isset($params['max_price']) && is_numeric($params['max_price'])) {
+            $query->where('price', '<=', (float) $params['max_price']);
+        }
+
+        if (filter_var($params['featured'] ?? false, FILTER_VALIDATE_BOOL)) {
+            $query->where('is_featured', true);
+        }
+
+        $sortBy = in_array($params['sort_by'] ?? null, ['id', 'title', 'price', 'created_at'], true)
+            ? $params['sort_by']
+            : 'id';
+        $sortOrder = ($params['sort_order'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
+
+        return $query->orderBy($sortBy, $sortOrder)->get();
+    }
+
+    /**
      * All featured products regardless of status (admin listing).
      */
     public function findFeatured(): Collection

@@ -22,6 +22,8 @@ class ConfigurableProductControllerTest extends TestCase
     {
         parent::setUp();
         $this->adminUser = User::factory()->create();
+        // ProductPolicy authorizes by role, not by product-* permissions.
+        $this->adminUser->assignRole('admin');
         $this->adminUser->givePermissionTo([
             'product-list', 'product-create', 'product-update', 'product-delete',
         ]);
@@ -30,19 +32,27 @@ class ConfigurableProductControllerTest extends TestCase
     #[Test]
     public function it_can_create_a_configurable_product(): void
     {
+        $category = \Modules\Category\Models\Category::factory()->create();
+        $tag = \Modules\Tag\Models\Tag::factory()->create();
+
         $productData = [
             'type' => Product::TYPE_CONFIGURABLE,
             'title' => 'T-Shirt',
             'sku' => 'TSHIRT',
+            'summary' => 'A configurable t-shirt',
             'price' => 29.99,
             'stock' => 100,
             'status' => 'active',
+            'images' => [\Illuminate\Http\UploadedFile::fake()->image('shirt.jpg')],
+            'category' => [$category->id],
+            'tag' => [$tag->id],
             'configurable_attributes' => ['color', 'size'],
         ];
 
         $response = $this->actingAs($this->adminUser)
             ->post(route('admin.products.store'), $productData);
 
+        $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('products', [
             'title' => 'T-Shirt',
@@ -252,9 +262,11 @@ class ConfigurableProductControllerTest extends TestCase
     #[Test]
     public function variant_inherits_parent_details_on_create(): void
     {
+        $brand = \Modules\Brand\Models\Brand::factory()->create();
+
         $parent = Product::factory()->create([
             'type' => Product::TYPE_CONFIGURABLE,
-            'brand_id' => 5,
+            'brand_id' => $brand->id,
             'description' => 'Parent description',
         ]);
 
@@ -265,7 +277,7 @@ class ConfigurableProductControllerTest extends TestCase
             'sku' => 'VARIANT',
         ]);
 
-        $this->assertEquals(5, $variant->brand_id);
+        $this->assertEquals($brand->id, $variant->brand_id);
         $this->assertEquals('Parent description', $variant->description);
     }
 }
