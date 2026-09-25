@@ -28,7 +28,7 @@
                     <div class="shop-sidebar">
                         <!-- Single Widget -->
                         <div class="single-widget recent-post">
-                            <h3 class="title">Recent post</h3>
+                            <h3 class="title">Recent Bundles</h3>
                             {{-- {{dd($recent_products)}} --}}
                             @foreach($products as $product)
                                 <div class="single-post first">
@@ -335,6 +335,13 @@
                     slide: function (event, ui) {
                         $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
                         $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
+                    },
+                    // Apply the filter as soon as the handle is released - no button needed
+                    stop: function (event, ui) {
+                        const params = new URLSearchParams(window.location.search);
+                        params.set('price', ui.values[0] + '-' + ui.values[1]);
+                        params.delete('page');
+                        window.location.search = params.toString();
                     }
                 });
             }

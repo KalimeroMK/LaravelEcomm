@@ -14,18 +14,18 @@
                 <div class="row">
                     {{-- Sidebar --}}
                     <div class="col-md-3 col-sm-4">
-                        <aside class="sidebar">
+                        <div class="shop-sidebar">
                             {{-- Categories Widget --}}
-                            <div class="block clearfix">
+                            <div class="single-widget category">
                                 <h3 class="title">Categories</h3>
-                                <ul class="list-unstyled">
+                                <ul class="categor-list">
                                     @foreach ($categories as $category)
                                         <li>
                                             <a href="{{ route('front.product-cat', $category->slug) }}">
                                                 {{ $category->title }}
                                             </a>
                                             @if($category->childrenCategories->count() > 0)
-                                                <ul class="list-unstyled">
+                                                <ul>
                                                     @foreach ($category->childrenCategories as $childCategory)
                                                         @include($themePath . '.layouts.child_category', ['child_category' => $childCategory])
                                                     @endforeach
@@ -36,28 +36,33 @@
                                 </ul>
                             </div>
 
-                            {{-- Price Filter --}}
-                            <div class="block clearfix">
+                            {{-- Price Filter: applies automatically when the slider is released --}}
+                            <div class="single-widget range">
                                 <h3 class="title">Shop by Price</h3>
-                                <div id="slider-range" data-min="0" data-max="{{ $max }}"></div>
-                                <div class="form-group mt-20">
-                                    <label>Range:</label>
-                                    <input type="text" id="amount" class="form-control" readonly/>
-                                    <input type="hidden" name="price_range" id="price_range" value="@if(!empty($_GET['price'])){{ $_GET['price'] }}@endif"/>
+                                <div class="price-filter">
+                                    <div class="price-filter-inner">
+                                        <div id="slider-range" data-min="0" data-max="{{ $max }}"></div>
+                                        <div class="product_filter">
+                                            <div class="label-input">
+                                                <span>Range:</span>
+                                                <input type="text" id="amount" readonly/>
+                                                <input type="hidden" name="price_range" id="price_range" value="@if(!empty($_GET['price'])){{ $_GET['price'] }}@endif"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-default btn-block">Filter</button>
                             </div>
 
                             {{-- Recent Products --}}
-                            <div class="block clearfix">
+                            <div class="single-widget recent-post">
                                 <h3 class="title">Recent Products</h3>
-                                @foreach($products->take(3) as $product)
-                                    <div class="media">
-                                        <a class="pull-left" href="{{ route('front.product-detail', $product->slug) }}">
-                                            <img class="media-object" src="{{ $product->imageThumbUrl }}" alt="{{ $product->title }}" style="width:80px;">
-                                        </a>
-                                        <div class="media-body">
-                                            <h5 class="media-heading"><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h5>
+                                @foreach(($recent_products ?? $products->take(3)) as $product)
+                                    <div class="single-post first">
+                                        <div class="image">
+                                            <img src="{{ $product->image_thumb_url }}" alt="{{ $product->title }}">
+                                        </div>
+                                        <div class="content">
+                                            <h5><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h5>
                                             @php
                                                 $org = ($product->price - ($product->price * $product->discount) / 100);
                                             @endphp
@@ -71,15 +76,15 @@
                             </div>
 
                             {{-- Brands --}}
-                            <div class="block clearfix">
+                            <div class="single-widget side-tags">
                                 <h3 class="title">Brands</h3>
-                                <ul class="list-unstyled">
+                                <ul class="tag">
                                     @foreach($brands as $brand)
                                         <li><a href="{{ route('front.product-brand', $brand->slug) }}">{{ $brand->title }}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
-                        </aside>
+                        </div>
                     </div>
 
                     {{-- Product Grid --}}
@@ -280,6 +285,13 @@ $(document).ready(function() {
             slide: function(event, ui) {
                 $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
                 $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
+            },
+            // Apply the filter as soon as the handle is released - no button needed
+            stop: function(event, ui) {
+                const params = new URLSearchParams(window.location.search);
+                params.set('price', ui.values[0] + '-' + ui.values[1]);
+                params.delete('page');
+                window.location.search = params.toString();
             }
         });
         $("#amount").val("$" + $("#slider-range").slider("values", 0) + " - $" + $("#slider-range").slider("values", 1));

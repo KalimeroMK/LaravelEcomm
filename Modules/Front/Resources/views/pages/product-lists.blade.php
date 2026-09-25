@@ -68,7 +68,6 @@
                                         </div>
                                         <div id="slider-range" data-min="0" data-max="{{$max}}"></div>
                                         <div class="product_filter">
-                                            <button type="submit" class="filter_button">Filter</button>
                                             <div class="label-input">
                                                 <span>Range:</span>
                                                 <input style="" type="text" id="amount" readonly/>
@@ -78,29 +77,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul class="check-box-list">
-                                    <li>
-                                        <label class="checkbox-inline" for="1"><input name="news" id="1"
-                                                                                      type="checkbox">$20 - $50<span
-                                                    class="count">(3)</span></label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox-inline" for="2"><input name="news" id="2"
-                                                                                      type="checkbox">$50 - $100<span
-                                                    class="count">(5)</span></label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox-inline" for="3"><input name="news" id="3"
-                                                                                      type="checkbox">$100 - $250<span
-                                                    class="count">(8)</span></label>
-                                    </li>
-                                </ul>
                             </div>
                             <!--/ End Shop By Price -->
                             <!-- Single Widget -->
                             <div class="single-widget recent-post">
                                 <h3 class="title">Recent post</h3>
-                                @foreach($products as $product)
+                                @foreach(($recent_products ?? collect()) as $product)
                                     <!-- Single Post -->
                                     <div class="single-post first">
                                         <div class="image">
@@ -437,6 +419,13 @@
                     slide: function (event, ui) {
                         $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
                         $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
+                    },
+                    // Apply the filter as soon as the handle is released - no button needed
+                    stop: function (event, ui) {
+                        const params = new URLSearchParams(window.location.search);
+                        params.set('price', ui.values[0] + '-' + ui.values[1]);
+                        params.delete('page');
+                        window.location.search = params.toString();
                     }
                 });
             }
