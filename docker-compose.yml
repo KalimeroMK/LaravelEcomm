@@ -73,7 +73,7 @@ services:
       - ELASTICSEARCH_HOST=elasticsearch
 
   db:
-    image: mariadb:11.4
+    image: mariadb:11.8
     container_name: e_comm_mysql
     restart: unless-stopped
     environment:
@@ -120,7 +120,7 @@ services:
       timeout: 10s
 
   elasticsearch:
-    image: elasticsearch:8.16.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.0
     container_name: e_comm_elasticsearch
     restart: unless-stopped
     environment:
