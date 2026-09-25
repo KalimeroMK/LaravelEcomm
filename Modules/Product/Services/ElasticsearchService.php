@@ -211,7 +211,7 @@ class ElasticsearchService
             // Fetch models to ensure they have all methods/accessors available to view
             // Using whereIn preserves order only if we explicitly sort collection or use mysql ORDER BY FIELD
             // Eager load relationships to prevent N+1 queries
-            $products = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
+            $products = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
                 ->whereIn('id', $ids)
                 ->get();
 
@@ -317,7 +317,7 @@ class ElasticsearchService
         $this->deleteIndex();
         $this->createIndex();
 
-        Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute'])
+        Product::with(['brand', 'categories', 'tags', 'attributeValues.attribute', 'media'])
             ->chunk(100, function ($products) {
                 foreach ($products as $product) {
                     $this->indexProduct($product);
@@ -330,7 +330,7 @@ class ElasticsearchService
      */
     public function searchFallback(string $query, array $filters = []): Collection
     {
-        $productsQuery = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
+        $productsQuery = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
             ->where('status', $filters['status'] ?? 'active');
 
         // Text search

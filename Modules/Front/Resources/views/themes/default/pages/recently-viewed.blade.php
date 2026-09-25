@@ -35,8 +35,8 @@
                                     <div class="single-product">
                                         <div class="product-img">
                                             <a href="{{ route('front.product-detail', $product->slug) }}">
-                                                @if($product->getFirstMediaUrl('product_images'))
-                                                    <img class="default-img" src="{{ $product->getFirstMediaUrl('product_images') }}" alt="{{ $product->title }}">
+                                                @if($product->getFirstMediaUrl('product', 'thumb'))
+                                                    <img class="default-img" src="{{ $product->getFirstMediaUrl('product', 'thumb') }}" alt="{{ $product->title }}">
                                                 @else
                                                     <img class="default-img" src="{{ asset('frontend/img/no-image.png') }}" alt="{{ $product->title }}">
                                                 @endif

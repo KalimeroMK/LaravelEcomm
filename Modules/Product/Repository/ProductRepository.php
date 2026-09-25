@@ -54,6 +54,16 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
     }
 
     /**
+     * All featured products regardless of status (admin listing).
+     */
+    public function findFeatured(): Collection
+    {
+        return (new $this->modelClass)->with($this->withRelations())
+            ->where('is_featured', true)
+            ->get();
+    }
+
+    /**
      * Find a product by ID with relations.
      */
     public function findById(int $id): ?Model
@@ -66,7 +76,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function findBySlug(string $slug): ?Product
     {
-        return Product::with(['getReview', 'categories', 'attributeValues.attribute', 'brand', 'tags', 'media'])
+        return Product::with(['getReview.user.media', 'categories', 'attributeValues.attribute', 'brand', 'tags', 'media'])
             ->whereSlug($slug)
             ->first();
     }
@@ -76,8 +86,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function getFeatured(int $limit = 4): Collection
     {
-        return Product::with(['categories', 'brand', 'tags', 'media'])
-            ->where('status', 'active')
+        return $this->frontListingQuery()
             ->where('is_featured', true)
             ->orderByDesc('price')
             ->limit($limit)
@@ -89,8 +98,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function getLatest(int $limit = 4, int $offset = 0): Collection
     {
-        return Product::with(['categories', 'brand', 'tags', 'media'])
-            ->where('status', 'active')
+        return $this->frontListingQuery()
             ->orderByDesc('id')
             ->offset($offset)
             ->limit($limit)
@@ -102,8 +110,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function getRecent(int $limit = 3): Collection
     {
-        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
-            ->where('status', 'active')
+        return $this->frontListingQuery()
             ->whereNull('parent_id')
             ->orderByDesc('id')
             ->limit($limit)
@@ -118,10 +125,9 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function getRelatedByCategoryIds(array $categoryIds, int $excludeId, int $limit = 8): Collection
     {
-        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+        return $this->frontListingQuery()
             ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
             ->where('id', '!=', $excludeId)
-            ->where('status', 'active')
             ->limit($limit)
             ->get();
     }
@@ -131,7 +137,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function getDeals(int $perPage = 9): LengthAwarePaginator
     {
-        return Product::with(['categories', 'brand', 'media'])
+        return $this->frontListingQuery()
             ->where('d_deal', true)
             ->orderByDesc('id')
             ->paginate($perPage);
@@ -142,8 +148,7 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function searchByTerm(string $term, int $perPage = 9): LengthAwarePaginator
     {
-        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
-            ->where('status', 'active')
+        return $this->frontListingQuery()
             ->where(fn ($q) => $q
                 ->where('title', 'like', "%{$term}%")
                 ->orWhere('description', 'like', "%{$term}%")
@@ -157,8 +162,9 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     public function getByBrand(string $brandSlug, int $perPage = 9): LengthAwarePaginator
     {
-        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+        return $this->frontListingQuery()
             ->whereHas('brand', fn ($q) => $q->where('slug', $brandSlug))
+            ->orderByDesc('id')
             ->paginate($perPage);
     }
 
@@ -204,7 +210,24 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     protected function withRelations(): array
     {
-        return ['brand', 'categories', 'carts', 'tags', 'attributeValues.attribute'];
+        // NOTE: 'carts' deliberately not eager-loaded — nothing on the admin
+        // index reads it and it grows with every cart line ever created.
+        return ['brand', 'categories', 'tags', 'attributeValues.attribute'];
+    }
+
+    /**
+     * Base query for front-facing product listings: active products with the
+     * relations the theme templates render, plus review aggregates so the
+     * templates never query per product.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder<Product>
+     */
+    private function frontListingQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+            ->withAvg('getReview as reviews_avg', 'rate')
+            ->withCount('getReview as reviews_count')
+            ->where('status', 'active');
     }
 
     /**
@@ -212,8 +235,9 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
      */
     private function clearProductCache(): void
     {
-        // Bump generation so all existing search_* cache keys become orphaned.
-        Cache::increment('product_search_generation');
+        // Bump generation so all parameterized listing keys
+        // (product_grids_*, product_lists_*, search_products_*) become orphaned.
+        Cache::increment('product_listing_generation');
 
         $keys = [
             'featured_products',
@@ -221,7 +245,9 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
             'hot_products',
             'all_products',
             'active_banners_with_categories',
-            'recent_products',
+            'recent_products_sidebar',
+            'deal_products',
+            'max_product_price',
         ];
 
         foreach ($keys as $key) {

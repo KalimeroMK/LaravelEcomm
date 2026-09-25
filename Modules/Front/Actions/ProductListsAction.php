@@ -21,11 +21,15 @@ class ProductListsAction
     public function __invoke(): array
     {
         $queryParams = request()->only(['category', 'brand', 'sortBy', 'price', 'show']);
-        $cacheKey    = 'product_lists_'.md5(json_encode($queryParams));
+        $page = max(1, (int) request()->input('page', 1));
+        $generation = (int) Cache::get('product_listing_generation', 1);
+        $cacheKey = 'product_lists_'.$generation.'_'.md5(json_encode($queryParams).'_page'.$page);
 
         return Cache::remember($cacheKey, 3600, function () use ($queryParams): array {
             $query = Product::query()
-                ->with(['categories', 'brand', 'tags', 'media'])
+                ->with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+                ->withAvg('getReview as reviews_avg', 'rate')
+                ->withCount('getReview as reviews_count')
                 ->where('status', 'active');
 
             if (! empty($queryParams['category'])) {
@@ -47,15 +51,14 @@ class ProductListsAction
                 $query->whereBetween('price', [(float) $min, (float) $max]);
             }
 
-            if (! empty($queryParams['sortBy'])) {
-                $col   = $queryParams['sortBy'];
-                $order = in_array($col, ['title', 'price']) ? 'asc' : 'desc';
-                $query->orderBy($col, $order);
+            $col = $queryParams['sortBy'] ?? null;
+            if (in_array($col, ['title', 'price', 'created_at', 'id'], true)) {
+                $query->orderBy($col, in_array($col, ['title', 'price'], true) ? 'asc' : 'desc');
             } else {
                 $query->orderByDesc('created_at');
             }
 
-            $products = $query->paginate((int) ($queryParams['show'] ?? 6));
+            $products = $query->paginate(min(60, max(1, (int) ($queryParams['show'] ?? 6))));
 
             $recent_products = Cache::remember('recent_products_sidebar', 1800, fn () => $this->productRepository->getRecent(3));
 
@@ -63,8 +66,8 @@ class ProductListsAction
 
             return [
                 'recent_products' => $recent_products,
-                'products'        => $products,
-                'brands'          => $brands,
+                'products' => $products,
+                'brands' => $brands,
             ];
         });
     }

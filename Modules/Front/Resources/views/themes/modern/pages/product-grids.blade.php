@@ -135,7 +135,7 @@
                                         <div class="product-item">
                                             <div class="product-item-img">
                                                 <a href="{{ route('front.product-detail', $product->slug) }}">
-                                                    <img src="{{ $product->imageUrl }}" alt="{{ $product->title }}" class="img-responsive">
+                                                    <img src="{{ $product->image_thumb_url }}" alt="{{ $product->title }}" class="img-responsive">
                                                 </a>
                                                 @if($product->discount)
                                                     <span class="badge badge-danger">-{{ $product->discount }}%</span>
@@ -195,14 +195,14 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <img src="{{ $product->imageUrl }}" alt="{{ $product->title }}" class="img-responsive">
+                                    <img src="{{ $product->image_thumb_url }}" alt="{{ $product->title }}" class="img-responsive">
                                 </div>
                                 <div class="col-md-6">
                                     <h3>{{ $product->title }}</h3>
                                     @php
                                         $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-                                        $rate = DB::table('product_reviews')->where('product_id', $product->id)->avg('rate');
-                                        $rate_count = DB::table('product_reviews')->where('product_id', $product->id)->count();
+                                        $rate = $product->reviews_avg ?? 0;
+                                        $rate_count = $product->reviews_count ?? 0;
                                     @endphp
                                     <div class="rating">
                                         @for($i = 1; $i <= 5; $i++)

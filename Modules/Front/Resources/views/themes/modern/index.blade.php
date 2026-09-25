@@ -101,7 +101,7 @@
                                     <div class="col-md-3 col-sm-6 masonry-grid-item">
                                         <div class="listing-item white-bg bordered mb-20">
                                             <div class="overlay-container">
-                                                <img src="{{ $product->imageUrl }}" alt="{{ $product->title }}">
+                                                <img src="{{ $product->image_thumb_url }}" alt="{{ $product->title }}">
                                                 <a class="overlay-link popup-img-single" href="{{ $product->imageUrl }}">
                                                     <i class="fa fa-search-plus"></i>
                                                 </a>
@@ -145,7 +145,7 @@
                                     <div class="col-md-3 col-sm-6 masonry-grid-item">
                                         <div class="listing-item white-bg bordered mb-20">
                                             <div class="overlay-container">
-                                                <img src="{{ $product->imageUrl }}" alt="{{ $product->title }}">
+                                                <img src="{{ $product->image_thumb_url }}" alt="{{ $product->title }}">
                                                 <a class="overlay-link popup-img-single" href="{{ $product->imageUrl }}">
                                                     <i class="fa fa-search-plus"></i>
                                                 </a>
@@ -189,7 +189,7 @@
                                     <div class="col-md-3 col-sm-6 masonry-grid-item">
                                         <div class="listing-item white-bg bordered mb-20">
                                             <div class="overlay-container">
-                                                <img src="{{ $product->imageUrl }}" alt="{{ $product->title }}">
+                                                <img src="{{ $product->image_thumb_url }}" alt="{{ $product->title }}">
                                                 <a class="overlay-link popup-img-single" href="{{ $product->imageUrl }}">
                                                     <i class="fa fa-search-plus"></i>
                                                 </a>

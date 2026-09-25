@@ -10,20 +10,8 @@ use Modules\Product\Models\Product;
 class RecentlyViewedService
 {
     private const CACHE_TTL = 43200; // 30 days in minutes
-    private const MAX_ITEMS = 20;
 
-    /**
-     * Get cache key for user or session.
-     */
-    private function getCacheKey(?int $userId = null): string
-    {
-        if ($userId) {
-            return 'recently_viewed_user_' . $userId;
-        }
-        
-        $sessionId = session()->getId();
-        return 'recently_viewed_session_' . $sessionId;
-    }
+    private const MAX_ITEMS = 20;
 
     /**
      * Add product to recently viewed list.
@@ -32,16 +20,16 @@ class RecentlyViewedService
     {
         $key = $this->getCacheKey($userId);
         $products = Cache::get($key, []);
-        
+
         // Remove if already exists (to move to front)
         $products = array_diff($products, [$productId]);
-        
+
         // Add to front of array
         array_unshift($products, $productId);
-        
+
         // Limit to max items
         $products = array_slice($products, 0, self::MAX_ITEMS);
-        
+
         Cache::put($key, $products, self::CACHE_TTL);
     }
 
@@ -52,19 +40,19 @@ class RecentlyViewedService
     {
         $key = $this->getCacheKey($userId);
         $productIds = Cache::get($key, []);
-        
+
         if (empty($productIds)) {
             return [];
         }
-        
+
         // Limit the number of products
         $productIds = array_slice($productIds, 0, $limit);
-        
+
         // Get active products
-        $products = Product::whereIn('id', $productIds)
+        $products = Product::with('media')->whereIn('id', $productIds)
             ->where('status', 'active')
             ->get();
-        
+
         // Sort by original order
         $sortedProducts = [];
         foreach ($productIds as $id) {
@@ -73,7 +61,7 @@ class RecentlyViewedService
                 $sortedProducts[] = $product;
             }
         }
-        
+
         return $sortedProducts;
     }
 
@@ -83,6 +71,7 @@ class RecentlyViewedService
     public function getForCurrentUser(int $limit = 8): array
     {
         $userId = auth()->id();
+
         return $this->getProducts($userId, $limit);
     }
 
@@ -102,6 +91,7 @@ class RecentlyViewedService
     {
         $key = $this->getCacheKey($userId);
         $products = Cache::get($key, []);
+
         return count($products);
     }
 
@@ -112,15 +102,29 @@ class RecentlyViewedService
     {
         $sessionKey = $this->getCacheKey();
         $userKey = $this->getCacheKey($userId);
-        
+
         $sessionProducts = Cache::get($sessionKey, []);
         $userProducts = Cache::get($userKey, []);
-        
+
         // Merge and remove duplicates
         $merged = array_unique(array_merge($userProducts, $sessionProducts));
         $merged = array_slice($merged, 0, self::MAX_ITEMS);
-        
+
         Cache::put($userKey, $merged, self::CACHE_TTL);
         Cache::forget($sessionKey);
+    }
+
+    /**
+     * Get cache key for user or session.
+     */
+    private function getCacheKey(?int $userId = null): string
+    {
+        if ($userId) {
+            return 'recently_viewed_user_'.$userId;
+        }
+
+        $sessionId = session()->getId();
+
+        return 'recently_viewed_session_'.$sessionId;
     }
 }

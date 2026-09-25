@@ -49,9 +49,12 @@ class ImageGenerator
             $font->align('center', 'center');
         });
 
-        // Save to temporary file
-        $tempPath = tempnam(sys_get_temp_dir(), 'img_').'.jpg';
+        // Save to temporary file (drop the extension-less tempnam artifact,
+        // which used to be left behind on every call)
+        $tempBase = tempnam(sys_get_temp_dir(), 'img_');
+        $tempPath = $tempBase.'.jpg';
         $image->encodeUsingMediaType('image/jpeg', quality: 85)->save($tempPath);
+        @unlink($tempBase);
 
         return $tempPath;
     }

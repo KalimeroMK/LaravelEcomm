@@ -135,8 +135,8 @@
                     @foreach($products as $product)
                         <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                             <div class="aspect-w-1 aspect-h-1 bg-gray-200">
-                                @if($product->getFirstMediaUrl('images'))
-                                    <img src="{{ $product->getFirstMediaUrl('images') }}" 
+                                @if($product->getFirstMediaUrl('product', 'thumb'))
+                                    <img src="{{ $product->getFirstMediaUrl('product', 'thumb') }}" 
                                          alt="{{ $product->title }}"
                                          class="w-full h-48 object-cover">
                                 @else

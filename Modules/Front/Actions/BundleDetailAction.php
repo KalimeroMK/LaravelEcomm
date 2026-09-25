@@ -29,7 +29,7 @@ class BundleDetailAction
             $bundle->load('products');
         }
 
-        $related = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute'])
+        $related = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
             ->where('status', 'active')
             ->whereNotIn('id', $bundle->products->pluck('id'))
             ->orderBy('id', 'DESC')

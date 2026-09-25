@@ -13,9 +13,9 @@ class GetSearchSuggestionsAction
 {
     private const QUERY_CORRECTIONS = [
         'laptop' => 'laptop computer',
-        'phone'  => 'smartphone',
-        'tv'     => 'television',
-        'pc'     => 'personal computer',
+        'phone' => 'smartphone',
+        'tv' => 'television',
+        'pc' => 'personal computer',
     ];
 
     public function __construct(
@@ -26,17 +26,31 @@ class GetSearchSuggestionsAction
 
     public function __invoke(string $query): array
     {
-        $products = $this->productRepository->searchByTerm($query, 5);
-
-        $categories = Category::where('title', 'like', "%{$query}%")->active()->get() ?? collect();
-
-        $brands = $this->brandRepository->searchByTerm($query);
-
-        return [
-            'popular_terms'  => $products->pluck('title')->take(5)->toArray(),
-            'categories'     => $categories->pluck('title')->take(3)->toArray(),
-            'brands'         => $brands->pluck('title')->take(3)->toArray(),
-            'suggested_query' => self::QUERY_CORRECTIONS[$query] ?? $query,
-        ];
+        // Hit on every keystroke: cache briefly and fetch only the titles —
+        // no relations, no pagination COUNT, no unbounded ->get().
+        return \Illuminate\Support\Facades\Cache::remember(
+            'search_suggestions_'.md5(mb_strtolower($query)),
+            300,
+            fn (): array => [
+                'popular_terms' => \Modules\Product\Models\Product::query()
+                    ->where('status', 'active')
+                    ->where('title', 'like', "%{$query}%")
+                    ->limit(5)
+                    ->pluck('title')
+                    ->toArray(),
+                'categories' => Category::query()
+                    ->active()
+                    ->where('title', 'like', "%{$query}%")
+                    ->limit(3)
+                    ->pluck('title')
+                    ->toArray(),
+                'brands' => \Modules\Brand\Models\Brand::query()
+                    ->where('title', 'like', "%{$query}%")
+                    ->limit(3)
+                    ->pluck('title')
+                    ->toArray(),
+                'suggested_query' => self::QUERY_CORRECTIONS[$query] ?? $query,
+            ]
+        );
     }
 }

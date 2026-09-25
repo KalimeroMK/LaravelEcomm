@@ -133,7 +133,8 @@ class AbandonedCartService
      */
     private function getCartItems(?User $user = null, ?string $sessionId = null): array
     {
-        $query = Cart::with('product')
+        // No relations needed — only scalar cart columns are snapshotted below.
+        $query = Cart::query()
             ->where('status', 'new')
             ->whereNull('order_id');
 

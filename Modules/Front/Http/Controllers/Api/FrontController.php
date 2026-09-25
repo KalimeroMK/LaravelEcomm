@@ -7,11 +7,13 @@ namespace Modules\Front\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
 use Log;
 use Modules\Banner\Models\Banner;
 use Modules\Billing\Services\WishlistService;
 use Modules\Core\Http\Controllers\Api\CoreController;
+use Modules\Coupon\Actions\ApplyCouponAction;
 use Modules\Front\Actions\BlogAction;
 use Modules\Front\Actions\BlogByCategoryAction;
 use Modules\Front\Actions\BlogByTagAction;
@@ -19,8 +21,6 @@ use Modules\Front\Actions\BlogDetailAction;
 use Modules\Front\Actions\BlogFilterAction;
 use Modules\Front\Actions\BlogSearchAction;
 use Modules\Front\Actions\BundleDetailAction;
-use Modules\Coupon\Actions\ApplyCouponAction;
-use Illuminate\Support\Facades\Auth;
 use Modules\Front\Actions\IndexAction;
 use Modules\Front\Actions\MessageStoreAction;
 use Modules\Front\Actions\NewsletterDeleteAction;
@@ -177,7 +177,7 @@ class FrontController extends CoreController
     public function couponRemove(ApplyCouponAction $applyCouponAction): JsonResponse
     {
         $result = $applyCouponAction->remove();
-        
+
         return $this
             ->setMessage($result['message'])
             ->respond($result);
@@ -273,7 +273,8 @@ class FrontController extends CoreController
             });
         }
 
-        $banners = $query->get()->filter(fn ($b): bool => $b->isActive());
+        // Filter at DB level via scopeActive() instead of hydrating all banners.
+        $banners = $query->active()->get();
 
         return $this
             ->setMessage('Banners retrieved successfully.')
@@ -510,20 +511,23 @@ class FrontController extends CoreController
      */
     private function getSearchSuggestions(string $query): array
     {
-        $popularTerms = \Modules\Product\Models\Product::where('title', 'like', "%{$query}%")
-            ->orWhere('summary', 'like', "%{$query}%")
+        // LIMIT in SQL (not ->take() after fetching every match), and use the
+        // real 'title' columns — categories/brands have no 'name' column.
+        $popularTerms = \Modules\Product\Models\Product::where(fn ($q) => $q
+            ->where('title', 'like', "%{$query}%")
+            ->orWhere('summary', 'like', "%{$query}%"))
+            ->limit(5)
             ->pluck('title')
-            ->take(5)
             ->toArray();
 
-        $categorySuggestions = \Modules\Category\Models\Category::where('name', 'like', "%{$query}%")
-            ->pluck('name')
-            ->take(3)
+        $categorySuggestions = \Modules\Category\Models\Category::where('title', 'like', "%{$query}%")
+            ->limit(3)
+            ->pluck('title')
             ->toArray();
 
-        $brandSuggestions = \Modules\Brand\Models\Brand::where('name', 'like', "%{$query}%")
-            ->pluck('name')
-            ->take(3)
+        $brandSuggestions = \Modules\Brand\Models\Brand::where('title', 'like', "%{$query}%")
+            ->limit(3)
+            ->pluck('title')
             ->toArray();
 
         return [

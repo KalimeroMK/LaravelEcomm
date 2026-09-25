@@ -193,8 +193,8 @@
                                         <div class="single-product">
                                             <div class="product-img">
                                                 <a href="{{route('front.product-detail',$product->slug)}}">
-                                                    <img class="default-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
-<img class="hover-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
+                                                    <img class="default-img" src="{{ $product->image_thumb_url }}" alt="{{$product->title}}">
+<img class="hover-img" src="{{ $product->image_thumb_url }}" alt="{{$product->title}}">
                                                     @if($product->discount)
                                                         <span class="price-dec">{{$product->discount}} % @lang('frontend.off')</span>
                                                     @endif
@@ -273,7 +273,7 @@
                                         <div class="quickview-slider-active">
 
                                             <div class="single-slider">
-                                                <img class="default-img" src="{{$product->imageUrl}}" alt="{{$product->title}}">
+                                                <img class="default-img" src="{{ $product->image_thumb_url }}" alt="{{$product->title}}">
                                             </div>
                                         </div>
                                     </div>
@@ -291,8 +291,8 @@
                                                     <i class="yellow fa fa-star"></i>
                                                     <i class="fa fa-star"></i>
                                                     @php
-                                                        $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
-                                                        $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
+                                                        $rate = $product->reviews_avg ?? 0;
+                                                        $rate_count = $product->reviews_count ?? 0;
                                                     @endphp
                                                     @for($i=1; $i<=5; $i++)
                                                         @if($rate>=$i)

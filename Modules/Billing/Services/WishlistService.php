@@ -130,9 +130,10 @@ class WishlistService
     /**
      * Get wishlist statistics
      */
-    public function getWishlistStats(User $user): array
+    public function getWishlistStats(User $user, ?Collection $wishlist = null): array
     {
-        $wishlist = $user->wishlists()->with('product')->get();
+        // Reuse an already-loaded wishlist when the caller has one.
+        $wishlist ??= $user->wishlists()->with('product')->get();
 
         return [
             'total_items' => $wishlist->count(),
@@ -150,24 +151,23 @@ class WishlistService
     /**
      * Get wishlist recommendations based on current items
      */
-    public function getWishlistRecommendations(User $user, int $limit = 5): Collection
+    public function getWishlistRecommendations(User $user, int $limit = 5, ?Collection $wishlist = null): Collection
     {
-        $wishlistCategories = $user->wishlists()
-            ->with('product.categories')
-            ->get()
+        // One wishlist load (or the caller's) instead of three separate queries.
+        $wishlist ??= $this->getUserWishlist($user);
+
+        $wishlistCategories = $wishlist
             ->pluck('product.categories.*.id')
             ->flatten()
             ->filter()
             ->unique();
 
-        $wishlistBrands = $user->wishlists()
-            ->with('product.brand')
-            ->get()
+        $wishlistBrands = $wishlist
             ->pluck('product.brand_id')
             ->filter()
             ->unique();
 
-        $wishlistProductIds = $user->wishlists()->pluck('product_id')->toArray();
+        $wishlistProductIds = $wishlist->pluck('product_id')->toArray();
 
         return Product::where('status', 'active')
             ->where('stock', '>', 0)
@@ -235,7 +235,7 @@ class WishlistService
     public function getWishlistWithPriceAlerts(User $user): Collection
     {
         return $user->wishlists()
-            ->with(['product.media', 'product.brand'])
+            ->with(['product.media', 'product.brand', 'product.categories'])
             ->get()
             ->map(function ($wishlist): \Illuminate\Database\Eloquent\Model {
                 $product = $wishlist->product;

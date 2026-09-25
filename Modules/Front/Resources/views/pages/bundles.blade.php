@@ -189,8 +189,8 @@
                                                     <i class="yellow fa fa-star"></i>
                                                     <i class="fa fa-star"></i>
                                                     @php
-                                                        $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
-                                                        $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
+                                                        $rate = $product->reviews_avg ?? 0;
+                                                        $rate_count = $product->reviews_count ?? 0;
                                                     @endphp
                                                     @for($i=1; $i<=5; $i++)
                                                         @if($rate>=$i)
