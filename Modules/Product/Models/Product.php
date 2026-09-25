@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Kalimeromk\Filterable\app\Traits\Filterable;
+use Kalimeromk\Filterable\Traits\Filterable;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeFamily;
 use Modules\Attribute\Models\AttributeValue;

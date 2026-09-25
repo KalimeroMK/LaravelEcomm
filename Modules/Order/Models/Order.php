@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Kalimeromk\Filterable\app\Traits\Filterable;
+use Kalimeromk\Filterable\Traits\Filterable;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Models\Core;
 use Modules\Order\Database\Factories\OrderFactory;
