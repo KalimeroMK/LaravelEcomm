@@ -83,12 +83,20 @@
                                     @endif
                                 </div>
                                 <div class="text-center">
+                                    {{-- Social buttons only when the provider is actually configured;
+                                         an unconfigured provider 500s on redirect --}}
+                                    @if(config('services.facebook.client_id'))
                                     <a href="{{ url('login/facebook') }}" class="btn btn-social-icon btn-facebook"><i
                                                 class="fab fa-facebook"></i></a>
+                                    @endif
+                                    @if(config('services.twitter.client_id'))
                                     <a href="{{ url('login/twitter') }}" class="btn btn-social-icon btn-twitter"><i
                                                 class="fab fa-twitter"></i></a>
+                                    @endif
+                                    @if(config('services.github.client_id'))
                                     <a href="{{ url('login/github') }}" class="btn btn-social-icon btn-github"><i
                                                 class="fab fa-github"></i></a>
+                                    @endif
 
                                 </div>
 

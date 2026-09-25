@@ -60,6 +60,12 @@ class AuthController extends CoreController
 
     public function socialLogin(string $social): RedirectResponse
     {
+        // A provider without credentials 500s inside Socialite; fail soft.
+        if (! config("services.{$social}.client_id")) {
+            return redirect()->route('login')
+                ->with('error', ucfirst($social).' login is not configured.');
+        }
+
         return Socialite::driver($social)->redirect();
     }
 

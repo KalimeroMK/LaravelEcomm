@@ -125,7 +125,7 @@
                                         </div>
                                         <div class="product-content">
                                             <h3>
-                                                <a href="{{route('front.product-detail',$product->slug)}}">{{$product->name}}</a>
+                                                <a href="{{route('front.bundle-detail',$product->slug)}}">{{$product->name}}</a>
                                             </h3>
                                             <span>${{number_format($product->price,2)}}</span>
                                         </div>
