@@ -76,9 +76,9 @@
                             </div>
 
                             {{-- Brands --}}
-                            <div class="single-widget side-tags">
+                            <div class="single-widget category">
                                 <h3 class="title">Brands</h3>
-                                <ul class="tag">
+                                <ul class="categor-list">
                                     @foreach($brands as $brand)
                                         <li><a href="{{ route('front.product-brand', $brand->slug) }}">{{ $brand->title }}</a></li>
                                     @endforeach
@@ -261,6 +261,10 @@
 .product-item-title a { color: #333; font-weight: 500; }
 .product-item-title a:hover { color: #4eb3dd; }
 .product-item-price { font-size: 18px; font-weight: 600; }
+/* Keep the price range readout inside the sidebar card at any width */
+.shop-sidebar .single-widget.range .label-input { display: flex; align-items: center; gap: 6px; }
+.shop-sidebar .single-widget.range .label-input input { flex: 1 1 auto; width: 100%; min-width: 0; box-sizing: border-box; }
+.shop-sidebar .single-widget.range .price-filter { overflow: hidden; }
 </style>
 @endpush
 

@@ -24,9 +24,11 @@ class ProductBrandAction
         $recentProducts = Cache::remember('recent_products_sidebar', 1800, fn () => $this->productRepository->getRecent(3));
 
         return [
-            'products'       => $products,
-            'brands'         => $brands,
-            'recentProducts' => $recentProducts,
+            'products'        => $products,
+            'brands'          => $brands,
+            'recentProducts'  => $recentProducts,
+            // Both spellings: the shared list/grid templates read recent_products.
+            'recent_products' => $recentProducts,
         ];
     }
 }
