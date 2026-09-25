@@ -141,7 +141,7 @@ use Modules\Core\Helpers\Helper;
                                     <div class="row">
                                         <div class="col-lg-4 col-md-6 col-12">
                                             <div class="list-image overlay" style="position: relative;">
-                                                <img src="{{ $product->image_url ?? asset('frontend/img/placeholder.jpg') }}" alt="{{ $product->title }}">
+                                                <img src="{{ $product->image_thumb_url ?? asset('frontend/img/placeholder.jpg') }}" alt="{{ $product->title }}">
                                                 <!-- Overlay Actions -->
                                                 <div class="image-actions" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); z-index: 10;">
                                                     <a href="{{ route('add-to-cart', $product->slug) }}" class="action-btn" style="width: 40px; height: 40px; background: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #333; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); margin-right: 10px;">

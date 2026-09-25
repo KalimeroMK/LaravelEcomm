@@ -29,7 +29,30 @@ class ProductCatAction
             ];
         }
 
-        $childCategories = $category->children;
+        // Child category cards: real product count and a cover image taken
+        // from the first active product (categories carry no photo column, so
+        // the templates' $childCat->photo used to always fall back to the
+        // static grey placeholder).
+        $childCategories = Cache::remember(
+            "category_children_{$category->id}",
+            1800,
+            function () use ($category) {
+                $children = $category->children()
+                    ->withCount(['products' => fn ($q) => $q->where('status', 'active')])
+                    ->get();
+
+                $children->each(function ($child): void {
+                    $cover = $child->products()
+                        ->where('status', 'active')
+                        ->whereHas('media')
+                        ->with('media')
+                        ->first();
+                    $child->setAttribute('photo', $cover?->image_thumb_url);
+                });
+
+                return $children;
+            }
+        );
 
         $products = $childCategories->isEmpty()
             ? $category->products()->where('status', 'active')->with(['brand', 'media'])->paginate(12)

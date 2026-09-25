@@ -74,7 +74,7 @@ use Modules\Core\Helpers\Helper;
                             <div class="col-md-4 col-sm-6">
                                 <div class="listing-item bordered light-gray-bg mb-20">
                                     <div class="overlay-container">
-                                        <img src="{{ $product->image_url ?? asset('frontend/themes/modern/images/product-placeholder.jpg') }}" alt="{{ $product->title }}" style="height: 250px; object-fit: cover; width: 100%;">
+                                        <img src="{{ $product->image_thumb_url ?? asset('frontend/img/placeholder.jpg') }}" alt="{{ $product->title }}" style="height: 250px; object-fit: cover; width: 100%;">
                                         <a href="{{ route('front.product-detail', $product->slug) }}" class="overlay-link"></a>
                                         @if($product->discount > 0)
                                             <span class="badge badge-danger">-{{ $product->discount }}%</span>
@@ -130,7 +130,7 @@ use Modules\Core\Helpers\Helper;
             <div class="col-md-3 col-sm-6">
                 <div class="listing-item bordered light-gray-bg mb-20">
                     <div class="overlay-container">
-                        <img src="{{ $recentProduct->image_url ?? asset('frontend/themes/modern/images/product-placeholder.jpg') }}" alt="{{ $recentProduct->title }}" style="height: 180px; object-fit: cover; width: 100%;">
+                        <img src="{{ $recentProduct->image_thumb_url ?? asset('frontend/img/placeholder.jpg') }}" alt="{{ $recentProduct->title }}" style="height: 180px; object-fit: cover; width: 100%;">
                         <a href="{{ route('front.product-detail', $recentProduct->slug) }}" class="overlay-link"></a>
                     </div>
                     <div class="body">
