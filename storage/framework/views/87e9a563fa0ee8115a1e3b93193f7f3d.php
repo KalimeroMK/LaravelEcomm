@@ -1,6 +1,5 @@
-@extends('admin::layouts.master')
-@section('title', 'Analytics Dashboard')
-@section('content')
+<?php $__env->startSection('title', 'Analytics Dashboard'); ?>
+<?php $__env->startSection('content'); ?>
     <style>
         /* Chart.js with maintainAspectRatio:false needs a fixed-height parent,
            otherwise the canvas resizes its own container in a feedback loop
@@ -34,11 +33,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-3">
                             <label for="startDate">Start Date:</label>
-                            <input type="date" id="startDate" class="form-control" value="{{ now()->subMonth()->format('Y-m-d') }}">
+                            <input type="date" id="startDate" class="form-control" value="<?php echo e(now()->subMonth()->format('Y-m-d')); ?>">
                         </div>
                         <div class="col-md-3">
                             <label for="endDate">End Date:</label>
-                            <input type="date" id="endDate" class="form-control" value="{{ now()->format('Y-m-d') }}">
+                            <input type="date" id="endDate" class="form-control" value="<?php echo e(now()->format('Y-m-d')); ?>">
                         </div>
                         <div class="col-md-3">
                             <label for="analyticsType">Analytics Type:</label>
@@ -385,14 +384,14 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
-    <link href="{{asset('backend/css/analytics.css')}}" rel="stylesheet">
-@endpush
+<?php $__env->startPush('styles'); ?>
+    <link href="<?php echo e(asset('backend/css/analytics.css')); ?>" rel="stylesheet">
+<?php $__env->stopPush(); ?>
 
-@push('scripts')
-<script src="{{ asset('backend/vendor/chart.js/chart.umd.js') }}"></script>
+<?php $__env->startPush('scripts'); ?>
+<script src="<?php echo e(asset('backend/vendor/chart.js/chart.umd.js')); ?>"></script>
 <script>
     // Global variables
     let revenueChart, ordersPieChart, salesChart, userRegistrationsChart, userSegmentsChart;
@@ -987,4 +986,6 @@
         }
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('admin::layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/Modules/Admin/Resources/views/analytics-dashboard.blade.php ENDPATH**/ ?>
