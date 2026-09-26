@@ -102,9 +102,13 @@ class ProductFactory extends Factory
                 'material' => ['Silk', 'Cotton', 'Polyester', 'Plastic'],
                 'brand' => ['Nike', 'Adidas', 'Puma'],
             ];
-            $attributeModels = Attribute::whereIn('code', array_keys($attributes))->get();
+            $attributeModels = Attribute::with('options')->whereIn('code', array_keys($attributes))->get();
             foreach ($attributeModels as $attribute) {
-                $value = $attributes[$attribute->code][array_rand($attributes[$attribute->code])];
+                // Prefer the attribute's real option values so layered
+                // navigation counts line up; fall back to the sample list.
+                $value = $attribute->options->isNotEmpty()
+                    ? $attribute->options->random()->value
+                    : $attributes[$attribute->code][array_rand($attributes[$attribute->code])];
                 $column = method_exists(
                     $attribute,
                     'getValueColumnName'

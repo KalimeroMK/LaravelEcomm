@@ -54,6 +54,74 @@ services:
         reservations:
           memory: 512M
 
+  # Queue worker — newsletters, media conversions, order/abandoned-cart emails.
+  queue:
+    build:
+      context: .docker
+      dockerfile: Dockerfile
+    container_name: e_comm_queue
+    restart: unless-stopped
+    working_dir: /var/www/
+    command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravelapp
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "--version" ]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOST=elasticsearch
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # Scheduler — abandoned-cart recovery emails, cleanups, scheduled reports.
+  scheduler:
+    build:
+      context: .docker
+      dockerfile: Dockerfile
+    container_name: e_comm_scheduler
+    restart: unless-stopped
+    working_dir: /var/www/
+    command: php artisan schedule:work
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravelapp
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "--version" ]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOST=elasticsearch
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
   db:
     image: mariadb:11.8
     container_name: e_comm_mysql

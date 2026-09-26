@@ -41,6 +41,9 @@ class UpdateCartItemsActionTest extends ActionTestCase
             'qty_id' => [$cart1->id, $cart2->id], // Cart item IDs
         ]);
 
+        // The action only updates rows owned by the current visitor.
+        $this->actingAs($user);
+
         $action = app(UpdateCartItemsAction::class);
         $action->execute($request);
 
@@ -162,6 +165,9 @@ class UpdateCartItemsActionTest extends ActionTestCase
             'quantity' => [10],
             'qty_id' => [$cart->id],
         ]);
+
+        // The action only updates rows owned by the current visitor.
+        $this->actingAs($user);
 
         $action = app(UpdateCartItemsAction::class);
         $action->execute($request);

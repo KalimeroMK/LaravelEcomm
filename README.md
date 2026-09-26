@@ -594,6 +594,10 @@ docker exec e_comm_app php artisan migrate
 # - MySQL:            3311 → 3306
 # - Redis:            6381 → 6379
 # - Elasticsearch:    9200 → 9200
+
+# Background services (started automatically with docker-compose up):
+# - e_comm_queue      php artisan queue:work redis   (emails, media, jobs)
+# - e_comm_scheduler  php artisan schedule:work      (abandoned-cart emails, cleanups)
 ```
 
 #### Email Configuration
@@ -607,7 +611,8 @@ MAIL_USERNAME=your-email
 MAIL_PASSWORD=your-password
 MAIL_ENCRYPTION=tls
 
-# Process abandoned cart emails
+# Abandoned-cart recovery emails run automatically via the scheduler
+# container (hourly). To trigger a run manually:
 php artisan cart:process-abandoned-emails
 ```
 

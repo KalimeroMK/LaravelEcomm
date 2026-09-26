@@ -72,6 +72,37 @@ services:
       - REDIS_HOST=redis
       - ELASTICSEARCH_HOST=elasticsearch
 
+  # Scheduler — runs due scheduled tasks (abandoned-cart emails, cleanups,
+  # scheduled reports) every minute.
+  scheduler:
+    build:
+      context: .docker
+      dockerfile: Dockerfile
+    container_name: e_comm_scheduler
+    restart: unless-stopped
+    working_dir: /var/www/
+    command: php artisan schedule:work
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "--version" ]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravelapp
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOST=elasticsearch
+
   db:
     image: mariadb:11.8
     container_name: e_comm_mysql

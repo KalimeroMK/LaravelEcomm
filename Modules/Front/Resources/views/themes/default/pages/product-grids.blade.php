@@ -67,6 +67,7 @@
                                 </div>
                             </div>
                             <!--/ End Shop By Price -->
+                            @include('front::partials.attribute-filters')
                             <!-- Single Widget -->
                             <div class="single-widget recent-post">
                                 <h3 class="title">@lang('frontend.recent_post')</h3>

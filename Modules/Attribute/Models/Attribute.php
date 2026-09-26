@@ -186,7 +186,8 @@ class Attribute extends Core
             'url' => 'url_value',
             'hex' => 'hex_value',
             'decimal' => 'decimal_value',
-            default => null,
+            // select / multiselect / anything else stores plain text
+            default => 'text_value',
         };
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Cart\Actions;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Cart\DTOs\CartDTO;
 use Modules\Cart\Repository\CartRepository;
 
@@ -23,6 +24,15 @@ readonly class UpdateCartItemsAction
                 $cart = $this->repository->findById($id);
 
                 if (! $cart) {
+                    continue;
+                }
+
+                // Only touch rows owned by the current visitor (user or guest session).
+                $owns = Auth::check()
+                    ? $cart->user_id === Auth::id()
+                    : ($cart->user_id === null && $cart->session_id === session()->getId());
+
+                if (! $owns) {
                     continue;
                 }
 

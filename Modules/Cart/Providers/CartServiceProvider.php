@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Modules\Cart\Providers;
 
 use Config;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Modules\Cart\Listeners\MergeGuestCart;
 
 class CartServiceProvider extends ServiceProvider
 {
@@ -22,6 +25,9 @@ class CartServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+
+        // Guest carts are claimed by the account on login.
+        Event::listen(Login::class, MergeGuestCart::class);
     }
 
     /**

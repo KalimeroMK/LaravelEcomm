@@ -53,6 +53,8 @@
                                 </div>
                             </div>
 
+                            @include('front::partials.attribute-filters')
+
                             {{-- Recent Products --}}
                             <div class="single-widget recent-post">
                                 <h3 class="title">Recent Products</h3>

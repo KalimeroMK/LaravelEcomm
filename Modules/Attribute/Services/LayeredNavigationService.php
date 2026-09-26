@@ -46,8 +46,11 @@ readonly class LayeredNavigationService
     public function getOptionsWithCounts(Attribute $attribute, ?array $categoryIds = null): Collection
     {
         /** @var Collection<string, int> $counts */
+        // Values live in a type-specific column (text for selects, string for
+        // plain strings...) - count across both text-ish columns.
         $counts = $attribute->attributeValues()
-            ->selectRaw('text_value as value, COUNT(DISTINCT attributable_id) as count')
+            ->selectRaw('COALESCE(text_value, string_value) as value, COUNT(DISTINCT attributable_id) as count')
+            ->whereRaw('COALESCE(text_value, string_value) IS NOT NULL')
             ->where('attributable_type', Product::class)
             ->whereHas('attributable', function (Builder $query) use ($categoryIds) {
                 $query->where('status', 'active');
@@ -58,7 +61,7 @@ readonly class LayeredNavigationService
                     });
                 }
             })
-            ->groupBy('text_value')
+            ->groupBy(\Illuminate\Support\Facades\DB::raw('COALESCE(text_value, string_value)'))
             ->pluck('count', 'value');
 
         return $attribute->options->map(function ($option) use ($counts) {

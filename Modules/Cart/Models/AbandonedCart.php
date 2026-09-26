@@ -97,14 +97,21 @@ class AbandonedCart extends Core
      */
     public function getCartItemsAttribute(): array
     {
-        return collect($this->cart_data)->map(function (array $item): array {
-            $product = \Modules\Product\Models\Product::find($item['product_id']);
+        // Snapshots are stored JSON - stay tolerant of missing keys so one
+        // malformed row can never break the whole recovery-email run.
+        return collect($this->cart_data ?? [])->map(function (array $item): array {
+            $product = isset($item['product_id'])
+                ? \Modules\Product\Models\Product::find($item['product_id'])
+                : null;
+
+            $price = (float) ($item['price'] ?? 0);
+            $quantity = (int) ($item['quantity'] ?? 1);
 
             return [
                 'product' => $product,
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-                'amount' => $item['amount'],
+                'quantity' => $quantity,
+                'price' => $price,
+                'amount' => (float) ($item['amount'] ?? $price * $quantity),
             ];
         })->toArray();
     }

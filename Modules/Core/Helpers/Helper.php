@@ -56,14 +56,18 @@ class Helper
     {
         $user_id = self::getUserId($user_id);
 
-        if ($user_id === 0) {
-            return collect();
-        }
+        return once(function () use ($user_id): Collection {
+            $query = Cart::with('product.media')->whereNull('order_id');
 
-        return once(fn (): Collection => Cart::with('product.media')
-            ->where('user_id', $user_id)
-            ->where('order_id', null)
-            ->get());
+            if ($user_id !== 0) {
+                $query->where('user_id', $user_id);
+            } else {
+                // Guest cart - rows are keyed by the browser session.
+                $query->whereNull('user_id')->where('session_id', session()->getId());
+            }
+
+            return $query->get();
+        });
     }
 
     // Total amount cart

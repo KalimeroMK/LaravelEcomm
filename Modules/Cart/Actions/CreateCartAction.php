@@ -15,10 +15,15 @@ readonly class CreateCartAction
     public function execute(CartDTO $dto): Cart
     {
         // Merge into an existing open line for the same product instead of
-        // inserting a duplicate row on every add-to-cart click.
-        $existing = Cart::where('user_id', $dto->user_id)
-            ->where('product_id', $dto->product_id)
+        // inserting a duplicate row on every add-to-cart click. Guest lines
+        // (no user) are matched by session instead.
+        $existing = Cart::where('product_id', $dto->product_id)
             ->whereNull('order_id')
+            ->when(
+                $dto->user_id !== null,
+                fn ($query) => $query->where('user_id', $dto->user_id),
+                fn ($query) => $query->whereNull('user_id')->where('session_id', $dto->session_id)
+            )
             ->first();
 
         if ($existing instanceof Cart) {

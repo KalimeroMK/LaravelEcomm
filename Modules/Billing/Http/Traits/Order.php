@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
 use Modules\Core\Helpers\Helper;
 use Modules\Core\Notifications\StatusNotification;
-use Modules\Notification\Notifications\NewOrderCreatedNotification;
+use Modules\Order\Notifications\OrderPlacedNotification;
 use Modules\User\Models\User;
 
 trait Order
@@ -29,6 +29,7 @@ trait Order
         $order->fill($order_data);
         $order->save();
         Cart::where('user_id', Auth::id())->where('order_id', null)->update(['order_id' => $order->id]);
+        $order->decrementStock();
         $details = [
             'title' => 'New order created',
             'actionURL' => route('orders.show', $order->id),
@@ -36,8 +37,9 @@ trait Order
         ];
         $superAdmins = User::role('super-admin')->get();
         Notification::send($superAdmins, new StatusNotification($details));
-        foreach ($superAdmins as $admin) {
-            $admin->notify(new NewOrderCreatedNotification($order));
-        }
+
+        // Confirmation to the customer (queued).
+        $order->load('carts.product', 'user');
+        $order->notifyCustomer(new OrderPlacedNotification($order));
     }
 }

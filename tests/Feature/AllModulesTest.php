@@ -80,9 +80,10 @@ test('authentication works across all modules', function () {
     $user = User::factory()->create();
 
     // Test protected routes require authentication
+    // cart-list is intentionally public (guest carts); checkout still requires auth.
     $protectedRoutes = [
         '/admin',
-        route('cart-list'),
+        route('front.checkout'),
         route('user-profile'),
     ];
 

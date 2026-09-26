@@ -184,6 +184,52 @@ class Order extends Core
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Reduce product stock for every line on this order. Called once when
+     * the order is created; clamped so stock never goes negative.
+     */
+    public function decrementStock(): void
+    {
+        foreach ($this->carts()->with('product')->get() as $line) {
+            $product = $line->product;
+
+            if (! $product) {
+                continue;
+            }
+
+            $product->stock = max(0, (int) $product->stock - (int) $line->quantity);
+            $product->save();
+        }
+    }
+
+    /**
+     * Give the stock back, e.g. when the order is cancelled.
+     */
+    public function restoreStock(): void
+    {
+        foreach ($this->carts()->with('product')->get() as $line) {
+            $line->product?->increment('stock', (int) $line->quantity);
+        }
+    }
+
+    /**
+     * Notify the customer behind this order: the account owner when there is
+     * one, otherwise the guest checkout email.
+     */
+    public function notifyCustomer(\Illuminate\Notifications\Notification $notification): void
+    {
+        if ($this->user) {
+            $this->user->notify($notification);
+
+            return;
+        }
+
+        if ($this->email) {
+            \Illuminate\Support\Facades\Notification::route('mail', $this->email)
+                ->notify($notification);
+        }
+    }
+
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);

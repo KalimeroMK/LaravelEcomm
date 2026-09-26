@@ -36,12 +36,6 @@ class CartController extends CoreController
 
     public function addToCart(string $slug): RedirectResponse
     {
-        if (! Auth::check()) {
-            request()->session()->flash('error', __('messages.please_login_first'));
-
-            return back();
-        }
-
         $product = $this->findProductBySlugAction->execute($slug);
         if (! $slug || ! $product) {
             request()->session()->flash('error', __('messages.product_not_added_to_cart'));
@@ -67,12 +61,6 @@ class CartController extends CoreController
 
     public function singleAddToCart(AddToCartSingle $request): RedirectResponse
     {
-        if (! Auth::check()) {
-            request()->session()->flash('error', __('messages.please_login_first'));
-
-            return redirect()->back();
-        }
-
         $data = $request->validated();
         $product = $this->findProductBySlugAction->execute($data['slug']);
 
@@ -100,6 +88,12 @@ class CartController extends CoreController
 
     public function cartDelete(int $id): RedirectResponse
     {
+        $cart = Cart::find($id);
+
+        if (! $cart || ! $this->ownsCartRow($cart)) {
+            abort(403);
+        }
+
         $this->deleteAction->execute($id);
 
         return redirect()->back();
@@ -110,6 +104,19 @@ class CartController extends CoreController
         $this->updateCartItemsAction->execute($request);
 
         return redirect()->back();
+    }
+
+    /**
+     * A cart row belongs to the current visitor: the authenticated user,
+     * or (for guests) the current browser session.
+     */
+    private function ownsCartRow(Cart $cart): bool
+    {
+        if (Auth::check()) {
+            return $cart->user_id === Auth::id();
+        }
+
+        return $cart->user_id === null && $cart->session_id === session()->getId();
     }
 
     public function checkout(): View|Factory|RedirectResponse|Application

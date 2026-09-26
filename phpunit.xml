@@ -38,6 +38,9 @@
                <env name="DB_CONNECTION" value="sqlite"/>
                <env name="DB_DATABASE" value=":memory:"/>
                <env name="MAIL_MAILER" value="array"/>
+               <!-- Notifications need a From header even on the array transport -->
+               <env name="MAIL_FROM_ADDRESS" value="test@example.com"/>
+               <env name="MAIL_FROM_NAME" value="Testing"/>
                <env name="QUEUE_CONNECTION" value="sync"/>
                <env name="SESSION_DRIVER" value="array"/>
                <env name="TELESCOPE_ENABLED" value="false"/>

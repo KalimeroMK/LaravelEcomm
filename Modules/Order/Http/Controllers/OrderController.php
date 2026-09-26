@@ -66,6 +66,8 @@ class OrderController extends CoreController
 
     public function update(Update $request, Order $order): RedirectResponse
     {
+        $previousStatus = $order->status;
+
         $dto = OrderDTO::fromRequest($request, $order->id);
         $this->updateAction->execute($dto);
 
@@ -76,6 +78,15 @@ class OrderController extends CoreController
                 'tracking_carrier' => $request->input('tracking_carrier'),
                 'shipped_at' => $request->input('tracking_number') ? now() : null,
             ]);
+        }
+
+        // Tell the customer when the status changed (queued).
+        $order->refresh();
+        if ($order->status === 'cancelled' && $previousStatus !== 'cancelled') {
+            $order->restoreStock();
+        }
+        if ($order->status !== $previousStatus) {
+            $order->notifyCustomer(new \Modules\Order\Notifications\OrderStatusUpdatedNotification($order));
         }
 
         return redirect()->route('orders.index');

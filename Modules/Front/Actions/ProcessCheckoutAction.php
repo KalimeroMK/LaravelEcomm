@@ -33,6 +33,21 @@ class ProcessCheckoutAction
             return redirect()->back()->with('error', 'Your cart is empty.');
         }
 
+        // Reject lines that exceed the available stock before taking payment.
+        foreach ($cartItems as $line) {
+            $product = $line->product;
+            if ($product && ! $product->isDownloadable() && ! $product->isVirtual()
+                && $line->quantity > $product->stock) {
+                return redirect()->back()->with(
+                    'error',
+                    __('Only :stock of ":title" left in stock.', [
+                        'stock' => $product->stock,
+                        'title' => $product->title,
+                    ])
+                );
+            }
+        }
+
         // Shipping
         $shippingId = null;
         $shippingCost = 0;
@@ -128,6 +143,12 @@ class ProcessCheckoutAction
                 $couponDiscount
             );
         }
+
+        $order->decrementStock();
+
+        // Order confirmation to the customer (queued).
+        $order->load('carts.product', 'user');
+        $order->notifyCustomer(new \Modules\Order\Notifications\OrderPlacedNotification($order));
 
         session()->forget(['cart', 'coupon', 'pending_order']);
 
