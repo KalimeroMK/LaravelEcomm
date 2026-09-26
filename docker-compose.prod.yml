@@ -22,6 +22,7 @@ services:
       - ./.docker/php/conf.d/performance.ini:/usr/local/etc/php/conf.d/performance.ini
     networks:
       - laravelapp
+      - cloudflare-edge
     # Во продукција не expose-ираме порти надвор - само преку Cloudflare тунел
     # Тунелот е во /root/cloudflare-tunnel/ и е поврзан на e-comm_laravelapp мрежа
     # ports:
@@ -216,6 +217,10 @@ services:
   # Тунелот е веќе поврзан со e-comm_laravelapp мрежата.
 
 networks:
+  # Постоечка мрежа на серверот за централниот cloudflared тунел.
+  # Пред прво `up` на нов сервер: docker network create cloudflare-edge
+  cloudflare-edge:
+    external: true
   laravelapp:
     driver: bridge
     # Оваа мрежа е external за централниот cloudflared тунел
