@@ -64,6 +64,7 @@ class RouteServiceProvider extends ServiceProvider
                 Route::get('my-orders', [\Modules\Order\Http\Controllers\UserOrderController::class, 'history'])->name('user.orders.history');
                 Route::get('my-orders/{order}', [\Modules\Order\Http\Controllers\UserOrderController::class, 'detail'])->name('user.orders.detail');
                 Route::get('my-orders/{order}/track', [\Modules\Order\Http\Controllers\UserOrderController::class, 'track'])->name('user.orders.track');
+                Route::post('my-orders/{order}/return', [\Modules\Order\Http\Controllers\UserOrderController::class, 'requestReturn'])->name('user.orders.return.request');
             });
     }
 }

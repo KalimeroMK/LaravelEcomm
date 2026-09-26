@@ -43,7 +43,7 @@
                                             $org = $product->price;
                                         @endphp
                                         <p class="price">
-                                            ${{number_format($org,2)}}  
+                                            {{ currency($org) }}  
                                         </p>
 
                                     </div>
@@ -127,7 +127,7 @@
                                             <h3>
                                                 <a href="{{route('front.bundle-detail',$product->slug)}}">{{$product->name}}</a>
                                             </h3>
-                                            <span>${{number_format($product->price,2)}}</span>
+                                            <span>{{ currency($product->price) }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@
                                             </div>
                                         </div>
                                         <h3><small>
-                                            </small> ${{number_format($product->price,2)}}  </h3>
+                                            </small> {{ currency($product->price) }}  </h3>
                                         <div class="quickview-peragraph">
                                             <p>{{ $product->description ?? '' }}</p>
                                         </div>

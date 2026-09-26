@@ -22,7 +22,7 @@ trait Order
         $order_data['user_id'] = Auth::id();
         $order_data['sub_total'] = Helper::totalCartPrice();
         $order_data['quantity'] = Helper::cartCount();
-        $order_data['status'] = 'new';
+        $order_data['status'] = 'processing'; // 'new' is not in the orders.status enum
         $order_data['total_amount'] = (int) $amount;
         $order_data['payment_method'] = 'stripe';
         $order_data['payment_status'] = 'paid';

@@ -55,7 +55,7 @@ $themePath = 'front::themes.' . $activeTheme;
                                             </a>
                                         </td>
                                         <td>{{ $order->created_at->format('M d, Y') }}</td>
-                                        <td>${{ number_format($order->total_amount, 2) }}</td>
+                                        <td>{{ currency($order->total_amount) }}</td>
                                         <td>
                                             <span class="badge badge-{{ $order->status === 'delivered' ? 'success' : ($order->status === 'pending' ? 'warning' : 'info') }}">
                                                 {{ ucfirst($order->status) }}

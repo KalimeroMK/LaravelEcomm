@@ -158,10 +158,10 @@ use Modules\Core\Helpers\Helper;
                                                 <h4 class="title"><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h4>
                                                 <p class="price with-discount">
                                                     @if($product->discount > 0)
-                                                        <span class="old">${{ number_format($product->price, 2) }}</span>
-                                                        <span>${{ number_format($product->price - ($product->price * $product->discount / 100), 2) }}</span>
+                                                        <span class="old">{{ currency($product->price) }}</span>
+                                                        <span>{{ currency($product->price - ($product->price * $product->discount / 100)) }}</span>
                                                     @else
-                                                        <span>${{ number_format($product->price, 2) }}</span>
+                                                        <span>{{ currency($product->price) }}</span>
                                                     @endif
                                                 </p>
                                                 <p>{{ Str::limit($product->summary, 150) }}</p>

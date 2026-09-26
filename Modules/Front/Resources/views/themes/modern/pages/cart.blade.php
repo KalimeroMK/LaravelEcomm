@@ -57,14 +57,14 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="price">${{number_format($cart['price'],2)}}</td>
+                                    <td class="price">{{ currency($cart['price']) }}</td>
                                     <td class="quantity">
                                         <div class="form-inline">
                                             <input type="number" name="quantity[{{$loop->index}}]" class="form-control" value="{{$cart->quantity}}" min="1" max="100" style="width:70px;">
                                             <input type="hidden" name="qty_id[]" value="{{$cart->id}}">
                                         </div>
                                     </td>
-                                    <td class="amount">${{number_format($cart['amount'],2)}}</td>
+                                    <td class="amount">{{ currency($cart['amount']) }}</td>
                                     <td>
                                         <a href="{{route('cart-delete',$cart->id)}}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to remove this item?')">
                                             <i class="fa fa-trash"></i>
@@ -89,24 +89,24 @@
                                     <tbody>
                                         <tr>
                                             <td>Cart Subtotal:</td>
-                                            <td class="amount">${{number_format(Helper::totalCartPrice(),2)}}</td>
+                                            <td class="amount">{{ currency(Helper::totalCartPrice()) }}</td>
                                         </tr>
                                         @if(session()->has('coupon'))
                                         <tr>
                                             <td>Discount:</td>
-                                            <td class="amount">-${{number_format(Session::get('coupon')['value'],2)}}</td>
+                                            <td class="amount">-{{ currency(Session::get('coupon')['value']) }}</td>
                                         </tr>
                                         @php
                                             $total_amount = Helper::totalCartPrice() - Session::get('coupon')['value'];
                                         @endphp
                                         <tr>
                                             <td><strong>Total:</strong></td>
-                                            <td class="total-amount"><strong>${{number_format($total_amount,2)}}</strong></td>
+                                            <td class="total-amount"><strong>{{ currency($total_amount) }}</strong></td>
                                         </tr>
                                         @else
                                         <tr>
                                             <td><strong>Total:</strong></td>
-                                            <td class="total-amount"><strong>${{number_format(Helper::totalCartPrice(),2)}}</strong></td>
+                                            <td class="total-amount"><strong>{{ currency(Helper::totalCartPrice()) }}</strong></td>
                                         </tr>
                                         @endif
                                     </tbody>

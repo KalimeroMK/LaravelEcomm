@@ -20,7 +20,7 @@
         
         <div class="bg-white rounded-lg shadow-md p-6 text-center">
             <i class="fas fa-dollar-sign text-green-500 text-3xl mb-3"></i>
-            <h3 class="text-lg font-semibold text-gray-900">${{ number_format($statistics['total_value'], 2) }}</h3>
+            <h3 class="text-lg font-semibold text-gray-900">{{ currency($statistics['total_value']) }}</h3>
             <p class="text-gray-600 text-sm">Total Value</p>
         </div>
         
@@ -130,22 +130,22 @@
                                 @if($withPriceAlerts && $item->price_drop)
                                     <div class="flex items-center space-x-2 mb-2">
                                         <span class="text-lg font-bold text-red-600">
-                                            ${{ number_format($item->product->special_price ?? $item->product->price, 2) }}
+                                            {{ currency($item->product->special_price ?? $item->product->price) }}
                                         </span>
                                         <span class="text-sm text-gray-500 line-through">
-                                            ${{ number_format($item->price, 2) }}
+                                            {{ currency($item->price) }}
                                         </span>
                                         <span class="text-sm text-red-600 font-medium">
-                                            Save ${{ number_format($item->price_difference, 2) }}
+                                            Save {{ currency($item->price_difference) }}
                                         </span>
                                     </div>
                                 @else
                                     <div class="flex items-center mb-2">
                                         @if($item->product->special_price)
-                                            <span class="text-lg font-bold text-red-600">${{ number_format($item->product->special_price, 2) }}</span>
-                                            <span class="text-sm text-gray-500 line-through ml-2">${{ number_format($item->product->price, 2) }}</span>
+                                            <span class="text-lg font-bold text-red-600">{{ currency($item->product->special_price) }}</span>
+                                            <span class="text-sm text-gray-500 line-through ml-2">{{ currency($item->product->price) }}</span>
                                         @else
-                                            <span class="text-lg font-bold text-gray-900">${{ number_format($item->product->price, 2) }}</span>
+                                            <span class="text-lg font-bold text-gray-900">{{ currency($item->product->price) }}</span>
                                         @endif
                                     </div>
                                 @endif
@@ -232,10 +232,10 @@
                             
                             <div class="flex items-center mb-2">
                                 @if($product->special_price)
-                                    <span class="text-lg font-bold text-red-600">${{ number_format($product->special_price, 2) }}</span>
-                                    <span class="text-sm text-gray-500 line-through ml-2">${{ number_format($product->price, 2) }}</span>
+                                    <span class="text-lg font-bold text-red-600">{{ currency($product->special_price) }}</span>
+                                    <span class="text-sm text-gray-500 line-through ml-2">{{ currency($product->price) }}</span>
                                 @else
-                                    <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                    <span class="text-lg font-bold text-gray-900">{{ currency($product->price) }}</span>
                                 @endif
                             </div>
                             

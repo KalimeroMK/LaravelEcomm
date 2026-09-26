@@ -26,7 +26,25 @@ class ProductSearchAction
         $products = Cache::remember(
             'search_products_'.$generation.'_'.md5($searchTerm.'_'.$perPage.'_page'.$page),
             900,
-            fn () => $this->productRepository->searchByTerm($searchTerm, $perPage)
+            function () use ($searchTerm, $perPage, $page) {
+                // Elasticsearch first (typo-tolerant, relevance-ranked across
+                // title/summary/description/sku/brand/tags/categories);
+                // falls back to the SQL LIKE search when ES is unavailable.
+                $esResults = app(\Modules\Product\Services\ElasticsearchService::class)
+                    ->search($searchTerm);
+
+                if ($esResults !== null) {
+                    return new \Illuminate\Pagination\LengthAwarePaginator(
+                        $esResults->forPage($page, $perPage)->values(),
+                        $esResults->count(),
+                        $perPage,
+                        $page,
+                        ['path' => request()->url(), 'query' => request()->query()]
+                    );
+                }
+
+                return $this->productRepository->searchByTerm($searchTerm, $perPage);
+            }
         );
 
         $brands = Cache::remember(

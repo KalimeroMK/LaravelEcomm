@@ -86,10 +86,10 @@ use Modules\Core\Helpers\Helper;
                                         <div class="elements-list clearfix">
                                             <span class="price">
                                                 @if($product->discount > 0)
-                                                    <del>${{ number_format($product->price, 2) }}</del>
-                                                    <span class="text-default">${{ number_format($product->price - ($product->price * $product->discount / 100), 2) }}</span>
+                                                    <del>{{ currency($product->price) }}</del>
+                                                    <span class="text-default">{{ currency($product->price - ($product->price * $product->discount / 100)) }}</span>
                                                 @else
-                                                    <span class="text-default">${{ number_format($product->price, 2) }}</span>
+                                                    <span class="text-default">{{ currency($product->price) }}</span>
                                                 @endif
                                             </span>
                                             <a href="{{ route('front.product-detail', $product->slug) }}" class="pull-right btn btn-sm btn-default btn-animated">
@@ -135,7 +135,7 @@ use Modules\Core\Helpers\Helper;
                     </div>
                     <div class="body">
                         <h5 class="title"><a href="{{ route('front.product-detail', $recentProduct->slug) }}">{{ $recentProduct->title }}</a></h5>
-                        <span class="price text-default">${{ number_format($recentProduct->price, 2) }}</span>
+                        <span class="price text-default">{{ currency($recentProduct->price) }}</span>
                     </div>
                 </div>
             </div>

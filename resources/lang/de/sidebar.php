@@ -53,6 +53,7 @@ return [
     'general_settings' => 'Allgemeine Einstellungen',
     'tenant' => 'Tenant',
     'page' => 'Seite',
+    'returns' => 'Retouren / Erstattungen',
     'complaints' => 'Beschwerden',
     'attribute_groups' => 'Attributgruppen',
     'analytics_dashboard' => 'Analytics-Dashboard',

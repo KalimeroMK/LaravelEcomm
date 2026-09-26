@@ -45,6 +45,9 @@
                             <li class="language-switcher-item">
                                 @include('core::components.language-switcher')
                             </li>
+                            <li class="language-switcher-item">
+                                @include('core::components.currency-switcher')
+                            </li>
                         </ul>
                     </div>
                     <!-- End Top Right -->
@@ -129,7 +132,7 @@
                                                 <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
                                                        target="_blank">{{$data->product['title']}}</a></h4>
                                                 <p class="quantity">{{$data->quantity}} x - <span
-                                                            class="amount">${{number_format($data->price,2)}}</span></p>
+                                                            class="amount">{{ currency($data->price) }}</span></p>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -137,7 +140,7 @@
                                         <div class="total">
                                             <span>@lang('frontend.total')</span>
                                             <span
-                                                    class="total-amount">${{number_format(Helper::totalWishlistPrice(),2)}}</span>
+                                                    class="total-amount">{{ currency(Helper::totalWishlistPrice()) }}</span>
                                         </div>
                                         <a href="{{route('cart-list')}}" class="btn animate">@lang('frontend.cart')</a>
                                     </div>
@@ -169,7 +172,7 @@
                                                 <h4><a href="{{route('front.product-detail',$data->product['slug'])}}"
                                                        target="_blank">{{$data->product['title']}}</a></h4>
                                                 <p class="quantity">{{$data->quantity}} x - <span
-                                                            class="amount">${{number_format($data->price,2)}}</span></p>
+                                                            class="amount">{{ currency($data->price) }}</span></p>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -177,7 +180,7 @@
                                         <div class="total">
                                             <span>@lang('frontend.total')</span>
                                             <span
-                                                    class="total-amount">${{number_format(Helper::totalCartPrice(),2)}}</span>
+                                                    class="total-amount">{{ currency(Helper::totalCartPrice()) }}</span>
                                         </div>
                                         <a href="{{route('front.checkout')}}" class="btn animate">@lang('frontend.checkout')</a>
                                     </div>

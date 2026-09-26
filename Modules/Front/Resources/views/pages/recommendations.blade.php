@@ -116,10 +116,10 @@
                             
                             <div class="flex items-center mb-2">
                                 @if($product->special_price)
-                                    <span class="text-lg font-bold text-red-600">${{ number_format($product->special_price, 2) }}</span>
-                                    <span class="text-sm text-gray-500 line-through ml-2">${{ number_format($product->price, 2) }}</span>
+                                    <span class="text-lg font-bold text-red-600">{{ currency($product->special_price) }}</span>
+                                    <span class="text-sm text-gray-500 line-through ml-2">{{ currency($product->price) }}</span>
                                 @else
-                                    <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                    <span class="text-lg font-bold text-gray-900">{{ currency($product->price) }}</span>
                                 @endif
                             </div>
                             
@@ -177,10 +177,10 @@
                                 <div class="flex items-center space-x-4">
                                     <div class="flex items-center">
                                         @if($product->special_price)
-                                            <span class="text-lg font-bold text-red-600">${{ number_format($product->special_price, 2) }}</span>
-                                            <span class="text-sm text-gray-500 line-through ml-2">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-lg font-bold text-red-600">{{ currency($product->special_price) }}</span>
+                                            <span class="text-sm text-gray-500 line-through ml-2">{{ currency($product->price) }}</span>
                                         @else
-                                            <span class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                            <span class="text-lg font-bold text-gray-900">{{ currency($product->price) }}</span>
                                         @endif
                                     </div>
                                     

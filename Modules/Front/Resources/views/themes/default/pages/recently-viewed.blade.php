@@ -54,10 +54,10 @@
                                             <h3><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
                                             <div class="product-price">
                                                 @if($product->discount > 0)
-                                                    <span class="old">${{ number_format($product->price, 2) }}</span>
-                                                    <span>${{ number_format($product->price - ($product->price * $product->discount / 100), 2) }}</span>
+                                                    <span class="old">{{ currency($product->price) }}</span>
+                                                    <span>{{ currency($product->price - ($product->price * $product->discount / 100)) }}</span>
                                                 @else
-                                                    <span>${{ number_format($product->price, 2) }}</span>
+                                                    <span>{{ currency($product->price) }}</span>
                                                 @endif
                                             </div>
                                         </div>

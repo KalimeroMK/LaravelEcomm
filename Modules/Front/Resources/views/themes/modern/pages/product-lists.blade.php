@@ -33,8 +33,8 @@
                                         <h5><a href="{{ route('front.product-detail', $recent->slug) }}">{{ $recent->title }}</a></h5>
                                         @php $org = ($recent->price - ($recent->price * $recent->discount) / 100); @endphp
                                         <p class="price">
-                                            <del class="text-muted">${{ number_format($recent->price, 2) }}</del>
-                                            ${{ number_format($org, 2) }}
+                                            <del class="text-muted">{{ currency($recent->price) }}</del>
+                                            {{ currency($org) }}
                                         </p>
                                     </div>
                                 </div>
@@ -73,8 +73,8 @@
                             <h3><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
                             @php $after_discount = ($product->price - ($product->price * $product->discount) / 100); @endphp
                             <h4 class="price">
-                                @if($product->discount)<del class="text-muted">${{ number_format($product->price, 2) }}</del>@endif
-                                ${{ number_format($after_discount, 2) }}
+                                @if($product->discount)<del class="text-muted">{{ currency($product->price) }}</del>@endif
+                                {{ currency($after_discount) }}
                             </h4>
                             <p>{!! html_entity_decode($product->summary) !!}</p>
                             <a href="{{ route('add-to-cart', $product->slug) }}" class="btn btn-default">Add to Cart</a>

@@ -185,6 +185,24 @@ class Order extends Core
     }
 
     /**
+     * The customer's return/refund request for this order, if any.
+     */
+    public function orderReturn(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(OrderReturn::class);
+    }
+
+    /**
+     * A return can be requested once the order shipped/arrived and
+     * no return exists yet.
+     */
+    public function canRequestReturn(): bool
+    {
+        return in_array($this->status, ['shipped', 'delivered'], true)
+            && $this->orderReturn === null;
+    }
+
+    /**
      * Reduce product stock for every line on this order. Called once when
      * the order is created; clamped so stock never goes negative.
      */

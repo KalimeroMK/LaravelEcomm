@@ -108,26 +108,26 @@ $themePath = 'front::themes.' . $activeTheme;
                                                     <span class="text-muted">Product no longer available</span>
                                                 @endif
                                             </td>
-                                            <td>${{ number_format($item->price, 2) }}</td>
+                                            <td>{{ currency($item->price) }}</td>
                                             <td>{{ $item->quantity }}</td>
-                                            <td>${{ number_format($item->amount, 2) }}</td>
+                                            <td>{{ currency($item->amount) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
-                                        <td>${{ number_format($order->sub_total, 2) }}</td>
+                                        <td>{{ currency($order->sub_total) }}</td>
                                     </tr>
                                     @if($order->shipping)
                                         <tr>
                                             <td colspan="3" class="text-right"><strong>Shipping ({{ $order->shipping->type }}):</strong></td>
-                                            <td>${{ number_format($order->shipping->price, 2) }}</td>
+                                            <td>{{ currency($order->shipping->price) }}</td>
                                         </tr>
                                     @endif
                                     <tr>
                                         <td colspan="3" class="text-right"><strong>Total:</strong></td>
-                                        <td><strong>${{ number_format($order->total_amount, 2) }}</strong></td>
+                                        <td><strong>{{ currency($order->total_amount) }}</strong></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -155,4 +155,6 @@ $themePath = 'front::themes.' . $activeTheme;
         </div>
     </div>
 </section>
+@include('front::partials.order-return')
+
 @endsection

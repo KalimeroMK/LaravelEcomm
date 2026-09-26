@@ -62,6 +62,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PageSeeder::class);
         $this->call(AttributeGroupSeeder::class);
         $this->call(AttributeSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\CurrencySeeder::class);
         $this->call(AttributeValueSeeder::class);
         $this->call(AttributeOptionSeeder::class);
         Product::factory()->count(400)->withCategoriesAndTags()->withAttributes()->withMedia(3)->create();

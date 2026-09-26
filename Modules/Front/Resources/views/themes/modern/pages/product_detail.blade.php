@@ -64,9 +64,9 @@
                         $finalPrice = $specialPrice ? $specialPrice : ($price - (($price * $discount) / 100));
                     @endphp
                     <h3 class="price">
-                        <span class="text-default">${{ number_format($finalPrice, 2) }}</span>
+                        <span class="text-default">{{ currency($finalPrice) }}</span>
                         @if($finalPrice < $price)
-                            <del class="text-muted ml-10">${{ number_format($price, 2) }}</del>
+                            <del class="text-muted ml-10">{{ currency($price) }}</del>
                             <span class="label label-danger">-{{ $discount }}%</span>
                         @endif
                     </h3>
@@ -236,9 +236,9 @@
                             $relatedPrice = $product->price - ($product->price * ($product->discount ?? 0) / 100);
                         @endphp
                         @if($product->discount)
-                            <del class="text-muted">${{ number_format($product->price, 2) }}</del>
+                            <del class="text-muted">{{ currency($product->price) }}</del>
                         @endif
-                        <span class="text-default">${{ number_format($relatedPrice, 2) }}</span>
+                        <span class="text-default">{{ currency($relatedPrice) }}</span>
                     </div>
                 </div>
             </div>

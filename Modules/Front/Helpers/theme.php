@@ -165,3 +165,47 @@ if (! function_exists('get_available_themes')) {
         return array_values($themes);
     }
 }
+
+if (! function_exists('active_currency')) {
+    /**
+     * The visitor's display currency: session choice, else the default.
+     */
+    function active_currency(): ?\Modules\Core\Models\Currency
+    {
+        try {
+            $currencies = \Modules\Core\Models\Currency::activeList();
+
+            $code = session('currency');
+            if ($code) {
+                $chosen = $currencies->firstWhere('code', $code);
+                if ($chosen) {
+                    return $chosen;
+                }
+            }
+
+            return $currencies->firstWhere('is_default', true) ?? $currencies->first();
+        } catch (\Throwable) {
+            // Table missing (fresh install mid-migration) - fall through.
+            return null;
+        }
+    }
+}
+
+if (! function_exists('currency')) {
+    /**
+     * Convert a BASE-currency amount to the active display currency and
+     * format it with the currency symbol. Falls back to "$1,234.56".
+     */
+    function currency(float|int|null $amount): string
+    {
+        $amount = (float) ($amount ?? 0);
+
+        $currency = active_currency();
+
+        if (! $currency instanceof \Modules\Core\Models\Currency) {
+            return '$'.number_format($amount, 2);
+        }
+
+        return $currency->format($amount);
+    }
+}

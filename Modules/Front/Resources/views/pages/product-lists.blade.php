@@ -97,8 +97,8 @@
                                             @endphp
                                             <p class="price">
                                                 <del class="text-muted">
-                                                    ${{number_format($product->price,2)}}</del>
-                                                ${{number_format($org,2)}}  </p>
+                                                    {{ currency($product->price) }}</del>
+                                                {{ currency($org) }}  </p>
                                         </div>
                                     </div>
                                     <!-- End Single Post -->
@@ -221,8 +221,8 @@
                                                             @php
                                                                 $after_discount=($product->price-($product->price*$product->discount)/100);
                                                             @endphp
-                                                            <span>${{number_format($after_discount,2)}}</span>
-                                                            <del>${{number_format($product->price,2)}}</del>
+                                                            <span>{{ currency($after_discount) }}</span>
+                                                            <del>{{ currency($product->price) }}</del>
                                                         </div>
                                                         <h3 class="title"><a
                                                                     href="{{route('front.product-detail',$product->slug)
@@ -315,8 +315,8 @@
                                     @endphp
                                     <h3><small>
                                             <del class="text-muted">
-                                                ${{number_format($product->price,2)}}</del>
-                                        </small> ${{number_format($after_discount,2)}}  </h3>
+                                                {{ currency($product->price) }}</del>
+                                        </small> {{ currency($after_discount) }}  </h3>
                                     <div class="quickview-peragraph">
                                         <p>{!! html_entity_decode($product->summary) !!}</p>
                                     </div>

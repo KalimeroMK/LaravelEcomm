@@ -21,6 +21,9 @@ class TestDataSeeder extends Seeder
         // admin/super-admin/client roles) - module tests grant these directly.
         $this->call(\Modules\User\Database\Seeders\PermissionTableSeeder::class);
 
+        // Display currencies (USD base + EUR/MKD/GBP)
+        $this->call(\Modules\Core\Database\Seeders\CurrencySeeder::class);
+
         // Create roles
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $clientRole = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'web']);

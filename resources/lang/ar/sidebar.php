@@ -53,6 +53,7 @@ return [
     'general_settings' => 'General settings',
     'tenant' => 'Tenant',
     'page' => 'Page',
+    'returns' => 'المرتجعات / المبالغ المستردة',
     'complaints' => 'Complaints',
     'attribute_groups' => 'Attribute groups',
 

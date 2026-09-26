@@ -52,28 +52,28 @@ $subtotal = Helper::totalCartPrice();
                                     <a href="{{ route('front.product-detail', $item->product->slug) }}">{{ $item->product->title }}</a>
                                     <small>{{ Str::limit($item->product->summary, 50) }}</small>
                                 </td>
-                                <td class="price">${{ number_format($item->price, 2) }}</td>
+                                <td class="price">{{ currency($item->price) }}</td>
                                 <td class="quantity">
                                     <div class="form-group">
                                         <input type="text" class="form-control" value="{{ $item->quantity }}" readonly>
                                     </div>
                                 </td>
-                                <td class="amount">${{ number_format($item->amount, 2) }}</td>
+                                <td class="amount">{{ currency($item->amount) }}</td>
                             </tr>
                             @endforeach
                             <tr>
                                 <td class="total-quantity" colspan="3">Subtotal</td>
-                                <td class="amount">${{ number_format($subtotal, 2) }}</td>
+                                <td class="amount">{{ currency($subtotal) }}</td>
                             </tr>
                             @if(session('coupon'))
                             <tr>
                                 <td class="total-quantity" colspan="3">Discount</td>
-                                <td class="amount">-${{ number_format(session('coupon.value'), 2) }}</td>
+                                <td class="amount">-{{ currency(session('coupon.value')) }}</td>
                             </tr>
                             @endif
                             <tr>
                                 <td class="total-quantity" colspan="3">Total</td>
-                                <td class="total-amount">${{ number_format($subtotal - (session('coupon.value') ?? 0), 2) }}</td>
+                                <td class="total-amount">{{ currency($subtotal - (session('coupon.value') ?? 0)) }}</td>
                             </tr>
                         </tbody>
                     </table>

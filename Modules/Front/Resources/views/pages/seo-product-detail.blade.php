@@ -74,10 +74,10 @@
                         @endif
                         
                         <div class="product-price">
-                            <span class="current-price">${{ number_format($product_detail->price, 2) }}</span>
+                            <span class="current-price">{{ currency($product_detail->price) }}</span>
                             @if($product_detail->discount && $product_detail->discount > 0)
-                                <span class="original-price">${{ number_format($product_detail->price + $product_detail->discount, 2) }}</span>
-                                <span class="discount-badge">Save ${{ number_format($product_detail->discount, 2) }}</span>
+                                <span class="original-price">{{ currency($product_detail->price + $product_detail->discount) }}</span>
+                                <span class="discount-badge">Save {{ currency($product_detail->discount) }}</span>
                             @endif
                         </div>
                         

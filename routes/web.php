@@ -71,6 +71,17 @@ Route::get('/login/{social}/callback', [AuthController::class, 'handleProviderCa
 // Language switch route (for frontend)
 Route::get('language/{lang}', [LanguageController::class, 'switchLang'])->name('language.switch');
 
+// Display-currency switch (session only; amounts stay stored in the base currency)
+Route::get('currency/{code}', function (string $code) {
+    $currency = \Modules\Core\Models\Currency::activeList()->firstWhere('code', strtoupper($code));
+
+    abort_unless($currency !== null, 404);
+
+    session(['currency' => $currency->code]);
+
+    return redirect()->back();
+})->name('currency.switch');
+
 /**
  * Safely get the default language code, handling database unavailability (e.g., during testing)
  */

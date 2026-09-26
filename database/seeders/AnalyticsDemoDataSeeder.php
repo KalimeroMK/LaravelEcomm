@@ -39,30 +39,9 @@ class AnalyticsDemoDataSeeder extends Seeder
     {
         $this->command->info('Creating demo users...');
 
-        // Create users for different months
-        $months = [
-            '2024-01' => 15,
-            '2024-02' => 22,
-            '2024-03' => 18,
-            '2024-04' => 25,
-            '2024-05' => 30,
-            '2024-06' => 28,
-            '2024-07' => 35,
-            '2024-08' => 32,
-            '2024-09' => 40,
-            '2024-10' => 45,
-            '2024-11' => 38,
-            '2024-12' => 50,
-            '2025-01' => 42,
-            '2025-02' => 48,
-            '2025-03' => 55,
-            '2025-04' => 60,
-            '2025-05' => 65,
-            '2025-06' => 70,
-            '2025-07' => 75,
-            '2025-08' => 80,
-            '2025-09' => 85,
-        ];
+        // Signups over the last 21 months (relative to today so the
+        // analytics charts always have data), gently trending upward.
+        $months = $this->monthlyCounts(21, 15, 85);
 
         foreach ($months as $month => $count) {
             for ($i = 0; $i < $count; $i++) {
@@ -71,8 +50,8 @@ class AnalyticsDemoDataSeeder extends Seeder
                 $user->email = 'user'.microtime(true).rand(1000, 9999).'@demo.com';
                 $user->email_verified_at = now();
                 $user->password = bcrypt('password');
-                $user->created_at = Carbon::parse($month.'-'.rand(1, 28));
-                $user->updated_at = Carbon::parse($month.'-'.rand(1, 28));
+                $user->created_at = $this->randomDayInMonth($month);
+                $user->updated_at = $user->created_at;
                 $user->save();
             }
         }
@@ -122,35 +101,13 @@ class AnalyticsDemoDataSeeder extends Seeder
             return;
         }
 
-        // Create orders for different months
-        $months = [
-            '2024-01' => 8,
-            '2024-02' => 12,
-            '2024-03' => 15,
-            '2024-04' => 18,
-            '2024-05' => 22,
-            '2024-06' => 25,
-            '2024-07' => 28,
-            '2024-08' => 30,
-            '2024-09' => 35,
-            '2024-10' => 40,
-            '2024-11' => 45,
-            '2024-12' => 50,
-            '2025-01' => 55,
-            '2025-02' => 60,
-            '2025-03' => 65,
-            '2025-04' => 70,
-            '2025-05' => 75,
-            '2025-06' => 80,
-            '2025-07' => 85,
-            '2025-08' => 90,
-            '2025-09' => 95,
-        ];
+        // Orders over the last 21 months (relative to today), trending upward.
+        $months = $this->monthlyCounts(21, 8, 95);
 
         foreach ($months as $month => $count) {
             for ($i = 0; $i < $count; $i++) {
                 $user = $users->random();
-                $orderDate = Carbon::parse($month.'-'.rand(1, 28));
+                $orderDate = $this->randomDayInMonth($month);
 
                 $order = new Order;
                 $order->user_id = $user->id;
@@ -218,5 +175,41 @@ class AnalyticsDemoDataSeeder extends Seeder
             $br->status = 'active';
             $br->save();
         }
+    }
+
+    /**
+     * Month-keyed counts for the last N months (oldest first), linearly
+     * growing from $from to $to with a little jitter - always relative to
+     * today so charts show a living trend regardless of when you seed.
+     *
+     * @return array<string, int>
+     */
+    private function monthlyCounts(int $monthsBack, int $from, int $to): array
+    {
+        $counts = [];
+
+        for ($i = $monthsBack - 1; $i >= 0; $i--) {
+            $month = now()->subMonths($i)->format('Y-m');
+            $progress = ($monthsBack - 1 - $i) / max(1, $monthsBack - 1);
+            $base = (int) round($from + ($to - $from) * $progress);
+            $counts[$month] = max(1, $base + rand(-3, 3));
+        }
+
+        return $counts;
+    }
+
+    /**
+     * A random moment in the given Y-m month, never in the future.
+     */
+    private function randomDayInMonth(string $month): Carbon
+    {
+        $maxDay = 28;
+
+        if ($month === now()->format('Y-m')) {
+            $maxDay = min(28, (int) now()->format('d'));
+        }
+
+        return Carbon::parse($month.'-'.rand(1, $maxDay))
+            ->setTime(rand(8, 21), rand(0, 59), rand(0, 59));
     }
 }

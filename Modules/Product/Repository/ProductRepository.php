@@ -251,7 +251,8 @@ class ProductRepository extends EloquentRepository implements EloquentRepository
     {
         // NOTE: 'carts' deliberately not eager-loaded — nothing on the admin
         // index reads it and it grows with every cart line ever created.
-        return ['brand', 'categories', 'tags', 'attributeValues.attribute'];
+        // 'media' is needed for thumbnails (admin grid, API resources).
+        return ['brand', 'categories', 'tags', 'attributeValues.attribute', 'media'];
     }
 
     /**

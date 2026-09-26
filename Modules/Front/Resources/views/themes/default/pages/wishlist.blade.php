@@ -50,7 +50,7 @@
                                         </p>
                                         <p class="product-des">{!!($wishlist['summary']) !!}</p>
                                     </td>
-                                    <td class="total-amount" data-title="Total"><span>${{$wishlist['amount']}}</span>
+                                    <td class="total-amount" data-title="Total"><span>{{ currency($wishlist['amount']) }}</span>
                                     </td>
                                     <td><a href="{{route('add-to-cart',$wishlist->product['slug'])}}"
                                            class='btn text-white'>Add To Cart</a></td>

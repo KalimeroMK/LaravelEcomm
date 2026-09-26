@@ -53,6 +53,7 @@ return [
     'general_settings' => 'Општи поставки',
     'tenant' => 'Tenant',
     'page' => 'Страна',
+    'returns' => 'Поврати / Рефундирања',
     'complaints' => 'Жалби',
     'attribute_groups' => 'Групи за атрибути',
     'analytics_dashboard' => 'Аналитичка табла',

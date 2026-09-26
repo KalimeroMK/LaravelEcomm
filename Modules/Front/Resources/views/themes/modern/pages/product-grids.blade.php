@@ -69,8 +69,8 @@
                                                 $org = ($product->price - ($product->price * $product->discount) / 100);
                                             @endphp
                                             <p class="price">
-                                                <del class="text-muted">${{ number_format($product->price, 2) }}</del>
-                                                ${{ number_format($org, 2) }}
+                                                <del class="text-muted">{{ currency($product->price) }}</del>
+                                                {{ currency($org) }}
                                             </p>
                                         </div>
                                     </div>
@@ -149,9 +149,9 @@
                                                     $after_discount = ($product->price - ($product->price * $product->discount) / 100);
                                                 @endphp
                                                 @if($product->discount)
-                                                    <del class="text-muted">${{ number_format($product->price, 2) }}</del>
+                                                    <del class="text-muted">{{ currency($product->price) }}</del>
                                                 @endif
-                                                <span class="text-default">${{ number_format($after_discount, 2) }}</span>
+                                                <span class="text-default">{{ currency($after_discount) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -207,9 +207,9 @@
                                     </div>
                                     <h4 class="price">
                                         @if($product->discount)
-                                            <del class="text-muted">${{ number_format($product->price, 2) }}</del>
+                                            <del class="text-muted">{{ currency($product->price) }}</del>
                                         @endif
-                                        ${{ number_format($after_discount, 2) }}
+                                        {{ currency($after_discount) }}
                                     </h4>
                                     <p>{!! html_entity_decode($product->summary) !!}</p>
                                     <p>

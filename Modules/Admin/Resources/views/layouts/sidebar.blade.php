@@ -203,6 +203,12 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('order-returns.index') }}">
+            <i class="fas fa-undo fa-chart-area"></i>
+            <span>@lang('sidebar.returns')</span>
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.complaints.index') }}">
             <i class="fas fa-question fa-chart-area"></i>
             <span>@lang('sidebar.complaints')</span>

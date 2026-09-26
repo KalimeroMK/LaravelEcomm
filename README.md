@@ -1,5 +1,7 @@
 # Advanced E-commerce Platform in Laravel 13
 
+[![Tests](https://github.com/KalimeroMK/LaravelEcomm/actions/workflows/tests.yml/badge.svg)](https://github.com/KalimeroMK/LaravelEcomm/actions/workflows/tests.yml)
+
 ### 🌐 Demo: https://e-comm.mk
 
 ---
@@ -118,6 +120,9 @@ php artisan serve
 - **RTL Support**: Right-to-left language support built-in
 
 #### GeoLocalization & Currency
+- **Multi-Currency Display**: Header currency switcher (USD base, EUR, MKD, GBP out of the box);
+  session-based choice, per-currency symbol/position/decimals, rates stored in the `currencies` table.
+  All amounts are stored in the base currency and converted for display via the `currency()` helper.
 - **GeoIP Detection**: Auto-detect user country from IP address
 - **Automatic Currency**: Detects and sets currency based on country
 - **Real-Time Exchange Rates**: 20+ currencies with live rates
@@ -141,17 +146,24 @@ php artisan serve
 
 #### Shopping Experience
 - **Shopping Cart**: AJAX add/remove, quantity updates, mini-cart dropdown
+- **Guest Cart**: Visitors build a session-based cart without an account;
+  it merges into their account cart automatically on login
 - **Saved Carts**: Save cart for later, restore cart
-- **Guest Checkout**: Checkout without registration
 - **Multiple Addresses**: Save multiple shipping/billing addresses
 - **Address Book**: Default addresses, address management
 - **Order Tracking**: Track order status, shipping information
+- **Returns / Refunds (RMA)**: Request a return on shipped/delivered orders;
+  email updates on approval, rejection and refund
 - **Order History**: View all orders, reorder previous orders
 - **Coupon System**: Apply coupons in cart, see discount breakdown
 - **Shipping Estimation**: Calculate shipping costs before checkout
 
 #### Search & Discovery
-- **Elasticsearch Integration**: Full-text search, fuzzy matching, suggestions
+- **Elasticsearch Integration**: Storefront search runs on Elasticsearch
+  (typo-tolerant fuzzy matching, relevance ranking across title/SKU/brand/tags/categories)
+  with automatic SQL fallback when ES is unavailable; products sync on save via queued jobs
+- **Layered Navigation**: Attribute filters (color swatches, size, material) with
+  live product counts in the shop sidebar
 - **Advanced Filters**: Filter by price, brand, attributes, ratings
 - **Auto-Complete**: Search suggestions as you type
 - **Search Analytics**: Track popular searches, no-results queries
@@ -184,14 +196,18 @@ php artisan serve
   - **Cash on Delivery (COD)**: Pay on delivery option
 - **Secure Checkout**: SSL support, PCI compliance helpers
 - **Multi-Step Checkout**: Shipping, payment, review steps
-- **Order Confirmation**: Email confirmation, PDF invoice
+- **Order Confirmation**: Email confirmation to the customer (account or guest email), PDF invoice
+- **Status Emails**: Customers are emailed on status changes, incl. tracking number when shipped
+- **Stock Control**: Stock is validated at checkout, decremented on order creation
+  and restored when an order is cancelled or refunded
 - **Failed Payment Handling**: Retry payment, cancel order
 
 #### Marketing & Engagement
 - **Product Sharing**: Share on social media (Facebook, Twitter, Pinterest)
 - **Social Login**: One-click registration/login
 - **Newsletter Subscription**: Footer signup, popup option
-- **Abandoned Cart Recovery**: Automated email reminders
+- **Abandoned Cart Recovery**: Automated email reminders (1h / 24h / 72h sequence,
+  dispatched hourly by the scheduler container)
 - **Product Recommendations**: AI-powered suggestions based on behavior
 - **Promotional Banners**: Targeted banners based on user segment
 
@@ -242,7 +258,9 @@ php artisan serve
 - **Order Details**: Products, customer info, shipping, payment
 - **Invoice Generation**: PDF invoices with customizable template
 - **Shipment Tracking**: Add tracking numbers, shipping carriers
-- **Refund Processing**: Partial/full refunds, store credit
+- **Refund Processing**: Return requests dashboard (approve / reject / refund),
+  partial or full amounts, automatic Stripe refunds via the stored charge id,
+  stock restored on refund
 - **Order Notes**: Internal notes, customer-visible notes
 - **Print Order**: Print-friendly order page
 - **Resend Email**: Resend order confirmation, invoice

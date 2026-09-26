@@ -401,7 +401,7 @@ $defaultAddress = $user?->defaultShippingAddress();
                                     <ul>
                                         <li class="order_subtotal"
                                             data-price="{{Helper::totalCartPrice()}}">Cart
-                                            Subtotal<span>${{number_format(Helper::totalCartPrice(),2)}}</span>
+                                            Subtotal<span>{{ currency(Helper::totalCartPrice()) }}</span>
                                         </li>
                                         @if(Helper::cartRequiresShipping())
                                         <li class="shipping">
@@ -412,7 +412,7 @@ $defaultAddress = $user?->defaultShippingAddress();
                                                     @foreach(Helper::shipping() as $shipping)
                                                         <option value="{{$shipping->id}}" class="shippingOption"
                                                                 data-price="{{$shipping->price}}">{{$shipping->type}}
-                                                            : ${{$shipping->price}}</option>
+                                                            : {{ currency($shipping->price) }}</option>
                                                     @endforeach
                                                 </select>
                                             @else
@@ -423,7 +423,7 @@ $defaultAddress = $user?->defaultShippingAddress();
 
                                         @if(session('coupon'))
                                             <li class="coupon_price" data-price="{{session('coupon')['value']}}">You
-                                                Save<span>${{number_format(session('coupon')['value'],2)}}</span></li>
+                                                Save<span>{{ currency(session('coupon')['value']) }}</span></li>
                                         @endif
                                         @php
                                             $total_amount=Helper::totalCartPrice();
@@ -433,10 +433,10 @@ $defaultAddress = $user?->defaultShippingAddress();
                                         @endphp
                                         @if(session('coupon'))
                                             <li class="last" id="order_total_price">
-                                                Total<span>${{number_format($total_amount,2)}}</span></li>
+                                                Total<span>{{ currency($total_amount) }}</span></li>
                                         @else
                                             <li class="last" id="order_total_price">
-                                                Total<span>${{number_format($total_amount,2)}}</span></li>
+                                                Total<span>{{ currency($total_amount) }}</span></li>
                                         @endif
                                     </ul>
                                 </div>

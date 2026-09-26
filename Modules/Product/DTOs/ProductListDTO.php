@@ -12,6 +12,9 @@ class ProductListDTO
     {
         foreach ($products as $product) {
             $arr = $product->toArray();
+            // Accessors are not part of toArray() - expose the thumbnail
+            // (falls back to the generated placeholder when no media exists).
+            $arr['photo'] = $product->image_thumb_url;
             // Map attributeValues to attributes array
             $arr['attributes'] = [];
             if (! empty($product->attributeValues)) {

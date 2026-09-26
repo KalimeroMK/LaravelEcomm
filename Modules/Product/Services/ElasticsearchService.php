@@ -109,6 +109,10 @@ class ElasticsearchService
      */
     public function search(string $query, array $filters = []): ?Collection
     {
+        if (! config('elasticsearch.enabled', true)) {
+            return null; // signals the caller to use the SQL fallback
+        }
+
         $searchParams = [
             'index' => $this->index,
             'body' => [
@@ -212,6 +216,8 @@ class ElasticsearchService
             // Using whereIn preserves order only if we explicitly sort collection or use mysql ORDER BY FIELD
             // Eager load relationships to prevent N+1 queries
             $products = Product::with(['categories', 'brand', 'tags', 'attributeValues.attribute', 'media'])
+                ->withAvg('getReview as reviews_avg', 'rate')
+                ->withCount('getReview as reviews_count')
                 ->whereIn('id', $ids)
                 ->get();
 

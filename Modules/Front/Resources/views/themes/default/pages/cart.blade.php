@@ -54,7 +54,7 @@
                                             <p class="product-des">{!!($cart['summary']) !!}</p>
                                         </td>
                                         <td class="price" data-title="@lang('frontend.price')">
-                                            <span>${{number_format($cart['price'],2)}}</span></td>
+                                            <span>{{ currency($cart['price']) }}</span></td>
                                         <td class="qty" data-title="@lang('frontend.quantity')"><!-- Input Order -->
                                             <div class="input-group">
                                                 <div class="button minus">
@@ -77,7 +77,7 @@
                                             <!--/ End Input Order -->
                                         </td>
                                         <td class="total-amount cart_single_price" data-title="@lang('frontend.total')"><span
-                                                    class="money">${{$cart['amount']}}</span></td>
+                                                    class="money">{{ currency($cart['amount']) }}</span></td>
 
                                         <td class="action" data-title="@lang('frontend.remove_this_item')"><a
                                                     href="{{route('cart-delete',$cart->id)}}"><i
@@ -131,11 +131,11 @@
                                     <ul>
                                         <li class="order_subtotal"
                                             data-price="{{Helper::totalCartPrice()}}">
-                                            @lang('frontend.cart_subtotal')<span>${{number_format(Helper::totalCartPrice(),2)}}</span>
+                                            @lang('frontend.cart_subtotal')<span>{{ currency(Helper::totalCartPrice()) }}</span>
                                         </li>
                                         @if(session()->has('coupon'))
                                             <li class="coupon_price" data-price="{{Session::get('coupon')['value']}}">
-                                                @lang('frontend.you_save')<span>${{number_format(Session::get('coupon')['value'],2)}}</span>
+                                                @lang('frontend.you_save')<span>{{ currency(Session::get('coupon')['value']) }}</span>
                                             </li>
                                         @endif
                                         @php
@@ -145,9 +145,9 @@
                                             }
                                         @endphp
                                         @if(session()->has('coupon'))
-                                            <li class="last" id="order_total_price">@lang('frontend.you_pay')<span>${{number_format($total_amount,2)}}</span></li>
+                                            <li class="last" id="order_total_price">@lang('frontend.you_pay')<span>{{ currency($total_amount) }}</span></li>
                                         @else
-                                            <li class="last" id="order_total_price">@lang('frontend.you_pay')<span>${{number_format($total_amount,2)}}</span></li>
+                                            <li class="last" id="order_total_price">@lang('frontend.you_pay')<span>{{ currency($total_amount) }}</span></li>
                                         @endif
                                     </ul>
                                     <div class="button5">

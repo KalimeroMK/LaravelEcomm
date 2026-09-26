@@ -22,8 +22,8 @@
                     </div>
                     <div class="product-item-price">
                         @php $after_discount = ($bundle->price - ($bundle->price * $bundle->discount) / 100); @endphp
-                        @if($bundle->discount)<del class="text-muted">${{ number_format($bundle->price, 2) }}</del>@endif
-                        <span class="text-default">${{ number_format($after_discount, 2) }}</span>
+                        @if($bundle->discount)<del class="text-muted">{{ currency($bundle->price) }}</del>@endif
+                        <span class="text-default">{{ currency($after_discount) }}</span>
                     </div>
                 </div>
             </div>

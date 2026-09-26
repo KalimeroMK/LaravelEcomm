@@ -95,9 +95,9 @@
                                         $finalPrice = $specialPrice ? $specialPrice : ($price - (($price * $discount) / 100));
                                     @endphp
                                     <p class="price">
-                                        <span class="discount">${{ number_format($finalPrice, 2) }}</span>
+                                        <span class="discount">{{ currency($finalPrice) }}</span>
                                         @if($finalPrice < $price)
-                                            <s>${{ number_format($price, 2) }}</s>
+                                            <s>{{ currency($price) }}</s>
                                         @endif
                                     </p>
                                     <p class="description">{!!($product_detail->summary)!!}</p>
@@ -496,8 +496,8 @@
                                             $finalPrice = $specialPrice ? $specialPrice : ($price - (($price * $discount) / 100));
                                         @endphp
                                         <div class="product-price">
-                                            <span class="old">${{ number_format($price, 2) }}</span>
-                                            <span>${{ number_format($finalPrice, 2) }}</span>
+                                            <span class="old">{{ currency($price) }}</span>
+                                            <span>{{ currency($finalPrice) }}</span>
                                         </div>
 
                                     </div>

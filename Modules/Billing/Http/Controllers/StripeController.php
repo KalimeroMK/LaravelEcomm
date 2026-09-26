@@ -66,9 +66,10 @@ class StripeController extends CoreController
                 return redirect()->route('front.cart')->with('error', 'Your cart is empty.');
             }
             
-            // Update order data with Stripe payment info
+            // Update order data with Stripe payment info. The CHARGE id is
+            // stored (not the one-time card token) so refunds can reference it.
             $pendingOrder['payment_status'] = 'paid';
-            $pendingOrder['transaction_reference'] = $request->stripeToken;
+            $pendingOrder['transaction_reference'] = $paymentResult->id;
             
             // Create the order
             $orderDto = OrderDTO::fromArray($pendingOrder);
@@ -78,6 +79,10 @@ class StripeController extends CoreController
             foreach ($cartItems as $cartItem) {
                 $cartItem->update(['order_id' => $order->id]);
             }
+
+            $order->decrementStock();
+            $order->load('carts.product', 'user');
+            $order->notifyCustomer(new \Modules\Order\Notifications\OrderPlacedNotification($order));
             
             // Save address to user's address book if logged in
             if (!empty($pendingOrder['user_id']) && !empty($pendingOrder['save_address'])) {

@@ -30,7 +30,7 @@
                                 </a>
                                 <p class="small">{!! $wishlist['summary'] !!}</p>
                             </td>
-                            <td class="text-center">${{ $wishlist['amount'] }}</td>
+                            <td class="text-center">{{ currency($wishlist['amount']) }}</td>
                             <td class="text-center">
                                 <a href="{{ route('add-to-cart', $wishlist->product['slug']) }}" class="btn btn-sm btn-default">Add to Cart</a>
                             </td>

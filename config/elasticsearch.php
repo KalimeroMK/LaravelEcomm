@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 return [
+    // Kill switch: tests and environments without ES set this to false so
+    // search falls back to SQL instead of hitting a foreign index.
+    'enabled' => env('ELASTICSEARCH_ENABLED', true),
+
     'hosts' => [
         [
             'host' => env('ELASTICSEARCH_HOST', 'localhost'),

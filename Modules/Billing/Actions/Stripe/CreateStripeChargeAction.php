@@ -10,11 +10,12 @@ use Stripe\Stripe;
 
 readonly class CreateStripeChargeAction
 {
-    public function execute(StripeDTO $dto): void
+    public function execute(StripeDTO $dto): Charge
     {
-        Stripe::setApiKey(env('STRIPE_SECRET')); // Use env directly for reliability
-        Charge::create([
-            'amount' => $dto->amount * 100,
+        Stripe::setApiKey(config('stripe.'.config('stripe.mode', 'sandbox').'.client_secret'));
+
+        return Charge::create([
+            'amount' => (int) round($dto->amount * 100),
             'currency' => $dto->currency,
             'source' => $dto->source,
             'description' => $dto->description,

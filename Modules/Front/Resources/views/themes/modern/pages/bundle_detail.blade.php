@@ -58,7 +58,7 @@
                             <div class="product-info">
                                 <h2 class="product-title">{{$bundle->name}}</h2>
                                 <div class="product-price">
-                                    <span class="price">${{number_format($bundle->price, 2)}}</span>
+                                    <span class="price">{{ currency($bundle->price) }}</span>
                                 </div>
                                 <div class="product-description">
                                     <p>{!! ($bundle->description) !!}</p>
@@ -74,7 +74,7 @@
                                                         <a href="{{route('front.product-detail', $product->slug)}}">
                                                             <img src="{{$product->imageUrl}}" alt="{{$product->title}}" class="img-fluid" style="max-width: 100px;">
                                                             <h5>{{$product->title}}</h5>
-                                                            <p class="price">${{number_format($product->price, 2)}}</p>
+                                                            <p class="price">{{ currency($product->price) }}</p>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -126,7 +126,7 @@
                                                                 <a href="{{route('front.product-detail', $product->slug)}}">
                                                                     <img src="{{$product->imageUrl}}" alt="{{$product->title}}" class="img-fluid">
                                                                     <h5>{{$product->title}}</h5>
-                                                                    <p class="price">${{number_format($product->price, 2)}}</p>
+                                                                    <p class="price">{{ currency($product->price) }}</p>
                                                                     @if($product->summary)
                                                                         <p class="summary">{{Str::limit($product->summary, 100)}}</p>
                                                                     @endif
@@ -195,8 +195,8 @@
                                             @php
                                                 $after_discount=($data->price-(($data->discount*$data->price)/100));
                                             @endphp
-                                            <span class="old">${{number_format($data->price,2)}}</span>
-                                            <span>${{number_format($after_discount,2)}}</span>
+                                            <span class="old">{{ currency($data->price) }}</span>
+                                            <span>{{ currency($after_discount) }}</span>
                                         </div>
 
                                     </div>

@@ -77,14 +77,14 @@
                 <div class="product-price">
                     @if($product->hasSpecialPrice())
                         <span class="original-price text-muted text-decoration-line-through">
-                            ${{ number_format($product->price, 2) }}
+                            {{ currency($product->price) }}
                         </span>
                         <span class="sale-price text-danger">
-                            ${{ number_format($product->special_price, 2) }}
+                            {{ currency($product->special_price) }}
                         </span>
                     @else
                         <span class="regular-price">
-                            ${{ number_format($product->price, 2) }}
+                            {{ currency($product->price) }}
                         </span>
                     @endif
                 </div>

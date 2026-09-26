@@ -53,6 +53,7 @@ return [
     'general_settings' => 'General settings',
     'tenant' => 'Tenant',
     'page' => 'Page',
+    'returns' => 'Devoluciones / Reembolsos',
     'complaints' => 'Complaints',
     'attribute_groups' => 'Attribute groups',
 

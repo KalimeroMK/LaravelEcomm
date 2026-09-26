@@ -119,7 +119,7 @@
                                                 <h3><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
                                                 <p class="small">{{ Str::limit($product->description, 100) }}</p>
                                                 <div class="elements-list clearfix">
-                                                    <span class="price">{{ number_format($product->price, 2) }} {{ config('app.currency', '$') }}</span>
+                                                    <span class="price">{{ currency($product->price) }}</span>
                                                     <a href="{{ route('add-to-cart', $product->slug) }}" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated">
                                                         Add to Cart<i class="fa fa-shopping-cart"></i>
                                                     </a>
@@ -163,7 +163,7 @@
                                                 <h3><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
                                                 <p class="small">{{ Str::limit($product->description, 100) }}</p>
                                                 <div class="elements-list clearfix">
-                                                    <span class="price">{{ number_format($product->price, 2) }} {{ config('app.currency', '$') }}</span>
+                                                    <span class="price">{{ currency($product->price) }}</span>
                                                     <a href="{{ route('add-to-cart', $product->slug) }}" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated">
                                                         Add to Cart<i class="fa fa-shopping-cart"></i>
                                                     </a>
@@ -207,7 +207,7 @@
                                                 <h3><a href="{{ route('front.product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
                                                 <p class="small">{{ Str::limit($product->description, 100) }}</p>
                                                 <div class="elements-list clearfix">
-                                                    <span class="price">{{ number_format($product->price, 2) }} {{ config('app.currency', '$') }}</span>
+                                                    <span class="price">{{ currency($product->price) }}</span>
                                                     <a href="{{ route('add-to-cart', $product->slug) }}" class="pull-right margin-clear btn btn-sm btn-default-transparent btn-animated">
                                                         Add to Cart<i class="fa fa-shopping-cart"></i>
                                                     </a>
