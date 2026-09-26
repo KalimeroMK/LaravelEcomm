@@ -26,7 +26,9 @@ Route::middleware('auth:api')->get('/admin', function (Request $request) {
 // Analytics API Routes. These expose revenue, customer and marketing figures,
 // so authentication alone is not enough - any registered customer would
 // otherwise be able to read them.
-Route::prefix('admin/analytics')->middleware(['auth:sanctum', 'role:admin|super-admin'])->group(function (): void {
+// Route names get an "api." prefix so they don't collide with the identically
+// named web routes in web.php - duplicate names break `route:cache`.
+Route::prefix('admin/analytics')->name('api.')->middleware(['auth:sanctum', 'role:admin|super-admin'])->group(function (): void {
     Route::get('dashboard', [AnalyticsController::class, 'dashboard'])->name('admin.analytics.dashboard');
     Route::get('overview', [AnalyticsController::class, 'overview'])->name('admin.analytics.overview');
     Route::get('sales', [AnalyticsController::class, 'sales'])->name('admin.analytics.sales');
@@ -42,7 +44,7 @@ Route::prefix('admin/analytics')->middleware(['auth:sanctum', 'role:admin|super-
 
 // Behaviour *collection* is public by design - the storefront posts tracking
 // beacons for anonymous visitors.
-Route::prefix('admin/analytics')->group(function (): void {
+Route::prefix('admin/analytics')->name('api.')->group(function (): void {
     Route::post('track', [UserBehaviorController::class, 'track'])->name('admin.analytics.track');
 });
 
@@ -50,6 +52,7 @@ Route::prefix('admin/analytics')->group(function (): void {
 // This group previously had no middleware at all, making that data readable by
 // anyone on the internet.
 Route::prefix('admin/analytics')
+    ->name('api.')
     ->middleware(['auth:sanctum', 'role:admin|super-admin'])
     ->group(function (): void {
         Route::get('behavior', [UserBehaviorController::class, 'analytics'])->name('admin.analytics.behavior');
