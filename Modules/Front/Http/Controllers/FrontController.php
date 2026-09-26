@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use InvalidArgumentException;
 use Log;
 use Modules\Billing\Services\WishlistService;
@@ -89,6 +90,9 @@ class FrontController extends Controller
             $data = $productDetailAction($slug);
 
             return view(theme_view('pages.product_detail'), $data);
+        } catch (HttpException $e) {
+            // 404 for an unknown slug is expected traffic, not an error.
+            throw $e;
         } catch (Exception $e) {
             Log::error('productDetail error: '.$e->getMessage());
             throw $e;

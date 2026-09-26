@@ -19,14 +19,10 @@ class ProductCatAction
     {
         $category = $this->categoryRepository->findBySlug($slug);
 
+        // The templates dereference $category directly, so a null here used to
+        // surface as a ViewException (500). A missing category is a 404.
         if (! $category) {
-            return [
-                'category'        => null,
-                'childCategories' => collect(),
-                'products'        => collect(),
-                'recentProducts'  => collect(),
-                'error'           => 'Category not found',
-            ];
+            abort(404);
         }
 
         // Child category cards: real product count and a cover image taken

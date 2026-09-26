@@ -19,6 +19,12 @@ class ProductDetailAction
     {
         $product_detail = $this->productRepository->findBySlug($slug);
 
+        // Unknown slug used to crash with "property on null" (500); a missing
+        // product is a plain 404.
+        if ($product_detail === null) {
+            abort(404);
+        }
+
         // Related products — use category IDs already loaded on the model.
         // Avoids the previous N+1 pattern of pluck('title') inside a whereHas subquery.
         $related = Cache::remember("related_products_{$product_detail->id}", 3600, function () use ($product_detail) {
