@@ -4,6 +4,29 @@ declare(strict_types=1);
 
 use Modules\Language\Models\Language;
 
+if (! function_exists('getSafeDefaultLocale')) {
+    /**
+     * Default language code, tolerating unavailable infrastructure.
+     *
+     * Lives here rather than in routes/web.php so that it stays defined when
+     * the route cache is warm: cached routes never execute the route files,
+     * so the root closure would call an undefined function.
+     *
+     * Catches Throwable, not just QueryException: this runs during boot, and
+     * getDefaultCode() goes through the cache first, so an unreachable cache
+     * backend (CI has no Redis) otherwise takes the whole application down
+     * before it can even run `key:generate`.
+     */
+    function getSafeDefaultLocale(): string
+    {
+        try {
+            return Language::getDefaultCode();
+        } catch (Throwable) {
+            return config('app.locale', 'en');
+        }
+    }
+}
+
 if (! function_exists('current_locale')) {
     /**
      * Get current locale

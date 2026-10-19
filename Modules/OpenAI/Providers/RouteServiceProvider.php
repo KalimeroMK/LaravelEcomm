@@ -56,6 +56,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api/v1')
             ->middleware('api')
             ->namespace($this->moduleNamespace)
+            ->name('v1.')
             ->group(module_path('OpenAI', '/Routes/api.php'));
     }
 }

@@ -43,6 +43,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         // Wishlist routes without authentication
         Route::prefix('api/v1')
+            ->name('v1.')
             ->group(module_path('Billing', '/Routes/api.php'));
 
         // Other billing routes with authentication

@@ -66,6 +66,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api/v1')
             ->middleware(['api', 'auth:sanctum'])
             ->namespace($this->moduleNamespace)
+            ->name('v1.')
             ->group(module_path('Complaint', '/Routes/api.php'));
     }
 }

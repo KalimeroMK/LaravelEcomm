@@ -17,5 +17,9 @@ use Modules\Tag\Http\Controllers\Api\TagController;
 */
 
 // API Routes
-Route::apiResource('tag', TagController::class);
-Route::apiResource('tags', TagController::class);
+//
+// Named explicitly: the bare resource names collide with the admin `tags.*`
+// web routes in Routes/web.php, which both breaks route:cache and makes
+// route('tags.index') resolve to the API endpoint instead of the admin screen.
+Route::apiResource('tag', TagController::class)->names('api.tag');
+Route::apiResource('tags', TagController::class)->names('api.tags');

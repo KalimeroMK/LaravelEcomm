@@ -91,6 +91,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api/v1')
             ->middleware('auth:sanctum')
+            ->name('v1.')
             ->group(module_path('Newsletter', '/Routes/api.php'));
     }
 }

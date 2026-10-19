@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +35,11 @@ class AppServiceProvider extends ServiceProvider
         LengthAwarePaginator::defaultView('pagination::admin-bootstrap-5');
 
         $this->configureRateLimiting();
+
+        // Default {locale} for URL generation. Previously set in routes/web.php,
+        // which a warm route cache never loads; LocaleMiddleware still overrides
+        // this per request for the localized front-end routes.
+        URL::defaults(['locale' => getSafeDefaultLocale()]);
     }
 
     /**

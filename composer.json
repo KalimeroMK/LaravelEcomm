@@ -78,6 +78,7 @@
       "Modules\\": "Modules/"
     },
     "files": [
+      "app/Helpers/LocaleHelper.php",
       "Modules/Front/Helpers/theme.php"
     ]
   },
