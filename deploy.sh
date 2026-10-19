@@ -46,15 +46,19 @@ echo "🔧 Running Laravel optimizations..."
 # Миграции
 docker compose -f docker-compose.prod.yml exec -T app php artisan migrate --force 2>/dev/null || echo "⚠️  Migration skipped (may already be up to date)"
 
+# Чистење на стари кешови — мора ПРЕД кеширањето, инаку optimize:clear
+# го брише токму она што штотуку е изградено.
+docker compose -f docker-compose.prod.yml exec -T app php artisan cache:clear 2>/dev/null || true
+docker compose -f docker-compose.prod.yml exec -T app php artisan optimize:clear 2>/dev/null || true
+
 # Кеширање на конфигурација, рути и views
 docker compose -f docker-compose.prod.yml exec -T app php artisan config:cache
 docker compose -f docker-compose.prod.yml exec -T app php artisan route:cache
 docker compose -f docker-compose.prod.yml exec -T app php artisan view:cache
 docker compose -f docker-compose.prod.yml exec -T app php artisan event:cache
 
-# Чистење на стари кешови
-docker compose -f docker-compose.prod.yml exec -T app php artisan cache:clear 2>/dev/null || true
-docker compose -f docker-compose.prod.yml exec -T app php artisan optimize:clear 2>/dev/null || true
+# Воркерите држат стар код во меморија до следниот --max-time циклус.
+docker compose -f docker-compose.prod.yml exec -T app php artisan queue:restart
 
 echo ""
 echo "🔒 Setting permissions..."
