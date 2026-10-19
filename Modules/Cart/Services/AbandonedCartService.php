@@ -101,11 +101,15 @@ class AbandonedCartService
 
     /**
      * Clean up old abandoned carts (older than 30 days)
+     *
+     * Converted and unconverted carts are pruned alike: the recovery sequence
+     * is finished within four days, so nothing older is still actionable, and
+     * dropping only the converted ones would both let the table grow without
+     * bound and skew the conversion rate towards 100%.
      */
     public function cleanupOldAbandonedCarts(): void
     {
         AbandonedCart::where('created_at', '<', now()->subDays(30))
-            ->where('converted', true)
             ->delete();
     }
 

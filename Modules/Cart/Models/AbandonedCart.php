@@ -163,7 +163,22 @@ class AbandonedCart extends Core
     {
         return $query->whereNull('first_email_sent')
             ->where('last_activity', '<=', now()->subHour())
-            ->where('converted', false);
+            ->where('converted', false)
+            ->hasContactAddress();
+    }
+
+    /**
+     * Scope for carts we can actually reach by email.
+     *
+     * Guest carts are tracked without any contact details, so without this
+     * the recovery jobs are re-dispatched for them on every scheduled run
+     * and never mark themselves as handled.
+     */
+    public function scopeHasContactAddress(Builder $query): Builder
+    {
+        return $query->where(function (Builder $query): void {
+            $query->whereNotNull('email')->orWhereNotNull('user_id');
+        });
     }
 
     /**
@@ -174,7 +189,8 @@ class AbandonedCart extends Core
         return $query->whereNotNull('first_email_sent')
             ->whereNull('second_email_sent')
             ->where('first_email_sent', '<=', now()->subDay())
-            ->where('converted', false);
+            ->where('converted', false)
+            ->hasContactAddress();
     }
 
     /**
@@ -185,6 +201,7 @@ class AbandonedCart extends Core
         return $query->whereNotNull('second_email_sent')
             ->whereNull('third_email_sent')
             ->where('second_email_sent', '<=', now()->subDays(3))
-            ->where('converted', false);
+            ->where('converted', false)
+            ->hasContactAddress();
     }
 }
