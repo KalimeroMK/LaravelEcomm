@@ -7,6 +7,7 @@ namespace Tests\Unit\Actions\Front;
 use Modules\Category\Models\Category;
 use Modules\Front\Actions\ProductCatAction;
 use Modules\Product\Models\Product;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\Unit\Actions\ActionTestCase;
 
 class ProductCatActionTest extends ActionTestCase
@@ -77,18 +78,16 @@ class ProductCatActionTest extends ActionTestCase
         $this->assertTrue($result['products']->isEmpty());
     }
 
-    public function test_invoke_returns_error_for_nonexistent_category(): void
+    public function test_invoke_aborts_with_404_for_nonexistent_category(): void
     {
         // Arrange
         $action = app(ProductCatAction::class);
 
-        // Act
-        $result = $action('nonexistent-category');
-
         // Assert
-        $this->assertIsArray($result);
-        $this->assertNull($result['category']);
-        $this->assertEquals('Category not found', $result['error']);
+        $this->expectException(NotFoundHttpException::class);
+
+        // Act
+        $action('nonexistent-category');
     }
 
     public function test_invoke_returns_recent_products(): void
