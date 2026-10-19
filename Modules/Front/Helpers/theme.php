@@ -58,7 +58,12 @@ if (! function_exists('clear_theme_cache')) {
         // Clear compiled Blade views
         $compiledPath = config('view.compiled');
         if ($compiledPath && is_dir($compiledPath)) {
-            \Illuminate\Support\Facades\File::cleanDirectory($compiledPath);
+            // glob('*') rather than File::cleanDirectory(): the latter also wipes
+            // the directory's .gitignore, which is how compiled views have ended
+            // up staged before. This mirrors Laravel's own view:clear.
+            foreach (\Illuminate\Support\Facades\File::glob($compiledPath.'/*') as $view) {
+                \Illuminate\Support\Facades\File::delete($view);
+            }
         }
 
         // Clear only theme-related cache keys, not the whole cache store
