@@ -58,6 +58,13 @@ class ReportingServiceProvider extends ServiceProvider
         $viewPath = resource_path('views/modules/reporting');
         $sourcePath = module_path('Reporting', 'Resources/views');
 
+        // Reporting is API-only and ships no Blade views. Registering a source
+        // path that does not exist makes view:cache abort with
+        // DirectoryNotFoundException, so skip it the way translations do.
+        if (! is_dir($sourcePath)) {
+            return;
+        }
+
         $this->publishes([
             $sourcePath => $viewPath,
         ], ['views', 'reporting-module-views']);
