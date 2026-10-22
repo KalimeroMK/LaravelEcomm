@@ -67,6 +67,8 @@ return [
     
     'fixer_api_key' => env('FIXER_API_KEY'),
     
+    'allratestoday_api_key' => env('ALLRATESTODAY_API_KEY'),
+    
     /*
     |--------------------------------------------------------------------------
     | Default Location Settings
