@@ -48,6 +48,7 @@ class CurrencyService
             'exchangerate-api' => $this->fetchFromExchangeRateApi(),
             'openexchangerates' => $this->fetchFromOpenExchangeRates(),
             'fixer' => $this->fetchFromFixer(),
+            'allratestoday' => $this->fetchFromAllRatesToday(),
             default => $this->getDefaultRates(),
         };
     }
@@ -134,6 +135,43 @@ class CurrencyService
             return $response->json()['rates'] ?? $this->getDefaultRates();
         } catch (\Exception $e) {
             logger()->error('Fixer API failed', ['error' => $e->getMessage()]);
+            return $this->getDefaultRates();
+        }
+    }
+
+    /**
+     * Fetch from AllRatesToday (API key required)
+     */
+    private function fetchFromAllRatesToday(): array
+    {
+        $apiKey = config('geolocalization.allratestoday_api_key');
+
+        if (! $apiKey) {
+            return $this->getDefaultRates();
+        }
+
+        try {
+            $response = Http::timeout(10)
+                ->withToken($apiKey)
+                ->get('https://allratestoday.com/api/v1/rates', [
+                    'source' => $this->baseCurrency,
+                ]);
+
+            if (! $response->successful()) {
+                return $this->getDefaultRates();
+            }
+
+            // Response is a list of {source, target, rate, time} rows
+            $rates = [$this->baseCurrency => 1.0];
+            foreach ($response->json() ?? [] as $row) {
+                if (isset($row['target'], $row['rate'])) {
+                    $rates[$row['target']] = (float) $row['rate'];
+                }
+            }
+
+            return count($rates) > 1 ? $rates : $this->getDefaultRates();
+        } catch (\Exception $e) {
+            logger()->error('AllRatesToday API failed', ['error' => $e->getMessage()]);
             return $this->getDefaultRates();
         }
     }
